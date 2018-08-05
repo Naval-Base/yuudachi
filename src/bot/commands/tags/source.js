@@ -14,6 +14,7 @@ class TagSourceCommand extends Command {
 			args: [
 				{
 					id: 'name',
+					match: 'content',
 					type: 'lowercase'
 				}
 			]

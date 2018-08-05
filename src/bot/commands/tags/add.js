@@ -19,6 +19,7 @@ class TagAddCommand extends Command {
 				},
 				{
 					id: 'content',
+					match: 'rest',
 					type: 'string'
 				},
 				{

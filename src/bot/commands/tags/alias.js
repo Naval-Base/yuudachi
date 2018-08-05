@@ -18,6 +18,7 @@ class TagAliasCommand extends Command {
 				},
 				{
 					id: 'second',
+					match: 'rest',
 					type: 'lowercase'
 				},
 				{

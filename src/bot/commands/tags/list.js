@@ -4,6 +4,7 @@ const { MessageEmbed } = require('discord.js');
 class TagListCommand extends Command {
 	constructor() {
 		super('tag-list', {
+			aliases: ['tags'],
 			category: 'tags',
 			description: {
 				content: 'Lists all server tags.'

@@ -17,6 +17,7 @@ class TagInfoCommand extends Command {
 			args: [
 				{
 					id: 'name',
+					match: 'content',
 					type: 'lowercase'
 				}
 			]

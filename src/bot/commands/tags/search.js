@@ -17,6 +17,7 @@ class SearchTagCommand extends Command {
 			args: [
 				{
 					id: 'name',
+					match: 'content',
 					type: 'lowercase'
 				}
 			]
