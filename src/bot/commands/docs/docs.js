@@ -17,6 +17,7 @@ class DocsCommand extends Command {
 			args: [
 				{
 					id: 'query',
+					match: 'content',
 					type: 'lowercase'
 				}
 			]
@@ -24,6 +25,7 @@ class DocsCommand extends Command {
 	}
 
 	async exec(message, { query }) {
+		query = [query];
 		let project = 'main';
 		let branch = ['stable', 'master', 'rpc', 'commando'].includes(query.slice(-1)[0]) ? query.pop() : 'stable';
 		if (['rpc', 'commando'].includes(branch)) {
