@@ -1,0 +1,31 @@
+{
+	"name": "graf-zeppelin",
+	"version": "0.1.0",
+	"description": "German aircraft boat",
+	"main": "src/graf_zeppelin.js",
+	"author": "iCrawl <icrawltogo@gmail.com>",
+	"license": "UNLICENSED",
+	"private": true,
+	"dependencies": {
+		"bufferutil": "^4.0.0",
+		"common-tags": "^1.8.0",
+		"discord-akairo": "1Computer1/discord-akairo",
+		"discord.js": "discordjs/discord.js",
+		"dotenv": "^6.0.0",
+		"erlpack": "discordapp/erlpack",
+		"moment": "^2.22.2",
+		"moment-duration-format": "^2.2.2",
+		"node-fetch": "^2.2.0",
+		"pg": "6.4.2",
+		"sequelize": "^4.38.0",
+		"winston": "^3.0.0",
+		"zlib-sync": "^0.1.4"
+	},
+	"devDependencies": {
+		"eslint": "^5.3.0",
+		"eslint-config-aqua": "^4.3.0"
+	},
+	"eslintConfig": {
+		"extends": "aqua/node"
+	}
+}

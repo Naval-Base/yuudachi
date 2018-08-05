@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  graf_zeppelin:
+    build:
+      context: ./
+    restart: always
+    env_file:
+      - ./.env
+    network_mode: 'host'
