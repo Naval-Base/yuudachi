@@ -28,7 +28,7 @@ class TagInfoCommand extends Command {
 		name = cleanContent(message, name);
 		const tag = await this.client.db.models.tags.findOne({ where: { name, guild: message.guild.id } });
 		if (!tag) return message.util.reply(`a tag with the name **${name}** doesn't exist.`);
-		const user = this.client.users.fetch(tag.user);
+		const user = await this.client.users.fetch(tag.user);
 		const guild = this.client.guilds.get(tag.guild);
 		const embed = new MessageEmbed()
 			.setColor(3447003)
