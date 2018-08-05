@@ -34,7 +34,7 @@ class TagShowCommand extends Command {
 				guild: message.guild.id
 			}
 		});
-		if (!tag) return message.util.reply(`a tag with the name **${name}** doesn't exist.`);
+		if (!tag) return;
 		tag.increment('uses');
 
 		return message.util.send(tag.content);
