@@ -15,6 +15,7 @@ class TagShowCommand extends Command {
 			args: [
 				{
 					id: 'name',
+					match: 'content',
 					type: 'lowercase'
 				}
 			]
