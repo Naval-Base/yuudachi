@@ -11,10 +11,10 @@ class MessageInvalidListener extends Listener {
 
 	async exec(message) {
 		if (message.util.prefix) {
+			if (!message.util.alias) return;
 			const command = this.client.commandHandler.modules.get('tag-show');
 			return this.client.commandHandler.runCommand(message, command, await command.parse(message, message.content.slice(1)));
 		}
-		this.client.logger.info('Invalid message!');
 	}
 }
 
