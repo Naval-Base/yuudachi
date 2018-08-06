@@ -33,7 +33,7 @@ class GitHubCommitCommand extends Command {
 		if (!repository) return message.reply("the guild owner didn't set a GitHub repository yet.");
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
-		const commit = args.match[1].split('#')[1];
+		const commit = args.match[0].split('#')[1];
 		let body;
 		try {
 			const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${commit}`,
