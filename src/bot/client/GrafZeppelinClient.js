@@ -57,7 +57,8 @@ class GrafZeppelinClient extends AkairoClient {
 		this.listenerHandler.loadAll();
 	}
 
-	start() {
+	async start() {
+		await this.settings.init();
 		return this.login(this.config.token);
 	}
 }
