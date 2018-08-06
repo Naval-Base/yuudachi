@@ -1,5 +1,6 @@
 const { Command } = require('discord-akairo');
 const { cleanContent } = require('../../../util/cleanContent');
+const { Op } = require('sequelize');
 
 class TagAddCommand extends Command {
 	constructor() {
@@ -34,7 +35,15 @@ class TagAddCommand extends Command {
 	async exec(message, { name, content, hoisted }) {
 		name = cleanContent(message, name);
 		content = cleanContent(message, content);
-		const tag = await this.client.db.models.tags.findOne({ where: { name, guild: message.guild.id } });
+		const tag = await this.client.db.models.tags.findOne({
+			where: {
+				[Op.or]: [
+					{ name },
+					{ aliases: { [Op.contains]: [name] } }
+				],
+				guild: message.guild.id
+			}
+		});
 		if (tag) return message.util.reply(`a tag with the name **${name}** already exists.`);
 		await this.client.db.models.tags.create({
 			user: message.author.id,
