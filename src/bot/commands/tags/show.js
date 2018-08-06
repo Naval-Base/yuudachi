@@ -23,6 +23,7 @@ class TagShowCommand extends Command {
 	}
 
 	async exec(message, { name }) {
+		if (!name) return;
 		if (Boolean(message.member.roles.find(r => r.name === 'Embed restricted'))) return;
 		name = cleanContent(message, name);
 		const tag = await this.client.db.models.tags.findOne({
