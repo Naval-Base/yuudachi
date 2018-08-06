@@ -67,7 +67,7 @@ class TagCommand extends Command {
 			list: this.handler.modules.get('tag-list')
 		}[method];
 
-		return this.handler.runCommand(message, command, await command.parse(message, name));
+		return this.handler.runCommand(message, command, await command.parse(message, name || ''));
 	}
 }
 

@@ -11,14 +11,13 @@ class TagListCommand extends Command {
 			},
 			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
-			ratelimit: 2
-			/* args: [
+			ratelimit: 2,
+			args: [
 				{
-					'id': 'member',
-					'type': 'member',
-					'default': ''
+					id: 'member',
+					type: 'member'
 				}
-			] */
+			]
 		});
 	}
 
