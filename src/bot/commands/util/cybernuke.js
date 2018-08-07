@@ -12,7 +12,7 @@ class LaunchCybernukeCommand extends Command {
 			},
 			category: 'util',
 			ownerOnly: true,
-			clientPermissions: ['BAN_MBMERS'],
+			clientPermissions: ['BAN_MEMBERS'],
 			ratelimit: 2,
 			args: [
 				{
