@@ -1,6 +1,5 @@
 const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
-const { cleanContent } = require('../../../util/cleanContent');
 const moment = require('moment');
 
 class TagInfoCommand extends Command {
@@ -18,19 +17,17 @@ class TagInfoCommand extends Command {
 				{
 					id: 'name',
 					match: 'content',
-					type: 'lowercase',
+					type: 'tag',
 					prompt: {
-						start: message => `${message.author}, what tag do you want information on?`
+						start: message => `${message.author}, what tag do you want information on?`,
+						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { name }) {
-		name = cleanContent(message, name);
-		const tag = await this.client.db.models.tags.findOne({ where: { name, guild: message.guild.id } });
-		if (!tag) return message.util.reply(`a tag with the name **${name}** doesn't exist.`);
+	async exec(message, { tag }) {
 		const user = await this.client.users.fetch(tag.user);
 		const guild = this.client.guilds.get(tag.guild);
 		const embed = new MessageEmbed()

@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo');
-const { cleanContent } = require('../../../util/cleanContent');
 
 class TagAliasCommand extends Command {
 	constructor() {
@@ -14,17 +13,19 @@ class TagAliasCommand extends Command {
 			args: [
 				{
 					id: 'first',
-					type: 'lowercase',
+					type: 'tag',
 					prompt: {
-						start: message => `${message.author}, what's the tag you want to alias?`
+						start: message => `${message.author}, what's the tag you want to alias?`,
+						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
 					}
 				},
 				{
 					id: 'second',
 					match: 'rest',
-					type: 'lowercase',
+					type: 'existingTag',
 					prompt: {
-						start: message => `${message.author}, what's the alias you want to apply to this tag?`
+						start: message => `${message.author}, what's the alias you want to apply to this tag?`,
+						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
 					}
 				},
 				{
@@ -42,19 +43,15 @@ class TagAliasCommand extends Command {
 	}
 
 	async exec(message, { first, second, add, del }) {
-		first = cleanContent(message, first);
-		second = cleanContent(message, second);
-		const tag = await this.client.db.models.tags.findOne({ where: { name: first, guild: message.guild.id } });
-		if (!tag) return message.util.reply(`a tag with the name **${first}** doesn't exists.`);
 		if (add) {
-			tag.aliases.push(second);
+			first.aliases.push(second);
 		} else if (del) {
-			const index = tag.aliases.indexOf(second);
-			tag.aliases.splice(index, 1);
+			const index = first.aliases.indexOf(second);
+			first.aliases.splice(index, 1);
 		} else {
 			return message.util.reply('you have to either supply `--add` or `--del.`');
 		}
-		await tag.update({ aliases: tag.aliases });
+		await first.update({ aliases: first.aliases });
 
 		return message.util.reply(`alias ${second} ${add ? 'added to' : 'deleted from'} tag ${first}.`);
 	}

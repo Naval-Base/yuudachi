@@ -3,6 +3,8 @@ const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = requ
 const { createLogger, transports, format } = require('winston');
 const database = require('../structures/Database');
 const SettingsProvider = require('../structures/SettingsProvider');
+const { Op } = require('sequelize');
+const { cleanContent } = require('../../util/cleanContent');
 
 class GrafZeppelinClient extends AkairoClient {
 	constructor(config) {
@@ -42,6 +44,36 @@ class GrafZeppelinClient extends AkairoClient {
 				retries: 3,
 				time: 30000
 			}
+		});
+		this.commandHandler.resolver.addType('tag', async (phrase, message) => {
+			if (!phrase) return null;
+			phrase = cleanContent(message, phrase.toLowerCase());
+			const tag = await this.db.models.tags.findOne({
+				where: {
+					[Op.or]: [
+						{ name: phrase },
+						{ aliases: { [Op.contains]: [phrase] } }
+					],
+					guild: message.guild.id
+				}
+			});
+
+			return tag ? tag : null;
+		});
+		this.commandHandler.resolver.addType('existingTag', async (phrase, message) => {
+			if (!phrase) return null;
+			phrase = cleanContent(message, phrase.toLowerCase());
+			const tag = await this.db.models.tags.findOne({
+				where: {
+					[Op.or]: [
+						{ name: phrase },
+						{ aliases: { [Op.contains]: [phrase] } }
+					],
+					guild: message.guild.id
+				}
+			});
+
+			return tag ? null : phrase;
 		});
 
 		this.inhibitorHandler = new InhibitorHandler(this, { directory: join(__dirname, '..', 'inhibitors') });

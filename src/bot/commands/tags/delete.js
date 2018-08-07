@@ -13,26 +13,24 @@ class TagDeleteCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					id: 'name',
+					id: 'tag',
 					match: 'content',
-					type: 'lowercase',
+					type: 'tag',
 					prompt: {
-						start: message => `${message.author}, what tag do you want to delete?`
+						start: message => `${message.author}, what tag do you want to delete?`,
+						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { name }) {
+	exec(message, { tag }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
-		name = cleanContent(message, name);
-		const tag = await this.client.db.models.tags.findOne({ where: { name, guild: message.guild.id } });
-		if (!tag) return message.util.reply(`a tag with the name **${name}** doesn't exist.`);
 		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only delete your own tags.');
 		tag.destroy();
 
-		return message.util.reply(`successfully deleted **${name}**.`);
+		return message.util.reply(`successfully deleted **${tag}**.`);
 	}
 }
 

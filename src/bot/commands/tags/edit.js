@@ -14,10 +14,11 @@ class TagEditCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					id: 'name',
-					type: 'lowercase',
+					id: 'tag',
+					type: 'tag',
 					prompt: {
-						start: message => `${message.author}, what tag do you want to edit?`
+						start: message => `${message.author}, what tag do you want to edit?`,
+						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
 					}
 				},
 				{
@@ -32,16 +33,13 @@ class TagEditCommand extends Command {
 		});
 	}
 
-	async exec(message, { name, content }) {
+	async exec(message, { tag, content }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
-		name = cleanContent(message, name);
 		content = cleanContent(message, content);
-		const tag = await this.client.db.models.tags.findOne({ where: { name, guild: message.guild.id } });
-		if (!tag) return message.util.reply(`a tag with the name **${name}** doesn't exist.`);
 		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
 		await this.client.db.models.tags.update({ content }, { where: { name, guild: message.guild.id } });
 
-		return message.util.reply(`successfully edited **${name}**.`);
+		return message.util.reply(`successfully edited **${tag}**.`);
 	}
 }
 

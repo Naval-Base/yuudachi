@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo');
-const { cleanContent } = require('../../../util/cleanContent');
 
 class TagSourceCommand extends Command {
 	constructor() {
@@ -13,22 +12,19 @@ class TagSourceCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					id: 'name',
+					id: 'tag',
 					match: 'content',
-					type: 'lowercase',
+					type: 'tag',
 					prompt: {
-						start: message => `${message.author}, what tag would you like to see the source of?`
+						start: message => `${message.author}, what tag would you like to see the source of?`,
+						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { name }) {
-		name = cleanContent(message, name);
-		const tag = await this.client.db.models.tags.findOne({ where: { name, guild: message.guild.id } });
-		if (!tag) return message.util.reply(`a tag with the name **${name}** doesn't exist.`);
-
+	exec(message, { tag }) {
 		return message.util.send(tag.content, { code: 'md' });
 	}
 }
