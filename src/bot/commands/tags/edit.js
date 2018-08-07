@@ -24,7 +24,7 @@ class TagEditCommand extends Command {
 				{
 					id: 'content',
 					match: 'rest',
-					type: Argument.valid('string', str => str.length <= 1950),
+					type: Argument.validate('string', str => str.length <= 1950),
 					prompt: {
 						start: message => `${message.author}, what should the new content be?`,
 						retry: message => `${message.author}, make sure the content isn't longer than 1950 characters!`
