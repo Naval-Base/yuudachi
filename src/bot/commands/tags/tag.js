@@ -68,7 +68,7 @@ class TagCommand extends Command {
 			list: this.handler.modules.get('tag-list')
 		}[method];
 
-		return this.handler.handleDirectCommand(message, name, command);
+		return this.handler.handleDirectCommand(message, name, command, true);
 	}
 }
 
