@@ -42,7 +42,7 @@ class StatsCommand extends Command {
 				true
 			)
 			.setThumbnail(this.client.user.displayAvatarURL())
-			.setFooter('© 2018 Crawl#2424');
+			.setFooter(`© 2018 ${this.client.users.get(this.client.config.owner).tag}`);
 
 		return message.util.send(embed);
 	}

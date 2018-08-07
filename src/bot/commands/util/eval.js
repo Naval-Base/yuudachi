@@ -79,7 +79,7 @@ class EvalCommand extends Command {
 				\`\`\`javascript
 				${inspected}
 				\`\`\`
-			`, { maxLength: 1900, prepend, append })
+			`, { maxLength: 1900, prepend, append });
 		}
 
 		return splitMessage(stripIndents`
