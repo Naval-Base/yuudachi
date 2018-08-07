@@ -46,14 +46,15 @@ class TagCommand extends Command {
 					type: ['show', 'add', 'alias', 'del', 'edit', 'source', 'info', 'search', 'list']
 				},
 				{
-					id: 'name',
-					match: 'rest'
+					'id': 'name',
+					'match': 'rest',
+					'default': ''
 				}
 			]
 		});
 	}
 
-	async exec(message, { method, name }) {
+	exec(message, { method, name }) {
 		if (!method) return message.util.send('Use a real command, boi.');
 		const command = {
 			show: this.handler.modules.get('tag-show'),
@@ -67,7 +68,7 @@ class TagCommand extends Command {
 			list: this.handler.modules.get('tag-list')
 		}[method];
 
-		return this.handler.runCommand(message, command, await command.parse(message, name || ''));
+		return this.handler.handleDirectCommand(message, name, command);
 	}
 }
 
