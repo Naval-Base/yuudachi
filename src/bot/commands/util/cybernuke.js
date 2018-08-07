@@ -25,7 +25,7 @@ class LaunchCybernukeCommand extends Command {
 				},
 				{
 					id: 'age',
-					type: Argument.range('number', 0.1, null, true),
+					type: Argument.range('number', 0.1, Infinity, true),
 					prompt: {
 						start: message => `${message.author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
 						retry: message => `${message.author}, the minimum is \`0.1\` minutes.`
