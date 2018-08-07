@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo');
-const { cleanContent } = require('../../../util/cleanContent');
 
 class TagDeleteCommand extends Command {
 	constructor() {
