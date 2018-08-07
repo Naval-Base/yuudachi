@@ -15,7 +15,7 @@ class TagInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					id: 'name',
+					id: 'tag',
 					match: 'content',
 					type: 'tag',
 					prompt: {
