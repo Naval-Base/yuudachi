@@ -40,7 +40,7 @@ class TagEditCommand extends Command {
 		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
 		await this.client.db.models.tags.update({ content }, { where: { name: tag.name, guild: message.guild.id } });
 
-		return message.util.reply(`successfully edited **${tag}**.`);
+		return message.util.reply(`successfully edited **${tag.name}**.`);
 	}
 }
 
