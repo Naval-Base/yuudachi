@@ -32,7 +32,16 @@ class GrafZeppelinClient extends AkairoClient {
 			handleEdits: true,
 			commandUtil: true,
 			commandUtilLifetime: 3e5,
-			defaultCooldown: 3000
+			defaultCooldown: 3000,
+			defaultPrompt: {
+				modifyStart: str => `${str}\n\nType \`cancel\` to cancel the command.`,
+				modifyRetry: str => `${str}\n\nType \`cancel\` to cancel the command.`,
+				timeout: 'Guess you took too long, command as been cancelled.',
+				ended: "More than 3 tries and you still didn't quite get it. Command has been cancelled",
+				cancel: 'Command has been cancelled.',
+				retries: 3,
+				time: 30000
+			}
 		});
 
 		this.inhibitorHandler = new InhibitorHandler(this, { directory: join(__dirname, '..', 'inhibitors') });

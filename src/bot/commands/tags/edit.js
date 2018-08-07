@@ -15,12 +15,18 @@ class TagEditCommand extends Command {
 			args: [
 				{
 					id: 'name',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what tag do you want to edit?`
+					}
 				},
 				{
 					id: 'content',
 					match: 'rest',
-					type: 'string'
+					type: 'string',
+					prompt: {
+						start: message => `${message.author}, what should the new content be?`
+					}
 				}
 			]
 		});

@@ -18,7 +18,10 @@ class SearchTagCommand extends Command {
 				{
 					id: 'name',
 					match: 'content',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what would you like to search for?`
+					}
 				}
 			]
 		});

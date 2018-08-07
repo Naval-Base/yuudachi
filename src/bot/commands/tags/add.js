@@ -16,12 +16,18 @@ class TagAddCommand extends Command {
 			args: [
 				{
 					id: 'name',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what should the tag be named?`
+					}
 				},
 				{
 					id: 'content',
 					match: 'rest',
-					type: 'string'
+					type: 'string',
+					prompt: {
+						start: message => `${message.author}, what should the content of the tag be?`
+					}
 				},
 				{
 					id: 'hoisted',

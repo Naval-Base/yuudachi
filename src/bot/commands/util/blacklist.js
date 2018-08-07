@@ -16,7 +16,10 @@ class BlacklistCommand extends Command {
 				{
 					id: 'user',
 					match: 'content',
-					type: 'user'
+					type: 'user',
+					prompt: {
+						start: message => `${message.author}, who would you like to blacklist/unblacklist?`
+					}
 				}
 			]
 		});

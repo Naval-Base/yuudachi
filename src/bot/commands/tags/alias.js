@@ -14,12 +14,18 @@ class TagAliasCommand extends Command {
 			args: [
 				{
 					id: 'first',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what's the tag you want to alias?`
+					}
 				},
 				{
 					id: 'second',
 					match: 'rest',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what's the alias you want to apply to this tag?`
+					}
 				},
 				{
 					id: 'add',

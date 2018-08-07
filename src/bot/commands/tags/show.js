@@ -16,7 +16,10 @@ class TagShowCommand extends Command {
 				{
 					id: 'name',
 					match: 'content',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what tag would you like to see?`
+					}
 				}
 			]
 		});

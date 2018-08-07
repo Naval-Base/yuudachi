@@ -18,7 +18,10 @@ class TagInfoCommand extends Command {
 				{
 					id: 'name',
 					match: 'content',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what tag do you want information on?`
+					}
 				}
 			]
 		});
