@@ -30,7 +30,7 @@ class TagDeleteCommand extends Command {
 		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only delete your own tags.');
 		tag.destroy();
 
-		return message.util.reply(`successfully deleted **${tag}**.`);
+		return message.util.reply(`successfully deleted **${tag.name}**.`);
 	}
 }
 

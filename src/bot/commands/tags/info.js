@@ -33,7 +33,7 @@ class TagInfoCommand extends Command {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.addField('User', user ? `${user.tag} (ID: ${user.id})` : "Couldn't fetch user.")
-			.addField('Guild', guild ? `${guild.name}` : "Could'nt fetch guild.")
+			.addField('Guild', guild ? `${guild.name}` : "Couldn't fetch guild.")
 			.addField('Uses', tag.uses)
 			.addField('Created at', moment.utc(tag.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'))
 			.addField('Modified at', moment.utc(tag.updatedAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'));

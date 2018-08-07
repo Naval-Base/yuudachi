@@ -53,7 +53,7 @@ class TagAliasCommand extends Command {
 		}
 		await first.update({ aliases: first.aliases });
 
-		return message.util.reply(`alias ${second} ${add ? 'added to' : 'deleted from'} tag ${first}.`);
+		return message.util.reply(`alias ${second} ${add ? 'added to' : 'deleted from'} tag ${first.name}.`);
 	}
 }
 
