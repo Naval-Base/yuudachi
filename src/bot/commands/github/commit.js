@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo');
+const { Argument, Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const { oneLine, stripIndents } = require('common-tags');
@@ -18,7 +18,14 @@ class GitHubCommitCommand extends Command {
 			category: 'github',
 			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
-			ratelimit: 2
+			ratelimit: 2,
+			args: [
+				{
+					id: 'commit',
+					match: 'content',
+					type: Argument.validate('string', str => str.length >= 40)
+				}
+			]
 		});
 	}
 
@@ -33,7 +40,7 @@ class GitHubCommitCommand extends Command {
 		if (!repository) return message.reply("the guild owner didn't set a GitHub repository yet.");
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
-		const commit = args.match[0].split('#')[1];
+		const commit = args.match ? args.match[0].split('#')[1] : args.commit;
 		let body;
 		try {
 			const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${commit}`,

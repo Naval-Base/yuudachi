@@ -18,7 +18,14 @@ class GitHubPROrIssueCommand extends Command {
 			category: 'github',
 			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
-			ratelimit: 2
+			ratelimit: 2,
+			args: [
+				{
+					id: 'pr_issue',
+					match: 'content',
+					type: 'number'
+				}
+			]
 		});
 	}
 
@@ -34,7 +41,7 @@ class GitHubPROrIssueCommand extends Command {
 		if (!repository) return message.util.reply("the guild owner didn't set a GitHub repository yet.");
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
-		const number = args.match[1];
+		const number = args.match ? args.match[1] : args.pr_issue;
 		const query = `
 			{
 				repository(owner: "${owner}", name: "${repo}") {
