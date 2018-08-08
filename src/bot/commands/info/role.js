@@ -50,9 +50,10 @@ class RoleInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					id: 'role',
-					match: 'content',
-					type: 'role'
+					'id': 'role',
+					'match': 'content',
+					'type': 'role',
+					'default': message => message.member.highestRole
 				}
 			]
 		});
