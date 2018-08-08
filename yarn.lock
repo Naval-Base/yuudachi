@@ -303,16 +303,16 @@ diagnostics@^1.0.1:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/31c72ec32e9c12e83085ec317e5bf96ddaf742e7"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/bb77950c7379b4927ad31efd185ce13940adc204"
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/b38f537da89e02d7cce0af508cd07d284e2fa8ec"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/8152841bab23eb37b2c83c4d2dc136ddc0c01cb4"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
     pako "^1.0.0"
-    prism-media hydrabolt/prism-media
+    prism-media amishshah/prism-media
     tweetnacl "^1.0.0"
     ws "^6.0.0"
 
@@ -981,9 +981,9 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
 
-prism-media@hydrabolt/prism-media:
+prism-media@amishshah/prism-media:
   version "0.3.1"
-  resolved "https://codeload.github.com/hydrabolt/prism-media/tar.gz/ead016c69b1f341898cb264746c355b982502c62"
+  resolved "https://codeload.github.com/amishshah/prism-media/tar.gz/7146426e462bf91b39053de4cf8b78c72490cd54"
 
 process-nextick-args@~2.0.0:
   version "2.0.0"
