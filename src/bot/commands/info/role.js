@@ -53,7 +53,7 @@ class RoleInfoCommand extends Command {
 					'id': 'role',
 					'match': 'content',
 					'type': 'role',
-					'default': message => message.member.highestRole
+					'default': message => message.member.roles.highest
 				}
 			]
 		});
