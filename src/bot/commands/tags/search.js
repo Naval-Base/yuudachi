@@ -30,16 +30,18 @@ class SearchTagCommand extends Command {
 	async exec(message, { name }) {
 		name = cleanContent(message, name);
 		const tags = await this.client.db.models.tags.findAll({ where: { name: { [Op.like]: `%${name}%` }, guild: message.guild.id } });
-		if (!tags) return message.util.reply(`a tag with the name **${name}** doesn't exist.`);
+		if (!tags.length) return message.util.reply(`No results found with query ${name}.`);
+		const search = tags
+			.map(tag => `\`${tag.name}\``)
+			.sort()
+			.join(', ');
+		if (search.length >= 1950) {
+			return message.util.reply('the output is way too big to display, make your search more specific and try again.');
+		}
 		const embed = new MessageEmbed()
 			.setColor(0x30a9ed)
 			.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-			.setDescription(
-				tags
-					.map(tag => `\`${tag.name}\``)
-					.sort()
-					.join(', ')
-			);
+			.setDescription(search);
 
 		return message.util.send(embed);
 	}
