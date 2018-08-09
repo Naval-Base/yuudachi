@@ -307,7 +307,7 @@ discord-akairo@1Computer1/discord-akairo:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/9dfcb61a90e89051b09b77384726001175a9e56c"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/f3d7f7c3bd662d84cd9fb1780ebebeafa91a2b64"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
@@ -602,8 +602,8 @@ iconv-lite@^0.4.17:
     safer-buffer ">= 2.1.2 < 3"
 
 ignore@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.3.tgz#e2d58c9654d75b542529fa28d80ac95b29e4f467"
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.5.tgz#333535a20325ba4852c4ddb135d47392aa035e6d"
 
 imurmurhash@^0.1.4:
   version "0.1.4"

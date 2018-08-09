@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { cleanContent } = require('../../../util/cleanContent');
+const { Util } = require('discord.js');
 const { Op } = require('sequelize');
 
 class TagShowCommand extends Command {
@@ -28,7 +28,7 @@ class TagShowCommand extends Command {
 	async exec(message, { name }) {
 		if (!name) return;
 		if (Boolean(message.member.roles.find(r => r.name === 'Embed restricted'))) return;
-		name = cleanContent(message, name);
+		name = Util.cleanContent(name, message);
 		const tag = await this.client.db.models.tags.findOne({
 			where: {
 				[Op.or]: [

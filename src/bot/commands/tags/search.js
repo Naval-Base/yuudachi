@@ -1,6 +1,5 @@
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { cleanContent } = require('../../../util/cleanContent');
+const { MessageEmbed, Util } = require('discord.js');
 const { Op } = require('sequelize');
 
 class SearchTagCommand extends Command {
@@ -28,7 +27,7 @@ class SearchTagCommand extends Command {
 	}
 
 	async exec(message, { name }) {
-		name = cleanContent(message, name);
+		name = Util.cleanContent(name, message);
 		const tags = await this.client.db.models.tags.findAll({ where: { name: { [Op.like]: `%${name}%` }, guild: message.guild.id } });
 		if (!tags.length) return message.util.reply(`No results found with query ${name}.`);
 		const search = tags

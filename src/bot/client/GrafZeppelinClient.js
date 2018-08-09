@@ -1,10 +1,10 @@
 const { join } = require('path');
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = require('discord-akairo');
+const { Util } = require('discord.js');
 const { createLogger, transports, format } = require('winston');
 const database = require('../structures/Database');
 const SettingsProvider = require('../structures/SettingsProvider');
 const { Op } = require('sequelize');
-const { cleanContent } = require('../../util/cleanContent');
 
 class GrafZeppelinClient extends AkairoClient {
 	constructor(config) {
@@ -47,7 +47,7 @@ class GrafZeppelinClient extends AkairoClient {
 		});
 		this.commandHandler.resolver.addType('tag', async (phrase, message) => {
 			if (!phrase) return null;
-			phrase = cleanContent(message, phrase.toLowerCase());
+			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tag = await this.db.models.tags.findOne({
 				where: {
 					[Op.or]: [
@@ -62,7 +62,7 @@ class GrafZeppelinClient extends AkairoClient {
 		});
 		this.commandHandler.resolver.addType('existingTag', async (phrase, message) => {
 			if (!phrase) return null;
-			phrase = cleanContent(message, phrase.toLowerCase());
+			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tag = await this.db.models.tags.findOne({
 				where: {
 					[Op.or]: [
@@ -77,7 +77,7 @@ class GrafZeppelinClient extends AkairoClient {
 		});
 		this.commandHandler.resolver.addType('tagContent', (phrase, message) => {
 			if (!phrase) phrase = '';
-			phrase = cleanContent(message, phrase);
+			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first().url}`;
 
 			return phrase || null;

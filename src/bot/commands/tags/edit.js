@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { cleanContent } = require('../../../util/cleanContent');
+const { Util } = require('discord.js');
 
 class TagEditCommand extends Command {
 	constructor() {
@@ -38,7 +38,7 @@ class TagEditCommand extends Command {
 		if (content && content.length >= 1950) {
 			return message.util.reply("make sure the content isn't longer than 1950 characters!");
 		}
-		content = cleanContent(message, content);
+		content = Util.cleanContent(content, message);
 		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
 		await this.client.db.models.tags.update({ content }, { where: { name: tag.name, guild: message.guild.id } });
 
