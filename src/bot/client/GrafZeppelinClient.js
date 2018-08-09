@@ -58,7 +58,7 @@ class GrafZeppelinClient extends AkairoClient {
 				}
 			});
 
-			return tag ? tag : null;
+			return tag || null;
 		});
 		this.commandHandler.resolver.addType('existingTag', async (phrase, message) => {
 			if (!phrase) return null;
@@ -74,6 +74,13 @@ class GrafZeppelinClient extends AkairoClient {
 			});
 
 			return tag ? null : phrase;
+		});
+		this.commandHandler.resolver.addType('tagContent', (phrase, message) => {
+			if (!phrase) phrase = '';
+			phrase = cleanContent(message, phrase);
+			if (message.attachments.first()) phrase += `\n${message.attachments.first().url}`;
+
+			return phrase || null;
 		});
 
 		this.inhibitorHandler = new InhibitorHandler(this, { directory: join(__dirname, '..', 'inhibitors') });
