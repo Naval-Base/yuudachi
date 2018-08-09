@@ -1,4 +1,4 @@
-const { Argument, Command } = require('discord-akairo');
+const { Command } = require('discord-akairo');
 const { cleanContent } = require('../../../util/cleanContent');
 
 class TagEditCommand extends Command {
@@ -24,10 +24,9 @@ class TagEditCommand extends Command {
 				{
 					id: 'content',
 					match: 'rest',
-					type: Argument.validate('string', str => str.length <= 1950),
+					type: 'tagContent',
 					prompt: {
-						start: message => `${message.author}, what should the new content be?`,
-						retry: message => `${message.author}, make sure the content isn't longer than 1950 characters!`
+						start: message => `${message.author}, what should the new content be?`
 					}
 				}
 			]
@@ -36,6 +35,9 @@ class TagEditCommand extends Command {
 
 	async exec(message, { tag, content }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
+		if (content && content.length >= 1950) {
+			return message.util.reply(`${message.author}, make sure the content isn't longer than 1950 characters!`);
+		}
 		content = cleanContent(message, content);
 		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
 		await this.client.db.models.tags.update({ content }, { where: { name: tag.name, guild: message.guild.id } });

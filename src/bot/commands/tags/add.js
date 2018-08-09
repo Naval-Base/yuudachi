@@ -1,5 +1,4 @@
-const { Argument, Command } = require('discord-akairo');
-const { cleanContent } = require('../../../util/cleanContent');
+const { Command } = require('discord-akairo');
 
 class TagAddCommand extends Command {
 	constructor() {
@@ -24,10 +23,9 @@ class TagAddCommand extends Command {
 				{
 					id: 'content',
 					match: 'rest',
-					type: Argument.validate('string', str => str.length <= 1950),
+					type: 'tagContent',
 					prompt: {
-						start: message => `${message.author}, what should the content of the tag be?`,
-						retry: message => `${message.author}, make sure the content isn't longer than 1950 characters!`
+						start: message => `${message.author}, what should the content of the tag be?`
 					}
 				},
 				{
@@ -40,7 +38,9 @@ class TagAddCommand extends Command {
 	}
 
 	async exec(message, { name, content, hoisted }) {
-		content = cleanContent(message, content);
+		if (content && content.length >= 1950) {
+			return message.util.reply(`${message.author}, make sure the content isn't longer than 1950 characters!`);
+		}
 		await this.client.db.models.tags.create({
 			user: message.author.id,
 			guild: message.guild.id,
