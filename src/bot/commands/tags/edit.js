@@ -36,7 +36,7 @@ class TagEditCommand extends Command {
 	async exec(message, { tag, content }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
 		if (content && content.length >= 1950) {
-			return message.util.reply(`${message.author}, make sure the content isn't longer than 1950 characters!`);
+			return message.util.reply("make sure the content isn't longer than 1950 characters!");
 		}
 		content = cleanContent(message, content);
 		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
