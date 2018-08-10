@@ -18,7 +18,10 @@ class DocsCommand extends Command {
 				{
 					id: 'query',
 					match: 'content',
-					type: 'lowercase'
+					type: 'lowercase',
+					prompt: {
+						start: message => `${message.author}, what would you like to search?`
+					}
 				}
 			]
 		});
@@ -36,6 +39,10 @@ class DocsCommand extends Command {
 		const res = await fetch(`https://djsdocs.sorta.moe/${project}/${branch}/embed?${queryString}`);
 		const embed = await res.json();
 		if (!embed) return message.util.reply("couldn't find the requested information in the documentation.");
+		if (
+			!message.channel.permissionsFor(message.guild.me).has('ADD_REACTIONS') ||
+			!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')
+		) { return message.util.send({ embed }); }
 		const msg = await message.util.send({ embed });
 		msg.react('🗑');
 		let react;
