@@ -37,7 +37,7 @@ class BlacklistCommand extends Command {
 		}
 
 		blacklist.push(user.id);
-		this.client.provider.set('global', 'blacklist', blacklist);
+		this.client.settings.set('global', 'blacklist', blacklist);
 
 		return message.util.send(`${user.tag} has been blacklisted from using ${this.client.user}`);
 	}
