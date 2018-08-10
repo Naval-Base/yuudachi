@@ -55,7 +55,13 @@ class TagCommand extends Command {
 	}
 
 	exec(message, { method, name }) {
-		if (!method) return message.util.send('Use a real command, boi.');
+		if (!method) {
+			return message.util.send(stripIndents`
+				This is not a command. Check \`${this.handler.prefix}help tag\` for more information.
+			
+				You probably wanted to use \`${this.handler.prefix}tag show\`
+			`);
+		}
 		const command = {
 			show: this.handler.modules.get('tag-show'),
 			add: this.handler.modules.get('tag-add'),
