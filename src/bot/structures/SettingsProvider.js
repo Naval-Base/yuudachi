@@ -31,7 +31,7 @@ class SettingsProvider extends SequelizeProvider {
 
 	static getGuildId(guild) {
 		if (guild instanceof Guild) return guild.id;
-		if (guild === 'global' || guild === null) return 'global';
+		if (guild === 'global' || guild === null) return 0;
 		if (typeof guild === 'string' && /^\d+$/.test(guild)) return guild;
 		throw new TypeError('Invalid guild specified. Must be a Guild instance, guild ID, "global", or null.');
 	}
