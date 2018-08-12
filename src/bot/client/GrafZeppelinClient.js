@@ -28,7 +28,7 @@ class GrafZeppelinClient extends AkairoClient {
 
 		this.commandHandler = new CommandHandler(this, {
 			directory: join(__dirname, '..', 'commands'),
-			prefix: process.env.COMMAND_PREFIX,
+			prefix: message => this.settings.get(message.guild, 'prefix', process.env.COMMAND_PREFIX),
 			aliasReplacement: /-/g,
 			allowMention: true,
 			handleEdits: true,
