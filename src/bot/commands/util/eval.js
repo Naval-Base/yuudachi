@@ -60,7 +60,9 @@ class EvalCommand extends Command {
 		}
 
 		this.hrStart = process.hrtime();
-		return message.util.send(this.result(this.lastResult, hrDiff, code));
+		const result = this.result(this.lastResult, hrDiff, code);
+		if (Array.isArray(result)) return result.map(res => message.util.send(res));
+		return message.util.send(result);
 	}
 
 	result(result, hrDiff, input = null) {
