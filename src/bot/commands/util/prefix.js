@@ -22,7 +22,7 @@ class PrefixCommand extends Command {
 	}
 
 	exec(message, { prefix }) {
-		if (!prefix) return message.util.send(this.handler.prefix);
+		if (!prefix) return message.util.send(`The current prefix for this guild is: \`${this.handler.prefix(message)}\``);
 		this.client.settings.set(message.guild, 'prefix', prefix);
 		if (prefix === process.env.COMMAND_PREFIX) {
 			return message.util.reply(`the prefix has been reset to \`${prefix}\``);
