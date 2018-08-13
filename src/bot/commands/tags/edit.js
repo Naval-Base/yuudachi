@@ -58,7 +58,6 @@ class TagEditCommand extends Command {
 			content = Util.cleanContent(content, message);
 			tag.content = content;
 		}
-		console.log(tag, hoisted, content);
 		await tag.save();
 
 		return message.util.reply(`successfully edited **${tag.name}**${hoisted ? ' to be hoisted.' : '.'}`);
