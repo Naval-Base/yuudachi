@@ -27,6 +27,9 @@ module.exports = (sequelize, DataTypes) =>
 		uses: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0
+		},
+		last_modified: {
+			type: DataTypes.BIGINT
 		}
 	}, {
 		timestamps: true

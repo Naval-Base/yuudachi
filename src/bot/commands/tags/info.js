@@ -29,6 +29,12 @@ class TagInfoCommand extends Command {
 
 	async exec(message, { tag }) {
 		const user = await this.client.users.fetch(tag.user);
+		let lastModifiedBy;
+		try {
+			lastModifiedBy = await this.client.users.fetch(tag.last_modified);
+		} catch (error) {
+			lastModifiedBy = null;
+		}
 		const guild = this.client.guilds.get(tag.guild);
 		const embed = new MessageEmbed()
 			.setColor(3447003)
@@ -38,6 +44,9 @@ class TagInfoCommand extends Command {
 			.addField('❯ Uses', tag.uses)
 			.addField('❯ Created at', moment.utc(tag.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'))
 			.addField('❯ Modified at', moment.utc(tag.updatedAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'));
+		if (lastModifiedBy) {
+			embed.addField('❯ Last modified by', lastModifiedBy ? `${lastModifiedBy.tag} (ID: ${lastModifiedBy.id})` : "Couldn't fetch user.");
+		}
 
 		return message.util.send(embed);
 	}
