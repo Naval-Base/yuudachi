@@ -60,7 +60,7 @@ class TagEditCommand extends Command {
 		}
 		await tag.save();
 
-		return message.util.reply(`successfully edited **${tag.name}**${hoisted ? ' to be hoisted.' : '.'}`);
+		return message.util.reply(`successfully edited **${tag.name}**${hoisted && staffRole ? ' to be hoisted.' : '.'}`);
 	}
 }
 
