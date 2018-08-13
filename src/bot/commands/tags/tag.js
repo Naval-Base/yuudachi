@@ -56,10 +56,11 @@ class TagCommand extends Command {
 
 	exec(message, { method, name }) {
 		if (!method) {
+			const prefix = this.handler.prefix(message);
 			return message.util.send(stripIndents`
-				This is not a command. Check \`${this.handler.prefix}help tag\` for more information.
+				This is not a command. Check \`${prefix}help tag\` for more information.
 			
-				You probably wanted to use \`${this.handler.prefix}tag show\`
+				You probably wanted to use \`${prefix}tag show\`
 			`);
 		}
 		const command = {

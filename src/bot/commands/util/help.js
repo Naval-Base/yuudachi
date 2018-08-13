@@ -23,7 +23,7 @@ class HelpCommand extends Command {
 	}
 
 	exec(message, { command }) {
-		const { prefix } = this.handler;
+		const prefix = this.handler.prefix(message);
 		if (!command) {
 			const embed = new MessageEmbed()
 				.setColor(3447003)
