@@ -24,7 +24,7 @@ class TagEditCommand extends Command {
 				{
 					id: 'hoisted',
 					match: 'option',
-					flag: '--hoisted='
+					flag: ['--hoisted=', '--pin=']
 				},
 				Control.if((_, args) => args.hoisted, [
 					{
@@ -53,7 +53,7 @@ class TagEditCommand extends Command {
 			return message.util.reply("make sure the content isn't longer than 1950 characters!");
 		}
 		hoisted = Boolean(JSON.parse(hoisted));
-		tag.hoisted = hoisted;
+		if (staffRole) tag.hoisted = hoisted;
 		if (content) {
 			content = Util.cleanContent(content, message);
 			tag.content = content;

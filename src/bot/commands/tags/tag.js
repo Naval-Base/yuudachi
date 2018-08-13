@@ -11,7 +11,7 @@ class TagCommand extends Command {
 					 • add \`[--hoisted] <tag> <content>\`
 					 • alias \`<--add/--del> <tag> <tagalias>\`
 					 • del \`<tag>\`
-					 • edit \`<tag> <content>\`
+					 • edit \`[--hoisted=true/false] <tag> <content>\`
 					 • source \`<tag>\`
 					 • info \`<tag>\`
 					 • search \`<tag>\`
@@ -31,6 +31,8 @@ class TagCommand extends Command {
 					'del Test',
 					'edit Test Some new content',
 					'edit "Test 1" Some more new content',
+					'edit Test --hoisted=true',
+					'edit Test --hoisted=false Some more new content',
 					'source Test',
 					'info Test',
 					'search Test',
@@ -43,7 +45,7 @@ class TagCommand extends Command {
 			args: [
 				{
 					id: 'method',
-					type: ['show', 'add', 'alias', 'del', 'edit', 'source', 'info', 'search', 'list']
+					type: ['show', 'add', 'alias', 'del', 'delete', 'edit', 'source', 'info', 'search', 'list']
 				},
 				{
 					'id': 'name',
@@ -64,15 +66,16 @@ class TagCommand extends Command {
 			`);
 		}
 		const command = {
-			show: this.handler.modules.get('tag-show'),
-			add: this.handler.modules.get('tag-add'),
-			alias: this.handler.modules.get('tag-alias'),
-			del: this.handler.modules.get('tag-delete'),
-			edit: this.handler.modules.get('tag-edit'),
-			source: this.handler.modules.get('tag-source'),
-			info: this.handler.modules.get('tag-info'),
-			search: this.handler.modules.get('tag-search'),
-			list: this.handler.modules.get('tag-list')
+			'show': this.handler.modules.get('tag-show'),
+			'add': this.handler.modules.get('tag-add'),
+			'alias': this.handler.modules.get('tag-alias'),
+			'del': this.handler.modules.get('tag-delete'),
+			'delete': this.handler.modules.get('tag-delete'),
+			'edit': this.handler.modules.get('tag-edit'),
+			'source': this.handler.modules.get('tag-source'),
+			'info': this.handler.modules.get('tag-info'),
+			'search': this.handler.modules.get('tag-search'),
+			'list': this.handler.modules.get('tag-list')
 		}[method];
 
 		return this.handler.handleDirectCommand(message, name, command, true);
