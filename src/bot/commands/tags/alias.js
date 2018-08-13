@@ -51,7 +51,7 @@ class TagAliasCommand extends Command {
 		} else {
 			return message.util.reply('you have to either supply `--add` or `--del.`');
 		}
-		await first.update({ aliases: first.aliases });
+		await first.update({ aliases: first.aliases, last_modified: message.author.id });
 
 		return message.util.reply(`alias ${second} ${add ? 'added to' : 'deleted from'} tag ${first.name}.`);
 	}

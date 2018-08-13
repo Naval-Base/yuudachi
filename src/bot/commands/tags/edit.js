@@ -58,6 +58,7 @@ class TagEditCommand extends Command {
 			content = Util.cleanContent(content, message);
 			tag.content = content;
 		}
+		tag.last_modified = message.author.id;
 		await tag.save();
 
 		return message.util.reply(`successfully edited **${tag.name}**${hoisted && staffRole ? ' to be hoisted.' : '.'}`);
