@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo');
+const { Command, Control } = require('discord-akairo');
 const { Util } = require('discord.js');
 
 class TagEditCommand extends Command {
@@ -22,27 +22,46 @@ class TagEditCommand extends Command {
 					}
 				},
 				{
-					id: 'content',
-					match: 'rest',
-					type: 'tagContent',
-					prompt: {
-						start: message => `${message.author}, what should the new content be?`
+					id: 'hoisted',
+					match: 'option',
+					flag: '--hoisted='
+				},
+				Control.if((_, args) => args.hoisted, [
+					{
+						id: 'content',
+						match: 'rest',
+						type: 'tagContent'
 					}
-				}
+				], [
+					{
+						id: 'content',
+						match: 'rest',
+						type: 'tagContent',
+						prompt: {
+							start: message => `${message.author}, what should the new content be?`
+						}
+					}
+				])
 			]
 		});
 	}
 
-	async exec(message, { tag, content }) {
+	async exec(message, { tag, hoisted, content }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
+		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
 		if (content && content.length >= 1950) {
 			return message.util.reply("make sure the content isn't longer than 1950 characters!");
 		}
-		content = Util.cleanContent(content, message);
-		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
-		await this.client.db.models.tags.update({ content }, { where: { name: tag.name, guild: message.guild.id } });
+		hoisted = Boolean(JSON.parse(hoisted));
+		tag.hoisted = hoisted;
+		if (content) {
+			content = Util.cleanContent(content, message);
+			tag.content = content;
+		}
+		console.log(tag, hoisted, content);
+		await tag.save();
 
-		return message.util.reply(`successfully edited **${tag.name}**.`);
+		return message.util.reply(`successfully edited **${tag.name}**${hoisted ? ' to be hoisted.' : '.'}`);
 	}
 }
 
