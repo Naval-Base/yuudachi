@@ -5,6 +5,7 @@ const { createLogger, transports, format } = require('winston');
 const database = require('../structures/Database');
 const SettingsProvider = require('../structures/SettingsProvider');
 const { Op } = require('sequelize');
+const Raven = require('raven');
 
 class GrafZeppelinClient extends AkairoClient {
 	constructor(config) {
@@ -87,6 +88,15 @@ class GrafZeppelinClient extends AkairoClient {
 		this.listenerHandler = new ListenerHandler(this, { directory: join(__dirname, '..', 'listeners') });
 
 		this.config = config;
+
+		if (process.env.RAVEN) {
+			Raven.config(process.env.RAVEN, {
+				captureUnhandledRejections: true,
+				autoBreadcrumbs: true
+			}).install();
+		} else {
+			process.on('unhandledRejection', this.logger.error);
+		}
 
 		this.init();
 	}

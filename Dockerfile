@@ -21,6 +21,7 @@ ENV NODE_ENV= \
 	OWNERS= \
 	TOKEN= \
 	DB= \
+	RAVEN= \
 	GITHUB_API_KEY=
 
 CMD ["node", "src/graf_zeppelin.js"]
