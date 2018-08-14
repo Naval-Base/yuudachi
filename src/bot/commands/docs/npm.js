@@ -6,7 +6,7 @@ module.exports = class NPMCommand extends Command {
 	constructor() {
 		super('npm', {
 			aliases: ['npm', 'npm-package'],
-			category: 'search',
+			category: 'docs',
 			description: {
 				content: 'Responds with information on an NPM package.',
 				usage: '<query>',
