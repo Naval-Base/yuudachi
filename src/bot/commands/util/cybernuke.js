@@ -46,27 +46,24 @@ class LaunchCybernukeCommand extends Command {
 		);
 
 		await message.util.send(`Cybernuke will strike ${members.size} members; proceed?`);
-		let response;
 		let statusMessage;
 
-		while (!statusMessage) {
-			const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
-				max: 1,
-				time: 10000
-			});
+		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
+			max: 1,
+			time: 10000
+		});
 
-			if (!responses || responses.size !== 1) {
-				await message.reply('Cybernuke cancelled.');
-				return null;
-			}
-			response = responses.first();
+		if (!responses || responses.size !== 1) {
+			await message.reply('Cybernuke cancelled.');
+			return null;
+		}
+		const response = responses.first();
 
-			if (/^y(?:e(?:a|s)?)?$/i.test(response.content)) {
-				statusMessage = await response.reply('Launching cybernuke...');
-			} else {
-				await response.reply('Cybernuke cancelled.');
-				return null;
-			}
+		if (/^y(?:e(?:a|s)?)?$/i.test(response.content)) {
+			statusMessage = await response.reply('Launching cybernuke...');
+		} else {
+			await response.reply('Cybernuke cancelled.');
+			return null;
 		}
 
 		const fatalities = [];

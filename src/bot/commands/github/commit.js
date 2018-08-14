@@ -88,10 +88,9 @@ class GitHubCommitCommand extends Command {
 			.setThumbnail(body.author ? body.author.avatar_url : '')
 			.setTimestamp(new Date(body.commit.author.date));
 
-		if (
-			!message.channel.permissionsFor(message.guild.me).has('ADD_REACTIONS') ||
-			!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')
-		) { return message.util.send(embed); }
+		if (!message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'])) {
+			return message.util.send(embed);
+		}
 		const msg = await message.util.send(embed);
 		msg.react('🗑');
 		let react;

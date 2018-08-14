@@ -14,7 +14,6 @@ class StatsCommand extends Command {
 				content: 'Displays statistics about the bot.'
 			},
 			category: 'util',
-			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
 			ratelimit: 2
 		});

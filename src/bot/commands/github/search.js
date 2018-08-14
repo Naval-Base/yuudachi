@@ -90,11 +90,9 @@ class GitHubSearchCommand extends Command {
 				.setThumbnail(body.author ? body.author.avatar_url : '')
 				.setTimestamp(new Date(body.commit.author.date));
 
-			if (
-				message.guild &&
-				(!message.channel.permissionsFor(this.client.user).has('ADD_REACTIONS') ||
-					!message.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES'))
-			) { return message.util.send(embed); }
+			if (message.guild && !message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'])) {
+				return message.util.send(embed);
+			}
 			const msg = await message.util.send(embed);
 			const ownReaction = await msg.react('🗑');
 			let react;
@@ -218,11 +216,9 @@ class GitHubSearchCommand extends Command {
 			);
 		}
 
-		if (
-			message.guild &&
-			(!message.channel.permissionsFor(this.client.user).has('ADD_REACTIONS') ||
-				!message.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES'))
-		) { return message.util.send(embed); }
+		if (message.guild && (!message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES']))) {
+			return message.util.send(embed);
+		}
 		const msg = await message.util.send(embed);
 		const ownReaction = await msg.react('🗑');
 		let react;

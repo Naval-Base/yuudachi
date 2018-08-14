@@ -144,10 +144,9 @@ class GitHubPROrIssueCommand extends Command {
 			);
 		}
 
-		if (
-			!message.channel.permissionsFor(message.guild.me).has('ADD_REACTIONS') ||
-			!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')
-		) { return message.util.send(embed); }
+		if (!message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'])) {
+			return message.util.send(embed);
+		}
 		const msg = await message.util.send(embed);
 		msg.react('🗑');
 		let react;
