@@ -29,12 +29,12 @@ module.exports = class MDNCommand extends Command {
 		});
 	}
 
-	async exec(msg, { query, match }) {
+	async exec(message, { query, match }) {
 		if (!query && match) [, query] = match;
 		const queryString = qs.stringify({ q: query });
 		const res = await fetch(`https://mdn.topkek.pw/search?${queryString}`);
 		const body = await res.json();
-		if (!body.URL || !body.Title || !body.Summary) return msg.util.send('Could not find any results.');
+		if (!body.URL || !body.Title || !body.Summary) return message.util.send('Could not find any results.');
 		const turndown = new Turndown();
 		turndown.addRule('hyperlink', {
 			filter: 'a',
@@ -46,6 +46,7 @@ module.exports = class MDNCommand extends Command {
 			.setURL(`https://developer.mozilla.org${body.URL}`)
 			.setTitle(body.Title)
 			.setDescription(turndown.turndown(body.Summary));
-		return msg.util.send({ embed });
+
+		return message.util.send(embed);
 	}
 };

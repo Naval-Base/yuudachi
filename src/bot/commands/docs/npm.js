@@ -26,11 +26,11 @@ module.exports = class NPMCommand extends Command {
 		});
 	}
 
-	async exec(msg, { pkg }) {
+	async exec(message, { pkg }) {
 		const res = await fetch(`https://registry.npmjs.com/${pkg}`);
-		if (res.status === 404) return msg.util.send('Could not find any results.');
+		if (res.status === 404) return message.util.send('Could not find any results.');
 		const body = await res.json();
-		if (body.time.unpublished) return msg.util.send('This package no longer exists.');
+		if (body.time.unpublished) return message.util.send('This package no longer exists.');
 		const version = body.versions[body['dist-tags'].latest];
 		const maintainers = this.trimArray(body.maintainers.map(user => user.name));
 		const dependencies = version.dependencies ? this.trimArray(Object.keys(version.dependencies)) : null;
@@ -48,7 +48,8 @@ module.exports = class NPMCommand extends Command {
 			.addField('❯ Main File', version.main || 'index.js', true)
 			.addField('❯ Dependencies', dependencies && dependencies.length ? dependencies.join(', ') : 'None')
 			.addField('❯ Maintainers', maintainers.join(', '));
-		return msg.util.send({ embed });
+
+		return message.util.send(embed);
 	}
 
 	trimArray(arr) {
@@ -57,6 +58,7 @@ module.exports = class NPMCommand extends Command {
 			arr = arr.slice(0, 10);
 			arr.push(`${len} more...`);
 		}
+
 		return arr;
 	}
 };
