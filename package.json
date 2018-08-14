@@ -13,7 +13,6 @@
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^6.0.0",
 		"erlpack": "discordapp/erlpack",
-		"git-rev-sync": "^1.12.0",
 		"moment": "^2.22.2",
 		"moment-duration-format": "^2.2.2",
 		"node-fetch": "^2.2.0",
