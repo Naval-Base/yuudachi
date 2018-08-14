@@ -6,6 +6,7 @@ const database = require('../structures/Database');
 const SettingsProvider = require('../structures/SettingsProvider');
 const { Op } = require('sequelize');
 const Raven = require('raven');
+const git = require('git-rev-sync');
 
 class GrafZeppelinClient extends AkairoClient {
 	constructor(config) {
@@ -92,7 +93,9 @@ class GrafZeppelinClient extends AkairoClient {
 		if (process.env.RAVEN) {
 			Raven.config(process.env.RAVEN, {
 				captureUnhandledRejections: true,
-				autoBreadcrumbs: true
+				autoBreadcrumbs: true,
+				environment: process.env.NODE_ENV,
+				release: git.long()
 			}).install();
 		} else {
 			process.on('unhandledRejection', this.logger.error);
