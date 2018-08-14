@@ -7,7 +7,7 @@ class PrefixCommand extends Command {
 			description: {
 				content: 'Displays or changes the prefix of the guild.',
 				usage: '[prefix]',
-				examples: ['prefix', 'prefix *', 'prefix Graf']
+				examples: ['prefix', 'prefix *', 'prefix Yukikaze']
 			},
 			category: 'util',
 			channel: 'guild',

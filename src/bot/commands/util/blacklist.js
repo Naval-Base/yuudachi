@@ -5,7 +5,7 @@ class BlacklistCommand extends Command {
 		super('blacklist', {
 			aliases: ['blacklist', 'unblacklist'],
 			description: {
-				content: 'Prohibit/Allow a user from using Graf Zeppelin.',
+				content: 'Prohibit/Allow a user from using Yukikaze.',
 				usage: '<user>',
 				examples: ['Crawl', '@Crawl', '81440962496172032']
 			},

@@ -11,7 +11,7 @@ class EvalCommand extends Command {
 		super('eval', {
 			aliases: ['eval'],
 			description: {
-				content: 'Prohibit/Allow a user from using Graf Zeppelin.',
+				content: 'Prohibit/Allow a user from using Yukikaze.',
 				usage: '<code>'
 			},
 			category: 'util',

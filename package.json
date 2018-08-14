@@ -1,8 +1,8 @@
 {
-	"name": "graf-zeppelin",
+	"name": "yukikaze",
 	"version": "0.1.0",
-	"description": "German aircraft boat",
-	"main": "src/graf_zeppelin.js",
+	"description": "",
+	"main": "src/yukikaze.js",
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "UNLICENSED",
 	"private": true,

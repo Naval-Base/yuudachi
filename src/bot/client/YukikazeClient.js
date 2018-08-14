@@ -7,7 +7,7 @@ const SettingsProvider = require('../structures/SettingsProvider');
 const { Op } = require('sequelize');
 const Raven = require('raven');
 
-class GrafZeppelinClient extends AkairoClient {
+class YukikazeClient extends AkairoClient {
 	constructor(config) {
 		super({ ownerID: config.owner }, {
 			disableEveryone: true,
@@ -123,4 +123,4 @@ class GrafZeppelinClient extends AkairoClient {
 	}
 }
 
-module.exports = GrafZeppelinClient;
+module.exports = YukikazeClient;

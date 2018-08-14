@@ -1,10 +1,10 @@
 FROM node:10-alpine
 
-LABEL name "Graf Zeppelin"
+LABEL name "Yukikaze"
 LABEL version "0.1.0"
 LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
 
-WORKDIR /usr/src/graf-Zeppelin
+WORKDIR /usr/src/yukikaze
 
 COPY package.json yarn.lock ./
 
@@ -24,4 +24,4 @@ ENV NODE_ENV= \
 	RAVEN= \
 	GITHUB_API_KEY=
 
-CMD ["node", "src/graf_zeppelin.js"]
+CMD ["node", "src/yukikaze.js"]
