@@ -8,7 +8,7 @@ class TagCommand extends Command {
 			description: {
 				content: stripIndents`Available methods:
 					 • show \`<tag>\`
-					 • add \`[--hoisted] <tag> <content>\`
+					 • add \`[--hoist/--pin] <tag> <content>\`
 					 • alias \`<--add/--del> <tag> <tagalias>\`
 					 • del \`<tag>\`
 					 • edit \`[--hoist/--unhoist] <tag> <content>\`
@@ -25,7 +25,7 @@ class TagCommand extends Command {
 				examples: [
 					'show Test',
 					'add Test Test',
-					'add --hoisted "Test 2" Test2',
+					'add --hoist/--pin "Test 2" Test2',
 					'alias --add Test1 Test2',
 					'alias --del "Test 2" "Test 3"',
 					'del Test',

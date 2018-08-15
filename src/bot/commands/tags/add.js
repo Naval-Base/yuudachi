@@ -29,15 +29,15 @@ class TagAddCommand extends Command {
 					}
 				},
 				{
-					id: 'hoisted',
+					id: 'hoist',
 					match: 'flag',
-					flag: '--hoisted'
+					flag: ['--hoist', '--pin']
 				}
 			]
 		});
 	}
 
-	async exec(message, { name, content, hoisted }) {
+	async exec(message, { name, content, hoist }) {
 		if (content && content.length >= 1950) {
 			return message.util.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
@@ -45,7 +45,7 @@ class TagAddCommand extends Command {
 			user: message.author.id,
 			guild: message.guild.id,
 			name,
-			hoisted: hoisted ? true : false,
+			hoisted: hoist ? true : false,
 			content
 		});
 
