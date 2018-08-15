@@ -49,7 +49,7 @@ class TagAddCommand extends Command {
 			content
 		});
 
-		return message.util.reply(`Leave it to me! A tag with the name **${name}** has been added.`);
+		return message.util.reply(`leave it to me! A tag with the name **${name}** has been added.`);
 	}
 }
 
