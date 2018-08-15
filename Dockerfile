@@ -21,6 +21,7 @@ ENV NODE_ENV= \
 	OWNERS= \
 	TOKEN= \
 	DB= \
+	REDIS= \
 	RAVEN= \
 	GITHUB_API_KEY=
 

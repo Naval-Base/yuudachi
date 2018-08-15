@@ -3,6 +3,7 @@ const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = requ
 const { Util } = require('discord.js');
 const { createLogger, transports, format } = require('winston');
 const database = require('../structures/Database');
+const Redis = require('ioredis');
 const SettingsProvider = require('../structures/SettingsProvider');
 const { Op } = require('sequelize');
 const Raven = require('raven');
@@ -24,6 +25,13 @@ class YukikazeClient extends AkairoClient {
 		});
 
 		this.db = database;
+		if (process.env.REDIS) {
+			this.redis = new Redis({
+				port: 6379,
+				host: process.env.REDIS,
+				db: 0
+			});
+		}
 
 		this.settings = new SettingsProvider(database.model('settings'));
 
