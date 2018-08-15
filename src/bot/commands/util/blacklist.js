@@ -33,13 +33,13 @@ class BlacklistCommand extends Command {
 			if (blacklist.length === 0) this.client.settings.delete('global', 'blacklist');
 			else this.client.settings.set('global', 'blacklist', blacklist);
 
-			return message.util.send(`${user.tag} has been removed from the blacklist.`);
+			return message.util.send(`${user.tag}, have you realized Yukikaze's greatness? You've got good eyes~`);
 		}
 
 		blacklist.push(user.id);
 		this.client.settings.set('global', 'blacklist', blacklist);
 
-		return message.util.send(`${user.tag} has been blacklisted from using ${this.client.user}`);
+		return message.util.send(`${user.tag}, you are not worthy of Yukikaze's luck~`);
 	}
 }
 

@@ -41,7 +41,7 @@ class TagListCommand extends Command {
 			return message.util.send(embed);
 		}
 		const tags = await this.client.db.models.tags.findAll({ where: { guild: message.guild.id } });
-		if (!tags.length) return message.util.send(`**${message.guild.name}** doesn't have any tags. Why not add one?`);
+		if (!tags.length) return message.util.send(`**${message.guild.name}** doesn't have any tags. Why not add some?`);
 		const hoistedTags = tags
 			.filter(tag => tag.hoisted)
 			.map(tag => `\`${tag.name}\``)

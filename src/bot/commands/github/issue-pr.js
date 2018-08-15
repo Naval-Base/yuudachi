@@ -110,10 +110,10 @@ class GitHubPROrIssueCommand extends Command {
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util.reply("couldn't find an issue or PR with the supplied number.");
+			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		if (!body || !body.data || !body.data.repository) {
-			return message.util.reply("couldn't find an issue or PR with the supplied number.");
+			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const data = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()

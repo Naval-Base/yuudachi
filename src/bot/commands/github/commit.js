@@ -47,10 +47,10 @@ class GitHubCommitCommand extends Command {
 				{ headers: { Authorization: `token ${GITHUB_API_KEY}` } });
 			body = await res.json();
 		} catch (error) {
-			return message.util.reply("couldn't find a commit with that hash.");
+			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		if (!body) {
-			return message.util.reply("couldn't find a commit with that hash.");
+			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const embed = new MessageEmbed()
 			.setColor(3447003)

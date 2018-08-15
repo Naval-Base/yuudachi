@@ -48,9 +48,11 @@ class TagEditCommand extends Command {
 
 	async exec(message, { tag, hoisted, content }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
-		if (tag.user !== message.author.id && !staffRole) return message.util.reply('you can only edit your own tags.');
+		if (tag.user !== message.author.id && !staffRole) {
+			return message.util.reply('Losers are only allowed to edit their own tags! Hah hah hah!');
+		}
 		if (content && content.length >= 1950) {
-			return message.util.reply("make sure the content isn't longer than 1950 characters!");
+			return message.util.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
 		hoisted = Boolean(JSON.parse(hoisted));
 		if (staffRole) tag.hoisted = hoisted;

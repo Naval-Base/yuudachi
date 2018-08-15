@@ -10,7 +10,7 @@ class DisconnectListener extends Listener {
 	}
 
 	exec(event) {
-		this.client.logger.warn(`Disconnected with code: ${event.code}`);
+		this.client.logger.warn(`Hmm, I have to hide the fact I was defeated... I'll let you go this time! (${event.code})`);
 	}
 }
 

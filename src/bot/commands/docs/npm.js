@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const moment = require('moment');
 require('moment-duration-format');
 
-module.exports = class NPMCommand extends Command {
+class NPMCommand extends Command {
 	constructor() {
 		super('npm', {
 			aliases: ['npm', 'npm-package'],
@@ -22,7 +22,7 @@ module.exports = class NPMCommand extends Command {
 						start: message => `${message.author}, what would you like to search for?`
 					},
 					match: 'content',
-					type: pkg => pkg ? encodeURIComponent(pkg.replace(/ /g, '-')) : null
+					type: pkg => pkg ? encodeURIComponent(pkg.replace(/ /g, '-')) : null // eslint-disable-line no-confusing-arrow
 				}
 			]
 		});
@@ -30,9 +30,13 @@ module.exports = class NPMCommand extends Command {
 
 	async exec(message, { pkg }) {
 		const res = await fetch(`https://registry.npmjs.com/${pkg}`);
-		if (res.status === 404) return message.util.send('Could not find any results.');
+		if (res.status === 404) {
+			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+		}
 		const body = await res.json();
-		if (body.time.unpublished) return message.util.send('This package no longer exists.');
+		if (body.time.unpublished) {
+			return message.util.reply('whoever was the Commander of this package decided to unpublish it, what a fool.');
+		}
 		const version = body.versions[body['dist-tags'].latest];
 		const maintainers = this.trimArray(body.maintainers.map(user => user.name));
 		const dependencies = version.dependencies ? this.trimArray(Object.keys(version.dependencies)) : null;
@@ -45,8 +49,8 @@ module.exports = class NPMCommand extends Command {
 			.addField('❯ Version', body['dist-tags'].latest, true)
 			.addField('❯ License', body.license || 'None', true)
 			.addField('❯ Author', body.author ? body.author.name : '???', true)
-			.addField('❯ Creation Date', moment.utc(body.time.created).format('dddd, MMMM, Do YYYY, HH:mm:ss ZZ'), true)
-			.addField('❯ Modification Date', moment.utc(body.time.modified).format('dddd, MMMM, Do YYYY, HH:mm:ss ZZ'), true)
+			.addField('❯ Creation Date', moment.utc(body.time.created).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'), true)
+			.addField('❯ Modification Date', moment.utc(body.time.modified).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'), true)
 			.addField('❯ Main File', version.main || 'index.js', true)
 			.addField('❯ Dependencies', dependencies && dependencies.length ? dependencies.join(', ') : 'None')
 			.addField('❯ Maintainers', maintainers.join(', '));
@@ -63,4 +67,6 @@ module.exports = class NPMCommand extends Command {
 
 		return arr;
 	}
-};
+}
+
+module.exports = NPMCommand;

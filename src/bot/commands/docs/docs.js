@@ -38,7 +38,9 @@ class DocsCommand extends Command {
 		const queryString = qs.stringify({ q: query.join(' ') });
 		const res = await fetch(`https://djsdocs.sorta.moe/${project}/${branch}/embed?${queryString}`);
 		const embed = await res.json();
-		if (!embed) return message.util.reply("couldn't find the requested information in the documentation.");
+		if (!embed) {
+			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+		}
 		if (!message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'])) {
 			return message.util.send({ embed });
 		}

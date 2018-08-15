@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const qs = require('querystring');
 const Turndown = require('turndown');
 
-module.exports = class MDNCommand extends Command {
+class MDNCommand extends Command {
 	constructor() {
 		super('mdn', {
 			aliases: ['mdn', 'mozilla-developer-network'],
@@ -12,7 +12,7 @@ module.exports = class MDNCommand extends Command {
 			description: {
 				content: 'Searches MDN for your query.',
 				usage: '<query>',
-				examples: ['Map#get', 'Map.set', 'mdn, Map']
+				examples: ['mdn, Map', 'Map#get', 'Map.set']
 			},
 			regex: /^(?:mdn,) (.+)/i,
 			clientPermissions: ['EMBED_LINKS'],
@@ -23,18 +23,20 @@ module.exports = class MDNCommand extends Command {
 						start: message => `${message.author}, what would you like to search for?`
 					},
 					match: 'content',
-					type: query => query ? query.replace(/#/g, '.prototype.') : null
+					type: query => query ? query.replace(/#/g, '.prototype.') : null // eslint-disable-line no-confusing-arrow
 				}
 			]
 		});
 	}
 
 	async exec(message, { query, match }) {
-		if (!query && match) [, query] = match;
+		if (!query && match) query = match[1]; // eslint-disable-line prefer-destructuring
 		const queryString = qs.stringify({ q: query });
 		const res = await fetch(`https://mdn.topkek.pw/search?${queryString}`);
 		const body = await res.json();
-		if (!body.URL || !body.Title || !body.Summary) return message.util.send('Could not find any results.');
+		if (!body.URL || !body.Title || !body.Summary) {
+			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+		}
 		const turndown = new Turndown();
 		turndown.addRule('hyperlink', {
 			filter: 'a',
@@ -49,4 +51,6 @@ module.exports = class MDNCommand extends Command {
 
 		return message.util.send(embed);
 	}
-};
+}
+
+module.exports = MDNCommand;

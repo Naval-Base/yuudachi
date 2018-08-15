@@ -35,7 +35,7 @@ class SearchTagCommand extends Command {
 			.sort()
 			.join(', ');
 		if (search.length >= 1950) {
-			return message.util.reply('the output is way too big to display, make your search more specific and try again.');
+			return message.util.reply('the output is way too big to display, make your search more specific and try again!');
 		}
 		const embed = new MessageEmbed()
 			.setColor(0x30a9ed)

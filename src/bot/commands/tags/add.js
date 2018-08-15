@@ -39,7 +39,7 @@ class TagAddCommand extends Command {
 
 	async exec(message, { name, content, hoisted }) {
 		if (content && content.length >= 1950) {
-			return message.util.reply("make sure the content isn't longer than 1950 characters!");
+			return message.util.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
 		await this.client.db.models.tags.create({
 			user: message.author.id,
@@ -49,7 +49,7 @@ class TagAddCommand extends Command {
 			content
 		});
 
-		return message.util.reply(`a tag with the name **${name}** has been added.`);
+		return message.util.reply(`Leave it to me! A tag with the name **${name}** has been added.`);
 	}
 }
 
