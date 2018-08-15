@@ -49,7 +49,7 @@ class GitHubCommitCommand extends Command {
 		} catch (error) {
 			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
-		if (!body) {
+		if (!body || !body.commit) {
 			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const embed = new MessageEmbed()
