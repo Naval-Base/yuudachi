@@ -16,22 +16,24 @@ class CommandStartedListener extends Listener {
 				id: message.author.id,
 				username: message.author.tag
 			},
-			/* eslint-disable multiline-ternary */
-			guild: message.guild ? {
-				id: message.guild.id,
-				name: message.guild.name
-			} : null,
+			extra: {
+				/* eslint-disable multiline-ternary */
+				guild: message.guild ? {
+					id: message.guild.id,
+					name: message.guild.name
+				} : null,
+				command: {
+					id: command.id,
+					aliases: command.aliases,
+					category: command.category
+				},
+				message: {
+					id: message.id,
+					content: message.content
+				},
+				args
+			}
 			/* eslint-enable multiline-ternary */
-			command: {
-				id: command.id,
-				aliases: command.aliases,
-				category: command.category
-			},
-			message: {
-				id: message.id,
-				content: message.content
-			},
-			args
 		});
 	}
 }

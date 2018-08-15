@@ -11,6 +11,7 @@ class CommandErrorListener extends Listener {
 	}
 
 	exec(error, message, command) {
+		this.client.logger.error(error);
 		Raven.captureException(error);
 	}
 }
