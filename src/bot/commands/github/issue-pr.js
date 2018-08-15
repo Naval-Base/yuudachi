@@ -14,7 +14,7 @@ class GitHubPROrIssueCommand extends Command {
 				usage: '<pr/issue>',
 				examples: ['1', '24', '100']
 			},
-			regex: /\bg#(\d+)/i,
+			regex: /\b(g|djs|commando|guide|rpc)#(\d+)/i,
 			category: 'github',
 			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
@@ -37,11 +37,37 @@ class GitHubPROrIssueCommand extends Command {
 				therefore this command is not available.
 			`);
 		}
-		const repository = this.client.settings.get(message.guild, 'githubRepository');
-		if (!repository) return message.util.reply("the guild owner didn't set a GitHub repository yet.");
-		const owner = repository.split('/')[0];
-		const repo = repository.split('/')[1];
-		const number = args.match ? args.match[1] : args.pr_issue;
+		let owner;
+		let repo;
+		if ((args.match && args.match[1] === 'g') || !args.match) {
+			const repository = this.client.settings.get(message.guild, 'githubRepository');
+			if (!repository) return message.util.reply("the guild owner didn't set a GitHub repository yet.");
+			owner = repository.split('/')[0]; // eslint-disable-line prefer-destructuring
+			repo = repository.split('/')[1]; // eslint-disable-line prefer-destructuring
+		}
+		if (args.match && args.match[1] !== 'g') {
+			switch (args.match[1]) {
+				case 'djs':
+					owner = 'discordjs';
+					repo = 'discord.js';
+					break;
+				case 'commando':
+					owner = 'discordjs';
+					repo = 'Commando';
+					break;
+				case 'guide':
+					owner = 'discordjs';
+					repo = 'guide';
+					break;
+				case 'rpc':
+					owner = 'discordjs';
+					repo = 'RPC';
+					break;
+				default:
+					return message.util.reply('No u.');
+			}
+		}
+		const number = args.match ? args.match[2] : args.pr_issue;
 		const query = `
 			{
 				repository(owner: "${owner}", name: "${repo}") {
