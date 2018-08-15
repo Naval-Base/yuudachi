@@ -134,11 +134,13 @@ class GitHubPROrIssueCommand extends Command {
 				headers: { Authorization: `Bearer ${GITHUB_API_KEY}` },
 				body: JSON.stringify({ query })
 			});
+			console.log(res);
 			body = await res.json();
+			console.log(body);
 		} catch (error) {
 			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
-		if (!body || !body.data || !body.data.repository) {
+		if (!body || !body.data || !body.data.repository || !body.data.repository.issueOrPullRequest) {
 			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const data = body.data.repository.issueOrPullRequest;
