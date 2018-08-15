@@ -11,7 +11,7 @@ class TagCommand extends Command {
 					 • add \`[--hoisted] <tag> <content>\`
 					 • alias \`<--add/--del> <tag> <tagalias>\`
 					 • del \`<tag>\`
-					 • edit \`[--hoisted=true/false] <tag> <content>\`
+					 • edit \`[--hoist/--unhoist] <tag> <content>\`
 					 • source \`<tag>\`
 					 • info \`<tag>\`
 					 • search \`<tag>\`
@@ -31,8 +31,8 @@ class TagCommand extends Command {
 					'del Test',
 					'edit Test Some new content',
 					'edit "Test 1" Some more new content',
-					'edit Test --hoisted=true',
-					'edit Test --hoisted=false Some more new content',
+					'edit Test --hoist',
+					'edit Test --unhoist Some more new content',
 					'source Test',
 					'info Test',
 					'search Test',

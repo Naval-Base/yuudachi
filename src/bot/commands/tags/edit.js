@@ -7,8 +7,8 @@ class TagEditCommand extends Command {
 			category: 'tags',
 			description: {
 				content: 'Edit a tag (Markdown can be used).',
-				usage: '<tag> <content>',
-				examples: ['Test Some new content', '"Test 1" Some more new content']
+				usage: '<tag> [--hoist/--unhoist/--pin/--unpin] <content>',
+				examples: ['Test Some new content', '"Test 1" Some more new content', 'Test --hoist', '"Test 1" --unpin']
 			},
 			channel: 'guild',
 			ratelimit: 2,
@@ -22,11 +22,16 @@ class TagEditCommand extends Command {
 					}
 				},
 				{
-					id: 'hoisted',
-					match: 'option',
-					flag: ['--hoisted=', '--pin=']
+					id: 'hoist',
+					match: 'flag',
+					flag: ['--hoist', '--pin']
 				},
-				Control.if((_, args) => args.hoisted, [
+				{
+					id: 'unhoist',
+					match: 'flag',
+					flag: ['--unhoist', '--unpin']
+				},
+				Control.if((_, args) => args.hoist || args.unhoist, [
 					{
 						id: 'content',
 						match: 'rest',
@@ -46,7 +51,7 @@ class TagEditCommand extends Command {
 		});
 	}
 
-	async exec(message, { tag, hoisted, content }) {
+	async exec(message, { tag, hoist, unhoist, content }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
 		if (tag.user !== message.author.id && !staffRole) {
 			return message.util.reply('Losers are only allowed to edit their own tags! Hah hah hah!');
@@ -54,8 +59,9 @@ class TagEditCommand extends Command {
 		if (content && content.length >= 1950) {
 			return message.util.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
-		hoisted = Boolean(JSON.parse(hoisted));
-		if (staffRole) tag.hoisted = hoisted;
+		if (hoist) hoist = true;
+		else if (unhoist) hoist = false;
+		if (staffRole) tag.hoisted = hoist;
 		if (content) {
 			content = Util.cleanContent(content, message);
 			tag.content = content;
@@ -63,7 +69,7 @@ class TagEditCommand extends Command {
 		tag.last_modified = message.author.id;
 		await tag.save();
 
-		return message.util.reply(`successfully edited **${tag.name}**${hoisted && staffRole ? ' to be hoisted.' : '.'}`);
+		return message.util.reply(`successfully edited **${tag.name}**${hoist && staffRole ? ' to be hoisted.' : '.'}`);
 	}
 }
 
