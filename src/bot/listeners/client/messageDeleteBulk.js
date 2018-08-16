@@ -13,6 +13,7 @@ class MessageDeleteBulkListener extends Listener {
 	}
 
 	exec(messages) {
+		if (messages.first().author.bot) return;
 		const guildLogs = this.client.settings.get(messages.first().guild, 'guildLogs');
 		if (guildLogs) {
 			const output = messages.reduce((out, msg) => {
