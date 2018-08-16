@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo');
+const { Command, Control } = require('discord-akairo');
 
 class TagAliasCommand extends Command {
 	constructor() {
@@ -20,15 +20,6 @@ class TagAliasCommand extends Command {
 					}
 				},
 				{
-					id: 'second',
-					match: 'rest',
-					type: 'existingTag',
-					prompt: {
-						start: message => `${message.author}, what's the alias you want to apply to this tag?`,
-						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
-					}
-				},
-				{
 					id: 'add',
 					match: 'flag',
 					flag: '--add'
@@ -37,7 +28,28 @@ class TagAliasCommand extends Command {
 					id: 'del',
 					match: 'flag',
 					flag: '--del'
-				}
+				},
+				Control.if((_, args) => args.add, [
+					{
+						id: 'second',
+						match: 'rest',
+						type: 'existingTag',
+						prompt: {
+							start: message => `${message.author}, what's the alias you want to apply to this tag?`,
+							retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
+						}
+					}
+				], [
+					{
+						id: 'second',
+						match: 'rest',
+						type: 'string',
+						prompt: {
+							start: message => `${message.author}, what's the alias you want to apply to this tag?`,
+							retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
+						}
+					}
+				])
 			]
 		});
 	}
