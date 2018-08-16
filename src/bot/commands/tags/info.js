@@ -1,6 +1,7 @@
 const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
+require('moment-duration-format');
 
 class TagInfoCommand extends Command {
 	constructor() {
