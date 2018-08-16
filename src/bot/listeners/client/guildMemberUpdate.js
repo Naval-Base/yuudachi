@@ -9,7 +9,7 @@ class GuildMemberUpdateListener extends Listener {
 		});
 	}
 
-	async exec(oldember, newMember) {
+	async exec(oldMember, newMember) {
 		const roleState = this.client.settings.get(newMember.guild, 'roleState');
 		if (roleState) {
 			await newMember.guild.members.fetch(newMember.id);
