@@ -7,8 +7,8 @@
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.6.tgz#3e02972728c69248c2af08d60a48cbb8680fffdf"
 
 "@types/node@*":
-  version "10.7.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.7.0.tgz#d384b2c8625414ab2aa18fdf989c288d6a7a8202"
+  version "10.7.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.7.1.tgz#b704d7c259aa40ee052eec678758a68d07132a2e"
 
 abab@^1.0.4:
   version "1.0.4"
@@ -407,13 +407,17 @@ diagnostics@^1.0.1:
     enabled "1.0.x"
     kuler "1.0.x"
 
+diff@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
+
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
   resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/4e4cd9076ed1dbf486f36b0825123311b04c16eb"
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/64832abfdbb21041328a7155790764ef73e0b9fa"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/3f81b613d83140cdf3d99b93ea74d83c52846b2c"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
@@ -634,8 +638,8 @@ fast-levenshtein@~2.0.4:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
 
 fast-safe-stringify@^2.0.4:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.5.tgz#cdb2d02d41329afbe67eff073598811d482609e3"
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.6.tgz#04b26106cc56681f51a044cfc0d76cf0008ac2c2"
 
 fecha@^2.3.3:
   version "2.3.3"

@@ -1,9 +1,8 @@
 const { join } = require('path');
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = require('discord-akairo');
-const { Util } = require('discord.js');
+const { Util, WebhookClient } = require('discord.js');
 const { createLogger, transports, format } = require('winston');
 const database = require('../structures/Database');
-const Redis = require('ioredis');
 const SettingsProvider = require('../structures/SettingsProvider');
 const { Op } = require('sequelize');
 const Raven = require('raven');
@@ -25,13 +24,6 @@ class YukikazeClient extends AkairoClient {
 		});
 
 		this.db = database;
-		if (process.env.REDIS) {
-			this.redis = new Redis({
-				port: 6379,
-				host: process.env.REDIS,
-				db: 0
-			});
-		}
 
 		this.settings = new SettingsProvider(database.model('settings'));
 
@@ -106,6 +98,10 @@ class YukikazeClient extends AkairoClient {
 			}).install();
 		} else {
 			process.on('unhandledRejection', this.logger.error);
+		}
+
+		if (process.env.LOGS) {
+			this.webhook = new WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
 		}
 
 		this.init();
