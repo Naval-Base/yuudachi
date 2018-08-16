@@ -14,14 +14,17 @@ class MessageUpdateListener extends Listener {
 	exec(oldMessage, newMessage) {
 		if (oldMessage.author.bot || newMessage.author.bot) return;
 		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs');
-		if (guildLogs) {
+		if (guildLogs || newMessage.guild.id === '424963290989461514') {
 			const embed = new MessageEmbed()
 				.setColor(0x306bff)
 				.setAuthor(`${newMessage.author.tag} (${newMessage.author.id})`, newMessage.author.displayAvatarURL())
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
 			if (/```(.*?)```/s.test(oldMessage)) {
-				const diffMessage = diff.diffLines(oldMessage.content, newMessage.content, { newlineIsToken: true });
+				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2];
+				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2];
+				if (strippedOldMessage === strippedNewMessage) return;
+				const diffMessage = diff.diffLines(strippedOldMessage, strippedNewMessage, { newlineIsToken: true });
 				for (const part of diffMessage) {
 					if (part.value === '\n') continue;
 					const d = part.added ? '+ ' : part.removed ? '- ' : '';
@@ -29,7 +32,7 @@ class MessageUpdateListener extends Listener {
 				}
 				const prepend = '```diff\n';
 				const append = '\n```';
-				embed.addField('❯ Message', `${prepend}${msg.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2].substring(0, 1000)}${append}`);
+				embed.addField('❯ Message', `${prepend}${msg.substring(0, 1000)}${append}`);
 			} else {
 				const diffMessage = diff.diffWords(oldMessage.content, newMessage.content);
 				for (const part of diffMessage) {
