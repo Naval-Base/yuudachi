@@ -29,7 +29,7 @@ class MessageUpdateListener extends Listener {
 				}
 				const prepend = '```diff\n';
 				const append = '\n```';
-				embed.addField('❯ Message', `${prepend}${msg.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2].substring(0, 1000)}\n...${append}`);
+				embed.addField('❯ Message', `${prepend}${msg.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2].substring(0, 1000)}${append}`);
 			} else {
 				const diffMessage = diff.diffWords(oldMessage.content, newMessage.content);
 				for (const part of diffMessage) {
