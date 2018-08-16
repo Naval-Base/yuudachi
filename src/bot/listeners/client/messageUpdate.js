@@ -36,10 +36,10 @@ class MessageUpdateListener extends Listener {
 					const markdown = part.added ? '**' : part.removed ? '~~' : '';
 					msg += `${markdown}${part.value}${markdown}`;
 				}
-				embed.addField('❯ Message', `${msg.substring(0, 1020)}`);
+				embed.addField('❯ Message', `${msg.substring(0, 1020)}` || '\u200b');
 			}
 			embed.addField('❯ Jump To', newMessage.url, true);
-			embed.setTimestamp(newMessage.editedAt);
+			embed.setTimestamp(newMessage.editedAt || oldMessage.editedAt);
 			embed.setFooter('Edited');
 
 			return this.client.webhook.send({
