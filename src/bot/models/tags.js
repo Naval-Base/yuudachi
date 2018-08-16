@@ -32,5 +32,10 @@ module.exports = (sequelize, DataTypes) =>
 			type: DataTypes.BIGINT
 		}
 	}, {
-		timestamps: true
+		timestamps: true,
+		indexes: [
+			{ fields: ['user'] },
+			{ fields: ['guild'] },
+			{ fields: ['name'] }
+		]
 	});
