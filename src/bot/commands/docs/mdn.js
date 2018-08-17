@@ -12,7 +12,7 @@ class MDNCommand extends Command {
 			description: {
 				content: 'Searches MDN for your query.',
 				usage: '<query>',
-				examples: ['mdn, Map', 'Map#get', 'Map.set']
+				examples: ['Map', 'Map#get', 'Map.set']
 			},
 			regex: /^(?:mdn,) (.+)/i,
 			clientPermissions: ['EMBED_LINKS'],
