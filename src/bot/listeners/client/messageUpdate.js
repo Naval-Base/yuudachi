@@ -13,6 +13,7 @@ class MessageUpdateListener extends Listener {
 
 	exec(oldMessage, newMessage) {
 		if (oldMessage.author.bot || newMessage.author.bot) return;
+		if (oldMessage.content === newMessage.content) return;
 		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs');
 		if (guildLogs || newMessage.guild.id === '424963290989461514') {
 			const embed = new MessageEmbed()
