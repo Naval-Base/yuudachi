@@ -12,6 +12,7 @@ class MessageDeleteListener extends Listener {
 
 	exec(message) {
 		if (message.author.bot) return;
+		if (!message.content) return;
 		const guildLogs = this.client.settings.get(message.guild, 'guildLogs');
 		if (guildLogs) {
 			const attachment = message.attachments.first();

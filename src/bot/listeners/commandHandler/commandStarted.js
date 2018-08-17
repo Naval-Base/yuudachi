@@ -25,7 +25,7 @@ class CommandStartedListener extends Listener {
 				command: {
 					id: command.id,
 					aliases: command.aliases,
-					category: command.category
+					category: command.category.id
 				},
 				message: {
 					id: message.id,
