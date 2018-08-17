@@ -21,7 +21,6 @@ class MessageDeleteBulkListener extends Listener {
 				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author.tag} (${msg.author.id}): ${msg.cleanContent || ''}${attachment ? `\r\n${attachment.url}` : ''}\r\n`;
 				return out;
 			}, '');
-			console.log(output);
 			const embed = new MessageEmbed()
 				.setColor(0x824aee)
 				.setAuthor(`${messages.first().author.tag} (${messages.first().author.id})`, messages.first().author.displayAvatarURL())
