@@ -90,7 +90,7 @@ class GitHubSearchCommand extends Command {
 				.setThumbnail(body.author ? body.author.avatar_url : '')
 				.setTimestamp(new Date(body.commit.author.date));
 
-			if (message.guild && !message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'])) {
+			if (message.guild && !message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 				return message.util.send(embed);
 			}
 			const msg = await message.util.send(embed);
@@ -216,7 +216,7 @@ class GitHubSearchCommand extends Command {
 			);
 		}
 
-		if (message.guild && (!message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES']))) {
+		if (message.guild && !message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 			return message.util.send(embed);
 		}
 		const msg = await message.util.send(embed);

@@ -413,11 +413,11 @@ diff@^3.5.0:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/4e4cd9076ed1dbf486f36b0825123311b04c16eb"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/400e98d510c57aafe9efc059ffd4b351612e5421"
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/3f81b613d83140cdf3d99b93ea74d83c52846b2c"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/d437cecb3f8d10fa3f726f5806df1e7d972bbbb4"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
@@ -1790,8 +1790,8 @@ uuid@^3.2.1, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
 validator@^10.4.0:
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-10.5.0.tgz#1debbe1e6f5fd0c920ed2af47516f3762033939c"
+  version "10.6.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-10.6.0.tgz#a9bdce685b3c3e8480e7ebbb9eb95c54cd9733b0"
 
 verror@1.10.0:
   version "1.10.0"
