@@ -21,7 +21,7 @@ class MessageUpdateListener extends Listener {
 				.setAuthor(`${newMessage.author.tag} (${newMessage.author.id})`, newMessage.author.displayAvatarURL())
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
-			if (/```(.*?)```/s.test(oldMessage)) {
+			if (/```(.*?)```/s.test(oldMessage) && /```(.*?)```/s.test(newMessage)) {
 				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2];
 				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2];
 				if (strippedOldMessage === strippedNewMessage) return;
