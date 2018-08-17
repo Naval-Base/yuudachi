@@ -10,6 +10,7 @@ const Raven = require('raven');
 class YukikazeClient extends AkairoClient {
 	constructor(config) {
 		super({ ownerID: config.owner }, {
+			messageCacheMaxSize: 1000,
 			disableEveryone: true,
 			disableEvents: ['TYPING_START']
 		});
