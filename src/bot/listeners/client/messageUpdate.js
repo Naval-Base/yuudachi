@@ -1,5 +1,5 @@
 const { Listener } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Util } = require('discord.js');
 const diff = require('diff');
 
 class MessageUpdateListener extends Listener {
@@ -13,7 +13,7 @@ class MessageUpdateListener extends Listener {
 
 	exec(oldMessage, newMessage) {
 		if (oldMessage.author.bot || newMessage.author.bot) return;
-		if (oldMessage.content === newMessage.content) return;
+		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
 		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs');
 		if (guildLogs || newMessage.guild.id === '424963290989461514') {
 			const embed = new MessageEmbed()
@@ -35,7 +35,7 @@ class MessageUpdateListener extends Listener {
 				const append = '\n```';
 				embed.addField('❯ Message', `${prepend}${msg.substring(0, 1000)}${append}`);
 			} else {
-				const diffMessage = diff.diffWords(oldMessage.content, newMessage.content);
+				const diffMessage = diff.diffWords(Util.escapeMarkdown(oldMessage.content), Util.escapeMarkdown(newMessage.content));
 				for (const part of diffMessage) {
 					const markdown = part.added ? '**' : part.removed ? '~~' : '';
 					msg += `${markdown}${part.value}${markdown}`;
