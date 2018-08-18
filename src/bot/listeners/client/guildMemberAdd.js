@@ -13,7 +13,9 @@ class GuildMemberAddListener extends Listener {
 		const roleState = this.client.settings.get(member.guild, 'roleState');
 		if (roleState) {
 			const user = await this.client.db.models.role_states.findOne({ where: { guild: member.guild.id, user: member.id } });
-			if (user && member.roles) await member.roles.add(user.roles, 'Automatic role state');
+			try {
+				if (user && member.roles) await member.roles.add(user.roles, 'Automatic role state');
+			} catch {}
 		}
 	}
 }
