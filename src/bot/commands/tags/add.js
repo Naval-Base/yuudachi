@@ -41,11 +41,12 @@ class TagAddCommand extends Command {
 		if (content && content.length >= 1950) {
 			return message.util.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
+		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
 		await this.client.db.models.tags.create({
 			user: message.author.id,
 			guild: message.guild.id,
 			name,
-			hoisted: hoist ? true : false,
+			hoisted: hoist && staffRole ? true : false,
 			content
 		});
 
