@@ -18,11 +18,11 @@ class ToggleLogsCommand extends Command {
 		const guildLogs = this.client.settings.get(message.guild, 'guildLogs');
 		if (guildLogs) {
 			this.client.settings.set(message.guild, 'guildLogs', false);
-			return message.util.reply('Successfully deactivated logs!');
+			return message.util.reply('successfully deactivated logs!');
 		}
 		this.client.settings.set(message.guild, 'guildLogs', true);
 
-		return message.util.reply('Successfully activated logs!');
+		return message.util.reply('successfully activated logs!');
 	}
 }
 

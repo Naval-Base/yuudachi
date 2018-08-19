@@ -21,7 +21,7 @@ class ToggleRoleStateCommand extends Command {
 			const users = await this.client.db.models.role_states.findAll({ where: { guild: message.guild.id } });
 			for (const user of users) await user.destroy();
 
-			return message.util.reply('Successfully removed all records!');
+			return message.util.reply('successfully removed all records!');
 		}
 		this.client.settings.set(message.guild, 'roleState', true);
 		const members = await message.guild.members.fetch();
@@ -35,7 +35,7 @@ class ToggleRoleStateCommand extends Command {
 		}
 		await this.client.db.models.role_states.bulkCreate(records.filter(record => record.roles.length));
 
-		return message.util.reply('Successfully inserted all the records!');
+		return message.util.reply('successfully inserted all the records!');
 	}
 }
 
