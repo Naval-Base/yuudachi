@@ -22,12 +22,17 @@ class DocsCommand extends Command {
 					prompt: {
 						start: message => `${message.author}, what would you like to search?`
 					}
+				},
+				{
+					id: 'force',
+					match: 'flag',
+					flag: ['--force', '-f']
 				}
 			]
 		});
 	}
 
-	async exec(message, { query }) {
+	async exec(message, { query, force }) {
 		query = query.split(' ');
 		let project = 'main';
 		let branch = ['stable', 'master', 'rpc', 'commando'].includes(query.slice(-1)[0]) ? query.pop() : 'stable';
@@ -35,7 +40,7 @@ class DocsCommand extends Command {
 			project = branch;
 			branch = 'master';
 		}
-		const queryString = qs.stringify({ q: query.join(' ') });
+		const queryString = qs.stringify({ q: query.join(' '), force });
 		const res = await fetch(`https://djsdocs.sorta.moe/${project}/${branch}/embed?${queryString}`);
 		const embed = await res.json();
 		if (!embed) {
