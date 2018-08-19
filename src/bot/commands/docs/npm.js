@@ -49,8 +49,8 @@ class NPMCommand extends Command {
 			.addField('❯ Version', body['dist-tags'].latest, true)
 			.addField('❯ License', body.license || 'None', true)
 			.addField('❯ Author', body.author ? body.author.name : '???', true)
-			.addField('❯ Creation Date', moment.utc(body.time.created).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'), true)
-			.addField('❯ Modification Date', moment.utc(body.time.modified).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'), true)
+			.addField('❯ Creation Date', moment.utc(body.time.created).format('YYYY/MM/DD hh:mm:ss'), true)
+			.addField('❯ Modification Date', moment.utc(body.time.modified).format('YYYY/MM/DD hh:mm:ss'), true)
 			.addField('❯ Main File', version.main || 'index.js', true)
 			.addField('❯ Dependencies', dependencies && dependencies.length ? dependencies.join(', ') : 'None')
 			.addField('❯ Maintainers', maintainers.join(', '));

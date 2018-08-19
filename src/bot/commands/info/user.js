@@ -39,7 +39,7 @@ class UserInfoCommand extends Command {
 				stripIndents`
 				${member.nickname == undefined ? '• No nickname' : ` • Nickname: ${member.nickname}`}
 				• Roles: ${member.roles.map(roles => `\`${roles.name}\``).join(' ')}
-				• Joined at: ${moment.utc(member.joinedAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ')}
+				• Joined at: ${moment.utc(member.joinedAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
 			/* eslint-enable no-undefined, eqeqeq */
 			)
@@ -49,7 +49,7 @@ class UserInfoCommand extends Command {
 				stripIndents`
 				• ID: ${member.id}
 				• Username: ${member.user.tag}
-				• Created at: ${moment.utc(user.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ')}${user.bot ? '\n• Is a bot account' : ''}
+				• Created at: ${moment.utc(user.createdAt).format('YYYY/MM/DD hh:mm:ss')}${user.bot ? '\n• Is a bot account' : ''}
 				• Status: ${user.presence.status.toUpperCase()}
 				• Activity: ${user.presence.activity ? user.presence.activity.name : 'None'}
 			`

@@ -44,8 +44,8 @@ class TagInfoCommand extends Command {
 			.addField('❯ Guild', guild ? `${guild.name}` : "Couldn't fetch guild.")
 			.addField('❯ Aliases', tag.aliases.length ? tag.aliases.map(t => `\`${t}\``).sort().join(', ') : 'No aliases.')
 			.addField('❯ Uses', tag.uses)
-			.addField('❯ Created at', moment.utc(tag.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'))
-			.addField('❯ Modified at', moment.utc(tag.updatedAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ'));
+			.addField('❯ Created at', moment.utc(tag.createdAt).format('YYYY/MM/DD hh:mm:ss'))
+			.addField('❯ Modified at', moment.utc(tag.updatedAt).format('YYYY/MM/DD hh:mm:ss'));
 		if (lastModifiedBy) {
 			embed.addField('❯ Last modified by', lastModifiedBy ? `${lastModifiedBy.tag} (ID: ${lastModifiedBy.id})` : "Couldn't fetch user.");
 		}

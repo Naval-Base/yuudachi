@@ -49,7 +49,7 @@ class ServerInfoCommand extends Command {
 				stripIndents`
 				• Roles: ${message.guild.roles.size}
 				• Region: ${message.guild.region}
-				• Created at: ${moment.utc(message.guild.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ')}
+				• Created at: ${moment.utc(message.guild.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 				• Verification Level: ${HUMAN_LEVELS[message.guild.verificationLevel]}
 			`
 			)

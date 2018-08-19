@@ -38,7 +38,7 @@ class ChannelInfoCommand extends Command {
 				• Type: ${channel.type}
 				• Topic ${channel.topic ? channel.topic : 'None'}
 				• NSFW: ${channel.nsfw}
-				• Creation Date: ${moment.utc(channel.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ')}
+				• Creation Date: ${moment.utc(channel.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
 			)
 			.setThumbnail(message.guild.iconURL());

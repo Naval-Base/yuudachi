@@ -72,7 +72,7 @@ class RoleInfoCommand extends Command {
 				• Color: ${role.hexColor.toUpperCase()}
 				• Hoisted: ${role.hoist ? 'Yes' : 'No'}
 				• Mentionable: ${role.mentionable ? 'Yes' : 'No'}
-				• Creation Date: ${moment.utc(role.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss ZZ')}
+				• Creation Date: ${moment.utc(role.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
 			)
 			.addField(
