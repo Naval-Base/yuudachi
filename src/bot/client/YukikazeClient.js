@@ -18,7 +18,7 @@ class YukikazeClient extends AkairoClient {
 		this.logger = createLogger({
 			format: format.combine(
 				format.colorize({ all: true }),
-				format.timestamp({ format: 'DD/MM/YYYY HH:mm:ss' }),
+				format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
 				format.printf(info => `[${info.timestamp}] ${info.level}: ${info.message}`)
 			),
 			transports: [new transports.Console()]
