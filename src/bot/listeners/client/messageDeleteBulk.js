@@ -18,7 +18,7 @@ class MessageDeleteBulkListener extends Listener {
 		if (guildLogs) {
 			const output = messages.reduce((out, msg) => {
 				const attachment = msg.attachments.first();
-				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author.tag} (${msg.author.id}): ${msg.cleanContent ? msg.cleanContent.replace('\n', '\r\n') : ''}${attachment ? `\r\n${attachment.url}` : ''}\r\n`;
+				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author.tag} (${msg.author.id}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${attachment ? `\r\n${attachment.url}` : ''}\r\n`;
 				return out;
 			}, '');
 			const embed = new MessageEmbed()

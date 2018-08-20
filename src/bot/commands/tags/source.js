@@ -33,7 +33,7 @@ class TagSourceCommand extends Command {
 		return message.util.send(tag.content, {
 			code: 'md',
 			files: file ? [{
-				attachment: Buffer.from(tag.content.replace('\n', '\r\n'), 'utf8'),
+				attachment: Buffer.from(tag.content.replace(/\n/g, '\r\n'), 'utf8'),
 				name: `${tag.name}_source.txt`
 			}] : null
 		});
