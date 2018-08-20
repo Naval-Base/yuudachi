@@ -21,7 +21,7 @@ class TagDownloadCommand extends Command {
 		});
 	}
 
-	exec(message, { member }) {
+	async exec(message, { member }) {
 		const tags = await this.client.db.models.tags.findAll({ where: { user: member || undefined, guild: message.guild.id } });
 		if (!tags.length) return;
 		const output = tags.reduce((out, t) => {
