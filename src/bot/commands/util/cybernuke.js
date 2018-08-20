@@ -11,7 +11,7 @@ class LaunchCybernukeCommand extends Command {
 				examples: ['cybernuke 10 120']
 			},
 			category: 'util',
-			ownerOnly: true,
+			userPermissions: ['MANAGE_GUILD'],
 			clientPermissions: ['BAN_MEMBERS'],
 			ratelimit: 2,
 			args: [

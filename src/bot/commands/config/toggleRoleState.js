@@ -9,7 +9,7 @@ class ToggleRoleStateCommand extends Command {
 			},
 			category: 'config',
 			channel: 'guild',
-			ownerOnly: true,
+			userPermissions: ['MANAGE_GUILD'],
 			ratelimit: 2
 		});
 	}
