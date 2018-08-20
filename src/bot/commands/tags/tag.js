@@ -16,7 +16,7 @@ class TagCommand extends Command {
 					 • info \`<tag>\`
 					 • search \`<tag>\`
 					 • list \`[member]\`
-					 • download \`[tag]\`
+					 • download \`[member]\`
 
 					Required: \`<>\` | Optional: \`[]\`
 

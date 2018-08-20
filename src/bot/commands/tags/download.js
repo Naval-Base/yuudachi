@@ -6,7 +6,7 @@ class TagDownloadCommand extends Command {
 			category: 'tags',
 			description: {
 				content: 'Downloads a/all tag(s).',
-				usage: '[tag]'
+				usage: '[member]'
 			},
 			channel: 'guild',
 			ratelimit: 2,
