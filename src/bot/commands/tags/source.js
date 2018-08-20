@@ -6,11 +6,16 @@ class TagSourceCommand extends Command {
 			category: 'tags',
 			description: {
 				content: 'Displays a tags source (Highlighted with Markdown).',
-				usage: '<tag>'
+				usage: '[--file/-f] <tag>'
 			},
 			channel: 'guild',
 			ratelimit: 2,
 			args: [
+				{
+					id: 'file',
+					match: 'flag',
+					flag: ['--file', '-f']
+				},
 				{
 					id: 'tag',
 					match: 'content',
@@ -24,8 +29,14 @@ class TagSourceCommand extends Command {
 		});
 	}
 
-	exec(message, { tag }) {
-		return message.util.send(tag.content, { code: 'md' });
+	exec(message, { tag, file }) {
+		return message.util.send(tag.content, {
+			code: 'md',
+			files: file ? [{
+				attachment: Buffer.from(tag.content.replace('\n', '\r\n'), 'utf8'),
+				name: `${tag.name}_source.txt`
+			}] : null
+		});
 	}
 }
 

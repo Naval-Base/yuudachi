@@ -12,7 +12,7 @@ class TagCommand extends Command {
 					 • alias \`<--add/--del> <tag> <tagalias>\`
 					 • del \`<tag>\`
 					 • edit \`[--hoist/--unhoist] <tag> <content>\`
-					 • source \`<tag>\`
+					 • source \`[--file] <tag>\`
 					 • info \`<tag>\`
 					 • search \`<tag>\`
 					 • list \`[member]\`
@@ -34,6 +34,7 @@ class TagCommand extends Command {
 					'edit Test --hoist',
 					'edit Test --unhoist Some more new content',
 					'source Test',
+					'source --file Test',
 					'info Test',
 					'search Test',
 					'list @Crawl'
