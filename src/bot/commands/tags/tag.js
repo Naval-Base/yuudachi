@@ -16,6 +16,7 @@ class TagCommand extends Command {
 					 • info \`<tag>\`
 					 • search \`<tag>\`
 					 • list \`[member]\`
+					 • download \`[tag]\`
 
 					Required: \`<>\` | Optional: \`[]\`
 
@@ -37,7 +38,8 @@ class TagCommand extends Command {
 					'source --file Test',
 					'info Test',
 					'search Test',
-					'list @Crawl'
+					'list @Crawl',
+					'download @Crawl'
 				]
 			},
 			category: 'tags',
@@ -46,7 +48,7 @@ class TagCommand extends Command {
 			args: [
 				{
 					id: 'method',
-					type: ['show', 'add', 'alias', 'del', 'delete', 'edit', 'source', 'info', 'search', 'list']
+					type: ['show', 'add', 'alias', 'del', 'delete', 'edit', 'source', 'info', 'search', 'list', 'download', 'dl']
 				},
 				{
 					'id': 'name',
@@ -77,7 +79,9 @@ class TagCommand extends Command {
 			'source': this.handler.modules.get('tag-source'),
 			'info': this.handler.modules.get('tag-info'),
 			'search': this.handler.modules.get('tag-search'),
-			'list': this.handler.modules.get('tag-list')
+			'list': this.handler.modules.get('tag-list'),
+			'download': this.handler.modules.get('tag-download'),
+			'dl': this.handler.modules.get('tag-download')
 		}[method];
 
 		return this.handler.handleDirectCommand(message, name, command, true);
