@@ -22,14 +22,15 @@ class TagDownloadCommand extends Command {
 	}
 
 	async exec(message, { member }) {
-		const tags = await this.client.db.models.tags.findAll({ where: { user: member || undefined, guild: message.guild.id } });
+		const where = member ? { user: member.id, guild: message.guild.id } : { guild: message.guild.id };
+		const tags = await this.client.db.models.tags.findAll({ where });
 		if (!tags.length) return;
 		const output = tags.reduce((out, t) => {
 			out += `Name: ${t.name}\r\nContent:\r\n${t.content.replace(/\n/g, '\r\n')}\r\n========================================\r\n`
 			return out;
 		}, '');
 		
-		return message.util.send('Haiiiii~', { files: [{ attachment: Buffer.from(output, 'utf8'), name: `${tag ? `${tag.name}_source` : 'all_sources' }.txt` }] });
+		return message.util.send('Haiiiii~', { files: [{ attachment: Buffer.from(output, 'utf8'), name: `${member ? `${member.displayName}s_tags` : 'all_tags' }.txt` }] });
 	}
 }
 
