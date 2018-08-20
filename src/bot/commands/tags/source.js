@@ -18,7 +18,7 @@ class TagSourceCommand extends Command {
 				},
 				{
 					id: 'tag',
-					match: 'content',
+					match: 'rest',
 					type: 'tag',
 					prompt: {
 						start: message => `${message.author}, what tag would you like to see the source of?`,
