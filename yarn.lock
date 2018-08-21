@@ -1674,9 +1674,9 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-turndown@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/turndown/-/turndown-4.0.2.tgz#c3ddb8ba32a3665723599be2f4e7860adb6042ae"
+turndown@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/turndown/-/turndown-5.0.0.tgz#e51f58aef20713f98e969acdd751206cb6164601"
   dependencies:
     jsdom "^11.9.0"
 
