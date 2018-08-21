@@ -9,8 +9,8 @@ class ToggleLogsCommand extends Command {
 			},
 			category: 'config',
 			channel: 'guild',
-			ownerOnly: true,
 			clientPermissions: ['MANAGE_WEBHOOKS'],
+			userPermissions: ['MANAGE_GUILD'],
 			ratelimit: 2,
 			args: [
 				{
