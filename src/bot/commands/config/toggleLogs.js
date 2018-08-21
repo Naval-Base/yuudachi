@@ -33,6 +33,7 @@ class ToggleLogsCommand extends Command {
 		}
 		this.client.settings.set(message.guild, 'guildLogs', webhook);
 		const wh = (await message.guild.fetchWebhooks()).get(webhook);
+		if (!wh) return;
 		this.client.webhooks.set(wh.id, wh);
 
 		return message.util.reply('successfully activated logs!');
