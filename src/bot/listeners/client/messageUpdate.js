@@ -15,7 +15,9 @@ class MessageUpdateListener extends Listener {
 		if (oldMessage.author.bot || newMessage.author.bot) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
 		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs');
-		if (guildLogs || newMessage.guild.id === '424963290989461514') {
+		if (guildLogs) {
+			const webhook = this.client.webhooks.get(guildLogs);
+			if (!webhook) return;
 			const embed = new MessageEmbed()
 				.setColor(0x306bff)
 				.setAuthor(`${newMessage.author.tag} (${newMessage.author.id})`, newMessage.author.displayAvatarURL())
@@ -46,7 +48,7 @@ class MessageUpdateListener extends Listener {
 			embed.setTimestamp(oldMessage.editedAt || newMessage.editedAt || new Date());
 			embed.setFooter('Edited');
 
-			return this.client.webhook.send({
+			return webhook.send({
 				embeds: [embed],
 				username: 'Logs: MESSAGE UPDATED',
 				avatarURL: 'https://i.imgur.com/wnC4KmC.png'

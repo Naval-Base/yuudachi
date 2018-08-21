@@ -1,6 +1,6 @@
 const { join } = require('path');
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } = require('discord-akairo');
-const { Util, WebhookClient } = require('discord.js');
+const { Collection, Util } = require('discord.js');
 const { createLogger, transports, format } = require('winston');
 const database = require('../structures/Database');
 const SettingsProvider = require('../structures/SettingsProvider');
@@ -102,7 +102,7 @@ class YukikazeClient extends AkairoClient {
 		}
 
 		if (process.env.LOGS) {
-			this.webhook = new WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
+			this.webhooks = new Collection();
 		}
 
 		this.init();
