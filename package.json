@@ -7,11 +7,11 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"bufferutil": "^4.0.0",
+		"@discordjs/uws": "^10.14.0",
 		"common-tags": "^1.8.0",
 		"diff": "^3.5.0",
 		"discord-akairo": "1Computer1/discord-akairo",
-		"discord.js": "discordjs/discord.js",
+		"discord.js": "discordjs/discord.js#uws",
 		"dotenv": "^6.0.0",
 		"erlpack": "discordapp/erlpack",
 		"ioredis": "^4.0.0",
