@@ -473,9 +473,9 @@ escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-aqua@^4.3.3:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/eslint-config-aqua/-/eslint-config-aqua-4.3.3.tgz#052a342395b378d14cc9bcade341fa3de2c06831"
+eslint-config-aqua@^4.3.4:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/eslint-config-aqua/-/eslint-config-aqua-4.3.4.tgz#8aa7f5d039427f12ac6a57a63f78c41ef0282dde"
 
 eslint-scope@^4.0.0:
   version "4.0.0"
