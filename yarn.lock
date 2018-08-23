@@ -399,13 +399,13 @@ diff@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
 
-discord-akairo@1Computer1/discord-akairo:
+discord-akairo@1Computer1/discord-akairo#7daf628ce50268b343d02fcb01b3068f94301df2:
   version "8.0.0-dev"
   resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/7daf628ce50268b343d02fcb01b3068f94301df2"
 
-discord.js@discordjs/discord.js#uws:
+discord.js@discordjs/discord.js#2edf15581752ebb6c196753403fc9c4784686b78:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/11ef10dfe1bb932faf442494836c65fe523eb8c9"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/2edf15581752ebb6c196753403fc9c4784686b78"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
