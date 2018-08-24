@@ -163,10 +163,10 @@ class GitHubPROrIssueCommand extends Command {
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
 			.setTimestamp(new Date(data.publishedAt));
-		if (data.commits) {
+		if (!['guide'].includes(repo) && data.commits) {
 			embed.addField(
 				'Install with',
-				`\`npm i discordjs/discord.js#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``
+				`\`npm i ${owner}/${repo}#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``
 			);
 		}
 
