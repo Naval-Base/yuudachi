@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@discordjs/uws@^10.14.0":
-  version "10.14.0"
-  resolved "https://registry.yarnpkg.com/@discordjs/uws/-/uws-10.14.0.tgz#52d93e1175c58b0d1cab1d47c77e2eb19a97046d"
+"@discordjs/uws@^10.149.0":
+  version "10.149.0"
+  resolved "https://registry.yarnpkg.com/@discordjs/uws/-/uws-10.149.0.tgz#5ec3d12aa140aea402ad8bfabeddb2986a371bb9"
 
 "@types/geojson@^1.0.0":
   version "1.0.6"
