@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@discordjs/uws@^10.14.0":
-  version "10.14.0"
-  resolved "https://registry.yarnpkg.com/@discordjs/uws/-/uws-10.14.0.tgz#52d93e1175c58b0d1cab1d47c77e2eb19a97046d"
+"@discordjs/uws@^10.149.0":
+  version "10.149.0"
+  resolved "https://registry.yarnpkg.com/@discordjs/uws/-/uws-10.149.0.tgz#5ec3d12aa140aea402ad8bfabeddb2986a371bb9"
 
 "@types/geojson@^1.0.0":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.6.tgz#3e02972728c69248c2af08d60a48cbb8680fffdf"
 
 "@types/node@*":
-  version "10.7.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.7.1.tgz#b704d7c259aa40ee052eec678758a68d07132a2e"
+  version "10.9.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.1.tgz#06f002136fbcf51e730995149050bb3c45ee54e6"
 
 abab@^2.0.0:
   version "2.0.0"
@@ -31,8 +31,8 @@ acorn-jsx@^4.1.1:
     acorn "^5.0.3"
 
 acorn@^5.0.0, acorn@^5.0.3, acorn@^5.5.3, acorn@^5.6.0:
-  version "5.7.1"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.1.tgz#f095829297706a7c9776958c0afc8930a9b9d9d8"
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.2.tgz#91fa871883485d06708800318404e72bfb26dcc5"
 
 ajv-keywords@^3.0.0:
   version "3.2.0"
@@ -399,13 +399,13 @@ diff@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
 
-discord-akairo@1Computer1/discord-akairo#7daf628ce50268b343d02fcb01b3068f94301df2:
+discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/7daf628ce50268b343d02fcb01b3068f94301df2"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/85c6736c0ed7f22e74912eac76479d5aa02917d6"
 
-discord.js@discordjs/discord.js#2edf15581752ebb6c196753403fc9c4784686b78:
+discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/2edf15581752ebb6c196753403fc9c4784686b78"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/9b329a457c90eae43496f45f596005c8eb9fa662"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
@@ -1709,8 +1709,8 @@ uuid@^3.2.1, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
 validator@^10.4.0:
-  version "10.6.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-10.6.0.tgz#a9bdce685b3c3e8480e7ebbb9eb95c54cd9733b0"
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-10.7.0.tgz#2d6443badcf942c86c19dc3deac7b87c0bd9b60d"
 
 verror@1.10.0:
   version "1.10.0"
