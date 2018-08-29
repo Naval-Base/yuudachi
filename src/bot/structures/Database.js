@@ -9,6 +9,5 @@ const sequelize = new Sequelize(process.env.DB, {
 sequelize.import(join(__dirname, '..', 'models', 'settings'));
 sequelize.import(join(__dirname, '..', 'models', 'tags'));
 sequelize.import(join(__dirname, '..', 'models', 'role_states'));
-sequelize.sync({ alter: true });
 
 module.exports = sequelize;
