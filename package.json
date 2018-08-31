@@ -21,7 +21,7 @@
 		"pg": "6.4.2",
 		"raven": "^2.6.3",
 		"sequelize": "^4.38.0",
-		"turndown": "^5.0.0",
+		"turndown": "^5.0.1",
 		"winston": "^3.0.0",
 		"zlib-sync": "^0.1.4"
 	},
