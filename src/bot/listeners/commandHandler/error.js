@@ -14,7 +14,7 @@ class CommandErrorListener extends Listener {
 		this.client.logger.error(error);
 		Raven.captureBreadcrumb({
 			message: 'command_errored',
-			category: command.category.id,
+			category: command ? command.category.id : 'inhibitor',
 			data: {
 				user: {
 					id: message.author.id,
@@ -25,11 +25,11 @@ class CommandErrorListener extends Listener {
 					id: message.guild.id,
 					name: message.guild.name
 				} : null,
-				command: {
+				command: command ? {
 					id: command.id,
 					aliases: command.aliases,
 					category: command.category.id
-				},
+				} : null,
 				message: {
 					id: message.id,
 					content: message.content
