@@ -22,7 +22,7 @@
 		"raven": "^2.6.3",
 		"sequelize": "^4.38.0",
 		"turndown": "^5.0.1",
-		"winston": "^3.0.0",
+		"winston": "^3.0.1",
 		"zlib-sync": "^0.1.4"
 	},
 	"devDependencies": {
