@@ -19,7 +19,7 @@
 		"moment-duration-format": "^2.2.2",
 		"node-fetch": "^2.2.0",
 		"pg": "6.4.2",
-		"raven": "^2.6.3",
+		"raven": "^2.6.4",
 		"sequelize": "^4.38.0",
 		"turndown": "^5.0.1",
 		"winston": "^3.0.0",
