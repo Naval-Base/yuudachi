@@ -40,7 +40,7 @@ class YukikazeClient extends AkairoClient {
 			defaultPrompt: {
 				modifyStart: str => `${str}\n\nType \`cancel\` to cancel the command.`,
 				modifyRetry: str => `${str}\n\nType \`cancel\` to cancel the command.`,
-				timeout: 'Guess you took too long, the command as been cancelled.',
+				timeout: 'Guess you took too long, the command has been cancelled.',
 				ended: "More than 3 tries and you still didn't quite get it. The command has been cancelled",
 				cancel: 'The command has been cancelled.',
 				retries: 3,
