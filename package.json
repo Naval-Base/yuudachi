@@ -20,7 +20,7 @@
 		"node-fetch": "^2.2.0",
 		"pg": "6.4.2",
 		"raven": "^2.6.4",
-		"sequelize": "^4.38.0",
+		"sequelize": "^4.38.1",
 		"turndown": "^5.0.1",
 		"winston": "^3.1.0",
 		"zlib-sync": "^0.1.4"
