@@ -112,8 +112,11 @@ class GitHubSearchCommand extends Command {
 
 			return message;
 		}
-		const repository = repo.split('/')[1].split('#')[0];
+		let repository = repo.split('/')[1];
+		if (!repository) return;
+		[repository] = repository.split('#');
 		const number = repo.split('#')[1];
+		if (!number) return;
 		const query = `
 			{
 				repository(owner: "${owner}", name: "${repository}") {
