@@ -12,7 +12,7 @@
 		"diff": "^3.5.0",
 		"discord-akairo": "1Computer1/discord-akairo",
 		"discord.js": "discordjs/discord.js",
-		"dotenv": "^6.0.0",
+		"dotenv": "^6.1.0",
 		"erlpack": "discordapp/erlpack",
 		"ioredis": "^4.0.1",
 		"moment": "^2.22.2",
