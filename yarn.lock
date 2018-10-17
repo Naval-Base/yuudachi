@@ -1403,9 +1403,9 @@ semver@^5.5.0, semver@^5.5.1:
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.1.tgz#7dfdd8814bdb7cabc7be0fb1d734cfb66c940477"
 
-sequelize@^4.39.0:
-  version "4.39.0"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.39.0.tgz#0e070a4705367e4b0779183f812c72f478ff12b9"
+sequelize@^4.39.1:
+  version "4.39.1"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.39.1.tgz#160df2ca771b3b0ae8f747c6850daf5563743668"
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"
