@@ -1645,10 +1645,10 @@ semver@^5.5.0, semver@^5.5.1:
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
   integrity sha512-RS9R6R35NYgQn++fkDWaOmqGoj4Ek9gGs+DPxNUZKuwE183xjJroKvyo1IzVFeXvUrvmALy6FWD5xrdJT25gMg==
 
-sequelize@^4.40.0:
-  version "4.40.0"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.40.0.tgz#7d249c043f71bda9ee772670e37ae1cd8dd03241"
-  integrity sha512-gcYwPBz3wadbKCFjk9ccYcCyyIyGenIE1WaZ/vO0OtPyax4DDLETCj1bXRt7oIqfNztgBjherMKCV+l8kwSTtg==
+sequelize@^4.41.0:
+  version "4.41.0"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.41.0.tgz#fa24ac0471e398090b55b302579240ed58e0b54a"
+  integrity sha512-6zCYxjPriUBgLQ5dN4ZxC5eadUtRu2tHFoBiSU9vNGb6G3f4bZM6vFpJu0DhxeeyhodTAXqY1GaBpZzT3PXB/Q==
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"
