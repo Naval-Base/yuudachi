@@ -7,7 +7,7 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"@discordjs/uws": "^10.149.0",
+		"@discordjs/uws": "^11.149.1",
 		"common-tags": "^1.8.0",
 		"diff": "^3.5.0",
 		"discord-akairo": "1Computer1/discord-akairo",
