@@ -1,8 +1,9 @@
 module.exports = (sequelize, DataTypes) =>
 	sequelize.define('reminders', {
 		id: {
-			type: DataTypes.BIGINT,
-			primaryKey: true
+			type: DataTypes.UUID,
+			primaryKey: true,
+			defaultValue: DataTypes.UUIDV4
 		},
 		user: {
 			type: DataTypes.BIGINT,

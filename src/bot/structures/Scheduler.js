@@ -20,11 +20,11 @@ class Scheduler extends EventEmitter {
 	cancelReminder(id) {
 		const reminder = this.queuedReminders.get(id);
 		if (reminder) clearTimeout(reminder);
-		return this.delete(id);
+		return this.queuedReminders.delete(id);
 	}
 
 	deleteReminder(id) {
-		this.queuedReminders.delete(id);
+		this.cancelReminder(id);
 		return this.model.destroy({ where: { id } });
 	}
 

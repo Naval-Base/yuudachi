@@ -52,7 +52,6 @@ class ReminderAddCommand extends Command {
 		}
 
 		await this.client.scheduler.addReminder({
-			id: message.id,
 			user: message.author.id,
 			channel: message.channel.type === 'dm' || dm ? null : message.channel.id,
 			reason: eventTitle,

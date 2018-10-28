@@ -45,7 +45,7 @@ class ReminderDeleteCommand extends Command {
 
 			const index = parseInt(messages, 10) - 1;
 			const reminder = reminders.splice(index, 1)[0];
-			await this.client.db.models.reminders.destroy({ where: { id: reminder.id } });
+			await this.client.scheduler.deleteReminder(reminder.id);
 		}
 
 		return message.util.send('Welp, looks like all of your reminders are gone!');
