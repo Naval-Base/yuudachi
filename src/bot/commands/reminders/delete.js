@@ -27,7 +27,7 @@ class ReminderDeleteCommand extends Command {
 			for (const reminder of reminders) this.client.scheduler.cancelReminder(reminder.id);
 
 			const deleted = await this.client.db.models.reminders.destroy({ where: { user: message.author.id } });
-			return message.util.reply(`I deleted ${deleted} reminders!`);
+			return message.util.reply(`I deleted ${deleted} reminder${deleted === 1 ? '' : 's'}!`);
 		}
 
 		const reminders = await this.client.db.models.reminders.findAll({ where: { user: message.author.id } });
