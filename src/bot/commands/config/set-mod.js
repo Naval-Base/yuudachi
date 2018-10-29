@@ -9,7 +9,7 @@ class SetModRoleCommand extends Command {
 				usage: '<role>',
 				examples: ['modrole @Mod', 'modrole Mods']
 			},
-			category: 'util',
+			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
 			ratelimit: 2,

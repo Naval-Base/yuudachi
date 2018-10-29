@@ -4,7 +4,8 @@ const { Collection, Util } = require('discord.js');
 const { createLogger, transports, format } = require('winston');
 const database = require('../structures/Database');
 const SettingsProvider = require('../structures/SettingsProvider');
-const Scheduler = require('../structures/Scheduler');
+const MuteScheduler = require('../structures/MuteScheduler');
+const RemindScheduler = require('../structures/RemindScheduler');
 const { Op } = require('sequelize');
 const Raven = require('raven');
 
@@ -107,7 +108,8 @@ class YukikazeClient extends AkairoClient {
 		}
 
 		this.init();
-		this.scheduler = new Scheduler(this, this.db.models.reminders);
+		this.muteScheduler = new MuteScheduler(this, this.db.models.cases);
+		this.remindScheduler = new RemindScheduler(this, this.db.models.reminders);
 	}
 
 	init() {
@@ -127,7 +129,8 @@ class YukikazeClient extends AkairoClient {
 	async start() {
 		await this.settings.init();
 		await this.login(this.config.token);
-		return this.scheduler.init();
+		await this.muteScheduler.init();
+		await this.remindScheduler.init();
 	}
 }
 

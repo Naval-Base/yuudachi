@@ -34,11 +34,10 @@ class EmojiInfoCommand extends Command {
 	}
 
 	exec(message, { emoji }) {
-		const guildEmoji = emoji instanceof GuildEmoji;
 		const embed = new MessageEmbed()
 			.setColor(3447003);
 
-		if (guildEmoji) {
+		if (emoji instanceof GuildEmoji) {
 			embed.setDescription(`Info about ${emoji.name} (ID: ${emoji.id})`);
 			embed.setThumbnail(emoji.url);
 			embed.addField(
