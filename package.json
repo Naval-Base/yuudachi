@@ -21,7 +21,7 @@
 		"pg": "6.4.2",
 		"punycode": "^2.1.1",
 		"raven": "^2.6.4",
-		"sequelize": "^4.39.0",
+		"sequelize": "^4.41.0",
 		"sherlockjs": "^1.4.0",
 		"turndown": "^5.0.1",
 		"winston": "^3.1.0"
