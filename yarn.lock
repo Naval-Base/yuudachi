@@ -23,6 +23,11 @@
   resolved "https://registry.yarnpkg.com/@discordjs/uws/-/uws-11.149.1.tgz#2e86f2825f43bed43d2e69eaf30a07d2dd8e8946"
   integrity sha512-TmbwZaeXDSCq0ckmf2q10Fkt1220gu9AZJ/UvtQjsi2jyJDjy0i0OwL4/eb3vc9Cwr0mpC9EbfzltQ2si0qUiQ==
 
+"@naval-base/ms@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@naval-base/ms/-/ms-2.2.1.tgz#def4aca5147b8c8888f787ae4248888ef68ce5ca"
+  integrity sha512-VSphYbfd5wA6Dt4/j1tiUau1g4cBnEozA9oykFOKkhd6EREmBMiCZEc9ceSjqiHZTVJ2dcOypzdoLA63vfduHg==
+
 "@types/geojson@^1.0.0":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.6.tgz#3e02972728c69248c2af08d60a48cbb8680fffdf"

@@ -10,5 +10,6 @@ sequelize.import(join(__dirname, '..', 'models', 'settings'));
 sequelize.import(join(__dirname, '..', 'models', 'tags'));
 sequelize.import(join(__dirname, '..', 'models', 'role_states'));
 sequelize.import(join(__dirname, '..', 'models', 'reminders'));
+sequelize.import(join(__dirname, '..', 'models', 'cases'));
 
 module.exports = sequelize;

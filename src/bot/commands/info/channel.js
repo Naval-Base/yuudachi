@@ -37,7 +37,7 @@ class ChannelInfoCommand extends Command {
 				stripIndents`
 				• Type: ${channel.type}
 				• Topic ${channel.topic ? channel.topic : 'None'}
-				• NSFW: ${channel.nsfw}
+				• NSFW: ${Boolean(channel.nsfw)}
 				• Creation Date: ${moment.utc(channel.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
 			)

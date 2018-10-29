@@ -7,6 +7,7 @@ class MuteScheduler extends Scheduler {
 	}
 
 	async addMute(mute) {
+		this.client.logger.info('Muted');
 		mute = await this.model.create(mute, { returning: true });
 		if (mute.action_duration.getTime() < (Date.now() + this.checkRate)) {
 			this.queueMute(mute);
@@ -14,9 +15,12 @@ class MuteScheduler extends Scheduler {
 	}
 
 	async cancelMute(mute) {
-		const member = this.client.guilds.get(mute.guild).members.get(mute.target_id);
+		this.client.logger.info('Unmuted');
+		const guild = this.client.guilds.get(mute.guild);
+		const muteRole = this.client.settings.get(guild, 'mutedRole');
+		const member = await guild.members.fetch(mute.target_id);
 		mute.update({ action_processed: true });
-		if (member) await member.roles.remove('506409290400137216', `Unmuted automatically based on duration.`);
+		if (member) await member.roles.remove(muteRole, `Unmuted automatically based on duration.`);
 		super.cancelSchedule(mute.id);
 	}
 
