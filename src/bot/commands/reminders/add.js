@@ -51,7 +51,7 @@ class ReminderAddCommand extends Command {
 			return message.util.reply('I\'m sure you have better memory than that.');
 		}
 
-		await this.client.scheduler.addReminder({
+		await this.client.remindScheduler.addReminder({
 			user: message.author.id,
 			channel: message.channel.type === 'dm' || dm ? null : message.channel.id,
 			reason: eventTitle,

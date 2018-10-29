@@ -24,7 +24,7 @@ class ReminderDeleteCommand extends Command {
 	async exec(message, { all }) {
 		if (all) {
 			const reminders = await this.client.db.models.reminders.findAll({ where: { user: message.author.id }, attributes: ['id'] });
-			for (const reminder of reminders) this.client.scheduler.cancelReminder(reminder.id);
+			for (const reminder of reminders) this.client.remindScheduler.cancelReminder(reminder.id);
 
 			const deleted = await this.client.db.models.reminders.destroy({ where: { user: message.author.id } });
 			return message.util.reply(`I deleted ${deleted} reminder${deleted === 1 ? '' : 's'}!`);
@@ -45,7 +45,7 @@ class ReminderDeleteCommand extends Command {
 
 			const index = parseInt(messages, 10) - 1;
 			const reminder = reminders.splice(index, 1)[0];
-			await this.client.scheduler.deleteReminder(reminder.id);
+			await this.client.remindScheduler.deleteReminder(reminder.id);
 		}
 
 		return message.util.send('Welp, looks like all of your reminders are gone!');
