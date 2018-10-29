@@ -1646,7 +1646,7 @@ semver@^5.5.0, semver@^5.5.1:
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
   integrity sha512-RS9R6R35NYgQn++fkDWaOmqGoj4Ek9gGs+DPxNUZKuwE183xjJroKvyo1IzVFeXvUrvmALy6FWD5xrdJT25gMg==
 
-sequelize@^4.41.0:
+sequelize@^4.39.0:
   version "4.41.0"
   resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.41.0.tgz#fa24ac0471e398090b55b302579240ed58e0b54a"
   integrity sha512-6zCYxjPriUBgLQ5dN4ZxC5eadUtRu2tHFoBiSU9vNGb6G3f4bZM6vFpJu0DhxeeyhodTAXqY1GaBpZzT3PXB/Q==
@@ -1680,6 +1680,11 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
   integrity sha1-2kL0l0DAtC2yypcoVxyxkMmO/qM=
+
+sherlockjs@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/sherlockjs/-/sherlockjs-1.4.0.tgz#57dcba75dd95b9e8243b67a6ee3e13629ac4b566"
+  integrity sha512-+IkG0zu/vrwjUcdp4iNTM000U6bgFzX0yqakrO+PrQOLl1nbbZ46361DBMwpG1TW+VLjuYZhvVn67e+AgtLLRg==
 
 shimmer@^1.1.0:
   version "1.2.0"

@@ -7,4 +7,6 @@ client
 	.on('error', err => client.logger.error(`Error:\n${err.stack}`))
 	.on('warn', warn => client.logger.warn(`Warning:\n${warn}`));
 
+client.scheduler.on('error', err => client.logger.error(`Error:\n${err.stack}`));
+
 client.start();
