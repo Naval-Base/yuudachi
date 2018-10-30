@@ -1,17 +1,5 @@
 const { Listener } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { stripIndents } = require('common-tags');
-
-const ACTIONS = {
-	BAN: 1,
-	UNBAN: 2,
-	SOFTBAN: 3,
-	KICK: 4,
-	MUTE: 5,
-	EMBED: 6,
-	EMOJI: 7,
-	REACTION: 8
-};
+const { CONSTANTS: { ACTIONS }, logEmbed } = require('../../util');
 
 class GuildBanRemoveListener extends Listener {
 	constructor() {
@@ -29,14 +17,8 @@ class GuildBanRemoveListener extends Listener {
 		const modLogChannel = this.client.settings.get(guild, 'modLogChannel');
 		let modMessage;
 		if (modLogChannel) {
-			const embed = new MessageEmbed()
-				.setDescription(stripIndents`
-					**Member:** ${user.tag} (${user.id})
-					**Action:** Unban
-					**Reason:** Use \`?reason ${totalCases} <...reason>\` to set a reason for this case
-				`)
-				.setFooter(`Case ${totalCases}`)
-				.setTimestamp(new Date());
+			const reason = `Use \`?reason ${totalCases} <...reason>\` to set a reason for this case`;
+			const embed = logEmbed({ member: user, action: 'Unban', caseNum: totalCases, reason });
 			modMessage = await this.client.channels.get(modLogChannel).send(embed);
 		}
 		await this.client.db.models.cases.create({

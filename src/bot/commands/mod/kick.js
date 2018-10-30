@@ -1,17 +1,5 @@
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { stripIndents } = require('common-tags');
-
-const ACTIONS = {
-	BAN: 1,
-	UNBAN: 2,
-	SOFTBAN: 3,
-	KICK: 4,
-	MUTE: 5,
-	EMBED: 6,
-	EMOJI: 7,
-	REACTION: 8
-};
+const { CONSTANTS: { ACTIONS }, logEmbed } = require('../../util');
 
 class KickCommand extends Command {
 	constructor() {
@@ -69,15 +57,7 @@ class KickCommand extends Command {
 		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');
 		let modMessage;
 		if (modLogChannel) {
-			const embed = new MessageEmbed()
-				.setAuthor(message.author.tag, message.author.displayAvatarURL())
-				.setDescription(stripIndents`
-					**Member:** ${member.user.tag} (${member.id})
-					**Action:** Kick
-					**Reason:** ${reason}
-				`)
-				.setFooter(`Case ${totalCases}`)
-				.setTimestamp(new Date());
+			const embed = logEmbed({ message, member, action: 'Kick', caseNum: totalCases, reason });
 			modMessage = await this.client.channels.get(modLogChannel).send(embed);
 		}
 		await this.client.db.models.cases.create({
