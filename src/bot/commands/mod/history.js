@@ -1,17 +1,5 @@
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-
-const ACTIONS = {
-	1: 'ban',
-	2: 'unban',
-	3: 'kick',
-	4: 'kick',
-	5: 'mute',
-	6: 'restriction',
-	7: 'restriction',
-	8: 'restriction',
-	9: 'warn'
-};
+const { historyEmbed } = require('../../util');
 
 class HistoryCommand extends Command {
 	constructor() {
@@ -48,15 +36,7 @@ class HistoryCommand extends Command {
 		if (!dbCases.length) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
-
-		const footer = dbCases.reduce((count, c) => {
-			const action = ACTIONS[c.action];
-			count[action] = (count[action] || 0) + 1;
-			return count;
-		}, {});
-		const embed = new MessageEmbed()
-			.setAuthor(`${member.user.tag} (${member.id})`, member.user.displayAvatarURL())
-			.setFooter(`${footer.warn || 0} warnings, ${footer.restriction || 0} restrictions, ${footer.mute || 0} mutes, ${footer.kick || 0} kicks, and ${footer.ban || 0} bans.`);
+		const embed = historyEmbed(member, dbCases);
 
 		return message.util.send(embed);
 	}

@@ -1,6 +1,6 @@
 const { Command } = require('discord-akairo');
 const { stripIndents } = require('common-tags');
-const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
+const { CONSTANTS: { ACTIONS, COLORS }, logEmbed, historyEmbed } = require('../../util');
 
 class BanCommand extends Command {
 	constructor() {
@@ -49,7 +49,9 @@ class BanCommand extends Command {
 		}
 		this.client._cachedCases.add(key);
 
-		await message.channel.send('You sure you want me to ban this guy?');
+		const dbCases = await this.client.db.models.cases.findAll({ where: { target_id: member.id } });
+		const embed = historyEmbed(member, dbCases);
+		await message.channel.send('You sure you want me to ban this guy?', { embed });
 		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
 			max: 1,
 			time: 10000
