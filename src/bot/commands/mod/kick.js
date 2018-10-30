@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo');
+const { stripIndents } = require('discord.js');
 const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
 
 class KickCommand extends Command {
@@ -40,7 +41,16 @@ class KickCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
+		let sentMessage;
 		try {
+			sentMessage = await message.channel.send(`Kicking **${member.user.tag}**...`);
+			try {
+				await member.send(stripIndents`
+					**You have been kicked from ${message.guild.name}**
+					${reason ? `\n**Reason:** ${reason}\n` : ''}
+					You may rejoin whenever.
+				`);
+			} catch {}
 			await member.kick(`Kicked by ${message.author.tag}`);
 		} catch (error) {
 			return message.reply('there is no mute role configured on this server.');
@@ -72,7 +82,7 @@ class KickCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully kicked **${member.user.tag}**`);
+		return sentMessage.edit(`Successfully kicked **${member.user.tag}**`);
 	}
 }
 

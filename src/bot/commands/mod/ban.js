@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo');
+const { stripIndents } = require('common-tags');
 const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
 
 class BanCommand extends Command {
@@ -45,7 +46,16 @@ class BanCommand extends Command {
 		}
 		this.client._cachedCases.add(key);
 
+		let sentMessage;
 		try {
+			sentMessage = await message.channel.send(`Banning **${member.user.tag}**...`);
+			try {
+				await member.send(stripIndents`
+					**You have been banned from ${message.guild.name}**
+					${reason ? `\n**Reason:** ${reason}\n` : ''}
+					You can appeal your ban by DMing \`Crawl#0002\` with a message why you think you deserve to have your ban lifted.
+				`);
+			} catch {}
 			await member.ban(`Banned by ${message.author.tag}`);
 		} catch (error) {
 			this.client._cachedCases.delete(key);
@@ -78,7 +88,7 @@ class BanCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully banned **${member.user.tag}**`);
+		return sentMessage.edit(`Successfully banned **${member.user.tag}**`);
 	}
 }
 

@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo');
+const { stripIndents } = require('discord.js');
 const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
 
 class SoftbanCommand extends Command {
@@ -47,7 +48,17 @@ class SoftbanCommand extends Command {
 		this.client._cachedCases.add(keys[0]);
 		this.client._cachedCases.add(keys[1]);
 
+		let sentMessage;
 		try {
+			sentMessage = await message.channel.send(`Softbanning **${member.user.tag}**...`);
+			try {
+				await member.send(stripIndents`
+					**You have been softbanned from ${message.guild.name}**
+					${reason ? `\n**Reason:** ${reason}\n` : ''}
+					A softban is a kick that uses ban + unban to remove your messages from the server.
+					You may rejoin whenever.
+				`);
+			} catch {}
 			await member.ban(`Softbanned by ${message.author.tag}`);
 			await message.guild.members.unban(member, `Softbanned by ${message.author.tag}`);
 		} catch (error) {
@@ -82,7 +93,7 @@ class SoftbanCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully softbanned **${member.user.tag}**`);
+		return sentMessage.edit(`Successfully softbanned **${member.user.tag}**`);
 	}
 }
 
