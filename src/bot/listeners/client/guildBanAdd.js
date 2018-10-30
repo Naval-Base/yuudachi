@@ -1,5 +1,5 @@
 const { Listener } = require('discord-akairo');
-const { CONSTANTS: { ACTIONS }, logEmbed } = require('../../util');
+const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
 
 class GuildBanAddListener extends Listener {
 	constructor() {
@@ -17,8 +17,9 @@ class GuildBanAddListener extends Listener {
 		const modLogChannel = this.client.settings.get(guild, 'modLogChannel');
 		let modMessage;
 		if (modLogChannel) {
-			const reason = `Use \`?reason ${totalCases} <...reason>\` to set a reason for this case`;
-			const embed = logEmbed({ member, action: 'Ban', caseNum: totalCases, reason });
+			const prefix = this.client.commandHandler.prefix({ guild });
+			const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
+			const embed = logEmbed({ member, action: 'Ban', caseNum: totalCases, reason }).setColor(COLORS.BAN);
 			modMessage = await this.client.channels.get(modLogChannel).send(embed);
 		}
 		await this.client.db.models.cases.create({
