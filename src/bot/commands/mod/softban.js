@@ -82,7 +82,7 @@ class SoftbanCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully softbanned ${member.user.tag}`);
+		return message.util.send(`Successfully softbanned **${member.user.tag}**`);
 	}
 }
 

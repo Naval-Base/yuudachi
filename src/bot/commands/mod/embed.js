@@ -77,7 +77,7 @@ class RestrictEmbedCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully embed restricted ${member.user.tag}`);
+		return message.util.send(`Successfully embed restricted **${member.user.tag}**`);
 	}
 }
 

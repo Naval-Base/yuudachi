@@ -79,7 +79,7 @@ class UnbanCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully unbanned ${user.tag}`);
+		return message.util.send(`Successfully unbanned **${user.tag}**`);
 	}
 }
 

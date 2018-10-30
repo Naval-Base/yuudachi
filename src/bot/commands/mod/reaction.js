@@ -78,7 +78,7 @@ class RestrictReactionCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully reaction restricted ${member.user.tag}`);
+		return message.util.send(`Successfully reaction restricted **${member.user.tag}**`);
 	}
 }
 

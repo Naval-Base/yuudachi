@@ -77,7 +77,7 @@ class RestrictEmojiCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully emoji restricted ${member.user.tag}`);
+		return message.util.send(`Successfully emoji restricted **${member.user.tag}**`);
 	}
 }
 
