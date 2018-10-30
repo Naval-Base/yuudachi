@@ -23,12 +23,10 @@ module.exports = (sequelize, DataTypes) =>
 			allowNull: false
 		},
 		mod_id: {
-			type: DataTypes.BIGINT,
-			allowNull: false
+			type: DataTypes.BIGINT
 		},
 		mod_tag: {
-			type: DataTypes.TEXT,
-			allowNull: false
+			type: DataTypes.TEXT
 		},
 		action: {
 			type: DataTypes.INTEGER,

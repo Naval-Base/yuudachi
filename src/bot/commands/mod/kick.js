@@ -4,12 +4,13 @@ const { stripIndents } = require('common-tags');
 
 const ACTIONS = {
 	BAN: 1,
-	SOFTBAN: 2,
-	KICK: 3,
-	MUTE: 4,
-	EMBED: 5,
-	EMOJI: 6,
-	REACTION: 7
+	UNBAN: 2,
+	SOFTBAN: 3,
+	KICK: 4,
+	MUTE: 5,
+	EMBED: 6,
+	EMOJI: 7,
+	REACTION: 8
 };
 
 class KickCommand extends Command {
@@ -23,8 +24,7 @@ class KickCommand extends Command {
 				examples: ['kick @Crawl', 'kick @Crawl']
 			},
 			channel: 'guild',
-			/* userPermissions: ['MANAGE_ROLES'],
-			clientPermissions: ['MANAGE_ROLES'], */
+			clientPermissions: ['MANAGE_ROLES'],
 			ratelimit: 2,
 			args: [
 				{
@@ -47,8 +47,9 @@ class KickCommand extends Command {
 
 	async exec(message, { member, reason }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
+		if (!staffRole) return message.util.send('You know, I know, we should just leave it at that.');
 		if (member.roles.has(staffRole)) {
-			return;
+			return message.util.send('Nuh-uh! You know you can\'t do this.');
 		}
 
 		await member.kick(`Kicked by ${message.author.tag}`);
@@ -57,7 +58,8 @@ class KickCommand extends Command {
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
 
 		if (!reason) {
-			reason = `Use \`-reason ${totalCases} <...reason>\` to set a reason for this case`;
+			const prefix = this.handler.prefix(message);
+			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
 		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');

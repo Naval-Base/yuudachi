@@ -17,19 +17,21 @@ class EmojiInfoCommand extends Command {
 			},
 			category: 'info',
 			ratelimit: 2,
-			args: [{
-				id: 'emoji',
-				match: 'content',
-				type: (content, message) => {
-					if (emojiRegex.test(content)) [, content] = content.match(emojiRegex);
-					if (!isNaN(content)) return message.guild.emojis.get(content);
-					return emojis.find(content);
-				},
-				prompt: {
-					start: message => `${message.author}, what emoji would you like information about?`,
-					retry: message => `${message.author}, please provide a valid emoji!`
+			args: [
+				{
+					id: 'emoji',
+					match: 'content',
+					type: (content, message) => {
+						if (emojiRegex.test(content)) [, content] = content.match(emojiRegex);
+						if (!isNaN(content)) return message.guild.emojis.get(content);
+						return emojis.find(content);
+					},
+					prompt: {
+						start: message => `${message.author}, what emoji would you like information about?`,
+						retry: message => `${message.author}, please provide a valid emoji!`
+					}
 				}
-			}]
+			]
 		});
 	}
 

@@ -107,6 +107,8 @@ class YukikazeClient extends AkairoClient {
 			this.webhooks = new Collection();
 		}
 
+		this._cachedCases = new Set();
+
 		this.init();
 		this.muteScheduler = new MuteScheduler(this, this.db.models.cases);
 		this.remindScheduler = new RemindScheduler(this, this.db.models.reminders);
