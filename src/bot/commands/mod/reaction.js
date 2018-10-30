@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { CONSTANTS: { ACTIONS }, logEmbed } = require('../../util');
+const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
 
 class RestrictReactionCommand extends Command {
 	constructor() {
@@ -63,7 +63,7 @@ class RestrictReactionCommand extends Command {
 		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');
 		let modMessage;
 		if (modLogChannel) {
-			const embed = logEmbed({ message, member, action: 'Reaction restriction', caseNum: totalCases, reason });
+			const embed = logEmbed({ message, member, action: 'Reaction restriction', caseNum: totalCases, reason }).setColor(COLORS.RESTRICT);
 			modMessage = await this.client.channels.get(modLogChannel).send(embed);
 		}
 		await this.client.db.models.cases.create({

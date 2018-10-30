@@ -12,7 +12,17 @@ module.exports = {
 			MUTE: 5,
 			EMBED: 6,
 			EMOJI: 7,
-			REACTION: 8
+			REACTION: 8,
+			WARN: 9
+		},
+		COLORS: {
+			BAN: 16718080,
+			UNBAN: 8450847,
+			SOFTBAN: 16745216,
+			KICK: 16745216,
+			MUTE: 16763904,
+			RESTRICT: 16776960,
+			WARN: 16776960
 		}
 	},
 	reminderEmbed: (message, reminders) => {
@@ -29,7 +39,7 @@ module.exports = {
 	logEmbed: ({ message = null, member, action, duration = null, caseNum, reason, ref = null }) => {
 		const embed = new MessageEmbed();
 		if (message) {
-			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
+			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
 		}
 		embed.setDescription(stripIndents`
 				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
