@@ -35,14 +35,14 @@ class SoftbanCommand extends Command {
 
 	async exec(message, { member, reason }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
-		if (!staffRole) return message.util.send('You know, I know, we should just leave it at that.');
+		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 		if (member.roles.has(staffRole)) {
-			return message.util.send('Nuh-uh! You know you can\'t do this.');
+			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
 		const keys = [`${message.guild.id}:${member.id}:BAN`, `${message.guild.id}:${member.id}:UNBAN`];
 		if (this.client._cachedCases.has(keys[0]) && this.client._cachedCases.has(keys[1])) {
-			return message.util.send('That user is currently being moderated by someone else.');
+			return message.reply('that user is currently being moderated by someone else.');
 		}
 		this.client._cachedCases.add(keys[0]);
 		this.client._cachedCases.add(keys[1]);
@@ -53,7 +53,7 @@ class SoftbanCommand extends Command {
 		} catch (error) {
 			this.client._cachedCases.delete(keys[0]);
 			this.client._cachedCases.delete(keys[1]);
-			return message.util.send(`There was an error softbanning this member: \`${error}\``);
+			return message.reply(`there was an error softbanning this member: \`${error}\``);
 		}
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;

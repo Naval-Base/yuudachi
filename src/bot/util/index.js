@@ -26,16 +26,15 @@ module.exports = {
 				).join('\n')
 				: 'No reminders');
 	},
-	logEmbed: ({ message = null, member, action, duration = null, caseNum, reason }) => {
+	logEmbed: ({ message = null, member, action, duration = null, caseNum, reason, ref = null }) => {
 		const embed = new MessageEmbed();
 		if (message) {
 			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 		}
 		embed.setDescription(stripIndents`
-			**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
-			**Action:** ${action}
-			${action === 'Mute' ? `**Length:** ${ms(duration, { 'long': true })}` : ''}
-			**Reason:** ${reason}
+				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
+				**Action:** ${action}${action === 'Mute' ? `\n**Length:** ${ms(duration, { 'long': true })}` : ''}
+				**Reason:** ${reason}${ref ? `\n**Ref case:** ${ref}` : ''}
 			`)
 			.setFooter(`Case ${caseNum}`)
 			.setTimestamp(new Date());

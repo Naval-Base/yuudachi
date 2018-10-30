@@ -1,16 +1,14 @@
 const { Command } = require('discord-akairo');
 const { CONSTANTS: { ACTIONS }, logEmbed } = require('../../util');
-const ms = require('@naval-base/ms');
 
-class MuteCommand extends Command {
+class RestrictEmbedCommand extends Command {
 	constructor() {
-		super('mute', {
-			aliases: ['mute'],
+		super('restrict-embed', {
 			category: 'mod',
 			description: {
 				content: '.',
-				usage: '<member> <duration> <...reason>',
-				examples: ['mute @Crawl']
+				usage: '<member> <...reason>',
+				examples: ['restrict img @Crawl', 'restrict embed @Crawl']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -20,21 +18,8 @@ class MuteCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: message => `${message.author}, what member do you want to mute?`,
+						start: message => `${message.author}, what member do you want to restrict?`,
 						retry: message => `${message.author}, please mention a member.`
-					}
-				},
-				{
-					id: 'duration',
-					type: str => {
-						const duration = ms(str);
-						// 300000
-						if (duration && duration >= 30000) return duration;
-						return null;
-					},
-					prompt: {
-						start: message => `${message.author}, for how long do you want the mute to last?`,
-						retry: message => `${message.author}, please use a proper time format.`
 					}
 				},
 				{
@@ -47,27 +32,23 @@ class MuteCommand extends Command {
 		});
 	}
 
-	async exec(message, { member, duration, reason }) {
+	async exec(message, { member, reason }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
 		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
-
-		const muteRole = this.client.settings.get(message.guild, 'mutedRole');
-		if (!muteRole) return message.reply('there is no mute role configured on this server.');
-
-		const key = `${message.guild.id}:${member.id}:MUTE`;
+		const key = `${message.guild.id}:${member.id}:EMBED`;
 		if (this.client._cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
 		this.client._cachedCases.add(key);
 
 		try {
-			await member.roles.add(muteRole, `Muted by ${message.author.tag}`);
+			// await member.roles.add('', `Embed restricted by ${message.author.tag}`);
 		} catch (error) {
 			this.client._cachedCases.delete(key);
-			return message.reply(`there was an error muting this member: \`${error}\``);
+			return message.reply(`there was an error embed retricting this member: \`${error}\``);
 		}
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
@@ -81,10 +62,10 @@ class MuteCommand extends Command {
 		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');
 		let modMessage;
 		if (modLogChannel) {
-			const embed = logEmbed({ message, member, action: 'Mute', duration, caseNum: totalCases, reason });
+			const embed = logEmbed({ message, member, action: 'Embed restriction', caseNum: totalCases, reason });
 			modMessage = await this.client.channels.get(modLogChannel).send(embed);
 		}
-		await this.client.muteScheduler.addMute({
+		await this.client.db.models.cases.create({
 			guild: message.guild.id,
 			message: modMessage ? modMessage.id : null,
 			case_id: totalCases,
@@ -92,14 +73,12 @@ class MuteCommand extends Command {
 			target_tag: member.user.tag,
 			mod_id: message.author.id,
 			mod_tag: message.author.tag,
-			action: ACTIONS.MUTE,
-			action_duration: new Date(Date.now() + duration),
-			action_processed: false,
+			action: ACTIONS.EMBED,
 			reason
 		});
 
-		return message.util.send(`Successfully muted **${member.user.tag}**`);
+		return message.util.send(`Successfully embed restricted ${member.user.tag}`);
 	}
 }
 
-module.exports = MuteCommand;
+module.exports = RestrictEmbedCommand;

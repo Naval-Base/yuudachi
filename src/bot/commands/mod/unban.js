@@ -38,11 +38,11 @@ class UnbanCommand extends Command {
 
 	async exec(message, { user, reason }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
-		if (!staffRole) return message.util.send('You know, I know, we should just leave it at that.');
+		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 
 		const key = `${message.guild.id}:${user.id}:UNBAN`;
 		if (this.client._cachedCases.has(key)) {
-			return message.util.send('That user is currently being moderated by someone else.');
+			return message.reply('that user is currently being moderated by someone else.');
 		}
 		this.client._cachedCases.add(key);
 
@@ -50,7 +50,7 @@ class UnbanCommand extends Command {
 			await message.guild.members.unban(user, `Unbanned by ${message.author.tag}`);
 		} catch (error) {
 			this.client._cachedCases.delete(key);
-			return message.util.send(`There was an error unbanning this user: \`${error}\``);
+			return message.reply(`there was an error unbanning this user: \`${error}\``);
 		}
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;

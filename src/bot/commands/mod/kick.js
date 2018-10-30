@@ -35,15 +35,15 @@ class KickCommand extends Command {
 
 	async exec(message, { member, reason }) {
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
-		if (!staffRole) return message.util.send('You know, I know, we should just leave it at that.');
+		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 		if (member.roles.has(staffRole)) {
-			return message.util.send('Nuh-uh! You know you can\'t do this.');
+			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
 		try {
 			await member.kick(`Kicked by ${message.author.tag}`);
 		} catch (error) {
-			return message.util.send(`There was an error kicking this member: \`${error}\``);
+			return message.reply('there is no mute role configured on this server.');
 		}
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
@@ -72,7 +72,7 @@ class KickCommand extends Command {
 			reason
 		});
 
-		return message.util.send(`Successfully kicked ${member.user.tag}`);
+		return message.util.send(`Successfully kicked **${member.user.tag}**`);
 	}
 }
 
