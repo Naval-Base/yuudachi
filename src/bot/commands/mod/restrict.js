@@ -33,6 +33,9 @@ class RestrictCommand extends Command {
 	}
 
 	exec(message, { restriction, rest }) {
+		if (!this.client.settings.get(message.guild, 'moderation', false)) {
+			return message.reply('moderation commands are disabled on this server.');
+		}
 		if (!restriction) {
 			const prefix = this.handler.prefix(message);
 			return message.util.send(stripIndents`

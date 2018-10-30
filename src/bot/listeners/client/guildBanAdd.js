@@ -11,6 +11,7 @@ class GuildBanAddListener extends Listener {
 	}
 
 	async exec(guild, member) {
+		if (!this.client.settings.get(guild, 'moderation', false)) return;
 		if (this.client._cachedCases.delete(`${guild.id}:${member.id}:BAN`)) return;
 		const totalCases = this.client.settings.get(guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(guild, 'caseTotal', totalCases);

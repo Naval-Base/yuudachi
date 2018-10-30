@@ -37,6 +37,9 @@ class UnbanCommand extends Command {
 	}
 
 	async exec(message, { user, reason }) {
+		if (!this.client.settings.get(message.guild, 'moderation', false)) {
+			return message.reply('moderation commands are disabled on this server.');
+		}
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
 		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 
