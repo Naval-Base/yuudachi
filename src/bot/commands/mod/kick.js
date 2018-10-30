@@ -52,7 +52,11 @@ class KickCommand extends Command {
 			return message.util.send('Nuh-uh! You know you can\'t do this.');
 		}
 
-		await member.kick(`Kicked by ${message.author.tag}`);
+		try {
+			await member.kick(`Kicked by ${message.author.tag}`);
+		} catch (error) {
+			return message.util.send(`There was an error kicking this member: \`${error}\``);
+		}
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);

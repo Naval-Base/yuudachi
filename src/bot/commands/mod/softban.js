@@ -59,8 +59,14 @@ class SoftbanCommand extends Command {
 		this.client._cachedCases.add(keys[0]);
 		this.client._cachedCases.add(keys[1]);
 
-		await member.ban(`Softbanned by ${message.author.tag}`);
-		await message.guild.members.unban(member, `Softbanned by ${message.author.tag}`);
+		try {
+			await member.ban(`Softbanned by ${message.author.tag}`);
+			await message.guild.members.unban(member, `Softbanned by ${message.author.tag}`);
+		} catch (error) {
+			this.client._cachedCases.delete(keys[0]);
+			this.client._cachedCases.delete(keys[1]);
+			return message.util.send(`There was an error softbanning this member: \`${error}\``);
+		}
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);

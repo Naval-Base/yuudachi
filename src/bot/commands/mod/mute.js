@@ -75,7 +75,12 @@ class MuteCommand extends Command {
 		}
 		this.client._cachedCases.add(key);
 
-		await member.roles.add(muteRole, `Muted by ${message.author.tag}`);
+		try {
+			await member.roles.add(muteRole, `Muted by ${message.author.tag}`);
+		} catch (error) {
+			this.client._cachedCases.delete(key);
+			return message.util.send(`There was an error muting this member: \`${error}\``);
+		}
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
