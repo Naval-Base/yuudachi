@@ -49,9 +49,27 @@ class BanCommand extends Command {
 		}
 		this.client._cachedCases.add(key);
 
+		await message.channel.send('You sure you want me to ban this guy?');
+		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
+			max: 1,
+			time: 10000
+		});
+
+		if (!responses || responses.size !== 1) {
+			this.client._cachedCases.delete(key);
+			return message.reply('timed out. Cancelled ban.');
+		}
+		const response = responses.first();
+
 		let sentMessage;
-		try {
+		if (/^y(?:e(?:a|s)?)?$/i.test(response.content)) {
 			sentMessage = await message.channel.send(`Banning **${member.user.tag}**...`);
+		} else {
+			this.client._cachedCases.delete(key);
+			return message.reply('cancelled ban.');
+		}
+
+		try {
 			try {
 				await member.send(stripIndents`
 					**You have been banned from ${message.guild.name}**

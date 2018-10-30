@@ -1,15 +1,29 @@
 const { Argument, Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
+const { stripIndents } = require('common-tags');
+const ms = require('@naval-base/ms');
 
-class ReasonCommand extends Command {
+const ACTIONS = {
+	1: 'Ban',
+	2: 'Unban',
+	3: 'Softban',
+	4: 'Kick',
+	5: 'Mute',
+	6: 'Embed restriction',
+	7: 'Emoji restriction',
+	8: 'Reaction restriction',
+	9: 'Warn'
+};
+
+class CaseCommand extends Command {
 	constructor() {
-		super('reason', {
-			aliases: ['reason'],
+		super('case', {
+			aliases: ['case'],
 			category: 'mod',
 			description: {
 				content: '.',
-				usage: '<case> <...reason>',
-				examples: ['reason 1234 dumb', 'reason latest dumb']
+				usage: '<case>',
+				examples: ['case 1234']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -19,20 +33,15 @@ class ReasonCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: message => `${message.author}, what case do you want to add a reason to?`,
+						start: message => `${message.author}, what case do you want to look up?`,
 						retry: message => `${message.author}, please enter a case number.`
 					}
-				},
-				{
-					id: 'reason',
-					match: 'rest',
-					type: 'string'
 				}
 			]
 		});
 	}
 
-	async exec(message, { caseNum, reason }) {
+	async exec(message, { caseNum }) {
 		if (!this.client.settings.get(message.guild, 'moderation', false)) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
@@ -46,26 +55,20 @@ class ReasonCommand extends Command {
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
-		if (dbCase.mod_id && (dbCase.mod_id !== message.author.id && !message.member.permissions.has('MANAGE_GUILD'))) {
-			return message.reply('you\'d be wrong in thinking I would let you fiddle with other peoples achievements!');
-		}
 
-		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');
-		if (modLogChannel) {
-			const caseEmbed = await message.channel.messages.fetch(dbCase.message);
-			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
-			const embed = new MessageEmbed(caseEmbed.embeds[0])
-				.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
-			await caseEmbed.edit(embed);
-		}
-		dbCase.update({
-			mod_id: message.author.id,
-			mod_tag: message.author.tag,
-			reason
-		});
+		const moderator = await message.guild.members.fetch(dbCase.mod_id);
+		const embed = new MessageEmbed()
+			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, moderator ? moderator.user.displayAvatarURL() : '')
+			.setDescription(stripIndents`
+				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
+				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration.getTime(), { 'long': true })}` : ''}
+				**Reason:** ${dbCase.reason}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
+			`)
+			.setFooter(`Case ${dbCase.case_id}`)
+			.setTimestamp(new Date(dbCase.createdAt));
 
-		return message.util.send(`Successfully set reason for case **#${caseToFind}**`);
+		return message.util.send(embed);
 	}
 }
 
-module.exports = ReasonCommand;
+module.exports = CaseCommand;
