@@ -54,7 +54,7 @@ class MuteCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const muteRole = this.client.settings.get(message.guild, 'mutedRole');
+		const muteRole = this.client.settings.get(message.guild, 'muteRole');
 		if (!muteRole) return message.reply('there is no mute role configured on this server.');
 
 		const key = `${message.guild.id}:${member.id}:MUTE`;
