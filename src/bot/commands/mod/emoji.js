@@ -6,7 +6,7 @@ class RestrictEmojiCommand extends Command {
 		super('restrict-emoji', {
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Restrict a members ability to use custom emoji.',
 				usage: '<member> <...reason>',
 				examples: ['restrict emoji @Crawl']
 			},

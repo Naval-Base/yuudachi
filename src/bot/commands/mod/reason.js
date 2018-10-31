@@ -7,7 +7,7 @@ class ReasonCommand extends Command {
 			aliases: ['reason'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Sets/Updates the reason of a modlog entry.',
 				usage: '<case> <...reason>',
 				examples: ['reason 1234 dumb', 'reason latest dumb']
 			},

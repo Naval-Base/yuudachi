@@ -6,7 +6,7 @@ class RestrictReactionCommand extends Command {
 		super('restrict-reaction', {
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Restrict a members ability to use reactions.',
 				usage: '<member> <...reason>',
 				examples: ['restrict react @Crawl', 'restrict reaction @Crawl']
 			},

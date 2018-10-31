@@ -6,7 +6,7 @@ class RestrictEmbedCommand extends Command {
 		super('restrict-embed', {
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Restrict a members ability to post embeds/upload files.',
 				usage: '<member> <...reason>',
 				examples: ['restrict img @Crawl', 'restrict embed @Crawl']
 			},

@@ -8,7 +8,7 @@ class BanCommand extends Command {
 			aliases: ['ban'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Bans a member, duh.',
 				usage: '<member> <...reason>',
 				examples: ['ban @Crawl']
 			},

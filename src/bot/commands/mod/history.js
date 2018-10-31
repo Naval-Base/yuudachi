@@ -7,7 +7,7 @@ class HistoryCommand extends Command {
 			aliases: ['history'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Check the history of a member.',
 				usage: '<member>',
 				examples: ['history @Crawl']
 			},

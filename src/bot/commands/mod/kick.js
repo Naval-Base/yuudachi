@@ -8,7 +8,7 @@ class KickCommand extends Command {
 			aliases: ['kick'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Kicks a member, duh.',
 				usage: '<member> <...reason>',
 				examples: ['kick @Crawl', 'kick @Crawl']
 			},

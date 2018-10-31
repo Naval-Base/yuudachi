@@ -7,7 +7,7 @@ class WarnCommand extends Command {
 			aliases: ['warn'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Warns a user, duh.',
 				usage: '<member> <...reason>',
 				examples: ['warn @Crawl dumb']
 			},

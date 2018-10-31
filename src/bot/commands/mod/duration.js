@@ -9,7 +9,7 @@ class DurationCommand extends Command {
 			aliases: ['duration'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Sets the duration for a mute and reschedules it.',
 				usage: '<case> <duration>',
 				examples: ['duration 1234 30m', 'duration latest 20h']
 			},

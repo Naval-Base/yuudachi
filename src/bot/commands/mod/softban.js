@@ -8,7 +8,7 @@ class SoftbanCommand extends Command {
 			aliases: ['softban'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Softbans a member, duh.',
 				usage: '<member> <...reason>',
 				examples: ['softban @Crawl']
 			},

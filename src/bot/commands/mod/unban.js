@@ -7,7 +7,7 @@ class UnbanCommand extends Command {
 			aliases: ['unban'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Unbans a user, duh.',
 				usage: '<member> <...reason>',
 				examples: ['unban @Crawl']
 			},

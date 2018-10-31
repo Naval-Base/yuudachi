@@ -22,7 +22,7 @@ class CaseCommand extends Command {
 			aliases: ['case'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Inspect a case, pulled from the database.',
 				usage: '<case>',
 				examples: ['case 1234']
 			},

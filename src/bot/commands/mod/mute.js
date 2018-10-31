@@ -8,7 +8,7 @@ class MuteCommand extends Command {
 			aliases: ['mute'],
 			category: 'mod',
 			description: {
-				content: '.',
+				content: 'Mutes a member, duh.',
 				usage: '<member> <duration> <...reason>',
 				examples: ['mute @Crawl']
 			},

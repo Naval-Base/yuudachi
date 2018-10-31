@@ -6,9 +6,25 @@ class RestrictCommand extends Command {
 		super('restrict', {
 			aliases: ['restrict'],
 			description: {
-				content: '.',
-				usage: '<restriction> <member> <...reason>',
-				examples: ['restrict img @Crawl', 'restrict embed @Crawl']
+				content: stripIndents`
+					Restrict a members ability to post embeds/use custom emojis/react.
+
+					Available restrictions:
+					 • embed \`<member> <...reason>\`
+					 • emoji \`<member> <...reason>\`
+					 • reaction \`<member> <...reason>\`
+
+					Required: \`<>\` | Optional: \`[]\`
+
+					For additional \`<...arguments>\` usage refer to the examples below.
+				`,
+				usage: '<restriction> <...argumens>',
+				examples: [
+					'restrict img @Crawl nsfw',
+					'restrict embed @Crawl img spam',
+					'restrict emoji @Dim dumb',
+					'restrict reaction @appellation why though'
+				]
 			},
 			category: 'mod',
 			channel: 'guild',
