@@ -42,6 +42,7 @@ class UnbanCommand extends Command {
 		}
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
 		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
+		if (user.id === message.author.id) return;
 
 		const key = `${message.guild.id}:${user.id}:UNBAN`;
 		if (this.client._cachedCases.has(key)) {

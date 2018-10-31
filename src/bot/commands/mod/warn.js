@@ -39,6 +39,7 @@ class WarnCommand extends Command {
 		}
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
 		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
+		if (member.id === message.author.id) return;
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}

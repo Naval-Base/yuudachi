@@ -30,6 +30,8 @@ class GuildMemberUpdateListener extends Listener {
 			if (this.client._cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMOJI`)) return;
 			if (this.client._cachedCases.delete(`${newMember.guild.id}:${newMember.id}:REACTION`)) return;
 
+			const modRole = this.client.settings.get(newMember.guild, 'modRole');
+			if (modRole && newMember.roles.has(modRole)) return;
 			const muteRole = this.client.settings.get(newMember.guild, 'muteRole');
 			const restrictRoles = this.client.settings.get(newMember.guild, 'restrictRoles');
 			if (!muteRole && !restrictRoles) return;

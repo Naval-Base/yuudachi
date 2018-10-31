@@ -33,9 +33,6 @@ class HistoryCommand extends Command {
 		if (!staffRole && message.author.id !== member.id) return message.reply('you know, I know, we should just leave it at that.');
 
 		const dbCases = await this.client.db.models.cases.findAll({ where: { target_id: member.id } });
-		if (!dbCases.length) {
-			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
-		}
 		const embed = historyEmbed(member, dbCases);
 
 		return message.util.send(embed);
