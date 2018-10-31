@@ -40,7 +40,7 @@ class GuildMemberUpdateListener extends Listener {
 			if (!role) {
 				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
 					const dbCase = await this.client.db.models.cases.findOne({ where: { target_id: newMember.id, action_processed: false } });
-					if (dbCase) dbCase.update({ action_processed: true });
+					if (dbCase) this.client.muteScheduler.cancelMute(dbCase);
 				}
 				return;
 			}
