@@ -42,6 +42,9 @@ class RestrictReactionCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
+		const restrictRoles = this.client.settings.get(message.guild, 'restrictRoles');
+		if (!restrictRoles) return message.reply('there are no restricted roles configured on this server.');
+
 		const key = `${message.guild.id}:${member.id}:REACTION`;
 		if (this.client._cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
@@ -49,7 +52,7 @@ class RestrictReactionCommand extends Command {
 		this.client._cachedCases.add(key);
 
 		try {
-			// await member.roles.add('', `Embed restricted by ${message.author.tag}`);
+			await member.roles.add(restrictRoles.reaction, `Embed restricted by ${message.author.tag}`);
 		} catch (error) {
 			this.client._cachedCases.delete(key);
 			return message.reply(`there was an error muting this member: \`${error}\``);
