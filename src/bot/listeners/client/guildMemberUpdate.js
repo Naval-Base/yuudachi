@@ -35,8 +35,6 @@ class GuildMemberUpdateListener extends Listener {
 			const muteRole = this.client.settings.get(newMember.guild, 'muteRole');
 			const restrictRoles = this.client.settings.get(newMember.guild, 'restrictRoles');
 			if (!muteRole && !restrictRoles) return;
-			const totalCases = this.client.settings.get(newMember.guild, 'caseTotal', 0) + 1;
-			this.client.settings.set(newMember.guild, 'caseTotal', totalCases);
 			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel');
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			if (!role) {
@@ -66,6 +64,9 @@ class GuildMemberUpdateListener extends Listener {
 			} else {
 				return;
 			}
+
+			const totalCases = this.client.settings.get(newMember.guild, 'caseTotal', 0) + 1;
+			this.client.settings.set(newMember.guild, 'caseTotal', totalCases);
 
 			let modMessage;
 			if (modLogChannel) {
