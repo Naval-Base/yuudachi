@@ -29,8 +29,7 @@ class DurationCommand extends Command {
 					id: 'duration',
 					type: str => {
 						const duration = ms(str);
-						// 300000
-						if (duration && duration >= 30000) return duration;
+						if (duration && duration >= 300000) return duration;
 						return null;
 					},
 					prompt: {
@@ -43,7 +42,7 @@ class DurationCommand extends Command {
 	}
 
 	async exec(message, { caseNum, duration }) {
-		if (!this.client.settings.get(message.guild, 'moderation', false)) {
+		if (!this.client.settings.get(message.guild, 'moderation')) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
@@ -65,7 +64,11 @@ class DurationCommand extends Command {
 			const caseEmbed = await message.channel.messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0])
-				.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, { 'long': true })}`));
+			if (dbCase.action_duration) {
+				embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, { 'long': true })}`));
+			} else {
+				embed.setDescription(caseEmbed.embeds[0].description.replace(/(\*\*Action:\*\* Mute)/, `$1\n**Length:** ${ms(duration, { 'long': true })}`));
+			}
 			await caseEmbed.edit(embed);
 		}
 		await dbCase.update({ action_duration: new Date(Date.now() + duration) });

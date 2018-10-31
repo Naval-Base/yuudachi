@@ -21,7 +21,11 @@ class MuteScheduler extends Scheduler {
 		const muteRole = this.client.settings.get(guild, 'muteRole');
 		const member = await guild.members.fetch(mute.target_id);
 		mute.update({ action_processed: true });
-		if (member) await member.roles.remove(muteRole, `Unmuted automatically based on duration.`);
+		if (member) {
+			try {
+				await member.roles.remove(muteRole, `Unmuted automatically based on duration.`);
+			} catch {}
+		}
 		super.cancelSchedule(mute.id);
 	}
 

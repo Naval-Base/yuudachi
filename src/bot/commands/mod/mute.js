@@ -28,8 +28,7 @@ class MuteCommand extends Command {
 					id: 'duration',
 					type: str => {
 						const duration = ms(str);
-						// 300000
-						if (duration && duration >= 30000) return duration;
+						if (duration && duration >= 300000) return duration;
 						return null;
 					},
 					prompt: {
@@ -48,7 +47,7 @@ class MuteCommand extends Command {
 	}
 
 	async exec(message, { member, duration, reason }) {
-		if (!this.client.settings.get(message.guild, 'moderation', false)) {
+		if (!this.client.settings.get(message.guild, 'moderation')) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));

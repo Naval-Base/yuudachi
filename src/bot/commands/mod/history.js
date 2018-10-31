@@ -26,7 +26,7 @@ class HistoryCommand extends Command {
 	}
 
 	async exec(message, { member }) {
-		if (!this.client.settings.get(message.guild, 'moderation', false)) {
+		if (!this.client.settings.get(message.guild, 'moderation')) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));

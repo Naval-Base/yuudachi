@@ -55,7 +55,7 @@ module.exports = {
 		}
 		embed.setDescription(stripIndents`
 				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
-				**Action:** ${action}${action === 'Mute' ? `\n**Length:** ${ms(duration, { 'long': true })}` : ''}
+				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { 'long': true })}` : ''}
 				**Reason:** ${reason}${ref ? `\n**Ref case:** ${ref}` : ''}
 			`)
 			.setFooter(`Case ${caseNum}`)
