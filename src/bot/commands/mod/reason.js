@@ -52,9 +52,9 @@ class ReasonCommand extends Command {
 
 		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');
 		if (modLogChannel) {
-			const caseEmbed = await message.channel.messages.fetch(dbCase.message);
+			const caseEmbed = await this.client.channels.get(modLogChannel).messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
-			const embed = new MessageEmbed(caseEmbed.embeds[0])
+			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (!dbCase.mod_id && !dbCase.mod_tag) {
 				embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
 			}

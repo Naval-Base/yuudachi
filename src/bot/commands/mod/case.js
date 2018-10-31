@@ -58,7 +58,7 @@ class CaseCommand extends Command {
 		}
 
 		const moderator = await message.guild.members.fetch(dbCase.mod_id);
-		const color = Object.keys(CONSTANTS.ACTIONS).find(key => CONSTANTS.ACTIONS[key] === dbCase.action);
+		const color = Object.keys(CONSTANTS.ACTIONS).find(key => CONSTANTS.ACTIONS[key] === dbCase.action).split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
 			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, moderator ? moderator.user.displayAvatarURL() : '')
 			.setColor(CONSTANTS.COLORS[color])

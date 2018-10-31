@@ -71,7 +71,7 @@ class GuildMemberUpdateListener extends Listener {
 			if (modLogChannel) {
 				const prefix = this.client.commandHandler.prefix({ guild: newMember.guild });
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-				const color = Object.keys(ACTIONS).find(key => ACTIONS[key] === action);
+				const color = Object.keys(ACTIONS).find(key => ACTIONS[key] === action).split(' ')[0].toUpperCase();
 				const embed = logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason }).setColor(COLORS[color]);
 				modMessage = await this.client.channels.get(modLogChannel).send(embed);
 			}

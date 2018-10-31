@@ -61,9 +61,9 @@ class DurationCommand extends Command {
 
 		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');
 		if (modLogChannel) {
-			const caseEmbed = await message.channel.messages.fetch(dbCase.message);
+			const caseEmbed = await this.client.channels.get(modLogChannel).messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
-			const embed = new MessageEmbed(caseEmbed.embeds[0])
+			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (dbCase.action_duration) {
 				embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, { 'long': true })}`));
 			} else {
