@@ -38,8 +38,9 @@ class BanCommand extends Command {
 		if (!this.client.settings.get(message.guild, 'moderation')) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
-		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
+		const staffRole = this.client.settings.get(message.guild, 'modRole');
+		const hasStaffRole = message.member.roles.has(staffRole);
+		if (!hasStaffRole) return message.reply('you know, I know, we should just leave it at that.');
 		if (member.id === message.author.id) {
 			await message.reply('you asked for it, ok?');
 			try {
