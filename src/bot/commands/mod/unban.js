@@ -49,14 +49,15 @@ class UnbanCommand extends Command {
 		}
 		this.client._cachedCases.add(key);
 
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+
 		try {
-			await message.guild.members.unban(user, `Unbanned by ${message.author.tag}`);
+			await message.guild.members.unban(user, `Unbanned by ${message.author.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client._cachedCases.delete(key);
 			return message.reply(`there was an error unbanning this user: \`${error}\``);
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
 
 		if (!reason) {

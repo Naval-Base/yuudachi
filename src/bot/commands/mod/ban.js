@@ -71,6 +71,8 @@ class BanCommand extends Command {
 			return message.reply('cancelled ban.');
 		}
 
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+
 		try {
 			try {
 				await member.send(stripIndents`
@@ -79,13 +81,12 @@ class BanCommand extends Command {
 					You can appeal your ban by DMing \`Crawl#0002\` with a message why you think you deserve to have your ban lifted.
 				`);
 			} catch {}
-			await member.ban(`Banned by ${message.author.tag}`);
+			await member.ban(`Banned by ${message.author.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client._cachedCases.delete(key);
 			return message.reply(`there was an error banning this member: \`${error}\``);
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
 
 		if (!reason) {

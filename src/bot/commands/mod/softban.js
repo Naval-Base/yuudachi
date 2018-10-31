@@ -51,6 +51,8 @@ class SoftbanCommand extends Command {
 		this.client._cachedCases.add(keys[0]);
 		this.client._cachedCases.add(keys[1]);
 
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+
 		let sentMessage;
 		try {
 			sentMessage = await message.channel.send(`Softbanning **${member.user.tag}**...`);
@@ -62,15 +64,14 @@ class SoftbanCommand extends Command {
 					You may rejoin whenever.
 				`);
 			} catch {}
-			await member.ban(`Softbanned by ${message.author.tag}`);
-			await message.guild.members.unban(member, `Softbanned by ${message.author.tag}`);
+			await member.ban(`Softbanned by ${message.author.tag} | Case #${totalCases}`);
+			await message.guild.members.unban(member, `Softbanned by ${message.author.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client._cachedCases.delete(keys[0]);
 			this.client._cachedCases.delete(keys[1]);
 			return message.reply(`there was an error softbanning this member: \`${error}\``);
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
 
 		if (!reason) {

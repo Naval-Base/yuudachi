@@ -44,6 +44,8 @@ class KickCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+
 		let sentMessage;
 		try {
 			sentMessage = await message.channel.send(`Kicking **${member.user.tag}**...`);
@@ -54,12 +56,11 @@ class KickCommand extends Command {
 					You may rejoin whenever.
 				`);
 			} catch {}
-			await member.kick(`Kicked by ${message.author.tag}`);
+			await member.kick(`Kicked by ${message.author.tag} | Case #${totalCases}`);
 		} catch (error) {
 			return message.reply('there is no mute role configured on this server.');
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
 
 		if (!reason) {
