@@ -55,7 +55,10 @@ class ReasonCommand extends Command {
 			const caseEmbed = await message.channel.messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0])
-				.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+			if (!dbCase.mod_id && !dbCase.mod_tag) {
+				embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
+			}
+			embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
 			await caseEmbed.edit(embed);
 		}
 		dbCase.update({
