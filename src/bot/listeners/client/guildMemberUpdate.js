@@ -1,9 +1,9 @@
 const { Listener } = require('discord-akairo');
 const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
 
-class GuildMemberUpdateListener extends Listener {
+class GuildMemberUpdateModerationListener extends Listener {
 	constructor() {
-		super('guildMemberUpdate', {
+		super('guildMemberUpdateModeration', {
 			emitter: 'client',
 			event: 'guildMemberUpdate',
 			category: 'client'
@@ -11,7 +11,6 @@ class GuildMemberUpdateListener extends Listener {
 	}
 
 	async exec(oldMember, newMember) {
-		const roleState = this.client.settings.get(newMember.guild, 'roleState');
 		const moderation = this.client.settings.get(newMember.guild, 'moderation');
 		if (moderation) {
 			if (this.client._cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
@@ -26,10 +25,11 @@ class GuildMemberUpdateListener extends Listener {
 			if (!muteRole && !restrictRoles) return;
 			const automaticRoleState = await this.client.db.models.role_states.findOne({ where: { user: newMember.id } });
 			if (
-				automaticRoleState.roles.includes(muteRole) ||
+				automaticRoleState &&
+				(automaticRoleState.roles.includes(muteRole) ||
 				automaticRoleState.roles.includes(restrictRoles.embed) ||
 				automaticRoleState.roles.includes(restrictRoles.emoji) ||
-				automaticRoleState.roles.includes(restrictRoles.reaction)
+				automaticRoleState.roles.includes(restrictRoles.reaction))
 			) return;
 			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel');
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
@@ -82,18 +82,7 @@ class GuildMemberUpdateListener extends Listener {
 				action_processed: processed
 			});
 		}
-		if (roleState) {
-			await newMember.guild.members.fetch(newMember.id);
-			if (newMember.roles) {
-				const roles = newMember.roles.filter(role => role.id !== newMember.guild.id).map(role => role.id);
-				if (roles.length) {
-					await this.client.db.models.role_states.upsert({ guild: newMember.guild.id, user: newMember.id, roles });
-				} else {
-					await this.client.db.models.role_states.destroy({ where: { guild: newMember.guild.id, user: newMember.id } });
-				}
-			}
-		}
 	}
 }
 
-module.exports = GuildMemberUpdateListener;
+module.exports = GuildMemberUpdateModerationListener;
