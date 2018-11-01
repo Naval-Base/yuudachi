@@ -35,6 +35,8 @@ class GuildMemberUpdateListener extends Listener {
 			const muteRole = this.client.settings.get(newMember.guild, 'muteRole');
 			const restrictRoles = this.client.settings.get(newMember.guild, 'restrictRoles');
 			if (!muteRole && !restrictRoles) return;
+			const automaticRoleState = await this.client.db.models.role_states.findOne({ where: { user: newMember.id } });
+			if (automaticRoleState) return;
 			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel');
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			if (!role) {
