@@ -19,7 +19,10 @@ class MuteScheduler extends Scheduler {
 		this.client.logger.info('Unmuted');
 		const guild = this.client.guilds.get(mute.guild);
 		const muteRole = this.client.settings.get(guild, 'muteRole');
-		const member = await guild.members.fetch(mute.target_id);
+		let member;
+		try {
+			member = await guild.members.fetch(mute.target_id);
+		} catch {}
 		mute.update({ action_processed: true });
 		if (member) {
 			try {

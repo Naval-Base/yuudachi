@@ -64,7 +64,7 @@ class RemindScheduler extends Scheduler {
 		const now = new Date();
 
 		for (const reminder of reminders) {
-			if (this.queuedReminders.has(reminder.id)) continue;
+			if (this.queuedSchedules.has(reminder.id)) continue;
 
 			if (reminder.triggers_at < now) {
 				this.runReminder(reminder);
