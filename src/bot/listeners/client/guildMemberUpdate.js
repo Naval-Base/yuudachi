@@ -13,17 +13,6 @@ class GuildMemberUpdateListener extends Listener {
 	async exec(oldMember, newMember) {
 		const roleState = this.client.settings.get(newMember.guild, 'roleState');
 		const moderation = this.client.settings.get(newMember.guild, 'moderation');
-		if (roleState) {
-			await newMember.guild.members.fetch(newMember.id);
-			if (newMember.roles) {
-				const roles = newMember.roles.filter(role => role.id !== newMember.guild.id).map(role => role.id);
-				if (roles.length) {
-					await this.client.db.models.role_states.upsert({ guild: newMember.guild.id, user: newMember.id, roles });
-				} else {
-					await this.client.db.models.role_states.destroy({ where: { guild: newMember.guild.id, user: newMember.id } });
-				}
-			}
-		}
 		if (moderation) {
 			if (this.client._cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
 			if (this.client._cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMBED`)) return;
@@ -36,7 +25,12 @@ class GuildMemberUpdateListener extends Listener {
 			const restrictRoles = this.client.settings.get(newMember.guild, 'restrictRoles');
 			if (!muteRole && !restrictRoles) return;
 			const automaticRoleState = await this.client.db.models.role_states.findOne({ where: { user: newMember.id } });
-			if (automaticRoleState) return;
+			if (
+				automaticRoleState.roles.includes(muteRole) ||
+				automaticRoleState.roles.includes(restrictRoles.embed) ||
+				automaticRoleState.roles.includes(restrictRoles.emoji) ||
+				automaticRoleState.roles.includes(restrictRoles.reaction)
+			) return;
 			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel');
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			if (!role) {
@@ -87,6 +81,17 @@ class GuildMemberUpdateListener extends Listener {
 				action,
 				action_processed: processed
 			});
+		}
+		if (roleState) {
+			await newMember.guild.members.fetch(newMember.id);
+			if (newMember.roles) {
+				const roles = newMember.roles.filter(role => role.id !== newMember.guild.id).map(role => role.id);
+				if (roles.length) {
+					await this.client.db.models.role_states.upsert({ guild: newMember.guild.id, user: newMember.id, roles });
+				} else {
+					await this.client.db.models.role_states.destroy({ where: { guild: newMember.guild.id, user: newMember.id } });
+				}
+			}
 		}
 	}
 }
