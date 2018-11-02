@@ -59,7 +59,7 @@ class BanCommand extends Command {
 
 		const dbCases = await this.client.db.models.cases.findAll({ where: { target_id: member.id } });
 		const embed = historyEmbed(member, dbCases);
-		await message.channel.send('You sure you want me to ban this guy?', { embed });
+		await message.channel.send('You sure you want me to ban this [no gender specified]?', { embed });
 		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
 			max: 1,
 			time: 10000
