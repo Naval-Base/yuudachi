@@ -66,7 +66,7 @@ class SoftbanCommand extends Command {
 					You may rejoin whenever.
 				`);
 			} catch {}
-			await member.ban(`Softbanned by ${message.author.tag} | Case #${totalCases}`);
+			await member.ban({ days: 1, reason: `Softbanned by ${message.author.tag} | Case #${totalCases}` });
 			await message.guild.members.unban(member, `Softbanned by ${message.author.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client._cachedCases.delete(keys[0]);

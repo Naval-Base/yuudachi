@@ -89,7 +89,7 @@ class BanCommand extends Command {
 					You can appeal your ban by DMing \`Crawl#0002\` with a message why you think you deserve to have your ban lifted.
 				`);
 			} catch {}
-			await member.ban(`Banned by ${message.author.tag} | Case #${totalCases}`);
+			await member.ban({ days: 7, reason: `Banned by ${message.author.tag} | Case #${totalCases}` });
 		} catch (error) {
 			this.client._cachedCases.delete(key);
 			return message.reply(`there was an error banning this member: \`${error}\``);
