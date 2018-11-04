@@ -46,7 +46,7 @@ class DocsCommand extends Command {
 		if (!embed) {
 			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
-		if (!message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (message.channel.type === 'dm' || !message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 			return message.util.send({ embed });
 		}
 		const msg = await message.util.send({ embed });
