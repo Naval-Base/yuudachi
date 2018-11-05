@@ -483,12 +483,14 @@ discord-akairo@1Computer1/discord-akairo:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/b759fc415e89c1f3eb3523deb23c5b514968c845"
+  uid "7796cb5d0589a40fa719676d4b8b129a3598732e"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/7796cb5d0589a40fa719676d4b8b129a3598732e"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
     pako "^1.0.0"
     prism-media amishshah/prism-media
+    setimmediate "^1.0.5"
     tweetnacl "^1.0.0"
     ws "^6.0.0"
 
@@ -1671,6 +1673,11 @@ sequelize@^4.41.0:
     uuid "^3.2.1"
     validator "^10.4.0"
     wkx "^0.4.1"
+
+setimmediate@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
+  integrity sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU=
 
 shebang-command@^1.2.0:
   version "1.2.0"
