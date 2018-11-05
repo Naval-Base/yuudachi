@@ -33,7 +33,7 @@ class PingCommand extends Command {
 		return message.util.send(
 			RESPONSES[Math.floor(Math.random() * RESPONSES.length)]
 				.replace('$(ping)', Math.round(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp))
-				.replace('$(heartbeat)', Math.round(this.client.ping))
+				.replace('$(heartbeat)', Math.round(this.client.ws.ping))
 		);
 	}
 }
