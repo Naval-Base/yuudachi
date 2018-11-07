@@ -1,8 +1,9 @@
-const { Command } = require('discord-akairo');
-const { stripIndents } = require('common-tags');
+import { Command } from 'discord-akairo';
+import { Message } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
-class ReminderCommand extends Command {
-	constructor() {
+export default class ReminderCommand extends Command {
+	public constructor() {
 		super('reminder', {
 			aliases: ['remind', 'reminder'],
 			description: {
@@ -40,24 +41,23 @@ class ReminderCommand extends Command {
 		});
 	}
 
-	exec(message, { method, name }) {
+	public exec(message: Message, { method, name }: { method: string, name: string }) {
 		if (!method) {
+			// @ts-ignore
 			const prefix = this.handler.prefix(message);
-			return message.util.send(stripIndents`
+			return message.util!.send(stripIndents`
 				When you beg me so much I just can't not help you~
 				Check \`${prefix}help reminder\` for more information.
 			`);
 		}
-		const command = {
+		const command = ({
 			'add': this.handler.modules.get('reminder-add'),
 			'cancel': this.handler.modules.get('reminder-delete'),
 			'del': this.handler.modules.get('reminder-delete'),
 			'delete': this.handler.modules.get('reminder-delete'),
 			'list': this.handler.modules.get('reminder-list')
-		}[method];
+		} as { [key: string]: Command } )[method];
 
 		return this.handler.handleDirectCommand(message, name, command, true);
 	}
 }
-
-module.exports = ReminderCommand;
