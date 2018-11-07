@@ -8,7 +8,7 @@ export default class SetRestrictRoles extends Command {
 			description: {
 				content: 'Sets the restriction roles of the guild.',
 				usage: '<embedrole> <emojirole> <reactionrole>',
-				examples: ['set-restrict @Embed @Emoji @Reaction']
+				examples: ['@Embed @Emoji @Reaction']
 			},
 			category: 'config',
 			channel: 'guild',

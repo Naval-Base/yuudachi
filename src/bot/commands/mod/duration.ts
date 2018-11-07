@@ -1,17 +1,18 @@
-const { Argument, Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { CONSTANTS: { ACTIONS } } = require('../../util');
+import { Argument, Command } from 'discord-akairo';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import Util from '../../util';
+import { Case } from '../../models/Cases';
 const ms = require('@naval-base/ms');
 
-class DurationCommand extends Command {
-	constructor() {
+export default class DurationCommand extends Command {
+	public constructor() {
 		super('duration', {
 			aliases: ['duration'],
 			category: 'mod',
 			description: {
 				content: 'Sets the duration for a mute and reschedules it.',
 				usage: '<case> <duration>',
-				examples: ['duration 1234 30m', 'duration latest 20h']
+				examples: ['1234 30m', 'latest 20h']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -21,8 +22,8 @@ class DurationCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: message => `${message.author}, what case do you want to add a reason to?`,
-						retry: message => `${message.author}, please enter a case number.`
+						start: (message: Message) => `${message.author}, what case do you want to add a reason to?`,
+						retry: (message: Message) => `${message.author}, please enter a case number.`
 					}
 				},
 				{
@@ -33,25 +34,26 @@ class DurationCommand extends Command {
 						return null;
 					},
 					prompt: {
-						start: message => `${message.author}, for how long do you want the mute to last?`,
-						retry: message => `${message.author}, please use a proper time format.`
+						start: (message: Message) => `${message.author}, for how long do you want the mute to last?`,
+						retry: (message: Message) => `${message.author}, please use a proper time format.`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { caseNum, duration }) {
-		if (!this.client.settings.get(message.guild, 'moderation')) {
+	public async exec(message: Message, { caseNum, duration }: { caseNum: number | string, duration: number }) {
+		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
+		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
 		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
-		const dbCase = await this.client.db.models.cases.findOne({ where: { case_id: caseToFind, action: ACTIONS.MUTE, action_processed: false } });
+		const casesRepo = this.client.db.getRepository(Case);
+		const dbCase = await casesRepo.findOne({ case_id: caseToFind, action: Util.CONSTANTS.ACTIONS.MUTE, action_processed: false });
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id and action, maybe look for something that actually exists next time!');
 		}
@@ -59,9 +61,9 @@ class DurationCommand extends Command {
 			return message.reply('you\'d be wrong in thinking I would let you fiddle with other peoples achievements!');
 		}
 
-		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel');
+		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel', undefined);
 		if (modLogChannel) {
-			const caseEmbed = await this.client.channels.get(modLogChannel).messages.fetch(dbCase.message);
+			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message) as Message;
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (dbCase.action_duration) {
@@ -71,11 +73,10 @@ class DurationCommand extends Command {
 			}
 			await caseEmbed.edit(embed);
 		}
-		await dbCase.update({ action_duration: new Date(Date.now() + duration) });
+		dbCase.action_duration = new Date(Date.now() + duration);
+		await casesRepo.save(dbCase);
 		this.client.muteScheduler.rescheduleMute(dbCase);
 
-		return message.util.send(`Successfully updated duration for case **#${caseToFind}**`);
+		return message.util!.send(`Successfully updated duration for case **#${caseToFind}**`);
 	}
 }
-
-module.exports = DurationCommand;

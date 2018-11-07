@@ -8,7 +8,7 @@ export default class SetModRoleCommand extends Command {
 			description: {
 				content: 'Sets the mod role many of the commands use for permission checking.',
 				usage: '<role>',
-				examples: ['modrole @Mod', 'modrole Mods']
+				examples: ['@Mod', 'Mods']
 			},
 			category: 'config',
 			channel: 'guild',

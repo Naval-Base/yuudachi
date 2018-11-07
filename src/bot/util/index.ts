@@ -26,7 +26,7 @@ export default {
 			EMOJI: 7,
 			REACTION: 8,
 			WARN: 9
-		},
+		} as { [key: string]: number },
 		COLORS: {
 			BAN: 16718080,
 			UNBAN: 8450847,
@@ -37,7 +37,7 @@ export default {
 			EMOJI: 16776960,
 			REACTION: 16776960,
 			WARN: 16776960
-		}
+		} as { [key: string]: number }
 	},
 	reminderEmbed: (message: Message, reminders: any) => {
 		const truncate = (str: string, len: number) => str.length > len ? `${str.slice(0, len)}…` : str; // eslint-disable-line

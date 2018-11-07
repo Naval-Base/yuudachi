@@ -1,5 +1,5 @@
 import { Listener } from 'discord-akairo';
-import { Guild, GuildMember, TextChannel } from 'discord.js';
+import { Message, Guild, GuildMember, TextChannel } from 'discord.js';
 import Util from '../../util';
 import { Case } from '../../models/Cases';
 
@@ -18,13 +18,13 @@ export default class GuildBanAddListener extends Listener {
 		const totalCases = this.client.settings.get(guild, 'caseTotal', 0) + 1;
 		this.client.settings.set(guild, 'caseTotal', totalCases);
 		const modLogChannel = this.client.settings.get(guild, 'modLogChannel', undefined);
-		let modMessage: any;
+		let modMessage;
 		if (modLogChannel) {
 			// @ts-ignore
 			const prefix = this.client.commandHandler.prefix({ guild });
 			const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 			const embed = Util.logEmbed({ member, action: 'Ban', caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.BAN);
-			modMessage = (await this.client.channels.get(modLogChannel) as TextChannel)!.send(embed);
+			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 		}
 		const casesRepo = this.client.db.getRepository(Case);
 		const dbCase = new Case();

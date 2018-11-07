@@ -9,7 +9,7 @@ export default class LaunchCybernukeCommand extends Command {
 			description: {
 				content: 'Bans all members that have joined recently, with new accounts.',
 				usage: '<join> <age>',
-				examples: ['cybernuke 10 120']
+				examples: ['10 120']
 			},
 			category: 'util',
 			userPermissions: ['MANAGE_GUILD'],

@@ -8,7 +8,7 @@ export default class SetCasesCommand extends Command {
 			description: {
 				content: 'Sets the case number of the guild.',
 				usage: '<cases>',
-				examples: ['set-cases 5']
+				examples: ['5']
 			},
 			category: 'config',
 			channel: 'guild',

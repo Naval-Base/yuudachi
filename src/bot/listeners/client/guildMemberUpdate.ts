@@ -1,8 +1,8 @@
 import { Listener } from 'discord-akairo';
-import { GuildMember, TextChannel } from 'discord.js';
+import { Message, GuildMember, TextChannel } from 'discord.js';
 import { RoleState } from '../../models/RoleStates';
 import { Case } from '../../models/Cases';
-const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
+import Util from '../../util';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {
@@ -51,17 +51,17 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			let processed = true;
 			if (role.id === muteRole) {
 				actionName = 'Mute';
-				action = ACTIONS.MUTE;
+				action = Util.CONSTANTS.ACTIONS.MUTE;
 				processed = false;
 			} else if (role.id === restrictRoles.embed) {
 				actionName = 'Embed restriction';
-				action = ACTIONS.EMBED;
+				action = Util.CONSTANTS.ACTIONS.EMBED;
 			} else if (role.id === restrictRoles.emoji) {
 				actionName = 'Emoji restriction';
-				action = ACTIONS.EMOJI;
+				action = Util.CONSTANTS.ACTIONS.EMOJI;
 			} else if (role.id === restrictRoles.reaction) {
 				actionName = 'Reaction restriction';
-				action = ACTIONS.REACTION;
+				action = Util.CONSTANTS.ACTIONS.REACTION;
 			} else {
 				return;
 			}
@@ -69,14 +69,14 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			const totalCases = this.client.settings.get(newMember.guild, 'caseTotal', 0) + 1;
 			this.client.settings.set(newMember.guild, 'caseTotal', totalCases);
 
-			let modMessage: any;
+			let modMessage;
 			if (modLogChannel) {
 				// @ts-ignore
 				const prefix = this.client.commandHandler.prefix({ guild: newMember.guild });
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-				const color = Object.keys(ACTIONS).find(key => ACTIONS[key] === action)!.split(' ')[0].toUpperCase();
-				const embed = logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason }).setColor(COLORS[color]);
-				modMessage = (await this.client.channels.get(modLogChannel) as TextChannel)!.send(embed);
+				const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === action)!.split(' ')[0].toUpperCase();
+				const embed = Util.logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS[color]);
+				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 			}
 			const dbCase = new Case();
 			dbCase.guild = newMember.guild.id;

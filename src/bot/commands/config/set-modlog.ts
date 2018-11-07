@@ -8,7 +8,7 @@ export default class SetModChannelCommand extends Command {
 			description: {
 				content: 'Sets the mod log many of the commands use to log moderation actions.',
 				usage: '<channel>',
-				examples: ['mod-channel #mod-log', 'modlog mog-log']
+				examples: ['#mod-log', 'mog-log']
 			},
 			category: 'config',
 			channel: 'guild',

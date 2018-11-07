@@ -8,7 +8,7 @@ export default class SetMuteRole extends Command {
 			description: {
 				content: 'Sets the mute role of the guild.',
 				usage: '<role>',
-				examples: ['set-muterole @Muted']
+				examples: ['@Muted', 'Muted']
 			},
 			category: 'config',
 			channel: 'guild',

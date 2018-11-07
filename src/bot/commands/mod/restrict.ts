@@ -1,8 +1,9 @@
-const { Command } = require('discord-akairo');
-const { stripIndents } = require('common-tags');
+import { Command } from 'discord-akairo';
+import { Message } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
-class RestrictCommand extends Command {
-	constructor() {
+export default class RestrictCommand extends Command {
+	public constructor() {
 		super('restrict', {
 			aliases: ['restrict'],
 			description: {
@@ -20,10 +21,10 @@ class RestrictCommand extends Command {
 				`,
 				usage: '<restriction> <...argumens>',
 				examples: [
-					'restrict img @Crawl nsfw',
-					'restrict embed @Crawl img spam',
-					'restrict emoji @Dim dumb',
-					'restrict reaction @appellation why though'
+					'img @Crawl nsfw',
+					'embed @Crawl img spam',
+					'emoji @Dim dumb',
+					'reaction @appellation why though'
 				]
 			},
 			category: 'mod',
@@ -40,26 +41,27 @@ class RestrictCommand extends Command {
 					'match': 'rest',
 					'default': '',
 					'prompt': {
-						start: message => `${message.author}, `,
-						retry: message => `${message.author}, `
+						start: (message: Message) => `${message.author}, `,
+						retry: (message: Message) => `${message.author}, `
 					}
 				}
 			]
 		});
 	}
 
-	exec(message, { restriction, rest }) {
-		if (!this.client.settings.get(message.guild, 'moderation')) {
+	public exec(message: Message, { restriction, rest }: { restriction: string, rest: string }) {
+		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
 		if (!restriction) {
+			// @ts-ignore
 			const prefix = this.handler.prefix(message);
-			return message.util.send(stripIndents`
+			return message.util!.send(stripIndents`
 				When you beg me so much I just can't not help you~
 				Check \`${prefix}help restrict\` for more information.
 			`);
 		}
-		const command = {
+		const command = ({
 			embed: this.handler.modules.get('restrict-embed'),
 			embeds: this.handler.modules.get('restrict-embed'),
 			image: this.handler.modules.get('restrict-embed'),
@@ -68,10 +70,8 @@ class RestrictCommand extends Command {
 			emoji: this.handler.modules.get('restrict-emoji'),
 			reaction: this.handler.modules.get('restrict-reaction'),
 			react: this.handler.modules.get('restrict-reaction')
-		}[restriction];
+		} as { [key: string]: Command })[restriction];
 
 		return this.handler.handleDirectCommand(message, rest, command, true);
 	}
 }
-
-module.exports = RestrictCommand;

@@ -1,8 +1,9 @@
-const { Argument, Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { stripIndents } = require('common-tags');
+import { Argument, Command } from 'discord-akairo';
+import { Message, MessageEmbed } from 'discord.js';
+import { stripIndents } from 'common-tags';
+import Util from '../../util';
+import { Case } from '../../models/Cases';
 const ms = require('@naval-base/ms');
-const { CONSTANTS } = require('../../util');
 
 const ACTIONS = {
 	1: 'Ban',
@@ -14,17 +15,17 @@ const ACTIONS = {
 	7: 'Emoji restriction',
 	8: 'Reaction restriction',
 	9: 'Warn'
-};
+} as { [key: number]: string };
 
-class CaseCommand extends Command {
-	constructor() {
+export default class CaseCommand extends Command {
+	public constructor() {
 		super('case', {
 			aliases: ['case'],
 			category: 'mod',
 			description: {
 				content: 'Inspect a case, pulled from the database.',
 				usage: '<case>',
-				examples: ['case 1234']
+				examples: ['1234']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -34,34 +35,35 @@ class CaseCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: message => `${message.author}, what case do you want to look up?`,
-						retry: message => `${message.author}, please enter a case number.`
+						start: (message: Message) => `${message.author}, what case do you want to look up?`,
+						retry: (message: Message) => `${message.author}, please enter a case number.`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { caseNum }) {
-		if (!this.client.settings.get(message.guild, 'moderation')) {
+	public async exec(message: Message, { caseNum }: { caseNum: number | string }) {
+		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
 			return message.reply('moderation commands are disabled on this server.');
 		}
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole'));
+		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
 		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
-		const dbCase = await this.client.db.models.cases.findOne({ where: { case_id: caseToFind } });
+		const casesRepo = this.client.db.getRepository(Case);
+		const dbCase = await casesRepo.findOne({ case_id: caseToFind });
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
 
 		const moderator = await message.guild.members.fetch(dbCase.mod_id);
-		const color = Object.keys(CONSTANTS.ACTIONS).find(key => CONSTANTS.ACTIONS[key] === dbCase.action).split(' ')[0].toUpperCase();
+		const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
 			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, moderator ? moderator.user.displayAvatarURL() : '')
-			.setColor(CONSTANTS.COLORS[color])
+			.setColor(Util.CONSTANTS.COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
 				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration.getTime(), { 'long': true })}` : ''}
@@ -70,8 +72,6 @@ class CaseCommand extends Command {
 			.setFooter(`Case ${dbCase.case_id}`)
 			.setTimestamp(new Date(dbCase.createdAt));
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = CaseCommand;
