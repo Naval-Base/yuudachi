@@ -1,11 +1,11 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { stripIndents } = require('common-tags');
-const moment = require('moment');
-require('moment-duration-format');
+import { Command } from 'discord-akairo';
+import { Message, MessageEmbed } from 'discord.js';
+import { stripIndents } from 'common-tags';
+import * as moment from 'moment';
+import 'moment-duration-format';
 
-class ChannelInfoCommand extends Command {
-	constructor() {
+export default class ChannelInfoCommand extends Command {
+	public constructor() {
 		super('channel', {
 			aliases: ['channel', 'channel-info'],
 			description: {
@@ -22,13 +22,13 @@ class ChannelInfoCommand extends Command {
 					'id': 'channel',
 					'match': 'content',
 					'type': 'channel',
-					'default': message => message.channel
+					'default': (message: Message) => message.channel
 				}
 			]
 		});
 	}
 
-	exec(message, { channel }) {
+	public exec(message: Message, { channel }: { channel: any }) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${channel.name}** (ID: ${channel.id})`)
@@ -43,8 +43,6 @@ class ChannelInfoCommand extends Command {
 			)
 			.setThumbnail(message.guild.iconURL());
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = ChannelInfoCommand;

@@ -1,11 +1,11 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { stripIndents } = require('common-tags');
-const moment = require('moment');
-require('moment-duration-format');
+import { Command } from 'discord-akairo';
+import { Message, MessageEmbed, GuildMember } from 'discord.js';
+import { stripIndents } from 'common-tags';
+import * as moment from 'moment';
+import 'moment-duration-format';
 
-class UserInfoCommand extends Command {
-	constructor() {
+export default class UserInfoCommand extends Command {
+	public constructor() {
 		super('user', {
 			aliases: ['user', 'member', 'user-info'],
 			description: {
@@ -22,28 +22,25 @@ class UserInfoCommand extends Command {
 					'id': 'member',
 					'match': 'content',
 					'type': 'member',
-					'default': message => message.member
+					'default': (message: Message) => message.member
 				}
 			]
 		});
 	}
 
-	exec(message, { member }) {
+	public exec(message: Message, { member }: { member: GuildMember }) {
 		const { user } = member;
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${user.tag}** (ID: ${member.id})`)
 			.addField(
 				'❯ Member Details',
-				/* eslint-disable no-undefined, eqeqeq */
 				stripIndents`
 				${member.nickname == undefined ? '• No nickname' : ` • Nickname: ${member.nickname}`}
 				• Roles: ${member.roles.map(roles => `\`${roles.name}\``).join(' ')}
 				• Joined at: ${moment.utc(member.joinedAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
-			/* eslint-enable no-undefined, eqeqeq */
 			)
-			/* eslint-disable max-len */
 			.addField(
 				'❯ User Details',
 				stripIndents`
@@ -54,11 +51,8 @@ class UserInfoCommand extends Command {
 				• Activity: ${user.presence.activity ? user.presence.activity.name : 'None'}
 			`
 			)
-			/* eslint-enable max-len */
 			.setThumbnail(user.displayAvatarURL());
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = UserInfoCommand;

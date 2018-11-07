@@ -1,7 +1,8 @@
-const { Command } = require('discord-akairo');
+import { Command } from 'discord-akairo';
+import { Message } from 'discord.js';
 
-class SetCasesCommand extends Command {
-	constructor() {
+export default class SetCasesCommand extends Command {
+	public constructor() {
 		super('set-cases', {
 			aliases: ['set-cases'],
 			description: {
@@ -23,10 +24,8 @@ class SetCasesCommand extends Command {
 		});
 	}
 
-	exec(message, { cases }) {
+	public exec(message: Message, { cases }: { cases: number }) {
 		this.client.settings.set(message.guild, 'caseTotal', cases);
-		return message.util.reply(`set cases to **${cases}**`);
+		return message.util!.reply(`set cases to **${cases}**`);
 	}
 }
-
-module.exports = SetCasesCommand;

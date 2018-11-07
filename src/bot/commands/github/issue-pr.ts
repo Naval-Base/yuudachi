@@ -1,12 +1,12 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const fetch = require('node-fetch');
-const { oneLine } = require('common-tags');
+import { Argument, Command } from 'discord-akairo';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import fetch from 'node-fetch';
+import { stripIndents, oneLine } from 'common-tags';
 
 const { GITHUB_API_KEY } = process.env;
 
-class GitHubPROrIssueCommand extends Command {
-	constructor() {
+export default class GitHubPROrIssueCommand extends Command {
+	public constructor() {
 		super('gh-issue-pr', {
 			aliases: ['gh-issue-pr', 'issue-pr', 'gh-pr', 'gh-issue'],
 			description: {
@@ -29,10 +29,9 @@ class GitHubPROrIssueCommand extends Command {
 		});
 	}
 
-	async exec(message, args) {
-		// eslint-disable-line complexity
+	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
-			return message.util.reply(oneLine`
+			return message.util!.reply(oneLine`
 				my commander has not set a valid GitHub API key,
 				therefore this command is not available.
 			`);
@@ -40,10 +39,10 @@ class GitHubPROrIssueCommand extends Command {
 		let owner;
 		let repo;
 		if ((args.match && args.match[1] === 'g') || !args.match) {
-			const repository = this.client.settings.get(message.guild, 'githubRepository');
-			if (!repository) return message.util.reply("the guild owner didn't set a GitHub repository yet.");
-			owner = repository.split('/')[0]; // eslint-disable-line prefer-destructuring
-			repo = repository.split('/')[1]; // eslint-disable-line prefer-destructuring
+			const repository = this.client.settings.get(message.guild, 'githubRepository', undefined);
+			if (!repository) return message.util!.reply("the guild owner didn't set a GitHub repository yet.");
+			owner = repository.split('/')[0];
+			repo = repository.split('/')[1];
 		}
 		if (args.match && args.match[1] !== 'g') {
 			switch (args.match[1]) {
@@ -64,7 +63,7 @@ class GitHubPROrIssueCommand extends Command {
 					repo = 'RPC';
 					break;
 				default:
-					return message.util.reply('No u.');
+					return message.util!.reply('No u.');
 			}
 		}
 		const number = args.match ? args.match[2] : args.pr_issue;
@@ -136,10 +135,10 @@ class GitHubPROrIssueCommand extends Command {
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		if (!body || !body.data || !body.data.repository || !body.data.repository.issueOrPullRequest) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const data = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
@@ -158,7 +157,7 @@ class GitHubPROrIssueCommand extends Command {
 			.addField('Type', data.commits ? 'PULL REQUEST' : 'ISSUE', true)
 			.addField(
 				'Labels',
-				data.labels.nodes.length ? data.labels.nodes.map(node => node.name) : 'NO LABEL(S)',
+				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
 				true
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
@@ -170,10 +169,10 @@ class GitHubPROrIssueCommand extends Command {
 			);
 		}
 
-		if (!message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
-			return message.util.send(embed);
+		if (!(message.channel as TextChannel).permissionsFor(message.guild.me)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+			return message.util!.send(embed);
 		}
-		const msg = await message.util.send(embed);
+		const msg = await message.util!.send(embed) as Message;
 		msg.react('🗑');
 		let react;
 		try {
@@ -186,10 +185,8 @@ class GitHubPROrIssueCommand extends Command {
 
 			return message;
 		}
-		react.first().message.delete();
+		react.first()!.message.delete();
 
 		return message;
 	}
 }
-
-module.exports = GitHubPROrIssueCommand;

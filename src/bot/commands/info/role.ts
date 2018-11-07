@@ -1,10 +1,10 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { stripIndents } = require('common-tags');
-const moment = require('moment');
-require('moment-duration-format');
+import { Command } from 'discord-akairo';
+import { Message, MessageEmbed, Role } from 'discord.js';
+import { stripIndents } from 'common-tags';
+import * as moment from 'moment';
+import 'moment-duration-format';
 
-const PERMISSIONS = {
+const PERMISSIONS = ({
 	ADMINISTRATOR: 'Administrator',
 	VIEW_AUDIT_LOG: 'View audit log',
 	MANAGE_GUILD: 'Manage server',
@@ -33,10 +33,10 @@ const PERMISSIONS = {
 	DEAFEN_MEMBERS: 'Deafen members',
 	MOVE_MEMBERS: 'Move members',
 	USE_VAD: 'Use voice activity'
-};
+}) as { [key: string]: string };
 
-class RoleInfoCommand extends Command {
-	constructor() {
+export default class RoleInfoCommand extends Command {
+	public constructor() {
 		super('role', {
 			aliases: ['role', 'role-info'],
 			description: {
@@ -53,14 +53,15 @@ class RoleInfoCommand extends Command {
 					'id': 'role',
 					'match': 'content',
 					'type': 'role',
-					'default': message => message.member.roles.highest
+					'default': (message: Message) => message.member.roles.highest
 				}
 			]
 		});
 	}
 
-	exec(message, { role }) {
+	public exec(message: Message, { role }: { role: Role }) {
 		const permissions = Object.keys(PERMISSIONS).filter(
+			// @ts-ignore
 			permission => role.permissions.serialize()[permission]
 		);
 		const embed = new MessageEmbed()
@@ -83,8 +84,6 @@ class RoleInfoCommand extends Command {
 			)
 			.setThumbnail(message.guild.iconURL());
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = RoleInfoCommand;

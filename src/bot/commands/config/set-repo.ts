@@ -1,7 +1,8 @@
-const { Command } = require('discord-akairo');
+import { Command } from 'discord-akairo';
+import { Message } from 'discord.js';
 
-class GitHubSetRepositoryCommand extends Command {
-	constructor() {
+export default class SetGitHubRepositoryCommand extends Command {
+	public constructor() {
 		super('gh-set-repo', {
 			aliases: ['set-repo', 'set-repository'],
 			description: {
@@ -9,7 +10,7 @@ class GitHubSetRepositoryCommand extends Command {
 				usage: '<repo>',
 				examples: ['1Computer1/discord-akairo', 'discordjs/discord.js']
 			},
-			category: 'github',
+			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
 			ratelimit: 2,
@@ -22,10 +23,8 @@ class GitHubSetRepositoryCommand extends Command {
 		});
 	}
 
-	exec(message, { repository }) {
+	public exec(message: Message, { repository }: { repository: string }) {
 		this.client.settings.set(message.guild, 'githubRepository', repository);
-		return message.util.reply(`set repository to **${repository}**`);
+		return message.util!.reply(`set repository to **${repository}**`);
 	}
 }
-
-module.exports = GitHubSetRepositoryCommand;

@@ -1,19 +1,19 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const { stripIndents } = require('common-tags');
-const moment = require('moment');
-require('moment-duration-format');
+import { Command } from 'discord-akairo';
+import { Message, MessageEmbed } from 'discord.js';
+import { stripIndents } from 'common-tags';
+import * as moment from 'moment';
+import 'moment-duration-format';
 
-const HUMAN_LEVELS = {
+const HUMAN_LEVELS = ({
 	0: 'None',
 	1: 'Low',
 	2: 'Medium',
 	3: '(╯°□°）╯︵ ┻━┻',
 	4: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻'
-};
+}) as { [key: number]: string };
 
-class ServerInfoCommand extends Command {
-	constructor() {
+export default class ServerInfoCommand extends Command {
+	public constructor() {
 		super('server', {
 			aliases: ['server', 'server-info'],
 			description: {
@@ -26,7 +26,7 @@ class ServerInfoCommand extends Command {
 		});
 	}
 
-	exec(message) {
+	public exec(message: Message) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${message.guild.name}** (ID: ${message.guild.id})`)
@@ -55,8 +55,6 @@ class ServerInfoCommand extends Command {
 			)
 			.setThumbnail(message.guild.iconURL());
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = ServerInfoCommand;

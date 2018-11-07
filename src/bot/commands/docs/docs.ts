@@ -1,9 +1,10 @@
-const { Command } = require('discord-akairo');
-const fetch = require('node-fetch');
-const qs = require('querystring');
+import { Command } from 'discord-akairo';
+import { Message, TextChannel } from 'discord.js';
+import fetch from 'node-fetch';
+import * as qs from 'querystring';
 
-class DocsCommand extends Command {
-	constructor() {
+export default class DocsCommand extends Command {
+	public constructor() {
 		super('docs', {
 			aliases: ['docs'],
 			description: {
@@ -20,7 +21,7 @@ class DocsCommand extends Command {
 					match: 'rest',
 					type: 'lowercase',
 					prompt: {
-						start: message => `${message.author}, what would you like to search?`
+						start: (message: Message) => `${message.author}, what would you like to search?`
 					}
 				},
 				{
@@ -32,7 +33,7 @@ class DocsCommand extends Command {
 		});
 	}
 
-	async exec(message, { query, force }) {
+	public async exec(message: Message, { query, force }: { query: any, force: boolean }) {
 		query = query.split(' ');
 		let project = 'main';
 		let branch = ['stable', 'master', 'rpc', 'commando'].includes(query.slice(-1)[0]) ? query.pop() : 'stable';
@@ -44,12 +45,12 @@ class DocsCommand extends Command {
 		const res = await fetch(`https://djsdocs.sorta.moe/${project}/${branch}/embed?${queryString}`);
 		const embed = await res.json();
 		if (!embed) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
-		if (message.channel.type === 'dm' || !message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
-			return message.util.send({ embed });
+		if (message.channel.type === 'dm' || !(message.channel as TextChannel).permissionsFor(message.guild.me)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+			return message.util!.send({ embed });
 		}
-		const msg = await message.util.send({ embed });
+		const msg = await message.util!.send({ embed }) as Message;
 		msg.react('🗑');
 		let react;
 		try {
@@ -62,10 +63,8 @@ class DocsCommand extends Command {
 
 			return message;
 		}
-		react.first().message.delete();
+		react.first()!.message.delete();
 
 		return message;
 	}
 }
-
-module.exports = DocsCommand;

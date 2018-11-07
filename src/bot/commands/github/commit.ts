@@ -1,12 +1,12 @@
-const { Argument, Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const fetch = require('node-fetch');
-const { oneLine, stripIndents } = require('common-tags');
+import { Argument, Command } from 'discord-akairo';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import fetch from 'node-fetch';
+import { stripIndents, oneLine } from 'common-tags';
 
 const { GITHUB_API_KEY } = process.env;
 
-class GitHubCommitCommand extends Command {
-	constructor() {
+export default class GitHubCommitCommand extends Command {
+	public constructor() {
 		super('gh-commit', {
 			aliases: ['gh-commit', 'commit'],
 			description: {
@@ -29,14 +29,14 @@ class GitHubCommitCommand extends Command {
 		});
 	}
 
-	async exec(message, args) {
+	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
-			return message.util.reply(oneLine`
+			return message.util!.reply(oneLine`
 				my master has not set a valid GitHub API key,
 				therefore this command is not available.
 			`);
 		}
-		const repository = this.client.settings.get(message.guild, 'githubRepository');
+		const repository = this.client.settings.get(message.guild, 'githubRepository', undefined);
 		if (!repository) return message.reply("the guild owner didn't set a GitHub repository yet.");
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
@@ -47,10 +47,10 @@ class GitHubCommitCommand extends Command {
 				{ headers: { Authorization: `token ${GITHUB_API_KEY}` } });
 			body = await res.json();
 		} catch (error) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		if (!body || !body.commit) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const embed = new MessageEmbed()
 			.setColor(3447003)
@@ -88,10 +88,10 @@ class GitHubCommitCommand extends Command {
 			.setThumbnail(body.author ? body.author.avatar_url : '')
 			.setTimestamp(new Date(body.commit.author.date));
 
-		if (!message.channel.permissionsFor(message.guild.me).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
-			return message.util.send(embed);
+		if (!(message.channel as TextChannel).permissionsFor(message.guild.me)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+			return message.util!.send(embed);
 		}
-		const msg = await message.util.send(embed);
+		const msg = await message.util!.send(embed) as Message;
 		msg.react('🗑');
 		let react;
 		try {
@@ -104,10 +104,8 @@ class GitHubCommitCommand extends Command {
 
 			return message;
 		}
-		react.first().message.delete();
+		react.first()!.message.delete();
 
 		return message;
 	}
 }
-
-module.exports = GitHubCommitCommand;

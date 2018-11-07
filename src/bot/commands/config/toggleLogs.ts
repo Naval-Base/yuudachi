@@ -1,7 +1,8 @@
-const { Command } = require('discord-akairo');
+import { Command } from 'discord-akairo';
+import { Message } from 'discord.js';
 
-class ToggleLogsCommand extends Command {
-	constructor() {
+export default class ToggleLogsCommand extends Command {
+	public constructor() {
 		super('toggle-logs', {
 			aliases: ['logs', 'toggle-logs'],
 			description: {
@@ -18,27 +19,25 @@ class ToggleLogsCommand extends Command {
 					match: 'content',
 					type: 'string',
 					prompt: {
-						start: message => `${message.author}, what Webhook should send the messages?`
+						start: (message: Message) => `${message.author}, what Webhook should send the messages?`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { webhook }) {
-		const guildLogs = this.client.settings.get(message.guild, 'guildLogs');
+	public async exec(message: Message, { webhook }: { webhook: string }) {
+		const guildLogs = this.client.settings.get(message.guild, 'guildLogs', undefined);
 		if (guildLogs) {
 			this.client.settings.delete(message.guild, 'guildLogs');
 			this.client.webhooks.delete(webhook);
-			return message.util.reply('successfully deactivated logs!');
+			return message.util!.reply('successfully deactivated logs!');
 		}
 		this.client.settings.set(message.guild, 'guildLogs', webhook);
 		const wh = (await message.guild.fetchWebhooks()).get(webhook);
 		if (!wh) return;
 		this.client.webhooks.set(wh.id, wh);
 
-		return message.util.reply('successfully activated logs!');
+		return message.util!.reply('successfully activated logs!');
 	}
 }
-
-module.exports = ToggleLogsCommand;

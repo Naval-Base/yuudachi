@@ -1,7 +1,8 @@
-const { Command } = require('discord-akairo');
+import { Command } from 'discord-akairo';
+import { Message, TextChannel } from 'discord.js';
 
-class SetModChannelCommand extends Command {
-	constructor() {
+export default class SetModChannelCommand extends Command {
+	public constructor() {
 		super('set-modlog', {
 			aliases: ['set-modlog', 'modchan', 'mod-channel'],
 			description: {
@@ -23,10 +24,8 @@ class SetModChannelCommand extends Command {
 		});
 	}
 
-	exec(message, { channel }) {
+	public exec(message: Message, { channel }: { channel: TextChannel }) {
 		this.client.settings.set(message.guild, 'modLogChannel', channel.id);
-		return message.util.reply(`set moderation log channel to **${channel.name}**`);
+		return message.util!.reply(`set moderation log channel to **${channel.name}**`);
 	}
 }
-
-module.exports = SetModChannelCommand;

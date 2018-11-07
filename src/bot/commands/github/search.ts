@@ -1,12 +1,12 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const fetch = require('node-fetch');
-const { oneLine, stripIndents } = require('common-tags');
+import { Argument, Command } from 'discord-akairo';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import fetch from 'node-fetch';
+import { stripIndents, oneLine } from 'common-tags';
 
 const { GITHUB_API_KEY } = process.env;
 
-class GitHubSearchCommand extends Command {
-	constructor() {
+export default class GitHubSearchCommand extends Command {
+	public constructor() {
 		super('gh-search', {
 			aliases: ['gh-search'],
 			description: {
@@ -32,8 +32,7 @@ class GitHubSearchCommand extends Command {
 		});
 	}
 
-	async exec(message, { repo, commit }) {
-		// eslint-disable-line complexity
+	public async exec(message: Message, { repo, commit }: { repo: string, commit: string }) {
 		if (!GITHUB_API_KEY) {
 			return message.reply(oneLine`
 				my master has not set a valid GitHub API key,
@@ -49,10 +48,10 @@ class GitHubSearchCommand extends Command {
 					{ headers: { Authorization: `token ${GITHUB_API_KEY}` } });
 				body = await res.json();
 			} catch (error) {
-				return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+				return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 			}
 			if (!body) {
-				return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+				return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 			}
 			const embed = new MessageEmbed()
 				.setColor(3447003)
@@ -90,10 +89,10 @@ class GitHubSearchCommand extends Command {
 				.setThumbnail(body.author ? body.author.avatar_url : '')
 				.setTimestamp(new Date(body.commit.author.date));
 
-			if (message.guild && !message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
-				return message.util.send(embed);
+			if (message.guild && !(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+				return message.util!.send(embed);
 			}
-			const msg = await message.util.send(embed);
+			const msg = await message.util!.send(embed) as Message;
 			const ownReaction = await msg.react('🗑');
 			let react;
 			try {
@@ -103,12 +102,12 @@ class GitHubSearchCommand extends Command {
 					{ max: 1, time: 10000, errors: ['time'] }
 				);
 			} catch (error) {
-				if (message.guild) msg.clearReactions();
-				else ownReaction.remove();
+				if (message.guild) msg.reactions.removeAll();
+				else ownReaction.users.remove();
 
 				return message;
 			}
-			react.first().message.delete();
+			react.first()!.message.delete();
 
 			return message;
 		}
@@ -185,10 +184,10 @@ class GitHubSearchCommand extends Command {
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		if (!body || !body.data || !body.data.repository) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const data = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
@@ -207,7 +206,7 @@ class GitHubSearchCommand extends Command {
 			.addField('Type', data.commits ? 'PULL REQUEST' : 'ISSUE', true)
 			.addField(
 				'Labels',
-				data.labels.nodes.length ? data.labels.nodes.map(node => node.name) : 'NO LABEL(S)',
+				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
 				true
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
@@ -219,10 +218,10 @@ class GitHubSearchCommand extends Command {
 			);
 		}
 
-		if (message.guild && !message.channel.permissionsFor(this.client.user).has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
-			return message.util.send(embed);
+		if (message.guild && !(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+			return message.util!.send(embed);
 		}
-		const msg = await message.util.send(embed);
+		const msg = await message.util!.send(embed) as Message;
 		const ownReaction = await msg.react('🗑');
 		let react;
 		try {
@@ -233,14 +232,12 @@ class GitHubSearchCommand extends Command {
 			);
 		} catch (error) {
 			if (message.guild) msg.reactions.removeAll();
-			else ownReaction.remove();
+			else ownReaction.users.remove();
 
 			return message;
 		}
-		react.first().message.delete();
+		react.first()!.message.delete();
 
 		return message;
 	}
 }
-
-module.exports = GitHubSearchCommand;

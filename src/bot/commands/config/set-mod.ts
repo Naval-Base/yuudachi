@@ -1,7 +1,8 @@
-const { Command } = require('discord-akairo');
+import { Command } from 'discord-akairo';
+import { Message, Role } from 'discord.js';
 
-class SetModRoleCommand extends Command {
-	constructor() {
+export default class SetModRoleCommand extends Command {
+	public constructor() {
 		super('set-mod', {
 			aliases: ['set-mod', 'mod-role'],
 			description: {
@@ -23,10 +24,8 @@ class SetModRoleCommand extends Command {
 		});
 	}
 
-	exec(message, { role }) {
+	public exec(message: Message, { role }: { role: Role }) {
 		this.client.settings.set(message.guild, 'modRole', role.id);
-		return message.util.reply(`set moderation role to **${role.name}**`);
+		return message.util!.reply(`set moderation role to **${role.name}**`);
 	}
 }
-
-module.exports = SetModRoleCommand;

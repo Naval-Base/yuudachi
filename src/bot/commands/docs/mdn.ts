@@ -1,11 +1,11 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const fetch = require('node-fetch');
-const qs = require('querystring');
+import { Command } from 'discord-akairo';
+import { Message, MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
+import * as qs from 'querystring';
 const Turndown = require('turndown');
 
-class MDNCommand extends Command {
-	constructor() {
+export default class MDNCommand extends Command {
+	public constructor() {
 		super('mdn', {
 			aliases: ['mdn', 'mozilla-developer-network'],
 			category: 'docs',
@@ -20,27 +20,27 @@ class MDNCommand extends Command {
 				{
 					id: 'query',
 					prompt: {
-						start: message => `${message.author}, what would you like to search for?`
+						start: (message: Message) => `${message.author}, what would you like to search for?`
 					},
 					match: 'content',
-					type: query => query ? query.replace(/#/g, '.prototype.') : null // eslint-disable-line no-confusing-arrow
+					type: query => query ? query.replace(/#/g, '.prototype.') : null
 				}
 			]
 		});
 	}
 
-	async exec(message, { query, match }) {
-		if (!query && match) query = match[1]; // eslint-disable-line prefer-destructuring
+	public async exec(message: Message, { query, match }: { query: string, match: any }) {
+		if (!query && match) query = match[1];
 		const queryString = qs.stringify({ q: query });
-		const res = await fetch(`https://mdn.topkek.pw/search?${queryString}`);
+		const res = await fetch(`https://mdn.pleb.xyz/search?${queryString}`);
 		const body = await res.json();
 		if (!body.URL || !body.Title || !body.Summary) {
-			return message.util.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const turndown = new Turndown();
 		turndown.addRule('hyperlink', {
 			filter: 'a',
-			replacement: (text, node) => `[${text}](https://developer.mozilla.org${node.href})`
+			replacement: (text: string, node: { href: string }) => `[${text}](https://developer.mozilla.org${node.href})`
 		});
 		const embed = new MessageEmbed()
 			.setColor(0x066FAD)
@@ -49,8 +49,6 @@ class MDNCommand extends Command {
 			.setTitle(body.Title)
 			.setDescription(turndown.turndown(body.Summary));
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = MDNCommand;
