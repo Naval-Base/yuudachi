@@ -1,5 +1,6 @@
 import { Command, Control } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
+import * as moment from 'moment';
 import { Tag } from '../../models/Tags';
 
 export default class TagEditCommand extends Command {
@@ -69,6 +70,7 @@ export default class TagEditCommand extends Command {
 			tag.content = content;
 		}
 		tag.last_modified = message.author.id;
+		tag.updatedAt = moment.utc().toDate();
 		await tagRepo.save(tag);
 
 		return message.util!.reply(`successfully edited **${tag.name}**${hoist && staffRole ? ' to be hoisted.' : '.'}`);
