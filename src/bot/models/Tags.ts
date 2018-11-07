@@ -15,7 +15,7 @@ export class Tag {
 	name!: string;
 
 	@Column({ array: true, default: () => 'ARRAY[]::text[]' })
-	aliases!: string[];
+	aliases!: string;
 
 	@Column()
 	content!: string;

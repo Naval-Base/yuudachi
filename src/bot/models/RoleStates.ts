@@ -12,5 +12,5 @@ export class RoleState {
 	user!: string;
 
 	@Column({ array: true, default: () => 'ARRAY[]::text[]' })
-	roles!: string[];
+	roles!: string;
 }
