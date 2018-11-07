@@ -1,7 +1,7 @@
-const { Listener } = require('discord-akairo');
+import { Listener } from 'discord-akairo';
 
-class ResumeListener extends Listener {
-	constructor() {
+export default class ResumeListener extends Listener {
+	public constructor() {
 		super('resumed', {
 			emitter: 'client',
 			event: 'resumed',
@@ -9,9 +9,7 @@ class ResumeListener extends Listener {
 		});
 	}
 
-	exec(events) {
+	public exec(events: number) {
 		this.client.logger.info(`You made it out fine thanks to my luck! You ought to be thankful! (replayed ${events} events)`);
 	}
 }
-
-module.exports = ResumeListener;

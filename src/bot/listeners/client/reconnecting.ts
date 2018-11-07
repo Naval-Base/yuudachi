@@ -1,7 +1,7 @@
-const { Listener } = require('discord-akairo');
+import { Listener } from 'discord-akairo';
 
-class ReconnectListener extends Listener {
-	constructor() {
+export default class ReconnectListener extends Listener {
+	public constructor() {
 		super('reconnecting', {
 			emitter: 'client',
 			event: 'reconnecting',
@@ -9,9 +9,7 @@ class ReconnectListener extends Listener {
 		});
 	}
 
-	exec() {
+	public exec() {
 		this.client.logger.info("Come at me if you don't value your life!");
 	}
 }
-
-module.exports = ReconnectListener;

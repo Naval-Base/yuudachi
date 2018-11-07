@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"target": "es2017",
+		"lib": [
+			"esnext",
+			"esnext.array",
+			"esnext.asynciterable",
+			"esnext.intl",
+			"esnext.symbol"
+		],
+		"declaration": true,
+		"sourceMap": true,
+		"removeComments": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
+	},
+	"include": [
+		"./src"
+	]
+}

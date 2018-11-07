@@ -1,9 +1,9 @@
-const { Listener } = require('discord-akairo');
-const { MessageEmbed, Util } = require('discord.js');
+import { Listener } from 'discord-akairo';
+import { Message, MessageEmbed, Util } from 'discord.js';
 const diff = require('diff');
 
-class MessageUpdateListener extends Listener {
-	constructor() {
+export default class MessageUpdateListener extends Listener {
+	public constructor() {
 		super('messageUpdate', {
 			emitter: 'client',
 			event: 'messageUpdate',
@@ -11,10 +11,10 @@ class MessageUpdateListener extends Listener {
 		});
 	}
 
-	exec(oldMessage, newMessage) {
+	public exec(oldMessage: Message, newMessage: Message) {
 		if (oldMessage.author.bot || newMessage.author.bot) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
-		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs');
+		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
@@ -23,9 +23,9 @@ class MessageUpdateListener extends Listener {
 				.setAuthor(`${newMessage.author.tag} (${newMessage.author.id})`, newMessage.author.displayAvatarURL())
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
-			if (/```(.*?)```/s.test(oldMessage) && /```(.*?)```/s.test(newMessage)) {
-				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2];
-				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)[2];
+			if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
+				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)![2];
+				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)![2];
 				if (strippedOldMessage === strippedNewMessage) return;
 				const diffMessage = diff.diffLines(strippedOldMessage, strippedNewMessage, { newlineIsToken: true });
 				for (const part of diffMessage) {
@@ -56,5 +56,3 @@ class MessageUpdateListener extends Listener {
 		}
 	}
 }
-
-module.exports = MessageUpdateListener;

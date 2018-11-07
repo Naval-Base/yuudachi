@@ -1,8 +1,8 @@
-const { MessageEmbed, User } = require('discord.js');
-const { stripIndents, oneLine } = require('common-tags');
+import { Message, MessageEmbed, GuildMember, User } from 'discord.js';
+import { stripIndents, oneLine } from 'common-tags';
 const ms = require('@naval-base/ms');
 
-const ACTIONS = {
+const ACTIONS = ({
 	1: 'ban',
 	2: 'unban',
 	3: 'kick',
@@ -12,9 +12,9 @@ const ACTIONS = {
 	7: 'restriction',
 	8: 'restriction',
 	9: 'warn'
-};
+}) as { [key: number]: string };
 
-module.exports = {
+export default {
 	CONSTANTS: {
 		ACTIONS: {
 			BAN: 1,
@@ -39,18 +39,18 @@ module.exports = {
 			WARN: 16776960
 		}
 	},
-	reminderEmbed: (message, reminders) => {
-		const truncate = (str, len) => str.length > len ? `${str.slice(0, len)}…` : str; // eslint-disable-line
+	reminderEmbed: (message: Message, reminders: any) => {
+		const truncate = (str: string, len: number) => str.length > len ? `${str.slice(0, len)}…` : str; // eslint-disable-line
 		return new MessageEmbed()
 			.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 			.setColor(0x30A9ED)
 			.setDescription(reminders.length
-				? reminders.sort((a, b) => a.triggers_at - b.triggers_at).map(
-					(reminder, i) => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
+				? reminders.sort((a: { triggers_at: number }, b: { triggers_at: number }) => a.triggers_at - b.triggers_at).map(
+					(reminder: any, i: number) => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
 				).join('\n')
 				: 'No reminders');
 	},
-	logEmbed: ({ message = null, member, action, duration = null, caseNum, reason, ref = null }) => {
+	logEmbed: ({ message = null, member, action, duration = null, caseNum, reason, ref = null }: { message?: Message | null, member: GuildMember | User, action: string, duration?: number | null, caseNum: number, reason: string, ref?: number | null }) => {
 		const embed = new MessageEmbed();
 		if (message) {
 			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
@@ -65,8 +65,8 @@ module.exports = {
 
 		return embed;
 	},
-	historyEmbed: (member, cases) => {
-		const footer = cases.reduce((count, c) => {
+	historyEmbed: (member: GuildMember, cases: any) => {
+		const footer = cases.reduce((count: any, c: any) => {
 			const action = ACTIONS[c.action];
 			count[action] = (count[action] || 0) + 1;
 			return count;

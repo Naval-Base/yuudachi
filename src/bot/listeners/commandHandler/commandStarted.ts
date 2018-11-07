@@ -1,8 +1,9 @@
-const { Listener } = require('discord-akairo');
+import { Listener, Command } from 'discord-akairo';
+import { Message } from 'discord.js';
 const Raven = require('raven');
 
-class CommandStartedListener extends Listener {
-	constructor() {
+export default class CommandStartedListener extends Listener {
+	public constructor() {
 		super('commandStarted', {
 			emitter: 'commandHandler',
 			event: 'commandStarted',
@@ -10,7 +11,7 @@ class CommandStartedListener extends Listener {
 		});
 	}
 
-	exec(message, command, args) {
+	public exec(message: Message, command: Command, args: any[]) {
 		Raven.captureBreadcrumb({
 			message: 'command_started',
 			category: command.category.id,
@@ -19,7 +20,6 @@ class CommandStartedListener extends Listener {
 					id: message.author.id,
 					username: message.author.tag
 				},
-				/* eslint-disable multiline-ternary */
 				guild: message.guild ? {
 					id: message.guild.id,
 					name: message.guild.name
@@ -57,9 +57,6 @@ class CommandStartedListener extends Listener {
 				},
 				args
 			}
-			/* eslint-enable multiline-ternary */
 		});
 	}
 }
-
-module.exports = CommandStartedListener;

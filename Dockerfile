@@ -16,6 +16,8 @@ RUN apk add --update \
 
 COPY . .
 
+RUN yarn build
+
 ENV NODE_ENV= \
 	COMMAND_PREFIX= \
 	OWNERS= \
@@ -27,4 +29,4 @@ ENV NODE_ENV= \
 	RAVEN= \
 	GITHUB_API_KEY=
 
-CMD ["node", "src/yukikaze.js"]
+CMD ["node", "dist/yukikaze.js"]

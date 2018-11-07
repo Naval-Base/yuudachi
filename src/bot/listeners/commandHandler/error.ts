@@ -1,8 +1,9 @@
-const { Listener } = require('discord-akairo');
+import { Listener, Command } from 'discord-akairo';
+import { Message } from 'discord.js';
 const Raven = require('raven');
 
-class CommandErrorListener extends Listener {
-	constructor() {
+export default class CommandErrorListener extends Listener {
+	public constructor() {
 		super('error', {
 			emitter: 'commandHandler',
 			event: 'error',
@@ -10,7 +11,7 @@ class CommandErrorListener extends Listener {
 		});
 	}
 
-	exec(error, message, command) {
+	public exec(error: Error, message: Message, command: Command) {
 		this.client.logger.error(error);
 		Raven.captureBreadcrumb({
 			message: 'command_errored',
@@ -20,7 +21,6 @@ class CommandErrorListener extends Listener {
 					id: message.author.id,
 					username: message.author.tag
 				},
-				/* eslint-disable multiline-ternary */
 				guild: message.guild ? {
 					id: message.guild.id,
 					name: message.guild.name
@@ -34,11 +34,8 @@ class CommandErrorListener extends Listener {
 					id: message.id,
 					content: message.content
 				}
-				/* eslint-enable multiline-ternary */
 			}
 		});
 		Raven.captureException(error);
 	}
 }
-
-module.exports = CommandErrorListener;

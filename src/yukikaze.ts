@@ -1,5 +1,5 @@
-require('dotenv').config();
-const YukikazeClient = require('./bot/client/YukikazeClient');
+import 'reflect-metadata';
+import YukikazeClient from './bot/client/YukikazeClient';
 
 const client = new YukikazeClient({ owner: process.env.OWNERS, token: process.env.TOKEN });
 

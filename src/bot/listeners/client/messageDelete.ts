@@ -1,8 +1,8 @@
-const { Listener } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+import { Listener } from 'discord-akairo';
+import { Message, MessageEmbed } from 'discord.js';
 
-class MessageDeleteListener extends Listener {
-	constructor() {
+export default class MessageDeleteListener extends Listener {
+	public constructor() {
 		super('messageDelete', {
 			emitter: 'client',
 			event: 'messageDelete',
@@ -10,10 +10,10 @@ class MessageDeleteListener extends Listener {
 		});
 	}
 
-	exec(message) {
+	public exec(message: Message) {
 		if (message.author.bot) return;
 		if (!message.content) return;
-		const guildLogs = this.client.settings.get(message.guild, 'guildLogs');
+		const guildLogs = this.client.settings.get(message.guild, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
@@ -35,5 +35,3 @@ class MessageDeleteListener extends Listener {
 		}
 	}
 }
-
-module.exports = MessageDeleteListener;
