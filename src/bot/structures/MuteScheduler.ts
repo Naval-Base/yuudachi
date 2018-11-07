@@ -32,7 +32,7 @@ export default class MuteScheduler {
 			cs.target_tag = mute.target_tag;
 			cs.mod_id = mute.mod_id;
 			cs.mod_tag = mute.mod_tag;
-			cs.action = mute.acion;
+			cs.action = mute.action;
 			cs.action_duration = mute.action_duration;
 			cs.action_processed = mute.action_processed;
 			cs.reason = mute.reason;
