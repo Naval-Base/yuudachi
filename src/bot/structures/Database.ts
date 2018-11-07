@@ -7,7 +7,7 @@ import { Reminder } from '../models/Reminders';
 
 const connectionManager = new ConnectionManager();
 connectionManager.create({
-	name: 'haruna',
+	name: 'yukikaze',
 	type: 'postgres',
 	url: process.env.DB,
 	synchronize: true,
