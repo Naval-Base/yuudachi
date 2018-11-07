@@ -23,7 +23,7 @@ export default class GuildMemberUpdateRoleStateListener extends Listener {
 						.insert()
 						.into(RoleState)
 						.values({ guild: newMember.guild.id, user: newMember.id, roles })
-						.onConflict(`("guild") DO UPDATE SET "roles" = :roles`)
+						.onConflict(`("guild", "user") DO UPDATE SET "roles" = :roles`)
 						.setParameter('roles', roles)
 						.execute();
 				} else {
