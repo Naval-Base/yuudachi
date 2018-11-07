@@ -26,7 +26,7 @@ export default class MuteScheduler {
 			const casesRepo = this.client.db.getRepository(Case);
 			const cs = new Case();
 			cs.guild = mute.guild;
-			if (cs.message) cs.message = mute.message;
+			if (mute.message) cs.message = mute.message;
 			cs.case_id = mute.case_id;
 			cs.target_id = mute.target_id;
 			cs.target_tag = mute.target_tag;
