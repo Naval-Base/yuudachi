@@ -1,7 +1,7 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember, TextChannel } from 'discord.js';
-import { RoleStates } from '../../models/RoleStates';
-import { Cases } from '../../models/Cases';
+import { RoleState } from '../../models/RoleStates';
+import { Case } from '../../models/Cases';
 const { CONSTANTS: { ACTIONS, COLORS }, logEmbed } = require('../../util');
 
 export default class GuildMemberUpdateModerationListener extends Listener {
@@ -26,7 +26,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			const muteRole = this.client.settings.get(newMember.guild, 'muteRole', undefined);
 			const restrictRoles = this.client.settings.get(newMember.guild, 'restrictRoles', undefined);
 			if (!muteRole && !restrictRoles) return;
-			const roleStatesRepo = this.client.db.getRepository(RoleStates);
+			const roleStatesRepo = this.client.db.getRepository(RoleState);
 			const automaticRoleState = await roleStatesRepo.findOne({ user: newMember.id });
 			if (
 				automaticRoleState &&
@@ -37,7 +37,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			) return;
 			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel', undefined);
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
-			const casesRepo = this.client.db.getRepository(Cases);
+			const casesRepo = this.client.db.getRepository(Case);
 			if (!role) {
 				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
 					const dbCase = await casesRepo.findOne({ target_id: newMember.id, action_processed: false });
@@ -78,7 +78,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				const embed = logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason }).setColor(COLORS[color]);
 				modMessage = (await this.client.channels.get(modLogChannel) as TextChannel)!.send(embed);
 			}
-			const dbCase = new Cases();
+			const dbCase = new Case();
 			dbCase.guild = newMember.guild.id;
 			if (modMessage) dbCase.message = modMessage.id;
 			dbCase.case_id = totalCases;

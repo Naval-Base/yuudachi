@@ -1,6 +1,6 @@
 import YukikazeClient from '../client/YukikazeClient';
 import { LessThan, Repository } from 'typeorm';
-import { Cases } from '../models/Cases';
+import { Case } from '../models/Cases';
 
 export default class MuteScheduler {
 	protected client: YukikazeClient;
@@ -23,8 +23,8 @@ export default class MuteScheduler {
 		this.client.logger.info('Muted');
 		if (reschedule) this.client.logger.info('Rescheduled mute');
 		if (!reschedule) {
-			const casesRepo = this.client.db.getRepository(Cases);
-			const cs = new Cases();
+			const casesRepo = this.client.db.getRepository(Case);
+			const cs = new Case();
 			cs.guild = mute.guild;
 			if (cs.message) cs.message = mute.message;
 			cs.case_id = mute.case_id;
@@ -51,7 +51,7 @@ export default class MuteScheduler {
 		try {
 			member = await guild!.members.fetch(mute.target_id);
 		} catch {}
-		const casesRepo = this.client.db.getRepository(Cases);
+		const casesRepo = this.client.db.getRepository(Case);
 		mute.action_processed = true;
 		await casesRepo.save(mute);
 		if (member) {
@@ -68,7 +68,7 @@ export default class MuteScheduler {
 		const schedule = this.queuedSchedules.get(mute.id);
 		if (schedule) clearTimeout(schedule);
 		this.queuedSchedules.delete(mute.id);
-		const casesRepo = this.client.db.getRepository(Cases);
+		const casesRepo = this.client.db.getRepository(Case);
 		const deleted = await casesRepo.remove(mute);
 		return deleted;
 	}
@@ -93,7 +93,7 @@ export default class MuteScheduler {
 	}
 
 	private async _check() {
-		const casesRepo = this.client.db.getRepository(Cases);
+		const casesRepo = this.client.db.getRepository(Case);
 		const mutes = await casesRepo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false })
 		const now = new Date();
 

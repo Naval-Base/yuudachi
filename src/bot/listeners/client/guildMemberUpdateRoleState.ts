@@ -1,6 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
-import { RoleStates } from '../../models/RoleStates';
+import { RoleState } from '../../models/RoleStates';
 
 export default class GuildMemberUpdateRoleStateListener extends Listener {
 	public constructor() {
@@ -16,12 +16,12 @@ export default class GuildMemberUpdateRoleStateListener extends Listener {
 		if (roleState) {
 			await newMember.guild.members.fetch(newMember.id);
 			if (newMember.roles) {
-				const roleStateRepo = this.client.db.getRepository(RoleStates);
+				const roleStateRepo = this.client.db.getRepository(RoleState);
 				const roles = newMember.roles.filter(role => role.id !== newMember.guild.id).map(role => role.id);
 				if (roles.length) {
 					await roleStateRepo.createQueryBuilder()
 						.insert()
-						.into(RoleStates)
+						.into(RoleState)
 						.values({ guild: newMember.guild.id, user: newMember.id, roles })
 						.onConflict(`("guild") DO UPDATE SET "roles" = :roles`)
 						.setParameter('roles', roles)

@@ -1,7 +1,7 @@
 import { Provider } from 'discord-akairo';
 import { Guild } from 'discord.js';
 import { Repository } from 'typeorm';
-import { Settings } from '../models/Settings';
+import { Setting } from '../models/Settings';
 
 export default class TypeORMProvider extends Provider {
 	public repo: Repository<any>;
@@ -37,8 +37,8 @@ export default class TypeORMProvider extends Provider {
 
 		return this.repo.createQueryBuilder()
 			.insert()
-			.into(Settings)
-			.values(data)
+			.into(Setting)
+			.values({ guild: id, settings: data })
 			.onConflict(`("guild") DO UPDATE SET "settings" = :settings`)
 			.setParameter('settings', data)
 			.execute();
@@ -51,8 +51,8 @@ export default class TypeORMProvider extends Provider {
 
 		return this.repo.createQueryBuilder()
 			.insert()
-			.into(Settings)
-			.values(data)
+			.into(Setting)
+			.values({ guild: id, settings: data })
 			.onConflict(`("guild") DO UPDATE SET "settings" =:settings`)
 			.setParameter('settings', null)
 			.execute();

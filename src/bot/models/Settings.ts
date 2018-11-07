@@ -1,9 +1,10 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity('settings')
-export class Settings {
+export class Setting {
 	@PrimaryColumn({ type: 'bigint' })
 	guild!: string;
-	@Column({ type: 'jsonb' })
+
+	@Column({ type: 'jsonb', default: () => "'{}'::jsonb" })
 	settings: any;
 }

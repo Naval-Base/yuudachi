@@ -6,11 +6,11 @@ import database from '../structures/Database';
 import TypeORMProvider from '../structures/SettingsProvider';
 import MuteScheduler from '../structures/MuteScheduler';
 import RemindScheduler from '../structures/RemindScheduler';
-import { Settings } from '../models/Settings';
+import { Setting } from '../models/Settings';
 import { Connection } from 'typeorm';
-import { Cases } from '../models/Cases';
-import { Reminders } from '../models/Reminders';
-import { Tags } from '../models/Tags';
+import { Case } from '../models/Cases';
+import { Reminder } from '../models/Reminders';
+import { Tag } from '../models/Tags';
 const Raven = require('raven');
 
 declare module 'discord-akairo' {
@@ -88,7 +88,7 @@ export default class YukikazeClient extends AkairoClient {
 		this.commandHandler.resolver.addType('tag', async (phrase, message) => {
 			if (!phrase) return null;
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const tagsRepo = this.db.getRepository(Tags);
+			const tagsRepo = this.db.getRepository(Tag);
 			// TODO: remove this hack once I figure out how to OR operator this
 			const tags = await tagsRepo.find();
 			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
@@ -107,7 +107,7 @@ export default class YukikazeClient extends AkairoClient {
 		this.commandHandler.resolver.addType('existingTag', async (phrase, message) => {
 			if (!phrase) return null;
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const tagsRepo = this.db.getRepository(Tags);
+			const tagsRepo = this.db.getRepository(Tag);
 			// TODO: remove this hack once I figure out how to OR operator this
 			const tags = await tagsRepo.find();
 			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
@@ -166,10 +166,10 @@ export default class YukikazeClient extends AkairoClient {
 
 		this.db = database.get('yukikaze');
 		await this.db.connect();
-		this.settings = new TypeORMProvider(this.db.getRepository(Settings));
+		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
-		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Cases));
-		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminders));
+		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Case));
+		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();
 		await this.remindScheduler.init();
 	}

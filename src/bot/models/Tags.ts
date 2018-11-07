@@ -1,23 +1,31 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('tags')
-export class Tags {
+export class Tag {
 	@PrimaryGeneratedColumn()
 	id!: number;
+
 	@Column({ type: 'bigint' })
 	user!: string;
+
 	@Column({ type: 'bigint' })
 	guild!: string;
+
 	@Column()
 	name!: string;
-	@Column({ array: true })
+
+	@Column({ array: true, default: () => 'ARRAY[]::text[]' })
 	aliases!: string[];
+
 	@Column()
 	content!: string;
-	@Column()
+
+	@Column({ default: false })
 	hoisted!: boolean;
-	@Column()
+
+	@Column({ default: 0 })
 	uses!: number;
-	@Column({ type: 'bigint' })
+
+	@Column({ type: 'bigint', nullable: true })
 	last_modified!: string;
 }

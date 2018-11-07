@@ -1,9 +1,9 @@
 import { ConnectionManager } from 'typeorm';
-import { Settings } from '../models/Settings';
-import { Tags } from '../models/Tags';
-import { RoleStates } from '../models/RoleStates';
-import { Cases } from '../models/Cases';
-import { Reminders } from '../models/Reminders';
+import { Setting } from '../models/Settings';
+import { Tag } from '../models/Tags';
+import { RoleState } from '../models/RoleStates';
+import { Case } from '../models/Cases';
+import { Reminder } from '../models/Reminders';
 
 const connectionManager = new ConnectionManager();
 connectionManager.create({
@@ -11,7 +11,7 @@ connectionManager.create({
 	type: 'postgres',
 	url: process.env.DB,
 	synchronize: true,
-	entities: [Settings, Tags, RoleStates, Cases, Reminders]
+	entities: [Setting, Tag, RoleState, Case, Reminder]
 });
 
 export default connectionManager;

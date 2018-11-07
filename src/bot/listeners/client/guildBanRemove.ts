@@ -1,7 +1,7 @@
 import { Listener } from 'discord-akairo';
 import { Guild, User, TextChannel } from 'discord.js';
 import Util from '../../util';
-import { Cases } from '../../models/Cases';
+import { Case } from '../../models/Cases';
 
 export default class GuildBanRemoveListener extends Listener {
 	public constructor() {
@@ -26,8 +26,8 @@ export default class GuildBanRemoveListener extends Listener {
 			const embed = Util.logEmbed({ member: user, action: 'Unban', caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.UNBAN);
 			modMessage = (await this.client.channels.get(modLogChannel) as TextChannel)!.send(embed);
 		}
-		const casesRepo = this.client.db.getRepository(Cases);
-		const dbCase = new Cases();
+		const casesRepo = this.client.db.getRepository(Case);
+		const dbCase = new Case();
 		dbCase.guild = guild.id;
 		if (modMessage) dbCase.message = modMessage.id;
 		dbCase.case_id = totalCases;

@@ -1,7 +1,7 @@
 import YukikazeClient from '../client/YukikazeClient';
 import { TextChannel } from 'discord.js';
 import { Repository, LessThan } from 'typeorm';
-import { Reminders } from '../models/Reminders';
+import { Reminder } from '../models/Reminders';
 
 export default class RemindScheduler {
 	protected client: YukikazeClient;
@@ -21,8 +21,8 @@ export default class RemindScheduler {
 	}
 
 	public async addReminder(reminder: any) {
-		const remindersRepo = this.client.db.getRepository(Reminders);
-		const rmd = new Reminders();
+		const remindersRepo = this.client.db.getRepository(Reminder);
+		const rmd = new Reminder();
 		rmd.user = reminder.user;
 		if (reminder.channel) rmd.channel = reminder.channel;
 		rmd.reason = reminder.reason;
@@ -44,7 +44,7 @@ export default class RemindScheduler {
 		const schedule = this.queuedSchedules.get(reminder.id);
 		if (schedule) clearTimeout(schedule);
 		this.queuedSchedules.delete(reminder.id);
-		const remindersRepo = this.client.db.getRepository(Reminders);
+		const remindersRepo = this.client.db.getRepository(Reminder);
 		const deleted = await remindersRepo.remove(reminder);
 		return deleted;
 	}
@@ -84,7 +84,7 @@ export default class RemindScheduler {
 	}
 
 	private async _check() {
-		const remindersRepo = this.client.db.getRepository(Reminders);
+		const remindersRepo = this.client.db.getRepository(Reminder);
 		const reminders = await remindersRepo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) })
 		const now = new Date();
 
