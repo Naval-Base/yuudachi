@@ -1,8 +1,9 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+import { Command } from 'discord-akairo';
+import { Message, MessageEmbed, GuildMember } from 'discord.js';
+import { Tag } from '../../models/Tags';
 
-class TagListCommand extends Command {
-	constructor() {
+export default class TagListCommand extends Command {
+	public constructor() {
 		super('tag-list', {
 			aliases: ['tags'],
 			category: 'tags',
@@ -21,12 +22,13 @@ class TagListCommand extends Command {
 		});
 	}
 
-	async exec(message, { member }) {
+	public async exec(message: Message, { member }: { member: GuildMember }) {
+		const tagsRepo = this.client.db.getRepository(Tag);
 		if (member) {
-			const tags = await this.client.db.models.tags.findAll({ where: { user: member.id, guild: message.guild.id } });
+			const tags = await tagsRepo.find({ user: member.id, guild: message.guild.id });
 			if (!tags.length) {
-				if (member.id === message.author.id) return message.util.reply("you don't have any tags.");
-				return message.util.reply(`**${member.displayName}** doesn't have any tags.`);
+				if (member.id === message.author.id) return message.util!.reply("you don't have any tags.");
+				return message.util!.reply(`**${member.displayName}** doesn't have any tags.`);
 			}
 			const embed = new MessageEmbed()
 				.setColor(0x30a9ed)
@@ -38,10 +40,10 @@ class TagListCommand extends Command {
 						.join(', ')
 				);
 
-			return message.util.send(embed);
+			return message.util!.send(embed);
 		}
-		const tags = await this.client.db.models.tags.findAll({ where: { guild: message.guild.id } });
-		if (!tags.length) return message.util.send(`**${message.guild.name}** doesn't have any tags. Why not add some?`);
+		const tags = await tagsRepo.find({ guild: message.guild.id });
+		if (!tags.length) return message.util!.send(`**${message.guild.name}** doesn't have any tags. Why not add some?`);
 		const hoistedTags = tags
 			.filter(tag => tag.hoisted)
 			.map(tag => `\`${tag.name}\``)
@@ -59,8 +61,6 @@ class TagListCommand extends Command {
 		if (hoistedTags) embed.addField('❯ Tags', hoistedTags);
 		if (userTags) embed.addField(`❯ ${message.member.displayName}'s tags`, userTags);
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = TagListCommand;

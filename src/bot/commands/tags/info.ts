@@ -1,10 +1,11 @@
-const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const moment = require('moment');
-require('moment-duration-format');
+import { Command } from 'discord-akairo';
+import { Message, MessageEmbed } from 'discord.js';
+import * as moment from 'moment';
+import 'moment-duration-format';
+import { Tag } from '../../models/Tags';
 
-class TagInfoCommand extends Command {
-	constructor() {
+export default class TagInfoCommand extends Command {
+	public constructor() {
 		super('tag-info', {
 			category: 'tags',
 			description: {
@@ -20,15 +21,15 @@ class TagInfoCommand extends Command {
 					match: 'content',
 					type: 'tag',
 					prompt: {
-						start: message => `${message.author}, what tag do you want information on?`,
-						retry: (message, _, provided) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
+						start: (message: Message) => `${message.author}, what tag do you want information on?`,
+						retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { tag }) {
+	public async exec(message: Message, { tag }: { tag: Tag }) {
 		const user = await this.client.users.fetch(tag.user);
 		let lastModifiedBy;
 		try {
@@ -50,8 +51,6 @@ class TagInfoCommand extends Command {
 			embed.addField('❯ Last modified by', lastModifiedBy ? `${lastModifiedBy.tag} (ID: ${lastModifiedBy.id})` : "Couldn't fetch user.");
 		}
 
-		return message.util.send(embed);
+		return message.util!.send(embed);
 	}
 }
-
-module.exports = TagInfoCommand;
