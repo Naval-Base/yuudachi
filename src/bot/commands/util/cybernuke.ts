@@ -1,8 +1,9 @@
-const { Argument, Command } = require('discord-akairo');
-const { stripIndents } = require('common-tags');
+import { Argument, Command } from 'discord-akairo';
+import { Message, GuildMember } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
-class LaunchCybernukeCommand extends Command {
-	constructor() {
+export default class LaunchCybernukeCommand extends Command {
+	public constructor() {
 		super('cybernuke', {
 			aliases: ['cybernuke', 'launch-cybernuke'],
 			description: {
@@ -19,24 +20,24 @@ class LaunchCybernukeCommand extends Command {
 					id: 'join',
 					type: Argument.range('number', 0.1, 120, true),
 					prompt: {
-						start: message => `${message.author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
-						retry: message => `${message.author}, the minimum is \`0.1\` and the maximum \`120\` minutes.`
+						start: (message: Message) => `${message.author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
+						retry: (message: Message) => `${message.author}, the minimum is \`0.1\` and the maximum \`120\` minutes.`
 					}
 				},
 				{
 					id: 'age',
 					type: Argument.range('number', 0.1, Infinity, true),
 					prompt: {
-						start: message => `${message.author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
-						retry: message => `${message.author}, the minimum is \`0.1\` minutes.`
+						start: (message: Message) => `${message.author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
+						retry: (message: Message) => `${message.author}, the minimum is \`0.1\` minutes.`
 					}
 				}
 			]
 		});
 	}
 
-	async exec(message, { join, age }) {
-		await message.util.send('Calculating targeting parameters for cybernuke...');
+	public async exec(message: Message, { join, age }: { join: number, age: number }) {
+		await message.util!.send('Calculating targeting parameters for cybernuke...');
 		await message.guild.members.fetch();
 
 		const memberCutoff = Date.now() - (join * 60000);
@@ -45,8 +46,8 @@ class LaunchCybernukeCommand extends Command {
 			member => member.joinedTimestamp > memberCutoff && member.user.createdTimestamp > ageCutoff
 		);
 
-		await message.util.send(`Cybernuke will strike ${members.size} members; proceed?`);
-		let statusMessage;
+		await message.util!.send(`Cybernuke will strike ${members.size} members; proceed?`);
+		let statusMessage: Message;
 
 		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
 			max: 1,
@@ -59,16 +60,16 @@ class LaunchCybernukeCommand extends Command {
 		}
 		const response = responses.first();
 
-		if (/^y(?:e(?:a|s)?)?$/i.test(response.content)) {
-			statusMessage = await response.reply('Launching cybernuke...');
+		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
+			statusMessage = await response!.reply('Launching cybernuke...') as Message;
 		} else {
-			await response.reply('Cybernuke cancelled.');
+			await response!.reply('Cybernuke cancelled.');
 			return null;
 		}
 
-		const fatalities = [];
-		const survivors = [];
-		const promises = [];
+		const fatalities: GuildMember[] = [];
+		const survivors: { member: GuildMember, error: Error }[] = [];
+		const promises: Promise<any>[] = [];
 
 		for (const member of members.values()) {
 			promises.push(
@@ -84,7 +85,7 @@ class LaunchCybernukeCommand extends Command {
 					.catch(err => {
 						this.client.logger.error(err);
 						survivors.push({
-							member: member.id,
+							member,
 							error: err
 						});
 					})
@@ -99,8 +100,7 @@ class LaunchCybernukeCommand extends Command {
 
 		await Promise.all(promises);
 		await statusMessage.edit('Cybernuke impact confirmed. Casuality report incoming...');
-		/* eslint-disable multiline-ternary */
-		await response.reply(stripIndents`
+		await response!.reply(stripIndents`
 			__**Fatalities:**__
 
 			${fatalities.length > 0 ? stripIndents`
@@ -113,10 +113,7 @@ class LaunchCybernukeCommand extends Command {
 				${survivors.map(srv => `**-** ${srv.member.displayName} (${srv.member.id}): \`${srv.error}\``).join('\n')}
 			` : ''}
 		`, { split: true });
-		/* eslint-enable multiline-ternary */
 
 		return null;
 	}
 }
-
-module.exports = LaunchCybernukeCommand;

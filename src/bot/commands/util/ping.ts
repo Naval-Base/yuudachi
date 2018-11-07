@@ -1,7 +1,8 @@
-const { Command } = require('discord-akairo');
-const { stripIndents } = require('common-tags');
+import { Command } from 'discord-akairo';
+import { Message } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
-const RESPONSES = [
+const RESPONSES: string[] = [
 	'No.',
 	'Not happening.',
 	'Maybe later.',
@@ -15,8 +16,8 @@ const RESPONSES = [
 		Heartbeat: \`$(heartbeat)ms\``
 ];
 
-class PingCommand extends Command {
-	constructor() {
+export default class PingCommand extends Command {
+	public constructor() {
 		super('ping', {
 			aliases: ['ping'],
 			description: {
@@ -27,13 +28,13 @@ class PingCommand extends Command {
 		});
 	}
 
-	async exec(message) {
-		const msg = await message.util.send('Pinging...');
+	public async exec(message: Message) {
+		const msg = await message.util!.send('Pinging...') as Message;
 
-		return message.util.send(
+		return message.util!.send(
 			RESPONSES[Math.floor(Math.random() * RESPONSES.length)]
-				.replace('$(ping)', Math.round(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp))
-				.replace('$(heartbeat)', Math.round(this.client.ws.ping))
+				.replace('$(ping)', ((msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp)).toString())
+				.replace('$(heartbeat)', Math.round(this.client.ws.ping).toString())
 		);
 	}
 }

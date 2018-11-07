@@ -1,13 +1,19 @@
-const { Command } = require('discord-akairo');
-const { splitMessage } = require('discord.js');
-const util = require('util');
-const { stripIndents } = require('common-tags');
+import { Command } from 'discord-akairo';
+import { Message, Util } from 'discord.js';
+import * as util from 'util';
+import { stripIndents } from 'common-tags';
 
 const NL = '!!NL!!';
 const NL_PATTERN = new RegExp(NL, 'g');
 
-class EvalCommand extends Command {
-	constructor() {
+export default class EvalCommand extends Command {
+	public hrStart: [number, number] | undefined;
+
+	public lastResult: any = null;
+
+	private _sensitivePattern!: any;
+
+	public constructor() {
 		super('eval', {
 			aliases: ['eval'],
 			description: {
@@ -23,29 +29,27 @@ class EvalCommand extends Command {
 					match: 'content',
 					type: 'string',
 					prompt: {
-						start: message => `${message.author}, what would you like to evaluate?`
+						start: (message: Message) => `${message.author}, what would you like to evaluate?`
 					}
 				}
 			]
 		});
-
-		this.lastResult = null;
 	}
 
-	exec(message, { code }) {
+	public exec(message: Message, { code }: { code: string }) {
 		/* eslint-disable no-unused-vars */
 		const msg = message;
 		const { client, lastResult } = this;
-		const doReply = val => {
+		const doReply = (val: any) => {
 			if (val instanceof Error) {
-				message.util.send(`Callback error: \`${val}\``);
+				message.util!.send(`Callback error: \`${val}\``);
 			} else {
 				const result = this.result(val, process.hrtime(this.hrStart));
 				if (Array.isArray(result)) {
-					for (const res of result) message.util.send(res);
+					for (const res of result) message.util!.send(res);
 				}
 
-				message.util.send(result);
+				message.util!.send(result);
 			}
 		};
 		/* eslint-enable no-unused-vars */
@@ -56,16 +60,16 @@ class EvalCommand extends Command {
 			this.lastResult = eval(code); // eslint-disable-line no-eval
 			hrDiff = process.hrtime(hrStart);
 		} catch (error) {
-			return message.util.send(`Error while evaluating: \`${error}\``);
+			return message.util!.send(`Error while evaluating: \`${error}\``);
 		}
 
 		this.hrStart = process.hrtime();
 		const result = this.result(this.lastResult, hrDiff, code);
-		if (Array.isArray(result)) return result.map(res => message.util.send(res));
-		return message.util.send(result);
+		if (Array.isArray(result)) return result.map(res => message.util!.send(res));
+		return message.util!.send(result);
 	}
 
-	result(result, hrDiff, input = null) {
+	result(result: any, hrDiff: [number, number], input: string | null = null) {
 		const inspected = util.inspect(result, { depth: 0 })
 			.replace(NL_PATTERN, '\n')
 			.replace(this.sensitivePattern, '--snip--');
@@ -76,7 +80,7 @@ class EvalCommand extends Command {
 		const prepend = `\`\`\`javascript\n${prependPart}\n`;
 		const append = `\n${appendPart}\n\`\`\``;
 		if (input) {
-			return splitMessage(stripIndents`
+			return Util.splitMessage(stripIndents`
 				*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
@@ -84,7 +88,7 @@ class EvalCommand extends Command {
 			`, { maxLength: 1900, prepend, append });
 		}
 
-		return splitMessage(stripIndents`
+		return Util.splitMessage(stripIndents`
 			*Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 			\`\`\`javascript
 			${inspected}
@@ -101,5 +105,3 @@ class EvalCommand extends Command {
 		return this._sensitivePattern;
 	}
 }
-
-module.exports = EvalCommand;
