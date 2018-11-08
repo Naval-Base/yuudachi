@@ -27,9 +27,10 @@ export default class MuteCommand extends Command {
 				},
 				{
 					id: 'duration',
-					type: (str: string) => {
+					type: str => {
+						if (!str) return null;
 						const duration = ms(str);
-						if (duration && duration >= 300000) return duration;
+						if (duration && duration >= 300000 && !isNaN(duration)) return duration;
 						return null;
 					},
 					prompt: {
