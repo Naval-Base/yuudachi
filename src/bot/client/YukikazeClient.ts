@@ -147,8 +147,6 @@ export default class YukikazeClient extends AkairoClient {
 		if (process.env.LOGS) {
 			this.webhooks = new Collection();
 		}
-
-		this._init();
 	}
 
 	private async _init() {
@@ -175,6 +173,7 @@ export default class YukikazeClient extends AkairoClient {
 	}
 
 	public async start() {
+		await this._init();
 		return this.login(this.config.token);
 	}
 }
