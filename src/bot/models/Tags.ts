@@ -14,7 +14,7 @@ export class Tag {
 	guild!: string;
 
 	@Index()
-	@Column()
+	@Column({ nullable: true })
 	name!: string;
 
 	@Column({ type: 'text', array: true, default: () => 'ARRAY[]::text[]' })
