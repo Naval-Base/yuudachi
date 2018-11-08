@@ -64,7 +64,7 @@ export default class TagEditCommand extends Command {
 		const tagRepo = this.client.db.getRepository(Tag);
 		if (hoist) hoist = true;
 		else if (unhoist) hoist = false;
-		if (staffRole) tag.hoisted = hoist;
+		if ((hoist || unhoist) && staffRole) tag.hoisted = hoist;
 		if (content) {
 			content = Util.cleanContent(content, message);
 			tag.content = content;
