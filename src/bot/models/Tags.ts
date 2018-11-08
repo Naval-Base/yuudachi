@@ -20,7 +20,7 @@ export class Tag {
 	@Column({ type: 'text', array: true, default: () => 'ARRAY[]::text[]' })
 	aliases!: string[];
 
-	@Column()
+	@Column({ nullable: true })
 	content!: string;
 
 	@Column({ default: false })
