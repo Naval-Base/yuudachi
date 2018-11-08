@@ -6,6 +6,9 @@
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "UNLICENSED",
 	"private": true,
+	"scripts": {
+		"build": "gulp"
+	},
 	"dependencies": {
 		"@discordjs/uws": "^11.149.1",
 		"@naval-base/ms": "^2.2.1",
@@ -14,28 +17,34 @@
 		"discord-akairo": "1Computer1/discord-akairo",
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^6.1.0",
-		"ioredis": "^4.2.0",
 		"moment": "^2.22.2",
 		"moment-duration-format": "^2.2.2",
 		"node-emoji": "^1.8.1",
 		"node-fetch": "^2.2.1",
-		"pg": "6.4.2",
+		"pg": "^7.6.0",
 		"punycode": "^2.1.1",
 		"raven": "^2.6.4",
-		"sequelize": "^4.41.1",
-		"sherlockjs": "^1.4.0",
+		"reflect-metadata": "^0.1.12",
 		"turndown": "^5.0.1",
+		"typeorm": "^0.2.8",
 		"winston": "^3.1.0"
 	},
 	"devDependencies": {
-		"eslint": "^5.8.0",
-		"eslint-config-aqua": "^4.4.1"
+		"@types/common-tags": "^1.4.0",
+		"@types/moment-duration-format": "^2.2.2",
+		"@types/node": "^10.12.2",
+		"@types/node-emoji": "^1.8.0",
+		"@types/node-fetch": "^2.1.2",
+		"@types/ws": "^6.0.1",
+		"fs-nextra": "^0.3.7",
+		"gulp": "^3.9.1",
+		"gulp-sourcemaps": "^2.6.4",
+		"gulp-typescript": "^5.0.0-alpha.3",
+		"merge2": "^1.2.3",
+		"typescript": "^3.1.6"
 	},
 	"optionalDependencies": {
 		"erlpack": "discordapp/erlpack",
 		"zlib-sync": "^0.1.4"
-	},
-	"eslintConfig": {
-		"extends": "aqua/node"
 	}
 }
