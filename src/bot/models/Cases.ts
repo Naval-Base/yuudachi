@@ -1,22 +1,25 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity('cases')
 export class Case {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
+	@Index()
 	@Column({ type: 'bigint' })
 	guild!: string;
 
 	@Column({ type: 'bigint', nullable: true })
 	message!: string;
 
+	@Index()
 	@Column()
 	case_id!: number;
 
 	@Column({ nullable: true })
 	ref_id!: number;
 
+	@Index()
 	@Column({ type: 'bigint' })
 	target_id!: string;
 
@@ -38,6 +41,7 @@ export class Case {
 	@Column({ type: 'timestamptz', nullable: true })
 	action_duration!: Date;
 
+	@Index()
 	@Column({ default: true })
 	action_processed!: boolean;
 

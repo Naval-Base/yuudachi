@@ -1,16 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity('tags')
 export class Tag {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
+	@Index()
 	@Column({ type: 'bigint' })
 	user!: string;
 
+	@Index()
 	@Column({ type: 'bigint' })
 	guild!: string;
 
+	@Index()
 	@Column()
 	name!: string;
 

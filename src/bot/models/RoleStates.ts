@@ -1,13 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity('role_states')
+@Index(['guild', 'user'], { unique: true })
 export class RoleState {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
+	@Index()
 	@Column({ type: 'bigint' })
 	guild!: string;
 
+	@Index()
 	@Column({ type: 'bigint' })
 	user!: string;
 
