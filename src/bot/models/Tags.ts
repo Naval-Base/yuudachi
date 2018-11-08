@@ -14,13 +14,13 @@ export class Tag {
 	guild!: string;
 
 	@Index()
-	@Column({ nullable: true })
+	@Column()
 	name!: string;
 
 	@Column({ type: 'text', array: true, default: () => 'ARRAY[]::text[]' })
 	aliases!: string[];
 
-	@Column({ nullable: true })
+	@Column()
 	content!: string;
 
 	@Column({ default: false })

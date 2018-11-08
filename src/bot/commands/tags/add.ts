@@ -48,6 +48,7 @@ export default class TagAddCommand extends Command {
 		const tag = new Tag();
 		tag.user = message.author.id;
 		tag.guild = message.guild.id;
+		tag.name = name;
 		tag.hoisted = hoist && staffRole ? true : false;
 		tag.content = content;
 		await tagsRepo.save(tag);
