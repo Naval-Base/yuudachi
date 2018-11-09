@@ -1,5 +1,5 @@
 import { Listener } from 'discord-akairo';
-import { Message, Guild, GuildMember, TextChannel } from 'discord.js';
+import { Message, Guild, GuildMember, User, TextChannel } from 'discord.js';
 import Util from '../../util';
 import { Case } from '../../models/Cases';
 
@@ -32,7 +32,7 @@ export default class GuildBanAddListener extends Listener {
 		if (modMessage) dbCase.message = modMessage.id;
 		dbCase.case_id = totalCases;
 		dbCase.target_id = member.id;
-		dbCase.target_tag = member.user.tag;
+		dbCase.target_tag = member instanceof User ? member.tag : member.user.tag;
 		dbCase.action = Util.CONSTANTS.ACTIONS.BAN;
 		await casesRepo.save(dbCase);
 	}
