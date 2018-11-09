@@ -12,6 +12,7 @@ export default class CommandStartedListener extends Listener {
 	}
 
 	public exec(message: Message, command: Command, args: any[]) {
+		this.client.prometheus.commandCounter.inc();
 		Raven.captureBreadcrumb({
 			message: 'command_started',
 			category: command.category.id,

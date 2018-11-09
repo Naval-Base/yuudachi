@@ -11,6 +11,9 @@ import { Connection } from 'typeorm';
 import { Case } from '../models/Cases';
 import { Reminder } from '../models/Reminders';
 import { Tag } from '../models/Tags';
+import { Counter, Gauge, collectDefaultMetrics, register } from 'prom-client';
+import { createServer } from 'http';
+import { parse } from 'url';
 const Raven = require('raven');
 
 declare module 'discord-akairo' {
@@ -24,6 +27,9 @@ declare module 'discord-akairo' {
 		cachedCases: Set<string>
 		muteScheduler: MuteScheduler;
 		remindScheduler: RemindScheduler;
+		prometheus: {
+			commandCounter: Counter;
+		};
 	}
 }
 
@@ -78,11 +84,22 @@ export default class YukikazeClient extends AkairoClient {
 
 	public remindScheduler!: RemindScheduler;
 
+	public prometheus = {
+		messagesCounter: new Counter({ name: 'yukikaze_messages_total', help: 'Total number of messages Yukikaze has seen' }),
+		commandCounter: new Counter({ name: 'yukikaze_commands_total', help: 'Total number of commands used' }),
+		collectDefaultMetrics,
+		register
+	};
+
 	public constructor(config: YukikazeOptions) {
 		super({ ownerID: config.owner }, {
 			messageCacheMaxSize: 1000,
 			disableEveryone: true,
 			disabledEvents: ['TYPING_START']
+		});
+
+		this.on('message', message => {
+			this.prometheus.messagesCounter.inc();
 		});
 
 		this.commandHandler.resolver.addType('tag', async (phrase, message) => {
@@ -147,6 +164,8 @@ export default class YukikazeClient extends AkairoClient {
 		if (process.env.LOGS) {
 			this.webhooks = new Collection();
 		}
+
+		this.prometheus.collectDefaultMetrics({ prefix: 'yukikaze_', timeout: 30000 });
 	}
 
 	private async _init() {
@@ -170,6 +189,16 @@ export default class YukikazeClient extends AkairoClient {
 		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();
 		await this.remindScheduler.init();
+	}
+
+	public metrics() {
+		createServer((req, res) => {
+			if (parse(req.url!).pathname === '/metrics') {
+				res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
+				res.write(this.prometheus.register.metrics());
+			}
+			res.end();
+		}).listen(5500);
 	}
 
 	public async start() {
