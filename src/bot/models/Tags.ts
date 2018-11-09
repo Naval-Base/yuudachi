@@ -32,9 +32,9 @@ export class Tag {
 	@Column({ type: 'bigint', nullable: true })
 	last_modified!: string;
 
-	@Column({ type: 'timestamptz', default: () => 'NOW()' })
+	@Column({ type: 'timestamptz', default: () => 'now()' })
 	createdAt!: Date;
 
-	@Column({ type: 'timestamptz', default: () => 'NOW()' })
+	@Column({ type: 'timestamptz', default: () => 'now()' })
 	updatedAt!: Date;
 }

@@ -45,6 +45,6 @@ export class Case {
 	@Column({ default: true })
 	action_processed!: boolean;
 
-	@Column({ type: 'timestamptz', default: () => 'NOW()' })
+	@Column({ type: 'timestamptz', default: () => 'now()' })
 	createdAt!: Date;
 }
