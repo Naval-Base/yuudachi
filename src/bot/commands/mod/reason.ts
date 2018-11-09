@@ -57,10 +57,8 @@ export default class ReasonCommand extends Command {
 			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
-			if (!dbCase.mod_id && !dbCase.mod_tag) {
-				embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
-			}
-			embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
+				.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
 			await caseEmbed.edit(embed);
 		}
 
