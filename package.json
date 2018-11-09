@@ -10,7 +10,6 @@
 		"build": "gulp"
 	},
 	"dependencies": {
-		"@discordjs/uws": "^11.149.1",
 		"@naval-base/ms": "^2.2.1",
 		"common-tags": "^1.8.0",
 		"diff": "^3.5.0",
@@ -45,6 +44,7 @@
 		"typescript": "^3.1.6"
 	},
 	"optionalDependencies": {
+		"@discordjs/uws": "^11.149.1",
 		"erlpack": "discordapp/erlpack",
 		"zlib-sync": "^0.1.4"
 	}
