@@ -37,7 +37,6 @@ export default class EvalCommand extends Command {
 	}
 
 	public exec(message: Message, { code }: { code: string }) {
-		/* eslint-disable no-unused-vars */
 		const msg = message;
 		const { client, lastResult } = this;
 		const doReply = (val: any) => {
@@ -52,12 +51,11 @@ export default class EvalCommand extends Command {
 				message.util!.send(result);
 			}
 		};
-		/* eslint-enable no-unused-vars */
 
 		let hrDiff;
 		try {
 			const hrStart = process.hrtime();
-			this.lastResult = eval(code); // eslint-disable-line no-eval
+			this.lastResult = eval(code);
 			hrDiff = process.hrtime(hrStart);
 		} catch (error) {
 			return message.util!.send(`Error while evaluating: \`${error}\``);

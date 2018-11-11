@@ -40,7 +40,7 @@ export default {
 		} as { [key: string]: number }
 	},
 	reminderEmbed: (message: Message, reminders: any) => {
-		const truncate = (str: string, len: number) => str.length > len ? `${str.slice(0, len)}…` : str; // eslint-disable-line
+		const truncate = (str: string, len: number) => str.length > len ? `${str.slice(0, len)}…` : str;
 		return new MessageEmbed()
 			.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 			.setColor(0x30A9ED)
