@@ -38,12 +38,15 @@ export default class UnbanCommand extends Command {
 		});
 	}
 
+	// @ts-ignore
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
+		const hasStaffRole = message.member.roles.has(staffRole);
+		if (!hasStaffRole) return 'Moderator';
+		return null;
+	}
+
 	public async exec(message: Message, { user, reason }: { user: User, reason: string }) {
-		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
-			return message.reply('moderation commands are disabled on this server.');
-		}
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
-		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
 		if (user.id === message.author.id) return;
 
 		const key = `${message.guild.id}:${user.id}:UNBAN`;

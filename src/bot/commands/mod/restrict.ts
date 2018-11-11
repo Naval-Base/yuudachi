@@ -49,10 +49,15 @@ export default class RestrictCommand extends Command {
 		});
 	}
 
+	// @ts-ignore
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
+		const hasStaffRole = message.member.roles.has(staffRole);
+		if (!hasStaffRole) return 'Moderator';
+		return null;
+	}
+
 	public exec(message: Message, { restriction, rest }: { restriction: string, rest: string }) {
-		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
-			return message.reply('moderation commands are disabled on this server.');
-		}
 		if (!restriction) {
 			// @ts-ignore
 			const prefix = this.handler.prefix(message);

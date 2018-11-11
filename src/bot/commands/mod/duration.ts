@@ -43,13 +43,15 @@ export default class DurationCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { caseNum, duration }: { caseNum: number | string, duration: number }) {
-		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
-			return message.reply('moderation commands are disabled on this server.');
-		}
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
-		if (!staffRole) return message.reply('you know, I know, we should just leave it at that.');
+	// @ts-ignore
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
+		const hasStaffRole = message.member.roles.has(staffRole);
+		if (!hasStaffRole) return 'Moderator';
+		return null;
+	}
 
+	public async exec(message: Message, { caseNum, duration }: { caseNum: number | string, duration: number }) {
 		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');

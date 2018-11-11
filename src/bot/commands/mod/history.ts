@@ -14,7 +14,7 @@ export default class HistoryCommand extends Command {
 				examples: ['@Crawl']
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
 			ratelimit: 2,
 			args: [
 				{
@@ -28,9 +28,6 @@ export default class HistoryCommand extends Command {
 	}
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
-		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
-			return message.reply('moderation commands are disabled on this server.');
-		}
 		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
 		if (!staffRole && message.author.id !== member.id) return message.reply('you know, I know, we should just leave it at that.');
 

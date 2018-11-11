@@ -36,13 +36,16 @@ export default class SoftbanCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { member, reason }: { member: GuildMember, reason: string }) {
-		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
-			return message.reply('moderation commands are disabled on this server.');
-		}
+	// @ts-ignore
+	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
 		const hasStaffRole = message.member.roles.has(staffRole);
-		if (!hasStaffRole) return message.reply('you know, I know, we should just leave it at that.');
+		if (!hasStaffRole) return 'Moderator';
+		return null;
+	}
+
+	public async exec(message: Message, { member, reason }: { member: GuildMember, reason: string }) {
+		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
 		if (member.id === message.author.id) return;
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');

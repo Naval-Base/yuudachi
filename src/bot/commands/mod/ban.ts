@@ -15,7 +15,7 @@ export default class BanCommand extends Command {
 				examples: ['@Crawl']
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
 			ratelimit: 2,
 			args: [
 				{
@@ -43,13 +43,16 @@ export default class BanCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { member, days, reason }: { member: GuildMember, days: number, reason: string }) {
-		if (!this.client.settings.get(message.guild, 'moderation', undefined)) {
-			return message.reply('moderation commands are disabled on this server.');
-		}
+	// @ts-ignore
+	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
 		const hasStaffRole = message.member.roles.has(staffRole);
-		if (!hasStaffRole) return message.reply('you know, I know, we should just leave it at that.');
+		if (!hasStaffRole) return 'Moderator';
+		return null;
+	}
+
+	public async exec(message: Message, { member, days, reason }: { member: GuildMember, days: number, reason: string }) {
+		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
 		if (member.id === message.author.id) {
 			await message.reply('you asked for it, ok?');
 			try {
@@ -120,17 +123,17 @@ export default class BanCommand extends Command {
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 		}
 
-		const cs = new Case();
-		cs.guild = message.guild.id;
-		if (modMessage) cs.message = modMessage.id;
-		cs.case_id = totalCases;
-		cs.target_id = member.id;
-		cs.target_tag = member.user.tag;
-		cs.mod_id = message.author.id;
-		cs.mod_tag = message.author.tag;
-		cs.action = Util.CONSTANTS.ACTIONS.BAN;
-		cs.reason = reason;
-		await casesRepo.save(cs);
+		const dbCase = new Case();
+		dbCase.guild = message.guild.id;
+		if (modMessage) dbCase.message = modMessage.id;
+		dbCase.case_id = totalCases;
+		dbCase.target_id = member.id;
+		dbCase.target_tag = member.user.tag;
+		dbCase.mod_id = message.author.id;
+		dbCase.mod_tag = message.author.tag;
+		dbCase.action = Util.CONSTANTS.ACTIONS.BAN;
+		dbCase.reason = reason;
+		await casesRepo.save(dbCase);
 
 		return sentMessage.edit(`Successfully banned **${member.user.tag}**`);
 	}
