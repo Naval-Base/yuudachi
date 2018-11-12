@@ -1,9 +1,9 @@
 import { Listener } from 'discord-akairo';
 import { User } from 'discord.js';
 
-export default class UserUpdateBellaAvatarListener extends Listener {
+export default class UserUpdateLewdcarioAvatarListener extends Listener {
 	public constructor() {
-		super('userUpdateBellaAvatar', {
+		super('userUpdateLewdcarioAvatar', {
 			emitter: 'client',
 			event: 'userUpdate',
 			category: 'client'
