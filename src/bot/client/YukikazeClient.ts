@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } from 'discord-akairo';
-import { Collection, Util, Webhook } from 'discord.js';
+import { Collection, Message, Util, Webhook } from 'discord.js';
 import { Logger, createLogger, transports, format } from 'winston';
 import database from '../structures/Database';
 import TypeORMProvider from '../structures/SettingsProvider';
@@ -11,7 +11,7 @@ import { Connection } from 'typeorm';
 import { Case } from '../models/Cases';
 import { Reminder } from '../models/Reminders';
 import { Tag } from '../models/Tags';
-import { Counter, Gauge, collectDefaultMetrics, register } from 'prom-client';
+import { Counter, collectDefaultMetrics, register } from 'prom-client';
 import { createServer } from 'http';
 import { parse } from 'url';
 const Raven = require('raven');
@@ -29,6 +29,7 @@ declare module 'discord-akairo' {
 		remindScheduler: RemindScheduler;
 		prometheus: {
 			commandCounter: Counter;
+			lewdcarioAvatarCounter: Counter;
 		};
 	}
 }
@@ -54,7 +55,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		directory: join(__dirname, '..', 'commands'),
-		prefix: message => this.settings.get(message.guild, 'prefix', process.env.COMMAND_PREFIX),
+		prefix: (message: Message) => this.settings.get(message.guild, 'prefix', process.env.COMMAND_PREFIX),
 		aliasReplacement: /-/g,
 		allowMention: true,
 		handleEdits: true,
@@ -87,6 +88,7 @@ export default class YukikazeClient extends AkairoClient {
 	public prometheus = {
 		messagesCounter: new Counter({ name: 'yukikaze_messages_total', help: 'Total number of messages Yukikaze has seen' }),
 		commandCounter: new Counter({ name: 'yukikaze_commands_total', help: 'Total number of commands used' }),
+		lewdcarioAvatarCounter: new Counter({ name: 'yukikaze_lewdcario_avatar_total', help: 'Total number of avatar changes from Lewdcario' }),
 		collectDefaultMetrics,
 		register
 	};
