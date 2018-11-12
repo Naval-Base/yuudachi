@@ -42,12 +42,13 @@ export default class MDNCommand extends Command {
 			filter: 'a',
 			replacement: (text: string, node: { href: string }) => `[${text}](https://developer.mozilla.org${node.href})`
 		});
+		const summary = body.Summary.replace(/<code><strong>(.+)<\/strong><\/code>/g, '<strong><code>$1<\/code><\/strong>');
 		const embed = new MessageEmbed()
 			.setColor(0x066FAD)
 			.setAuthor('MDN', 'https://i.imgur.com/DFGXabG.png', 'https://developer.mozilla.org/')
 			.setURL(`https://developer.mozilla.org${body.URL}`)
 			.setTitle(body.Title)
-			.setDescription(turndown.turndown(body.Summary));
+			.setDescription(turndown.turndown(summary));
 
 		return message.util!.send(embed);
 	}
