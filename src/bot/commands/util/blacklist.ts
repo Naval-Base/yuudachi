@@ -26,7 +26,7 @@ export default class BlacklistCommand extends Command {
 		});
 	}
 
-	public exec(message: Message, { user }: { user: User }) {
+	public async exec(message: Message, { user }: { user: User }) {
 		const blacklist = this.client.settings.get('global', 'blacklist', []);
 		if (blacklist.includes(user.id)) {
 			const index = blacklist.indexOf(user.id);

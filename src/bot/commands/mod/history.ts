@@ -18,10 +18,10 @@ export default class HistoryCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					'id': 'member',
-					'match': 'content',
-					'type': 'member',
-					'default': (message: Message) => message.member
+					id: 'member',
+					match: 'content',
+					type: 'member',
+					default: (message: Message) => message.member
 				}
 			]
 		});

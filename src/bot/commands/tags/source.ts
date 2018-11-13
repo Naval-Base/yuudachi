@@ -31,7 +31,7 @@ export default class TagSourceCommand extends Command {
 		});
 	}
 
-	public exec(message: Message, { tag, file }: { tag: Tag, file: boolean }) {
+	public async exec(message: Message, { tag, file }: { tag: Tag, file: boolean }) {
 		return message.util!.send(tag.content, {
 			code: 'md',
 			files: file ? [{

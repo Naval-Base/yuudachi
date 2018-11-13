@@ -50,14 +50,14 @@ export default class MuteScheduler {
 		let member;
 		try {
 			member = await guild!.members.fetch(mute.target_id);
-		} catch {}
+		} catch {} // tslint:disable-line
 		const casesRepo = this.client.db.getRepository(Case);
 		mute.action_processed = true;
 		await casesRepo.save(mute);
 		if (member) {
 			try {
-				await member.roles.remove(muteRole, `Unmuted automatically based on duration.`);
-			} catch {}
+				await member.roles.remove(muteRole, 'Unmuted automatically based on duration.');
+			} catch {} // tslint:disable-line
 		}
 		const schedule = this.queuedSchedules.get(mute.id);
 		if (schedule) clearTimeout(schedule);
@@ -94,7 +94,7 @@ export default class MuteScheduler {
 
 	private async _check() {
 		const casesRepo = this.client.db.getRepository(Case);
-		const mutes = await casesRepo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false })
+		const mutes = await casesRepo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false });
 		const now = new Date();
 
 		for (const mute of mutes) {

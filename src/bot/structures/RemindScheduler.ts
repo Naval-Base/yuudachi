@@ -85,7 +85,7 @@ export default class RemindScheduler {
 
 	private async _check() {
 		const remindersRepo = this.client.db.getRepository(Reminder);
-		const reminders = await remindersRepo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) })
+		const reminders = await remindersRepo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) });
 		const now = new Date();
 
 		for (const reminder of reminders) {

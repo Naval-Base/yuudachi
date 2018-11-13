@@ -1,5 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
+/* tslint:disable:member-access */
+
 @Entity('role_states')
 @Index(['guild', 'user'], { unique: true })
 export class RoleState {

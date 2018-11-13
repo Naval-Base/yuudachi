@@ -27,17 +27,17 @@ export default class BanCommand extends Command {
 					}
 				},
 				{
-					'id': 'days',
-					'type': 'integer',
-					'match': 'option',
-					'flag': ['--days', '-d'],
-					'default': 7
+					id: 'days',
+					type: 'integer',
+					match: 'option',
+					flag: ['--days', '-d'],
+					default: 7
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -57,7 +57,7 @@ export default class BanCommand extends Command {
 			await message.reply('you asked for it, ok?');
 			try {
 				await member.kick(`${message.author.tag} used a mod command on themselves.`);
-			} catch {}
+			} catch {} // tslint:disable-line
 			return;
 		}
 		if (member.roles.has(staffRole)) {
@@ -92,7 +92,7 @@ export default class BanCommand extends Command {
 			return message.reply('cancelled ban.');
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
 
 		try {
 			try {
@@ -101,7 +101,7 @@ export default class BanCommand extends Command {
 					${reason ? `\n**Reason:** ${reason}\n` : ''}
 					You can appeal your ban by DMing \`Crawl#0002\` with a message why you think you deserve to have your ban lifted.
 				`);
-			} catch {}
+			} catch {} // tslint:disable-line
 			await member.ban({ days, reason: `Banned by ${message.author.tag} | Case #${totalCases}` });
 		} catch (error) {
 			this.client.cachedCases.delete(key);

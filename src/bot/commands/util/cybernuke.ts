@@ -78,7 +78,7 @@ export default class LaunchCybernukeCommand extends Command {
 					This means that you have been banned, likely in the case of a server raid.
 					Please contact them if you believe this ban to be in error.
 				`).catch(this.client.logger.error)
-					.then(() => member.ban())
+					.then(async () => member.ban())
 					.then(() => {
 						fatalities.push(member);
 					})

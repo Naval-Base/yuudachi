@@ -26,10 +26,10 @@ export default class WarnCommand extends Command {
 					}
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -50,7 +50,7 @@ export default class WarnCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
 
 		if (!reason) {

@@ -1,6 +1,6 @@
 import { Message, MessageEmbed, GuildMember, User } from 'discord.js';
 import { stripIndents, oneLine } from 'common-tags';
-const ms = require('@naval-base/ms');
+const ms = require('@naval-base/ms'); // tslint:disable-line
 
 const ACTIONS = ({
 	1: 'ban',
@@ -57,7 +57,7 @@ export default {
 		}
 		embed.setDescription(stripIndents`
 				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
-				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { 'long': true })}` : ''}
+				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { long: true })}` : ''}
 				**Reason:** ${reason}${ref ? `\n**Ref case:** ${ref}` : ''}
 			`)
 			.setFooter(`Case ${caseNum}`)
@@ -68,13 +68,13 @@ export default {
 	historyEmbed: (member: GuildMember, cases: any) => {
 		const footer = cases.reduce((count: any, c: any) => {
 			const action = ACTIONS[c.action];
-			count[action] = (count[action] || 0) + 1;
+			count[action] = (count[action] || 0) as number + 1;
 			return count;
 		}, {});
 		const colors = [8450847, 10870283, 13091073, 14917123, 16152591, 16667430, 16462404];
 		const values = [footer.warn || 0, footer.restriction || 0, footer.mute || 0, footer.kick || 0, footer.ban || 0];
 		const [warn, restriction, mute, kick, ban] = values;
-		const colorIndex = Math.min(values.reduce((a, b) => a + b), colors.length - 1);
+		const colorIndex = Math.min(values.reduce((a: number, b: number) => a + b), colors.length - 1);
 
 		return new MessageEmbed()
 			.setAuthor(`${member.user.tag} (${member.id})`, member.user.displayAvatarURL())

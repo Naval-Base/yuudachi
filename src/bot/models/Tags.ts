@@ -1,5 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
+/* tslint:disable:member-access variable-name */
+
 @Entity('tags')
 export class Tag {
 	@PrimaryGeneratedColumn()

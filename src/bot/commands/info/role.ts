@@ -50,16 +50,16 @@ export default class RoleInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					'id': 'role',
-					'match': 'content',
-					'type': 'role',
-					'default': (message: Message) => message.member.roles.highest
+					id: 'role',
+					match: 'content',
+					type: 'role',
+					default: (message: Message) => message.member.roles.highest
 				}
 			]
 		});
 	}
 
-	public exec(message: Message, { role }: { role: Role }) {
+	public async exec(message: Message, { role }: { role: Role }) {
 		const permissions = Object.keys(PERMISSIONS).filter(
 			// @ts-ignore
 			permission => role.permissions.serialize()[permission]

@@ -26,7 +26,7 @@ export default class ServerInfoCommand extends Command {
 		});
 	}
 
-	public exec(message: Message) {
+	public async exec(message: Message) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${message.guild.name}** (ID: ${message.guild.id})`)

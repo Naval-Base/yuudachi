@@ -29,10 +29,10 @@ export default class UnbanCommand extends Command {
 					}
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -55,7 +55,7 @@ export default class UnbanCommand extends Command {
 		}
 		this.client.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
 
 		try {
 			await message.guild.members.unban(user, `Unbanned by ${message.author.tag} | Case #${totalCases}`);

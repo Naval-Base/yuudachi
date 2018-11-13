@@ -25,10 +25,10 @@ export default class RestrictReactionCommand extends Command {
 					}
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -58,7 +58,7 @@ export default class RestrictReactionCommand extends Command {
 		}
 		this.client.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
 
 		try {
 			await member.roles.add(restrictRoles.reaction, `Embed restricted by ${message.author.tag} | Case #${totalCases}`);

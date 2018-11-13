@@ -52,9 +52,9 @@ export default class TagCommand extends Command {
 					type: ['show', 'add', 'alias', 'del', 'delete', 'edit', 'source', 'info', 'search', 'list', 'download', 'dl']
 				},
 				{
-					'id': 'name',
-					'match': 'rest',
-					'default': ''
+					id: 'name',
+					match: 'rest',
+					default: ''
 				}
 			]
 		});
@@ -67,23 +67,23 @@ export default class TagCommand extends Command {
 			return message.util!.send(stripIndents`
 				When you beg me so much I just can't not help you~
 				Check \`${prefix}help tag\` for more information.
-			
+
 				Hmph, you probably wanted to use \`${prefix}tag show\` or something!
 			`);
 		}
 		const command = ({
-			'show': this.handler.modules.get('tag-show'),
-			'add': this.handler.modules.get('tag-add'),
-			'alias': this.handler.modules.get('tag-alias'),
-			'del': this.handler.modules.get('tag-delete'),
-			'delete': this.handler.modules.get('tag-delete'),
-			'edit': this.handler.modules.get('tag-edit'),
-			'source': this.handler.modules.get('tag-source'),
-			'info': this.handler.modules.get('tag-info'),
-			'search': this.handler.modules.get('tag-search'),
-			'list': this.handler.modules.get('tag-list'),
-			'download': this.handler.modules.get('tag-download'),
-			'dl': this.handler.modules.get('tag-download')
+			show: this.handler.modules.get('tag-show'),
+			add: this.handler.modules.get('tag-add'),
+			alias: this.handler.modules.get('tag-alias'),
+			del: this.handler.modules.get('tag-delete'),
+			delete: this.handler.modules.get('tag-delete'),
+			edit: this.handler.modules.get('tag-edit'),
+			source: this.handler.modules.get('tag-source'),
+			info: this.handler.modules.get('tag-info'),
+			search: this.handler.modules.get('tag-search'),
+			list: this.handler.modules.get('tag-list'),
+			download: this.handler.modules.get('tag-download'),
+			dl: this.handler.modules.get('tag-download')
 		} as { [key: string]: Command })[method];
 
 		return this.handler.handleDirectCommand(message, name, command, true);

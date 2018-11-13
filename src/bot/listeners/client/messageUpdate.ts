@@ -1,6 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
-const diff = require('diff');
+const diff = require('diff'); // tslint:disable-line
 
 export default class MessageUpdateListener extends Listener {
 	public constructor() {

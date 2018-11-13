@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import Util from '../../util';
-const ms = require('@naval-base/ms');
+const ms = require('@naval-base/ms'); // tslint:disable-line
 
 export default class MuteCommand extends Command {
 	public constructor() {
@@ -39,10 +39,10 @@ export default class MuteCommand extends Command {
 					}
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -72,7 +72,7 @@ export default class MuteCommand extends Command {
 		}
 		this.client.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
 
 		try {
 			await member.roles.add(muteRole, `Muted by ${message.author.tag} | Case #${totalCases}`);

@@ -27,10 +27,10 @@ export default class KickCommand extends Command {
 					}
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -51,7 +51,7 @@ export default class KickCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
 
 		let sentMessage;
 		try {
@@ -62,7 +62,7 @@ export default class KickCommand extends Command {
 					${reason ? `\n**Reason:** ${reason}\n` : ''}
 					You may rejoin whenever.
 				`);
-			} catch {}
+			} catch {} // tslint:disable-line
 			await member.kick(`Kicked by ${message.author.tag} | Case #${totalCases}`);
 		} catch (error) {
 			return message.reply('there is no mute role configured on this server.');

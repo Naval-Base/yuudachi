@@ -43,7 +43,7 @@ export default class SetRestrictRoles extends Command {
 		});
 	}
 
-	public exec(message: Message, { embed, emoji, reaction }: { embed: Role, emoji: Role, reaction: Role }) {
+	public async exec(message: Message, { embed, emoji, reaction }: { embed: Role, emoji: Role, reaction: Role }) {
 		const roles = { embed: embed.id, emoji: emoji.id, reaction: reaction.id };
 		this.client.settings.set(message.guild, 'restrictRoles', roles);
 		return message.util!.reply(`set restricted roles to **${embed.name}**, **${emoji.name}** and **${reaction.name}**`);

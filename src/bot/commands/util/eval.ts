@@ -11,7 +11,7 @@ export default class EvalCommand extends Command {
 
 	public lastResult: any = null;
 
-	private _sensitivePattern!: any;
+	private readonly _sensitivePattern!: any; // tslint:disable-line
 
 	public constructor() {
 		super('eval', {
@@ -37,13 +37,14 @@ export default class EvalCommand extends Command {
 	}
 
 	public exec(message: Message, { code }: { code: string }) {
-		const msg = message;
-		const { client, lastResult } = this;
+		const msg = message; // tslint:disable-line
+		const { client, lastResult } = this; // tslint:disable-line
+		// tslint:disable-next-line
 		const doReply = (val: any) => {
 			if (val instanceof Error) {
 				message.util!.send(`Callback error: \`${val}\``);
 			} else {
-				const result = this.result(val, process.hrtime(this.hrStart));
+				const result = this._result(val, process.hrtime(this.hrStart));
 				if (Array.isArray(result)) {
 					for (const res of result) message.util!.send(res);
 				}
@@ -55,19 +56,19 @@ export default class EvalCommand extends Command {
 		let hrDiff;
 		try {
 			const hrStart = process.hrtime();
-			this.lastResult = eval(code);
+			this.lastResult = eval(code); // tslint:disable-line
 			hrDiff = process.hrtime(hrStart);
 		} catch (error) {
 			return message.util!.send(`Error while evaluating: \`${error}\``);
 		}
 
 		this.hrStart = process.hrtime();
-		const result = this.result(this.lastResult, hrDiff, code);
-		if (Array.isArray(result)) return result.map(res => message.util!.send(res));
+		const result = this._result(this.lastResult, hrDiff, code);
+		if (Array.isArray(result)) return result.map(async res => message.util!.send(res));
 		return message.util!.send(result);
 	}
 
-	result(result: any, hrDiff: [number, number], input: string | null = null) {
+	private _result(result: any, hrDiff: [number, number], input: string | null = null) {
 		const inspected = util.inspect(result, { depth: 0 })
 			.replace(NL_PATTERN, '\n')
 			.replace(this.sensitivePattern, '--snip--');

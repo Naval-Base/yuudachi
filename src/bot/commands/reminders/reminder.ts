@@ -33,9 +33,9 @@ export default class ReminderCommand extends Command {
 					type: ['add', 'del', 'delete', 'list']
 				},
 				{
-					'id': 'name',
-					'match': 'rest',
-					'default': ''
+					id: 'name',
+					match: 'rest',
+					default: ''
 				}
 			]
 		});
@@ -51,11 +51,11 @@ export default class ReminderCommand extends Command {
 			`);
 		}
 		const command = ({
-			'add': this.handler.modules.get('reminder-add'),
-			'cancel': this.handler.modules.get('reminder-delete'),
-			'del': this.handler.modules.get('reminder-delete'),
-			'delete': this.handler.modules.get('reminder-delete'),
-			'list': this.handler.modules.get('reminder-list')
+			add: this.handler.modules.get('reminder-add'),
+			cancel: this.handler.modules.get('reminder-delete'),
+			del: this.handler.modules.get('reminder-delete'),
+			delete: this.handler.modules.get('reminder-delete'),
+			list: this.handler.modules.get('reminder-list')
 		} as { [key: string]: Command } )[method];
 
 		return this.handler.handleDirectCommand(message, name, command, true);

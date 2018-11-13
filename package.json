@@ -7,7 +7,9 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"scripts": {
-		"build": "gulp"
+		"prebuild": "yarn lint",
+		"build": "gulp",
+		"lint": "tslint -p tsconfig.json"
 	},
 	"dependencies": {
 		"@naval-base/ms": "^2.2.1",
@@ -41,6 +43,8 @@
 		"gulp-sourcemaps": "^2.6.4",
 		"gulp-typescript": "^5.0.0-alpha.3",
 		"merge2": "^1.2.3",
+		"tslint": "^5.11.0",
+		"tslint-config-fire": "^0.1.0",
 		"typescript": "^3.1.6"
 	},
 	"optionalDependencies": {

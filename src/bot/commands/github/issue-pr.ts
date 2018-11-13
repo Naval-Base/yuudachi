@@ -1,7 +1,7 @@
-import { Argument, Command } from 'discord-akairo';
+import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
-import { stripIndents, oneLine } from 'common-tags';
+import { oneLine } from 'common-tags';
 
 const { GITHUB_API_KEY } = process.env;
 
@@ -66,12 +66,12 @@ export default class GitHubPROrIssueCommand extends Command {
 					return message.util!.reply('No u.');
 			}
 		}
-		const number = args.match ? args.match[2] : args.pr_issue;
+		const num = args.match ? args.match[2] : args.pr_issue;
 		const query = `
 			{
 				repository(owner: "${owner}", name: "${repo}") {
 					name
-					issueOrPullRequest(number: ${number}) {
+					issueOrPullRequest(number: ${num}) {
 						... on PullRequest {
 							comments {
 								totalCount

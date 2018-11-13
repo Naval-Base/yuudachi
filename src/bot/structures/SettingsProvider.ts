@@ -23,13 +23,13 @@ export default class TypeORMProvider extends Provider {
 		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
 		if (this.items.has(id)) {
 			const value = this.items.get(id)[key];
-			return value == null ? defaultValue : value;
+			return value == null ? defaultValue : value; // tslint:disable-line
 		}
 
 		return defaultValue;
 	}
 
-	public set(guild: string | Guild, key: string, value: any) {
+	public async set(guild: string | Guild, key: string, value: any) {
 		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
 		const data = this.items.get(id) || {};
 		data[key] = value;
@@ -39,26 +39,26 @@ export default class TypeORMProvider extends Provider {
 			.insert()
 			.into(Setting)
 			.values({ guild: id, settings: data })
-			.onConflict(`("guild") DO UPDATE SET "settings" = :settings`)
+			.onConflict('("guild") DO UPDATE SET "settings" = :settings')
 			.setParameter('settings', data)
 			.execute();
 	}
 
-	public delete(guild: string | Guild, key: string) {
+	public async delete(guild: string | Guild, key: string) {
 		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
 		const data = this.items.get(id) || {};
-		delete data[key];
+		delete data[key]; // tslint:disable-line
 
 		return this.repo.createQueryBuilder()
 			.insert()
 			.into(Setting)
 			.values({ guild: id, settings: data })
-			.onConflict(`("guild") DO UPDATE SET "settings" =:settings`)
+			.onConflict('("guild") DO UPDATE SET "settings" =:settings')
 			.setParameter('settings', null)
 			.execute();
 	}
 
-	public clear(guild: string | Guild) {
+	public async clear(guild: string | Guild) {
 		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
 		this.items.delete(id);
 

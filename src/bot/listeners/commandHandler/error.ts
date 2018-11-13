@@ -1,6 +1,6 @@
 import { Listener, Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-const Raven = require('raven');
+const Raven = require('raven'); // tslint:disable-line
 
 export default class CommandErrorListener extends Listener {
 	public constructor() {

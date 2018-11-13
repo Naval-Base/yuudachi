@@ -23,7 +23,7 @@ export default class SetGitHubRepositoryCommand extends Command {
 		});
 	}
 
-	public exec(message: Message, { repository }: { repository: string }) {
+	public async exec(message: Message, { repository }: { repository: string }) {
 		this.client.settings.set(message.guild, 'githubRepository', repository);
 		return message.util!.reply(`set repository to **${repository}**`);
 	}

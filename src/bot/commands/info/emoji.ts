@@ -3,7 +3,7 @@ import { Message, MessageEmbed, GuildEmoji } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import * as emojis from 'node-emoji';
-const punycode = require('punycode');
+const punycode = require('punycode'); // tslint:disable-line
 
 const EMOJI_REGEX = /<:\w+:(\d{17,19})>/;
 
@@ -37,7 +37,7 @@ export default class EmojiInfoCommand extends Command {
 		});
 	}
 
-	public exec(message: Message, { emoji }: { emoji: any }) {
+	public async exec(message: Message, { emoji }: { emoji: any }) {
 		const embed = new MessageEmbed()
 			.setColor(3447003);
 

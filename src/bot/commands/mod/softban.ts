@@ -27,10 +27,10 @@ export default class SoftbanCommand extends Command {
 					}
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -58,7 +58,7 @@ export default class SoftbanCommand extends Command {
 		this.client.cachedCases.add(keys[0]);
 		this.client.cachedCases.add(keys[1]);
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
 
 		let sentMessage;
 		try {
@@ -70,7 +70,7 @@ export default class SoftbanCommand extends Command {
 					A softban is a kick that uses ban + unban to remove your messages from the server.
 					You may rejoin whenever.
 				`);
-			} catch {}
+			} catch {} // tslint:disable-line
 			await member.ban({ days: 1, reason: `Softbanned by ${message.author.tag} | Case #${totalCases}` });
 			await message.guild.members.unban(member, `Softbanned by ${message.author.tag} | Case #${totalCases}`);
 		} catch (error) {

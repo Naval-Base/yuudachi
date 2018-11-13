@@ -24,7 +24,7 @@ export default class SetCasesCommand extends Command {
 		});
 	}
 
-	public exec(message: Message, { cases }: { cases: number }) {
+	public async exec(message: Message, { cases }: { cases: number }) {
 		this.client.settings.set(message.guild, 'caseTotal', cases);
 		return message.util!.reply(`set cases to **${cases}**`);
 	}

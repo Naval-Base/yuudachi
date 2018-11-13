@@ -24,7 +24,7 @@ export default class SetMuteRole extends Command {
 		});
 	}
 
-	public exec(message: Message, { role }: { role: Role }) {
+	public async exec(message: Message, { role }: { role: Role }) {
 		this.client.settings.set(message.guild, 'muteRole', role.id);
 		return message.util!.reply(`set mute role to **${role.name}**`);
 	}

@@ -2,7 +2,7 @@ import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import Util from '../../util';
 import { Case } from '../../models/Cases';
-const ms = require('@naval-base/ms');
+const ms = require('@naval-base/ms'); // tslint:disable-line
 
 export default class DurationCommand extends Command {
 	public constructor() {
@@ -70,9 +70,9 @@ export default class DurationCommand extends Command {
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (dbCase.action_duration) {
-				embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, { 'long': true })}`));
+				embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, { long: true })}`));
 			} else {
-				embed.setDescription(caseEmbed.embeds[0].description.replace(/(\*\*Action:\*\* Mute)/, `$1\n**Length:** ${ms(duration, { 'long': true })}`));
+				embed.setDescription(caseEmbed.embeds[0].description.replace(/(\*\*Action:\*\* Mute)/, `$1\n**Length:** ${ms(duration, { long: true })}`));
 			}
 			await caseEmbed.edit(embed);
 		}

@@ -14,7 +14,7 @@ import { Tag } from '../models/Tags';
 import { Counter, collectDefaultMetrics, register } from 'prom-client';
 import { createServer } from 'http';
 import { parse } from 'url';
-const Raven = require('raven');
+const Raven = require('raven'); // tslint:disable-line
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
@@ -23,8 +23,8 @@ declare module 'discord-akairo' {
 		settings: TypeORMProvider;
 		commandHandler: CommandHandler;
 		config: YukikazeOptions;
-		webhooks: Collection<string, Webhook>
-		cachedCases: Set<string>
+		webhooks: Collection<string, Webhook>;
+		cachedCases: Set<string>;
 		muteScheduler: MuteScheduler;
 		remindScheduler: RemindScheduler;
 		prometheus: {

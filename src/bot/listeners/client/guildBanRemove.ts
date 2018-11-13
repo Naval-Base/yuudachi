@@ -15,7 +15,7 @@ export default class GuildBanRemoveListener extends Listener {
 	public async exec(guild: Guild, user: User) {
 		if (!this.client.settings.get(guild, 'moderation', undefined)) return;
 		if (this.client.cachedCases.delete(`${guild.id}:${user.id}:UNBAN`)) return;
-		const totalCases = this.client.settings.get(guild, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get(guild, 'caseTotal', 0) as number + 1;
 		this.client.settings.set(guild, 'caseTotal', totalCases);
 		const modLogChannel = this.client.settings.get(guild, 'modLogChannel', undefined);
 		let modMessage;

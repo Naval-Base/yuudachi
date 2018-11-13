@@ -18,7 +18,7 @@ export default class GuildMemberAddListener extends Listener {
 			const user = await roleStateRepo.findOne({ guild: member.guild.id, user: member.id });
 			try {
 				if (user && member.roles) await member.roles.add(user.roles, 'Automatic role state');
-			} catch {}
+			} catch {} // tslint:disable-line
 		}
 	}
 }

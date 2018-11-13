@@ -49,24 +49,29 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			let actionName;
 			let action: number;
 			let processed = true;
-			if (role.id === muteRole) {
-				actionName = 'Mute';
-				action = Util.CONSTANTS.ACTIONS.MUTE;
-				processed = false;
-			} else if (role.id === restrictRoles.embed) {
-				actionName = 'Embed restriction';
-				action = Util.CONSTANTS.ACTIONS.EMBED;
-			} else if (role.id === restrictRoles.emoji) {
-				actionName = 'Emoji restriction';
-				action = Util.CONSTANTS.ACTIONS.EMOJI;
-			} else if (role.id === restrictRoles.reaction) {
-				actionName = 'Reaction restriction';
-				action = Util.CONSTANTS.ACTIONS.REACTION;
-			} else {
-				return;
+			switch (role.id) {
+				case muteRole:
+					actionName = 'Mute';
+					action = Util.CONSTANTS.ACTIONS.MUTE;
+					processed = false;
+					break;
+				case restrictRoles.embed:
+					actionName = 'Embed restriction';
+					action = Util.CONSTANTS.ACTIONS.EMBED;
+					break;
+				case restrictRoles.emoji:
+					actionName = 'Emoji restriction';
+					action = Util.CONSTANTS.ACTIONS.EMOJI;
+					break;
+				case restrictRoles.reaction:
+					actionName = 'Reaction restriction';
+					action = Util.CONSTANTS.ACTIONS.REACTION;
+					break;
+				default:
+					return;
 			}
 
-			const totalCases = this.client.settings.get(newMember.guild, 'caseTotal', 0) + 1;
+			const totalCases = this.client.settings.get(newMember.guild, 'caseTotal', 0) as number + 1;
 			this.client.settings.set(newMember.guild, 'caseTotal', totalCases);
 
 			let modMessage;

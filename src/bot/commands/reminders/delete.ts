@@ -37,7 +37,7 @@ export default class ReminderDeleteCommand extends Command {
 		if (!reminders.length) return message.util!.reply('you have no ongoing reminders!');
 
 		while (reminders.length) {
-			await message.util!.send(Util.reminderEmbed(message, reminders).setFooter(`Send a message with the reminder's number to delete it or \`cancel\` to cancel`));
+			await message.util!.send(Util.reminderEmbed(message, reminders).setFooter('Send a message with the reminder\'s number to delete it or \`cancel\` to cancel'));
 
 			const messages = await message.channel.awaitMessages(
 				m => m.author.id === message.author.id && ((m.content > 0 && m.content <= reminders.length) || m.content.toLowerCase() === 'cancel'),

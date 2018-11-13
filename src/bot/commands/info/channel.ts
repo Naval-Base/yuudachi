@@ -19,16 +19,16 @@ export default class ChannelInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					'id': 'channel',
-					'match': 'content',
-					'type': 'channel',
-					'default': (message: Message) => message.channel
+					id: 'channel',
+					match: 'content',
+					type: 'channel',
+					default: (message: Message) => message.channel
 				}
 			]
 		});
 	}
 
-	public exec(message: Message, { channel }: { channel: any }) {
+	public async exec(message: Message, { channel }: { channel: any }) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${channel.name}** (ID: ${channel.id})`)

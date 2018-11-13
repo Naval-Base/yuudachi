@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { Reminder } from '../../models/Reminders';
-const ms = require('@naval-base/ms');
+const ms = require('@naval-base/ms'); // tslint:disable-line
 
 const REMINDER_LIMIT = 15;
 

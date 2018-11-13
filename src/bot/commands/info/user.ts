@@ -19,20 +19,21 @@ export default class UserInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					'id': 'member',
-					'match': 'content',
-					'type': 'member',
-					'default': (message: Message) => message.member
+					id: 'member',
+					match: 'content',
+					type: 'member',
+					default: (message: Message) => message.member
 				}
 			]
 		});
 	}
 
-	public exec(message: Message, { member }: { member: GuildMember }) {
+	public async exec(message: Message, { member }: { member: GuildMember }) {
 		const { user } = member;
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${user.tag}** (ID: ${member.id})`)
+			/* tslint:disable:triple-equals */
 			.addField(
 				'❯ Member Details',
 				stripIndents`
@@ -41,6 +42,7 @@ export default class UserInfoCommand extends Command {
 				• Joined at: ${moment.utc(member.joinedAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
 			)
+			/* tslint:enable:triple-equals */
 			.addField(
 				'❯ User Details',
 				stripIndents`

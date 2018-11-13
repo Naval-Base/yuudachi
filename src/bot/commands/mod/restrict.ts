@@ -37,13 +37,9 @@ export default class RestrictCommand extends Command {
 					type: ['embed', 'embeds', 'image', 'images', 'img', 'emoji', 'reaction', 'react']
 				},
 				{
-					'id': 'rest',
-					'match': 'rest',
-					'default': '',
-					'prompt': {
-						start: (message: Message) => `${message.author}, `,
-						retry: (message: Message) => `${message.author}, `
-					}
+					id: 'rest',
+					match: 'rest',
+					default: ''
 				}
 			]
 		});

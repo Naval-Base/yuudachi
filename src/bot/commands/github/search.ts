@@ -1,4 +1,4 @@
-import { Argument, Command } from 'discord-akairo';
+import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import { stripIndents, oneLine } from 'common-tags';
@@ -24,9 +24,9 @@ export default class GitHubSearchCommand extends Command {
 					type: 'string'
 				},
 				{
-					'id': 'commit',
-					'type': 'string',
-					'default': ''
+					id: 'commit',
+					type: 'string',
+					default: ''
 				}
 			]
 		});
@@ -113,13 +113,13 @@ export default class GitHubSearchCommand extends Command {
 		let repository = repo.split('/')[1];
 		if (!repository) return;
 		[repository] = repository.split('#');
-		const number = repo.split('#')[1];
-		if (!number) return;
+		const num = repo.split('#')[1];
+		if (!num) return;
 		const query = `
 			{
 				repository(owner: "${owner}", name: "${repository}") {
 					name
-					issueOrPullRequest(number: ${number}) {
+					issueOrPullRequest(number: ${num}) {
 						... on PullRequest {
 							comments {
 								totalCount

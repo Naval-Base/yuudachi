@@ -22,7 +22,7 @@ export default class HelpCommand extends Command {
 		});
 	}
 
-	public exec(message: Message, { command }: { command: Command }) {
+	public async exec(message: Message, { command }: { command: Command }) {
 		// @ts-ignore
 		const prefix = this.handler.prefix(message);
 		if (!command) {

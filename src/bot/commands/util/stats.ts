@@ -4,7 +4,7 @@ import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
 
-const { version } = require('../../../../package.json');
+const { version } = require('../../../../package.json'); // tslint:disable-line
 
 export default class StatsCommand extends Command {
 	public constructor() {
@@ -19,7 +19,7 @@ export default class StatsCommand extends Command {
 		});
 	}
 
-	public exec(message: Message) {
+	public async exec(message: Message) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`**${this.client.user!.username} Statistics**`)
