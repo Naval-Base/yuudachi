@@ -3452,10 +3452,10 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typeorm@^0.2.8:
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.8.tgz#b8f7e0809ad7b2c03c03ff101fadf1b90e4083a3"
-  integrity sha512-MvMwi3Qd1nTBMZsohOy9Pb7eHFXY+YRtPdG90ayfPeC7z2DJXE0gOF8zAKUlxLy1+Dyyq/tOQS+LY/4/6yI/3A==
+typeorm@^0.2.9:
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.9.tgz#b21a55f4c7ae398c104911e298485c232bcceefc"
+  integrity sha512-guvrl5TH85N0y1AdPRuCrs2OTRQqs1wVgM+GrMfaiAGF8X+EoHDTUg2SPmcGtoAOSg7CnrCPxxwKOH4VvBr5Tw==
   dependencies:
     app-root-path "^2.0.1"
     buffer "^5.1.0"
