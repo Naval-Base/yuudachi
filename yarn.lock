@@ -53,10 +53,10 @@
   resolved "https://registry.yarnpkg.com/@types/node-emoji/-/node-emoji-1.8.0.tgz#6bc88a880cdcb3c165e2828d056db242e8829a8b"
   integrity sha512-+LiY4f3HMAgQGjte8Lg4K6xpTR+glwZolVrreU+ShACr6H/IzYN1VQAitHVeQrNKgZeuOegxE3IACh7Jo2qk0w==
 
-"@types/node-fetch@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.1.2.tgz#8c5da14d70321e4c4ecd5db668e3f93cf6c7399f"
-  integrity sha512-XroxUzLpKuL+CVkQqXlffRkEPi4Gh3Oui/mWyS7ztKiyqVxiU+h3imCW5I2NQmde5jK+3q++36/Q96cyRWsweg==
+"@types/node-fetch@^2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.1.3.tgz#80538fbaee61bdc01449f4e00a11e11291e52dec"
+  integrity sha512-3P5f1st1wfjtA97KxQNK8ul1y+bM0b/+bMVPl3anPsdmOm794CQh3lRzphlFqTcJP01NtYDda/F/pbSbYUChmQ==
   dependencies:
     "@types/node" "*"
 
