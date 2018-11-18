@@ -1,6 +1,6 @@
 import { Command } from 'discord-akairo';
 import { Message, TextChannel } from 'discord.js';
-import fetch from 'node-fetch';
+import * as fetch from 'node-fetch';
 import * as qs from 'querystring';
 
 export default class DocsCommand extends Command {

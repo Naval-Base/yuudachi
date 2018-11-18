@@ -1,6 +1,6 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
+import * as fetch from 'node-fetch';
 import * as qs from 'querystring';
 const Turndown = require('turndown'); // tslint:disable-line
 
