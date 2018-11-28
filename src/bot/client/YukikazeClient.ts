@@ -58,7 +58,7 @@ export default class YukikazeClient extends AkairoClient {
 					format.json()
 				),
 				level: 'debug',
-				filename: 'haruna-%DATE%.log',
+				filename: 'yukikaze-%DATE%.log',
 				maxFiles: '14d'
 			})
 		]
