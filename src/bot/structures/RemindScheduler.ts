@@ -20,7 +20,7 @@ export default class RemindScheduler {
 		this.checkRate = checkRate;
 	}
 
-	public async addReminder(reminder: any) {
+	public async addReminder(reminder: Reminder) {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const rmd = new Reminder();
 		rmd.user = reminder.user;
@@ -40,7 +40,7 @@ export default class RemindScheduler {
 		return this.queuedSchedules.delete(id);
 	}
 
-	public async deleteReminder(reminder: any) {
+	public async deleteReminder(reminder: Reminder) {
 		const schedule = this.queuedSchedules.get(reminder.id);
 		if (schedule) clearTimeout(schedule);
 		this.queuedSchedules.delete(reminder.id);
@@ -49,13 +49,13 @@ export default class RemindScheduler {
 		return deleted;
 	}
 
-	public queueReminder(reminder: any) {
+	public queueReminder(reminder: Reminder) {
 		this.queuedSchedules.set(reminder.id, setTimeout(() => {
 			this.runReminder(reminder);
 		}, reminder.triggers_at.getTime() - Date.now()));
 	}
 
-	public async runReminder(reminder: any) {
+	public async runReminder(reminder: Reminder) {
 		try {
 			const reason = reminder.reason || `${reminder.channel ? 'y' : 'Y'}ou wanted me to remind you around this time!`;
 			const content = `${reminder.channel ? `<@${reminder.user}>, ` : ''} ${reason}\n\n<${reminder.trigger}>`;
@@ -68,13 +68,13 @@ export default class RemindScheduler {
 				if (!this.client.shard || this.client.shard.id === 0) await user.send(content);
 			}
 		} catch (error) {
-			this.client.logger.error(error);
+			this.client.logger.error(`[REMINDER ERROR] ${error.message}`, error.stack);
 		}
 
 		try {
 			await this.deleteReminder(reminder);
 		} catch (error) {
-			this.client.logger.error(error);
+			this.client.logger.error(`[REMINDER ERROR] ${error.message}`, error.stack);
 		}
 	}
 

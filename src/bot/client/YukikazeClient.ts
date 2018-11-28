@@ -2,6 +2,7 @@ import { join } from 'path';
 import { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } from 'discord-akairo';
 import { Collection, Message, Util, Webhook } from 'discord.js';
 import { Logger, createLogger, transports, format } from 'winston';
+import * as DailyRotateFile from 'winston-daily-rotate-file';
 import database from '../structures/Database';
 import TypeORMProvider from '../structures/SettingsProvider';
 import MuteScheduler from '../structures/MuteScheduler';
@@ -42,11 +43,25 @@ interface YukikazeOptions {
 export default class YukikazeClient extends AkairoClient {
 	public logger = createLogger({
 		format: format.combine(
-			format.colorize({ all: true }),
+			format.colorize({ level: true }),
 			format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
-			format.printf(info => `[${info.timestamp}] ${info.level}: ${info.message}`)
+			format.printf((info: any) => {
+				const { timestamp, level, message, ...rest } = info;
+				return `[${timestamp}] ${level}: ${message}${Object.keys(rest).length ? `\n${JSON.stringify(rest, null, 2)}` : ''}`;
+			})
 		),
-		transports: [new transports.Console()]
+		transports: [
+			new transports.Console({ level: 'info' }),
+			new DailyRotateFile({
+				format: format.combine(
+					format.timestamp(),
+					format.json()
+				),
+				level: 'debug',
+				filename: 'haruna-%DATE%.log',
+				maxFiles: '14d'
+			})
+		]
 	});
 
 	public db!: Connection;
@@ -160,7 +175,7 @@ export default class YukikazeClient extends AkairoClient {
 				release: '0.1.0'
 			}).install();
 		} else {
-			process.on('unhandledRejection', this.logger.error);
+			process.on('unhandledRejection', err => this.logger.error(`[UNHANDLED REJECTION] ${err.message}`, err.stack));
 		}
 
 		if (process.env.LOGS) {

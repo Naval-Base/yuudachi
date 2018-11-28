@@ -48,7 +48,7 @@ export default class ReminderDeleteCommand extends Command {
 
 			const index = parseInt(messages.first()!.content, 10) - 1;
 			const reminder = reminders.splice(index, 1)[0];
-			await this.client.remindScheduler.deleteReminder(reminder.id);
+			await this.client.remindScheduler.deleteReminder(reminder);
 		}
 
 		return message.util!.send('Welp, looks like all of your reminders are gone!');

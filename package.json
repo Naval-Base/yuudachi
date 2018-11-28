@@ -29,7 +29,8 @@
 		"reflect-metadata": "^0.1.12",
 		"turndown": "^5.0.1",
 		"typeorm": "^0.2.9",
-		"winston": "^3.1.0"
+		"winston": "^3.1.0",
+		"winston-daily-rotate-file": "^3.5.1"
 	},
 	"devDependencies": {
 		"@types/common-tags": "^1.4.0",

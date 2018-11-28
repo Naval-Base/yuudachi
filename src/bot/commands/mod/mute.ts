@@ -98,6 +98,7 @@ export default class MuteCommand extends Command {
 
 		await this.client.muteScheduler.addMute({
 			guild: message.guild.id,
+			// @ts-ignore
 			message: modMessage ? modMessage.id : null,
 			case_id: totalCases,
 			target_id: member.id,

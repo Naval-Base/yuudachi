@@ -15,7 +15,8 @@
 		"sourceMap": true,
 		"removeComments": false,
 		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true
+		"emitDecoratorMetadata": true,
+		"alwaysStrict": true
 	},
 	"include": [
 		"./src"

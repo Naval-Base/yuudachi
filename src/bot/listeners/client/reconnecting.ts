@@ -10,6 +10,6 @@ export default class ReconnectListener extends Listener {
 	}
 
 	public exec() {
-		this.client.logger.info("Come at me if you don't value your life!");
+		this.client.logger.info("[RECONNECTING] Come at me if you don't value your life!");
 	}
 }

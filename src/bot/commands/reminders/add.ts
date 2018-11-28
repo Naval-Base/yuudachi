@@ -68,9 +68,11 @@ export default class ReminderAddCommand extends Command {
 
 		await this.client.remindScheduler.addReminder({
 			user: message.author.id,
+			// @ts-ignore
 			channel: message.channel.type === 'dm' || dm ? null : message.channel.id,
 			reason,
 			trigger: message.url,
+			// @ts-ignore
 			triggers_at: time
 		});
 
