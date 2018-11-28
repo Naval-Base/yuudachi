@@ -10,6 +10,6 @@ export default class DebugListener extends Listener {
 	}
 
 	public exec(event: any) {
-		this.client.logger.warn(`[DEBUG] ${event}`);
+		this.client.logger.debug(`[DEBUG] ${event}`);
 	}
 }
