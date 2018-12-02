@@ -16,7 +16,9 @@
 		"removeComments": false,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"alwaysStrict": true
+		"alwaysStrict": true,
+		"allowSyntheticDefaultImports": true,
+		"pretty": true
 	},
 	"include": [
 		"./src"
