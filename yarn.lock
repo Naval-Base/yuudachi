@@ -31,10 +31,10 @@
   resolved "https://registry.yarnpkg.com/@naval-base/ms/-/ms-2.2.1.tgz#def4aca5147b8c8888f787ae4248888ef68ce5ca"
   integrity sha512-VSphYbfd5wA6Dt4/j1tiUau1g4cBnEozA9oykFOKkhd6EREmBMiCZEc9ceSjqiHZTVJ2dcOypzdoLA63vfduHg==
 
-"@types/common-tags@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@types/common-tags/-/common-tags-1.4.0.tgz#28c1be61e352dde38936018984e2885caef087c1"
-  integrity sha512-HI1tSO87vmd1sPS3DOVSK4gvVKROvCBFvAnXlLiQtAus/+1xXMQcNyu9TX2ChwRXFeQZeB9+f+nMo99xLd5DdA==
+"@types/common-tags@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@types/common-tags/-/common-tags-1.8.0.tgz#79d55e748d730b997be5b7fce4b74488d8b26a6b"
+  integrity sha512-htRqZr5qn8EzMelhX/Xmx142z218lLyGaeZ3YR8jlze4TATRU9huKKvuBmAJEW4LCC4pnY1N6JAm6p85fMHjhg==
 
 "@types/events@*":
   version "1.2.0"

@@ -33,7 +33,7 @@
 		"winston-daily-rotate-file": "^3.5.1"
 	},
 	"devDependencies": {
-		"@types/common-tags": "^1.4.0",
+		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
 		"@types/node": "^10.12.12",
 		"@types/node-emoji": "^1.8.0",
