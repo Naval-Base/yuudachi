@@ -18,7 +18,7 @@
 		"discord-akairo": "1Computer1/discord-akairo",
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^6.2.0",
-		"moment": "^2.22.2",
+		"moment": "^2.23.0",
 		"moment-duration-format": "^2.2.2",
 		"node-emoji": "^1.8.1",
 		"node-fetch": "^2.3.0",
