@@ -59,10 +59,10 @@ export default class ReminderAddCommand extends Command {
 		if (!time) {
 			return message.util!.reply('I can\'t tell what time I\'m supposed to remind you at!');
 		}
-		if (time < Date.now()) {
+		if ((Date.now() + time) < Date.now()) {
 			return message.util!.reply('sorry, I don\'t have access to time travel yet!');
 		}
-		if (time < (Date.now() + 5000)) {
+		if ((Date.now() + time) < (Date.now() + 5000)) {
 			return message.util!.reply('I\'m sure you have better memory than that.');
 		}
 
