@@ -39,7 +39,7 @@
 		"@types/node-emoji": "^1.8.0",
 		"@types/node-fetch": "^2.1.4",
 		"@types/ws": "^6.0.1",
-		"fs-nextra": "^0.3.7",
+		"fs-nextra": "^0.3.8",
 		"gulp": "^4.0.0",
 		"gulp-sourcemaps": "^2.6.4",
 		"gulp-typescript": "^5.0.0",
