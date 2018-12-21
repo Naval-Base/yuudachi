@@ -964,7 +964,8 @@ diff@^3.2.0, diff@^3.5.0:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/89a538be5f70101eea880e81d3fd82d8a90a649a"
+  uid "54ceeeaa0d162b75b87ff4786d75b66b2c8f104c"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/54ceeeaa0d162b75b87ff4786d75b66b2c8f104c"
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
