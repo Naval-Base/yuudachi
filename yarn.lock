@@ -2912,10 +2912,10 @@ process-nextick-args@^2.0.0, process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
   integrity sha512-MtEC1TqN0EU5nephaJ4rAtThHtC86dNN9qCuEhtshvpVBkAW5ZO7BASN9REnF9eoXGcRub+pFuKEpOHE+HbEMw==
 
-prom-client@^11.2.0:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/prom-client/-/prom-client-11.2.0.tgz#4a52b29a6e9960f8b0b27054b87ad37ad120562e"
-  integrity sha512-4gUAq/GR5C8q5eWxOa7tA60AtmkMpbyBd/2btCayvd3h/7HzS0p/kESKRwggJgbFrfdhTCBpOwPAwKiI01Q0VQ==
+prom-client@^11.2.1:
+  version "11.2.1"
+  resolved "https://registry.yarnpkg.com/prom-client/-/prom-client-11.2.1.tgz#486e7817de9b1d43c0a12aee26fc68830f4d1b16"
+  integrity sha512-7VwtjrkQS50NvDoeYNn2z6wzXB5BMGzUlmMOeLPaITtJsTVXnPywRta7QFiV4pKr0fbRx9oDfUcx1xibabjSAg==
   dependencies:
     tdigest "^0.1.1"
 
