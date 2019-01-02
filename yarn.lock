@@ -3873,10 +3873,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeorm@^0.2.10:
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.10.tgz#114592a7591014d2c46ce7754782be0b3c665888"
-  integrity sha512-EdfiqF4eyQDeDvrzddbhV4fcBaoUgLKxbe/dj7jyxyGiHKjSYGihEcHPoBFVXh6bAaT1TIoALx/IUJptWTh/yg==
+typeorm@^0.2.11:
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.11.tgz#d81a295ed822e05043f2920cd539f52a963896b0"
+  integrity sha512-B+lA/LUjIc2MbAElfOxIIx2s+fijdRp0I/4jFGiMVBe61AX9aFz7gI68kk6wdmYFg798c5Oa+76Q1X9WsnqVTQ==
   dependencies:
     app-root-path "^2.0.1"
     buffer "^5.1.0"
