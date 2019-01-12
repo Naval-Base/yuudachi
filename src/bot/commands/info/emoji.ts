@@ -17,6 +17,7 @@ export default class EmojiInfoCommand extends Command {
 				examples: ['🤔', 'thinking_face', '264701195573133315', '<:Thonk:264701195573133315>']
 			},
 			category: 'info',
+			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
 			ratelimit: 2,
 			args: [
