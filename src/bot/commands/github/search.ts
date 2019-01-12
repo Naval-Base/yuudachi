@@ -39,6 +39,7 @@ export default class GitHubSearchCommand extends Command {
 				therefore this command is not available.
 			`);
 		}
+		if (!repo) return;
 		const owner = repo.split('/')[0];
 		if (commit.match(/[a-f0-9]{40}$/i)) {
 			const repository = repo.split('/')[1];
