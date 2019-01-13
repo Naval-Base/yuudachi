@@ -32,6 +32,6 @@ export default class TagDeleteCommand extends Command {
 		const tagsRepo = this.client.db.getRepository(Tag);
 		await tagsRepo.remove(tag);
 
-		return message.util!.reply(`successfully deleted **${tag.name}**.`);
+		return message.util!.reply(`successfully deleted **${tag.name.substring(0, 1900)}**.`);
 	}
 }

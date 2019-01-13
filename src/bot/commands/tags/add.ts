@@ -40,6 +40,9 @@ export default class TagAddCommand extends Command {
 	}
 
 	public async exec(message: Message, { name, content, hoist }: { name: any, content: string, hoist: boolean }) {
+		if (name && name.length >= 1900) {
+			return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
+		}
 		if (content && content.length >= 1950) {
 			return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
@@ -53,6 +56,6 @@ export default class TagAddCommand extends Command {
 		tag.content = content;
 		await tagsRepo.save(tag);
 
-		return message.util!.reply(`leave it to me! A tag with the name **${name}** has been added.`);
+		return message.util!.reply(`leave it to me! A tag with the name **${name.substring(0, 1900)}** has been added.`);
 	}
 }

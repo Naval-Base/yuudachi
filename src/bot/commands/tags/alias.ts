@@ -58,6 +58,9 @@ export default class TagAliasCommand extends Command {
 
 	public async exec(message: Message, { first, second, add, del }: { first: Tag, second: any, add: boolean, del: boolean }) {
 		if (add) {
+			if (second && second.length >= 1900) {
+				return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
+			}
 			first.aliases.push(second);
 		} else if (del) {
 			const index = first.aliases.indexOf(second);
@@ -69,6 +72,6 @@ export default class TagAliasCommand extends Command {
 		first.last_modified = message.author.id;
 		await tagsRepo.save(first);
 
-		return message.util!.reply(`alias ${second} ${add ? 'added to' : 'deleted from'} tag ${first.name}.`);
+		return message.util!.reply(`alias ${second.substring(0, 1900)} ${add ? 'added to' : 'deleted from'} tag ${first.name}.`);
 	}
 }
