@@ -29,7 +29,7 @@
 		"reflect-metadata": "^0.1.13",
 		"turndown": "^5.0.3",
 		"typeorm": "^0.2.12",
-		"winston": "^3.1.0",
+		"winston": "^3.2.0",
 		"winston-daily-rotate-file": "^3.6.0"
 	},
 	"devDependencies": {
