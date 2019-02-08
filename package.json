@@ -35,7 +35,7 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^10.12.21",
+		"@types/node": "^10.12.22",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.1.5",
 		"@types/ws": "^6.0.1",
