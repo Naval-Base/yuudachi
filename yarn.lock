@@ -4182,10 +4182,10 @@ winston-compat@^0.1.4:
     logform "^1.6.0"
     triple-beam "^1.2.0"
 
-winston-daily-rotate-file@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-3.6.0.tgz#93b18c62ee778611494955ed0740f3a3dd67ba19"
-  integrity sha512-J02YBlG+NJkgpcz0xOlziaNUCEXB/Rer9L3h1b3IClzEH/XsGDpttmyxaXN4pECBxkOSTyk2YDFiqGlTIlxmbw==
+winston-daily-rotate-file@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-3.7.0.tgz#23189fe9a7cc01f853e2944fcdaa8f73ebc69895"
+  integrity sha512-ChBpP8HvvA/xu3nzJXw0gsa93r+bLcN449Sceny2qNgQQ4MrlrvilfEXnxNVRoKe71mNdvz2IARXADpYYzBb/w==
   dependencies:
     file-stream-rotator "^0.4.1"
     object-hash "^1.3.0"
