@@ -64,7 +64,7 @@ export default class BanCommand extends Command {
 			} catch {} // tslint:disable-line
 			return;
 		}
-		if (member.roles.has(staffRole)) {
+		if (member.roles && member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 		const key = `${message.guild.id}:${member.id}:BAN`;
