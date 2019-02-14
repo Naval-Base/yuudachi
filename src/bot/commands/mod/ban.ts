@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Argument, Command } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import Util from '../../util';
@@ -20,7 +20,11 @@ export default class BanCommand extends Command {
 			args: [
 				{
 					id: 'member',
-					type: 'member',
+					type: Argument.union('member', async phrase => {
+						const m = await this.client.users.fetch(phrase);
+						if (m) return { id: m.id, user: m };
+						return null;
+					}),
 					prompt: {
 						start: (message: Message) => `${message.author}, what member do you want to ban?`,
 						retry: (message: Message) => `${message.author}, please mention a member.`

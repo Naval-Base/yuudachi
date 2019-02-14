@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Argument, Command } from 'discord-akairo';
 import { Message, GuildMember } from 'discord.js';
 import Util from '../../util';
 import { Case } from '../../models/Cases';
@@ -20,7 +20,11 @@ export default class HistoryCommand extends Command {
 				{
 					id: 'member',
 					match: 'content',
-					type: 'member',
+					type: Argument.union('member', async phrase => {
+						const m = await this.client.users.fetch(phrase);
+						if (m) return { id: m.id, user: m };
+						else return null;
+					}),
 					default: (message: Message) => message.member
 				}
 			]
