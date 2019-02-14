@@ -17,7 +17,7 @@ export default class EvalCommand extends Command {
 		super('eval', {
 			aliases: ['eval'],
 			description: {
-				content: 'Prohibit/Allow a user from using Yukikaze.',
+				content: 'You can\'t use this anyway, so why explain.',
 				usage: '<code>'
 			},
 			category: 'util',

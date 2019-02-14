@@ -21,7 +21,7 @@ export default class PingCommand extends Command {
 		super('ping', {
 			aliases: ['ping'],
 			description: {
-				content: "Checks the bot's ping to the Discord server."
+				content: "Checks the bot's ping to the Discord servers."
 			},
 			category: 'util',
 			ratelimit: 2

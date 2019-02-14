@@ -115,7 +115,7 @@ export default class YukikazeClient extends AkairoClient {
 			disabledEvents: ['TYPING_START']
 		});
 
-		this.on('message', message => {
+		this.on('message', () => {
 			this.prometheus.messagesCounter.inc();
 		});
 
