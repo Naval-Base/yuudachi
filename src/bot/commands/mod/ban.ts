@@ -108,8 +108,12 @@ export default class BanCommand extends Command {
 			} catch {} // tslint:disable-line
 			await member.ban({ days, reason: `Banned by ${message.author.tag} | Case #${totalCases}` });
 		} catch (error) {
-			this.client.cachedCases.delete(key);
-			return message.reply(`there was an error banning this member: \`${error}\``);
+			try {
+				await message.guild.members.ban(member.id, { days, reason: `Banned by ${message.author.tag} | Case #${totalCases}` });
+			} catch (error) {
+				this.client.cachedCases.delete(key);
+				return message.reply(`there was an error banning this member: \`${error}\``);
+			}
 		}
 
 		this.client.settings.set(message.guild, 'caseTotal', totalCases);
