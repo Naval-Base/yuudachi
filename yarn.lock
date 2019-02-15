@@ -997,8 +997,8 @@ discord-akairo@1Computer1/discord-akairo:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  uid "5c3f5d704840fca3888264e19eb38d88977304ea"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/5c3f5d704840fca3888264e19eb38d88977304ea"
+  uid "0564c5c777cfd2391261417a2047d4d7f92474ca"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/0564c5c777cfd2391261417a2047d4d7f92474ca"
   dependencies:
     form-data "^2.3.3"
     node-fetch "^2.3.0"
