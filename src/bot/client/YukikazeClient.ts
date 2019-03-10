@@ -175,7 +175,7 @@ export default class YukikazeClient extends AkairoClient {
 				release: '0.1.0'
 			}).install();
 		} else {
-			process.on('unhandledRejection', err => this.logger.error(`[UNHANDLED REJECTION] ${err.message}`, err.stack));
+			process.on('unhandledRejection', (err: any) => this.logger.error(`[UNHANDLED REJECTION] ${err.message}`, err.stack));
 		}
 
 		if (process.env.LOGS) {
