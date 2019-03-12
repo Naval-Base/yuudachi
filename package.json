@@ -16,7 +16,7 @@
 		"common-tags": "^1.8.0",
 		"diff": "^4.0.1",
 		"discord-akairo": "1Computer1/discord-akairo",
-		"discord.js": "discordjs/discord.js",
+		"discord.js": "discordjs/discord.js#0d265d2ab168919212295e2eeaea37fa55e6fd25",
 		"dotenv": "^6.2.0",
 		"moment": "^2.24.0",
 		"moment-duration-format": "^2.2.2",
@@ -28,7 +28,7 @@
 		"raven": "^2.6.4",
 		"reflect-metadata": "^0.1.13",
 		"turndown": "^5.0.3",
-		"typeorm": "^0.2.14",
+		"typeorm": "^0.2.15-rc.2",
 		"winston": "^3.2.1",
 		"winston-daily-rotate-file": "^3.8.0"
 	},
