@@ -17,7 +17,7 @@
 		"diff": "^4.0.1",
 		"discord-akairo": "1Computer1/discord-akairo",
 		"discord.js": "discordjs/discord.js#0d265d2ab168919212295e2eeaea37fa55e6fd25",
-		"dotenv": "^6.2.0",
+		"dotenv": "^7.0.0",
 		"moment": "^2.24.0",
 		"moment-duration-format": "^2.2.2",
 		"node-emoji": "^1.10.0",
