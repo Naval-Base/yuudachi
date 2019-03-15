@@ -73,6 +73,11 @@
     "@types/events" "*"
     "@types/node" "*"
 
+"@types/zen-observable@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.0.tgz#8b63ab7f1aa5321248aad5ac890a485656dcea4d"
+  integrity sha512-te5lMAWii1uEJ4FwLjzdlbw3+n0FZNOvFXHxQDKeT0dilh7HOzdMzV2TrJVUzq8ep7J4Na8OUYPRLSQkJHAlrg==
+
 abab@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.0.tgz#aba0ab4c5eee2d4c79d3487d85450fb2376ebb0f"
@@ -3935,11 +3940,12 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeorm@^0.2.15-rc.2:
-  version "0.2.15-rc.2"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.15-rc.2.tgz#67b085ef9f249e86592eb68d56f14c6cceb400d8"
-  integrity sha512-8RDnsi77Xed0V/d6tH8wTJYpOhvGk6xUTzlke0XRO4zyrX/KEd2kSBZ4lRwwavhpYFNQr3BsKq6ArU/xC7EF+A==
+typeorm@^0.3.0-alpha.23:
+  version "0.3.0-alpha.23"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.3.0-alpha.23.tgz#57a82b7b587fb34b96c871d8a1da60d0f287211b"
+  integrity sha512-TN9CvGYM3tTeVamf7FGK4wQ0xzSLA4R7pmSXorVp2Z5WAWuTDg4PcBYGHRfdnmD+G6Qge6MWFNe1cFmqhQmwyg==
   dependencies:
+    "@types/zen-observable" "^0.8.0"
     app-root-path "^2.0.1"
     buffer "^5.1.0"
     chalk "^2.4.2"
@@ -3954,6 +3960,7 @@ typeorm@^0.2.15-rc.2:
     xml2js "^0.4.17"
     yargonaut "^1.1.2"
     yargs "^13.2.1"
+    zen-observable "^0.8.9"
 
 typescript@^3.3.3333:
   version "3.3.3333"
@@ -4389,6 +4396,11 @@ yargs@^7.1.0:
     which-module "^1.0.0"
     y18n "^3.2.1"
     yargs-parser "^5.0.0"
+
+zen-observable@^0.8.9:
+  version "0.8.13"
+  resolved "https://registry.yarnpkg.com/zen-observable/-/zen-observable-0.8.13.tgz#a9f1b9dbdfd2d60a08761ceac6a861427d44ae2e"
+  integrity sha512-fa+6aDUVvavYsefZw0zaZ/v3ckEtMgCFi30sn91SEZea4y/6jQp05E3omjkX91zV6RVdn15fqnFZ6RKjRGbp2g==
 
 zlib-sync@^0.1.4:
   version "0.1.4"
