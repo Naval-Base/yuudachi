@@ -23,7 +23,7 @@ export default class GitHubCommitCommand extends Command {
 				{
 					id: 'commit',
 					match: 'content',
-					type: Argument.validate('string', str => str.length >= 40)
+					type: Argument.validate('string', (_, str) => str.length >= 40)
 				}
 			]
 		});

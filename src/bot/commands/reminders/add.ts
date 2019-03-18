@@ -19,7 +19,7 @@ export default class ReminderAddCommand extends Command {
 			args: [
 				{
 					id: 'time',
-					type: str => {
+					type: (_, str) => {
 						if (!str) return null;
 						const duration = ms(str);
 						if (duration && duration >= 300000 && !isNaN(duration)) return duration;

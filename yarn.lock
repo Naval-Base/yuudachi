@@ -318,9 +318,9 @@ async-done@^1.2.0, async-done@^1.2.2:
     stream-exhaust "^1.0.1"
 
 async-each@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
-  integrity sha1-GdOGodntxufByF04iu28xW0zYC0=
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.2.tgz#8b8a7ca2a658f927e9f307d6d1a42f4199f0f735"
+  integrity sha512-6xrbvN0MOBKSJDdonmSSz2OwFSgxRaVtBDes26mj9KIGtDo+g9xosFRSC+i1gQh2oAN/tQ62AI/pGZGQjVOiRg==
 
 async-limiter@~1.0.0:
   version "1.0.0"
@@ -996,13 +996,13 @@ diff@^4.0.1:
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.1.tgz#0c667cb467ebbb5cea7f14f135cc2dba7780a8ff"
   integrity sha512-s2+XdvhPCOF01LRQBC8hf4vhbVmI2CGS5aZnxLJlT5FtdhPCDFq80q++zK2KlrVorVDdL5BOGZ/VfLrVtYNF+Q==
 
-discord-akairo@1Computer1/discord-akairo:
+discord-akairo@1Computer1/discord-akairo#parsers:
   version "8.0.0-beta.1"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/0f92d696e9db0d76ebde3b9d3cff57dca4b1960c"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/15a1b8beecb852303ee626da3446f2c88ce26ef4"
 
-discord.js@discordjs/discord.js#0d265d2ab168919212295e2eeaea37fa55e6fd25:
+discord.js@discordjs/discord.js#pull/3140/head:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/0d265d2ab168919212295e2eeaea37fa55e6fd25"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/cd8747c06899ce938addac13f893921c3fb7f902"
   dependencies:
     form-data "^2.3.3"
     node-fetch "^2.3.0"
@@ -2477,9 +2477,9 @@ mz@^2.4.0:
     thenify-all "^1.0.0"
 
 nan@^2.1.0, nan@^2.8.0, nan@^2.9.2:
-  version "2.12.1"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.12.1.tgz#7b1aa193e9aa86057e3c7bbd0ac448e770925552"
-  integrity sha512-JY7V6lRkStKcKTvHO5NVSQRv+RV+FIL5pvDoLiAtSL9pKlC5x9PKQcZDsq7m4FO4d57mkhC6Z+QhAh3Jdk5JFw==
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.13.1.tgz#a15bee3790bde247e8f38f1d446edcdaeb05f2dd"
+  integrity sha512-I6YB/YEuDeUZMmhscXKxGgZlFnhsn5y0hgOZBadkzfTRrZBtJDZeg6eQf7PYMIEclwmorTKK8GztsyOUSVBREA==
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -3935,10 +3935,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeorm@^0.2.15-rc.2:
-  version "0.2.15-rc.2"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.15-rc.2.tgz#67b085ef9f249e86592eb68d56f14c6cceb400d8"
-  integrity sha512-8RDnsi77Xed0V/d6tH8wTJYpOhvGk6xUTzlke0XRO4zyrX/KEd2kSBZ4lRwwavhpYFNQr3BsKq6ArU/xC7EF+A==
+typeorm@^0.2.15:
+  version "0.2.15"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.15.tgz#b0cdb4fdc6c38671350135ed72d91d1242e6ea30"
+  integrity sha512-Gpl6fdgb7WLngtuSw2l7dOdOp4jrbVIjlSgpL3P6DX9GKvSzbXmjurmGQ9RRomn+us1Bg+tCYAiSv3j55riplQ==
   dependencies:
     app-root-path "^2.0.1"
     buffer "^5.1.0"

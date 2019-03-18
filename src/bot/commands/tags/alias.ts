@@ -1,4 +1,4 @@
-import { Command, Control } from 'discord-akairo';
+import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { Tag } from '../../models/Tags';
 
@@ -12,48 +12,52 @@ export default class TagAliasCommand extends Command {
 			},
 			channel: 'guild',
 			ratelimit: 2,
-			args: [
-				{
-					id: 'first',
-					type: 'tag',
-					prompt: {
-						start: (message: Message) => `${message.author}, what's the tag you want to alias?`,
-						retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
-					}
-				},
-				{
-					id: 'add',
-					match: 'flag',
-					flag: '--add'
-				},
-				{
-					id: 'del',
-					match: 'flag',
-					flag: '--del'
-				},
-				Control.if((_, args) => args.add, [
-					{
-						id: 'second',
-						match: 'rest',
-						type: 'existingTag',
-						prompt: {
-							start: (message: Message) => `${message.author}, what's the alias you want to apply to this tag?`,
-							retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
-						}
-					}
-				], [
-					{
-						id: 'second',
-						match: 'rest',
-						type: 'string',
-						prompt: {
-							start: (message: Message) => `${message.author}, what's the alias you want to apply to this tag?`,
-							retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
-						}
-					}
-				])
-			]
+			flags: ['--add', '--del']
 		});
+	}
+
+	public *args() {
+		const msg = yield (msg: Message) => msg;
+
+		const first = yield {
+			type: 'tag',
+			prompt: {
+				start: (message: Message) => `${message.author}, what's the tag you want to alias?`,
+				retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
+			}
+		};
+
+		const add = yield {
+			match: 'flag',
+			flag: '--add'
+		};
+
+		const del = yield {
+			match: 'flag',
+			flag: '--del'
+		};
+
+		const second = yield (
+			add ?
+			{
+				match: 'rest',
+				type: 'existingTag',
+				prompt: {
+					start: (message: Message) => `${message.author}, what's the alias you want to apply to this tag?`,
+					retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
+				}
+			} :
+			{
+				match: 'rest',
+				type: 'string',
+				prompt: {
+					start: (message: Message) => `${message.author}, what's the alias you want to remove from this tag?`,
+					retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
+				}
+			}
+		);
+
+		return { first, second, add, del };
 	}
 
 	public async exec(message: Message, { first, second, add, del }: { first: Tag, second: any, add: boolean, del: boolean }) {

@@ -22,7 +22,7 @@ export default class NPMCommand extends Command {
 						start: (message: Message) => `${message.author}, what would you like to search for?`
 					},
 					match: 'content',
-					type: pkg => pkg ? encodeURIComponent(pkg.replace(/ /g, '-')) : null
+					type: (_, pkg) => pkg ? encodeURIComponent(pkg.replace(/ /g, '-')) : null
 				}
 			]
 		});

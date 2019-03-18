@@ -19,7 +19,7 @@ export default class UnbanCommand extends Command {
 			args: [
 				{
 					id: 'user',
-					type: async id => {
+					type: async (_, id) => {
 						const user = await this.client.users.fetch(id);
 						return user;
 					},

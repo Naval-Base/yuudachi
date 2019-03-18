@@ -1,4 +1,4 @@
-import { Command, Control } from 'discord-akairo';
+import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import * as moment from 'moment';
 import { Tag } from '../../models/Tags';
@@ -14,43 +14,47 @@ export default class TagEditCommand extends Command {
 			},
 			channel: 'guild',
 			ratelimit: 2,
-			args: [
-				{
-					id: 'tag',
-					type: 'tag',
-					prompt: {
-						start: (message: Message) => `${message.author}, what tag do you want to edit?`,
-						retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
-					}
-				},
-				{
-					id: 'hoist',
-					match: 'flag',
-					flag: ['--hoist', '--pin']
-				},
-				{
-					id: 'unhoist',
-					match: 'flag',
-					flag: ['--unhoist', '--unpin']
-				},
-				Control.if((_, args) => args.hoist || args.unhoist, [
-					{
-						id: 'content',
-						match: 'rest',
-						type: 'tagContent'
-					}
-				], [
-					{
-						id: 'content',
-						match: 'rest',
-						type: 'tagContent',
-						prompt: {
-							start: (message: Message) => `${message.author}, what should the new content be?`
-						}
-					}
-				])
-			]
+			flags: ['--hoist', '--pin', '--unhoist', '--unpin']
 		});
+	}
+
+	public *args() {
+		const msg = yield (msg: Message) => msg;
+
+		const tag = yield {
+			type: 'tag',
+			prompt: {
+				start: (message: Message) => `${message.author}, what tag do you want to edit?`,
+				retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
+			}
+		};
+
+		const hoist = yield {
+			match: 'flag',
+			flag: ['--hoist', '--pin']
+		};
+
+		const unhoist = yield {
+			match: 'flag',
+			flag: ['--unhoist', '--unpin']
+		};
+
+		const content = yield (
+			hoist || unhoist ?
+			{
+				match: 'rest',
+				type: 'tagContent'
+			} :
+			{
+				match: 'rest',
+				type: 'tagContent',
+				prompt: {
+					start: (message: Message) => `${message.author}, what should the new content be?`
+				}
+			}
+		);
+
+		return { tag, hoist, unhoist, content };
 	}
 
 	public async exec(message: Message, { tag, hoist, unhoist, content }: { tag: Tag, hoist: boolean, unhoist: boolean, content: string }) {
