@@ -19,8 +19,6 @@ export default class TagEditCommand extends Command {
 	}
 
 	public *args() {
-		const msg = yield (msg: Message) => msg;
-
 		const tag = yield {
 			type: 'tag',
 			prompt: {

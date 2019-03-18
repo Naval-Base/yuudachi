@@ -17,8 +17,6 @@ export default class TagAliasCommand extends Command {
 	}
 
 	public *args() {
-		const msg = yield (msg: Message) => msg;
-
 		const first = yield {
 			type: 'tag',
 			prompt: {
