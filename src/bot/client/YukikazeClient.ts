@@ -119,7 +119,7 @@ export default class YukikazeClient extends AkairoClient {
 			this.prometheus.messagesCounter.inc();
 		});
 
-		this.commandHandler.resolver.addType('tag', async (phrase, message) => {
+		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
 			if (!phrase) return null;
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
@@ -138,7 +138,7 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag || null;
 		});
-		this.commandHandler.resolver.addType('existingTag', async (phrase, message) => {
+		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
 			if (!phrase) return null;
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
@@ -157,7 +157,7 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag ? null : phrase;
 		});
-		this.commandHandler.resolver.addType('tagContent', (phrase, message) => {
+		this.commandHandler.resolver.addType('tagContent', (message, phrase) => {
 			if (!phrase) phrase = '';
 			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
