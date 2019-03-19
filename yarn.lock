@@ -998,7 +998,7 @@ diff@^4.0.1:
 
 discord-akairo@1Computer1/discord-akairo#parsers:
   version "8.0.0-beta.1"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/07f4d6cc643ad0e407ac9e46fe41a3d4aa61c182"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/286647a62cc8052d4bfcef60d4f88aa67c56069a"
 
 discord.js@discordjs/discord.js#pull/3140/head:
   version "12.0.0-dev"
