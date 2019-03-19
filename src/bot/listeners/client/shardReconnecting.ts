@@ -9,7 +9,7 @@ export default class ShardReconnectListener extends Listener {
 		});
 	}
 
-	public exec() {
-		this.client.logger.info("[SHARD RECONNECTING] Come at me if you don't value your life!");
+	public exec(id: number) {
+		this.client.logger.info(`[SHARD ${id} RECONNECTING] Come at me if you don't value your life!`);
 	}
 }
