@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler } from 'discord-akairo';
+import { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, Flag } from 'discord-akairo';
 import { Collection, Message, Util, Webhook } from 'discord.js';
 import { Logger, createLogger, transports, format } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
@@ -120,7 +120,7 @@ export default class YukikazeClient extends AkairoClient {
 		});
 
 		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
-			if (!phrase) return null;
+			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
 			// TODO: remove this hack once I figure out how to OR operator this
@@ -136,10 +136,10 @@ export default class YukikazeClient extends AkairoClient {
 				}
 			}); */
 
-			return tag || null;
+			return tag || Flag.fail(phrase);
 		});
 		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
-			if (!phrase) return null;
+			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
 			// TODO: remove this hack once I figure out how to OR operator this
@@ -155,14 +155,14 @@ export default class YukikazeClient extends AkairoClient {
 				}
 			}); */
 
-			return tag ? null : phrase;
+			return tag ? Flag.fail(phrase) : phrase;
 		});
 		this.commandHandler.resolver.addType('tagContent', (message, phrase) => {
 			if (!phrase) phrase = '';
 			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
 
-			return phrase || null;
+			return phrase || Flag.fail(phrase);
 		});
 
 		this.config = config;

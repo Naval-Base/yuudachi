@@ -21,7 +21,7 @@ export default class TagAliasCommand extends Command {
 			type: 'tag',
 			prompt: {
 				start: (message: Message) => `${message.author}, what's the tag you want to alias?`,
-				retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** does not exist.`
+				retry: (message: Message, { failure }: { failure: { data: string } }) => `${message.author}, a tag with the name **${failure.data}** does not exist.`
 			}
 		};
 
