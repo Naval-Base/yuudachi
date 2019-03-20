@@ -35,7 +35,7 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^11.11.3",
+		"@types/node": "^11.11.4",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.1.6",
 		"@types/ws": "^6.0.1",
@@ -46,7 +46,7 @@
 		"merge2": "^1.2.3",
 		"tslint": "^5.14.0",
 		"tslint-config-fire": "^1.0.1",
-		"typescript": "^3.3.3333"
+		"typescript": "^3.3.4000"
 	},
 	"optionalDependencies": {
 		"@discordjs/uws": "^11.149.1",
