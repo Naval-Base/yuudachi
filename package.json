@@ -37,7 +37,7 @@
 		"@types/moment-duration-format": "^2.2.2",
 		"@types/node": "^11.11.4",
 		"@types/node-emoji": "^1.8.1",
-		"@types/node-fetch": "^2.1.6",
+		"@types/node-fetch": "^2.1.7",
 		"@types/ws": "^6.0.1",
 		"fs-nextra": "^0.4.5",
 		"gulp": "^4.0.0",
