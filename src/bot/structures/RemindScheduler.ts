@@ -36,13 +36,13 @@ export default class RemindScheduler {
 
 	public cancelReminder(id: string) {
 		const schedule = this.queuedSchedules.get(id);
-		if (schedule) clearTimeout(schedule);
+		if (schedule) this.client.clearTimeout(schedule);
 		return this.queuedSchedules.delete(id);
 	}
 
 	public async deleteReminder(reminder: Reminder) {
 		const schedule = this.queuedSchedules.get(reminder.id);
-		if (schedule) clearTimeout(schedule);
+		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(reminder.id);
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const deleted = await remindersRepo.remove(reminder);
@@ -50,7 +50,7 @@ export default class RemindScheduler {
 	}
 
 	public queueReminder(reminder: Reminder) {
-		this.queuedSchedules.set(reminder.id, setTimeout(() => {
+		this.queuedSchedules.set(reminder.id, this.client.setTimeout(() => {
 			this.runReminder(reminder);
 		}, reminder.triggers_at.getTime() - Date.now()));
 	}
@@ -80,7 +80,7 @@ export default class RemindScheduler {
 
 	public async init() {
 		await this._check();
-		this.checkInterval = setInterval(this._check.bind(this), this.checkRate);
+		this.checkInterval = this.client.setInterval(this._check.bind(this), this.checkRate);
 	}
 
 	private async _check() {

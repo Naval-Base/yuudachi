@@ -60,13 +60,13 @@ export default class MuteScheduler {
 			} catch {} // tslint:disable-line
 		}
 		const schedule = this.queuedSchedules.get(mute.id);
-		if (schedule) clearTimeout(schedule);
+		if (schedule) this.client.clearTimeout(schedule);
 		return this.queuedSchedules.delete(mute.id);
 	}
 
 	public async deleteMute(mute: Case) {
 		const schedule = this.queuedSchedules.get(mute.id);
-		if (schedule) clearTimeout(schedule);
+		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(mute.id);
 		const casesRepo = this.client.db.getRepository(Case);
 		const deleted = await casesRepo.remove(mute);
@@ -74,7 +74,7 @@ export default class MuteScheduler {
 	}
 
 	public queueMute(mute: Case) {
-		this.queuedSchedules.set(mute.id, setTimeout(() => {
+		this.queuedSchedules.set(mute.id, this.client.setTimeout(() => {
 			this.cancelMute(mute);
 		}, mute.action_duration.getTime() - Date.now()));
 	}
@@ -82,14 +82,14 @@ export default class MuteScheduler {
 	public rescheduleMute(mute: Case) {
 		this.client.logger.info('Rescheduling mute');
 		const schedule = this.queuedSchedules.get(mute.id);
-		if (schedule) clearTimeout(schedule);
+		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(mute.id);
 		this.addMute(mute, true);
 	}
 
 	public async init() {
 		await this._check();
-		this.checkInterval = setInterval(this._check.bind(this), this.checkRate);
+		this.checkInterval = this.client.setInterval(this._check.bind(this), this.checkRate);
 	}
 
 	private async _check() {
