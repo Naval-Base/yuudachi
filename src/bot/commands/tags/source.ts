@@ -24,7 +24,7 @@ export default class TagSourceCommand extends Command {
 					type: 'tag',
 					prompt: {
 						start: (message: Message) => `${message.author}, what tag would you like to see the source of?`,
-						retry: (message: Message, { failure }: { failure: { data: string } }) => `${message.author}, a tag with the name **${failure.data}** does not exist.`
+						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 					}
 				}
 			]
