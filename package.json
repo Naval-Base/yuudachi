@@ -15,7 +15,7 @@
 		"@naval-base/ms": "^2.2.1",
 		"common-tags": "^1.8.0",
 		"diff": "^4.0.1",
-		"discord-akairo": "1Computer1/discord-akairo#parsers",
+		"discord-akairo": "1Computer1/discord-akairo",
 		"discord.js": "discordjs/discord.js#pull/3140/head",
 		"dotenv": "^7.0.0",
 		"moment": "^2.24.0",

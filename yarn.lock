@@ -996,14 +996,13 @@ diff@^4.0.1:
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.1.tgz#0c667cb467ebbb5cea7f14f135cc2dba7780a8ff"
   integrity sha512-s2+XdvhPCOF01LRQBC8hf4vhbVmI2CGS5aZnxLJlT5FtdhPCDFq80q++zK2KlrVorVDdL5BOGZ/VfLrVtYNF+Q==
 
-discord-akairo@1Computer1/discord-akairo#parsers:
-  version "8.0.0-beta.1"
-  uid "383720ce9ede69f5a9b1fa17cf5e867a2881fe64"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/383720ce9ede69f5a9b1fa17cf5e867a2881fe64"
+discord-akairo@1Computer1/discord-akairo:
+  version "8.0.0-beta.2"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/0640acda063ea1239785f463d85f206dec07baf1"
 
 discord.js@discordjs/discord.js#pull/3140/head:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/aa0982b29402974e65453d1b3b88ec9e301201b6"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/b7c09b00fa4ef9c99a6bb00409e0f315877c124c"
   dependencies:
     form-data "^2.3.3"
     node-fetch "^2.3.0"
@@ -2023,9 +2022,9 @@ js-tokens@^3.0.2:
   integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
 
 js-yaml@^3.12.2, js-yaml@^3.7.0:
-  version "3.12.2"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.12.2.tgz#ef1d067c5a9d9cb65bd72f285b5d8105c77f14fc"
-  integrity sha512-QHn/Lh/7HhZ/Twc7vJYQTkjuCa0kaCcDcjK5Zlk2rvnUpy7DxMJ23+Jc2dcyvltwQVg1nygAVlB2oRDFHoRS5Q==
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.13.0.tgz#38ee7178ac0eea2c97ff6d96fff4b18c7d8cf98e"
+  integrity sha512-pZZoSxcCYco+DIKBTimr67J6Hy+EYGZDY/HCWC+iAEA9h1ByhMXAIVUXMcMFpOCxQ/xjXmPI2MkDL5HRm5eFrQ==
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
