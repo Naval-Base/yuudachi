@@ -3,7 +3,7 @@ import { Message, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
 
-const sources = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master']
+const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master'];
 
 export default class DocsCommand extends Command {
 	public constructor() {
@@ -37,7 +37,7 @@ export default class DocsCommand extends Command {
 
 	public async exec(message: Message, { query, force }: { query: any, force: boolean }) {
 		query = query.split(' ');
-		const source = sources.includes(query.slice(-1)[0]) ? query.pop() : 'stable';
+		const source = SOURCES.includes(query.slice(-1)[0]) ? query.pop() : 'stable';
 		const queryString = qs.stringify({ src: source, q: query.join(' '), force });
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?${queryString}`);
 		const embed = await res.json();
