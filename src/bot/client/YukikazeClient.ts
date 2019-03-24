@@ -12,9 +12,10 @@ import { Connection } from 'typeorm';
 import { Case } from '../models/Cases';
 import { Reminder } from '../models/Reminders';
 import { Tag } from '../models/Tags';
-import { Counter, collectDefaultMetrics, register } from 'prom-client';
+import { Counter, register } from 'prom-client';
 import { createServer } from 'http';
 import { parse } from 'url';
+import { Server } from 'net';
 const Raven = require('raven'); // tslint:disable-line
 
 declare module 'discord-akairo' {
@@ -32,6 +33,8 @@ declare module 'discord-akairo' {
 			commandCounter: Counter;
 			lewdcarioAvatarCounter: Counter;
 		};
+
+		promServer: Server;
 	}
 }
 
@@ -104,9 +107,16 @@ export default class YukikazeClient extends AkairoClient {
 		messagesCounter: new Counter({ name: 'yukikaze_messages_total', help: 'Total number of messages Yukikaze has seen' }),
 		commandCounter: new Counter({ name: 'yukikaze_commands_total', help: 'Total number of commands used' }),
 		lewdcarioAvatarCounter: new Counter({ name: 'yukikaze_lewdcario_avatar_total', help: 'Total number of avatar changes from Lewdcario' }),
-		collectDefaultMetrics,
 		register
 	};
+
+	public promServer = createServer((req, res) => {
+		if (parse(req.url!).pathname === '/metrics') {
+			res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
+			res.write(this.prometheus.register.metrics());
+		}
+		res.end();
+	});
 
 	public constructor(config: YukikazeOptions) {
 		super({ ownerID: config.owner }, {
@@ -181,8 +191,6 @@ export default class YukikazeClient extends AkairoClient {
 		if (process.env.LOGS) {
 			this.webhooks = new Collection();
 		}
-
-		this.prometheus.collectDefaultMetrics({ prefix: 'yukikaze_', timeout: 30000 });
 	}
 
 	private async _init() {
@@ -206,16 +214,6 @@ export default class YukikazeClient extends AkairoClient {
 		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();
 		await this.remindScheduler.init();
-	}
-
-	public metrics() {
-		createServer((req, res) => {
-			if (parse(req.url!).pathname === '/metrics') {
-				res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
-				res.write(this.prometheus.register.metrics());
-			}
-			res.end();
-		}).listen(5500);
 	}
 
 	public async start() {
