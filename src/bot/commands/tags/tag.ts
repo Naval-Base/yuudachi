@@ -45,18 +45,7 @@ export default class TagCommand extends Command {
 			},
 			category: 'tags',
 			channel: 'guild',
-			ratelimit: 2,
-			args: [
-				{
-					id: 'method',
-					type: ['show', 'add', 'alias', 'del', 'delete', 'edit', 'source', 'info', 'search', 'list', 'download', 'dl']
-				},
-				{
-					id: 'name',
-					match: 'rest',
-					default: ''
-				}
-			]
+			ratelimit: 2
 		});
 	}
 
