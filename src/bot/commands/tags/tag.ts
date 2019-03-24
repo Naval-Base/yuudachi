@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Command, Flag } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { stripIndents } from 'common-tags';
 
@@ -60,32 +60,32 @@ export default class TagCommand extends Command {
 		});
 	}
 
-	public exec(message: Message, { method, name }: { method: string, name: string }) {
-		if (!method) {
-			// @ts-ignore
-			const prefix = this.handler.prefix(message);
-			return message.util!.send(stripIndents`
-				When you beg me so much I just can't not help you~
-				Check \`${prefix}help tag\` for more information.
+	public *args() {
+		const method = yield {
+			type: [
+				['tag-show', 'show'],
+				['tag-add', 'add'],
+				['tag-alias', 'alias'],
+				['tag-delete', 'del', 'delete'],
+				['tag-edit', 'edit'],
+				['tag-source', 'source'],
+				['tag-info', 'info'],
+				['tag-search', 'search'],
+				['tag-list', 'list'],
+				['tag-download', 'download', 'dl']
+			],
+			otherwise: (msg: Message) => {
+				// @ts-ignore
+				const prefix = this.handler.prefix(msg);
+				return stripIndents`
+					When you beg me so much I just can't not help you~
+					Check \`${prefix}help tag\` for more information.
 
-				Hmph, you probably wanted to use \`${prefix}tag show\` or something!
-			`);
-		}
-		const command = ({
-			show: this.handler.modules.get('tag-show'),
-			add: this.handler.modules.get('tag-add'),
-			alias: this.handler.modules.get('tag-alias'),
-			del: this.handler.modules.get('tag-delete'),
-			delete: this.handler.modules.get('tag-delete'),
-			edit: this.handler.modules.get('tag-edit'),
-			source: this.handler.modules.get('tag-source'),
-			info: this.handler.modules.get('tag-info'),
-			search: this.handler.modules.get('tag-search'),
-			list: this.handler.modules.get('tag-list'),
-			download: this.handler.modules.get('tag-download'),
-			dl: this.handler.modules.get('tag-download')
-		} as { [key: string]: Command })[method];
+					Hmph, you probably wanted to use \`${prefix}tag show\` or something!
+				`;
+			}
+		};
 
-		return this.handler.handleDirectCommand(message, name, command, true);
+		return Flag.continue(method);
 	}
 }

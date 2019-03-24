@@ -998,7 +998,7 @@ diff@^4.0.1:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-beta.4"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/172be48ac0b69877f255dc4f1c7a5a994e86867e"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/3cd7b06ef47ed8e802d0c5a6eec152adc18c5b6c"
 
 discord.js@discordjs/discord.js#pull/3140/head:
   version "12.0.0-dev"
@@ -2477,9 +2477,9 @@ mz@^2.4.0:
     thenify-all "^1.0.0"
 
 nan@^2.1.0, nan@^2.8.0, nan@^2.9.2:
-  version "2.13.1"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.13.1.tgz#a15bee3790bde247e8f38f1d446edcdaeb05f2dd"
-  integrity sha512-I6YB/YEuDeUZMmhscXKxGgZlFnhsn5y0hgOZBadkzfTRrZBtJDZeg6eQf7PYMIEclwmorTKK8GztsyOUSVBREA==
+  version "2.13.2"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.13.2.tgz#f51dc7ae66ba7d5d55e1e6d4d8092e802c9aefe7"
+  integrity sha512-TghvYc72wlMGMVMluVo9WRJc0mB8KxxF/gZ4YYFy7V2ZQX9l7rgbPg7vjS9mt6U5HXODVFVI2bOduCzwOMv/lw==
 
 nanomatch@^1.2.9:
   version "1.2.13"
