@@ -13,9 +13,8 @@ import { Case } from '../models/Cases';
 import { Reminder } from '../models/Reminders';
 import { Tag } from '../models/Tags';
 import { Counter, register } from 'prom-client';
-import { createServer } from 'http';
+import { createServer, Server } from 'http';
 import { parse } from 'url';
-import { Server } from 'net';
 const Raven = require('raven'); // tslint:disable-line
 
 declare module 'discord-akairo' {
