@@ -12,8 +12,8 @@ export default class ReminderAddCommand extends Command {
 			category: 'reminders',
 			description: {
 				content: 'Adds a reminder that triggers at the given time and tells you the given reason.',
-				usage: '[--dm/--pm] <reason> <time>',
-				examples: ['leave in 5 minutes', 'ban Dim in 6 months --dm']
+				usage: '[--dm/--pm] <time> <...reason>',
+				examples: []
 			},
 			ratelimit: 2,
 			args: [
@@ -32,6 +32,7 @@ export default class ReminderAddCommand extends Command {
 				},
 				{
 					id: 'reason',
+					match: 'rest',
 					type: 'string',
 					prompt: {
 						start: (message: Message) => `${message.author}, what do you want me to remind you of?`
@@ -72,7 +73,6 @@ export default class ReminderAddCommand extends Command {
 			channel: message.channel.type === 'dm' || dm ? null : message.channel.id,
 			reason,
 			trigger: message.url,
-			// @ts-ignore
 			triggers_at: new Date(Date.now() + time)
 		});
 
