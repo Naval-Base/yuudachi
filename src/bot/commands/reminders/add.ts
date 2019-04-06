@@ -73,7 +73,7 @@ export default class ReminderAddCommand extends Command {
 			reason,
 			trigger: message.url,
 			// @ts-ignore
-			triggers_at: Date.now() + time
+			triggers_at: new Date(Date.now() + time)
 		});
 
 		return message.util!.reply(`I'll remind you in ${ms(time)}`);
