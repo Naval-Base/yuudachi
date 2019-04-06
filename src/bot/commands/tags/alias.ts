@@ -42,7 +42,7 @@ export default class TagAliasCommand extends Command {
 				type: 'existingTag',
 				prompt: {
 					start: (message: Message) => `${message.author}, what's the alias you want to apply to this tag?`,
-					retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
+					retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
 				}
 			} :
 			{
@@ -50,7 +50,7 @@ export default class TagAliasCommand extends Command {
 				type: 'string',
 				prompt: {
 					start: (message: Message) => `${message.author}, what's the alias you want to remove from this tag?`,
-					retry: (message: Message, _: any, provided: { phrase: string }) => `${message.author}, a tag with the name **${provided.phrase}** already exists.`
+					retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
 				}
 			}
 		);
