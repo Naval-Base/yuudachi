@@ -16,7 +16,7 @@
 		"common-tags": "^1.8.0",
 		"diff": "^4.0.1",
 		"discord-akairo": "1Computer1/discord-akairo",
-		"discord.js": "discordjs/discord.js#pull/3140/head",
+		"discord.js": "discordjs/discord.js",
 		"dotenv": "^7.0.0",
 		"moment": "^2.24.0",
 		"moment-duration-format": "^2.2.2",
