@@ -65,7 +65,7 @@ export default class RemindScheduler {
 				await channel.send(content);
 			} else {
 				const user = await this.client.users.fetch(reminder.user);
-				if (!this.client.shard || this.client.shard.id === 0) await user.send(content);
+				await user.send(content);
 			}
 		} catch (error) {
 			this.client.logger.error(`[REMINDER ERROR] ${error.message}`, error.stack);
