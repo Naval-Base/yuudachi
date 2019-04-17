@@ -1,6 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, GuildMember } from 'discord.js';
 import { stripIndents } from 'common-tags';
+import { Logger } from 'winston';
 
 export default class LaunchCybernukeCommand extends Command {
 	public constructor() {
@@ -20,36 +21,36 @@ export default class LaunchCybernukeCommand extends Command {
 					id: 'join',
 					type: Argument.range('number', 0.1, 120, true),
 					prompt: {
-						start: (message: Message) => `${message.author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
-						retry: (message: Message) => `${message.author}, the minimum is \`0.1\` and the maximum \`120\` minutes.`
+						start: (message: Message): string => `${message.author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
+						retry: (message: Message): string => `${message.author}, the minimum is \`0.1\` and the maximum \`120\` minutes.`
 					}
 				},
 				{
 					id: 'age',
 					type: Argument.range('number', 0.1, Infinity, true),
 					prompt: {
-						start: (message: Message) => `${message.author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
-						retry: (message: Message) => `${message.author}, the minimum is \`0.1\` minutes.`
+						start: (message: Message): string => `${message.author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
+						retry: (message: Message): string => `${message.author}, the minimum is \`0.1\` minutes.`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { join, age }: { join: number, age: number }) {
+	public async exec(message: Message, { join, age }: { join: number; age: number }): Promise<Message | Message[] | null> {
 		await message.util!.send('Calculating targeting parameters for cybernuke...');
-		await message.guild.members.fetch();
+		await message.guild!.members.fetch();
 
 		const memberCutoff = Date.now() - (join * 60000);
 		const ageCutoff = Date.now() - (age * 60000);
-		const members = message.guild.members.filter(
-			member => member.joinedTimestamp > memberCutoff && member.user.createdTimestamp > ageCutoff
+		const members = message.guild!.members.filter(
+			(member): boolean => member.joinedTimestamp! > memberCutoff && member.user.createdTimestamp > ageCutoff
 		);
 
 		await message.util!.send(`Cybernuke will strike ${members.size} members; proceed?`);
 		let statusMessage: Message;
 
-		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
+		const responses = await message.channel.awaitMessages((msg): boolean => msg.author.id === message.author!.id, {
 			max: 1,
 			time: 10000
 		});
@@ -68,51 +69,59 @@ export default class LaunchCybernukeCommand extends Command {
 		}
 
 		const fatalities: GuildMember[] = [];
-		const survivors: { member: GuildMember, error: Error }[] = [];
+		const survivors: { member: GuildMember; error: Error }[] = [];
 		const promises: Promise<any>[] = [];
 
 		for (const member of members.values()) {
+			/* eslint-disable promise/prefer-await-to-then, promise/always-return, promise/prefer-await-to-callbacks */
 			promises.push(
 				member.send(stripIndents`
-					Sorry, but you've been automatically targetted by the cybernuke in the "${message.guild.name}" server.
+					Sorry, but you've been automatically targetted by the cybernuke in the "${message.guild!.name}" server.
 					This means that you have been banned, likely in the case of a server raid.
 					Please contact them if you believe this ban to be in error.
-				`).catch(error => this.client.logger.error(`[CYBERNUKE ERROR] ${error.message}`, error.stack))
-					.then(async () => member.ban())
-					.then(() => {
+				`).catch((error): Logger => this.client.logger.error(`[CYBERNUKE ERROR] ${error.message}`, error.stack))
+					.then(async (): Promise<GuildMember> => member.ban())
+					.then((): void => {
 						fatalities.push(member);
 					})
-					.catch(err => {
+					.catch((err): void => {
 						this.client.logger.error(`[CYBERNUKE ERROR] ${err.message}`, err.stack);
 						survivors.push({
 							member,
 							error: err
 						});
 					})
-					.then(async () => {
+					.then(async (): Promise<void> => {
 						if (members.size <= 5) return;
 						if (promises.length % 5 === 0) {
 							await statusMessage.edit(`Launching cyber nuke (${Math.round(promises.length / members.size * 100)}%)...`);
 						}
 					})
 			);
+			/* eslint-enable promise/prefer-await-to-then, promise/always-return, promise/prefer-await-to-callbacks */
 		}
 
 		await Promise.all(promises);
 		await statusMessage.edit('Cybernuke impact confirmed. Casuality report incoming...');
+		/* eslint-disable @typescript-eslint/indent */
 		await response!.reply(stripIndents`
 			__**Fatalities:**__
 
-			${fatalities.length > 0 ? stripIndents`
-				${fatalities.length} confirmed KIA.
-				${fatalities.map(fat => `**-** ${fat.displayName} (${fat.id})`).join('\n')}
-			` : 'None'}
-			${survivors.length > 0 ? stripIndents`
-				__**Survivors**__
-				${survivors.length} left standing.
-				${survivors.map(srv => `**-** ${srv.member.displayName} (${srv.member.id}): \`${srv.error}\``).join('\n')}
-			` : ''}
+			${fatalities.length > 0
+				? stripIndents`
+					${fatalities.length} confirmed KIA.
+					${fatalities.map((fat): string => `**-** ${fat.displayName} (${fat.id})`).join('\n')}
+				`
+				: 'None'}
+			${survivors.length > 0
+				? stripIndents`
+					__**Survivors**__
+					${survivors.length} left standing.
+					${survivors.map((srv): string => `**-** ${srv.member.displayName} (${srv.member.id}): \`${srv.error}\``).join('\n')}
+				`
+				: ''}
 		`, { split: true });
+		/* eslint-enable @typescript-eslint/indent */
 
 		return null;
 	}

@@ -33,15 +33,15 @@ export default class ReminderCommand extends Command {
 					type: ['add', 'del', 'delete', 'list']
 				},
 				{
-					id: 'name',
-					match: 'rest',
-					default: ''
+					'id': 'name',
+					'match': 'rest',
+					'default': ''
 				}
 			]
 		});
 	}
 
-	public exec(message: Message, { method, name }: { method: string, name: string }) {
+	public async exec(message: Message, { method, name }: { method: string; name: string }): Promise<Message | Message[] | boolean | null> {
 		if (!method) {
 			// @ts-ignore
 			const prefix = this.handler.prefix(message);
@@ -50,13 +50,14 @@ export default class ReminderCommand extends Command {
 				Check \`${prefix}help reminder\` for more information.
 			`);
 		}
+		// eslint-disable-next-line
 		const command = ({
-			add: this.handler.modules.get('reminder-add'),
-			cancel: this.handler.modules.get('reminder-delete'),
-			del: this.handler.modules.get('reminder-delete'),
-			delete: this.handler.modules.get('reminder-delete'),
-			list: this.handler.modules.get('reminder-list')
-		} as { [key: string]: Command } )[method];
+			'add': this.handler.modules.get('reminder-add'),
+			'cancel': this.handler.modules.get('reminder-delete'),
+			'del': this.handler.modules.get('reminder-delete'),
+			'delete': this.handler.modules.get('reminder-delete'),
+			'list': this.handler.modules.get('reminder-list')
+		} as { [key: string]: Command })[method];
 
 		return this.handler.handleDirectCommand(message, name, command, true);
 	}

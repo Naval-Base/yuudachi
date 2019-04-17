@@ -9,7 +9,7 @@
 	"scripts": {
 		"prebuild": "yarn lint",
 		"build": "gulp",
-		"lint": "tslint -p tsconfig.json"
+		"lint": "eslint src --ext .ts"
 	},
 	"dependencies": {
 		"@naval-base/ms": "^2.2.1",
@@ -35,22 +35,27 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^11.13.4",
+		"@types/node": "^11.13.5",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.3.2",
 		"@types/ws": "^6.0.1",
+		"@typescript-eslint/eslint-plugin": "^1.6.0",
+		"@typescript-eslint/parser": "^1.6.0",
+		"eslint": "^5.16.0",
+		"eslint-config-marine": "^2.0.0",
 		"fs-nextra": "^0.4.5",
 		"gulp": "^4.0.0",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
 		"merge2": "^1.2.3",
-		"tslint": "^5.16.0",
-		"tslint-config-fire": "^1.0.1",
 		"typescript": "^3.4.3"
 	},
 	"optionalDependencies": {
 		"@discordjs/uws": "^11.149.1",
 		"erlpack": "discordapp/erlpack",
 		"zlib-sync": "^0.1.4"
+	},
+	"eslintConfig": {
+		"extends": "marine/node"
 	}
 }

@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import Util from '../../util';
-const ms = require('@naval-base/ms'); // tslint:disable-line
+const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class MuteCommand extends Command {
 	public constructor() {
@@ -21,67 +21,67 @@ export default class MuteCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: (message: Message) => `${message.author}, what member do you want to mute?`,
-						retry: (message: Message) => `${message.author}, please mention a member.`
+						start: (message: Message): string => `${message.author}, what member do you want to mute?`,
+						retry: (message: Message): string => `${message.author}, please mention a member.`
 					}
 				},
 				{
 					id: 'duration',
-					type: (_, str) => {
+					type: (_, str): number | null => {
 						if (!str) return null;
 						const duration = ms(str);
 						if (duration && duration >= 300000 && !isNaN(duration)) return duration;
 						return null;
 					},
 					prompt: {
-						start: (message: Message) => `${message.author}, for how long do you want the mute to last?`,
-						retry: (message: Message) => `${message.author}, please use a proper time format.`
+						start: (message: Message): string => `${message.author}, for how long do you want the mute to last?`,
+						retry: (message: Message): string => `${message.author}, please use a proper time format.`
 					}
 				},
 				{
-					id: 'reason',
-					match: 'rest',
-					type: 'string',
-					default: ''
+					'id': 'reason',
+					'match': 'rest',
+					'type': 'string',
+					'default': ''
 				}
 			]
 		});
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
-		const hasStaffRole = message.member.roles.has(staffRole);
+	public userPermissions(message: Message): string | null {
+		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { member, duration, reason }: { member: GuildMember, duration: number, reason: string }) {
-		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
-		if (member.id === message.author.id) return;
+	public async exec(message: Message, { member, duration, reason }: { member: GuildMember; duration: number; reason: string }): Promise<Message | Message[] | void> {
+		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+		if (member.id === message.author!.id) return;
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const muteRole = this.client.settings.get(message.guild, 'muteRole', undefined);
+		const muteRole = this.client.settings.get(message.guild!, 'muteRole', undefined);
 		if (!muteRole) return message.reply('there is no mute role configured on this server.');
 
-		const key = `${message.guild.id}:${member.id}:MUTE`;
+		const key = `${message.guild!.id}:${member.id}:MUTE`;
 		if (this.client.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
 		this.client.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
+		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number + 1;
 
 		try {
-			await member.roles.add(muteRole, `Muted by ${message.author.tag} | Case #${totalCases}`);
+			await member.roles.add(muteRole, `Muted by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client.cachedCases.delete(key);
 			return message.reply(`there was an error muting this member: \`${error}\``);
 		}
 
-		this.client.settings.set(message.guild, 'caseTotal', totalCases);
+		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
 
 		if (!reason) {
 			// @ts-ignore
@@ -89,7 +89,7 @@ export default class MuteCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
-		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
 			const embed = Util.logEmbed({ message, member, action: 'Mute', duration, caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.MUTE);
@@ -97,14 +97,14 @@ export default class MuteCommand extends Command {
 		}
 
 		await this.client.muteScheduler.addMute({
-			guild: message.guild.id,
+			guild: message.guild!.id,
 			// @ts-ignore
 			message: modMessage ? modMessage.id : null,
 			case_id: totalCases,
 			target_id: member.id,
 			target_tag: member.user.tag,
-			mod_id: message.author.id,
-			mod_tag: message.author.tag,
+			mod_id: message.author!.id,
+			mod_tag: message.author!.tag,
 			action: Util.CONSTANTS.ACTIONS.MUTE,
 			action_duration: new Date(Date.now() + duration),
 			action_processed: false,

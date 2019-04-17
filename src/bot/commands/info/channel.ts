@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed } from 'discord.js';
+import { DMChannel, GuildChannel, TextChannel, Message, MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
@@ -19,16 +19,16 @@ export default class ChannelInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					id: 'channel',
-					match: 'content',
-					type: 'channel',
-					default: (message: Message) => message.channel
+					'id': 'channel',
+					'match': 'content',
+					'type': 'channel',
+					'default': (message: Message): GuildChannel | DMChannel => message.channel
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { channel }: { channel: any }) {
+	public async exec(message: Message, { channel }: { channel: TextChannel }): Promise<Message | Message[]> {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${channel.name}** (ID: ${channel.id})`)
@@ -41,7 +41,7 @@ export default class ChannelInfoCommand extends Command {
 				• Creation Date: ${moment.utc(channel.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
 			)
-			.setThumbnail(message.guild.iconURL());
+			.setThumbnail(message.guild!.iconURL());
 
 		return message.util!.send(embed);
 	}

@@ -16,12 +16,12 @@ export default class TagAliasCommand extends Command {
 		});
 	}
 
-	public *args() {
+	public *args(): object {
 		const first = yield {
 			type: 'tag',
 			prompt: {
-				start: (message: Message) => `${message.author}, what's the tag you want to alias?`,
-				retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
+				start: (message: Message): string => `${message.author}, what's the tag you want to alias?`,
+				retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 			}
 		};
 
@@ -36,29 +36,29 @@ export default class TagAliasCommand extends Command {
 		};
 
 		const second = yield (
-			add ?
-			{
-				match: 'rest',
-				type: 'existingTag',
-				prompt: {
-					start: (message: Message) => `${message.author}, what's the alias you want to apply to this tag?`,
-					retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
+			add
+				? {
+					match: 'rest',
+					type: 'existingTag',
+					prompt: {
+						start: (message: Message): string => `${message.author}, what's the alias you want to apply to this tag?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** already exists.`
+					}
 				}
-			} :
-			{
-				match: 'rest',
-				type: 'string',
-				prompt: {
-					start: (message: Message) => `${message.author}, what's the alias you want to remove from this tag?`,
-					retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
+				: {
+					match: 'rest',
+					type: 'string',
+					prompt: {
+						start: (message: Message): string => `${message.author}, what's the alias you want to remove from this tag?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** already exists.`
+					}
 				}
-			}
 		);
 
 		return { first, second, add, del };
 	}
 
-	public async exec(message: Message, { first, second, add, del }: { first: Tag, second: any, add: boolean, del: boolean }) {
+	public async exec(message: Message, { first, second, add, del }: { first: Tag; second: any; add: boolean; del: boolean }): Promise<Message | Message[]> {
 		if (add) {
 			if (second && second.length >= 1900) {
 				return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
@@ -71,7 +71,7 @@ export default class TagAliasCommand extends Command {
 			return message.util!.reply('you have to either supply `--add` or `--del.`');
 		}
 		const tagsRepo = this.client.db.getRepository(Tag);
-		first.last_modified = message.author.id;
+		first.last_modified = message.author!.id;
 		await tagsRepo.save(first);
 
 		return message.util!.reply(`alias ${second.substring(0, 1900)} ${add ? 'added to' : 'deleted from'} tag ${first.name}.`);

@@ -12,20 +12,20 @@ export default class MessageDeleteBulkListener extends Listener {
 		});
 	}
 
-	public exec(messages: Collection<string, Message>) {
-		if (messages.first()!.author.bot) return;
-		const guildLogs = this.client.settings.get(messages.first()!.guild, 'guildLogs', undefined);
+	public async exec(messages: Collection<string, Message>): Promise<Message | Message[] | void> {
+		if (messages.first()!.author!.bot) return;
+		const guildLogs = this.client.settings.get(messages.first()!.guild!, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
-			const output = messages.reduce((out: string, msg) => {
+			const output = messages.reduce((out: string, msg): string => {
 				const attachment = msg.attachments.first();
-				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author.tag} (${msg.author.id}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${attachment ? `\r\n${attachment.url}` : ''}\r\n`;
+				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author!.tag} (${msg.author!.id}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${attachment ? `\r\n${attachment.url}` : ''}\r\n`;
 				return out;
 			}, '');
 			const embed = new MessageEmbed()
 				.setColor(0x824aee)
-				.setAuthor(`${messages.first()!.author.tag} (${messages.first()!.author.id})`, messages.first()!.author.displayAvatarURL())
+				.setAuthor(`${messages.first()!.author!.tag} (${messages.first()!.author!.id})`, messages.first()!.author!.displayAvatarURL())
 				.addField('❯ Logs', 'See attachment file for full logs (possibly above this embed)')
 				.setTimestamp(new Date())
 				.setFooter('Bulk Deleted');

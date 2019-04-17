@@ -22,53 +22,53 @@ export default class KickCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: (message: Message) => `${message.author}, what member do you want to kick?`,
-						retry: (message: Message) => `${message.author}, please mention a member.`
+						start: (message: Message): string => `${message.author}, what member do you want to kick?`,
+						retry: (message: Message): string => `${message.author}, please mention a member.`
 					}
 				},
 				{
-					id: 'reason',
-					match: 'rest',
-					type: 'string',
-					default: ''
+					'id': 'reason',
+					'match': 'rest',
+					'type': 'string',
+					'default': ''
 				}
 			]
 		});
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
-		const hasStaffRole = message.member.roles.has(staffRole);
+	public userPermissions(message: Message): string | null {
+		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { member, reason }: { member: GuildMember, reason: string }) {
-		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
-		if (member.id === message.author.id) return;
+	public async exec(message: Message, { member, reason }: { member: GuildMember; reason: string }): Promise<Message | Message[] | void> {
+		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+		if (member.id === message.author!.id) return;
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0) as number + 1;
+		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number + 1;
 
 		let sentMessage;
 		try {
 			sentMessage = await message.channel.send(`Kicking **${member.user.tag}**...`) as Message;
 			try {
 				await member.send(stripIndents`
-					**You have been kicked from ${message.guild.name}**
+					**You have been kicked from ${message.guild!.name}**
 					${reason ? `\n**Reason:** ${reason}\n` : ''}
 					You may rejoin whenever.
 				`);
-			} catch {} // tslint:disable-line
-			await member.kick(`Kicked by ${message.author.tag} | Case #${totalCases}`);
+			} catch {}
+			await member.kick(`Kicked by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
 			return message.reply('there is no mute role configured on this server.');
 		}
 
-		this.client.settings.set(message.guild, 'caseTotal', totalCases);
+		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
 
 		if (!reason) {
 			// @ts-ignore
@@ -76,7 +76,7 @@ export default class KickCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
-		const modLogChannel = this.client.settings.get(message.guild, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
 			const embed = Util.logEmbed({ message, member, action: 'Kick', caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.KICK);
@@ -85,13 +85,13 @@ export default class KickCommand extends Command {
 
 		const casesRepo = this.client.db.getRepository(Case);
 		const dbCase = new Case();
-		dbCase.guild = message.guild.id;
+		dbCase.guild = message.guild!.id;
 		if (modMessage) dbCase.message = modMessage.id;
 		dbCase.case_id = totalCases;
 		dbCase.target_id = member.id;
 		dbCase.target_tag = member.user.tag;
-		dbCase.mod_id = message.author.id;
-		dbCase.mod_tag = message.author.tag;
+		dbCase.mod_id = message.author!.id;
+		dbCase.mod_tag = message.author!.tag;
 		dbCase.action = Util.CONSTANTS.ACTIONS.KICK;
 		dbCase.reason = reason;
 		await casesRepo.save(dbCase);

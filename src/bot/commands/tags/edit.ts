@@ -18,12 +18,12 @@ export default class TagEditCommand extends Command {
 		});
 	}
 
-	public *args() {
+	public *args(): object {
 		const tag = yield {
 			type: 'tag',
 			prompt: {
-				start: (message: Message) => `${message.author}, what tag do you want to edit?`,
-				retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
+				start: (message: Message): string => `${message.author}, what tag do you want to edit?`,
+				retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 			}
 		};
 
@@ -38,26 +38,26 @@ export default class TagEditCommand extends Command {
 		};
 
 		const content = yield (
-			hoist || unhoist ?
-			{
-				match: 'rest',
-				type: 'tagContent'
-			} :
-			{
-				match: 'rest',
-				type: 'tagContent',
-				prompt: {
-					start: (message: Message) => `${message.author}, what should the new content be?`
+			hoist || unhoist
+				? {
+					match: 'rest',
+					type: 'tagContent'
 				}
-			}
+				: {
+					match: 'rest',
+					type: 'tagContent',
+					prompt: {
+						start: (message: Message): string => `${message.author}, what should the new content be?`
+					}
+				}
 		);
 
 		return { tag, hoist, unhoist, content };
 	}
 
-	public async exec(message: Message, { tag, hoist, unhoist, content }: { tag: Tag, hoist: boolean, unhoist: boolean, content: string }) {
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
-		if (tag.user !== message.author.id && !staffRole) {
+	public async exec(message: Message, { tag, hoist, unhoist, content }: { tag: Tag; hoist: boolean; unhoist: boolean; content: string }): Promise<Message | Message[]> {
+		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
+		if (tag.user !== message.author!.id && !staffRole) {
 			return message.util!.reply('Losers are only allowed to edit their own tags! Hah hah hah!');
 		}
 		if (content && content.length >= 1950) {
@@ -71,7 +71,7 @@ export default class TagEditCommand extends Command {
 			content = Util.cleanContent(content, message);
 			tag.content = content;
 		}
-		tag.last_modified = message.author.id;
+		tag.last_modified = message.author!.id;
 		tag.updatedAt = moment.utc().toDate();
 		await tagRepo.save(tag);
 

@@ -1,6 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
-const diff = require('diff'); // tslint:disable-line
+const diff = require('diff'); // eslint-disable-line
 
 export default class MessageUpdateListener extends Listener {
 	public constructor() {
@@ -11,16 +11,16 @@ export default class MessageUpdateListener extends Listener {
 		});
 	}
 
-	public exec(oldMessage: Message, newMessage: Message) {
-		if (oldMessage.author.bot || newMessage.author.bot) return;
+	public async exec(oldMessage: Message, newMessage: Message): Promise<Message | Message[] | void> {
+		if (oldMessage.author!.bot || newMessage.author!.bot) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
-		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get(newMessage.guild!, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
 			const embed = new MessageEmbed()
 				.setColor(0x306bff)
-				.setAuthor(`${newMessage.author.tag} (${newMessage.author.id})`, newMessage.author.displayAvatarURL())
+				.setAuthor(`${newMessage.author!.tag} (${newMessage.author!.id})`, newMessage.author!.displayAvatarURL())
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
 			if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
