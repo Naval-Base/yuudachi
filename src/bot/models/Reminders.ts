@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
-/* tslint:disable:member-access variable-name */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 
 @Entity('reminders')
 export class Reminder {

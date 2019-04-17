@@ -18,8 +18,8 @@ export default class TagAddCommand extends Command {
 					id: 'name',
 					type: 'existingTag',
 					prompt: {
-						start: (message: Message) => `${message.author}, what should the tag be named?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
+						start: (message: Message): string => `${message.author}, what should the tag be named?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** already exists.`
 					}
 				},
 				{
@@ -27,7 +27,7 @@ export default class TagAddCommand extends Command {
 					match: 'rest',
 					type: 'tagContent',
 					prompt: {
-						start: (message: Message) => `${message.author}, what should the content of the tag be?`
+						start: (message: Message): string => `${message.author}, what should the content of the tag be?`
 					}
 				},
 				{
@@ -39,18 +39,18 @@ export default class TagAddCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { name, content, hoist }: { name: any, content: string, hoist: boolean }) {
+	public async exec(message: Message, { name, content, hoist }: { name: any; content: string; hoist: boolean }): Promise<Message | Message[]> {
 		if (name && name.length >= 1900) {
 			return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
 		if (content && content.length >= 1950) {
 			return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
+		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
 		const tagsRepo = this.client.db.getRepository(Tag);
 		const tag = new Tag();
-		tag.user = message.author.id;
-		tag.guild = message.guild.id;
+		tag.user = message.author!.id;
+		tag.guild = message.guild!.id;
 		tag.name = name;
 		tag.hoisted = hoist && staffRole ? true : false;
 		tag.content = content;

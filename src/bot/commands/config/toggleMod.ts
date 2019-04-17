@@ -15,13 +15,13 @@ export default class ToggleModerationCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message) {
-		const moderation = this.client.settings.get(message.guild, 'moderation', undefined);
+	public async exec(message: Message): Promise<Message | Message[]> {
+		const moderation = this.client.settings.get(message.guild!, 'moderation', undefined);
 		if (moderation) {
-			this.client.settings.set(message.guild, 'moderation', false);
+			this.client.settings.set(message.guild!, 'moderation', false);
 			return message.util!.reply('disabled moderation commands!');
 		}
-		this.client.settings.set(message.guild, 'moderation', true);
+		this.client.settings.set(message.guild!, 'moderation', true);
 
 		return message.util!.reply('activated moderation commands!');
 	}

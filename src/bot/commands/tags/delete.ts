@@ -18,17 +18,17 @@ export default class TagDeleteCommand extends Command {
 					match: 'content',
 					type: 'tag',
 					prompt: {
-						start: (message: Message) => `${message.author}, what tag do you want to delete?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
+						start: (message: Message): string => `${message.author}, what tag do you want to delete?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { tag }: { tag: Tag }) {
-		const staffRole = message.member.roles.has(this.client.settings.get(message.guild, 'modRole', undefined));
-		if (tag.user !== message.author.id && !staffRole) return message.util!.reply('you can only delete your own tags.');
+	public async exec(message: Message, { tag }: { tag: Tag }): Promise<Message | Message[]> {
+		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
+		if (tag.user !== message.author!.id && !staffRole) return message.util!.reply('you can only delete your own tags.');
 		const tagsRepo = this.client.db.getRepository(Tag);
 		await tagsRepo.remove(tag);
 

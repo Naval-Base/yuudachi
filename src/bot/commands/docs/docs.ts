@@ -23,7 +23,7 @@ export default class DocsCommand extends Command {
 					match: 'rest',
 					type: 'lowercase',
 					prompt: {
-						start: (message: Message) => `${message.author}, what would you like to search?`
+						start: (message: Message): string => `${message.author}, what would you like to search?`
 					}
 				},
 				{
@@ -35,16 +35,16 @@ export default class DocsCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { query, force }: { query: any, force: boolean }) {
-		query = query.split(' ');
-		const source = SOURCES.includes(query.slice(-1)[0]) ? query.pop() : 'stable';
-		const queryString = qs.stringify({ src: source, q: query.join(' '), force });
+	public async exec(message: Message, { query, force }: { query: string; force: boolean }): Promise<Message | Message[]> {
+		const q = query.split(' ');
+		const source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : 'stable';
+		const queryString = qs.stringify({ src: source, q: q.join(' '), force });
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?${queryString}`);
 		const embed = await res.json();
 		if (!embed) {
 			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
-		if (message.channel.type === 'dm' || !(message.channel as TextChannel).permissionsFor(message.guild.me)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (message.channel.type === 'dm' || !(message.channel as TextChannel).permissionsFor(message.guild!.me!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 			return message.util!.send({ embed });
 		}
 		const msg = await message.util!.send({ embed }) as Message;
@@ -52,7 +52,7 @@ export default class DocsCommand extends Command {
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
+				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 				{ max: 1, time: 5000, errors: ['time'] }
 			);
 		} catch (error) {

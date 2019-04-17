@@ -24,8 +24,8 @@ export default class SetModRoleCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { role }: { role: Role }) {
-		this.client.settings.set(message.guild, 'modRole', role.id);
+	public async exec(message: Message, { role }: { role: Role }): Promise<Message | Message[]> {
+		this.client.settings.set(message.guild!, 'modRole', role.id);
 		return message.util!.reply(`set moderation role to **${role.name}**`);
 	}
 }

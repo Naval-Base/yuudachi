@@ -3,7 +3,7 @@ import { Message, MessageEmbed, GuildEmoji } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import * as emojis from 'node-emoji';
-const punycode = require('punycode'); // tslint:disable-line
+const punycode = require('punycode'); // eslint-disable-line
 
 const EMOJI_REGEX = /<:\w+:(\d{17,19})>/;
 
@@ -24,21 +24,21 @@ export default class EmojiInfoCommand extends Command {
 				{
 					id: 'emoji',
 					match: 'content',
-					type: (message, content) => {
+					type: async (message, content): Promise<any> => {
 						if (EMOJI_REGEX.test(content)) [, content] = content.match(EMOJI_REGEX)!;
-						if (!isNaN(content as any)) return message.guild.emojis.get(content);
+						if (!isNaN(content as any)) return message.guild!.emojis.get(content);
 						return emojis.find(content);
 					},
 					prompt: {
-						start: (message: Message) => `${message.author}, what emoji would you like information about?`,
-						retry: (message: Message) => `${message.author}, please provide a valid emoji!`
+						start: (message: Message): string => `${message.author}, what emoji would you like information about?`,
+						retry: (message: Message): string => `${message.author}, please provide a valid emoji!`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { emoji }: { emoji: any }) {
+	public async exec(message: Message, { emoji }: { emoji: any }): Promise<Message | Message[]> {
 		const embed = new MessageEmbed()
 			.setColor(3447003);
 
@@ -60,7 +60,7 @@ export default class EmojiInfoCommand extends Command {
 				stripIndents`
 				• Name: \`${emoji.key}\`
 				• Raw: \`${emoji.emoji}\`
-				• Unicode: \`${punycode.ucs2.decode(emoji.emoji).map((e: any) => `\\u${e.toString(16).toUpperCase().padStart(4, '0')}`).join('')}\`
+				• Unicode: \`${punycode.ucs2.decode(emoji.emoji).map((e: any): string => `\\u${e.toString(16).toUpperCase().padStart(4, '0')}`).join('')}\`
 				`
 			);
 		}

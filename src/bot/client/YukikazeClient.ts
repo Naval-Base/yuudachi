@@ -15,7 +15,7 @@ import { Tag } from '../models/Tags';
 import { Counter, register } from 'prom-client';
 import { createServer, Server } from 'http';
 import { parse } from 'url';
-const Raven = require('raven'); // tslint:disable-line
+const Raven = require('raven'); // eslint-disable-line
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
@@ -47,7 +47,7 @@ export default class YukikazeClient extends AkairoClient {
 		format: format.combine(
 			format.colorize({ level: true }),
 			format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
-			format.printf((info: any) => {
+			format.printf((info: any): string => {
 				const { timestamp, level, message, ...rest } = info;
 				return `[${timestamp}] ${level}: ${message}${Object.keys(rest).length ? `\n${JSON.stringify(rest, null, 2)}` : ''}`;
 			})
@@ -72,7 +72,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		directory: join(__dirname, '..', 'commands'),
-		prefix: (message: Message) => this.settings.get(message.guild, 'prefix', process.env.COMMAND_PREFIX),
+		prefix: async (message: Message): Promise<string> => this.settings.get(message.guild!, 'prefix', process.env.COMMAND_PREFIX),
 		aliasReplacement: /-/g,
 		allowMention: true,
 		handleEdits: true,
@@ -81,8 +81,8 @@ export default class YukikazeClient extends AkairoClient {
 		defaultCooldown: 3000,
 		argumentDefaults: {
 			prompt: {
-				modifyStart: (_, str) => `${str}\n\nType \`cancel\` to cancel the command.`,
-				modifyRetry: (_, str) => `${str}\n\nType \`cancel\` to cancel the command.`,
+				modifyStart: (_, str): string => `${str}\n\nType \`cancel\` to cancel the command.`,
+				modifyRetry: (_, str): string => `${str}\n\nType \`cancel\` to cancel the command.`,
 				timeout: 'Guess you took too long, the command has been cancelled.',
 				ended: "More than 3 tries and you still didn't quite get it. The command has been cancelled",
 				cancel: 'The command has been cancelled.',
@@ -112,7 +112,7 @@ export default class YukikazeClient extends AkairoClient {
 		register
 	};
 
-	public promServer = createServer((req, res) => {
+	public promServer = createServer((req, res): void => {
 		if (parse(req.url!).pathname === '/metrics') {
 			res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
 			res.write(this.prometheus.register.metrics());
@@ -127,17 +127,17 @@ export default class YukikazeClient extends AkairoClient {
 			disabledEvents: ['TYPING_START']
 		});
 
-		this.on('message', () => {
+		this.on('message', (): void => {
 			this.prometheus.messagesCounter.inc();
 		});
 
-		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
+		this.commandHandler.resolver.addType('tag', async (message, phrase): Promise<any> => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
 			// TODO: remove this hack once I figure out how to OR operator this
 			const tags = await tagsRepo.find();
-			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
+			const [tag] = tags.filter((t): boolean => t.name === phrase || t.aliases.includes(phrase));
 			/* const tag = await this.db.models.tags.findOne({
 				where: {
 					[Op.or]: [
@@ -150,13 +150,13 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag || Flag.fail(phrase);
 		});
-		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
+		this.commandHandler.resolver.addType('existingTag', async (message, phrase): Promise<any> => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
 			// TODO: remove this hack once I figure out how to OR operator this
 			const tags = await tagsRepo.find();
-			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
+			const [tag] = tags.filter((t): boolean => t.name === phrase || t.aliases.includes(phrase));
 			/* const tag = await this.db.models.tags.findOne({
 				where: {
 					[Op.or]: [
@@ -169,7 +169,7 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag ? Flag.fail(phrase) : phrase;
 		});
-		this.commandHandler.resolver.addType('tagContent', (message, phrase) => {
+		this.commandHandler.resolver.addType('tagContent', async (message, phrase): Promise<any> => {
 			if (!phrase) phrase = '';
 			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
@@ -187,7 +187,7 @@ export default class YukikazeClient extends AkairoClient {
 				release: '0.1.0'
 			}).install();
 		} else {
-			process.on('unhandledRejection', (err: any) => this.logger.error(`[UNHANDLED REJECTION] ${err.message}`, err.stack));
+			process.on('unhandledRejection', (err: any): Logger => this.logger.error(`[UNHANDLED REJECTION] ${err.message}`, err.stack));
 		}
 
 		if (process.env.LOGS) {
@@ -195,7 +195,7 @@ export default class YukikazeClient extends AkairoClient {
 		}
 	}
 
-	private async _init() {
+	private async _init(): Promise<void> {
 		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		this.commandHandler.useListenerHandler(this.listenerHandler);
 		this.listenerHandler.setEmitters({
@@ -218,7 +218,7 @@ export default class YukikazeClient extends AkairoClient {
 		await this.remindScheduler.init();
 	}
 
-	public async start() {
+	public async start(): Promise<string> {
 		await this._init();
 		return this.login(this.config.token);
 	}

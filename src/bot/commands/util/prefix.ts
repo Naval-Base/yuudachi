@@ -22,10 +22,10 @@ export default class PrefixCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { prefix }: { prefix: string }) {
+	public async exec(message: Message, { prefix }: { prefix: string }): Promise<Message | Message[]> {
 		// @ts-ignore
 		if (!prefix) return message.util!.send(`The current prefix for this guild is: \`${this.handler.prefix(message)}\``);
-		this.client.settings.set(message.guild, 'prefix', prefix);
+		this.client.settings.set(message.guild!, 'prefix', prefix);
 		if (prefix === process.env.COMMAND_PREFIX) {
 			return message.util!.reply(`the prefix has been reset to \`${prefix}\``);
 		}

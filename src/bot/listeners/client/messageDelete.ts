@@ -10,17 +10,17 @@ export default class MessageDeleteListener extends Listener {
 		});
 	}
 
-	public exec(message: Message) {
-		if (message.author.bot) return;
+	public async exec(message: Message): Promise<Message | Message[] | void> {
+		if (message.author!.bot) return;
 		if (!message.content) return;
-		const guildLogs = this.client.settings.get(message.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get(message.guild!, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
 			const attachment = message.attachments.first();
 			const embed = new MessageEmbed()
 				.setColor(0x824aee)
-				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
+				.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
 				.addField('❯ Channel', message.channel)
 				.addField('❯ Message', `${message.content.substring(0, 1020)}`);
 			if (attachment) embed.addField('❯ Attachment(s)', attachment.url);

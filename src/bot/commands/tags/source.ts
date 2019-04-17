@@ -23,21 +23,23 @@ export default class TagSourceCommand extends Command {
 					match: 'rest',
 					type: 'tag',
 					prompt: {
-						start: (message: Message) => `${message.author}, what tag would you like to see the source of?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
+						start: (message: Message): string => `${message.author}, what tag would you like to see the source of?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { tag, file }: { tag: Tag, file: boolean }) {
+	public async exec(message: Message, { tag, file }: { tag: Tag; file: boolean }): Promise<Message | Message[]> {
 		return message.util!.send(tag.content, {
 			code: 'md',
-			files: file ? [{
-				attachment: Buffer.from(tag.content.replace(/\n/g, '\r\n'), 'utf8'),
-				name: `${tag.name}_source.txt`
-			}] : undefined
+			files: file
+				? [{
+					attachment: Buffer.from(tag.content.replace(/\n/g, '\r\n'), 'utf8'),
+					name: `${tag.name}_source.txt`
+				}]
+				: undefined
 		});
 	}
 }

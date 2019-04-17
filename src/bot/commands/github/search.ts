@@ -24,15 +24,15 @@ export default class GitHubSearchCommand extends Command {
 					type: 'string'
 				},
 				{
-					id: 'commit',
-					type: 'string',
-					default: ''
+					'id': 'commit',
+					'type': 'string',
+					'default': ''
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { repo, commit }: { repo: string, commit: string }) {
+	public async exec(message: Message, { repo, commit }: { repo: string; commit: string }): Promise<Message | Message[] | void> {
 		if (!GITHUB_API_KEY) {
 			return message.reply(oneLine`
 				my master has not set a valid GitHub API key,
@@ -98,7 +98,7 @@ export default class GitHubSearchCommand extends Command {
 			let react;
 			try {
 				react = await msg.awaitReactions(
-					(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
+					(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 					{ max: 1, time: 10000, errors: ['time'] }
 				);
 			} catch (error) {
@@ -206,7 +206,7 @@ export default class GitHubSearchCommand extends Command {
 			.addField('Type', data.commits ? 'PULL REQUEST' : 'ISSUE', true)
 			.addField(
 				'Labels',
-				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
+				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }): string => node.name) : 'NO LABEL(S)',
 				true
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
@@ -226,7 +226,7 @@ export default class GitHubSearchCommand extends Command {
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
+				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 				{ max: 1, time: 10000, errors: ['time'] }
 			);
 		} catch (error) {

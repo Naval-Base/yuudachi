@@ -12,7 +12,7 @@ export default class GuildBanRemoveListener extends Listener {
 		});
 	}
 
-	public async exec(guild: Guild, user: User) {
+	public async exec(guild: Guild, user: User): Promise<void> {
 		if (!this.client.settings.get(guild, 'moderation', undefined)) return;
 		if (this.client.cachedCases.delete(`${guild.id}:${user.id}:UNBAN`)) return;
 		const totalCases = this.client.settings.get(guild, 'caseTotal', 0) as number + 1;

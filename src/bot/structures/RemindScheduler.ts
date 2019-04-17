@@ -20,7 +20,7 @@ export default class RemindScheduler {
 		this.checkRate = checkRate;
 	}
 
-	public async addReminder(reminder: Reminder) {
+	public async addReminder(reminder: Reminder): Promise<void> {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const rmd = new Reminder();
 		rmd.user = reminder.user;
@@ -34,13 +34,13 @@ export default class RemindScheduler {
 		}
 	}
 
-	public cancelReminder(id: string) {
+	public cancelReminder(id: string): boolean {
 		const schedule = this.queuedSchedules.get(id);
 		if (schedule) this.client.clearTimeout(schedule);
 		return this.queuedSchedules.delete(id);
 	}
 
-	public async deleteReminder(reminder: Reminder) {
+	public async deleteReminder(reminder: Reminder): Promise<Reminder> {
 		const schedule = this.queuedSchedules.get(reminder.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(reminder.id);
@@ -49,13 +49,13 @@ export default class RemindScheduler {
 		return deleted;
 	}
 
-	public queueReminder(reminder: Reminder) {
-		this.queuedSchedules.set(reminder.id, this.client.setTimeout(() => {
+	public queueReminder(reminder: Reminder): void {
+		this.queuedSchedules.set(reminder.id, this.client.setTimeout((): void => {
 			this.runReminder(reminder);
 		}, reminder.triggers_at.getTime() - Date.now()));
 	}
 
-	public async runReminder(reminder: Reminder) {
+	public async runReminder(reminder: Reminder): Promise<void> {
 		try {
 			const reason = reminder.reason || `${reminder.channel ? 'y' : 'Y'}ou wanted me to remind you around this time!`;
 			const content = `${reminder.channel ? `<@${reminder.user}>, ` : ''} ${reason}\n\n<${reminder.trigger}>`;
@@ -78,12 +78,12 @@ export default class RemindScheduler {
 		}
 	}
 
-	public async init() {
+	public async init(): Promise<void> {
 		await this._check();
 		this.checkInterval = this.client.setInterval(this._check.bind(this), this.checkRate);
 	}
 
-	private async _check() {
+	private async _check(): Promise<void> {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const reminders = await remindersRepo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) });
 		const now = new Date();

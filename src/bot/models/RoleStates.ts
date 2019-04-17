@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
-/* tslint:disable:member-access */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 
 @Entity('role_states')
 @Index(['guild', 'user'], { unique: true })
@@ -16,6 +16,6 @@ export class RoleState {
 	@Column({ type: 'bigint' })
 	user!: string;
 
-	@Column({ type: 'text', array: true, default: () => 'ARRAY[]::text[]' })
+	@Column({ 'type': 'text', 'array': true, 'default': (): string => 'ARRAY[]::text[]' })
 	roles!: string[];
 }

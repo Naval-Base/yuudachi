@@ -1,6 +1,6 @@
 import { Listener, Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-const Raven = require('raven'); // tslint:disable-line
+const Raven = require('raven'); // eslint-disable-line
 
 export default class CommandStartedListener extends Listener {
 	public constructor() {
@@ -11,20 +11,22 @@ export default class CommandStartedListener extends Listener {
 		});
 	}
 
-	public exec(message: Message, command: Command, args: any[]) {
+	public exec(message: Message, command: Command, args: any[]): void {
 		this.client.prometheus.commandCounter.inc();
 		Raven.captureBreadcrumb({
 			message: 'command_started',
 			category: command.category.id,
 			data: {
 				user: {
-					id: message.author.id,
-					username: message.author.tag
+					id: message.author!.id,
+					username: message.author!.tag
 				},
-				guild: message.guild ? {
-					id: message.guild.id,
-					name: message.guild.name
-				} : null,
+				guild: message.guild
+					? {
+						id: message.guild.id,
+						name: message.guild.name
+					}
+					: null,
 				command: {
 					id: command.id,
 					aliases: command.aliases,
@@ -39,14 +41,16 @@ export default class CommandStartedListener extends Listener {
 		});
 		Raven.setContext({
 			user: {
-				id: message.author.id,
-				username: message.author.tag
+				id: message.author!.id,
+				username: message.author!.tag
 			},
 			extra: {
-				guild: message.guild ? {
-					id: message.guild.id,
-					name: message.guild.name
-				} : null,
+				guild: message.guild
+					? {
+						id: message.guild.id,
+						name: message.guild.name
+					}
+					: null,
 				command: {
 					id: command.id,
 					aliases: command.aliases,

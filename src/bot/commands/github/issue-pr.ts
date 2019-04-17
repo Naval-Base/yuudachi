@@ -29,7 +29,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, args: any) {
+	public async exec(message: Message, args: any): Promise<Message | Message[]> {
 		if (!GITHUB_API_KEY) {
 			return message.util!.reply(oneLine`
 				my commander has not set a valid GitHub API key,
@@ -39,7 +39,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		let owner;
 		let repo;
 		if ((args.match && args.match[1] === 'g') || !args.match) {
-			const repository = this.client.settings.get(message.guild, 'githubRepository', undefined);
+			const repository = this.client.settings.get(message.guild!, 'githubRepository', undefined);
 			if (!repository) return message.util!.reply("the guild owner didn't set a GitHub repository yet.");
 			owner = repository.split('/')[0];
 			repo = repository.split('/')[1];
@@ -157,7 +157,7 @@ export default class GitHubPROrIssueCommand extends Command {
 			.addField('Type', data.commits ? 'PULL REQUEST' : 'ISSUE', true)
 			.addField(
 				'Labels',
-				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
+				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }): string => node.name) : 'NO LABEL(S)',
 				true
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
@@ -169,7 +169,7 @@ export default class GitHubPROrIssueCommand extends Command {
 			);
 		}
 
-		if (!(message.channel as TextChannel).permissionsFor(message.guild.me)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (!(message.channel as TextChannel).permissionsFor(message.guild!.me!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 			return message.util!.send(embed);
 		}
 		const msg = await message.util!.send(embed) as Message;
@@ -177,7 +177,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
+				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 				{ max: 1, time: 10000, errors: ['time'] }
 			);
 		} catch (error) {

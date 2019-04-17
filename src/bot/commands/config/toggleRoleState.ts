@@ -16,24 +16,24 @@ export default class ToggleRoleStateCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message) {
-		const roleState = this.client.settings.get(message.guild, 'roleState', undefined);
+	public async exec(message: Message): Promise<Message | Message[]> {
+		const roleState = this.client.settings.get(message.guild!, 'roleState', undefined);
 		if (roleState) {
-			this.client.settings.set(message.guild, 'roleState', false);
+			this.client.settings.set(message.guild!, 'roleState', false);
 			const userRepo = this.client.db.getRepository(RoleState);
-			const users = await userRepo.find({ guild: message.guild.id });
+			const users = await userRepo.find({ guild: message.guild!.id });
 			for (const user of users) userRepo.remove(user);
 
 			return message.util!.reply('successfully removed all records!');
 		}
-		this.client.settings.set(message.guild, 'roleState', true);
-		const members = await message.guild.members.fetch();
+		this.client.settings.set(message.guild!, 'roleState', true);
+		const members = await message.guild!.members.fetch();
 		const records: RoleState[] = [];
 		for (const member of members.values()) {
 			const rs = new RoleState();
-			rs.guild = message.guild.id;
+			rs.guild = message.guild!.id;
 			rs.user = member.id;
-			rs.roles = member.roles.filter(role => role.id !== message.guild.id).map(role => role.id);
+			rs.roles = member.roles.filter((role): boolean => role.id !== message.guild!.id).map((role): string => role.id);
 			records.push(rs);
 		}
 		const userRepo = this.client.db.getRepository(RoleState);

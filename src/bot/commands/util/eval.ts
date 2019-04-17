@@ -11,7 +11,7 @@ export default class EvalCommand extends Command {
 
 	public lastResult: any = null;
 
-	private readonly _sensitivePattern!: any; // tslint:disable-line
+	private readonly _sensitivePattern!: any;
 
 	public constructor() {
 		super('eval', {
@@ -29,17 +29,17 @@ export default class EvalCommand extends Command {
 					match: 'content',
 					type: 'string',
 					prompt: {
-						start: (message: Message) => `${message.author}, what would you like to evaluate?`
+						start: (message: Message): string => `${message.author}, what would you like to evaluate?`
 					}
 				}
 			]
 		});
 	}
 
-	public exec(message: Message, { code }: { code: string }) {
-		const msg = message; // tslint:disable-line
-		const { client, lastResult } = this; // tslint:disable-line
-		// tslint:disable-next-line
+	public async exec(message: Message, { code }: { code: string }): Promise<Message | Message[]> {
+		/* eslint-disable */
+		const msg = message;
+		const { client, lastResult } = this;
 		const doReply = (val: any) => {
 			if (val instanceof Error) {
 				message.util!.send(`Callback error: \`${val}\``);
@@ -52,11 +52,12 @@ export default class EvalCommand extends Command {
 				message.util!.send(result);
 			}
 		};
+		/* eslint-enable */
 
 		let hrDiff;
 		try {
 			const hrStart = process.hrtime();
-			this.lastResult = eval(code); // tslint:disable-line
+			this.lastResult = eval(code); // eslint-disable-line
 			hrDiff = process.hrtime(hrStart);
 		} catch (error) {
 			return message.util!.send(`Error while evaluating: \`${error}\``);
@@ -64,11 +65,12 @@ export default class EvalCommand extends Command {
 
 		this.hrStart = process.hrtime();
 		const result = this._result(this.lastResult, hrDiff, code);
-		if (Array.isArray(result)) return result.map(async res => message.util!.send(res));
+		// @ts-ignore
+		if (Array.isArray(result)) return result.map(async (res): Promise<Message | Message[]> => message.util!.send(res));
 		return message.util!.send(result);
 	}
 
-	private _result(result: any, hrDiff: [number, number], input: string | null = null) {
+	private _result(result: any, hrDiff: [number, number], input: string | null = null): string | string[] {
 		const inspected = util.inspect(result, { depth: 0 })
 			.replace(NL_PATTERN, '\n')
 			.replace(this.sensitivePattern, '--snip--');
@@ -95,10 +97,10 @@ export default class EvalCommand extends Command {
 		`, { maxLength: 1900, prepend, append });
 	}
 
-	get sensitivePattern() {
+	private get sensitivePattern(): any {
 		if (!this._sensitivePattern) {
-			const token = this.client.token.split('').join('[^]{0,2}');
-			const revToken = this.client.token.split('').reverse().join('[^]{0,2}');
+			const token = this.client.token!.split('').join('[^]{0,2}');
+			const revToken = this.client.token!.split('').reverse().join('[^]{0,2}');
 			Object.defineProperty(this, '_sensitivePattern', { value: new RegExp(`${token}|${revToken}`, 'g') });
 		}
 		return this._sensitivePattern;

@@ -37,23 +37,23 @@ export default class RestrictCommand extends Command {
 					type: ['embed', 'embeds', 'image', 'images', 'img', 'emoji', 'reaction', 'react']
 				},
 				{
-					id: 'rest',
-					match: 'rest',
-					default: ''
+					'id': 'rest',
+					'match': 'rest',
+					'default': ''
 				}
 			]
 		});
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
-		const hasStaffRole = message.member.roles.has(staffRole);
+	public userPermissions(message: Message): string | null {
+		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public exec(message: Message, { restriction, rest }: { restriction: string, rest: string }) {
+	public async exec(message: Message, { restriction, rest }: { restriction: string; rest: string }): Promise<Message | Message[] | boolean | null> {
 		if (!restriction) {
 			// @ts-ignore
 			const prefix = this.handler.prefix(message);
@@ -62,6 +62,7 @@ export default class RestrictCommand extends Command {
 				Check \`${prefix}help restrict\` for more information.
 			`);
 		}
+		// eslint-disable-next-line
 		const command = ({
 			embed: this.handler.modules.get('restrict-embed'),
 			embeds: this.handler.modules.get('restrict-embed'),

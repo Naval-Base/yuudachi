@@ -13,7 +13,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 		});
 	}
 
-	public async exec(oldMember: GuildMember, newMember: GuildMember) {
+	public async exec(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
 		const moderation = this.client.settings.get(newMember.guild, 'moderation', undefined);
 		if (moderation) {
 			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
@@ -36,7 +36,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				automaticRoleState.roles.includes(restrictRoles.reaction))
 			) return;
 			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel', undefined);
-			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
+			const role = newMember.roles.filter((r): boolean => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			const casesRepo = this.client.db.getRepository(Case);
 			if (!role) {
 				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
@@ -79,7 +79,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				// @ts-ignore
 				const prefix = this.client.commandHandler.prefix({ guild: newMember.guild });
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-				const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === action)!.split(' ')[0].toUpperCase();
+				const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === action)!.split(' ')[0].toUpperCase();
 				const embed = Util.logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS[color]);
 				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 			}

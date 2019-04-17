@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
-/* tslint:disable:member-access variable-name */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 
 @Entity('cases')
 export class Case {
@@ -44,9 +44,9 @@ export class Case {
 	action_duration!: Date;
 
 	@Index()
-	@Column({ default: true })
+	@Column({ 'default': true })
 	action_processed!: boolean;
 
-	@Column({ type: 'timestamptz', default: () => 'now()' })
+	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
 	createdAt!: Date;
 }

@@ -23,20 +23,20 @@ export default class GitHubCommitCommand extends Command {
 				{
 					id: 'commit',
 					match: 'content',
-					type: Argument.validate('string', (_, str) => str.length >= 40)
+					type: Argument.validate('string', (_, str): boolean => str.length >= 40)
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, args: any) {
+	public async exec(message: Message, args: any): Promise<Message | Message[]> {
 		if (!GITHUB_API_KEY) {
 			return message.util!.reply(oneLine`
 				my master has not set a valid GitHub API key,
 				therefore this command is not available.
 			`);
 		}
-		const repository = this.client.settings.get(message.guild, 'githubRepository', undefined);
+		const repository = this.client.settings.get(message.guild!, 'githubRepository', undefined);
 		if (!repository) return message.reply("the guild owner didn't set a GitHub repository yet.");
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
@@ -88,7 +88,7 @@ export default class GitHubCommitCommand extends Command {
 			.setThumbnail(body.author ? body.author.avatar_url : '')
 			.setTimestamp(new Date(body.commit.author.date));
 
-		if (!(message.channel as TextChannel).permissionsFor(message.guild.me)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (!(message.channel as TextChannel).permissionsFor(message.guild!.me!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 			return message.util!.send(embed);
 		}
 		const msg = await message.util!.send(embed) as Message;
@@ -96,7 +96,7 @@ export default class GitHubCommitCommand extends Command {
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
+				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 				{ max: 1, time: 10000, errors: ['time'] }
 			);
 		} catch (error) {

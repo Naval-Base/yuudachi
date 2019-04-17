@@ -4,7 +4,11 @@ import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
 
-const PERMISSIONS = ({
+interface Permissions {
+	[key: string]: string;
+}
+
+const PERMISSIONS: Permissions = {
 	ADMINISTRATOR: 'Administrator',
 	VIEW_AUDIT_LOG: 'View audit log',
 	MANAGE_GUILD: 'Manage server',
@@ -33,7 +37,7 @@ const PERMISSIONS = ({
 	DEAFEN_MEMBERS: 'Deafen members',
 	MOVE_MEMBERS: 'Move members',
 	USE_VAD: 'Use voice activity'
-}) as { [key: string]: string };
+};
 
 export default class RoleInfoCommand extends Command {
 	public constructor() {
@@ -50,19 +54,19 @@ export default class RoleInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					id: 'role',
-					match: 'content',
-					type: 'role',
-					default: (message: Message) => message.member.roles.highest
+					'id': 'role',
+					'match': 'content',
+					'type': 'role',
+					'default': (message: Message): Role => message.member!.roles.highest
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { role }: { role: Role }) {
+	public async exec(message: Message, { role }: { role: Role }): Promise<Message | Message[]> {
 		const permissions = Object.keys(PERMISSIONS).filter(
 			// @ts-ignore
-			permission => role.permissions.serialize()[permission]
+			(permission): string => role.permissions.serialize()[permission]
 		);
 		const embed = new MessageEmbed()
 			.setColor(3447003)
@@ -79,10 +83,10 @@ export default class RoleInfoCommand extends Command {
 			.addField(
 				'❯ Permissions',
 				stripIndents`
-				${permissions.map(permission => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
+				${permissions.map((permission): string => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
 			`
 			)
-			.setThumbnail(message.guild.iconURL());
+			.setThumbnail(message.guild!.iconURL());
 
 		return message.util!.send(embed);
 	}

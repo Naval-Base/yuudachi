@@ -3,9 +3,13 @@ import { Message, MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import Util from '../../util';
 import { Case } from '../../models/Cases';
-const ms = require('@naval-base/ms'); // tslint:disable-line
+const ms = require('@naval-base/ms'); // eslint-disable-line
 
-const ACTIONS = {
+interface Actions {
+	[key: number]: string;
+}
+
+const ACTIONS: Actions = {
 	1: 'Ban',
 	2: 'Unban',
 	3: 'Softban',
@@ -15,7 +19,7 @@ const ACTIONS = {
 	7: 'Emoji restriction',
 	8: 'Reaction restriction',
 	9: 'Warn'
-} as { [key: number]: string };
+};
 
 export default class CaseCommand extends Command {
 	public constructor() {
@@ -35,8 +39,8 @@ export default class CaseCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: (message: Message) => `${message.author}, what case do you want to look up?`,
-						retry: (message: Message) => `${message.author}, please enter a case number.`
+						start: (message: Message): string => `${message.author}, what case do you want to look up?`,
+						retry: (message: Message): string => `${message.author}, please enter a case number.`
 					}
 				}
 			]
@@ -44,15 +48,15 @@ export default class CaseCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild, 'modRole', undefined);
-		const hasStaffRole = message.member.roles.has(staffRole);
+	public userPermissions(message: Message): string | null {
+		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { caseNum }: { caseNum: number | string }) {
-		const totalCases = this.client.settings.get(message.guild, 'caseTotal', 0);
+	public async exec(message: Message, { caseNum }: { caseNum: number | string }): Promise<Message | Message[]> {
+		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
 		const casesRepo = this.client.db.getRepository(Case);
@@ -61,14 +65,14 @@ export default class CaseCommand extends Command {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
 
-		const moderator = await message.guild.members.fetch(dbCase.mod_id);
-		const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
+		const moderator = await message.guild!.members.fetch(dbCase.mod_id);
+		const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
 			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, moderator ? moderator.user.displayAvatarURL() : '')
 			.setColor(Util.CONSTANTS.COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
-				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration.getTime(), { long: true })}` : ''}
+				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration.getTime(), { 'long': true })}` : ''}
 				**Reason:** ${dbCase.reason}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
 			`)
 			.setFooter(`Case ${dbCase.case_id}`)
