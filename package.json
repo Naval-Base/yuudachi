@@ -48,7 +48,7 @@
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
 		"merge2": "^1.2.3",
-		"typescript": "^3.4.3"
+		"typescript": "^3.4.4"
 	},
 	"optionalDependencies": {
 		"@discordjs/uws": "^11.149.1",
