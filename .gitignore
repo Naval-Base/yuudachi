@@ -21,4 +21,5 @@ typings/
 # Miscellaneous
 .tmp/
 .github/
+src/util/version.ts
 ormconfig.json

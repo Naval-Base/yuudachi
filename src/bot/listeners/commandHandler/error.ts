@@ -1,6 +1,6 @@
 import { Listener, Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { addBreadcrumb, captureException } from '@sentry/node';
+import { addBreadcrumb, captureException, Severity } from '@sentry/node';
 
 export default class CommandErrorListener extends Listener {
 	public constructor() {
@@ -16,6 +16,7 @@ export default class CommandErrorListener extends Listener {
 		addBreadcrumb({
 			message: 'command_errored',
 			category: command ? command.category.id : 'inhibitor',
+			level: Severity.Error,
 			data: {
 				user: {
 					id: message.author!.id,
