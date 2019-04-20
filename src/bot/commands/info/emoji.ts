@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import * as emojis from 'node-emoji';
 const punycode = require('punycode'); // eslint-disable-line
 
-const EMOJI_REGEX = /<:\w+:(\d{17,19})>/;
+const EMOJI_REGEX = /<?(a)?:?(\w{2,32}):(\d{17,19})>?/;
 
 export default class EmojiInfoCommand extends Command {
 	public constructor() {
