@@ -26,7 +26,7 @@ ENV NODE_ENV= \
 	WEBHOOK_ID= \
 	WEBHOOK_TOKEN= \
 	DB= \
-	RAVEN= \
+	SENTRY= \
 	GITHUB_API_KEY=
 
 CMD ["node", "dist/yukikaze.js"]

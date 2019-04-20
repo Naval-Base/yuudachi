@@ -1,6 +1,6 @@
 import { Listener, Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-const Raven = require('raven'); // eslint-disable-line
+import { addBreadcrumb, captureException } from '@sentry/node';
 
 export default class CommandErrorListener extends Listener {
 	public constructor() {
@@ -13,7 +13,7 @@ export default class CommandErrorListener extends Listener {
 
 	public exec(error: Error, message: Message, command: Command): void {
 		this.client.logger.error(`[COMMAND ERROR] ${error.message}`, error.stack);
-		Raven.captureBreadcrumb({
+		addBreadcrumb({
 			message: 'command_errored',
 			category: command ? command.category.id : 'inhibitor',
 			data: {
@@ -40,6 +40,6 @@ export default class CommandErrorListener extends Listener {
 				}
 			}
 		});
-		Raven.captureException(error);
+		captureException(error);
 	}
 }
