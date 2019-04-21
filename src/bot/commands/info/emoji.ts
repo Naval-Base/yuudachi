@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import * as emojis from 'node-emoji';
 const punycode = require('punycode'); // eslint-disable-line
 
-const EMOJI_REGEX = /<?(a)?:?(\w{2,32}):(\d{17,19})>?/;
+const EMOJI_REGEX = /<(?:a)?:(?:\w{2,32}):(\d{17,19})>?/;
 
 export default class EmojiInfoCommand extends Command {
 	public constructor() {
@@ -27,7 +27,7 @@ export default class EmojiInfoCommand extends Command {
 					type: async (message, content): Promise<any> => {
 						if (EMOJI_REGEX.test(content)) [, content] = content.match(EMOJI_REGEX)!;
 						if (!isNaN(content as any)) return message.guild!.emojis.get(content);
-						return emojis.find(content);
+						return message.guild!.emojis.find((e: GuildEmoji) => e.name === content) || emojis.find(content);
 					},
 					prompt: {
 						start: (message: Message): string => `${message.author}, what emoji would you like information about?`,
