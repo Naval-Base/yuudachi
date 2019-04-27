@@ -55,20 +55,20 @@ export default class TagEditCommand extends Command {
 		return { tag, hoist, unhoist, content };
 	}
 
-	public async exec(message: Message, { tag, hoist, unhoist, content }: { tag: Tag; hoist: boolean; unhoist: boolean; content: string }): Promise<Message | Message[]> {
+	public async exec(message: Message, { tag, hoist, unhoist, content }: { tag: Tag; hoist: boolean; unhoist: boolean; content: string | { type: string; value: string } }): Promise<Message | Message[]> {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
 		if (tag.user !== message.author!.id && !staffRole) {
 			return message.util!.reply('Losers are only allowed to edit their own tags! Hah hah hah!');
 		}
-		if (content && content.length >= 1950) {
+		if (content && (content as string).length >= 1950) {
 			return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}
 		const tagRepo = this.client.db.getRepository(Tag);
 		if (hoist) hoist = true;
 		else if (unhoist) hoist = false;
 		if ((hoist || unhoist) && staffRole) tag.hoisted = hoist;
-		if (content) {
-			content = Util.cleanContent(content, message);
+		if (content || (content as any).type !== 'fail') {
+			content = Util.cleanContent((content as string), message);
 			tag.content = content;
 		}
 		tag.last_modified = message.author!.id;
