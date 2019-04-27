@@ -27,7 +27,7 @@ export default class EmojiInfoCommand extends Command {
 					type: async (message, content): Promise<any> => {
 						if (EMOJI_REGEX.test(content)) [, content] = content.match(EMOJI_REGEX)!;
 						if (!isNaN(content as any)) return message.guild!.emojis.get(content);
-						return message.guild!.emojis.find((e: GuildEmoji) => e.name === content) || emojis.find(content);
+						return message.guild!.emojis.find((e: GuildEmoji): boolean => e.name === content) || emojis.find(content);
 					},
 					prompt: {
 						start: (message: Message): string => `${message.author}, what emoji would you like information about?`,
