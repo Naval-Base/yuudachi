@@ -3,7 +3,8 @@ import { Message, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
 
-const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master'];
+const DEFAULTSOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master'];
+const EXTENDEDSOURCES = ['11.4-dev', '11.4.2', '11.3.2', '11.2.0', '11.1.0', '11.0.0', '10.0.1', '9.3.1', '9.2.0', '9.1.1', '9.0.2'];
 
 export default class DocsCommand extends Command {
 	public constructor() {
@@ -37,7 +38,12 @@ export default class DocsCommand extends Command {
 
 	public async exec(message: Message, { query, force }: { query: string; force: boolean }): Promise<Message | Message[]> {
 		const q = query.split(' ');
-		const source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : 'stable';
+		const sourceString = query.slice(-1)[0];
+		const isExtendedSource = EXTENDEDSOURCES.includes(sourceString);
+		let source = DEFAULTSOURCES.includes(sourceString) || isExtendedSource ? query.pop() : 'stable';
+		if (isExtendedSource) {
+			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
+		}
 		const queryString = qs.stringify({ src: source, q: q.join(' '), force });
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?${queryString}`);
 		const embed = await res.json();
