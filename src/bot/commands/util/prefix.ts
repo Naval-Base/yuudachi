@@ -12,6 +12,7 @@ export default class PrefixCommand extends Command {
 			},
 			category: 'util',
 			channel: 'guild',
+			userPermissions: ['MANAGE_GUILD'],
 			ratelimit: 2,
 			args: [
 				{
