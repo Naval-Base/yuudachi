@@ -36,11 +36,10 @@ export default class DocsCommand extends Command {
 		const query = yield {
 			match: 'rest',
 			type: 'lowercase',
-			prompt: defaultDocs
-				? false
-				: {
-					start: (message: Message): string => `${message.author}, what would you like to search?`
-				}
+			prompt: {
+				start: (message: Message): string => `${message.author}, what would you like to search?`,
+				optional: defaultDocs ? true : false
+			}
 		};
 
 		return { defaultDocs, force, query };
