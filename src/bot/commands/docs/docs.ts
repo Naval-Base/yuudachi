@@ -17,27 +17,44 @@ export default class DocsCommand extends Command {
 			category: 'docs',
 			clientPermissions: ['EMBED_LINKS'],
 			ratelimit: 2,
-			args: [
-				{
-					id: 'query',
-					match: 'rest',
-					type: 'lowercase',
-					prompt: {
-						start: (message: Message): string => `${message.author}, what would you like to search?`
-					}
-				},
-				{
-					id: 'force',
-					match: 'flag',
-					flag: ['--force', '-f']
-				}
-			]
+			flags: ['--force', '-f', '--default=']
 		});
 	}
 
-	public async exec(message: Message, { query, force }: { query: string; force: boolean }): Promise<Message | Message[]> {
+	public *args(): object {
+		const defaultDocs = yield {
+			match: 'option',
+			flag: '--default='
+		};
+
+		const force = yield {
+			match: 'flag',
+			flag: ['--force', '-f']
+		};
+
+		const query = yield {
+			match: 'rest',
+			type: 'lowercase',
+			prompt: defaultDocs
+				? false
+				: {
+					start: (message: Message): string => `${message.author}, what would you like to search?`
+				}
+		};
+
+		return { defaultDocs, force, query };
+	}
+
+	public async exec(message: Message, { defaultDocs, query, force }: { defaultDocs: string; query: string; force: boolean }): Promise<Message | Message[]> {
+		if (defaultDocs) {
+			const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
+			if (!staffRole) return message.util!.reply('What makes you think you can do that, huh?');
+			this.client.settings.set(message.guild!, 'defaultDocs', defaultDocs);
+		}
+
 		const q = query.split(' ');
-		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : 'stable';
+		const docs = this.client.settings.get(message.guild!, 'defaultDocs', 'stable');
+		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : docs;
 		if (source === '11.4-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
 		}
