@@ -17,7 +17,8 @@ export default class DocsCommand extends Command {
 			category: 'docs',
 			clientPermissions: ['EMBED_LINKS'],
 			ratelimit: 2,
-			flags: ['--force', '-f', '--default=']
+			flags: ['--force', '-f'],
+			optionFlags: ['--default=']
 		});
 	}
 
@@ -48,8 +49,9 @@ export default class DocsCommand extends Command {
 	public async exec(message: Message, { defaultDocs, query, force }: { defaultDocs: string; query: string; force: boolean }): Promise<Message | Message[]> {
 		if (defaultDocs) {
 			const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
-			if (!staffRole) return message.util!.reply('What makes you think you can do that, huh?');
+			if (!staffRole) return message.util!.reply('what makes you think you can do that, huh?');
 			this.client.settings.set(message.guild!, 'defaultDocs', defaultDocs);
+			return message.util!.reply(`set the default docs for this server to ${defaultDocs}`);
 		}
 
 		const q = query.split(' ');
