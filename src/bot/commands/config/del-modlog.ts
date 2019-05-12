@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, TextChannel } from 'discord.js';
+import { Message } from 'discord.js';
 
 export default class DeleteConfigModChannelCommand extends Command {
 	public constructor() {
