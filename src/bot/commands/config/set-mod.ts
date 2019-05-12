@@ -1,10 +1,9 @@
 import { Command } from 'discord-akairo';
 import { Message, Role } from 'discord.js';
 
-export default class SetModRoleCommand extends Command {
+export default class SetConfigModRoleCommand extends Command {
 	public constructor() {
-		super('set-mod', {
-			aliases: ['set-mod', 'mod-role'],
+		super('config-set-mod', {
 			description: {
 				content: 'Sets the mod role many of the commands use for permission checking.',
 				usage: '<role>',

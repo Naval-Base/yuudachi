@@ -1,10 +1,9 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 
-export default class SetCasesCommand extends Command {
+export default class SetConfigCasesCommand extends Command {
 	public constructor() {
-		super('set-cases', {
-			aliases: ['set-cases'],
+		super('config-set-cases', {
 			description: {
 				content: 'Sets the case number of the guild.',
 				usage: '<cases>',

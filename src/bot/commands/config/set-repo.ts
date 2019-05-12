@@ -1,10 +1,9 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 
-export default class SetGitHubRepositoryCommand extends Command {
+export default class SetConfigGitHubRepositoryCommand extends Command {
 	public constructor() {
-		super('gh-set-repo', {
-			aliases: ['set-repo', 'set-repository'],
+		super('config-set-repo', {
 			description: {
 				content: 'Sets the repository the GitHub commands use.',
 				usage: '<repo>',

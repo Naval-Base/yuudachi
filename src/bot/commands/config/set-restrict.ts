@@ -1,10 +1,9 @@
 import { Command } from 'discord-akairo';
 import { Message, Role } from 'discord.js';
 
-export default class SetRestrictRoles extends Command {
+export default class SetConfigRestrictRolesCommand extends Command {
 	public constructor() {
-		super('set-restrict', {
-			aliases: ['set-restrict', 'set-restrictroles'],
+		super('config-set-restrict', {
 			description: {
 				content: 'Sets the restriction roles of the guild.',
 				usage: '<embedrole> <emojirole> <reactionrole>',

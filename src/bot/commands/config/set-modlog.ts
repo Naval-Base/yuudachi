@@ -1,10 +1,9 @@
 import { Command } from 'discord-akairo';
 import { Message, TextChannel } from 'discord.js';
 
-export default class SetModChannelCommand extends Command {
+export default class SetConfigModChannelCommand extends Command {
 	public constructor() {
-		super('set-modlog', {
-			aliases: ['set-modlog', 'modchan', 'mod-channel'],
+		super('config-set-modlog', {
 			description: {
 				content: 'Sets the mod log many of the commands use to log moderation actions.',
 				usage: '<channel>',

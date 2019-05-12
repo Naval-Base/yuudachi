@@ -1,10 +1,9 @@
 import { Command } from 'discord-akairo';
 import { Message, Role } from 'discord.js';
 
-export default class SetMuteRole extends Command {
+export default class SetConfigMuteRoleCommand extends Command {
 	public constructor() {
-		super('set-muted', {
-			aliases: ['set-muterole', 'set-muted'],
+		super('config-set-muted', {
 			description: {
 				content: 'Sets the mute role of the guild.',
 				usage: '<role>',
