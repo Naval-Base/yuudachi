@@ -8,17 +8,19 @@ export default class ConfigCommand extends Command {
 			aliases: ['config'],
 			description: {
 				content: stripIndents`Available methods:
-					 • set <key> <...arguments>
-					 • delete <key>
+					 • set \`<key> <...arguments>\`
+					 • delete \`<key>\`
 					 • clear
 
 					Available keys:
-					 • cases <number>
-					 • mod <roleId>
-					 • modLog <channelId>
-					 • muted <roleId>
-					 • repo <repository>
-					 • restrict <embed roleId> <emoji roleId> <reaction roleId>
+					 • cases \`<number>\`
+					 • mod \`<roleId>\`
+					 • modLog \`<channelId>\`
+					 • muted \`<roleId>\`
+					 • repo \`<repository>\`
+					 • restrict \`<embed roleId> <emoji roleId> <reaction roleId>\`
+
+					Required: \`<>\` | Optional: \`[]\`
 				`,
 				usage: '<method> <...arguments>'
 			},
