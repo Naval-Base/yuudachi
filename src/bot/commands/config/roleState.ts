@@ -5,7 +5,6 @@ import { RoleState } from '../../models/RoleStates';
 export default class ToggleRoleStateCommand extends Command {
 	public constructor() {
 		super('toggle-role-state', {
-			aliases: ['role-state'],
 			description: {
 				content: 'Toggle role state on the server.'
 			},

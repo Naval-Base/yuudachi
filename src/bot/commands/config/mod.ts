@@ -4,7 +4,6 @@ import { Message } from 'discord.js';
 export default class ToggleModerationCommand extends Command {
 	public constructor() {
 		super('toggle-moderation', {
-			aliases: ['moderation'],
 			description: {
 				content: 'Toggle moderation features on the server.'
 			},

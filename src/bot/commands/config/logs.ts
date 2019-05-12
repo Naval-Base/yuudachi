@@ -4,7 +4,6 @@ import { Message } from 'discord.js';
 export default class ToggleLogsCommand extends Command {
 	public constructor() {
 		super('toggle-logs', {
-			aliases: ['logs', 'toggle-logs'],
 			description: {
 				content: 'Toggle logs on the server.'
 			},
