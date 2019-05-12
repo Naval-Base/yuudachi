@@ -22,7 +22,7 @@ export default class SetConfigCommand extends Command {
 			type: [
 				['config-set-cases', 'cases'],
 				['config-set-mod', 'modRole', 'mod', 'mod-role'],
-				['config-set-modlog', 'modLogChannel', 'modlog', 'modchan', 'mod-channel'],
+				['config-set-modlog', 'modLogChannel', 'modLog', 'modlog', 'modChan', 'modchan', 'mod-channel'],
 				['config-set-muted', 'muteRole', 'muted', 'mute-role'],
 				['config-set-repo', 'githubRepository', 'repo', 'repository'],
 				['config-set-restrict', 'restrictRoles', 'restrict', 'restrict-roles']
