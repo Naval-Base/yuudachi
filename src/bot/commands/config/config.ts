@@ -7,9 +7,20 @@ export default class ConfigCommand extends Command {
 		super('config', {
 			aliases: ['config'],
 			description: {
-				content: '.',
-				usage: '<method> <...arguments>',
-				examples: ['.']
+				content: stripIndents`Available methods:
+					 • set <key> <...arguments>
+					 • delete <key>
+					 • clear
+
+					Available keys:
+					 • cases <number>
+					 • mod <roleId>
+					 • modLog <channelId>
+					 • muted <roleId>
+					 • repo <repository>
+					 • restrict <embed roleId> <emoji roleId> <reaction roleId>
+				`,
+				usage: '<method> <...arguments>'
 			},
 			category: 'config',
 			channel: 'guild',
