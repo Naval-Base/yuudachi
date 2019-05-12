@@ -3,7 +3,7 @@ import { Message, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
 
-const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.4-dev'];
+const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev'];
 
 export default class DocsCommand extends Command {
 	public constructor() {
@@ -56,7 +56,7 @@ export default class DocsCommand extends Command {
 		const q = query.split(' ');
 		const docs = this.client.settings.get(message.guild!, 'defaultDocs', 'stable');
 		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : docs;
-		if (source === '11.4-dev') {
+		if (source === '11.5-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
 		}
 		const queryString = qs.stringify({ src: source, q: q.join(' '), force });
