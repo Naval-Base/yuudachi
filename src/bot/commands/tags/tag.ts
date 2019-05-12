@@ -55,7 +55,7 @@ export default class TagCommand extends Command {
 				['tag-show', 'show'],
 				['tag-add', 'add'],
 				['tag-alias', 'alias'],
-				['tag-delete', 'del', 'delete'],
+				['tag-delete', 'del', 'delete', 'remove', 'rm'],
 				['tag-edit', 'edit'],
 				['tag-source', 'source'],
 				['tag-info', 'info'],
