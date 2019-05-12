@@ -36,6 +36,6 @@ export default class DeleteConfigCommand extends Command {
 			}
 		};
 
-		Flag.continue(key);
+		return Flag.continue(key);
 	}
 }

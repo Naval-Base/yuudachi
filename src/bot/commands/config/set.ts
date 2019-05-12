@@ -37,6 +37,6 @@ export default class SetConfigCommand extends Command {
 			}
 		};
 
-		Flag.continue(key);
+		return Flag.continue(key);
 	}
 }
