@@ -25,4 +25,4 @@ ENV NODE_ENV= \
 	DB= \
 	SENTRY= \
 	GITHUB_API_KEY=
-CMD ["node", "yukikaze.js"]
+CMD ["node", "dist/yukikaze.js"]
