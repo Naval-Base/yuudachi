@@ -30,4 +30,4 @@ ENV NODE_ENV= \
 	DB= \
 	SENTRY= \
 	GITHUB_API_KEY=
-ENTRYPOINT ["node", "yukikaze.js"]
+CMD ["node", "yukikaze.js"]
