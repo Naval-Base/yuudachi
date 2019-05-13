@@ -7,20 +7,14 @@ RUN apk add --update \
 && yarn install \
 && apk del .build-deps
 
-FROM node:10-alpine AS compile
-WORKDIR /usr/src/yukikaze
-COPY --from=build /usr/src/yukikaze .
-COPY . .
-RUN yarn build
-
 FROM node:10-alpine
 LABEL name "Yukikaze"
 LABEL version "0.1.0"
 LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
 WORKDIR /usr/src/yukikaze
 COPY --from=build /usr/src/yukikaze .
-COPY --from=compile /usr/src/yukikaze/dist .
-COPY --from=compile /usr/src/yukikaze/ormconfig.json .
+COPY . .
+RUN yarn build
 ENV NODE_ENV= \
 	COMMAND_PREFIX= \
 	OWNERS= \
