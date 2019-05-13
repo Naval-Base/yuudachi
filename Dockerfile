@@ -20,6 +20,7 @@ LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
 WORKDIR /usr/src/yukikaze
 COPY --from=build /usr/src/yukikaze .
 COPY --from=compile /usr/src/yukikaze/dist .
+COPY --from=compile /usr/src/yukikaze/ormconfig.json .
 ENV NODE_ENV= \
 	COMMAND_PREFIX= \
 	OWNERS= \
