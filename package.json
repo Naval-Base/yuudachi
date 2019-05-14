@@ -2,7 +2,7 @@
 	"name": "yukikaze",
 	"version": "0.1.0",
 	"description": "",
-	"main": "src/yukikaze.js",
+	"main": "dist/yukikaze.js",
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "UNLICENSED",
 	"private": true,
