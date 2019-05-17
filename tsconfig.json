@@ -11,7 +11,7 @@
 			"esnext.intl",
 			"esnext.symbol"
 		],
-		"declaration": true,
+		"declaration": false,
 		"sourceMap": true,
 		"removeComments": false,
 		"experimentalDecorators": true,
