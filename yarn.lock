@@ -125,10 +125,10 @@
   resolved "https://registry.yarnpkg.com/@types/node-emoji/-/node-emoji-1.8.1.tgz#689cb74fdf6e84309bcafce93a135dfecd01de3f"
   integrity sha512-0fRfA90FWm6KJfw6P9QGyo0HDTCmthZ7cWaBQndITlaWLTZ6njRyKwrwpzpg+n6kBXBIGKeUHEQuBx7bphGJkA==
 
-"@types/node-fetch@^2.3.3":
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.3.3.tgz#eb9c2a0ce8e9424ebe0c0cbe6f1e8ea7576c1310"
-  integrity sha512-MIplfRxrDTsIbOLGyFqNWTmxho5Fs710Kul35tEcaqkx9He86mGbSCDvILL0LCMfmm+oJ8tDg51crE9+pJGgiQ==
+"@types/node-fetch@^2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.3.4.tgz#a46fc4fe9f94b491bf551b6bb7f0f493b9bacd1a"
+  integrity sha512-ZwGXz5osL88SF+jlbbz0WJlINlOZHoSWPrLytQRWRdB6j/KVLup1OoqIxnjO6q9ToqEEP3MZFzJCotgge+IiRw==
   dependencies:
     "@types/node" "*"
 
