@@ -35,6 +35,9 @@ const conf: NuxtConfiguration = {
 			{ rel: 'alternate', type: 'application/json+oembed', href: 'https://beta.listen.moe/oembed.json' }
 		]
 	},
+	modules: [
+		'cookie-universal-nuxt'
+	],
 	build: {
 		extend(config, { isDev }) {
 			if (isDev) config.output!.globalObject = 'this';
