@@ -192,12 +192,12 @@ export default class CaseDeleteCommand extends Command {
 		for (const c of cases) {
 			const chan = this.client.channels.get(modLogChannel) as TextChannel;
 			try {
-				newCaseNum++;
 				const msg = await chan.messages.fetch(c.message);
 				await msg.edit({ embed: msg.embeds[0].setFooter(`Case ${newCaseNum}`) });
 			} catch {}
 			c.case_id = newCaseNum;
 			await casesRepo.save(c);
+			newCaseNum++;
 		}
 	}
 }
