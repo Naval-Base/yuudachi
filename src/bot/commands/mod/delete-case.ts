@@ -81,7 +81,7 @@ export default class CaseDeleteCommand extends Command {
 		await message.channel.send('You sure you want me to delete this case?', { embed });
 		const responses = await message.channel.awaitMessages((msg): boolean => msg.author.id === message.author!.id, {
 			max: 1,
-			time: 1000
+			time: 10000
 		});
 
 		if (!responses || responses.size !== 1) return message.reply('timed out. Cancelled delete.');
