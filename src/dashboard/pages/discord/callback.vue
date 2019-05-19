@@ -1,7 +1,7 @@
 <template>
-	<main id="main" class="half-width">
-		<section id="section" class="grid">
-			{{ output }}
+	<main id="main" class="grid half-width">
+		<section id="section">
+			Successfully authenticated.
 		</section>
 	</main>
 </template>
@@ -10,17 +10,16 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Mutation } from 'vuex-class';
 
-@Component({
-	name: 'Home'
-})
-export default class IndexPage extends Vue {
-	public output = 'Loading...';
-
+@Component
+export default class DiscordCallbackPage extends Vue {
 	@Mutation
 	public setAuth: any;
 
 	@Mutation
 	public setUser: any;
+
+	@Mutation
+	public setGuilds: any;
 
 	async mounted() {
 		let json;
@@ -31,6 +30,7 @@ export default class IndexPage extends Vue {
 
 		this.setAuth({ authenticated: true });
 		this.setUser({ user: json.data });
+		this.setGuilds({ guilds: json.guilds });
 	}
 }
 </script>
@@ -43,10 +43,7 @@ export default class IndexPage extends Vue {
 	}
 
 	#section {
+		grid-column: span 2;
 		text-align: center;
-
-		> * {
-			grid-column: span 2;
-		}
 	}
 </style>
