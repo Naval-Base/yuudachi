@@ -23,8 +23,7 @@ const ACTIONS: Actions = {
 
 export default class CaseCommand extends Command {
 	public constructor() {
-		super('case', {
-			aliases: ['case'],
+		super('case-show', {
 			category: 'mod',
 			description: {
 				content: 'Inspect a case, pulled from the database.',
