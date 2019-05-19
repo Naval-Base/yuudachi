@@ -1,4 +1,6 @@
 {
 	"private": true,
-	"workspaces": ["src/*"]
+	"workspaces": [
+		"src/*"
+	]
 }
