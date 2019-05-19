@@ -59,7 +59,7 @@ export default class CaseCommand extends Command {
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
 		const casesRepo = this.client.db.getRepository(Case);
-		const dbCase = await casesRepo.findOne({ case_id: caseToFind });
+		const dbCase = await casesRepo.findOne({ guild: message.guild!.id, case_id: caseToFind });
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}

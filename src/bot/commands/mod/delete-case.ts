@@ -60,7 +60,7 @@ export default class CaseDeleteCommand extends Command {
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
 		const casesRepo = this.client.db.getRepository(Case);
-		const dbCase = await casesRepo.findOne({ case_id: caseToFind });
+		const dbCase = await casesRepo.findOne({ guild: message.guild!.id, case_id: caseToFind });
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
@@ -104,7 +104,7 @@ export default class CaseDeleteCommand extends Command {
 				const msgToDelete = await chan.messages.fetch(dbCase.message);
 				await msgToDelete.delete();
 			} catch {}
-			this._fixCases(totalCases, modLogChannel);
+			this._fixCases(totalCases, message.guild!.id, modLogChannel);
 		}
 
 		const restrictRoles = this.client.settings.get(message.guild!, 'restrictRoles', undefined);
@@ -184,9 +184,9 @@ export default class CaseDeleteCommand extends Command {
 		return sentMessage.edit(`Successfully deleted case **${dbCase.case_id}**`);
 	}
 
-	private async _fixCases(caseNum: number, modLogChannel: string): Promise<void> {
+	private async _fixCases(caseNum: number, guild: string, modLogChannel: string): Promise<void> {
 		const casesRepo = this.client.db.getRepository(Case);
-		const cases = await casesRepo.find({ case_id: MoreThan(caseNum) });
+		const cases = await casesRepo.find({ guild, case_id: MoreThan(caseNum) });
 		let newCaseNum = caseNum;
 
 		for (const c of cases) {
