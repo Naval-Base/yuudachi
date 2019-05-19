@@ -1,5 +1,5 @@
 FROM node:10-alpine AS build
-WORKDIR /usr/src/yukikaze
+WORKDIR /usr/src/yukikaze/dashboard
 COPY package.json yarn.lock .yarnclean ./
 RUN apk add --update \
 && apk add --no-cache ca-certificates \
@@ -8,21 +8,12 @@ RUN apk add --update \
 && apk del .build-deps
 
 FROM node:10-alpine
-LABEL name "Yukikaze"
+LABEL name "Yukikaze Dashboard"
 LABEL version "0.1.0"
 LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
-WORKDIR /usr/src/yukikaze
-COPY --from=build /usr/src/yukikaze .
+WORKDIR /usr/src/yukikaze/dashboard
+COPY --from=build /usr/src/yukikaze/dashboard .
 COPY . .
 RUN yarn build
-ENV NODE_ENV= \
-	COMMAND_PREFIX= \
-	OWNERS= \
-	TOKEN= \
-	LOGS= \
-	WEBHOOK_ID= \
-	WEBHOOK_TOKEN= \
-	DB= \
-	SENTRY= \
-	GITHUB_API_KEY=
-CMD ["node", "dist/yukikaze.js"]
+ENV NODE_ENV=
+CMD ["yarn", "start"]
