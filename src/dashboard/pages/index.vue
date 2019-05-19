@@ -1,8 +1,7 @@
 <template>
 	<main id="main" class="half-width">
 		<section id="section" class="grid">
-			<h2>Test</h2>
-			<p>some text here</p>
+			<p>Hello {{ message }}!</p>
 		</section>
 	</main>
 </template>
@@ -19,4 +18,16 @@ export default class IndexPage extends Vue {
 </script>
 
 <style lang="scss" scoped>
+	#main {
+		margin: 1rem .5rem;
+		background: #ffffff;
+		color: #000000;
+		text-align: center;
+	}
+
+	#section {
+		> * {
+			grid-column: span 2;
+		}
+	}
 </style>

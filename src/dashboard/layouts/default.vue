@@ -2,29 +2,40 @@
 	<div id="app">
 		<header id="header" class="grid">
 			<div class="header-logo">
-				Yukikaze
+				<nuxt-link to="/">Yukikaze</nuxt-link>
 			</div>
 			<div class="header-content">
-				Test Header 2
+				<a v-if="!auth" href="http://localhost:8000/discord">{{ username }}</a>
+				<span v-else>{{ username }}</span>
 			</div>
 		</header>
 		<Nuxt />
 		<footer id="footer" class="grid half-width">
-			<div>
-				Test Footer
-			</div>
-			<div>
-				Test Footer 2
-			</div>
+			<a href="/">Yukikaze</a>
 		</footer>
 	</div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Getter } from 'vuex-class';
 
 @Component
-export default class DefaultLayout extends Vue {}
+export default class DefaultLayout extends Vue {
+	@Getter
+	public authenticated: any;
+
+	@Getter
+	public user: any;
+
+	get auth() {
+		return this.authenticated;
+	}
+
+	get username() {
+		return this.user ? this.user.user.username : 'Login';
+	}
+}
 </script>
 
 <style lang="scss">
@@ -34,8 +45,8 @@ export default class DefaultLayout extends Vue {}
 		margin: 0;
 		background: #000000;
 		color: #ffffff;
-		font-size: 1.1rem;
-		line-height: 1.5;
+		font-size: 1rem;
+		line-height: 1;
 		font-family: $family-primary;
 	}
 
@@ -49,24 +60,46 @@ export default class DefaultLayout extends Vue {}
 	}
 
 	.half-width {
-		max-width: 400px;
 		margin: 0 auto;
 	}
 
 	#header {
 		padding: 1rem 0;
 		border-bottom: 2px solid #6fc6e2;
+
+		.header-logo {
+			margin-left: 1rem;
+		}
+
+		.header-content {
+			margin-right: 1rem;
+			text-align: right;
+		}
+
+		a {
+			text-decoration: none;
+			color: #ffffff;
+		}
 	}
 
-	.header-logo {
-		margin-left: 2rem;
+	#footer {
+		margin: 0 .5rem 0 .5rem;
+		text-align: center;
+
+		a {
+			text-decoration: none;
+			color: #ffffff;
+		}
+
+		> * {
+			grid-column: span 2;
+		}
 	}
 
 	@media (min-width: 768px) {
 		#app {}
 
 		.half-width {
-			max-width: 600px;
 			margin: 0 auto;
 		}
 
@@ -80,7 +113,6 @@ export default class DefaultLayout extends Vue {}
 		#app {}
 
 		.half-width {
-			max-width: 800px;
 			margin: 0 auto;
 		}
 	}
