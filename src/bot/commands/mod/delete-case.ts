@@ -104,7 +104,7 @@ export default class CaseDeleteCommand extends Command {
 				const msgToDelete = await chan.messages.fetch(dbCase.message);
 				await msgToDelete.delete();
 			} catch {}
-			this._fixCases(totalCases, message.guild!.id, modLogChannel);
+			this._fixCases(dbCase.case_id, message.guild!.id, modLogChannel);
 		}
 
 		const restrictRoles = this.client.settings.get(message.guild!, 'restrictRoles', undefined);
