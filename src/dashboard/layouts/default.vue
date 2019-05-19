@@ -11,7 +11,7 @@
 		</header>
 		<Nuxt />
 		<footer id="footer" class="grid half-width">
-			<a href="/">Yukikaze</a>
+			<nuxt-link to="/">Yukikaze</nuxt-link>
 		</footer>
 	</div>
 </template>
@@ -33,7 +33,7 @@ export default class DefaultLayout extends Vue {
 	}
 
 	get username() {
-		return this.user ? this.user.user.username : 'Login';
+		return this.user ? this.user.username : 'Login';
 	}
 }
 </script>
@@ -84,7 +84,7 @@ export default class DefaultLayout extends Vue {
 
 	#footer {
 		margin: 0 .5rem 0 .5rem;
-		text-align: center;
+		justify-items: center;
 
 		a {
 			text-decoration: none;
@@ -96,26 +96,9 @@ export default class DefaultLayout extends Vue {
 		}
 	}
 
-	@media (min-width: 768px) {
-		#app {}
+	@media (min-width: 768px) {}
 
-		.half-width {
-			margin: 0 auto;
-		}
-
-		.grid {
-			display: grid;
-			grid-template-columns: 1fr 1fr 1fr 1fr;
-		}
-	}
-
-	@media (min-width: 992px) {
-		#app {}
-
-		.half-width {
-			margin: 0 auto;
-		}
-	}
+	@media (min-width: 992px) {}
 
 	@media (min-width: 1200px) {}
 </style>
