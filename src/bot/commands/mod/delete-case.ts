@@ -100,9 +100,10 @@ export default class CaseDeleteCommand extends Command {
 		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
 		if (modLogChannel) {
 			const chan = await this.client.channels.get(modLogChannel) as TextChannel;
-			const msgToDelete = await chan.messages.fetch(dbCase.message);
-			if (!msgToDelete) return;
-			await msgToDelete.delete();
+			try {
+				const msgToDelete = await chan.messages.fetch(dbCase.message);
+				await msgToDelete.delete();
+			} catch {}
 			this._fixCases(totalCases, modLogChannel);
 		}
 
@@ -111,7 +112,12 @@ export default class CaseDeleteCommand extends Command {
 			switch (dbCase.action) {
 				case 5:
 					// eslint-disable-next-line no-case-declarations
-					const member = await message.guild!.members.fetch(dbCase.target_id);
+					let member;
+					try {
+						member = await message.guild!.members.fetch(dbCase.target_id);
+					} catch {
+						break;
+					}
 					if (!member) break;
 					// eslint-disable-next-line no-case-declarations
 					const key = `${message.guild!.id}:${member.id}:MUTE`;
@@ -126,7 +132,13 @@ export default class CaseDeleteCommand extends Command {
 				case 6:
 					try {
 						// eslint-disable-next-line no-shadow
-						const member = await message.guild!.members.fetch(dbCase.target_id);
+						let member;
+						try {
+							member = await message.guild!.members.fetch(dbCase.target_id);
+						} catch {
+							break;
+						}
+						if (!member) break;
 						await member.roles.remove(restrictRoles.embed, `Embed restriction removed by ${message.author!.tag} | Removed Case #${dbCase.case_id}`);
 					} catch (error) {
 						message.reply(`there was an error removing the embed restriction on this member: \`${error}\``);
@@ -135,7 +147,13 @@ export default class CaseDeleteCommand extends Command {
 				case 7:
 					try {
 						// eslint-disable-next-line no-shadow
-						const member = await message.guild!.members.fetch(dbCase.target_id);
+						let member;
+						try {
+							member = await message.guild!.members.fetch(dbCase.target_id);
+						} catch {
+							break;
+						}
+						if (!member) break;
 						await member.roles.remove(restrictRoles.emoji, `Emoji restriction removed by ${message.author!.tag} | Removed Case #${dbCase.case_id}`);
 					} catch (error) {
 						message.reply(`there was an error removing the emoji restriction on this member: \`${error}\``);
@@ -144,7 +162,13 @@ export default class CaseDeleteCommand extends Command {
 				case 8:
 					try {
 						// eslint-disable-next-line no-shadow
-						const member = await message.guild!.members.fetch(dbCase.target_id);
+						let member;
+						try {
+							member = await message.guild!.members.fetch(dbCase.target_id);
+						} catch {
+							break;
+						}
+						if (!member) break;
 						await member.roles.remove(restrictRoles.reaction, `Reaction restriction removed by ${message.author!.tag} | Removed Case #${dbCase.case_id}`);
 					} catch (error) {
 						message.reply(`there was an error removing the reaction restriction on this member: \`${error}\``);
@@ -167,8 +191,13 @@ export default class CaseDeleteCommand extends Command {
 
 		for (const c of cases) {
 			const chan = this.client.channels.get(modLogChannel) as TextChannel;
-			const msg = await chan.messages.fetch(c.message);
-			await msg.edit({ embed: msg.embeds[0].setFooter(`Case ${newCaseNum++}`) });
+			try {
+				newCaseNum++;
+				const msg = await chan.messages.fetch(c.message);
+				await msg.edit({ embed: msg.embeds[0].setFooter(`Case ${newCaseNum}`) });
+			} catch {}
+			c.case_id = newCaseNum;
+			await casesRepo.save(c);
 		}
 	}
 }
