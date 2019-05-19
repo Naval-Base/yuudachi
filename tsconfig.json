@@ -9,6 +9,12 @@
 		"emitDecoratorMetadata": true,
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
-		"pretty": true
+		"pretty": true,
+		"baseUrl": ".",
+		"paths": {
+			"~/*": [
+				"src/dashboard/*"
+			]
+		}
 	}
 }

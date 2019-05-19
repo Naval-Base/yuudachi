@@ -12,15 +12,6 @@
 			"dom"
 		],
 		"esModuleInterop": true,
-		"baseUrl": ".",
-		"paths": {
-			"~/*": [
-				"./*"
-			],
-			"@/*": [
-				"./*"
-			]
-		},
 		"types": [
 			"@types/node",
 			"@nuxt/vue-app"
