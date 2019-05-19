@@ -13,6 +13,7 @@
 		"lint": "eslint . --ext .ts"
 	},
 	"dependencies": {
+		"cookie-universal-nuxt": "^2.0.14",
 		"nuxt": "^2.7.1",
 		"ts-node": "^8.1.0",
 		"vue-property-decorator": "^8.1.1",
@@ -36,6 +37,9 @@
 		"parser": "vue-eslint-parser",
 		"parserOptions": {
 			"parser": "@typescript-eslint/parser"
+		},
+		"env": {
+			"browser": true
 		}
 	}
 }
