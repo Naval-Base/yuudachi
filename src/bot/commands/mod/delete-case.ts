@@ -186,7 +186,7 @@ export default class CaseDeleteCommand extends Command {
 
 	private async _fixCases(caseNum: number, guild: string, modLogChannel: string): Promise<void> {
 		const casesRepo = this.client.db.getRepository(Case);
-		const cases = await casesRepo.find({ guild, case_id: MoreThan(caseNum) });
+		const cases = await casesRepo.find({ where: { guild, case_id: MoreThan(caseNum) }, order: { id: 'ASC' } });
 		let newCaseNum = caseNum;
 
 		for (const c of cases) {
