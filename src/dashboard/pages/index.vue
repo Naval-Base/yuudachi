@@ -1,15 +1,19 @@
 <template>
 	<main id="main" class="half-width">
 		<section id="section">
-			<h1 class="guild-heading">Owner:</h1>
-			<div class="guild-list" v-for="guild in ownedGuilds" :key="guild.id">
+			<h1 class="guild-heading">
+				Owner:
+			</h1>
+			<div v-for="guild in ownedGuilds" :key="guild.id" class="guild-list">
 				<nuxt-link :to="`/guilds/${guild.id}`">
 					<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
 					<div>{{ guild.name }}</div>
 				</nuxt-link>
 			</div>
-			<h1 class="guild-heading">Member:</h1>
-			<div class="guild-list" v-for="guild in memberGuilds" :key="guild.id">
+			<h1 class="guild-heading">
+				Member:
+			</h1>
+			<div v-for="guild in memberGuilds" :key="guild.id" class="guild-list">
 				<nuxt-link :to="`/guilds/${guild.id}`">
 					<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
 					<div>{{ guild.name }}</div>
@@ -34,12 +38,10 @@ export default class IndexPage extends Vue {
 	public message = 'World';
 
 	get ownedGuilds() {
-		// eslint-disable-next-line @typescript-eslint/promise-function-async
 		return this.guilds.length ? this.guilds.filter((guild: Guild) => guild.owner) : [];
 	}
 
 	get memberGuilds() {
-		// eslint-disable-next-line @typescript-eslint/promise-function-async
 		return this.guilds.length ? this.guilds.filter((guild: Guild) => !guild.owner) : [];
 	}
 }
