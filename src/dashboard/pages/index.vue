@@ -1,24 +1,29 @@
 <template>
-	<main id="main" class="half-width">
+	<main id="main">
 		<section id="section">
-			<h1 class="guild-heading">
-				Manageable:
+			<template v-if="manageableGuilds.length || memberGuilds.length">
+				<h1 class="guild-heading">
+					Manageable:
+				</h1>
+				<div v-for="guild in manageableGuilds" :key="guild.id" class="guild-list">
+					<nuxt-link :to="`/guilds/${guild.id}`" @click.native="selectGuild(guild.id)">
+						<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
+						<div>{{ guild.name }}</div>
+					</nuxt-link>
+				</div>
+				<h1 class="guild-heading">
+					Non-manageable servers:
+				</h1>
+				<div v-for="guild in memberGuilds" :key="guild.id" class="guild-list">
+					<nuxt-link :to="`/guilds/${guild.id}`" @click.native="selectGuild(guild.id)">
+						<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
+						<div>{{ guild.name }}</div>
+					</nuxt-link>
+				</div>
+			</template>
+			<h1 v-else>
+				Not logged in.
 			</h1>
-			<div v-for="guild in manageableGuilds" :key="guild.id" class="guild-list">
-				<nuxt-link :to="`/guilds/${guild.id}`" @click.native="selectGuild(guild.id)">
-					<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
-					<div>{{ guild.name }}</div>
-				</nuxt-link>
-			</div>
-			<h1 class="guild-heading">
-				Non-manageable servers:
-			</h1>
-			<div v-for="guild in memberGuilds" :key="guild.id" class="guild-list">
-				<nuxt-link :to="`/guilds/${guild.id}`" @click.native="selectGuild(guild.id)">
-					<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
-					<div>{{ guild.name }}</div>
-				</nuxt-link>
-			</div>
 		</section>
 	</main>
 </template>
