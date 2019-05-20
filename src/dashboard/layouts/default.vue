@@ -59,10 +59,6 @@ export default class DefaultLayout extends Vue {
 		grid-template-columns: 1fr 1fr;
 	}
 
-	.half-width {
-		margin: 0 auto;
-	}
-
 	#header {
 		padding: 1rem 0;
 		border-bottom: 2px solid #6fc6e2;
