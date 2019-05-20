@@ -1,7 +1,7 @@
 <template>
 	<main id="main">
 		<section id="section">
-			<template v-if="manageableGuilds.length || memberGuilds.length">
+			<template v-if="auth">
 				<h1 class="guild-heading">
 					Manageable:
 				</h1>
@@ -38,6 +38,9 @@ import { Guild } from '~/store';
 })
 export default class IndexPage extends Vue {
 	@Getter
+	public authenticated: any;
+
+	@Getter
 	public guilds: any;
 
 	@Action
@@ -47,6 +50,10 @@ export default class IndexPage extends Vue {
 
 	guildManageable(guild: Guild) {
 		return (guild.permissions & (1 << 5)) === 1 << 5;
+	}
+
+	get auth() {
+		return this.authenticated;
 	}
 
 	get manageableGuilds() {
