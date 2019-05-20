@@ -8,8 +8,8 @@
 	"scripts": {
 		"prebuild": "yarn lint",
 		"dev": "nuxt dev",
-		"build": "nuxt build",
-		"start": "nuxt start",
+		"build": "nuxt build --modern=server",
+		"start": "nuxt start --modern=server",
 		"lint": "eslint . --ext .ts"
 	},
 	"dependencies": {
