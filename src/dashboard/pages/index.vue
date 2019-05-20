@@ -40,12 +40,16 @@ export default class IndexPage extends Vue {
 
 	public message = 'World';
 
+	guildManageable(guild: Guild) {
+		return (guild.permissions & (1 << 5)) === 1 << 5;
+	}
+
 	get manageableGuilds() {
-		return this.guilds.length ? this.guilds.filter((guild: Guild) => (guild.permissions & 1 << 5) === 1 << 5) : [];
+		return this.guilds.length ? this.guilds.filter((guild: Guild) => this.guildManageable(guild)) : [];
 	}
 
 	get memberGuilds() {
-		return this.guilds.length ? this.guilds.filter((guild: Guild) => !guild.owner) : [];
+		return this.guilds.length ? this.guilds.filter((guild: Guild) => !this.guildManageable(guild)) : [];
 	}
 }
 </script>
