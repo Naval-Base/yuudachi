@@ -1,9 +1,12 @@
 import NuxtConfiguration from '@nuxt/config';
 
 const conf: NuxtConfiguration = {
+	loading: false,
+	loadingIndicator: false,
+	globalName: 'yukikaze',
 	head: {
-		title: 'It\'s time to ditch other radios.',
-		titleTemplate: '%s | LISTEN.moe',
+		title: 'Yukikaze Dashboard.',
+		titleTemplate: '%s | NAVAL-BASE',
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
