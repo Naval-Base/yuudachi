@@ -1,16 +1,27 @@
 <template>
 	<main id="main" class="grid half-width">
 		<section id="section">
-			Information about the guild.
+			<p>Information about the guild.</p>
+			<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
+			<p>{{ guild.name }}</p>
+			<p>{{ guild.id }}</p>
 		</section>
 	</main>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Getter } from 'vuex-class';
 
 @Component
-export default class GuildPage extends Vue {}
+export default class GuildPage extends Vue {
+	@Getter
+	public selectedGuild: any;
+
+	get guild() {
+		return this.selectedGuild;
+	}
+}
 </script>
 
 <style lang="scss" scoped>
@@ -23,5 +34,9 @@ export default class GuildPage extends Vue {}
 	#section {
 		grid-column: span 2;
 		text-align: center;
+
+		img {
+			border-radius: 50%;
+		}
 	}
 </style>

@@ -2,19 +2,19 @@
 	<main id="main" class="half-width">
 		<section id="section">
 			<h1 class="guild-heading">
-				Owner:
+				Manageable:
 			</h1>
-			<div v-for="guild in ownedGuilds" :key="guild.id" class="guild-list">
-				<nuxt-link :to="`/guilds/${guild.id}`">
+			<div v-for="guild in manageableGuilds" :key="guild.id" class="guild-list">
+				<nuxt-link :to="`/guilds/${guild.id}`" @click.native="selectGuild(guild.id)">
 					<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
 					<div>{{ guild.name }}</div>
 				</nuxt-link>
 			</div>
 			<h1 class="guild-heading">
-				Member:
+				Non-manageable servers:
 			</h1>
 			<div v-for="guild in memberGuilds" :key="guild.id" class="guild-list">
-				<nuxt-link :to="`/guilds/${guild.id}`">
+				<nuxt-link :to="`/guilds/${guild.id}`" @click.native="selectGuild(guild.id)">
 					<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
 					<div>{{ guild.name }}</div>
 				</nuxt-link>
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
+import { Getter, Action } from 'vuex-class';
 import { Guild } from '~/store';
 
 @Component({
@@ -35,10 +35,13 @@ export default class IndexPage extends Vue {
 	@Getter
 	public guilds: any;
 
+	@Action
+	public selectGuild: any;
+
 	public message = 'World';
 
-	get ownedGuilds() {
-		return this.guilds.length ? this.guilds.filter((guild: Guild) => guild.owner) : [];
+	get manageableGuilds() {
+		return this.guilds.length ? this.guilds.filter((guild: Guild) => (guild.permissions & 1 << 5) === 1 << 5) : [];
 	}
 
 	get memberGuilds() {
