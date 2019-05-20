@@ -22,17 +22,12 @@ export default class IndexPage extends Vue {}
 
 <style lang="scss" scoped>
 	#main {
-		margin: 1rem .5rem;
 		background: #000000;
 		color: #ffffff;
 		text-align: center;
 	}
 
 	#section {
-		.guild-heading {
-			grid-column: 1 / -1;
-		}
-
 		> * {
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));

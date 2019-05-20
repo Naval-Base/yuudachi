@@ -44,12 +44,8 @@ export default class DefaultLayout extends Vue {
 		background: #000000;
 		color: #ffffff;
 		font-size: 1rem;
-		line-height: 1;
+		line-height: 1.2;
 		font-family: $family-primary;
-	}
-
-	#app {
-		margin: 0 auto;
 	}
 
 	.grid {
