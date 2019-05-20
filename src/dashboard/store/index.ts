@@ -3,7 +3,8 @@ import { GetterTree, ActionContext, ActionTree, MutationTree } from 'vuex';
 export const types = {
 	SET_AUTH: 'setAuth',
 	SET_USER: 'setUser',
-	SET_GUILDS: 'setGuilds'
+	SET_GUILDS: 'setGuilds',
+	SELECT_GUILD: 'selectGuild'
 };
 
 export interface User {
@@ -24,33 +25,43 @@ export interface Guild {
 	name: string;
 	icon: string | null;
 	owner: boolean;
-	permission: number;
+	permissions: number;
 }
 
 export interface State {
 	authenticated: boolean;
 	user: User | null;
 	guilds: Guild[];
+	selectedGuild: string | null;
 }
 
 export const state = (): State => ({
 	authenticated: false,
 	user: null,
-	guilds: []
+	guilds: [],
+	selectedGuild: null
 });
 
 export const getters: GetterTree<State, State> = {
 	authenticated: state => state.authenticated,
 	user: state => state.user,
-	guilds: state => state.guilds
+	guilds: state => state.guilds,
+	selectedGuild: state => {
+		const g = state.guilds.find(guild => guild.id === state.selectedGuild);
+		return g ? g : null;
+	}
 };
 
 export interface Actions<S, R> extends ActionTree<S, R> {
 	nuxtServerInit(context: ActionContext<S, R>): void;
+	selectGuild(context: ActionContext<S, R>, id: string): void;
 }
 
 export const actions: Actions<State, State> = {
-	nuxtServerInit() {}
+	nuxtServerInit() {},
+	selectGuild({ commit }, id: string) {
+		commit(types.SELECT_GUILD, id);
+	}
 };
 
 export const mutations: MutationTree<State> = {
@@ -62,5 +73,8 @@ export const mutations: MutationTree<State> = {
 	},
 	[types.SET_GUILDS](state, { guilds }: { guilds: Guild[] }) {
 		state.guilds = guilds;
+	},
+	[types.SELECT_GUILD](state, id: string) {
+		state.selectedGuild = id;
 	}
 };
