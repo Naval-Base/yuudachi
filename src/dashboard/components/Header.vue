@@ -52,5 +52,9 @@ export default class HeaderComponent extends Vue {
 			text-decoration: none;
 			color: #ffffff;
 		}
+
+		span {
+			color: #ffffff;
+		}
 	}
 </style>
