@@ -3840,10 +3840,10 @@ eslint-config-aqua@^6.0.0:
   resolved "https://registry.yarnpkg.com/eslint-config-aqua/-/eslint-config-aqua-6.0.0.tgz#bfc49aaa757864e47c2584f3afcc6253a1c020d4"
   integrity sha512-zH8/LTjA11ghrelRw5bGSReoz6gDAsSDGUNyy7EP7APkFvzEA0Xvnq+w2mu5R4i8z1g+GILReU0bI2uuDK7jAA==
 
-eslint-config-marine@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-marine/-/eslint-config-marine-3.0.1.tgz#6de03f167d02dc94fe77b88da7f6b677d2befa50"
-  integrity sha512-DWiXmGoHnbYTHhzPU3gX4q1fcarJmxIb+SHElyGmxxk3L1Wz3DP7YqvQAFX09+eUupC6+jgF5ah3JUtebkgA+A==
+eslint-config-marine@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-config-marine/-/eslint-config-marine-3.0.2.tgz#df9c09a5c15f618d5795f640e951a1fe82f0b3a2"
+  integrity sha512-jeI3ZHvnlGhrJoBs9BbSxilp3hxJQC0rzL3G9TFMElCoNeK9LeY3GxfBLL5j8JIjbC4EKQJX8DtbRI1goffelA==
   dependencies:
     eslint-config-aqua "^6.0.0"
     eslint-plugin-promise "^4.1.1"
