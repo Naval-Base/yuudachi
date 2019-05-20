@@ -64,11 +64,11 @@ export default class DefaultLayout extends Vue {
 		border-bottom: 2px solid #6fc6e2;
 
 		.header-logo {
-			margin-left: 1rem;
+			margin-left: 2rem;
 		}
 
 		.header-content {
-			margin-right: 1rem;
+			margin-right: 2rem;
 			text-align: right;
 		}
 
