@@ -1,22 +1,8 @@
 <template>
 	<div id="app">
-		<header id="header" class="grid">
-			<div class="header-logo">
-				<nuxt-link to="/">
-					Yukikaze
-				</nuxt-link>
-			</div>
-			<div class="header-content">
-				<a v-if="!auth" href="http://localhost:8000/discord">{{ username }}</a>
-				<span v-else>{{ username }}</span>
-			</div>
-		</header>
+		<Header />
 		<Nuxt />
-		<footer id="footer" class="grid">
-			<nuxt-link to="/">
-				Yukikaze
-			</nuxt-link>
-		</footer>
+		<Footer />
 	</div>
 </template>
 
@@ -24,7 +10,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 
-@Component
+import Header from '~/components/Header.vue';
+import Footer from '~/components/Footer.vue';
+
+@Component({
+	components: {
+		Header,
+		Footer
+	}
+})
 export default class DefaultLayout extends Vue {
 	@Getter
 	public authenticated: any;
@@ -61,39 +55,6 @@ export default class DefaultLayout extends Vue {
 	.grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-	}
-
-	#header {
-		padding: 1rem 0;
-		border-bottom: 2px solid #6fc6e2;
-
-		.header-logo {
-			margin-left: 2rem;
-		}
-
-		.header-content {
-			margin-right: 2rem;
-			text-align: right;
-		}
-
-		a {
-			text-decoration: none;
-			color: #ffffff;
-		}
-	}
-
-	#footer {
-		margin: 0 .5rem 0 .5rem;
-		justify-items: center;
-
-		a {
-			text-decoration: none;
-			color: #ffffff;
-		}
-
-		> * {
-			grid-column: span 2;
-		}
 	}
 
 	@media (min-width: 768px) {}
