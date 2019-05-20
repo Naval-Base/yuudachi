@@ -27,14 +27,12 @@ export interface Guild {
 	permission: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface State {
 	authenticated: boolean;
 	user: User | null;
 	guilds: Guild[];
 }
 
-// eslint-disable-next-line @typescript-eslint/promise-function-async
 export const state = (): State => ({
 	authenticated: false,
 	user: null,
