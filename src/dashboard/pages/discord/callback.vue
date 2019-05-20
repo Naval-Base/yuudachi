@@ -1,5 +1,5 @@
 <template>
-	<main id="main" class="grid half-width">
+	<main id="main" class="grid">
 		<section id="section">
 			Successfully authenticated.
 		</section>

@@ -2,7 +2,9 @@
 	<div id="app">
 		<header id="header" class="grid">
 			<div class="header-logo">
-				<nuxt-link to="/">Yukikaze</nuxt-link>
+				<nuxt-link to="/">
+					Yukikaze
+				</nuxt-link>
 			</div>
 			<div class="header-content">
 				<a v-if="!auth" href="http://localhost:8000/discord">{{ username }}</a>
@@ -10,8 +12,10 @@
 			</div>
 		</header>
 		<Nuxt />
-		<footer id="footer" class="grid half-width">
-			<nuxt-link to="/">Yukikaze</nuxt-link>
+		<footer id="footer" class="grid">
+			<nuxt-link to="/">
+				Yukikaze
+			</nuxt-link>
 		</footer>
 	</div>
 </template>

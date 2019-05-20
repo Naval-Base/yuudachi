@@ -1,5 +1,5 @@
 <template>
-	<main id="main" class="grid half-width">
+	<main id="main" class="grid">
 		<section id="section">
 			<p>Information about the guild.</p>
 			<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
