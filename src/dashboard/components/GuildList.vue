@@ -70,7 +70,6 @@ export default class GuildListComponent extends Vue {
 	.guild-list {
 		max-width: 128px;
 		display: grid;
-		align-items: center;
 
 		a {
 			text-decoration: none;
