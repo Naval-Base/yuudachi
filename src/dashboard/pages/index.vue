@@ -9,12 +9,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import GuildList from '~/components/GuildList.vue';
-
 @Component({
 	name: 'Home',
 	components: {
-		GuildList
+		GuildList: () => import('~/components/GuildList.vue')
 	}
 })
 export default class IndexPage extends Vue {}

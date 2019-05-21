@@ -10,13 +10,10 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 
-import Header from '~/components/Header.vue';
-import Footer from '~/components/Footer.vue';
-
 @Component({
 	components: {
-		Header,
-		Footer
+		Header: () => import('~/components/Header.vue'),
+		Footer: () => import('~/components/Footer.vue')
 	}
 })
 export default class DefaultLayout extends Vue {
