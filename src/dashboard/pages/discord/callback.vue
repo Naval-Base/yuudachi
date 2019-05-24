@@ -9,6 +9,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Mutation } from 'vuex-class';
+import { User, Guild } from '~/store';
+
+interface DiscordResponse {
+	data: User;
+	guilds: Guild[];
+}
 
 @Component
 export default class DiscordCallbackPage extends Vue {
@@ -25,12 +31,13 @@ export default class DiscordCallbackPage extends Vue {
 		let json;
 		try {
 			const res = await fetch(`http://localhost:8000/discord/callback?code=${this.$route.query.code}`, { credentials: 'include' });
-			json = await res.json();
+			json = await res.json() as DiscordResponse;
+			this.setAuth({ authenticated: true });
+			this.setUser({ user: json.data });
+			this.setGuilds({ guilds: json.guilds });
 		} catch {}
 
-		this.setAuth({ authenticated: true });
-		this.setUser({ user: json.data });
-		this.setGuilds({ guilds: json.guilds });
+		this.$router.push('/');
 	}
 }
 </script>
