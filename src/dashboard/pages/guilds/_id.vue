@@ -27,7 +27,7 @@ export default class GuildPage extends Vue {
 <style lang="scss" scoped>
 	#main {
 		margin: 1rem .5rem;
-		background: #ffffff;
+		background: #FFFFFF;
 		color: #000000;
 	}
 

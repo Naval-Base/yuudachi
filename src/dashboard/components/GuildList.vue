@@ -73,7 +73,7 @@ export default class GuildListComponent extends Vue {
 
 		a {
 			text-decoration: none;
-			color: #ffffff;
+			color: #FFFFFF;
 			margin: 0;
 			padding: 0;
 		}

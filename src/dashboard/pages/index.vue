@@ -21,7 +21,7 @@ export default class IndexPage extends Vue {}
 <style lang="scss" scoped>
 	#main {
 		background: #000000;
-		color: #ffffff;
+		color: #FFFFFF;
 		text-align: center;
 	}
 

@@ -37,7 +37,7 @@ export default class HeaderComponent extends Vue {
 <style lang="scss" scoped>
 	#header {
 		padding: 1rem 0;
-		border-bottom: 2px solid #6fc6e2;
+		border-bottom: 2px solid #6FC6E2;
 
 		.header-logo {
 			margin-left: 2rem;
@@ -50,11 +50,11 @@ export default class HeaderComponent extends Vue {
 
 		a {
 			text-decoration: none;
-			color: #ffffff;
+			color: #FFFFFF;
 		}
 
 		span {
-			color: #ffffff;
+			color: #FFFFFF;
 		}
 	}
 </style>

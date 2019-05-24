@@ -38,7 +38,7 @@ export default class DiscordCallbackPage extends Vue {
 <style lang="scss" scoped>
 	#main {
 		margin: 1rem .5rem;
-		background: #ffffff;
+		background: #FFFFFF;
 		color: #000000;
 	}
 

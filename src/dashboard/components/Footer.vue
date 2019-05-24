@@ -20,7 +20,7 @@ export default class FooterComponent extends Vue {}
 
 		a {
 			text-decoration: none;
-			color: #ffffff;
+			color: #FFFFFF;
 		}
 
 		> * {
