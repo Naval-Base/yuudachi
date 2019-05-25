@@ -1,0 +1,47 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "debug api",
+			"runtimeExecutable": "${workspaceFolder}/src/api/node_modules/.bin/nodemon",
+			"args": ["--watch", "./src/api/dist"],
+			"cwd": "${workspaceFolder}/src/api",
+			"program": "${workspaceFolder}/src/api/dist/index.js",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"preLaunchTask": "watch_api",
+			"restart": true,
+		},
+		{
+			"type": "chrome",
+			"request": "launch",
+			"name": "debug nuxt:client",
+			"runtimeExecutable": "C:/Program Files (x86)/Google/Chrome Dev/Application/chrome.exe",
+			"url": "http://localhost:3000",
+			"webRoot": "${workspaceFolder}/src/dashboard",
+			"internalConsoleOptions": "neverOpen",
+			"userDataDir": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "debug nuxt:server",
+			"args": ["dev"],
+			"cwd": "${workspaceFolder}/src/dashboard",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"windows": {
+				"program": "${workspaceFolder}/node_modules/nuxt/bin/nuxt.js"
+			},
+			"restart": true
+		}
+	],
+	"compounds": [
+		{
+			"name": "debug dashboard",
+			"configurations": ["debug nuxt:server", "debug nuxt:client"]
+		}
+	]
+}
