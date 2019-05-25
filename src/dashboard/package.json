@@ -15,7 +15,7 @@
 	"dependencies": {
 		"cookie-universal-nuxt": "^2.0.14",
 		"nuxt": "^2.7.1",
-		"ts-node": "^8.1.0",
+		"ts-node": "^8.1.1",
 		"vue-property-decorator": "^8.1.1",
 		"vuex": "^3.1.1",
 		"vuex-class": "^0.3.2"

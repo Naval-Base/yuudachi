@@ -11,10 +11,6 @@
 			"esnext.symbol",
 			"dom"
 		],
-		"esModuleInterop": true,
-		"types": [
-			"@types/node",
-			"@nuxt/vue-app"
-		]
+		"esModuleInterop": true
 	}
 }
