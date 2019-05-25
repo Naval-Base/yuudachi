@@ -7,12 +7,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { Mutation } from 'vuex-class';
+import { Component, Vue, Mutation } from 'nuxt-property-decorator';
 import { User, Guild } from '~/store';
 
 interface DiscordResponse {
-	data: User;
+	user: User;
 	guilds: Guild[];
 }
 
@@ -33,7 +32,7 @@ export default class DiscordCallbackPage extends Vue {
 			const res = await fetch(`http://localhost:8000/discord/callback?code=${this.$route.query.code}`, { credentials: 'include' });
 			json = await res.json() as DiscordResponse;
 			this.setAuth({ authenticated: true });
-			this.setUser({ user: json.data });
+			this.setUser({ user: json.user });
 			this.setGuilds({ guilds: json.guilds });
 		} catch {}
 
@@ -45,8 +44,7 @@ export default class DiscordCallbackPage extends Vue {
 <style lang="scss" scoped>
 	#main {
 		margin: 1rem .5rem;
-		background: #FFFFFF;
-		color: #000000;
+		color: #FFFFFF;
 	}
 
 	#section {

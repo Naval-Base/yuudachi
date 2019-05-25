@@ -10,8 +10,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
+import { Component, Vue, Getter } from 'nuxt-property-decorator';
 
 @Component
 export default class GuildPage extends Vue {

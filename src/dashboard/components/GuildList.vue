@@ -27,8 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { Getter, Action } from 'vuex-class';
+import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
 import { Guild } from '~/store';
 
 @Component({
