@@ -10,10 +10,16 @@
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
 		"pretty": true,
-		"baseUrl": ".",
+		"baseUrl": "src",
 		"paths": {
+			"~bot/*": [
+				"bot/*"
+			],
+			"~api/*": [
+				"api/*"
+			],
 			"~/*": [
-				"src/dashboard/*"
+				"dashboard/*"
 			]
 		}
 	}
