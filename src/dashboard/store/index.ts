@@ -8,6 +8,14 @@ export const types = {
 	SELECT_GUILD: 'selectGuild'
 };
 
+export interface Guild {
+	id: string;
+	name: string;
+	icon: string | null;
+	owner: boolean;
+	permissions: number;
+}
+
 export interface User {
 	id: string;
 	username: string;
@@ -19,14 +27,7 @@ export interface User {
 	email: string | null;
 	flags: number | null;
 	premium_type: number | null;
-}
-
-export interface Guild {
-	id: string;
-	name: string;
-	icon: string | null;
-	owner: boolean;
-	permissions: number;
+	guilds: Guild[];
 }
 
 export interface State {
@@ -55,7 +56,7 @@ export const getters: GetterTree<State, State> = {
 
 export interface Actions<S, R> extends ActionTree<S, R> {
 	nuxtServerInit(context: ActionContext<S, R>, { app }: { app: any }): void;
-	login(context: ActionContext<S, R>, { user }: { user: User }): void;
+	login(context: ActionContext<S, R>, user: User): void;
 	logout(context: ActionContext<S, R>): void;
 	selectGuild(context: ActionContext<S, R>, id: string): void;
 }
@@ -84,22 +85,31 @@ export const actions: Actions<State, State> = {
 						email
 						flags
 						premium_type
+						guilds {
+							id
+							name
+							icon
+							owner
+							permissions
+						}
 					}
 				}`
 			});
 
-			const { __typename: _, ...rest } = data.me;
-			await dispatch('login', rest);
+			await dispatch('login', data.me);
 		} catch {
 			await dispatch('logout');
 		}
 	},
 	login({ commit }, user) {
-		commit(types.SET_USER, { user });
+		const { guilds, ...rest } = user;
+		commit(types.SET_USER, { user: rest });
+		commit(types.SET_GUILDS, { guilds });
 		commit(types.SET_AUTH, true);
 	},
 	logout({ commit }) {
-		commit(types.SET_USER, null);
+		commit(types.SET_USER, { user: null });
+		commit(types.SET_GUILDS, { guilds: [] })
 		commit(types.SET_AUTH, false);
 	},
 	selectGuild({ commit }, id: string) {
@@ -108,7 +118,7 @@ export const actions: Actions<State, State> = {
 };
 
 export const mutations: MutationTree<State> = {
-	[types.SET_AUTH](state, { authenticated }: { authenticated: boolean }) {
+	[types.SET_AUTH](state, authenticated: boolean) {
 		state.authenticated = authenticated;
 	},
 	[types.SET_USER](state, { user }: { user: User }) {

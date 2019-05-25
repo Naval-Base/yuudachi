@@ -30,18 +30,16 @@
 import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
 import { Guild } from '~/store';
 
-@Component({
-	name: 'GuildList'
-})
+@Component
 export default class GuildListComponent extends Vue {
 	@Getter
-	public authenticated: any;
+	public authenticated!: boolean;
 
 	@Getter
-	public guilds: any;
+	public guilds!: any[];
 
 	@Action
-	public selectGuild: any;
+	public selectGuild!: string;
 
 	guildManageable(guild: Guild) {
 		return (guild.permissions & (1 << 5)) === 1 << 5;

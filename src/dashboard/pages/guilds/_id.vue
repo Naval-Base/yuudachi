@@ -15,7 +15,7 @@ import { Component, Vue, Getter } from 'nuxt-property-decorator';
 @Component
 export default class GuildPage extends Vue {
 	@Getter
-	public selectedGuild: any;
+	public selectedGuild!: string;
 
 	get guild() {
 		return this.selectedGuild;

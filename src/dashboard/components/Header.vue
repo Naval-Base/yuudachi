@@ -18,10 +18,10 @@ import { Component, Vue, Getter } from 'nuxt-property-decorator';
 @Component
 export default class HeaderComponent extends Vue {
 	@Getter
-	public authenticated: any;
+	public authenticated!: boolean;
 
 	@Getter
-	public user: any;
+	public user!: any;
 
 	get auth() {
 		return this.authenticated;

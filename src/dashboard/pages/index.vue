@@ -10,7 +10,6 @@
 import { Component, Vue } from 'nuxt-property-decorator';
 
 @Component({
-	name: 'Home',
 	components: {
 		GuildList: () => import('~/components/GuildList.vue')
 	}

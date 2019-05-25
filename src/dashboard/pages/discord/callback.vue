@@ -31,9 +31,8 @@ export default class DiscordCallbackPage extends Vue {
 		try {
 			const res = await fetch(`http://localhost:8000/discord/callback?code=${this.$route.query.code}`, { credentials: 'include' });
 			json = await res.json() as DiscordResponse;
-			this.setAuth({ authenticated: true });
+			this.setAuth(true);
 			this.setUser({ user: json.user });
-			this.setGuilds({ guilds: json.guilds });
 		} catch {}
 
 		this.$router.push('/');

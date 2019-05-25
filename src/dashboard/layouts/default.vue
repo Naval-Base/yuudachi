@@ -18,10 +18,10 @@ import { Getter } from 'vuex-class';
 })
 export default class DefaultLayout extends Vue {
 	@Getter
-	public authenticated: any;
+	public authenticated!: boolean;
 
 	@Getter
-	public user: any;
+	public user!: any;
 
 	get auth() {
 		return this.authenticated;
