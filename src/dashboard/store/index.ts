@@ -1,4 +1,5 @@
 import { GetterTree, ActionContext, ActionTree, MutationTree } from 'vuex';
+import gql from 'graphql-tag';
 
 export const types = {
 	SET_AUTH: 'setAuth',
@@ -53,12 +54,54 @@ export const getters: GetterTree<State, State> = {
 };
 
 export interface Actions<S, R> extends ActionTree<S, R> {
-	nuxtServerInit(context: ActionContext<S, R>): void;
+	nuxtServerInit(context: ActionContext<S, R>, { app }: { app: any }): void;
+	login(context: ActionContext<S, R>, { user }: { user: User }): void;
+	logout(context: ActionContext<S, R>): void;
 	selectGuild(context: ActionContext<S, R>, id: string): void;
 }
 
 export const actions: Actions<State, State> = {
-	nuxtServerInit() {},
+	async nuxtServerInit({ dispatch }, { app }) {
+		// @ts-ignore
+		const cookies = this.$cookies.getAll();
+		if (!cookies.token) {
+			dispatch('logout');
+			return;
+		}
+
+		try {
+			const client = app.apolloProvider.defaultClient;
+			const { data } = await client.query({
+				query: gql`{
+					me {
+						id
+						username
+						discriminator
+						avatar
+						bot
+						locale
+						verified
+						email
+						flags
+						premium_type
+					}
+				}`
+			});
+
+			const { __typename: _, ...rest } = data.me;
+			await dispatch('login', rest);
+		} catch {
+			await dispatch('logout');
+		}
+	},
+	login({ commit }, user) {
+		commit(types.SET_USER, { user });
+		commit(types.SET_AUTH, true);
+	},
+	logout({ commit }) {
+		commit(types.SET_USER, null);
+		commit(types.SET_AUTH, false);
+	},
 	selectGuild({ commit }, id: string) {
 		commit(types.SELECT_GUILD, id);
 	}

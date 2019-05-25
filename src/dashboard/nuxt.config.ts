@@ -39,6 +39,7 @@ const conf: NuxtConfiguration = {
 		]
 	},
 	modules: [
+		'@nuxtjs/apollo',
 		'cookie-universal-nuxt'
 	],
 	build: {
@@ -47,6 +48,12 @@ const conf: NuxtConfiguration = {
 				config.output!.globalObject = 'this';
 				config.devtool = 'inline-source-map';
 			}
+		}
+	},
+	apollo: {
+		tokenName: 'token',
+		clientConfigs: {
+			'default': '~/plugins/apollo-default-config.ts'
 		}
 	}
 };
