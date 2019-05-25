@@ -7,5 +7,5 @@ module.exports = (() => {
 		.toString()
 		.trim();
 	const line = `export const VERSION = '${rev}';\n`;
-	writeFileSync(join(__dirname, '..', 'util', 'version.ts'), line);
+	writeFileSync(join(__dirname, 'util', 'version.ts'), line);
 })();

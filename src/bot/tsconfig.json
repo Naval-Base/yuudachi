@@ -9,9 +9,7 @@
 			"esnext.asynciterable",
 			"esnext.intl",
 			"esnext.symbol"
-		]
-	},
-	"include": [
-		"."
-	]
+		],
+		"outDir": "dist"
+	}
 }
