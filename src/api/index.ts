@@ -10,6 +10,7 @@ import * as cors from 'cors';
 
 import { GuildResolver } from './gql/resolvers/Guild';
 import { User, UserResolver } from './gql/resolvers/User';
+import { SettingResolver } from './gql/resolvers/Setting';
 
 declare module 'http' {
 	interface IncomingMessage {
@@ -28,7 +29,7 @@ async function main(): Promise<void> {
 	await db.connect();
 
 	const schema = await buildSchema({
-		resolvers: [UserResolver, GuildResolver]
+		resolvers: [UserResolver, GuildResolver, SettingResolver]
 	});
 
 	const server = new ApolloServer({
