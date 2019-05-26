@@ -3,7 +3,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { createServer, IncomingMessage } from 'http';
 const polka = require('polka'); // eslint-disable-line
 import { buildSchema } from 'type-graphql';
-/* import database from './structures/Database'; */
+import database from './structures/Database';
 import { Connection } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 import * as cors from 'cors';
@@ -24,8 +24,8 @@ export interface Context {
 }
 
 async function main(): Promise<void> {
-	/* const db = database.get('yukikaze');
-	await db.connect(); */
+	const db = database.get('yukikaze');
+	await db.connect();
 
 	const schema = await buildSchema({
 		resolvers: [UserResolver, GuildResolver]
@@ -34,8 +34,8 @@ async function main(): Promise<void> {
 	const server = new ApolloServer({
 		schema,
 		context: ({ req }: { req: IncomingMessage }) => ({
-			req
-			/* db */
+			req,
+			db
 		})
 	});
 

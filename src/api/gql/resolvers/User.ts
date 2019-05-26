@@ -1,4 +1,4 @@
-import { Resolver, Query, Ctx, ObjectType, Field, ID, Int, ResolverInterface, FieldResolver, Root } from 'type-graphql';
+import { Resolver, Query, Ctx, ObjectType, Field, ID, Int, ResolverInterface, FieldResolver, Root, Arg } from 'type-graphql';
 import { Context } from '../../';
 import { Guild } from './Guild';
 import fetch from 'node-fetch';
@@ -68,13 +68,17 @@ export class UserResolver implements ResolverInterface<User> {
 	@FieldResolver()
 	public async guilds(
 		@Root() _: User,
-		@Ctx() context: Context
+		@Ctx() context: Context,
+		@Arg('id', { nullable: true }) id?: string
 	): Promise<Guild[]> {
 		const guilds = await (await fetch('https://discordapp.com/api/users/@me/guilds', {
 			headers: {
 				authorization: `Bearer ${context.req.token}`
 			}
-		})).json();
+		})).json() as Guild[];
+		if (id) {
+			return guilds.filter(guild => guild.id === id);
+		}
 
 		return guilds;
 	}
