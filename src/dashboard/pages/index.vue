@@ -19,16 +19,14 @@ export default class IndexPage extends Vue {}
 
 <style lang="scss" scoped>
 	#main {
-		background: #000000;
+		background: #1A1A1D;
 		color: #FFFFFF;
 		text-align: center;
 	}
 
-	#section {
-		> * {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-			justify-items: center;
-		}
+	#section > * {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+		justify-items: center;
 	}
 </style>

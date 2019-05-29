@@ -38,7 +38,7 @@ export default class DefaultLayout extends Vue {
 
 	body {
 		margin: 0;
-		background: #000000;
+		background: #1A1A1D;
 		color: #FFFFFF;
 		font-size: 1rem;
 		line-height: 1.2;
