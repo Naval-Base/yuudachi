@@ -1,14 +1,16 @@
 <template>
 	<header id="header" class="grid">
-		<div class="header-logo">
-			<nuxt-link to="/">
-				Yukikaze
-			</nuxt-link>
-		</div>
-		<div class="header-content">
-			<a v-if="!auth" href="http://localhost:8000/discord">{{ username }}</a>
-			<span v-else>{{ username }}</span>
-		</div>
+		<nav class="grid">
+			<div class="header-logo">
+				<nuxt-link to="/">
+					Yukikaze
+				</nuxt-link>
+			</div>
+			<div class="header-content">
+				<a v-if="!auth" href="http://localhost:8000/discord">{{ username }}</a>
+				<span v-else>{{ username }}</span>
+			</div>
+		</nav>
 	</header>
 </template>
 
@@ -37,6 +39,10 @@ export default class HeaderComponent extends Vue {
 	#header {
 		padding: 1rem 0;
 		border-bottom: 2px solid #6FC6E2;
+
+		> nav {
+			grid-column: span 2;
+		}
 
 		.header-logo {
 			margin-left: 2rem;
