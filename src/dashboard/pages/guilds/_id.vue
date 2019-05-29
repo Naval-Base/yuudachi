@@ -1,25 +1,39 @@
 <template>
 	<main id="main" class="grid">
 		<section id="section">
-			<h1>Information about the guild.</h1>
+			<h1>Information about this guild</h1>
 			<template v-if="guild">
 				<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
 				<h3>{{ guild.name }}</h3>
 				<h5>({{ guild.id }})</h5>
 				<template v-if="setting">
-					<div id="settings">
-						<p>Prefix: {{ setting.prefix }}</p>
-						<p>Moderation: {{ setting.moderation }}</p>
-						<p>Mute role: {{ setting.muteRole }}</p>
-						<p>Mod channel: {{ setting.modLogChannel }}</p>
-						<p>Total cases: {{ setting.caseTotal }}</p>
-						<p>Guild logs channel: {{ setting.guildLogs }}</p>
-						<p>GitHub repository: {{ setting.githubRepository }}</p>
-						<p>Default docs: {{ setting.defaultDocs }}</p>
+					<div class="settings">
+						<form>
+							<div>Normal Settings:</div>
+							<label>Prefix:</label>
+							<input type="text" name="prefix" :value="setting.prefix">
+							<label>GitHub Repository:</label>
+							<input type="text" name="githubRepository" :value="setting.githubRepository">
+							<label>Default Docs:</label>
+							<input type="text" name="defaultDocs" :value="setting.defaultDocs">
+							<div>Moderation Settings:</div>
+							<label>Moderation Feature:</label>
+							<input type="checkbox" name="prefix" :checked="Boolean(setting.moderation)">
+							<label>Mute Role:</label>
+							<input type="text" name="muteRole" :value="setting.muteRole">
+							<label>Mod Channel:</label>
+							<input type="text" name="modLogChannel" :value="setting.modLogChannel">
+							<label>Total Cases:</label>
+							<input type="text" name="caseTotal" :value="setting.caseTotal">
+							<label>Guild Logs Channel:</label>
+							<input type="text" name="guildLogs" :value="setting.guildLogs">
+						</form>
 					</div>
 				</template>
 				<template v-else>
-					<p>Not in this guild; No settings.</p>
+					<div class="settings no-settings">
+						<p>Not in this guild; No settings.</p>
+					</div>
 				</template>
 			</template>
 			<template v-else>
@@ -76,7 +90,7 @@ export default class GuildPage extends Vue {
 		} catch {
 			return {
 				settings: null
-			}
+			};
 		}
 	}
 
@@ -91,6 +105,8 @@ export default class GuildPage extends Vue {
 </script>
 
 <style lang="scss" scoped>
+	$family-primary: 'Nunito', 'Roboto', sans-serif;
+
 	#main {
 		margin: 1rem .5rem;
 		color: #FFFFFF;
@@ -102,6 +118,10 @@ export default class GuildPage extends Vue {
 
 		h1, h3, h5 {
 			justify-self: center;
+		}
+
+		h1 {
+			margin-top: 0;
 		}
 
 		h3, h5 {
@@ -119,11 +139,45 @@ export default class GuildPage extends Vue {
 			justify-self: center;
 		}
 
-		#settings {
-			margin-top: 1rem;
-			margin-left: 1.5rem;
-			padding-left: 1rem;
+		.settings {
+			&.no-settings {
+				text-align: center;
+			}
+
+			margin: 1rem;
+			padding: .5rem 1rem .2rem 1rem;
 			border-left: #FFFFFF 2px solid;
+			border-right: #FFFFFF 2px solid;
+
+			> form  {
+				> div {
+					&:nth-child(n+2) {
+						margin-top: 1rem;
+					}
+
+					text-align: center;
+					margin-bottom: 1rem;
+					background: rgba(13, 13, 14, .5);
+					padding: .5rem;
+				}
+
+				> input {
+					background: rgba(48, 48, 51, .7);
+					border: 1px transparent solid;
+					color: #ffffff;
+					font-size: 1rem;
+					font-family: $family-primary;
+					padding: 0;
+					margin-top: .2rem;
+					margin-bottom: .5rem;
+					outline: 0;
+					width: 100%;
+
+					&:focus {
+						border-bottom: 1px #ffffff solid;
+					}
+				}
+			}
 		}
 	}
 </style>
