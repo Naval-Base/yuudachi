@@ -12,7 +12,7 @@
 		"lint": "eslint . --ext .ts"
 	},
 	"dependencies": {
-		"apollo-server-express": "^2.5.0",
+		"apollo-server-express": "^2.5.1",
 		"cookie": "^0.4.0",
 		"cors": "^2.8.5",
 		"dotenv": "^8.0.0",
@@ -28,13 +28,13 @@
 		"@types/cors": "^2.8.5",
 		"@types/graphql": "^14.2.0",
 		"@types/jsonwebtoken": "^8.3.2",
-		"@types/node": "^12.0.2",
+		"@types/node": "^12.0.4",
 		"@typescript-eslint/eslint-plugin": "^1.9.0",
 		"@typescript-eslint/parser": "^1.9.0",
 		"eslint": "^5.16.0",
 		"eslint-config-marine": "^3.0.2",
-		"nodemon": "^1.19.0",
-		"typescript": "^3.4.5"
+		"nodemon": "^1.19.1",
+		"typescript": "^3.5.1"
 	},
 	"eslintConfig": {
 		"extends": "marine/node"

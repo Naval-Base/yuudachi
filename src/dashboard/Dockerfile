@@ -14,6 +14,7 @@ LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
 WORKDIR /usr/src/yukikaze/dashboard
 COPY --from=build /usr/src/yukikaze/dashboard .
 COPY . .
+EXPOSE 3000
 RUN yarn build
 ENV NODE_ENV=
 CMD ["yarn", "start"]

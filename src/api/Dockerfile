@@ -14,6 +14,7 @@ LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
 WORKDIR /usr/src/yukikaze/api
 COPY --from=build /usr/src/yukikaze/api .
 COPY . .
+EXPOSE 5000
 RUN yarn build
 ENV NODE_ENV= \
 	OWNERS= \
