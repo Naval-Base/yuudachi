@@ -72,7 +72,7 @@ export const actions: Actions<State, State> = {
 
 		try {
 			const client = app.apolloProvider.defaultClient;
-			const { data } = await client.query({
+			const res = await client.query({
 				query: gql`{
 					me {
 						id
@@ -96,7 +96,7 @@ export const actions: Actions<State, State> = {
 				}`
 			});
 
-			await dispatch('login', data.me);
+			await dispatch('login', res.data.me);
 		} catch {
 			await dispatch('logout');
 		}
@@ -109,7 +109,7 @@ export const actions: Actions<State, State> = {
 	},
 	logout({ commit }) {
 		commit(types.SET_USER, { user: null });
-		commit(types.SET_GUILDS, { guilds: [] })
+		commit(types.SET_GUILDS, { guilds: [] });
 		commit(types.SET_AUTH, false);
 	},
 	selectGuild({ commit }, id: string) {
