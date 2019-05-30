@@ -10,7 +10,7 @@ const conf: NuxtConfiguration = {
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ hid: 'theme-color', name: 'theme-color', content: '#6FC6E2' },
+			{ hid: 'theme-color', name: 'theme-color', content: '#1A1A1D' },
 			{ hid: 'description', name: 'description', content: 'It\'s time to ditch other radios.' },
 			{ hid: 'keywords', name: 'keywords', content: 'anime,radio,music,japanese,stream,anime radio,korea,korean,kpop,krap,k-pop,kpop radio' },
 
