@@ -41,7 +41,7 @@ export default class ChannelInfoCommand extends Command {
 				• Creation Date: ${moment.utc(channel.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 			`
 			)
-			.setThumbnail(message.guild!.iconURL());
+			.setThumbnail(message.guild!.iconURL()!);
 
 		return message.util!.send(embed);
 	}

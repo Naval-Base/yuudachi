@@ -57,7 +57,7 @@ export default class ServerInfoCommand extends Command {
 				• Verification Level: ${HUMAN_LEVELS[message.guild!.verificationLevel]}
 			`
 			)
-			.setThumbnail(message.guild!.iconURL());
+			.setThumbnail(message.guild!.iconURL()!);
 
 		return message.util!.send(embed);
 	}
