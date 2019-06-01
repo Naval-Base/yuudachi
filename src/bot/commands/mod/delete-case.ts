@@ -42,6 +42,11 @@ export default class CaseDeleteCommand extends Command {
 						start: (message: Message): string => `${message.author}, what case do you want to delete?`,
 						retry: (message: Message): string => `${message.author}, please enter a case number.`
 					}
+				},
+				{
+					id: 'removeRole',
+					match: 'flag',
+					flag: ['--role']
 				}
 			]
 		});
@@ -55,7 +60,7 @@ export default class CaseDeleteCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { caseNum }: { caseNum: number | string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { caseNum, removeRole }: { caseNum: number | string; removeRole: boolean }): Promise<Message | Message[] | void> {
 		let totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
@@ -65,14 +70,17 @@ export default class CaseDeleteCommand extends Command {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
 
-		const moderator = await message.guild!.members.fetch(dbCase.mod_id);
+		let moderator;
+		try {
+			moderator = await message.guild!.members.fetch(dbCase.mod_id);
+		} catch {}
 		const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
 			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, moderator ? moderator.user.displayAvatarURL() : '')
 			.setColor(Util.CONSTANTS.COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
-				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
+				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 && dbCase.action_duration ? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
 				**Reason:** ${dbCase.reason}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
 			`)
 			.setFooter(`Case ${dbCase.case_id}`)
@@ -108,7 +116,7 @@ export default class CaseDeleteCommand extends Command {
 		}
 
 		const restrictRoles = this.client.settings.get(message.guild!, 'restrictRoles', undefined);
-		if (restrictRoles) {
+		if (restrictRoles && !removeRole) {
 			switch (dbCase.action) {
 				case 5:
 					// eslint-disable-next-line no-case-declarations
@@ -131,7 +139,6 @@ export default class CaseDeleteCommand extends Command {
 					break;
 				case 6:
 					try {
-						// eslint-disable-next-line no-shadow
 						let member;
 						try {
 							member = await message.guild!.members.fetch(dbCase.target_id);
@@ -146,7 +153,6 @@ export default class CaseDeleteCommand extends Command {
 					break;
 				case 7:
 					try {
-						// eslint-disable-next-line no-shadow
 						let member;
 						try {
 							member = await message.guild!.members.fetch(dbCase.target_id);
@@ -161,7 +167,6 @@ export default class CaseDeleteCommand extends Command {
 					break;
 				case 8:
 					try {
-						// eslint-disable-next-line no-shadow
 						let member;
 						try {
 							member = await message.guild!.members.fetch(dbCase.target_id);
