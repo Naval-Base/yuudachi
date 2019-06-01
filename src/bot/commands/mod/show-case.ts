@@ -64,7 +64,10 @@ export default class CaseCommand extends Command {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
 
-		const moderator = await message.guild!.members.fetch(dbCase.mod_id);
+		let moderator;
+		try {
+			moderator = await message.guild!.members.fetch(dbCase.mod_id);
+		} catch {}
 		const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
 			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, moderator ? moderator.user.displayAvatarURL() : '')
