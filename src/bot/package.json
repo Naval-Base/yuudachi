@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"@naval-base/ms": "^2.2.1",
-		"@sentry/node": "^5.2.0",
+		"@sentry/node": "^5.4.0",
 		"common-tags": "^1.8.0",
 		"diff": "^4.0.1",
 		"discord-akairo": "1Computer1/discord-akairo",
@@ -36,25 +36,21 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^12.0.2",
+		"@types/node": "^12.0.4",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.3.4",
 		"@types/ws": "^6.0.1",
 		"@typescript-eslint/eslint-plugin": "^1.9.0",
 		"@typescript-eslint/parser": "^1.8.0",
 		"eslint": "^5.16.0",
-		"eslint-config-marine": "^2.2.0",
+		"eslint-config-marine": "^3.0.2",
 		"fs-nextra": "^0.4.5",
 		"gulp": "^4.0.2",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
-		"typescript": "^3.4.5"
+		"typescript": "^3.5.1"
 	},
-	"optionalDependencies": {
-		"@discordjs/uws": "^11.149.1",
-		"erlpack": "discordapp/erlpack",
-		"zlib-sync": "^0.1.4"
-	},
+	"optionalDependencies": {},
 	"eslintConfig": {
 		"extends": "marine/node"
 	}
