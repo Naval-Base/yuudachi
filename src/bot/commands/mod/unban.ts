@@ -29,6 +29,12 @@ export default class UnbanCommand extends Command {
 					}
 				},
 				{
+					id: 'ref',
+					type: 'integer',
+					match: 'option',
+					flag: ['--ref=', '-r=']
+				},
+				{
 					'id': 'reason',
 					'match': 'rest',
 					'type': 'string',
@@ -46,7 +52,7 @@ export default class UnbanCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { user, reason }: { user: User; reason: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { user, ref, reason }: { user: User; ref: number; reason: string }): Promise<Message | Message[] | void> {
 		if (user.id === message.author!.id) return;
 
 		const key = `${message.guild!.id}:${user.id}:UNBAN`;
@@ -72,14 +78,15 @@ export default class UnbanCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
+		const casesRepo = this.client.db.getRepository(Case);
+
 		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = Util.logEmbed({ message, member: user, action: 'Unban', caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.UNBAN);
+			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member: user, action: 'Unban', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.UNBAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 		}
 
-		const casesRepo = this.client.db.getRepository(Case);
 		const dbCase = new Case();
 		dbCase.guild = message.guild!.id;
 		if (modMessage) dbCase.message = modMessage.id;

@@ -27,6 +27,12 @@ export default class KickCommand extends Command {
 					}
 				},
 				{
+					id: 'ref',
+					type: 'integer',
+					match: 'option',
+					flag: ['--ref=', '-r=']
+				},
+				{
 					'id': 'reason',
 					'match': 'rest',
 					'type': 'string',
@@ -44,7 +50,7 @@ export default class KickCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { member, reason }: { member: GuildMember; reason: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }): Promise<Message | Message[] | void> {
 		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
 		if (member.id === message.author!.id) return;
 		if (member.roles.has(staffRole)) {
@@ -76,14 +82,15 @@ export default class KickCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
+		const casesRepo = this.client.db.getRepository(Case);
+
 		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = Util.logEmbed({ message, member, action: 'Kick', caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.KICK);
+			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Kick', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.KICK);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 		}
 
-		const casesRepo = this.client.db.getRepository(Case);
 		const dbCase = new Case();
 		dbCase.guild = message.guild!.id;
 		if (modMessage) dbCase.message = modMessage.id;

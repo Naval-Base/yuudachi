@@ -23,7 +23,7 @@ export default class GuildBanAddListener extends Listener {
 			// @ts-ignore
 			const prefix = this.client.commandHandler.prefix({ guild });
 			const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-			const embed = Util.logEmbed({ member: user, action: 'Ban', caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.BAN);
+			const embed = (await Util.logEmbed({ member: user, action: 'Ban', caseNum: totalCases, reason })).setColor(Util.CONSTANTS.COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 		}
 		const casesRepo = this.client.db.getRepository(Case);
