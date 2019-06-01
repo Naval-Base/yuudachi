@@ -1,18 +1,31 @@
-const gulp = require('gulp');
-const fsn = require('fs-nextra');
-const ts = require('gulp-typescript');
-const sourcemaps = require('gulp-sourcemaps');
-const project = ts.createProject('tsconfig.json');
+const { task, watch, series, dest } = require('gulp');
+const { emptyDir } = require('fs-nextra');
+const { createProject } = require('gulp-typescript');
+const { init, write } = require('gulp-sourcemaps');
+const project = createProject('tsconfig.json');
 
-async function build() {
-	await fsn.emptydir('dist');
-
-	const result = project.src()
-		.pipe(sourcemaps.init())
-		.pipe(project());
-
-	return result.js.pipe(sourcemaps.write('.', { sourceRoot: '.' })).pipe(gulp.dest('dist'));
+async function clean() {
+	await emptyDir('dist');
 }
 
-gulp.task('default', build);
-gulp.task('build', build);
+function scripts() {
+	return project.src()
+		.pipe(init())
+		.pipe(project())
+		.js
+		.pipe(write('.', { sourceRoot: './', includeContent: false }))
+		.pipe(dest('dist'));
+}
+
+async function build() {
+	await clean();
+	return scripts();
+}
+
+function watching() {
+	watch('**/*.ts', scripts);
+}
+
+task('default', build);
+task('build', build);
+task('watch', series(scripts, watching));
