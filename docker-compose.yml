@@ -3,7 +3,8 @@ version: '2.4'
 services:
   bot:
     build:
-      context: ./Dockerfile_bot
+      context: ./
+      dockerfile: Dockerfile_bot
     restart: always
     env_file:
       - ./src/bot/.env
