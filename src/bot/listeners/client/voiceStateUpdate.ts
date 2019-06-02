@@ -22,7 +22,7 @@ export default class VoiceStateUpdateListener extends Listener {
 				.setTimestamp(new Date())
 				.setFooter('Voice State Updated');
 
-			if (!oldState && newState.channel) {
+			if ((!oldState || (oldState && !oldState.channel)) && newState.channel) {
 				embed.addField('❯ Joined', newState.channel);
 			} else if (oldState && oldState.channel && newState.channel) {
 				embed.addField('❯ From', oldState.channel)
