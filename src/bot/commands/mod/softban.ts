@@ -11,8 +11,8 @@ export default class SoftbanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Softbans a member, duh.',
-				usage: '<member> <...reason>',
-				examples: ['@Crawl']
+				usage: '<member> [--ref=number] [...reason]',
+				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],

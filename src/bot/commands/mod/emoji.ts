@@ -9,8 +9,7 @@ export default class RestrictEmojiCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Restrict a members ability to use custom emoji.',
-				usage: '<member> <...reason>',
-				examples: []
+				usage: '<member> [--ref=number] [...reason]'
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],

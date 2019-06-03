@@ -11,8 +11,8 @@ export default class KickCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Kicks a member, duh.',
-				usage: '<member> <...reason>',
-				examples: ['@Crawl', '@Crawl']
+				usage: '<member> [--ref=number] [...reason]',
+				examples: ['@Crawl', '@Crawl dumb', '@Souji --ref=1234 no u']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],

@@ -11,9 +11,9 @@ export default class RestrictCommand extends Command {
 					Restrict a members ability to post embeds/use custom emojis/react.
 
 					Available restrictions:
-					 • embed \`<member> <...reason>\`
-					 • emoji \`<member> <...reason>\`
-					 • reaction \`<member> <...reason>\`
+					 • embed \`<member> [--ref=number] [...reason]\`
+					 • emoji \`<member> [--ref=number] [...reason]\`
+					 • reaction \`<member> [--ref=number] [...reason]\`
 
 					Required: \`<>\` | Optional: \`[]\`
 
@@ -21,10 +21,12 @@ export default class RestrictCommand extends Command {
 				`,
 				usage: '<restriction> <...argumens>',
 				examples: [
-					'img @Crawl nsfw',
+					'img @Crawl',
 					'embed @Crawl img spam',
 					'emoji @Dim dumb',
-					'reaction @appellation why though'
+					'reaction @appellation why though',
+					'img @Crawl --ref=1234 nsfw',
+					'embed @Crawl --ref=1234'
 				]
 			},
 			category: 'mod',

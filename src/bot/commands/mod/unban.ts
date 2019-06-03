@@ -10,8 +10,8 @@ export default class UnbanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Unbans a user, duh.',
-				usage: '<member> <...reason>',
-				examples: ['@Crawl']
+				usage: '<member> [--ref=number] [...reason]',
+				examples: ['@Crawl', '@Crawl appealed', '@Souji --ref=1234 appealed', '@Souji --ref=1234']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
