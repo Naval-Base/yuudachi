@@ -21,7 +21,7 @@
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^8.0.0",
 		"moment": "^2.24.0",
-		"moment-duration-format": "^2.2.2",
+		"moment-duration-format": "^2.3.0",
 		"node-emoji": "^1.10.0",
 		"node-fetch": "^2.6.0",
 		"pg": "^7.11.0",
