@@ -1,0 +1,25 @@
+FROM node:10-alpine AS build
+WORKDIR /usr/src/yukikaze/api
+COPY src/api/package.json yarn.lock .yarnclean ./
+RUN apk add --update \
+&& apk add --no-cache ca-certificates \
+&& apk add --no-cache --virtual .build-deps git curl build-base python g++ make \
+&& yarn install \
+&& apk del .build-deps
+
+FROM node:10-alpine
+LABEL name "Yukikaze GraphQL"
+LABEL version "0.1.0"
+LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
+WORKDIR /usr/src/yukikaze/api
+COPY --from=build /usr/src/yukikaze/api .
+COPY src/api .
+COPY tsconfig.json /usr/src/
+EXPOSE 5000
+RUN yarn build
+ENV NODE_ENV= \
+	OWNERS= \
+	DB= \
+	SENTRY= \
+	GITHUB_API_KEY=
+CMD ["node", "dist/index.js"]

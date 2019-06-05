@@ -1,9 +1,11 @@
 version: '2.4'
+
 services:
   bot:
     build:
       context: ./
+      dockerfile: Dockerfile_bot
     restart: always
     env_file:
-      - ./.env
+      - ./src/bot/.env
     network_mode: 'host'

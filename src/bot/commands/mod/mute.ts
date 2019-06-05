@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import Util from '../../util';
+import { Case } from '../../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class MuteCommand extends Command {
@@ -10,8 +11,8 @@ export default class MuteCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Mutes a member, duh.',
-				usage: '<member> <duration> <...reason>',
-				examples: ['@Crawl']
+				usage: '<member> <duration> [--ref=number] [...reason]',
+				examples: ['@Crawl 20m', '@Crawl 20m no u', '@Souji 14d --ref=1234 just stop']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -39,6 +40,12 @@ export default class MuteCommand extends Command {
 					}
 				},
 				{
+					id: 'ref',
+					type: 'integer',
+					match: 'option',
+					flag: ['--ref=', '-r=']
+				},
+				{
 					'id': 'reason',
 					'match': 'rest',
 					'type': 'string',
@@ -56,7 +63,7 @@ export default class MuteCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { member, duration, reason }: { member: GuildMember; duration: number; reason: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { member, duration, ref, reason }: { member: GuildMember; duration: number; ref: number; reason: string }): Promise<Message | Message[] | void> {
 		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
 		if (member.id === message.author!.id) return;
 		if (member.roles.has(staffRole)) {
@@ -89,10 +96,12 @@ export default class MuteCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
+		const casesRepo = this.client.db.getRepository(Case);
+
 		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = Util.logEmbed({ message, member, action: 'Mute', duration, caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.MUTE);
+			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Mute', duration, caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.MUTE);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
 		}
 

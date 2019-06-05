@@ -4,7 +4,7 @@ import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
 
-const { version } = require('../../../../package.json'); // eslint-disable-line
+const { version } = require('../../../package.json'); // eslint-disable-line
 
 export default class StatsCommand extends Command {
 	public constructor() {

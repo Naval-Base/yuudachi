@@ -86,7 +86,7 @@ export default class RoleInfoCommand extends Command {
 				${permissions.map((permission): string => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
 			`
 			)
-			.setThumbnail(message.guild!.iconURL());
+			.setThumbnail(message.guild!.iconURL()!);
 
 		return message.util!.send(embed);
 	}

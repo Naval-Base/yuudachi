@@ -1,5 +1,7 @@
 import { Message, MessageEmbed, GuildMember, User } from 'discord.js';
 import { stripIndents, oneLine } from 'common-tags';
+import { Repository } from 'typeorm';
+import { Case } from '../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface Actions {
@@ -56,15 +58,23 @@ export default {
 				).join('\n')
 				: 'No reminders');
 	},
-	logEmbed: ({ message = null, member, action, duration = null, caseNum, reason, ref = null }: { message?: Message | null; member: GuildMember | User; action: string; duration?: number | null; caseNum: number; reason: string; ref?: number | null }): MessageEmbed => {
+	logEmbed: async ({ message = null, db = null, channel, member, action, duration = null, caseNum, reason, ref = null }: { message?: Message | null; db?: Repository<Case> | null; channel?: string; member: GuildMember | User; action: string; duration?: number | null; caseNum: number; reason: string; ref?: number | null }): Promise<MessageEmbed> => {
 		const embed = new MessageEmbed();
 		if (message) {
 			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());
 		}
+		let reference;
+		if (db && ref) {
+			try {
+				reference = await db.findOne({ case_id: ref });
+			} catch {
+				reference = null;
+			}
+		}
 		embed.setDescription(stripIndents`
 				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
 				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { 'long': true })}` : ''}
-				**Reason:** ${reason}${ref ? `\n**Ref case:** ${ref}` : ''}
+				**Reason:** ${reason}${reference ? `\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})` : ''}
 			`)
 			.setFooter(`Case ${caseNum}`)
 			.setTimestamp(new Date());

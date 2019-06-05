@@ -16,7 +16,7 @@ import { Counter, register } from 'prom-client';
 import { createServer, Server } from 'http';
 import { parse } from 'url';
 import { init } from '@sentry/node';
-import { VERSION } from '../../util/version';
+import { VERSION } from '../util/version';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
@@ -102,7 +102,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public config: YukikazeOptions;
 
-	public cachedCases = new Set();
+	public cachedCases = new Set<string>();
 
 	public muteScheduler!: MuteScheduler;
 

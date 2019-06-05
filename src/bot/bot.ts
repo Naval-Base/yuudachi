@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import YukikazeClient from './bot/client/YukikazeClient';
+import YukikazeClient from './client/YukikazeClient';
 import { Logger } from 'winston';
 
 const client = new YukikazeClient({ owner: process.env.OWNERS, token: process.env.TOKEN });

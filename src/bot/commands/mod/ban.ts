@@ -11,8 +11,8 @@ export default class BanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Bans a member, duh.',
-				usage: '<member> <...reason>',
-				examples: ['@Crawl']
+				usage: '<member> [--days=number] [--ref=number] [...reason]',
+				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
@@ -34,8 +34,14 @@ export default class BanCommand extends Command {
 					'id': 'days',
 					'type': 'integer',
 					'match': 'option',
-					'flag': ['--days', '-d'],
+					'flag': ['--days=', '-d='],
 					'default': 7
+				},
+				{
+					id: 'ref',
+					type: 'integer',
+					match: 'option',
+					flag: ['--ref=', '-r=']
 				},
 				{
 					'id': 'reason',
@@ -55,7 +61,7 @@ export default class BanCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { member, days, reason }: { member: GuildMember; days: number; reason: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string }): Promise<Message | Message[] | void> {
 		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
 		if (member.id === message.author!.id) {
 			await message.reply('you asked for it, ok?');
@@ -127,7 +133,7 @@ export default class BanCommand extends Command {
 		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const e = Util.logEmbed({ message, member, action: 'Ban', caseNum: totalCases, reason }).setColor(Util.CONSTANTS.COLORS.BAN);
+			const e = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Ban', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(e) as Message;
 		}
 

@@ -1,16 +1,7 @@
 {
 	"compilerOptions": {
 		"strict": true,
-		"module": "commonjs",
 		"moduleResolution": "node",
-		"target": "es2017",
-		"lib": [
-			"esnext",
-			"esnext.array",
-			"esnext.asynciterable",
-			"esnext.intl",
-			"esnext.symbol"
-		],
 		"declaration": false,
 		"sourceMap": true,
 		"removeComments": false,
@@ -18,9 +9,12 @@
 		"emitDecoratorMetadata": true,
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
-		"pretty": true
-	},
-	"include": [
-		"./src"
-	]
+		"pretty": true,
+		"baseUrl": "./src",
+		"paths": {
+			"~/*": [
+				"dashboard/*"
+			]
+		}
+	}
 }

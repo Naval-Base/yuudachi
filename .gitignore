@@ -21,5 +21,6 @@ typings/
 # Miscellaneous
 .tmp/
 .github/
-src/util/version.ts
+src/bot/util/version.ts
 ormconfig.json
+.nuxt/
