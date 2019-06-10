@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"@nuxtjs/apollo": "^4.0.0-rc6",
-		"cookie-universal-nuxt": "^2.0.14",
+		"cookie-universal-nuxt": "^2.0.16",
 		"graphql-tag": "^2.10.1",
 		"nuxt": "^2.8.1",
 		"nuxt-property-decorator": "^2.3.0",
