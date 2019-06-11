@@ -41,7 +41,7 @@
 		"@types/node-fetch": "^2.3.5",
 		"@types/ws": "^6.0.1",
 		"@typescript-eslint/eslint-plugin": "^1.10.2",
-		"@typescript-eslint/parser": "^1.8.0",
+		"@typescript-eslint/parser": "^1.10.2",
 		"eslint": "^5.16.0",
 		"eslint-config-marine": "^3.0.2",
 		"fs-nextra": "^0.4.5",
