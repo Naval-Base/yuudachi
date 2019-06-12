@@ -1,6 +1,37 @@
 {
-	"private": true,
-	"workspaces": [
-		"src/*"
-	]
+    "name": "riot",
+    "version": "1.0.0",
+    "author": "Suvajit (esuvajit@gmail.com)",
+    "license": "MIT",
+    "description": "",
+    "main": "src/index.js",
+    "private": true,
+    "scripts": {
+        "test": "eslint ./",
+        "lint": "eslint --fix src/",
+        "start": "node src/index.js"
+    },
+    "dependencies": {
+        "@sentry/node": "^5.4.0",
+        "chalk": "^2.4.2",
+        "common-tags": "^1.8.0",
+        "diff": "^4.0.1",
+        "discord-akairo": "discord-akairo/discord-akairo",
+        "discord.js": "discordjs/discord.js",
+        "dotenv": "^8.0.0",
+        "eslint": "^5.16.0",
+        "eslint-config-aqua": "^6.0.0",
+        "firebase-admin": "^8.0.0",
+        "moment": "^2.24.0",
+        "moment-duration-format": "2.2.2",
+        "ms": "^2.1.1",
+        "node-fetch": "^2.6.0",
+        "os-utils": "^0.0.14",
+        "path": "^0.12.7",
+        "pg": "^7.11.0",
+        "qs": "^6.7.0",
+        "sequelize": "^5.8.7",
+        "shelljs": "^0.8.3",
+        "turndown": "^5.0.3"
+    }
 }

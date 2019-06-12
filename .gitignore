@@ -1,26 +1,6 @@
-# Packages
 node_modules/
-
-# Log files
-logs/
-*.log
-npm-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-
-# Env
+.vs/
 .env
-
-# Dist
-dist/
-typings/
-
-# Miscellaneous
-.tmp/
-.github/
-src/bot/util/version.ts
-ormconfig.json
-.nuxt/
+.vscode
+yarn.lock
+package-lock.json
