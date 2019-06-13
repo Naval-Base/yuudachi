@@ -13,6 +13,6 @@ export class SettingResolver {
 		const settings = context.db.getRepository(Setting);
 		const dbGuild = await settings.findOne(id);
 		if (!dbGuild) return undefined;
-		return dbGuild!.settings;
+		return dbGuild.settings;
 	}
 }

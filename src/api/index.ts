@@ -7,6 +7,7 @@ import database from './structures/Database';
 import { Connection } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 import * as cors from 'cors';
+import { Node, NodeSocket } from 'veza';
 
 import { GuildResolver } from './gql/resolvers/Guild';
 import { User, UserResolver } from './gql/resolvers/User';
@@ -22,11 +23,19 @@ declare module 'http' {
 export interface Context {
 	req: IncomingMessage;
 	db: Connection;
+	node: NodeSocket;
 }
 
 async function main(): Promise<void> {
 	const db = database.get('yukikaze');
 	await db.connect();
+
+	const node = await new Node('api')
+		.on('error', (error, client) => console.error(`> IPC error from ${client.name}`, error))
+		.on('client.disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
+		.on('client.destroy', client => console.log(`> IPC client destroyed: ${client.name}`))
+		.on('client.ready', client => console.log(`> IPC connected to: ${client.name}`))
+		.connectTo('bot', 9512);
 
 	const schema = await buildSchema({
 		resolvers: [UserResolver, GuildResolver, SettingResolver]
@@ -36,7 +45,8 @@ async function main(): Promise<void> {
 		schema,
 		context: ({ req }: { req: IncomingMessage }) => ({
 			req,
-			db
+			db,
+			node
 		})
 	});
 
@@ -71,7 +81,7 @@ async function main(): Promise<void> {
 			req.user = user;
 			req.token = access_token;
 		} catch (error) {
-			console.error(error);
+			/* console.error(error); */
 			req.user = null;
 			req.token = null;
 		}

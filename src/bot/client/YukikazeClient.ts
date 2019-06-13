@@ -16,12 +16,15 @@ import { Counter, register } from 'prom-client';
 import { createServer, Server } from 'http';
 import { parse } from 'url';
 import { init } from '@sentry/node';
+import { Node, NodeMessage } from 'veza';
 import { VERSION } from '../util/version';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
 		logger: Logger;
 		db: Connection;
+		node: Node;
+		nodeMessage: (m: NodeMessage) => void;
 		settings: TypeORMProvider;
 		commandHandler: CommandHandler;
 		config: YukikazeOptions;
@@ -70,6 +73,32 @@ export default class YukikazeClient extends AkairoClient {
 	});
 
 	public db!: Connection;
+
+	public node!: Node;
+
+	public nodeMessage = (m: NodeMessage) => {
+		let res;
+		/* eslint-disable no-case-declarations */
+		switch (m.data.type) {
+			case 'GUILD':
+				const guild = this.guilds.get(m.data.id);
+				if (guild) res = guild.toJSON();
+				break;
+			case 'CHANNEL':
+				const channel = this.channels.get(m.data.id);
+				if (channel) res = channel.toJSON();
+				break;
+			case 'USER':
+				const user = this.users.get(m.data.id);
+				if (user) res = user.toJSON();
+				break;
+			default:
+				break;
+		}
+		/* eslint-enable no-case-declarations */
+		if (res) return m.reply({ success: true, d: res });
+		return m.reply({ success: false });
+	};
 
 	public settings!: TypeORMProvider;
 
@@ -212,6 +241,11 @@ export default class YukikazeClient extends AkairoClient {
 
 		this.db = database.get('yukikaze');
 		await this.db.connect();
+		this.node = await new Node('bot')
+			.on('error', (error, client) => this.logger.error(`[IPC] Error from ${client.name}`, error))
+			.on('client.identify', client => this.logger.info(`[IPC] Client connected: ${client.name}`))
+			.on('client.destroy', client => this.logger.info(`[IPC] Client destroyed: ${client.name}`))
+			.serve(9512);
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
 		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Case));
