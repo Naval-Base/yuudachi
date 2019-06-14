@@ -2,7 +2,6 @@ import { ObjectType, Field, ID, Int, createUnionType } from 'type-graphql';
 
 interface Channel {
 	type: string;
-	deleted: boolean;
 	id: string;
 	name: string;
 	rawPosition: number;
@@ -30,9 +29,6 @@ interface VoiceChannel extends Channel {
 class Channel implements Channel {
 	@Field(() => String)
 	public type!: string;
-
-	@Field(() => Boolean)
-	public deleted!: boolean;
 
 	@Field(() => ID)
 	public id!: string;
