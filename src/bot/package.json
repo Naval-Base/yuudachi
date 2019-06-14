@@ -49,7 +49,7 @@
 		"gulp": "^4.0.2",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
-		"typescript": "^3.5.1"
+		"typescript": "^3.5.2"
 	},
 	"optionalDependencies": {},
 	"eslintConfig": {
