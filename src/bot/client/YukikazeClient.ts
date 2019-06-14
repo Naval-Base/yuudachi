@@ -88,6 +88,10 @@ export default class YukikazeClient extends AkairoClient {
 				const channel = this.channels.get(m.data.id);
 				if (channel) res = channel.toJSON();
 				break;
+			case 'ROLE':
+				const role = this.guilds.get(m.data.guildId)!.roles.get(m.data.id);
+				if (role) res = role.toJSON();
+				break;
 			case 'USER':
 				const user = this.users.get(m.data.id);
 				if (user) res = user.toJSON();
@@ -104,7 +108,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		directory: join(__dirname, '..', 'commands'),
-		prefix: (message: Message): string => this.settings.get(message.guild!, 'prefix', process.env.COMMAND_PREFIX),
+		prefix: (): string => process.env.COMMAND_PREFIX!,
 		aliasReplacement: /-/g,
 		allowMention: true,
 		handleEdits: true,

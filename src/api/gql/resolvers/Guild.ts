@@ -3,6 +3,7 @@ import { Context } from '../../';
 import { Setting } from '../../models/Settings';
 import { GuildSettings } from './GuildSettings';
 import { channelUnion } from './Channel';
+import { Role } from './Role';
 
 export interface Guild {
 	id: string;
@@ -11,6 +12,7 @@ export interface Guild {
 	owner: boolean;
 	permissions: number;
 	channels?: Array<typeof channelUnion>;
+	roles?: Role[];
 	settings?: GuildSettings;
 }
 
@@ -34,6 +36,9 @@ export class Guild implements Guild {
 	@Field(() => [channelUnion], { nullable: true })
 	public channels?: Array<typeof channelUnion>;
 
+	@Field(() => [Role], { nullable: true })
+	public roles?: Role[];
+
 	@Field(() => GuildSettings, { nullable: true })
 	public settings?: GuildSettings;
 }
@@ -49,8 +54,19 @@ export class GuildResolver implements ResolverInterface<Guild> {
 		if (!success) return undefined;
 		const promises = d.channels.map((c: string) => context.node.send({ type: 'CHANNEL', id: c }));
 		const resolved = await Promise.all(promises);
-		const c = resolved.map(({ d }: { d: typeof channelUnion }) => d);
-		return c;
+		return resolved.map(({ d }: { d: typeof channelUnion }) => d);
+	}
+
+	@FieldResolver()
+	public async roles(
+		@Root() guild: Guild,
+		@Ctx() context: Context
+	): Promise<Role[] | undefined> {
+		const { success, d }: { success: boolean; d: { roles: string[] } } = await context.node.send({ type: 'GUILD', id: guild.id });
+		if (!success) return undefined;
+		const promises = d.roles.map((r: string) => context.node.send({ type: 'ROLE', guildId: guild.id, id: r }));
+		const resolved = await Promise.all(promises);
+		return resolved.map(({ d }: { d: Role }) => d);
 	}
 
 	@FieldResolver()
