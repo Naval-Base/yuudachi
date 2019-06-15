@@ -6,45 +6,21 @@
 				<img :src="`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`">
 				<h3>{{ guild.name }}</h3>
 				<h5>({{ guild.id }})</h5>
-				<template v-if="setting">
-					<div class="settings">
-						<form>
-							<div>Normal Settings:</div>
-							<label>Prefix:</label>
-							<input type="text" name="prefix" :value="setting.prefix">
-							<label>GitHub Repository:</label>
-							<input type="text" name="githubRepository" :value="setting.githubRepository">
-							<label>Default Docs:</label>
-							<input type="text" name="defaultDocs" :value="setting.defaultDocs">
-							<div>Moderation Settings:</div>
-							<label>Moderation Feature:</label>
-							<input type="checkbox" name="moderation" :checked="Boolean(setting.moderation)">
-							<label>Mute Role:</label>
-							<input type="text" name="muteRole" list="muteRole" :value="databaseRole(setting.muteRole) ? `@${databaseRole(setting.muteRole).name}` : ''">
-							<datalist id="muteRole">
-								<option v-for="role in roles" :key="role.id" :value="role.id">
-									@{{ role.name }}
-								</option>
-							</datalist>
-							<label>Mod Channel:</label>
-							<input type="text" name="modLogChannel" list="modLogChannel" :value="databaseChannel(setting.modLogChannel) ? `#${databaseChannel(setting.modLogChannel).name}` : ''">
-							<datalist id="modLogChannel">
-								<option v-for="channel in channels" :key="channel.id" :value="channel.id">
-									#{{ channel.name }}
-								</option>
-							</datalist>
-							<label>Total Cases:</label>
-							<input type="text" name="caseTotal" :value="setting.caseTotal">
-							<label>Guild Logs Webhook:</label>
-							<input type="text" name="guildLogs" :value="setting.guildLogs">
-						</form>
+				<div class="tabs">
+					<div class="tabs-topbar">
+						<button :class="{ 'tab-button': true, active: activeTab === 'guildSettings' }" @click.prevent="switchTab('guildSettings')">
+							Guild Settings
+						</button>
+						<button :class="{ 'tab-button': true, active: activeTab === 'guildTags' }" @click.prevent="switchTab('guildTags')">
+							Guild Tags
+						</button>
+						<button :class="{ 'tab-button': true, active: activeTab === 'guildLogs' }" @click.prevent="switchTab('guildLogs')">
+							Guild Logs
+						</button>
 					</div>
-				</template>
-				<template v-else>
-					<div class="settings no-settings">
-						<p>Not in this guild; No settings.</p>
-					</div>
-				</template>
+					<GuildSettings v-if="activeTab === 'guildSettings'" :setting="setting" :channels="channels" :roles="roles" />
+					<GuildTags v-if="activeTab === 'guildTags'" />
+				</div>
 			</template>
 			<template v-else>
 				<p>Loading...</p>
@@ -55,16 +31,23 @@
 
 <script lang="ts">
 import { Component, Vue, Getter } from 'nuxt-property-decorator';
-import { Guild } from '../../store';
+import { Guild } from '~/store';
 import gql from 'graphql-tag';
 
-@Component
+@Component({
+	components: {
+		GuildSettings: () => import('~/components/GuildSettings.vue'),
+		GuildTags: () => import('~/components/GuildTags.vue')
+	}
+})
 export default class GuildPage extends Vue {
 	@Getter
 	public guilds!: Guild[];
 
 	@Getter
 	public selectedGuild!: string;
+
+	public activeTab: string = 'guildSettings';
 
 	public channels: any = null;
 
@@ -133,12 +116,8 @@ export default class GuildPage extends Vue {
 		return this.selectedGuild || this.guilds.find(guild => guild.id === this.$route.params.id);
 	}
 
-	databaseChannel(id: string) {
-		return this.channels.find((channel: any) => channel.id === id);
-	}
-
-	databaseRole(id: string) {
-		return this.roles.find((role: any) => role.id === id);
+	switchTab(key: string) {
+		this.activeTab = key;
 	}
 }
 </script>
@@ -178,40 +157,32 @@ export default class GuildPage extends Vue {
 			justify-self: center;
 		}
 
-		.settings {
-			&.no-settings {
-				text-align: center;
-			}
+		.tabs {
+			display: grid;
 
-			margin: 1rem;
-			padding: .5rem 1rem .2rem 1rem;
-			border-left: #FFFFFF 2px solid;
-			border-right: #FFFFFF 2px solid;
+			> .tabs-topbar {
+				display: grid;
+				justify-items: center;
+				grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+				margin: 1rem;
 
-			> form  {
-				> div {
-					&:nth-child(n+2) {
-						margin-top: 1rem;
+				> .tab-button {
+					color: #FFFFFF;
+					border: none;
+					border-bottom: 1px transparent solid;
+					background: none;
+					outline: none;
+					height: 45px;
+
+					&.active {
+						border-bottom: 1px #ffffff solid;
 					}
 
-					text-align: center;
-					margin-bottom: 1rem;
-					background: rgba(13, 13, 14, .5);
-					padding: .5rem;
-				}
+					&:active {
+						border-bottom: 1px #ffffff solid;
+					}
 
-				> input {
-					background: rgba(48, 48, 51, .7);
-					border: 1px transparent solid;
-					color: #ffffff;
-					font-size: 1rem;
-					font-family: $family-primary;
-					padding: 0;
-					margin-top: .2rem;
-					margin-bottom: .5rem;
-					outline: 0;
-					width: 100%;
-
+					// TODO: remove, just for dev
 					&:focus {
 						border-bottom: 1px #ffffff solid;
 					}
