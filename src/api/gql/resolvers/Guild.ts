@@ -1,23 +1,41 @@
-import { Resolver, ObjectType, Field, ID, Int, FieldResolver, ResolverInterface, Root, Ctx } from 'type-graphql';
+import { Resolver, ObjectType, Field, ID, Int, FieldResolver, ResolverInterface, Root, Ctx, Query, Arg } from 'type-graphql';
 import { Context } from '../../';
 import { Setting } from '../../models/Settings';
 import { GuildSettings } from './GuildSettings';
 import { channelUnion } from './Channel';
 import { Role } from './Role';
 
-export interface Guild {
+interface Guild {
 	id: string;
 	name: string;
 	icon: string | null;
-	owner: boolean;
-	permissions: number;
 	channels?: Array<typeof channelUnion>;
 	roles?: Role[];
 	settings?: GuildSettings;
 }
 
+export interface OAuthGuild extends Guild {
+	owner: boolean;
+	permissions: number;
+}
+
+export interface IPCGuild extends Guild {
+	splash: string | null;
+	region: string;
+	memberCount: number;
+	large: boolean;
+	vanityURLCode: string | null;
+	description: string | null;
+	banner: string | null;
+	ownerID: string;
+	createdTimestamp: number;
+	iconURL: string | null;
+	splashURL: string | null;
+	bannerURL: string | null;
+}
+
 @ObjectType()
-export class Guild implements Guild {
+export class OAuthGuild implements OAuthGuild {
 	@Field(() => ID)
 	public id!: string;
 
@@ -43,8 +61,78 @@ export class Guild implements Guild {
 	public settings?: GuildSettings;
 }
 
-@Resolver(() => Guild)
-export class GuildResolver implements ResolverInterface<Guild> {
+@ObjectType()
+export class IPCGuild implements IPCGuild {
+	@Field(() => ID)
+	public id!: string;
+
+	@Field()
+	public name!: string;
+
+	@Field(() => String, { nullable: true })
+	public icon!: string | null;
+
+	@Field(() => String, { nullable: true })
+	public splash!: string | null;
+
+	@Field()
+	public region!: string;
+
+	@Field(() => Int)
+	public memberCount!: number;
+
+	@Field()
+	public large!: boolean;
+
+	@Field(() => String, { nullable: true })
+	public vanityURLCode!: string | null;
+
+	@Field(() => String, { nullable: true })
+	public description!: string | null;
+
+	@Field(() => String, { nullable: true })
+	public banner!: string | null;
+
+	@Field()
+	public ownerID!: string;
+
+	@Field(() => Int)
+	public createdTimestamp!: number;
+
+	@Field(() => String, { nullable: true })
+	public iconURL!: string | null;
+
+	@Field(() => String, { nullable: true })
+	public splashURL!: string | null;
+
+	@Field(() => String, { nullable: true })
+	public bannerURL!: string | null;
+
+	@Field(() => [channelUnion], { nullable: true })
+	public channels?: Array<typeof channelUnion>;
+
+	@Field(() => [Role], { nullable: true })
+	public roles?: Role[];
+
+	@Field(() => GuildSettings, { nullable: true })
+	public settings?: GuildSettings;
+}
+
+@Resolver(() => IPCGuild)
+export class GuildResolver implements ResolverInterface<IPCGuild> {
+	@Query(() => IPCGuild, { nullable: true })
+	public async guild(
+		@Ctx() context: Context,
+		@Arg('id') id: string
+	): Promise<IPCGuild | null> {
+		if (!context.req.user) {
+			return null;
+		}
+		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'GUILD', id });
+		if (!success) return null;
+		return d;
+	}
+
 	@FieldResolver()
 	public async channels(
 		@Root() guild: Guild,

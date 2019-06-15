@@ -18,14 +18,24 @@
 							<input type="text" name="defaultDocs" :value="setting.defaultDocs">
 							<div>Moderation Settings:</div>
 							<label>Moderation Feature:</label>
-							<input type="checkbox" name="prefix" :checked="Boolean(setting.moderation)">
+							<input type="checkbox" name="moderation" :checked="Boolean(setting.moderation)">
 							<label>Mute Role:</label>
-							<input type="text" name="muteRole" :value="setting.muteRole">
+							<input type="text" name="muteRole" list="muteRole" :value="databaseRole(setting.muteRole) ? `@${databaseRole(setting.muteRole).name}` : ''">
+							<datalist id="muteRole">
+								<option v-for="role in roles" :key="role.id" :value="role.id">
+									@{{ role.name }}
+								</option>
+							</datalist>
 							<label>Mod Channel:</label>
-							<input type="text" name="modLogChannel" :value="setting.modLogChannel">
+							<input type="text" name="modLogChannel" list="modLogChannel" :value="databaseChannel(setting.modLogChannel) ? `#${databaseChannel(setting.modLogChannel).name}` : ''">
+							<datalist id="modLogChannel">
+								<option v-for="channel in channels" :key="channel.id" :value="channel.id">
+									#{{ channel.name }}
+								</option>
+							</datalist>
 							<label>Total Cases:</label>
 							<input type="text" name="caseTotal" :value="setting.caseTotal">
-							<label>Guild Logs Channel:</label>
+							<label>Guild Logs Webhook:</label>
 							<input type="text" name="guildLogs" :value="setting.guildLogs">
 						</form>
 					</div>
@@ -56,39 +66,60 @@ export default class GuildPage extends Vue {
 	@Getter
 	public selectedGuild!: string;
 
+	public channels: any = null;
+
+	public roles: any = null;
+
 	public settings: any = null;
 
 	async asyncData({ app }: { app: any }) {
 		try {
 			const { data } = await app.apolloProvider.defaultClient.query({
-				query: gql`query setting($id: String!) {
-					setting(id: $id) {
-						prefix
-						moderation
-						muteRole
-						restrictRoles {
-							embed
-							reaction
-							emoji
+				query: gql`query guild($guild_id: String!) {
+					guild(id: $guild_id) {
+						channels {
+							...on TextChannel {
+								type
+								id
+								name
+							}
 						}
-						modRole
-						modLogChannel
-						caseTotal
-						guildLogs
-						githubRepository
-						defaultDocs
+						roles {
+							id
+							name
+						}
+						settings {
+							prefix
+							moderation
+							muteRole
+							restrictRoles {
+								embed
+								reaction
+								emoji
+							}
+							modRole
+							modLogChannel
+							caseTotal
+							guildLogs
+							githubRepository
+							defaultDocs
+						}
 					}
 				}`,
 				variables: {
-					id: app.context.route.params.id
+					guild_id: app.context.route.params.id
 				}
 			});
 
 			return {
-				settings: data.setting
+				channels: data.guild.channels.filter((c: any) => c.__typename === 'TextChannel'),
+				roles: data.guild.roles,
+				settings: data.guild.settings
 			};
 		} catch {
 			return {
+				channels: null,
+				roles: null,
 				settings: null
 			};
 		}
@@ -100,6 +131,14 @@ export default class GuildPage extends Vue {
 
 	get guild() {
 		return this.selectedGuild || this.guilds.find(guild => guild.id === this.$route.params.id);
+	}
+
+	databaseChannel(id: string) {
+		return this.channels.find((channel: any) => channel.id === id);
+	}
+
+	databaseRole(id: string) {
+		return this.roles.find((role: any) => role.id === id);
 	}
 }
 </script>

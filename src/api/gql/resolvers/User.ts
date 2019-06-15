@@ -1,6 +1,6 @@
 import { Resolver, Query, Ctx, ObjectType, Field, ID, Int, ResolverInterface, FieldResolver, Root, Arg } from 'type-graphql';
 import { Context } from '../../';
-import { Guild } from './Guild';
+import { OAuthGuild } from './Guild';
 import fetch from 'node-fetch';
 
 export interface User {
@@ -14,7 +14,7 @@ export interface User {
 	email: string | null;
 	flags: number | null;
 	premium_type: number | null;
-	guilds: Guild[];
+	guilds: OAuthGuild[];
 }
 
 @ObjectType()
@@ -49,8 +49,8 @@ export class User implements User {
 	@Field(() => Int, { nullable: true })
 	public premium_type!: number | null;
 
-	@Field(() => [Guild])
-	public guilds!: Guild[];
+	@Field(() => [OAuthGuild])
+	public guilds!: OAuthGuild[];
 }
 
 @Resolver(() => User)
@@ -70,12 +70,12 @@ export class UserResolver implements ResolverInterface<User> {
 		@Root() _: User,
 		@Ctx() context: Context,
 		@Arg('id', { nullable: true }) id?: string
-	): Promise<Guild[]> {
+	): Promise<OAuthGuild[]> {
 		const guilds = await (await fetch('https://discordapp.com/api/users/@me/guilds', {
 			headers: {
 				authorization: `Bearer ${context.req.token}`
 			}
-		})).json() as Guild[];
+		})).json() as OAuthGuild[];
 		if (id) {
 			return guilds.filter(guild => guild.id === id);
 		}
