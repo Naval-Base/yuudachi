@@ -18,7 +18,7 @@
 							Guild Logs
 						</button>
 					</div>
-					<GuildSettings v-if="activeTab === 'guildSettings'" :setting="setting" :channels="channels" :roles="roles" />
+					<GuildSettings v-if="activeTab === 'guildSettings'" />
 					<GuildTags v-if="activeTab === 'guildTags'" />
 				</div>
 			</template>
@@ -32,7 +32,6 @@
 <script lang="ts">
 import { Component, Vue, Getter } from 'nuxt-property-decorator';
 import { Guild } from '~/store';
-import gql from 'graphql-tag';
 
 @Component({
 	components: {
@@ -48,69 +47,6 @@ export default class GuildPage extends Vue {
 	public selectedGuild!: string;
 
 	public activeTab: string = 'guildSettings';
-
-	public channels: any = null;
-
-	public roles: any = null;
-
-	public settings: any = null;
-
-	async asyncData({ app }: { app: any }) {
-		try {
-			const { data } = await app.apolloProvider.defaultClient.query({
-				query: gql`query guild($guild_id: String!) {
-					guild(id: $guild_id) {
-						channels {
-							...on TextChannel {
-								type
-								id
-								name
-							}
-						}
-						roles {
-							id
-							name
-						}
-						settings {
-							prefix
-							moderation
-							muteRole
-							restrictRoles {
-								embed
-								reaction
-								emoji
-							}
-							modRole
-							modLogChannel
-							caseTotal
-							guildLogs
-							githubRepository
-							defaultDocs
-						}
-					}
-				}`,
-				variables: {
-					guild_id: app.context.route.params.id
-				}
-			});
-
-			return {
-				channels: data.guild.channels.filter((c: any) => c.__typename === 'TextChannel'),
-				roles: data.guild.roles,
-				settings: data.guild.settings
-			};
-		} catch {
-			return {
-				channels: null,
-				roles: null,
-				settings: null
-			};
-		}
-	}
-
-	get setting() {
-		return this.settings;
-	}
 
 	get guild() {
 		return this.selectedGuild || this.guilds.find(guild => guild.id === this.$route.params.id);

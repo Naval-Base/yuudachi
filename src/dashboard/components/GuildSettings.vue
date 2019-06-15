@@ -43,15 +43,70 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator';
+import { Component, Vue } from 'nuxt-property-decorator';
+import gql from 'graphql-tag';
 
 @Component
 export default class GuildSettingsComponent extends Vue {
-	@Prop() readonly setting!: any;
+	public channels: any = null;
 
-	@Prop() readonly channels!: any;
+	public roles: any = null;
 
-	@Prop() readonly roles!: any;
+	public settings: any = null;
+
+	async mounted() {
+		try {
+			// @ts-ignore
+			const { data } = await this.$apollo.query({
+				query: gql`query guild($guild_id: String!) {
+					guild(id: $guild_id) {
+						channels {
+							...on TextChannel {
+								type
+								id
+								name
+							}
+						}
+						roles {
+							id
+							name
+						}
+						settings {
+							prefix
+							moderation
+							muteRole
+							restrictRoles {
+								embed
+								reaction
+								emoji
+							}
+							modRole
+							modLogChannel
+							caseTotal
+							guildLogs
+							githubRepository
+							defaultDocs
+						}
+					}
+				}`,
+				variables: {
+					guild_id: this.$route.params.id
+				}
+			});
+
+			this.channels = data.guild.channels.filter((c: any) => c.__typename === 'TextChannel');
+			this.roles = data.guild.roles;
+			this.settings = data.guild.settings;
+		} catch {
+			this.channels = null;
+			this.roles = null;
+			this.settings = null;
+		}
+	}
+
+	get setting() {
+		return this.settings;
+	}
 
 	databaseChannel(id: string) {
 		return this.channels.find((channel: any) => channel.id === id);
@@ -91,7 +146,7 @@ export default class GuildSettingsComponent extends Vue {
 			> input {
 				background: rgba(48, 48, 51, .7);
 				border: 1px transparent solid;
-				color: #ffffff;
+				color: #FFFFFF;
 				font-size: 1rem;
 				font-family: $family-primary;
 				padding: 0;
@@ -101,7 +156,7 @@ export default class GuildSettingsComponent extends Vue {
 				width: 100%;
 
 				&:focus {
-					border-bottom: 1px #ffffff solid;
+					border-bottom: 1px #FFFFFF solid;
 				}
 			}
 		}
