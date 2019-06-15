@@ -1,4 +1,6 @@
-import { ObjectType, Field, Int } from 'type-graphql';
+import { ObjectType, Resolver, Query, Ctx, Arg, Field, Int } from 'type-graphql';
+import { Context } from '../../';
+import { Setting } from '../../models/Settings';
 import { RestrictRoles } from './RestrictRoles';
 
 export interface GuildSettings {
@@ -45,4 +47,18 @@ export class GuildSettings implements GuildSettings {
 
 	@Field({ nullable: true })
 	public defaultDocs?: string;
+}
+
+@Resolver()
+export class GuildSettingsResolver {
+	@Query(() => GuildSettings)
+	public async setting(
+		@Arg('id') id: string,
+		@Ctx() context: Context
+	): Promise<GuildSettings | undefined> {
+		const settings = context.db.getRepository(Setting);
+		const dbGuild = await settings.findOne(id);
+		if (!dbGuild) return undefined;
+		return dbGuild.settings;
+	}
 }

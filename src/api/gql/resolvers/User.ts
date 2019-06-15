@@ -58,9 +58,9 @@ export class UserResolver implements ResolverInterface<User> {
 	@Query(() => User, { nullable: true })
 	public me(
 		@Ctx() context: Context
-	): User | null {
+	): User | undefined {
 		if (!context.req.user) {
-			return null;
+			return undefined;
 		}
 		return context.req.user;
 	}
