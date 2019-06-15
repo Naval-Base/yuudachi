@@ -17,6 +17,7 @@
 		"cors": "^2.8.5",
 		"dotenv": "^8.0.0",
 		"graphql": "^14.3.1",
+		"graphql-iso-date": "^3.6.1",
 		"jsonwebtoken": "^8.5.1",
 		"node-fetch": "^2.6.0",
 		"polka": "^0.5.2",
