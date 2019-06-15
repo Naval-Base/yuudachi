@@ -1,8 +1,10 @@
-import { Resolver, Query, Ctx, Arg } from 'type-graphql';
+import { Resolver, Query, Ctx, Arg, FieldResolver, Root } from 'type-graphql';
 import { Context } from '../../';
 import { Tag } from '../../models/Tags';
+import { IPCUser } from './User';
+import { IPCGuild } from './Guild';
 
-interface FindOption {
+export interface FindOption {
 	guild?: string;
 	user?: string;
 }
@@ -25,5 +27,35 @@ export class TagResolver {
 		const dbTags = await tags.find(where);
 		if (!dbTags) return undefined;
 		return dbTags;
+	}
+
+	@FieldResolver()
+	public async user(
+		@Root() tag: Tag,
+		@Ctx() context: Context
+	): Promise<IPCUser | undefined> {
+		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'USER', id: tag.user });
+		if (!success) return undefined;
+		return d;
+	}
+
+	@FieldResolver()
+	public async guild(
+		@Root() tag: Tag,
+		@Ctx() context: Context
+	): Promise<IPCGuild | undefined> {
+		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'GUILD', id: tag.guild });
+		if (!success) return undefined;
+		return d;
+	}
+
+	@FieldResolver()
+	public async last_modified(
+		@Root() tag: Tag,
+		@Ctx() context: Context
+	): Promise<IPCUser | undefined> {
+		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'USER', id: tag.last_modified });
+		if (!success) return undefined;
+		return d;
 	}
 }

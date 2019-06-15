@@ -4,6 +4,8 @@ import { Setting } from '../../models/Settings';
 import { GuildSettings } from './GuildSettings';
 import { channelUnion } from './Channel';
 import { Role } from './Role';
+import { Tag } from '../../models/Tags';
+import { FindOption } from './Tag';
 
 interface Guild {
 	id: string;
@@ -12,6 +14,7 @@ interface Guild {
 	channels?: Array<typeof channelUnion>;
 	roles?: Role[];
 	settings?: GuildSettings;
+	tags?: Tag[];
 }
 
 export interface OAuthGuild extends Guild {
@@ -59,6 +62,9 @@ export class OAuthGuild implements OAuthGuild {
 
 	@Field(() => GuildSettings, { nullable: true })
 	public settings?: GuildSettings;
+
+	@Field(() => [Tag], { nullable: true })
+	public tags?: Tag[];
 }
 
 @ObjectType()
@@ -116,6 +122,9 @@ export class IPCGuild implements IPCGuild {
 
 	@Field(() => GuildSettings, { nullable: true })
 	public settings?: GuildSettings;
+
+	@Field(() => [Tag], { nullable: true })
+	public tags?: Tag[];
 }
 
 @Resolver(() => IPCGuild)
@@ -166,5 +175,19 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		const dbGuild = await settings.findOne(guild.id);
 		if (!dbGuild) return undefined;
 		return dbGuild.settings;
+	}
+
+	@FieldResolver()
+	public async tags(
+		@Root() guild: Guild,
+		@Ctx() context: Context,
+		@Arg('user_id', { nullable: true }) user_id?: string
+	): Promise<Tag[] | undefined> {
+		const tags = context.db.getRepository(Tag);
+		const where: FindOption = { guild: guild.id };
+		if (user_id) where.user = user_id;
+		const dbTags = await tags.find(where);
+		if (!dbTags.length) return undefined;
+		return dbTags;
 	}
 }
