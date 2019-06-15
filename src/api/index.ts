@@ -12,7 +12,8 @@ import { Node, NodeSocket } from 'veza';
 
 import { GuildResolver } from './gql/resolvers/Guild';
 import { User, UserResolver } from './gql/resolvers/User';
-import { SettingResolver } from './gql/resolvers/Setting';
+import { GuildSettingsResolver } from './gql/resolvers/GuildSettings';
+import { TagResolver } from './gql/resolvers/Tag';
 
 declare module 'http' {
 	interface IncomingMessage {
@@ -39,7 +40,7 @@ async function main(): Promise<void> {
 		.connectTo('bot', 9512);
 
 	const schema = await buildSchema({
-		resolvers: [UserResolver, GuildResolver, SettingResolver]
+		resolvers: [UserResolver, GuildResolver, GuildSettingsResolver, TagResolver]
 	});
 
 	const server = new ApolloServer({
