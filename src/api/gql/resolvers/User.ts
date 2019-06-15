@@ -5,13 +5,13 @@ import fetch from 'node-fetch';
 
 interface User {
 	id: string;
-	bot: boolean;
 	username: string;
 	discriminator: string;
 	avatar: string | null;
 }
 
 export interface OAuthUser extends User {
+	bot: boolean | null;
 	locale: string | null;
 	verified: string | null;
 	email: string | null;
@@ -21,6 +21,7 @@ export interface OAuthUser extends User {
 }
 
 export interface IPCUser extends User {
+	bot: boolean;
 	tag: string;
 	createdTimestamp: number;
 	defaultAvatarURL: string;
@@ -33,8 +34,8 @@ export class OAuthUser implements OAuthUser {
 	@Field(() => ID)
 	public id!: string;
 
-	@Field(() => Boolean)
-	public bot!: boolean;
+	@Field(() => Boolean, { nullable: true })
+	public bot!: boolean | null;
 
 	@Field()
 	public username!: string;
