@@ -11,13 +11,13 @@ import * as cookie from 'cookie';
 import { Node, NodeSocket } from 'veza';
 
 import { GuildResolver } from './gql/resolvers/Guild';
-import { User, UserResolver } from './gql/resolvers/User';
+import { OAuthUser, OAuthUserResolver } from './gql/resolvers/User';
 import { GuildSettingsResolver } from './gql/resolvers/GuildSettings';
 import { TagResolver } from './gql/resolvers/Tag';
 
 declare module 'http' {
 	interface IncomingMessage {
-		user: User | null;
+		user: OAuthUser | null;
 		token: string | null;
 	}
 }
@@ -40,7 +40,7 @@ async function main(): Promise<void> {
 		.connectTo('bot', 9512);
 
 	const schema = await buildSchema({
-		resolvers: [UserResolver, GuildResolver, GuildSettingsResolver, TagResolver]
+		resolvers: [OAuthUserResolver, GuildResolver, GuildSettingsResolver, TagResolver]
 	});
 
 	const server = new ApolloServer({
@@ -80,7 +80,7 @@ async function main(): Promise<void> {
 		}
 
 		try {
-			const { access_token, user } = verify(token, process.env.JWT_SECRET!) as { access_token: string; user: User };
+			const { access_token, user } = verify(token, process.env.JWT_SECRET!) as { access_token: string; user: OAuthUser };
 			req.user = user;
 			req.token = access_token;
 		} catch (error) {

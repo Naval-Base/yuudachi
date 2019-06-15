@@ -3,12 +3,15 @@ import { Context } from '../../';
 import { OAuthGuild } from './Guild';
 import fetch from 'node-fetch';
 
-export interface User {
+interface User {
 	id: string;
+	bot: boolean;
 	username: string;
 	discriminator: string;
 	avatar: string | null;
-	bot: boolean | null;
+}
+
+export interface OAuthUser extends User {
 	locale: string | null;
 	verified: string | null;
 	email: string | null;
@@ -17,10 +20,21 @@ export interface User {
 	guilds: OAuthGuild[];
 }
 
+export interface IPCUser extends User {
+	tag: string;
+	createdTimestamp: number;
+	defaultAvatarURL: string;
+	avatarURL: string | null;
+	displayAvatarURL: string;
+}
+
 @ObjectType()
-export class User implements User {
+export class OAuthUser implements OAuthUser {
 	@Field(() => ID)
 	public id!: string;
+
+	@Field(() => Boolean)
+	public bot!: boolean;
 
 	@Field()
 	public username!: string;
@@ -30,9 +44,6 @@ export class User implements User {
 
 	@Field(() => String, { nullable: true })
 	public avatar!: string | null;
-
-	@Field(() => Boolean, { nullable: true })
-	public bot!: boolean | null;
 
 	@Field(() => String, { nullable: true })
 	public locale!: string | null;
@@ -53,12 +64,45 @@ export class User implements User {
 	public guilds!: OAuthGuild[];
 }
 
-@Resolver(() => User)
-export class UserResolver implements ResolverInterface<User> {
-	@Query(() => User, { nullable: true })
+@ObjectType()
+export class IPCUser implements IPCUser {
+	@Field(() => ID)
+	public id!: string;
+
+	@Field(() => Boolean)
+	public bot!: boolean;
+
+	@Field()
+	public username!: string;
+
+	@Field()
+	public discriminator!: string;
+
+	@Field()
+	public tag!: string;
+
+	@Field(() => String, { nullable: true })
+	public avatar!: string | null;
+
+	@Field(() => Int)
+	public createdTimestamp!: number;
+
+	@Field()
+	public defaultAvatarURL!: string;
+
+	@Field(() => String, { nullable: true })
+	public avatarURL!: string | null;
+
+	@Field()
+	public displayAvatarURL!: string;
+}
+
+@Resolver(() => OAuthUser)
+export class OAuthUserResolver implements ResolverInterface<OAuthUser> {
+	@Query(() => OAuthUser, { nullable: true })
 	public me(
 		@Ctx() context: Context
-	): User | undefined {
+	): OAuthUser | undefined {
 		if (!context.req.user) {
 			return undefined;
 		}
@@ -67,7 +111,7 @@ export class UserResolver implements ResolverInterface<User> {
 
 	@FieldResolver()
 	public async guilds(
-		@Root() _: User,
+		@Root() _: OAuthUser,
 		@Ctx() context: Context,
 		@Arg('id', { nullable: true }) id?: string
 	): Promise<OAuthGuild[]> {
