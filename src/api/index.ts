@@ -7,6 +7,7 @@ import database from './structures/Database';
 import { Connection } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 import * as cors from 'cors';
+import * as cookie from 'cookie';
 import { Node, NodeSocket } from 'veza';
 
 import { GuildResolver } from './gql/resolvers/Guild';
@@ -65,11 +66,12 @@ async function main(): Promise<void> {
 			return next();
 		}
 
+		console.log(req.headers);
 		const token = req.headers.authorization
 			? req.headers.authorization.startsWith('Bearer ')
 				? req.headers.authorization.split(' ')[1]
 				: null
-			: null;
+			: cookie.parse(req.headers.cookie || '').token;
 		if (!token) {
 			req.user = null;
 			req.token = null;
