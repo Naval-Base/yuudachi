@@ -70,7 +70,7 @@ export default class ReasonCommand extends Command {
 			if (ref) {
 				let reference;
 				try {
-					reference = await casesRepo.findOne({ case_id: ref });
+					reference = await casesRepo.findOne({ guild: message.guild!.id, case_id: ref });
 				} catch (error) {
 					reference = null;
 				}

@@ -64,9 +64,9 @@ export default {
 			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());
 		}
 		let reference;
-		if (db && ref) {
+		if (message && db && ref) {
 			try {
-				reference = await db.findOne({ case_id: ref });
+				reference = await db.findOne({ guild: message.guild!.id, case_id: ref });
 			} catch {
 				reference = null;
 			}
