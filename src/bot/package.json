@@ -10,7 +10,8 @@
 		"set_version": "node set_version.js",
 		"prebuild": "yarn lint",
 		"build": "gulp",
-		"lint": "eslint . --ext .ts"
+		"lint": "eslint . --ext .ts",
+		"dev": "node -r dotenv/config dist/bot.js"
 	},
 	"dependencies": {
 		"@naval-base/ms": "^2.2.1",

@@ -7,9 +7,9 @@
 	"private": true,
 	"scripts": {
 		"prebuild": "yarn lint",
-		"dev": "gulp watch",
 		"build": "gulp",
-		"lint": "eslint . --ext .ts"
+		"lint": "eslint . --ext .ts",
+		"dev": "node -r dotenv/config dist/index.js"
 	},
 	"dependencies": {
 		"apollo-server-express": "^2.6.3",
