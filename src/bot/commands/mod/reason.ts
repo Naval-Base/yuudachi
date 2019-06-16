@@ -75,10 +75,10 @@ export default class ReasonCommand extends Command {
 					reference = null;
 				}
 				if (reference) {
-					if (/\*\*Ref case:\*\* [\s\S]+/.test(caseEmbed.embeds[0].description)) {
-						embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Ref case:\*\* [\s\S]+/, `**Ref case:** ${reason}`));
+					if (/\*\*Ref case:\*\* [\s\S]+/.test(embed.description)) {
+						embed.setDescription(embed.description.replace(/\*\*Ref case:\*\* [\s\S]+/, `**Ref case:** ${reason}`));
 					} else {
-						embed.setDescription(`${caseEmbed.embeds[0].description}\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`);
+						embed.setDescription(`${embed.description}\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`);
 					}
 				}
 			}
