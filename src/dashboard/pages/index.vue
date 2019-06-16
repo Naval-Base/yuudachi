@@ -26,7 +26,7 @@ export default class IndexPage extends Vue {}
 
 	#section > * {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
 		justify-items: center;
 	}
 </style>
