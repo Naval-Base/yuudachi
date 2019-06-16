@@ -44,7 +44,7 @@ export default class GuildPage extends Vue {
 	public guilds!: Guild[];
 
 	@Getter
-	public selectedGuild!: string;
+	public selectedGuild!: any;
 
 	public activeTab: string = 'guildSettings';
 
@@ -99,7 +99,8 @@ export default class GuildPage extends Vue {
 			> .tabs-topbar {
 				display: grid;
 				justify-items: center;
-				grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+				justify-content: center;
+				grid-template-columns: minmax(6rem, 10rem) minmax(6rem, 10rem) minmax(6rem, 10rem);
 				margin: 1rem;
 
 				> .tab-button {
