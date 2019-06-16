@@ -10,7 +10,7 @@ export default class ReasonCommand extends Command {
 			description: {
 				content: 'Sets/Updates the reason of a modlog entry.',
 				usage: '<case> <...reason>',
-				examples: ['1234 dumb', 'latest dumb']
+				examples: ['1234 dumb', 'latest dumb', 'latest --ref=1234 cool']
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -23,6 +23,12 @@ export default class ReasonCommand extends Command {
 						start: (message: Message): string => `${message.author}, what case do you want to add a reason to?`,
 						retry: (message: Message): string => `${message.author}, please enter a case number.`
 					}
+				},
+				{
+					id: 'ref',
+					type: 'integer',
+					match: 'option',
+					flag: ['--ref=', '-r=']
 				},
 				{
 					id: 'reason',
@@ -41,7 +47,7 @@ export default class ReasonCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { caseNum, reason }: { caseNum: number | string; reason: string }): Promise<Message | Message[]> {
+	public async exec(message: Message, { caseNum, ref, reason }: { caseNum: number | string; ref: number; reason: string }): Promise<Message | Message[]> {
 		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
@@ -59,8 +65,23 @@ export default class ReasonCommand extends Command {
 			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
-			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
-				.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());
+			embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+			if (ref) {
+				let reference;
+				try {
+					reference = await casesRepo.findOne({ case_id: ref });
+				} catch (error) {
+					reference = null;
+				}
+				if (reference) {
+					if (/\*\*Ref case:\*\* [\s\S]+/.test(caseEmbed.embeds[0].description)) {
+						embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Ref case:\*\* [\s\S]+/, `**Ref case:** ${reason}`));
+					} else {
+						embed.setDescription(`${caseEmbed.embeds[0].description}\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`);
+					}
+				}
+			}
 			await caseEmbed.edit(embed);
 		}
 
