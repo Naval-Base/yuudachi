@@ -7,14 +7,17 @@
 						{{ tag.name }}
 					</div>
 					<div class="card-content">
-						{{ tag.content }}
+						Aliases: {{ tag.aliases.length ? tag.aliases.join(', ') : 'No aliases' }}
+					</div>
+					<div class="card-content">
+						Hoisted: {{ tag.hoisted }}
+					</div>
+					<div class="card-content">
+						Uses: {{ tag.uses }}
 					</div>
 					<div class="card-footer">
 						<span>
 							{{ tag.user ? tag.user.tag : 'Unknown' }}
-						</span>
-						<span>
-
 						</span>
 					</div>
 				</div>
@@ -88,7 +91,7 @@ export default class GuildTagsComponent extends Vue {
 	.tags {
 		display: grid;
 		justify-content: center;
-		grid-template-columns: repeat(auto-fit, minmax(20rem, 30rem));
+		grid-template-columns: repeat(auto-fill, minmax(10rem, 20rem));
 		padding: .5rem 1rem .2rem 1rem;
 
 		&.no-tags {
@@ -120,7 +123,7 @@ export default class GuildTagsComponent extends Vue {
 			}
 
 			> .card-content {
-				padding: 1rem;
+				padding: .3rem 1rem;
 			}
 
 			> .card-footer {
