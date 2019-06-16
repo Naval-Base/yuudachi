@@ -9,7 +9,7 @@ export default class ReasonCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Sets/Updates the reason of a modlog entry.',
-				usage: '<case> <...reason>',
+				usage: '<case> [--ref=number] <...reason>',
 				examples: ['1234 dumb', 'latest dumb', 'latest --ref=1234 cool']
 			},
 			channel: 'guild',
