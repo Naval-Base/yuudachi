@@ -4,34 +4,42 @@
 			<div class="settings">
 				<form>
 					<div>Normal Settings:</div>
-					<label>Prefix:</label>
-					<input type="text" name="prefix" :value="setting.prefix">
-					<label>GitHub Repository:</label>
-					<input type="text" name="githubRepository" :value="setting.githubRepository">
-					<label>Default Docs:</label>
-					<input type="text" name="defaultDocs" :value="setting.defaultDocs">
+					<label for="prefixInput">Prefix:</label>
+					<input id="prefixInput" v-model="setting.prefix" :class="{ changed: settingsChange.prefix }" type="text" name="prefix" @change="inputChange('prefix', $event)">
+					<label for="githubRepositoryInput">GitHub Repository:</label>
+					<input id="githubRepositoryInput" v-model="setting.githubRepository" :class="{ changed: settingsChange.githubRepository }" type="text" name="githubRepository" @change="inputChange('githubRepository', $event)">
+					<label for="defaultDocsInput">Default Docs:</label>
+					<input id="defaultDocsInput" v-model="setting.defaultDocs" :class="{ changed: settingsChange.defaultDocs }" type="text" name="defaultDocs" @change="inputChange('defaultDocs', $event)">
 					<div>Moderation Settings:</div>
-					<label>Moderation Feature:</label>
-					<input type="checkbox" name="moderation" :checked="Boolean(setting.moderation)">
-					<label>Mute Role:</label>
-					<input type="text" name="muteRole" list="muteRole" :value="databaseRole(setting.muteRole) ? `@${databaseRole(setting.muteRole).name}` : ''">
+					<label for="moderationInput">Moderation Feature:</label>
+					<input id="moderationInput" :checked="Boolean(setting.moderation)" type="checkbox" name="moderation">
+					<label for="muteRoleInput">Mute Role:</label>
+					<input id="muteRoleInput" v-model="setting.muteRole" list="muteRole" :class="{ changed: settingsChange.muteRole }" type="text" name="muteRole" @change="inputChange('muteRole', $event)">
 					<datalist id="muteRole">
 						<option v-for="role in roles" :key="role.id" :value="role.id">
 							@{{ role.name }}
 						</option>
 					</datalist>
-					<label>Mod Channel:</label>
-					<input type="text" name="modLogChannel" list="modLogChannel" :value="databaseChannel(setting.modLogChannel) ? `#${databaseChannel(setting.modLogChannel).name}` : ''">
+					<label for="modLogChannelInput">Mod Channel:</label>
+					<input id="modLogChannelInput" v-model="setting.modLogChannel" :class="{ changed: settingsChange.modLogChannel }" type="text" name="modLogChannel" list="modLogChannel" @change="inputChange('modLogChannel', $event)">
 					<datalist id="modLogChannel">
 						<option v-for="channel in channels" :key="channel.id" :value="channel.id">
 							#{{ channel.name }}
 						</option>
 					</datalist>
-					<label>Total Cases:</label>
-					<input type="text" name="caseTotal" :value="setting.caseTotal">
-					<label>Guild Logs Webhook:</label>
-					<input type="text" name="guildLogs" :value="setting.guildLogs">
+					<label for="caseTotalInput">Total Cases:</label>
+					<input id="caseTotalInput" v-model="setting.caseTotal" :class="{ changed: settingsChange.caseTotal }" type="text" name="caseTotal" @change="inputChange('caseTotal', $event)">
+					<label for="guildLogsInput">Guild Logs Webhook:</label>
+					<input id="guildLogsInput" v-model="setting.guildLogs" :class="{ changed: settingsChange.guildLogs }" type="text" name="guildLogs" @change="inputChange('guildLogs', $event)">
 				</form>
+				<div id="inputSubmit">
+					<button @click="reset">
+						Submit
+					</button>
+					<button @click="reset">
+						Reset
+					</button>
+				</div>
 			</div>
 		</template>
 		<template v-else>
@@ -46,6 +54,10 @@
 import { Component, Vue } from 'nuxt-property-decorator';
 import gql from 'graphql-tag';
 
+interface SettingsChange {
+	[key: string]: boolean;
+}
+
 @Component
 export default class GuildSettingsComponent extends Vue {
 	public channels: any = null;
@@ -53,6 +65,18 @@ export default class GuildSettingsComponent extends Vue {
 	public roles: any = null;
 
 	public settings: any = null;
+
+	public defaultSettings: any = null;
+
+	public settingsChange: SettingsChange = {
+		prefix: false,
+		githubRepository: false,
+		defaultDocs: false,
+		muteRole: false,
+		modLogChannel: false,
+		caseTotal: false,
+		guildLogs: false
+	};
 
 	async mounted() {
 		try {
@@ -97,10 +121,12 @@ export default class GuildSettingsComponent extends Vue {
 			this.channels = data.guild.channels.filter((c: any) => c.__typename === 'TextChannel');
 			this.roles = data.guild.roles;
 			this.settings = data.guild.settings;
+			this.defaultSettings = { ...data.guild.settings };
 		} catch {
 			this.channels = null;
 			this.roles = null;
 			this.settings = null;
+			this.defaultSettings = null;
 		}
 	}
 
@@ -114,6 +140,16 @@ export default class GuildSettingsComponent extends Vue {
 
 	databaseRole(id: string) {
 		return this.roles.find((role: any) => role.id === id);
+	}
+
+	inputChange(type: string) {
+		if (this.settings[type] === this.defaultSettings[type]) this.settingsChange[type] = false;
+		else this.settingsChange[type] = true;
+	}
+
+	reset() {
+		this.settings = { ...this.defaultSettings };
+		for (const [k] of Object.entries(this.settingsChange)) this.settingsChange[k] = false;
 	}
 }
 </script>
@@ -162,6 +198,30 @@ export default class GuildSettingsComponent extends Vue {
 				&:focus {
 					border-bottom: 1px #FFFFFF solid;
 				}
+
+				&.changed {
+					border-bottom: 1px #19B919 solid;
+				}
+
+				&[type='checkbox'] {
+					cursor: pointer;
+				}
+			}
+		}
+
+		> #inputSubmit {
+			display: grid;
+			justify-content: center;
+			grid-template-columns: minmax(4rem, 6rem) minmax(4rem, 6rem);
+			grid-gap: 1rem;
+
+			> button {
+				background: rgba(13, 13, 14, .5);
+				border: none;
+				color: #FFFFFF;
+				padding: 1rem;
+				outline: none;
+				cursor: pointer;
 			}
 		}
 	}
