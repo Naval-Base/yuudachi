@@ -122,16 +122,20 @@ export default class GuildSettingsComponent extends Vue {
 	$family-primary: 'Nunito', 'Roboto', sans-serif;
 
 	.settings {
+		display: grid;
+		justify-content: center;
+		grid-template-columns: minmax(6rem, 55rem);
+
 		&.no-settings {
 			text-align: center;
 		}
 
-		margin: 1rem;
-		padding: .5rem 1rem .2rem 1rem;
-		border-left: #FFFFFF 2px solid;
-		border-right: #FFFFFF 2px solid;
-
 		> form  {
+			margin: .5rem;
+			padding: .5rem 1rem .2rem 1rem;
+			border-left: #FFFFFF 2px solid;
+			border-right: #FFFFFF 2px solid;
+
 			> div {
 				&:nth-child(n+2) {
 					margin-top: 1rem;
