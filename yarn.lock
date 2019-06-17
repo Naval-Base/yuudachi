@@ -10787,10 +10787,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-veza@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/veza/-/veza-0.5.0.tgz#b66e33fda83aac5490d6e25d5e036f870cbf166a"
-  integrity sha512-KyPotWWG4GIm9nZnBDA43vHf/s2tJIJJTyGSI7Dw6xu/gLoDohSzWbFM04B9a+5XR8+UrXMicsS3WoaSGwKJHA==
+veza@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/veza/-/veza-0.5.1.tgz#a4f326b7ec8326b3c0ef37c222cb0ce2d1ff4a77"
+  integrity sha512-MrqMS+z9YAIw6lb6GK+kus9SpWWuwEymVwhlbbko5o5rMHS9myRmqgAYL1JqmHVm4QONDXVQx4TRXrJfYSLllQ==
 
 vinyl-fs@^3.0.0, vinyl-fs@^3.0.3:
   version "3.0.3"
