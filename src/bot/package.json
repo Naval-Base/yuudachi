@@ -31,7 +31,7 @@
 		"reflect-metadata": "^0.1.13",
 		"turndown": "^5.0.3",
 		"typeorm": "^0.2.18",
-		"veza": "^0.5.1",
+		"veza": "^0.6.0",
 		"winston": "^3.2.1",
 		"winston-daily-rotate-file": "^3.9.0"
 	},
