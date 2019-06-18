@@ -20,7 +20,7 @@ export default class RestrictCommand extends Command {
 
 					For additional \`<...arguments>\` usage refer to the examples below.
 				`,
-				usage: '<restriction> <...argumens>',
+				usage: '<restriction> <...arguments>',
 				examples: [
 					'img @Crawl',
 					'embed @Crawl img spam',
