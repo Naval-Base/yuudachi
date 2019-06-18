@@ -27,6 +27,15 @@ export default class SearchTagCommand extends Command {
 		});
 	}
 
+	// @ts-ignore
+	public userPermissions(message: Message): string | null {
+		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+		if (!restrictedRoles) return null;
+		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
+		if (hasRestrictedRole) return 'Restricted';
+		return null;
+	}
+
 	public async exec(message: Message, { name }: { name: string }): Promise<Message | Message[]> {
 		name = Util.cleanContent(name, message);
 		const tagsRepo = this.client.db.getRepository(Tag);

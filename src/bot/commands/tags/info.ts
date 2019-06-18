@@ -29,6 +29,15 @@ export default class TagInfoCommand extends Command {
 		});
 	}
 
+	// @ts-ignore
+	public userPermissions(message: Message): string | null {
+		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+		if (!restrictedRoles) return null;
+		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
+		if (hasRestrictedRole) return 'Restricted';
+		return null;
+	}
+
 	public async exec(message: Message, { tag }: { tag: Tag }): Promise<Message | Message[]> {
 		const user = await this.client.users.fetch(tag.user);
 		let lastModifiedBy;

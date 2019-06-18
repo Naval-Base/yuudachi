@@ -27,7 +27,10 @@ export default class TagShowCommand extends Command {
 
 	public async exec(message: Message, { name }: { name: string }): Promise<Message | Message[] | void> {
 		if (!name) return;
-		if (Boolean(message.member!.roles.find((r): boolean => r.name === 'Embed restricted'))) return;
+		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+		if (restrictedRoles) {
+			if (message.member!.roles.has(restrictedRoles.tag)) return;
+		}
 		name = Util.cleanContent(name, message);
 		const tagsRepo = this.client.db.getRepository(Tag);
 		const dbTags = await tagsRepo.find({ guild: message.guild!.id });

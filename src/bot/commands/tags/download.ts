@@ -23,6 +23,15 @@ export default class TagDownloadCommand extends Command {
 		});
 	}
 
+	// @ts-ignore
+	public userPermissions(message: Message): string | null {
+		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+		if (!restrictedRoles) return null;
+		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
+		if (hasRestrictedRole) return 'Restricted';
+		return null;
+	}
+
 	public async exec(message: Message, { member }: { member: GuildMember }): Promise<Message | Message[] | void> {
 		const where = member ? { user: member.id, guild: message.guild!.id } : { guild: message.guild!.id };
 		const tagsRepo = this.client.db.getRepository(Tag);

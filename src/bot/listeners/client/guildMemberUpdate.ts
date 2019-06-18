@@ -20,6 +20,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMBED`)) return;
 			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMOJI`)) return;
 			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:REACTION`)) return;
+			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:TAG`)) return;
 
 			const modRole = this.client.settings.get(newMember.guild, 'modRole', undefined);
 			if (modRole && newMember.roles.has(modRole)) return;
@@ -33,7 +34,8 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				(automaticRoleState.roles.includes(muteRole) ||
 				automaticRoleState.roles.includes(restrictRoles.embed) ||
 				automaticRoleState.roles.includes(restrictRoles.emoji) ||
-				automaticRoleState.roles.includes(restrictRoles.reaction))
+				automaticRoleState.roles.includes(restrictRoles.reaction) ||
+				automaticRoleState.roles.includes(restrictRoles.tag))
 			) return;
 			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel', undefined);
 			const role = newMember.roles.filter((r): boolean => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
@@ -66,6 +68,10 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				case restrictRoles.reaction:
 					actionName = 'Reaction restriction';
 					action = Util.CONSTANTS.ACTIONS.REACTION;
+					break;
+				case restrictRoles.tag:
+					actionName = 'Tag restriction';
+					action = Util.CONSTANTS.ACTIONS.TAG;
 					break;
 				default:
 					return;

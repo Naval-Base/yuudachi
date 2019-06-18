@@ -26,6 +26,15 @@ export default class TagDeleteCommand extends Command {
 		});
 	}
 
+	// @ts-ignore
+	public userPermissions(message: Message): string | null {
+		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+		if (!restrictedRoles) return null;
+		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
+		if (hasRestrictedRole) return 'Restricted';
+		return null;
+	}
+
 	public async exec(message: Message, { tag }: { tag: Tag }): Promise<Message | Message[]> {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
 		if (tag.user !== message.author!.id && !staffRole) return message.util!.reply('you can only delete your own tags.');

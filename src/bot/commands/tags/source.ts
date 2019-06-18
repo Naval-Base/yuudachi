@@ -31,6 +31,15 @@ export default class TagSourceCommand extends Command {
 		});
 	}
 
+	// @ts-ignore
+	public userPermissions(message: Message): string | null {
+		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+		if (!restrictedRoles) return null;
+		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
+		if (hasRestrictedRole) return 'Restricted';
+		return null;
+	}
+
 	public async exec(message: Message, { tag, file }: { tag: Tag; file: boolean }): Promise<Message | Message[]> {
 		return message.util!.send(tag.content, {
 			code: 'md',

@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Command, Flag } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { stripIndents } from 'common-tags';
 
@@ -14,6 +14,7 @@ export default class RestrictCommand extends Command {
 					 • embed \`<member> [--ref=number] [...reason]\`
 					 • emoji \`<member> [--ref=number] [...reason]\`
 					 • reaction \`<member> [--ref=number] [...reason]\`
+					 • tag \`<member> [--ref=number] [...reason]\`
 
 					Required: \`<>\` | Optional: \`[]\`
 
@@ -26,24 +27,15 @@ export default class RestrictCommand extends Command {
 					'emoji @Dim dumb',
 					'reaction @appellation why though',
 					'img @Crawl --ref=1234 nsfw',
-					'embed @Crawl --ref=1234'
+					'embed @Crawl --ref=1234',
+					'tag @Crawl no more!',
+					'tag @Souji --ref=1234 no u'
 				]
 			},
 			category: 'mod',
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
-			ratelimit: 2,
-			args: [
-				{
-					id: 'restriction',
-					type: ['embed', 'embeds', 'image', 'images', 'img', 'emoji', 'reaction', 'react']
-				},
-				{
-					'id': 'rest',
-					'match': 'rest',
-					'default': ''
-				}
-			]
+			ratelimit: 2
 		});
 	}
 
@@ -55,27 +47,24 @@ export default class RestrictCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { restriction, rest }: { restriction: string; rest: string }): Promise<Message | Message[] | boolean | null> {
-		if (!restriction) {
-			// @ts-ignore
-			const prefix = this.handler.prefix(message);
-			return message.util!.send(stripIndents`
-				When you beg me so much I just can't not help you~
-				Check \`${prefix}help restrict\` for more information.
-			`);
-		}
-		// eslint-disable-next-line
-		const command = ({
-			embed: this.handler.modules.get('restrict-embed'),
-			embeds: this.handler.modules.get('restrict-embed'),
-			image: this.handler.modules.get('restrict-embed'),
-			images: this.handler.modules.get('restrict-embed'),
-			img: this.handler.modules.get('restrict-embed'),
-			emoji: this.handler.modules.get('restrict-emoji'),
-			reaction: this.handler.modules.get('restrict-reaction'),
-			react: this.handler.modules.get('restrict-reaction')
-		} as { [key: string]: Command })[restriction];
+	public *args(): object {
+		const key = yield {
+			type: [
+				['restrict-embed', 'embed', 'embeds', 'image', 'images', 'img'],
+				['restrict-emoji', 'emoji'],
+				['restrict-reaction', 'reaction', 'react'],
+				['restrict-tag', 'tag']
+			],
+			otherwise: (msg: Message): string => {
+				// @ts-ignore
+				const prefix = this.handler.prefix(msg);
+				return stripIndents`
+					When you beg me so much I just can't not help you~
+					Check \`${prefix}help config\` for more information.
+				`;
+			}
+		};
 
-		return this.handler.handleDirectCommand(message, rest, command, true);
+		return Flag.continue(key);
 	}
 }

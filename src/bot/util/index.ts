@@ -17,7 +17,8 @@ const ACTIONS: Actions = {
 	6: 'restriction',
 	7: 'restriction',
 	8: 'restriction',
-	9: 'warn'
+	9: 'warn',
+	10: 'restriction'
 };
 
 export default {
@@ -32,7 +33,8 @@ export default {
 			EMBED: 6,
 			EMOJI: 7,
 			REACTION: 8,
-			WARN: 9
+			WARN: 9,
+			TAG: 10
 		} as { [key: string]: number },
 		COLORS: {
 			BAN: 16718080,
@@ -43,7 +45,8 @@ export default {
 			EMBED: 16776960,
 			EMOJI: 16776960,
 			REACTION: 16776960,
-			WARN: 16776960
+			WARN: 16776960,
+			TAG: 16776960
 		} as { [key: string]: number }
 	},
 	/* eslint-enable @typescript-eslint/no-object-literal-type-assertion */
