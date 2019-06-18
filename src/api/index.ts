@@ -34,10 +34,10 @@ async function main(): Promise<void> {
 
 	const node = await new Node('api')
 		.on('error', (error, client) => console.error(`> IPC error from ${client.name}`, error))
-		.on('client.disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
-		.on('client.destroy', client => console.log(`> IPC client destroyed: ${client.name}`))
-		.on('client.ready', client => console.log(`> IPC connected to: ${client.name}`))
-		.connectTo('bot', 9512);
+		.on('socket.disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
+		.on('socket.destroy', client => console.log(`> IPC client destroyed: ${client.name}`))
+		.on('socket.ready', client => console.log(`> IPC connected to: ${client.name}`))
+		.connectTo(9512);
 
 	const schema = await buildSchema({
 		resolvers: [OAuthUserResolver, GuildResolver, GuildSettingsResolver, TagResolver]
