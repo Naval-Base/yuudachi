@@ -7,8 +7,7 @@ export default class SetConfigCommand extends Command {
 		super('config-set', {
 			description: {
 				content: 'Sets a value to the config.',
-				usage: '<key> <...arguments>',
-				examples: ['.']
+				usage: '<key> <...arguments>'
 			},
 			category: 'config',
 			channel: 'guild',

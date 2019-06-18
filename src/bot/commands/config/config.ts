@@ -14,11 +14,15 @@ export default class ConfigCommand extends Command {
 
 					Available keys:
 					 • cases \`<number>\`
-					 • mod \`<roleId>\`
-					 • modLog \`<channelId>\`
-					 • muted \`<roleId>\`
+					 • mod \`<Role/RoleId>\`
+					 • modLog \`<Channel/ChannelId>\`
+					 • muted \`<Role/RoleId>\`
 					 • repo \`<repository>\`
-					 • restrict \`<embed roleId> <emoji roleId> <reaction roleId>\`
+					 • restrict
+					 • • embed \`<Role/RoleId>\`
+					 • • emoji \`<Role/RoleId>\`
+					 • • reaction \`<Role/RoleId>\`
+					 • • tag \`<Role/RoleId>\`
 
 					Required: \`<>\` | Optional: \`[]\`
 				`,
