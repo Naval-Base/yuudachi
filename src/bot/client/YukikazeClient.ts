@@ -108,7 +108,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		directory: join(__dirname, '..', 'commands'),
-		prefix: (): string => process.env.COMMAND_PREFIX!,
+		prefix: (message: Message): string => this.settings.get(message.guild!, 'prefix', process.env.COMMAND_PREFIX!),
 		aliasReplacement: /-/g,
 		allowMention: true,
 		handleEdits: true,
