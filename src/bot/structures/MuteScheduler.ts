@@ -5,7 +5,7 @@ import { Case } from '../models/Cases';
 export default class MuteScheduler {
 	protected client: YukikazeClient;
 
-	protected repo: Repository<any>;
+	protected repo: Repository<Case>;
 
 	protected checkRate: number;
 
@@ -13,7 +13,7 @@ export default class MuteScheduler {
 
 	protected queuedSchedules = new Map();
 
-	public constructor(client: YukikazeClient, repository: Repository<any>, { checkRate = 5 * 60 * 1000 } = {}) {
+	public constructor(client: YukikazeClient, repository: Repository<Case>, { checkRate = 5 * 60 * 1000 } = {}) {
 		this.client = client;
 		this.repo = repository;
 		this.checkRate = checkRate;
@@ -23,7 +23,6 @@ export default class MuteScheduler {
 		this.client.logger.info(`[MUTE] Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`);
 		if (reschedule) this.client.logger.info(`[MUTE] Rescheduled mute on ${mute.target_id} on ${this.client.guilds.get(mute.guild)}`);
 		if (!reschedule) {
-			const casesRepo = this.client.db.getRepository(Case);
 			const cs = new Case();
 			cs.guild = mute.guild;
 			if (mute.message) cs.message = mute.message;
@@ -36,7 +35,7 @@ export default class MuteScheduler {
 			cs.action_duration = mute.action_duration;
 			cs.action_processed = mute.action_processed;
 			cs.reason = mute.reason;
-			mute = await casesRepo.save(cs);
+			mute = await this.repo.save(cs);
 		}
 		if (mute.action_duration.getTime() < (Date.now() + this.checkRate)) {
 			this.queueMute(mute);
@@ -51,9 +50,8 @@ export default class MuteScheduler {
 		try {
 			member = await guild!.members.fetch(mute.target_id);
 		} catch {}
-		const casesRepo = this.client.db.getRepository(Case);
 		mute.action_processed = true;
-		await casesRepo.save(mute);
+		await this.repo.save(mute);
 		if (member) {
 			try {
 				await member.roles.remove(muteRole, 'Unmuted automatically based on duration.');
@@ -68,8 +66,7 @@ export default class MuteScheduler {
 		const schedule = this.queuedSchedules.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(mute.id);
-		const casesRepo = this.client.db.getRepository(Case);
-		const deleted = await casesRepo.remove(mute);
+		const deleted = await this.repo.remove(mute);
 		return deleted;
 	}
 
@@ -93,8 +90,7 @@ export default class MuteScheduler {
 	}
 
 	private async _check(): Promise<void> {
-		const casesRepo = this.client.db.getRepository(Case);
-		const mutes = await casesRepo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false });
+		const mutes = await this.repo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false });
 		const now = new Date();
 
 		for (const mute of mutes) {

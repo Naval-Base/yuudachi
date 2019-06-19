@@ -6,7 +6,7 @@ import { Reminder } from '../models/Reminders';
 export default class RemindScheduler {
 	protected client: YukikazeClient;
 
-	protected repo: Repository<any>;
+	protected repo: Repository<Reminder>;
 
 	protected checkRate: number;
 
@@ -14,21 +14,20 @@ export default class RemindScheduler {
 
 	protected queuedSchedules = new Map();
 
-	public constructor(client: YukikazeClient, repository: Repository<any>, { checkRate = 5 * 60 * 1000 } = {}) {
+	public constructor(client: YukikazeClient, repository: Repository<Reminder>, { checkRate = 5 * 60 * 1000 } = {}) {
 		this.client = client;
 		this.repo = repository;
 		this.checkRate = checkRate;
 	}
 
 	public async addReminder(reminder: Reminder): Promise<void> {
-		const remindersRepo = this.client.db.getRepository(Reminder);
 		const rmd = new Reminder();
 		rmd.user = reminder.user;
 		if (reminder.channel) rmd.channel = reminder.channel;
 		rmd.reason = reminder.reason;
 		rmd.trigger = reminder.trigger;
 		rmd.triggers_at = reminder.triggers_at;
-		const dbReminder = await remindersRepo.save(rmd);
+		const dbReminder = await this.repo.save(rmd);
 		if (dbReminder.triggers_at.getTime() < (Date.now() + this.checkRate)) {
 			this.queueReminder(dbReminder);
 		}
@@ -44,8 +43,7 @@ export default class RemindScheduler {
 		const schedule = this.queuedSchedules.get(reminder.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(reminder.id);
-		const remindersRepo = this.client.db.getRepository(Reminder);
-		const deleted = await remindersRepo.remove(reminder);
+		const deleted = await this.repo.remove(reminder);
 		return deleted;
 	}
 
@@ -84,8 +82,7 @@ export default class RemindScheduler {
 	}
 
 	private async _check(): Promise<void> {
-		const remindersRepo = this.client.db.getRepository(Reminder);
-		const reminders = await remindersRepo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) });
+		const reminders = await this.repo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) });
 		const now = new Date();
 
 		for (const reminder of reminders) {
