@@ -996,15 +996,15 @@
     webpack-node-externals "^1.7.2"
     webpackbar "^3.2.0"
 
-"@nuxtjs/apollo@^4.0.0-rc6":
-  version "4.0.0-rc6"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/apollo/-/apollo-4.0.0-rc6.tgz#25c857a6c4ebfa2720d875494ca14f3f02a94581"
-  integrity sha512-Jwe5apFXe2MAOQrs6LvO/1+e2P1FubONcryGAdhBJOd4bnZBgtszkj91TztaOuVjpC26HVaUM5cXc83R2Pmw9g==
+"@nuxtjs/apollo@^4.0.0-rc7":
+  version "4.0.0-rc7"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/apollo/-/apollo-4.0.0-rc7.tgz#4e39c17ba119dd70493cad98a4fbdc03de6d5b5b"
+  integrity sha512-/ZNvafMnApW8hRgj1o4VCd83ARAanxcbJn8B0qiidbqoXM/G6b7TBZgOZL6sbrMRlWYru/zMaR0NODoATwGgQw==
   dependencies:
     cookie "^0.4.0"
     isomorphic-fetch "^2.2.1"
     js-cookie "^2.2.0"
-    vue-apollo "^3.0.0-beta.30"
+    vue-apollo "^3.0.0-rc.1"
     vue-cli-plugin-apollo "^0.20.0"
     webpack-node-externals "^1.7.2"
 
@@ -10854,12 +10854,13 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-apollo@^3.0.0-beta.30:
-  version "3.0.0-beta.30"
-  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.0-beta.30.tgz#081bc2b8c8f9d2ffd508675c17dc1017da5ba3f4"
-  integrity sha512-uRv5JXGXCxMVyfThBtqeJVwHd7+XI/RmGjZY5kU6Ad8MGT6Da9M8T2wRmcvN4fa4fydRJuy4PheSEXS83WFUhg==
+vue-apollo@^3.0.0-rc.1:
+  version "3.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.0-rc.1.tgz#fed79fab2b77d6dfe6c5f0940ace80b0202d63e6"
+  integrity sha512-OlJMVQ9cvk75EXE2sCcFTNflAwFQsguKD7duJrC2IOEGcYQriumiNExH8FKYgmxhLF+dkykh+DLTG6YvOC+S2g==
   dependencies:
     chalk "^2.4.2"
+    serialize-javascript "^1.7.0"
     throttle-debounce "^2.1.0"
 
 vue-class-component@7.1.0, vue-class-component@^7.0.1:
