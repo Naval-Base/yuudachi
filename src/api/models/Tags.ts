@@ -4,55 +4,53 @@ import { GraphQLDateTime } from 'graphql-iso-date';
 import { IPCUser } from '../gql/resolvers/User';
 import { IPCGuild } from '../gql/resolvers/Guild';
 
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-
 @ObjectType()
 @Entity('tags')
 export class Tag {
 	@Field(() => ID)
 	@PrimaryGeneratedColumn()
-	id!: number;
+	public id!: number;
 
 	@Field(() => IPCUser, { nullable: true })
 	@Index()
 	@Column({ type: 'bigint' })
-	user!: string;
+	public user!: string;
 
 	@Field(() => IPCGuild)
 	@Index()
 	@Column({ type: 'bigint' })
-	guild!: string;
+	public guild!: string;
 
 	@Field()
 	@Index()
 	@Column()
-	name!: string;
+	public name!: string;
 
 	@Field(() => [String])
 	@Column({ 'type': 'text', 'array': true, 'default': (): string => 'ARRAY[]::text[]' })
-	aliases!: string[];
+	public aliases!: string[];
 
 	@Field()
 	@Column()
-	content!: string;
+	public content!: string;
 
 	@Field()
 	@Column({ 'default': false })
-	hoisted!: boolean;
+	public hoisted!: boolean;
 
 	@Field(() => Int)
 	@Column({ 'default': 0 })
-	uses!: number;
+	public uses!: number;
 
 	@Field(() => IPCUser, { nullable: true })
 	@Column({ type: 'bigint', nullable: true })
-	last_modified!: string;
+	public last_modified!: string;
 
 	@Field(() => GraphQLDateTime)
 	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
-	createdAt!: Date;
+	public createdAt!: Date;
 
 	@Field(() => GraphQLDateTime)
 	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
-	updatedAt!: Date;
+	public updatedAt!: Date;
 }

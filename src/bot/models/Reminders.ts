@@ -1,25 +1,23 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-
 @Entity('reminders')
 export class Reminder {
 	@PrimaryGeneratedColumn('uuid')
-	id!: string;
+	public id!: string;
 
 	@Index()
 	@Column({ type: 'bigint' })
-	user!: string;
+	public user!: string;
 
 	@Column({ type: 'bigint', nullable: true })
-	channel!: string;
+	public channel!: string;
 
 	@Column({ nullable: true })
-	reason!: string;
+	public reason!: string;
 
 	@Column()
-	trigger!: string;
+	public trigger!: string;
 
 	@Column({ type: 'timestamptz' })
-	triggers_at!: Date;
+	public triggers_at!: Date;
 }

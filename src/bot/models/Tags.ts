@@ -1,42 +1,40 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-
 @Entity('tags')
 export class Tag {
 	@PrimaryGeneratedColumn()
-	id!: number;
+	public id!: number;
 
 	@Index()
 	@Column({ type: 'bigint' })
-	user!: string;
+	public user!: string;
 
 	@Index()
 	@Column({ type: 'bigint' })
-	guild!: string;
+	public guild!: string;
 
 	@Index()
 	@Column()
-	name!: string;
+	public name!: string;
 
 	@Column({ 'type': 'text', 'array': true, 'default': (): string => 'ARRAY[]::text[]' })
-	aliases!: string[];
+	public aliases!: string[];
 
 	@Column()
-	content!: string;
+	public content!: string;
 
 	@Column({ 'default': false })
-	hoisted!: boolean;
+	public hoisted!: boolean;
 
 	@Column({ 'default': 0 })
-	uses!: number;
+	public uses!: number;
 
 	@Column({ type: 'bigint', nullable: true })
-	last_modified!: string;
+	public last_modified!: string;
 
 	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
-	createdAt!: Date;
+	public createdAt!: Date;
 
 	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
-	updatedAt!: Date;
+	public updatedAt!: Date;
 }

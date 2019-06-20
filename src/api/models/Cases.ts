@@ -1,52 +1,50 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-
 @Entity('cases')
 export class Case {
 	@PrimaryGeneratedColumn()
-	id!: number;
+	public id!: number;
 
 	@Index()
 	@Column({ type: 'bigint' })
-	guild!: string;
+	public guild!: string;
 
 	@Column({ type: 'bigint', nullable: true })
-	message!: string;
+	public message!: string;
 
 	@Index()
 	@Column()
-	case_id!: number;
+	public case_id!: number;
 
 	@Column({ nullable: true })
-	ref_id!: number;
+	public ref_id!: number;
 
 	@Index()
 	@Column({ type: 'bigint' })
-	target_id!: string;
+	public target_id!: string;
 
 	@Column({ type: 'text' })
-	target_tag!: string;
+	public target_tag!: string;
 
 	@Column({ type: 'bigint', nullable: true })
-	mod_id!: string;
+	public mod_id!: string;
 
 	@Column({ type: 'text', nullable: true })
-	mod_tag!: string;
+	public mod_tag!: string;
 
 	@Column()
-	action!: number;
+	public action!: number;
 
 	@Column({ type: 'text', nullable: true })
-	reason!: string;
+	public reason!: string;
 
 	@Column({ type: 'timestamptz', nullable: true })
-	action_duration!: Date;
+	public action_duration!: Date;
 
 	@Index()
 	@Column({ 'default': true })
-	action_processed!: boolean;
+	public action_processed!: boolean;
 
 	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
-	createdAt!: Date;
+	public createdAt!: Date;
 }
