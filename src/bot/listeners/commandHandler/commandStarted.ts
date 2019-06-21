@@ -1,6 +1,6 @@
 import { Listener, Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { addBreadcrumb, Severity } from '@sentry/node';
+import { addBreadcrumb, setContext, Severity } from '@sentry/node';
 
 export default class CommandStartedListener extends Listener {
 	public constructor() {
@@ -22,6 +22,30 @@ export default class CommandStartedListener extends Listener {
 					id: message.author!.id,
 					username: message.author!.tag
 				},
+				guild: message.guild
+					? {
+						id: message.guild.id,
+						name: message.guild.name
+					}
+					: null,
+				command: {
+					id: command.id,
+					aliases: command.aliases,
+					category: command.category.id
+				},
+				message: {
+					id: message.id,
+					content: message.content
+				},
+				args
+			}
+		});
+		setContext('command_started', {
+			user: {
+				id: message.author!.id,
+				username: message.author!.tag
+			},
+			extra: {
 				guild: message.guild
 					? {
 						id: message.guild.id,

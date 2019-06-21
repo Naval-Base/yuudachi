@@ -1095,6 +1095,15 @@
     "@sentry/utils" "5.4.2"
     tslib "^1.9.3"
 
+"@sentry/integrations@^5.4.2":
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-5.4.2.tgz#75312407571392badc40ee48b031fae701fee564"
+  integrity sha512-+nPaFdj8v2EBkZsQBF/pOIwqcf32//R3Iz37aMAWuutw0YOgJXJEaPe4GNMpk78bH3ZwVltGlW8RsDD6zgcc7A==
+  dependencies:
+    "@sentry/types" "5.4.2"
+    "@sentry/utils" "5.4.2"
+    tslib "^1.9.3"
+
 "@sentry/minimal@5.4.2":
   version "5.4.2"
   resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-5.4.2.tgz#525ea2b4fb3914ddae17c4b59a20746565699f07"
@@ -3999,12 +4008,10 @@ diffie-hellman@^5.0.0:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-beta.8"
-  uid "817327e64546062353ac595d64b52924896d032a"
   resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/817327e64546062353ac595d64b52924896d032a"
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  uid "6100aceef24abfff0d32fcf5a6ff79c2102d046f"
   resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/6100aceef24abfff0d32fcf5a6ff79c2102d046f"
   dependencies:
     form-data "^2.3.3"

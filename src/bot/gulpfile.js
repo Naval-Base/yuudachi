@@ -13,7 +13,7 @@ function scripts() {
 		.pipe(init())
 		.pipe(project())
 		.js
-		.pipe(write('.', { sourceRoot: './', includeContent: false }))
+		.pipe(write())
 		.pipe(dest('dist'));
 }
 

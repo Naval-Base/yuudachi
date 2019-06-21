@@ -16,6 +16,7 @@ import { Counter, register } from 'prom-client';
 import { createServer, Server } from 'http';
 import { parse } from 'url';
 import { init } from '@sentry/node';
+import { RewriteFrames } from '@sentry/integrations';
 import { Node, NodeMessage } from 'veza';
 import { VERSION } from '../util/version';
 
@@ -219,7 +220,13 @@ export default class YukikazeClient extends AkairoClient {
 			init({
 				dsn: process.env.SENTRY,
 				environment: process.env.NODE_ENV,
-				release: VERSION
+				release: VERSION,
+				serverName: 'yukikaze_bot',
+				integrations: [
+					new RewriteFrames({
+						root: __dirname || process.cwd()
+					})
+				]
 			});
 		} else {
 			process.on('unhandledRejection', (err: any): Logger => this.logger.error(`[UNHANDLED REJECTION] ${err.message}`, err.stack));

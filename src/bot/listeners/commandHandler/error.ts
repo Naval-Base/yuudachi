@@ -1,6 +1,6 @@
 import { Listener, Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { addBreadcrumb, captureException, Severity } from '@sentry/node';
+import { addBreadcrumb, setContext, captureException, Severity } from '@sentry/node';
 
 export default class CommandErrorListener extends Listener {
 	public constructor() {
@@ -35,6 +35,29 @@ export default class CommandErrorListener extends Listener {
 						category: command.category.id
 					}
 					: null,
+				message: {
+					id: message.id,
+					content: message.content
+				}
+			}
+		});
+		setContext('command_started', {
+			user: {
+				id: message.author!.id,
+				username: message.author!.tag
+			},
+			extra: {
+				guild: message.guild
+					? {
+						id: message.guild.id,
+						name: message.guild.name
+					}
+					: null,
+				command: {
+					id: command.id,
+					aliases: command.aliases,
+					category: command.category.id
+				},
 				message: {
 					id: message.id,
 					content: message.content
