@@ -33,7 +33,7 @@
 		"@types/node": "^12.0.10",
 		"@typescript-eslint/eslint-plugin": "^1.11.0",
 		"@typescript-eslint/parser": "^1.11.0",
-		"eslint": "^6.0.0",
+		"eslint": "^6.0.1",
 		"eslint-config-marine": "^3.0.2",
 		"nodemon": "^1.19.1",
 		"typescript": "^3.5.2"
