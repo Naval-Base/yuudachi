@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import { Tag } from '../../models/Tags';
+import { Raw } from 'typeorm';
 
 export default class TagShowCommand extends Command {
 	public constructor() {
@@ -33,8 +34,12 @@ export default class TagShowCommand extends Command {
 		}
 		name = Util.cleanContent(name, message);
 		const tagsRepo = this.client.db.getRepository(Tag);
-		const dbTags = await tagsRepo.find({ guild: message.guild!.id });
-		const [tag] = dbTags.filter((t): boolean => t.name === name || t.aliases.includes(name));
+		const tag = await tagsRepo.findOne({
+			where: [
+				{ name, guild: message.guild!.id },
+				{ aliases: Raw((alias: string) => `${alias} @> ARRAY['${name}']`), guild: message.guild!.id }
+			]
+		});
 		if (!tag) return;
 		tag.uses += 1;
 		await tagsRepo.save(tag);
