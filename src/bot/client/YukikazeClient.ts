@@ -175,7 +175,7 @@ export default class YukikazeClient extends AkairoClient {
 			const tag = await tagsRepo.findOne({
 				where: [
 					{ name: phrase, guild: message.guild!.id },
-					{ aliases: Raw((alias: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
+					{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
 				]
 			});
 
@@ -188,7 +188,7 @@ export default class YukikazeClient extends AkairoClient {
 			const tag = await tagsRepo.findOne({
 				where: [
 					{ name: phrase, guild: message.guild!.id },
-					{ aliases: Raw((alias: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
+					{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
 				]
 			});
 
