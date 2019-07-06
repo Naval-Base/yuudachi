@@ -76,7 +76,7 @@ export default class CaseDeleteCommand extends Command {
 		} catch {}
 		const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
-			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, moderator ? moderator.user.displayAvatarURL() : '')
+			.setAuthor(`${dbCase.mod_tag} (${dbCase.mod_id})`, dbCase.mod_id && moderator ? moderator.user.displayAvatarURL() : '')
 			.setColor(Util.CONSTANTS.COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
