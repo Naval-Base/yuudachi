@@ -36,7 +36,7 @@
 		"eslint": "^6.0.1",
 		"eslint-config-marine": "^3.0.3",
 		"nodemon": "^1.19.1",
-		"typescript": "^3.5.2"
+		"typescript": "^3.5.3"
 	},
 	"eslintConfig": {
 		"extends": "marine/node"
