@@ -23,7 +23,7 @@
 		"polka": "^0.5.2",
 		"reflect-metadata": "^0.1.13",
 		"type-graphql": "^0.17.4",
-		"veza": "^0.6.0"
+		"veza": "^0.5.1"
 	},
 	"devDependencies": {
 		"@types/cookie": "^0.3.3",

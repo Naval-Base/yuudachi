@@ -32,12 +32,17 @@ async function main(): Promise<void> {
 	const db = database.get('yukikaze');
 	await db.connect();
 
+	// @ts-ignore
 	const node = await new Node('api')
+		// @ts-ignore
 		.on('error', (error, client) => console.error(`> IPC error from ${client.name}`, error))
-		.on('socket.disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
-		.on('socket.destroy', client => console.log(`> IPC client destroyed: ${client.name}`))
-		.on('socket.ready', client => console.log(`> IPC connected to: ${client.name}`))
-		.connectTo(9512);
+		// @ts-ignore
+		.on('client.disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
+		// @ts-ignore
+		.on('client.destroy', client => console.log(`> IPC client destroyed: ${client.name}`))
+		// @ts-ignore
+		.on('client.ready', client => console.log(`> IPC connected to: ${client.name}`))
+		.connectTo('bot', 9512);
 
 	const schema = await buildSchema({
 		resolvers: [OAuthUserResolver, GuildResolver, GuildSettingsResolver, TagResolver]

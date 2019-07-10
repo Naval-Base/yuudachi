@@ -242,7 +242,7 @@ export default class YukikazeClient extends AkairoClient {
 		await this.db.connect();
 		this.node = await new Node('bot')
 			.on('error', (error, client) => this.logger.error(`[IPC] Error from ${client.name}`, error))
-			.on('client.ready', client => this.logger.info(`[IPC] Client connected: ${client.name}`))
+			.on('client.identify', client => this.logger.info(`[IPC] Client connected: ${client.name}`))
 			.on('client.destroy', client => this.logger.info(`[IPC] Client destroyed: ${client.name}`))
 			.serve(9512);
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
