@@ -20,7 +20,7 @@
 				</nuxt-link>
 			</div>
 		</template>
-		<h1 v-else>
+		<h1 v-else class="guild-heading">
 			Not logged in.
 		</h1>
 	</div>

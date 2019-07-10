@@ -73,7 +73,7 @@ export default class GuildTagsComponent extends Vue {
 					}
 				}`,
 				variables: {
-					guild_id: this.guild.id
+					guild_id: this.guild ? this.guild.id : this.$route.params.id
 				}
 			});
 

@@ -37,6 +37,11 @@ import { Guild } from '~/store';
 	components: {
 		GuildSettings: () => import('~/components/GuildSettings.vue'),
 		GuildTags: () => import('~/components/GuildTags.vue')
+	},
+	data() {
+		return {
+			activeTab: this.$route.query.tab || 'guildSettings'
+		};
 	}
 })
 export default class GuildPage extends Vue {
@@ -54,6 +59,7 @@ export default class GuildPage extends Vue {
 
 	switchTab(key: string) {
 		this.activeTab = key;
+		this.$router.push({ query: Object.assign({}, this.$route.query, { tab: key }) });
 	}
 }
 </script>
