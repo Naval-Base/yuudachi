@@ -34,13 +34,9 @@ async function main(): Promise<void> {
 
 	// @ts-ignore
 	const node = await new Node('api')
-		// @ts-ignore
 		.on('error', (error, client) => console.error(`> IPC error from ${client.name}`, error))
-		// @ts-ignore
 		.on('client.disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
-		// @ts-ignore
 		.on('client.destroy', client => console.log(`> IPC client destroyed: ${client.name}`))
-		// @ts-ignore
 		.on('client.ready', client => console.log(`> IPC connected to: ${client.name}`))
 		.connectTo('bot', 9512);
 
@@ -72,7 +68,6 @@ async function main(): Promise<void> {
 			return next();
 		}
 
-		console.log(req.headers);
 		const token = req.headers.authorization
 			? req.headers.authorization.startsWith('Bearer ')
 				? req.headers.authorization.split(' ')[1]
@@ -88,8 +83,7 @@ async function main(): Promise<void> {
 			const { access_token, user } = verify(token, process.env.JWT_SECRET!) as { access_token: string; user: OAuthUser };
 			req.user = user;
 			req.token = access_token;
-		} catch (error) {
-			/* console.error(error); */
+		} catch {
 			req.user = null;
 			req.token = null;
 		}
