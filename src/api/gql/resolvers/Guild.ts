@@ -6,6 +6,7 @@ import { channelUnion } from './Channel';
 import { Role } from './Role';
 import { Tag } from '../../models/Tags';
 import { FindOption } from './Tag';
+import { GuildMember } from './GuildMember';
 
 interface Guild {
 	id: string;
@@ -114,6 +115,9 @@ export class IPCGuild implements IPCGuild {
 	@Field(() => String, { nullable: true })
 	public bannerURL!: string | null;
 
+	@Field(() => GuildMember, { nullable: true })
+	public member?: GuildMember;
+
 	@Field(() => [channelUnion], { nullable: true })
 	public channels?: Array<typeof channelUnion>;
 
@@ -137,7 +141,18 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		if (!context.req.user) {
 			return undefined;
 		}
-		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'GUILD', id });
+		const { success, d }: { success: boolean; d: IPCGuild } = await context.node.send({ type: 'GUILD', id });
+		if (!success) return undefined;
+		return d;
+	}
+
+	@FieldResolver()
+	public async member(
+		@Root() guild: Guild,
+		@Ctx() context: Context,
+		@Arg('id') id: string
+	): Promise<GuildMember | undefined> {
+		const { success, d }: { success: boolean; d: GuildMember } = await context.node.send({ type: 'GUILD_MEMBER', id, guildId: guild.id });
 		if (!success) return undefined;
 		return d;
 	}

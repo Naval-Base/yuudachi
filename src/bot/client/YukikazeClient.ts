@@ -85,6 +85,10 @@ export default class YukikazeClient extends AkairoClient {
 				const guild = this.guilds.get(m.data.id);
 				if (guild) res = guild.toJSON();
 				break;
+			case 'GUILD_MEMBER':
+				const member = this.guilds.get(m.data.guildId)!.members.get(m.data.id);
+				if (member) res = member.toJSON();
+				break;
 			case 'CHANNEL':
 				const channel = this.channels.get(m.data.id);
 				if (channel) res = channel.toJSON();
