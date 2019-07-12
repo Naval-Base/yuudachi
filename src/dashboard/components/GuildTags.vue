@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="true">
+		<template v-if="tags">
 			<div class="tags">
 				<div v-for="(tag, index) in tags" :key="index" class="card">
 					<div class="card-header">
@@ -25,7 +25,7 @@
 		</template>
 		<template v-else>
 			<div class="tags no-tags">
-				<p>Not in this guild; No tags.</p>
+				<pre>{{ message }}</pre>
 			</div>
 		</template>
 	</div>
@@ -41,6 +41,8 @@ export default class GuildTagsComponent extends Vue {
 	public selectedGuild!: any;
 
 	public tags: string[] | null = null;
+
+	public message: string = 'Loading...';
 
 	get guild() {
 		return this.selectedGuild;
@@ -80,6 +82,7 @@ export default class GuildTagsComponent extends Vue {
 			this.tags = data.guild.tags;
 		} catch {
 			this.tags = null;
+			this.message = 'Not in this guild || No tags.';
 		}
 	}
 }
@@ -96,6 +99,10 @@ export default class GuildTagsComponent extends Vue {
 
 		&.no-tags {
 			text-align: center;
+
+			> pre {
+				grid-column: span 8;
+			}
 		}
 
 		.heading {
