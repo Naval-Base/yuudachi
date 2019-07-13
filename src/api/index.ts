@@ -56,7 +56,7 @@ async function main(): Promise<void> {
 	const app = polka();
 
 	app.use(cors({
-		origin: ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:8000'],
+		origin: process.env.CORS_ORIGIN!.split(','),
 		credentials: true,
 		allowedHeaders: ['Accept', 'Content-Type'],
 		optionsSuccessStatus: 200
