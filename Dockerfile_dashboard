@@ -15,7 +15,7 @@ WORKDIR /usr/src/yukikaze/dashboard
 COPY --from=build /usr/src/yukikaze/dashboard .
 COPY src/dashboard .
 COPY tsconfig.json /usr/src/
-EXPOSE 3000
+EXPOSE 3200
 RUN yarn build
 ENV NODE_ENV= \
 	DISCORD= \
