@@ -11,6 +11,9 @@ const conf: NuxtConfiguration = {
 		DISCORD_CALLBACK: process.env.DISCORD!,
 		GRAPHQL_API: process.env.GRAPHQL!
 	},
+	router: {
+		base: '/dashboard'
+	},
 	head: {
 		title: 'Yukikaze Dashboard',
 		titleTemplate: '%s | NAVAL-BASE',
