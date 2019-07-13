@@ -7,7 +7,7 @@
 				</nuxt-link>
 			</div>
 			<div class="header-content">
-				<a v-if="!auth" href="http://localhost:8000/discord">{{ username }}</a>
+				<a v-if="!auth" :href="process.env.DISCORD_CALLBACK || 'http://localhost:8000/discord'">{{ username }}</a>
 				<span v-else>{{ username }}</span>
 			</div>
 		</nav>
