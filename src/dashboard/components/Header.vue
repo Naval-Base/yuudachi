@@ -7,7 +7,7 @@
 				</nuxt-link>
 			</div>
 			<div class="header-content">
-				<a v-if="!auth" :href="process.env.DISCORD_CALLBACK || 'http://localhost:8000/discord'">{{ username }}</a>
+				<a v-if="!auth" :href="authURL">{{ username }}</a>
 				<span v-else>{{ username }}</span>
 			</div>
 		</nav>
@@ -31,6 +31,10 @@ export default class HeaderComponent extends Vue {
 
 	get username() {
 		return this.user ? this.user.username : 'Login';
+	}
+
+	get authURL() {
+		return process.env.DISCORD_CALLBACK || 'http://localhost:8000/discord';
 	}
 }
 </script>
