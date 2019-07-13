@@ -73,7 +73,7 @@ interface SettingsChange {
 
 @Component({
 	components: {
-		Loading: () => import('~/components/Loading.vue')
+		Loading: () => import('./Loading.vue')
 	}
 })
 export default class GuildSettingsComponent extends Vue {

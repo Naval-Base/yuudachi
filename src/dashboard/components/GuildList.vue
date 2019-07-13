@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
-import { Guild } from '~/store';
+import { Guild } from '../store';
 
 @Component
 export default class GuildListComponent extends Vue {

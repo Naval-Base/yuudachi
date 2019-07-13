@@ -13,9 +13,9 @@ import { Getter } from 'vuex-class';
 
 @Component({
 	components: {
-		Header: () => import('~/components/Header.vue'),
-		Footer: () => import('~/components/Footer.vue'),
-		GuildTagsModal: () => import('~/components/GuildTagsModal.vue')
+		Header: () => import('../components/Header.vue'),
+		Footer: () => import('../components/Footer.vue'),
+		GuildTagsModal: () => import('../components/GuildTagsModal.vue')
 	}
 })
 export default class DefaultLayout extends Vue {

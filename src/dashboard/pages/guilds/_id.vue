@@ -31,12 +31,12 @@
 
 <script lang="ts">
 import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
-import { Guild } from '~/store';
+import { Guild } from '../../store';
 
 @Component({
 	components: {
-		GuildSettings: () => import('~/components/GuildSettings.vue'),
-		GuildTags: () => import('~/components/GuildTags.vue')
+		GuildSettings: () => import('../../components/GuildSettings.vue'),
+		GuildTags: () => import('../../components/GuildTags.vue')
 	},
 	data() {
 		return {

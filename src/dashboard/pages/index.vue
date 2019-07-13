@@ -11,7 +11,7 @@ import { Component, Vue } from 'nuxt-property-decorator';
 
 @Component({
 	components: {
-		GuildList: () => import('~/components/GuildList.vue')
+		GuildList: () => import('../components/GuildList.vue')
 	}
 })
 export default class IndexPage extends Vue {}

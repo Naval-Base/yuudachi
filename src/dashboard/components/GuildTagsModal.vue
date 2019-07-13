@@ -34,7 +34,7 @@ const discordMarkdown = require('discord-markdown'); // eslint-disable-line
 
 @Component({
 	components: {
-		Loading: () => import('~/components/Loading.vue')
+		Loading: () => import('./Loading.vue')
 	}
 })
 export default class GuildTagsModalComponent extends Vue {

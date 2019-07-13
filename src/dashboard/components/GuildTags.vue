@@ -43,7 +43,7 @@ import gql from 'graphql-tag';
 
 @Component({
 	components: {
-		Loading: () => import('~/components/Loading.vue')
+		Loading: () => import('./Loading.vue')
 	}
 })
 export default class GuildTagsComponent extends Vue {

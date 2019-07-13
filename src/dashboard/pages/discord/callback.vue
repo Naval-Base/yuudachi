@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Component, Vue, Mutation } from 'nuxt-property-decorator';
-import { User, Guild } from '~/store';
+import { User, Guild } from '../../store';
 
 interface DiscordResponse {
 	user: User;
