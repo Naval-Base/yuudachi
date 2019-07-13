@@ -20,6 +20,8 @@ import { RewriteFrames } from '@sentry/integrations';
 import { Node, NodeMessage } from 'veza';
 import { VERSION } from '../util/version';
 
+const LokiTransport = require('winston-loki'); // eslint-disable-line
+
 declare module 'discord-akairo' {
 	interface AkairoClient {
 		logger: Logger;
@@ -62,6 +64,9 @@ export default class YukikazeClient extends AkairoClient {
 			new transports.Console({
 				format: format.colorize({ level: true }),
 				level: 'info'
+			}),
+			new LokiTransport({
+				host: 'http://localhost:3100'
 			}),
 			new DailyRotateFile({
 				format: format.combine(
