@@ -60,7 +60,7 @@ export default class GuildPage extends Vue {
 	public activeTab: string = 'guildSettings';
 
 	beforeRouteLeave(_: any, __: any, next: any) {
-		this.selectGuild(null);
+		this.selectGuild({ id: null, settings: null });
 		this.selectTag(null);
 		return next();
 	}

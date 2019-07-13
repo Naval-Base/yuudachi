@@ -2,50 +2,56 @@
 	<div>
 		<template v-if="setting">
 			<div class="settings">
-				<form :class="{ disabled: moderator }">
-					<fieldset :disabled="moderator">
-						<div :class="{ disabled: moderator }">
+				<form :class="{ disabled: !moderator }">
+					<fieldset :disabled="!moderator">
+						<div :class="{ disabled: !moderator }">
 							Normal Settings:
 						</div>
-						<label :class="{ disabled: moderator }" for="prefixInput">Prefix:</label>
+						<label :class="{ disabled: !moderator }" for="prefixInput">Prefix:</label>
 						<input id="prefixInput" v-model="setting.prefix" :class="{ changed: settingsChange.prefix }" type="text" name="prefix" @change="inputChange('prefix', $event)">
-						<label :class="{ disabled: moderator }" for="githubRepositoryInput">GitHub Repository:</label>
+						<label :class="{ disabled: !moderator }" for="githubRepositoryInput">GitHub Repository:</label>
 						<input id="githubRepositoryInput" v-model="setting.githubRepository" :class="{ changed: settingsChange.githubRepository }" type="text" name="githubRepository" @change="inputChange('githubRepository', $event)">
-						<label :class="{ disabled: moderator }" for="defaultDocsInput">Default Docs:</label>
+						<label :class="{ disabled: !moderator }" for="defaultDocsInput">Default Docs:</label>
 						<input id="defaultDocsInput" v-model="setting.defaultDocs" :class="{ changed: settingsChange.defaultDocs }" type="text" name="defaultDocs" @change="inputChange('defaultDocs', $event)">
-						<div :class="{ disabled: moderator }">
+						<div :class="{ disabled: !moderator }">
 							Moderation Settings:
 						</div>
-						<label :class="{ disabled: moderator }" for="moderationInput">Moderation Feature:</label>
+						<label :class="{ disabled: !moderator }" for="moderationInput">Moderation Feature:</label>
 						<input id="moderationInput" :checked="Boolean(setting.moderation)" type="checkbox" name="moderation">
-						<label :class="{ disabled: moderator }" for="muteRoleInput">Mute Role:</label>
+						<label :class="{ disabled: !moderator }" for="muteRoleInput">Mute Role:</label>
 						<input id="muteRoleInput" v-model="setting.muteRole" list="muteRole" :class="{ changed: settingsChange.muteRole }" type="text" name="muteRole" @change="inputChange('muteRole', $event)">
 						<datalist id="muteRole">
 							<option v-for="role in roles" :key="role.id" :value="role.id">
 								@{{ role.name }}
 							</option>
 						</datalist>
-						<label :class="{ disabled: moderator }" for="modLogChannelInput">Mod Channel:</label>
+						<label :class="{ disabled: !moderator }" for="modLogChannelInput">Mod Channel:</label>
 						<input id="modLogChannelInput" v-model="setting.modLogChannel" :class="{ changed: settingsChange.modLogChannel }" type="text" name="modLogChannel" list="modLogChannel" @change="inputChange('modLogChannel', $event)">
 						<datalist id="modLogChannel">
 							<option v-for="channel in channels" :key="channel.id" :value="channel.id">
 								#{{ channel.name }}
 							</option>
 						</datalist>
-						<label :class="{ disabled: moderator }" for="caseTotalInput">Total Cases:</label>
+						<label :class="{ disabled: !moderator }" for="caseTotalInput">Total Cases:</label>
 						<input id="caseTotalInput" v-model="setting.caseTotal" :class="{ changed: settingsChange.caseTotal }" type="text" name="caseTotal" @change="inputChange('caseTotal', $event)">
-						<label :class="{ disabled: moderator }" for="guildLogsInput">Guild Logs Webhook:</label>
+						<label :class="{ disabled: !moderator }" for="guildLogsInput">Guild Logs Webhook:</label>
 						<input id="guildLogsInput" v-model="setting.guildLogs" :class="{ changed: settingsChange.guildLogs }" type="text" name="guildLogs" @change="inputChange('guildLogs', $event)">
 					</fieldset>
 				</form>
 				<div id="inputSubmit">
-					<button :disabled="moderator" @click="post">
+					<button :disabled="!moderator" @click="post">
 						Submit
 					</button>
-					<button :disabled="moderator" @click="reset">
+					<button :disabled="!moderator" @click="reset">
 						Reset
 					</button>
 				</div>
+			</div>
+		</template>
+		<template v-else-if="loading">
+			<div class="loading">
+				<Loading />
+				<pre>{{ message }}</pre>
 			</div>
 		</template>
 		<template v-else>
@@ -57,17 +63,28 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Getter } from 'nuxt-property-decorator';
+import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
+import { Guild } from '../store';
 import gql from 'graphql-tag';
 
 interface SettingsChange {
 	[key: string]: boolean;
 }
 
-@Component
+@Component({
+	components: {
+		Loading: () => import('~/components/Loading.vue')
+	}
+})
 export default class GuildSettingsComponent extends Vue {
 	@Getter
 	public user!: any;
+
+	@Getter
+	public selectedGuild!: any;
+
+	@Action
+	public selectGuild!: any;
 
 	public member: any = null;
 
@@ -80,6 +97,8 @@ export default class GuildSettingsComponent extends Vue {
 	public defaultSettings: any = null;
 
 	public message: string = 'Loading..';
+
+	public loading: boolean = true;
 
 	public settingsChange: SettingsChange = {
 		prefix: false,
@@ -143,14 +162,18 @@ export default class GuildSettingsComponent extends Vue {
 			this.roles = data.guild.roles;
 			this.settings = data.guild.settings;
 			this.defaultSettings = { ...data.guild.settings };
+			this.selectGuild({ id: this.$route.params.id, member: this.member, settings: this.settings });
 		} catch {
 			this.member = null;
 			this.channels = null;
 			this.roles = null;
 			this.settings = null;
 			this.defaultSettings = null;
-			this.message = 'Not in this guild; No settings.';
+			this.loading = false;
 		}
+
+		if (this.settings) this.loading = false;
+		if (!this.settings) this.message = 'Not in this guild; No settings.';
 	}
 
 	get setting() {
@@ -158,7 +181,11 @@ export default class GuildSettingsComponent extends Vue {
 	}
 
 	get moderator() {
-		return this.member && !this.member.roles.some((r: { id: string }) => r.id === this.settings.modRole);
+		return this.guildManageable(this.selectedGuild);
+	}
+
+	guildManageable(guild: Guild) {
+		return (guild.permissions & (1 << 5)) === 1 << 5;
 	}
 
 	databaseChannel(id: string) {
@@ -286,5 +313,11 @@ export default class GuildSettingsComponent extends Vue {
 				}
 			}
 		}
+	}
+
+	.loading {
+		display: grid;
+		justify-content: center;
+		justify-items: center;
 	}
 </style>

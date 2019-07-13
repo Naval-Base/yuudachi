@@ -18,6 +18,23 @@ export interface Guild {
 	permissions: number;
 }
 
+export interface GuildSettings {
+	prefix?: string;
+	moderation?: boolean;
+	muteRole?: string;
+	restrictRoles?: {
+		embed?: string;
+		reaction?: string;
+		emoji?: string;
+	};
+	modRole?: string;
+	modLogChannel?: string;
+	caseTotal?: number;
+	guildLogs?: string;
+	githubRepository?: string;
+	defaultDocs?: string;
+}
+
 export interface User {
 	id: string;
 	username: string;
@@ -36,7 +53,16 @@ export interface State {
 	authenticated: boolean;
 	user: User | null;
 	guilds: Guild[];
-	selectedGuild: string | null;
+	selectedGuild: {
+		id: string | null;
+		member: {
+			roles: {
+				id: string;
+				name: string;
+			}[]
+		} | null;
+		settings: GuildSettings | null;
+	};
 	selectedTag: number | null;
 	tagModal: boolean;
 }
@@ -45,7 +71,11 @@ export const state = (): State => ({
 	authenticated: false,
 	user: null,
 	guilds: [],
-	selectedGuild: null,
+	selectedGuild: {
+		id: null,
+		member: null,
+		settings: null
+	},
 	selectedTag: null,
 	tagModal: false
 });
@@ -55,7 +85,7 @@ export const getters: GetterTree<State, State> = {
 	user: state => state.user,
 	guilds: state => state.guilds,
 	selectedGuild: state => {
-		const g = state.guilds.find(guild => guild.id === state.selectedGuild);
+		const g = state.guilds.find(guild => guild.id === state.selectedGuild!.id);
 		return g ? g : null;
 	},
 	selectedTag: state => state.selectedTag,
@@ -66,7 +96,7 @@ export interface Actions<S, R> extends ActionTree<S, R> {
 	nuxtServerInit(context: ActionContext<S, R>, { app }: { app: any }): void;
 	login(context: ActionContext<S, R>, user: User): void;
 	logout(context: ActionContext<S, R>): void;
-	selectGuild(context: ActionContext<S, R>, id: string): void;
+	selectGuild(context: ActionContext<S, R>, { id, member, settings }: { id: string; member: any; settings: GuildSettings }): void;
 	selectTag(context: ActionContext<S, R>, id: number): void;
 	showTagModal(context: ActionContext<S, R>, state: boolean): void;
 }
@@ -122,8 +152,8 @@ export const actions: Actions<State, State> = {
 		commit(types.SET_GUILDS, { guilds: [] });
 		commit(types.SET_AUTH, false);
 	},
-	selectGuild({ commit }, id: string) {
-		commit(types.SELECT_GUILD, id);
+	selectGuild({ commit }, { id, member, settings }) {
+		commit(types.SELECT_GUILD, { id, member, settings });
 	},
 	selectTag({ commit }, id: number) {
 		commit(types.SELECT_TAG, id);
@@ -143,8 +173,8 @@ export const mutations: MutationTree<State> = {
 	[types.SET_GUILDS](state, { guilds }: { guilds: Guild[] }) {
 		state.guilds = guilds;
 	},
-	[types.SELECT_GUILD](state, id: string) {
-		state.selectedGuild = id;
+	[types.SELECT_GUILD](state, { id, member, settings }: { id: string; member: any; settings: GuildSettings }) {
+		state.selectedGuild = { id, member, settings };
 	},
 	[types.SELECT_TAG](state, id: number) {
 		state.selectedTag = id;

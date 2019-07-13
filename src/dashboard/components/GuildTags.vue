@@ -23,6 +23,12 @@
 				</div>
 			</div>
 		</template>
+		<template v-else-if="loading">
+			<div class="loading">
+				<Loading />
+				<pre>{{ message }}</pre>
+			</div>
+		</template>
 		<template v-else>
 			<div class="tags no-tags">
 				<pre>{{ message }}</pre>
@@ -35,8 +41,15 @@
 import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
 import gql from 'graphql-tag';
 
-@Component
+@Component({
+	components: {
+		Loading: () => import('~/components/Loading.vue')
+	}
+})
 export default class GuildTagsComponent extends Vue {
+	@Getter
+	public user!: any;
+
 	@Getter
 	public selectedGuild!: any;
 
@@ -50,16 +63,20 @@ export default class GuildTagsComponent extends Vue {
 
 	public message: string = 'Loading...';
 
-	get guild() {
-		return this.selectedGuild;
-	}
+	public loading: boolean = true;
 
 	async mounted() {
 		try {
 			// @ts-ignore
 			const { data } = await this.$apollo.query({
-				query: gql`query guild_tags($guild_id: String!) {
+				query: gql`query guild_tags($guild_id: String!, $member_id: String!) {
 					guild(id: $guild_id) {
+						member(id: $member_id) {
+							roles {
+								id
+								name
+							}
+						}
 						tags {
 							id
 							user {
@@ -78,23 +95,34 @@ export default class GuildTagsComponent extends Vue {
 							createdAt
 							updatedAt
 						}
+						settings {
+							modRole
+						}
 					}
 				}`,
 				variables: {
-					guild_id: this.guild ? this.guild.id : this.$route.params.id
+					guild_id: this.guild ? this.guild.id : this.$route.params.id,
+					member_id: this.user.id
 				}
 			});
 
 			this.tags = data.guild.tags;
+			if (!this.tags) this.loading = false;
 		} catch {
 			this.tags = null;
+			this.loading = false;
 		}
 
 		if (!this.tags || !this.tags.length) this.message = 'Not in this guild || No tags.';
+		if (this.tags && this.tags!.length) this.loading = false;
 	}
 
 	beforeDestroy() {
 		this.showTagModal(false);
+	}
+
+	get guild() {
+		return this.selectedGuild;
 	}
 
 	openTag(id: number) {
@@ -146,5 +174,11 @@ export default class GuildTagsComponent extends Vue {
 				justify-self: end;
 			}
 		}
+	}
+
+	.loading {
+		display: grid;
+		justify-content: center;
+		justify-items: center;
 	}
 </style>

@@ -1,31 +1,46 @@
 <template>
 	<div class="modal-background" @click.prevent="hideModal">
 		<div class="modal" @click.prevent.stop="() => false">
-			<div class="modal-header">
-				{{ tag.name }}
-			</div>
-			<div class="modal-content">
-				<span v-html="md(tag.content)" />
-			</div>
-			<div id="inputSubmit">
-				<button :disabled="moderator" @click="post">
-					Submit
-				</button>
-				<button :disabled="moderator" @click="post">
-					Reset
-				</button>
-			</div>
+			<template v-if="tag">
+				<div class="modal-header">
+					{{ tag.name }}
+				</div>
+				<div class="modal-content">
+					<span v-html="md(tag.content)" />
+				</div>
+				<div v-if="moderator" id="inputSubmit">
+					<button :disabled="!moderator" @click="post">
+						Submit
+					</button>
+					<button :disabled="!moderator" @click="post">
+						Reset
+					</button>
+				</div>
+			</template>
+			<template v-if="loading">
+				<div class="loading">
+					<Loading />
+					<pre>{{ message }}</pre>
+				</div>
+			</template>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
+import { Component, Vue, State, Getter, Action } from 'nuxt-property-decorator';
 import gql from 'graphql-tag';
 const discordMarkdown = require('discord-markdown'); // eslint-disable-line
 
-@Component
-export default class GuildTagsComponent extends Vue {
+@Component({
+	components: {
+		Loading: () => import('~/components/Loading.vue')
+	}
+})
+export default class GuildTagsModalComponent extends Vue {
+	@State('selectedGuild')
+	public currentGuild!: any;
+
 	@Getter
 	public selectedGuild!: any;
 
@@ -52,6 +67,8 @@ export default class GuildTagsComponent extends Vue {
 
 	public message: string = 'Loading...';
 
+	public loading: boolean = true;
+
 	async mounted() {
 		document.body.classList.add('no-scroll');
 
@@ -77,13 +94,19 @@ export default class GuildTagsComponent extends Vue {
 			this.tag = data.tag;
 		} catch {
 			this.tag = null;
+			this.loading = false;
 		}
 
 		if (!this.tag) this.message = 'Not in this guild || No tags.';
+		if (this.tag) this.loading = false;
 	}
 
 	beforeDestroy() {
 		document.body.classList.remove('no-scroll');
+	}
+
+	get moderator() {
+		return this.currentGuild.member && this.currentGuild.member.roles.some((r: { id: string }) => r.id === this.currentGuild.settings.modRole);
 	}
 
 	hideModal() {
@@ -112,14 +135,14 @@ export default class GuildTagsComponent extends Vue {
 		align-items: center;
 		background: rgba(0, 0, 0, 0.75);
 		position: fixed;
+		overflow-y: auto;
 
 		> .modal {
 			display: grid;
 			grid-column: 1 / -1;
 			min-width: 18rem;
-			background: rgba(13, 13, 14, 1);
-			word-wrap: break-word;
-			word-break: break-all;
+			background: rgba(48, 48, 51, 1);
+			overflow-wrap: break-word;
 			padding: .3rem .5rem 1rem .3rem;
 
 			> .modal-header {
@@ -129,7 +152,8 @@ export default class GuildTagsComponent extends Vue {
 			}
 
 			> .modal-content {
-				padding: .3rem 1rem;
+				padding: .3rem 1rem 2rem 1rem;
+				overflow: auto;
 			}
 
 			> .modal-footer {
@@ -146,18 +170,25 @@ export default class GuildTagsComponent extends Vue {
 				grid-gap: 1rem;
 
 				> button {
-					background: rgba(13, 13, 14, .5);
+					background: rgba(13, 13, 14, .7);
 					border: none;
 					color: #FFFFFF;
 					padding: 1rem;
 					outline: none;
 					cursor: pointer;
 
-					/* &:disabled {
+					&:disabled {
 						opacity: .5;
 						pointer-events: none;
-					} */
+					}
 				}
+			}
+
+			> .loading {
+				display: grid;
+				justify-content: center;
+				justify-items: center;
+				padding-top: 1.5rem;
 			}
 		}
 	}
