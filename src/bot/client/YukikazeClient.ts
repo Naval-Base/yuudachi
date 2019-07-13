@@ -50,10 +50,12 @@ interface YukikazeOptions {
 export default class YukikazeClient extends AkairoClient {
 	public logger = createLogger({
 		format: format.combine(
+			format.errors({ stack: true }),
+			format.label({ label: 'BOT' }),
 			format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
 			format.printf((info: any): string => {
-				const { timestamp, level, message, ...rest } = info;
-				return `[${timestamp}] ${level}: ${message}${Object.keys(rest).length ? `\n${JSON.stringify(rest, null, 2)}` : ''}`;
+				const { timestamp, label, level, message, topic, event, ...rest } = info;
+				return `[${timestamp}][${label}][${level.toUpperCase()}][${topic}]${event ? `[${event}]` : ''}: ${message}${Object.keys(rest).length ? `\n${JSON.stringify(rest, null, 2)}` : ''}`;
 			})
 		),
 		transports: [
@@ -221,7 +223,7 @@ export default class YukikazeClient extends AkairoClient {
 				]
 			});
 		} else {
-			process.on('unhandledRejection', (err: any): Logger => this.logger.error(`[UNHANDLED REJECTION] ${err.message}`, err.stack));
+			process.on('unhandledRejection', (err: any): Logger => this.logger.error(err, { topic: 'UNHANDLED REJECTION' }));
 		}
 
 		if (process.env.LOGS) {
@@ -239,22 +241,29 @@ export default class YukikazeClient extends AkairoClient {
 		});
 
 		this.commandHandler.loadAll();
+		this.logger.info('Command handler loaded', { topic: 'DISCORD-AKAIRO', event: 'INIT' });
 		this.inhibitorHandler.loadAll();
+		this.logger.info('Inhibitor handler loaded', { topic: 'DISCORD-AKAIRO', event: 'INIT' });
 		this.listenerHandler.loadAll();
+		this.logger.info('Listener handler loaded', { topic: 'DISCORD-AKAIRO', event: 'INIT' });
 
 		this.db = database.get('yukikaze');
 		await this.db.connect();
+		this.logger.info(`Connected to database ${this.db.name}`, { topic: 'POSTGRES', event: 'INIT' });
 		this.node = await new Node('bot')
-			.on('error', (error, client) => this.logger.error(`[IPC] Error from ${client.name}`, error))
-			.on('client.identify', client => this.logger.info(`[IPC] Client connected: ${client.name}`))
-			.on('client.destroy', client => this.logger.info(`[IPC] Client destroyed: ${client.name}`))
+			.on('error', (error, client) => this.logger.error(`${client.name} ${error}`, { topic: 'RPC', event: 'ERROR' }))
+			.on('client.identify', client => this.logger.info(`${client.name} connected`, { topic: 'RPC', event: 'IDENTIFY' }))
+			.on('client.destroy', client => this.logger.info(`${client.name} destroyed`, { topic: 'RPC', event: 'DESTROY' }))
 			.serve(9512);
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
+		this.logger.info('Bot settings initialized', { topic: 'DISCORD-AKAIRO', event: 'INIT' });
 		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Case));
 		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();
+		this.logger.info('Mute scheduler initialized', { topic: 'DISCORD-AKAIRO', event: 'INIT' });
 		await this.remindScheduler.init();
+		this.logger.info('Remind scheduler initialized', { topic: 'DISCORD-AKAIRO', event: 'INIT' });
 	}
 
 	public async start(): Promise<string> {

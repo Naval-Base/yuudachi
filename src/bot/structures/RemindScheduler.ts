@@ -66,13 +66,13 @@ export default class RemindScheduler {
 				await user.send(content);
 			}
 		} catch (error) {
-			this.client.logger.error(`[REMINDER ERROR] ${error.message}`, error.stack);
+			this.client.logger.error(error, { topic: 'DISCORD', event: 'REMIND' });
 		}
 
 		try {
 			await this.deleteReminder(reminder);
 		} catch (error) {
-			this.client.logger.error(`[REMINDER ERROR] ${error.message}`, error.stack);
+			this.client.logger.error(error, { topic: 'DISCORD', event: 'REMIND' });
 		}
 	}
 

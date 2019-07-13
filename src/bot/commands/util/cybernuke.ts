@@ -79,13 +79,13 @@ export default class LaunchCybernukeCommand extends Command {
 					Sorry, but you've been automatically targetted by the cybernuke in the "${message.guild!.name}" server.
 					This means that you have been banned, likely in the case of a server raid.
 					Please contact them if you believe this ban to be in error.
-				`).catch((error): Logger => this.client.logger.error(`[CYBERNUKE ERROR] ${error.message}`, error.stack))
+				`).catch((error): Logger => this.client.logger.error(error, { topic: 'DISCORD', event: 'COMMAND ERROR' }))
 					.then(async (): Promise<GuildMember> => member.ban())
 					.then((): void => {
 						fatalities.push(member);
 					})
 					.catch((err): void => {
-						this.client.logger.error(`[CYBERNUKE ERROR] ${err.message}`, err.stack);
+						this.client.logger.error(err, { topic: 'DISCORD', event: 'COMMAND ERROR' });
 						survivors.push({
 							member,
 							error: err

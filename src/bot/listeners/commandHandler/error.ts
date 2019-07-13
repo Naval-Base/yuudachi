@@ -12,7 +12,8 @@ export default class CommandErrorListener extends Listener {
 	}
 
 	public exec(error: Error, message: Message, command: Command): void {
-		this.client.logger.error(`[COMMAND ERROR] ${error.message}`, error.stack);
+		// @ts-ignore
+		this.client.logger.error(error, { topic: 'DISCORD-AKAIRO', event: 'COMMAND_ERROR' });
 		addBreadcrumb({
 			message: 'command_errored',
 			category: command ? command.category.id : 'inhibitor',

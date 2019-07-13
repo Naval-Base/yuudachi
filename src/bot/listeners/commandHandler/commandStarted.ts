@@ -12,6 +12,7 @@ export default class CommandStartedListener extends Listener {
 	}
 
 	public exec(message: Message, command: Command, args: any[]): void {
+		this.client.logger.info(`Started ${command.id} on ${message.guild ? `${message.guild.name} (${message.guild.id})` : 'DM'}${Object.keys(args).length ? ` with arguments ${JSON.stringify(args)}` : ''}`, { topic: 'DISCORD-AKAIRO', event: 'COMMAND_STARTED' });
 		this.client.prometheus.commandCounter.inc();
 		addBreadcrumb({
 			message: 'command_started',

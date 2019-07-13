@@ -20,8 +20,8 @@ export default class MuteScheduler {
 	}
 
 	public async addMute(mute: Case, reschedule = false): Promise<void> {
-		this.client.logger.info(`[MUTE] Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`);
-		if (reschedule) this.client.logger.info(`[MUTE] Rescheduled mute on ${mute.target_id} on ${this.client.guilds.get(mute.guild)}`);
+		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: 'DISCORD', event: 'MUTE' });
+		if (reschedule) this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: 'DISCORD', event: 'MUTE' });
 		if (!reschedule) {
 			const cs = new Case();
 			cs.guild = mute.guild;
@@ -43,7 +43,7 @@ export default class MuteScheduler {
 	}
 
 	public async cancelMute(mute: Case): Promise<boolean> {
-		this.client.logger.info(`[MUTE] Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`);
+		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: 'DISCORD', event: 'MUTE' });
 		const guild = this.client.guilds.get(mute.guild);
 		const muteRole = this.client.settings.get(guild!, 'muteRole', undefined);
 		let member;
@@ -77,7 +77,6 @@ export default class MuteScheduler {
 	}
 
 	public rescheduleMute(mute: Case): void {
-		this.client.logger.info('Rescheduling mute');
 		const schedule = this.queuedSchedules.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(mute.id);
