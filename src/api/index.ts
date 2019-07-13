@@ -95,7 +95,7 @@ async function main(): Promise<void> {
 	const http = createServer(app.handler);
 	server.installSubscriptionHandlers(http);
 
-	http.listen(5000, () => {
+	http.listen(process.env.PORT!, () => {
 		console.log(`> Server ready at http://localhost:5000${server.graphqlPath}`);
 		console.log(`> Subscription server ready at ws://localhost:5000${server.subscriptionsPath}`);
 	});

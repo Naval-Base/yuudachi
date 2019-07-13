@@ -1,6 +1,9 @@
 import NuxtConfiguration from '@nuxt/config';
 
 const conf: NuxtConfiguration = {
+	server: {
+		port: 3200
+	},
 	loading: false,
 	loadingIndicator: false,
 	globalName: 'yukikaze',
