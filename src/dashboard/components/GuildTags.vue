@@ -2,7 +2,7 @@
 	<div>
 		<template v-if="tags">
 			<div class="tags">
-				<div v-for="(tag, index) in tags" :key="index" class="card">
+				<div v-for="tag in tags" :key="tag.id" class="card" @click="openTag(tag.id)">
 					<div class="card-header">
 						{{ tag.name }}
 					</div>
@@ -32,13 +32,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Getter } from 'nuxt-property-decorator';
+import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
 import gql from 'graphql-tag';
 
 @Component
 export default class GuildTagsComponent extends Vue {
 	@Getter
 	public selectedGuild!: any;
+
+	@Action
+	public selectTag!: any;
+
+	@Action
+	public showTagModal!: any;
 
 	public tags: string[] | null = null;
 
@@ -82,8 +88,18 @@ export default class GuildTagsComponent extends Vue {
 			this.tags = data.guild.tags;
 		} catch {
 			this.tags = null;
-			this.message = 'Not in this guild || No tags.';
 		}
+
+		if (!this.tags || !this.tags.length) this.message = 'Not in this guild || No tags.';
+	}
+
+	beforeDestroy() {
+		this.showTagModal(false);
+	}
+
+	openTag(id: number) {
+		this.selectTag(id);
+		this.showTagModal(true);
 	}
 }
 </script>
@@ -101,18 +117,8 @@ export default class GuildTagsComponent extends Vue {
 			text-align: center;
 
 			> pre {
-				grid-column: span 8;
+				grid-column: 1 / -1;
 			}
-		}
-
-		.heading {
-			margin-bottom: 1rem;
-			background: rgba(13, 13, 14, .5);
-			padding: .5rem;
-		}
-
-		.center {
-			text-align: center;
 		}
 
 		> .card {

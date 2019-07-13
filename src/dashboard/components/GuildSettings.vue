@@ -207,8 +207,8 @@ export default class GuildSettingsComponent extends Vue {
 			border-right: #FFFFFF 2px solid;
 
 			&.disabled {
-				border-left: rgba(255, 255, 255, 0.5) 2px solid;
-				border-right: rgba(255, 255, 255, 0.5) 2px solid;
+				border-left: rgba(255, 255, 255, .5) 2px solid;
+				border-right: rgba(255, 255, 255, .5) 2px solid;
 			}
 
 			.disabled {

@@ -5,7 +5,9 @@ export const types = {
 	SET_AUTH: 'setAuth',
 	SET_USER: 'setUser',
 	SET_GUILDS: 'setGuilds',
-	SELECT_GUILD: 'selectGuild'
+	SELECT_GUILD: 'selectGuild',
+	SELECT_TAG: 'selectTag',
+	SHOW_TAG_MODAL: 'showTagModal'
 };
 
 export interface Guild {
@@ -35,13 +37,17 @@ export interface State {
 	user: User | null;
 	guilds: Guild[];
 	selectedGuild: string | null;
+	selectedTag: number | null;
+	tagModal: boolean;
 }
 
 export const state = (): State => ({
 	authenticated: false,
 	user: null,
 	guilds: [],
-	selectedGuild: null
+	selectedGuild: null,
+	selectedTag: null,
+	tagModal: false
 });
 
 export const getters: GetterTree<State, State> = {
@@ -51,7 +57,9 @@ export const getters: GetterTree<State, State> = {
 	selectedGuild: state => {
 		const g = state.guilds.find(guild => guild.id === state.selectedGuild);
 		return g ? g : null;
-	}
+	},
+	selectedTag: state => state.selectedTag,
+	tagModal: state => state.tagModal
 };
 
 export interface Actions<S, R> extends ActionTree<S, R> {
@@ -59,6 +67,8 @@ export interface Actions<S, R> extends ActionTree<S, R> {
 	login(context: ActionContext<S, R>, user: User): void;
 	logout(context: ActionContext<S, R>): void;
 	selectGuild(context: ActionContext<S, R>, id: string): void;
+	selectTag(context: ActionContext<S, R>, id: number): void;
+	showTagModal(context: ActionContext<S, R>, state: boolean): void;
 }
 
 export const actions: Actions<State, State> = {
@@ -114,6 +124,12 @@ export const actions: Actions<State, State> = {
 	},
 	selectGuild({ commit }, id: string) {
 		commit(types.SELECT_GUILD, id);
+	},
+	selectTag({ commit }, id: number) {
+		commit(types.SELECT_TAG, id);
+	},
+	showTagModal({ commit }, state: boolean) {
+		commit(types.SHOW_TAG_MODAL, state);
 	}
 };
 
@@ -129,5 +145,11 @@ export const mutations: MutationTree<State> = {
 	},
 	[types.SELECT_GUILD](state, id: string) {
 		state.selectedGuild = id;
+	},
+	[types.SELECT_TAG](state, id: number) {
+		state.selectedTag = id;
+	},
+	[types.SHOW_TAG_MODAL](state, s: boolean) {
+		state.tagModal = s;
 	}
 };

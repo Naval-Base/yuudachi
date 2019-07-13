@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Getter } from 'nuxt-property-decorator';
+import { Component, Vue, Getter, Action } from 'nuxt-property-decorator';
 import { Guild } from '~/store';
 
 @Component({
@@ -51,7 +51,19 @@ export default class GuildPage extends Vue {
 	@Getter
 	public selectedGuild!: any;
 
+	@Action
+	public selectGuild!: any;
+
+	@Action
+	public selectTag!: any;
+
 	public activeTab: string = 'guildSettings';
+
+	beforeRouteLeave(_: any, __: any, next: any) {
+		this.selectGuild(null);
+		this.selectTag(null);
+		return next();
+	}
 
 	get guild() {
 		return this.selectedGuild || this.guilds.find(guild => guild.id === this.$route.params.id);

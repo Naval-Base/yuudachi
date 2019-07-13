@@ -1,5 +1,6 @@
 <template>
 	<div id="app">
+		<GuildTagsModal v-if="showModal" />
 		<Header />
 		<Nuxt />
 		<Footer />
@@ -13,7 +14,8 @@ import { Getter } from 'vuex-class';
 @Component({
 	components: {
 		Header: () => import('~/components/Header.vue'),
-		Footer: () => import('~/components/Footer.vue')
+		Footer: () => import('~/components/Footer.vue'),
+		GuildTagsModal: () => import('~/components/GuildTagsModal.vue')
 	}
 })
 export default class DefaultLayout extends Vue {
@@ -23,12 +25,19 @@ export default class DefaultLayout extends Vue {
 	@Getter
 	public user!: any;
 
+	@Getter
+	public tagModal!: boolean;
+
 	get auth() {
 		return this.authenticated;
 	}
 
 	get username() {
 		return this.user ? this.user.username : 'Login';
+	}
+
+	get showModal() {
+		return this.tagModal;
 	}
 }
 </script>
@@ -43,6 +52,10 @@ export default class DefaultLayout extends Vue {
 		font-size: 1rem;
 		line-height: 1.2;
 		font-family: $family-primary;
+	}
+
+	.no-scroll {
+		overflow: hidden;
 	}
 
 	.grid {

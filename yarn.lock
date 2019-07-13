@@ -4177,9 +4177,16 @@ discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-beta.8"
   resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/817327e64546062353ac595d64b52924896d032a"
 
+discord-markdown@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/discord-markdown/-/discord-markdown-2.1.2.tgz#32fd4540680885bb7d00423589b46db0c6bc8689"
+  integrity sha512-TWVRh3/CbRR/xf3NhafJ2c1ZTBIpRSAE4VGU96/M0/Ycz641uwiocDhY11Svb2mduaxV8LBWWQah7gzrGjcUJw==
+  dependencies:
+    highlight.js "^9.13.1"
+    simple-markdown "^0.4.2"
+
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  uid "00c4098bb315a92322d708fe4cf71d070508ab69"
   resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/00c4098bb315a92322d708fe4cf71d070508ab69"
   dependencies:
     form-data "^2.3.3"
@@ -5759,7 +5766,7 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-highlight.js@^9.6.0:
+highlight.js@^9.13.1, highlight.js@^9.6.0:
   version "9.15.8"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.15.8.tgz#f344fda123f36f1a65490e932cf90569e4999971"
   integrity sha512-RrapkKQWwE+wKdF73VsOa2RQdIoO3mxwJ4P8mhbI6KYJUraUHRKM5w5zQQKXNk0xNL4UVRdulV9SBJcmzJNzVA==
@@ -10063,6 +10070,11 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
+
+simple-markdown@^0.4.2:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/simple-markdown/-/simple-markdown-0.4.4.tgz#9bd597bdd5c2f5a789e56a4dbf06427d76c3834f"
+  integrity sha512-ZmlNUGR1KI12sPHeQ7dQY1qM5KfOgFqClNNVO8zQ9Pg6u7gHLCPFGD+VC7MCwpGDMd1uw3Bb2TfFfR8d6bB34A==
 
 simple-swizzle@^0.2.2:
   version "0.2.2"
