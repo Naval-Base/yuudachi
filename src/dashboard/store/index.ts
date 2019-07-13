@@ -59,7 +59,7 @@ export interface State {
 			roles: {
 				id: string;
 				name: string;
-			}[]
+			}[];
 		} | null;
 		settings: GuildSettings | null;
 	};
