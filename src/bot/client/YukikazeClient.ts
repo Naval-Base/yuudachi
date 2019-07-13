@@ -67,8 +67,7 @@ export default class YukikazeClient extends AkairoClient {
 			}),
 			new LokiTransport({
 				level: 'debug',
-				host: process.env.LOKI!,
-				json: true
+				host: process.env.LOKI!
 			}),
 			new DailyRotateFile({
 				format: format.combine(
