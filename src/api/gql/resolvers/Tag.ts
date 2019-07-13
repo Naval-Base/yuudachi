@@ -1,4 +1,4 @@
-import { Resolver, Query, Ctx, Arg, FieldResolver, Root } from 'type-graphql';
+import { Resolver, Query, Ctx, Arg, FieldResolver, Root, Int } from 'type-graphql';
 import { Context } from '../../';
 import { Tag } from '../../models/Tags';
 import { IPCUser } from './User';
@@ -11,6 +11,20 @@ export interface FindOption {
 
 @Resolver(() => Tag)
 export class TagResolver {
+	@Query(() => Tag, { nullable: true })
+	public async tag(
+		@Ctx() context: Context,
+		@Arg('id', () => Int) id: number
+	): Promise<Tag | undefined> {
+		if (!context.req.user) {
+			return undefined;
+		}
+		const tags = context.db.getRepository(Tag);
+		const dbTag = await tags.findOne(id);
+		if (!dbTag) return undefined;
+		return dbTag;
+	}
+
 	@Query(() => [Tag], { nullable: true })
 	public async tags(
 		@Ctx() context: Context,

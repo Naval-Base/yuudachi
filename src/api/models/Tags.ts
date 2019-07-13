@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
-import { ObjectType, ID, Field, Int } from 'type-graphql';
+import { ObjectType, Field, Int } from 'type-graphql';
 import { GraphQLDateTime } from 'graphql-iso-date';
 import { IPCUser } from '../gql/resolvers/User';
 import { IPCGuild } from '../gql/resolvers/Guild';
@@ -7,7 +7,7 @@ import { IPCGuild } from '../gql/resolvers/Guild';
 @ObjectType()
 @Entity('tags')
 export class Tag {
-	@Field(() => ID)
+	@Field(() => Int)
 	@PrimaryGeneratedColumn()
 	public id!: number;
 
