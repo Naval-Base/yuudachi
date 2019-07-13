@@ -17,5 +17,7 @@ COPY src/dashboard .
 COPY tsconfig.json /usr/src/
 EXPOSE 3000
 RUN yarn build
-ENV NODE_ENV=
+ENV NODE_ENV= \
+	DISCORD= \
+	GRAPHQL=
 CMD ["yarn", "start"]
