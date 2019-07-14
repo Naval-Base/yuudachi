@@ -6,7 +6,7 @@
 					{{ tag.name }}
 				</div>
 				<div class="modal-content">
-					<span v-html="tagContent" />
+					<span v-html="tagContent()" />
 				</div>
 				<div v-if="moderator" id="inputSubmit">
 					<button :disabled="!moderator" @click="post">
