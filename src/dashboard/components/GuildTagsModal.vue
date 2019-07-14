@@ -6,7 +6,7 @@
 					{{ tag.name }}
 				</div>
 				<div class="modal-content">
-					<span v-html="md(tag.content)" />
+					<span v-html="tagContent" />
 				</div>
 				<div v-if="moderator" id="inputSubmit">
 					<button :disabled="!moderator" @click="post">
@@ -109,6 +109,16 @@ export default class GuildTagsModalComponent extends Vue {
 		return this.currentGuild.member && this.currentGuild.member.roles.some((r: { id: string }) => r.id === this.currentGuild.settings.modRole);
 	}
 
+	tagContent() {
+		// Only embed pure image links
+		const linkRegex = /^https?:\/\/(?:\w+\.)?[\w-]+\.[\w]{2,3}(?:\/[\w-_.]+)+\.(?:png|jpg|jpeg|gif|webp)$/;
+		const linkMatch = this.tag.content.match(linkRegex);
+		if (linkMatch) {
+			return `<img src="${linkMatch[0]}">`;
+		}
+		return this.md(this.tag.content);
+	}
+
 	hideModal() {
 		this.showTagModal(!this.tagModal);
 	}
@@ -141,7 +151,7 @@ export default class GuildTagsModalComponent extends Vue {
 			display: grid;
 			grid-column: 1 / -1;
 			min-width: 18rem;
-			background: rgba(48, 48, 51, 1);
+			background: rgba(20, 20, 20, 1);
 			overflow-wrap: break-word;
 			padding: .3rem .5rem 1rem .3rem;
 
@@ -154,6 +164,15 @@ export default class GuildTagsModalComponent extends Vue {
 			> .modal-content {
 				padding: .3rem 1rem 2rem 1rem;
 				overflow: auto;
+
+				a {
+					text-decoration: none;
+					color: #6FC6E2;
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
 			}
 
 			> .modal-footer {
