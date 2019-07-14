@@ -42,7 +42,7 @@ export default class GuildListComponent extends Vue {
 	public selectGuild!: any;
 
 	guildManageable(guild: Guild) {
-		return (guild.permissions & (1 << 5)) === 1 << 5;
+		return guild ? (guild.permissions & (1 << 5)) === 1 << 5 : false;
 	}
 
 	get auth() {
