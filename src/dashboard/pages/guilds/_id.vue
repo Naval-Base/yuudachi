@@ -78,6 +78,7 @@ export default class GuildPage extends Vue {
 	#main {
 		margin: 1rem .5rem;
 		color: #FFFFFF;
+		margin-left: calc(100vw - 100%);
 	}
 
 	#section {
