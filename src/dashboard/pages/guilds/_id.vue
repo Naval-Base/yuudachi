@@ -48,9 +48,6 @@ export default class GuildPage extends Vue {
 	@Getter
 	public guilds!: Guild[];
 
-	@Getter
-	public selectedGuild!: any;
-
 	@Action
 	public selectGuild!: any;
 
@@ -59,14 +56,13 @@ export default class GuildPage extends Vue {
 
 	public activeTab: string = 'guildSettings';
 
-	beforeRouteLeave(_: any, __: any, next: any) {
+	beforeDestroy() {
 		this.selectGuild({ id: null, settings: null });
 		this.selectTag(null);
-		return next();
 	}
 
 	get guild() {
-		return this.selectedGuild || this.guilds.find(guild => guild.id === this.$route.params.id);
+		return this.guilds.find(guild => guild.id === this.$route.params.id);
 	}
 
 	switchTab(key: string) {
