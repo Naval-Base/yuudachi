@@ -111,7 +111,7 @@ export default class GuildTagsModalComponent extends Vue {
 
 	tagContent() {
 		// Only embed pure image links
-		const linkRegex = /^https?:\/\/(?:\w+\.)?[\w-]+\.[\w]{2,3}(?:\/[\w-_.]+)+\.(?:png|jpg|jpeg|gif|webp)$/;
+		const linkRegex = /^https?:\/\/(?:\w+\.)?[\w-]+\.[\w]{2,3}(?:\/[\w-_.]+)+\.(?:png|jpg|jpeg|gif|gifv|webp).*$/;
 		const linkMatch = this.tag.content.match(linkRegex);
 		if (linkMatch) {
 			return `<img src="${linkMatch[0]}">`;
@@ -164,15 +164,6 @@ export default class GuildTagsModalComponent extends Vue {
 			> .modal-content {
 				padding: .3rem 1rem 2rem 1rem;
 				overflow: auto;
-
-				a {
-					text-decoration: none;
-					color: #6FC6E2;
-
-					&:hover {
-						text-decoration: underline;
-					}
-				}
 			}
 
 			> .modal-footer {

@@ -54,6 +54,15 @@ export default class DefaultLayout extends Vue {
 		font-family: $family-primary;
 	}
 
+	a {
+		text-decoration: none;
+		color: #6FC6E2;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
 	.no-scroll {
 		overflow: hidden;
 	}
