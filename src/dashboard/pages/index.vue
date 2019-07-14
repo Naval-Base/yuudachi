@@ -22,6 +22,7 @@ export default class IndexPage extends Vue {}
 		background: #1A1A1D;
 		color: #FFFFFF;
 		text-align: center;
+		margin-left: calc(100vw - 100%);
 	}
 
 	#section > * {
