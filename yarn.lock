@@ -10148,7 +10148,7 @@ semver@5.5.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
   integrity sha512-4SJ3dm0WAwWy/NVeioZh5AntkdJoWKxHxcmyP622fOkgHa4z3R0TdBJICINyaSDE6uNwVc8gZr+ZinwZAH4xIA==
 
-semver@^6.0.0, semver@^6.1.0, semver@^6.1.1, semver@^6.1.2:
+semver@^6.0.0, semver@^6.1.0, semver@^6.1.1, semver@^6.1.2, semver@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.2.0.tgz#4d813d9590aaf8a9192693d6c85b9344de5901db"
   integrity sha512-jdFC1VdUGT/2Scgbimf7FSx9iJLXoqfglSF+gJeuNWVpiE37OIbc1jywR/GJyFdz3mnkz2/id0L0J/cr0izR5A==
@@ -12378,14 +12378,14 @@ winston-compat@^0.1.4:
     logform "^1.6.0"
     triple-beam "^1.2.0"
 
-winston-daily-rotate-file@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-3.9.0.tgz#2a9f4f327761b0c096c0649c275945148dd4b6f7"
-  integrity sha512-KicvoaLQapqjSDSCIUKik0dDb90vFkqx1/udUiAt6iOqAtBl2qBCrpSDNy3xp7WnT6xHCKAWEEp2XILtiN+zpQ==
+winston-daily-rotate-file@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-3.10.0.tgz#c49047d227f82a1f191c8298772aaeb7b67d5906"
+  integrity sha512-KO8CfbI2CvdR3PaFApEH02GPXiwJ+vbkF1mCkTlvRIoXFI8EFlf1ACcuaahXTEiDEKCii6cNe95gsL4ZkbnphA==
   dependencies:
     file-stream-rotator "^0.4.1"
     object-hash "^1.3.0"
-    semver "^5.6.0"
+    semver "^6.2.0"
     triple-beam "^1.3.0"
     winston-compat "^0.1.4"
     winston-transport "^4.2.0"
