@@ -138,9 +138,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		@Ctx() context: Context,
 		@Arg('id') id: string
 	): Promise<IPCGuild | undefined> {
-		if (!context.req.user) {
-			return undefined;
-		}
+		if (!context.req.user) return undefined;
 		const { success, d }: { success: boolean; d: IPCGuild } = await context.node.send({ type: 'GUILD', id });
 		if (!success) return undefined;
 		return d;

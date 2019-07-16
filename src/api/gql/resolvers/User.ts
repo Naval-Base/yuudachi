@@ -104,9 +104,7 @@ export class OAuthUserResolver implements ResolverInterface<OAuthUser> {
 	public me(
 		@Ctx() context: Context
 	): OAuthUser | undefined {
-		if (!context.req.user) {
-			return undefined;
-		}
+		if (!context.req.user) return undefined;
 		return context.req.user;
 	}
 
