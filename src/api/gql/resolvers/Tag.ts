@@ -59,7 +59,7 @@ export class TagResolver {
 	@Mutation(() => Tag)
 	public async editTag(
 		@Ctx() context: Context,
-		@Arg('id') id: number,
+		@Arg('id', () => Int) id: number,
 		@Arg('guild_id') guild_id: string,
 		@Arg('data') data: EditTagInput
 	): Promise<Tag | undefined> {

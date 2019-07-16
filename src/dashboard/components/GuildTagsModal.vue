@@ -27,7 +27,7 @@
 					<button :disabled="!moderator" @click="post">
 						Submit
 					</button>
-					<button :disabled="!moderator" @click="post">
+					<button :disabled="!moderator" @click="reset">
 						Reset
 					</button>
 				</div>
@@ -72,15 +72,9 @@ export default class GuildTagsModalComponent extends Vue {
 
 	public activeTab: string = 'tagPreview';
 
-	public tag: any = {
-		id: 'Loading...',
-		user: {
-			id: 'Loading...',
-			tag: 'Loading...'
-		},
-		name: 'Loading...',
-		content: 'Loading...'
-	};
+	public tag: any = null;
+
+	public resetTag: any = null;
 
 	public message: string = 'Loading...';
 
@@ -99,6 +93,9 @@ export default class GuildTagsModalComponent extends Vue {
 							id
 							tag
 						}
+						guild {
+							id
+						}
 						name
 						content
 					}
@@ -109,8 +106,10 @@ export default class GuildTagsModalComponent extends Vue {
 			});
 
 			this.tag = data.tag;
+			this.resetTag = { ...data.tag };
 		} catch {
 			this.tag = null;
+			this.resetTag = null;
 			this.loading = false;
 		}
 
@@ -144,11 +143,49 @@ export default class GuildTagsModalComponent extends Vue {
 		this.showTagModal(!this.tagModal);
 	}
 
-	post() {
-		if (true) {
-			console.error('no can do');
+	async post() {
+		this.loading = true;
+		this.message = 'Loading...';
+		try {
+			// @ts-ignore
+			const { data } = await this.$apollo.mutate({
+				mutation: gql`mutation editTag($id: Int!, $guild_id: String!, $data: EditTagInput!) {
+					editTag(id: $id, guild_id: $guild_id, data: $data) {
+						id
+						user {
+							id
+							tag
+						}
+						guild {
+							id
+						}
+						name
+						content
+					}
+				}`,
+				variables: {
+					id: this.tag.id,
+					guild_id: this.tag.guild.id,
+					data: {
+						content: this.tag.content
+					}
+				}
+			});
+
+			this.tag = data.editTag;
+			this.resetTag = { ...data.editTag };
+			this.activeTab = 'tagPreview';
+		} catch {
+			this.tag = null;
+			this.resetTag = null;
+			this.loading = false;
 		}
-		console.log('yes can do');
+
+		if (this.tag) this.loading = false;
+	}
+
+	reset() {
+		this.tag = { ...this.resetTag };
 	}
 }
 </script>
@@ -202,6 +239,7 @@ export default class GuildTagsModalComponent extends Vue {
 						background: none;
 						outline: none;
 						height: 45px;
+						cursor: pointer;
 
 						&.active {
 							border-bottom: 1px #FFFFFF solid;

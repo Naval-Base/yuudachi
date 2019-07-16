@@ -125,6 +125,7 @@ export default class GuildPage extends Vue {
 					background: none;
 					outline: none;
 					height: 45px;
+					cursor: pointer;
 
 					&.active {
 						border-bottom: 1px #FFFFFF solid;
