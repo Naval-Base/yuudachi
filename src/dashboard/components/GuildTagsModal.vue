@@ -165,7 +165,6 @@ export default class GuildTagsModalComponent extends Vue {
 		width: 100%;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(10rem, 20rem));
-		justify-items: center;
 		justify-content: center;
 		align-items: center;
 		background: rgba(0, 0, 0, 0.75);
