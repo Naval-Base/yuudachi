@@ -59,7 +59,7 @@ export class TagResolver {
 	@Mutation(() => Tag)
 	public async editTag(
 		@Ctx() context: Context,
-		@Arg('id') id: string,
+		@Arg('id') id: number,
 		@Arg('guild_id') guild_id: string,
 		@Arg('data') data: EditTagInput
 	): Promise<Tag | undefined> {
@@ -68,7 +68,7 @@ export class TagResolver {
 		const dbSettings = await settings.findOne(guild_id);
 		if (!dbSettings!.settings.moderation) return undefined;
 		if (!dbSettings!.settings.modRole) return undefined;
-		const { success, d }: { success: boolean; d: GuildMember } = await context.node.send({ type: 'GUILD_MEMBER', id, guildId: guild_id });
+		const { success, d }: { success: boolean; d: GuildMember } = await context.node.send({ type: 'GUILD_MEMBER', id: context.req.user.id, guildId: guild_id });
 		if (!success) return undefined;
 		if (!d.roles!.includes(dbSettings!.settings.modRole)) return undefined;
 
