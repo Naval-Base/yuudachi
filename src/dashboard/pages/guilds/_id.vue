@@ -127,16 +127,16 @@ export default class GuildPage extends Vue {
 					height: 45px;
 
 					&.active {
-						border-bottom: 1px #ffffff solid;
+						border-bottom: 1px #FFFFFF solid;
 					}
 
 					&:active {
-						border-bottom: 1px #ffffff solid;
+						border-bottom: 1px #FFFFFF solid;
 					}
 
 					// TODO: remove, just for dev
 					&:focus {
-						border-bottom: 1px #ffffff solid;
+						border-bottom: 1px #FFFFFF solid;
 					}
 				}
 			}

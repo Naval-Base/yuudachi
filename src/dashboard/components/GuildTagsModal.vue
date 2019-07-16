@@ -5,7 +5,22 @@
 				<div class="modal-header">
 					{{ tag.name }}
 				</div>
-				<div class="modal-content">
+				<div v-if="moderator" class="modal-tabs">
+					<div class="modal-tabs-topbar">
+						<button :class="{ 'modal-tab-button': true, active: activeTab === 'tagEditor' }" @click.prevent="switchTab('tagEditor')">
+							Editor
+						</button>
+						<button :class="{ 'modal-tab-button': true, active: activeTab === 'tagPreview' }" @click.prevent="switchTab('tagPreview')">
+							Preview
+						</button>
+					</div>
+					<GuildSettings v-if="activeTab === 'guildSettings'" />
+					<GuildTags v-if="activeTab === 'guildTags'" />
+				</div>
+				<div v-if="moderator && activeTab === 'tagEditor'" class="modal-content no-overflow">
+					<textarea v-model="tag.content" />
+				</div>
+				<div v-else-if="activeTab === 'tagPreview'" class="modal-content">
 					<span v-html="tagContent()" />
 				</div>
 				<div v-if="moderator" id="inputSubmit">
@@ -54,6 +69,8 @@ export default class GuildTagsModalComponent extends Vue {
 	public showTagModal!: any;
 
 	public md = discordMarkdown.toHTML;
+
+	public activeTab: string = 'tagPreview';
 
 	public tag: any = {
 		id: 'Loading...',
@@ -119,6 +136,10 @@ export default class GuildTagsModalComponent extends Vue {
 		return this.md(this.tag.content);
 	}
 
+	switchTab(key: string) {
+		this.activeTab = key;
+	}
+
 	hideModal() {
 		this.showTagModal(!this.tagModal);
 	}
@@ -134,6 +155,10 @@ export default class GuildTagsModalComponent extends Vue {
 
 <style lang="scss" scoped>
 	$family-primary: 'Nunito', 'Roboto', sans-serif;
+
+	.no-overflow {
+		overflow: unset !important;
+	}
 
 	.modal-background {
 		height: 100%;
@@ -161,9 +186,48 @@ export default class GuildTagsModalComponent extends Vue {
 				margin: 1rem;
 			}
 
+			> .modal-tabs {
+				display: grid;
+
+				> .modal-tabs-topbar {
+					display: grid;
+					justify-items: center;
+					justify-content: center;
+					grid-template-columns: minmax(6rem, 10rem) minmax(6rem, 10rem);
+					margin: 0 1rem 1rem 1rem;
+
+					> .modal-tab-button {
+						color: #FFFFFF;
+						border: none;
+						border-bottom: 1px transparent solid;
+						background: none;
+						outline: none;
+						height: 45px;
+
+						&.active {
+							border-bottom: 1px #FFFFFF solid;
+						}
+
+						&:active {
+							border-bottom: 1px #FFFFFF solid;
+						}
+
+						// TODO: remove, just for dev
+						&:focus {
+							border-bottom: 1px #FFFFFF solid;
+						}
+					}
+				}
+			}
+
 			> .modal-content {
 				padding: .3rem 1rem 2rem 1rem;
 				overflow: auto;
+
+				> textarea {
+					height: 10rem;
+					width: 100%;
+				}
 			}
 
 			> .modal-footer {
