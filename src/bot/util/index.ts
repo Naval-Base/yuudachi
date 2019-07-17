@@ -55,6 +55,7 @@ export default {
 		return new MessageEmbed()
 			.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
 			.setColor(0x30A9ED)
+			.setThumbnail(message.author!.displayAvatarURL())
 			.setDescription(reminders.length
 				? reminders.sort((a: { triggers_at: number }, b: { triggers_at: number }): number => a.triggers_at - b.triggers_at).map(
 					(reminder: any, i: number): string => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
@@ -79,6 +80,7 @@ export default {
 				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { 'long': true })}` : ''}
 				**Reason:** ${reason}${reference ? `\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})` : ''}
 			`)
+			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
 			.setFooter(`Case ${caseNum}`)
 			.setTimestamp(new Date());
 
@@ -98,6 +100,7 @@ export default {
 		return new MessageEmbed()
 			.setAuthor(`${member.user.tag} (${member.id})`, member.user.displayAvatarURL())
 			.setColor(colors[colorIndex])
+			.setThumbnail(member.user.displayAvatarURL())
 			.setFooter(oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
 				${restriction} restriction${restriction > 1 || restriction === 0 ? 's' : ''},
 				${mute} mute${mute > 1 || mute === 0 ? 's' : ''},
