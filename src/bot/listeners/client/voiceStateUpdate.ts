@@ -16,6 +16,7 @@ export default class VoiceStateUpdateListener extends Listener {
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
+			if (!newState.member) return;
 			const embed = new MessageEmbed()
 				.setColor(0x33ffff)
 				.setAuthor(`${newState.member!.user.tag} (${newState.member!.id})`, newState.member!.user.displayAvatarURL())
