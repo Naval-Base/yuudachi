@@ -17,7 +17,7 @@ export default class MessageTokenFilteringListener extends Listener {
 		// Bot ID: 24, Timestamp: 6, Cryptographic: Rest
 		const matches = /(\S+)\.(\S+)\.(\S+)/g.exec(message.content);
 		if (!matches) return;
-		const [botID] = matches;
+		const [, botID] = matches;
 		try {
 			// Convert the first part of the token to a bot ID (throws if invalid)
 			BigInt(Buffer.from(botID, 'base64').toString());
