@@ -11,6 +11,7 @@ export default class ToggleCommand extends Command {
 					 • logs \`<webhook>\`
 					 • mod
 					 • rolestate
+					 • tokenfiltering
 
 					Required: \`<>\` | Optional: \`[]\`
 				`,
@@ -28,7 +29,8 @@ export default class ToggleCommand extends Command {
 			type: [
 				['toggle-logs', 'logs'],
 				['toggle-moderation', 'mod', 'moderation'],
-				['toggle-role-state', 'role', 'rolestate', 'role-state']
+				['toggle-role-state', 'role', 'rolestate', 'role-state'],
+				['toggle-token-filtering', 'tokenfiltering', 'token']
 			],
 			otherwise: (msg: Message): string => {
 				// @ts-ignore
