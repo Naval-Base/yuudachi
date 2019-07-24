@@ -2,6 +2,7 @@ import YukikazeClient from '../client/YukikazeClient';
 import { TextChannel } from 'discord.js';
 import { Repository, LessThan } from 'typeorm';
 import { Reminder } from '../models/Reminders';
+import { TOPICS, EVENTS } from '../util/logger';
 
 export default class RemindScheduler {
 	protected client: YukikazeClient;
@@ -66,13 +67,13 @@ export default class RemindScheduler {
 				await user.send(content);
 			}
 		} catch (error) {
-			this.client.logger.error(error, { topic: 'DISCORD', event: 'REMIND' });
+			this.client.logger.error(error, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.REMINDER });
 		}
 
 		try {
 			await this.deleteReminder(reminder);
 		} catch (error) {
-			this.client.logger.error(error, { topic: 'DISCORD', event: 'REMIND' });
+			this.client.logger.error(error, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.REMINDER });
 		}
 	}
 

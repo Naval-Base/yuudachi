@@ -1,6 +1,7 @@
 import { Listener, Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { addBreadcrumb, setContext, captureException, Severity } from '@sentry/node';
+import { TOPICS, EVENTS } from '../../util/logger';
 
 export default class CommandErrorListener extends Listener {
 	public constructor() {
@@ -13,7 +14,7 @@ export default class CommandErrorListener extends Listener {
 
 	public exec(error: Error, message: Message, command: Command): void {
 		// @ts-ignore
-		this.client.logger.error(error, { topic: 'DISCORD-AKAIRO', event: 'COMMAND_ERROR' });
+		this.client.logger.error(error, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.COMMAND_ERROR });
 		addBreadcrumb({
 			message: 'command_errored',
 			category: command ? command.category.id : 'inhibitor',

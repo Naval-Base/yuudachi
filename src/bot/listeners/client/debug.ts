@@ -1,4 +1,5 @@
 import { Listener } from 'discord-akairo';
+import { TOPICS, EVENTS } from '../../util/logger';
 
 export default class DebugListener extends Listener {
 	public constructor() {
@@ -10,6 +11,6 @@ export default class DebugListener extends Listener {
 	}
 
 	public exec(event: any): void {
-		this.client.logger.debug(event, { topic: 'DISCORD', event: 'DEBUG' });
+		this.client.logger.debug(event, { topic: TOPICS.DISCORD, event: EVENTS.DEBUG });
 	}
 }

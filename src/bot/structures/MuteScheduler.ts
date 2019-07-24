@@ -1,6 +1,7 @@
 import YukikazeClient from '../client/YukikazeClient';
 import { LessThan, Repository } from 'typeorm';
 import { Case } from '../models/Cases';
+import { TOPICS, EVENTS } from '../util/logger';
 
 export default class MuteScheduler {
 	protected client: YukikazeClient;
@@ -20,8 +21,8 @@ export default class MuteScheduler {
 	}
 
 	public async addMute(mute: Case, reschedule = false): Promise<void> {
-		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: 'DISCORD', event: 'MUTE' });
-		if (reschedule) this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: 'DISCORD', event: 'MUTE' });
+		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
+		if (reschedule) this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		if (!reschedule) {
 			const cs = new Case();
 			cs.guild = mute.guild;
@@ -43,7 +44,7 @@ export default class MuteScheduler {
 	}
 
 	public async cancelMute(mute: Case): Promise<boolean> {
-		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: 'DISCORD', event: 'MUTE' });
+		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		const guild = this.client.guilds.get(mute.guild);
 		const muteRole = this.client.settings.get(guild!, 'muteRole', undefined);
 		let member;

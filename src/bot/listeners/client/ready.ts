@@ -1,4 +1,5 @@
 import { Listener } from 'discord-akairo';
+import { TOPICS, EVENTS } from '../../util/logger';
 
 export default class ReadyListener extends Listener {
 	public constructor() {
@@ -10,11 +11,11 @@ export default class ReadyListener extends Listener {
 	}
 
 	public async exec(): Promise<void> {
-		this.client.logger.info(`Yawn... Hmph, ${this.client.user!.tag} (${this.client.user!.id}) is only with you because she's in a good mood!`, { topic: 'DISCORD', event: 'READY' });
+		this.client.logger.info(`Yawn... Hmph, ${this.client.user!.tag} (${this.client.user!.id}) is only with you because she's in a good mood!`, { topic: TOPICS.DISCORD, event: EVENTS.READY });
 		this.client.user!.setActivity(`@${this.client.user!.username} help 💖`);
 		this.client.promServer.listen(5500);
 		this.client.node.on('message', this.client.nodeMessage);
-		this.client.logger.info('Metrics listening on 5500', { topic: 'METRICS', event: 'READY' });
+		this.client.logger.info('Metrics listening on 5500', { topic: TOPICS.METRICS, event: EVENTS.READY });
 		for (const guild of this.client.guilds.values()) {
 			const logs = this.client.settings.get(guild, 'guildLogs', undefined);
 			if (!logs) continue;

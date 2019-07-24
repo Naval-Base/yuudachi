@@ -2,6 +2,7 @@ import { Argument, Command } from 'discord-akairo';
 import { Message, GuildMember } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import { Logger } from 'winston';
+import { TOPICS, EVENTS } from '../../util/logger';
 
 export default class LaunchCybernukeCommand extends Command {
 	public constructor() {
@@ -79,13 +80,13 @@ export default class LaunchCybernukeCommand extends Command {
 					Sorry, but you've been automatically targetted by the cybernuke in the "${message.guild!.name}" server.
 					This means that you have been banned, likely in the case of a server raid.
 					Please contact them if you believe this ban to be in error.
-				`).catch((error): Logger => this.client.logger.error(error, { topic: 'DISCORD', event: 'COMMAND ERROR' }))
+				`).catch((error): Logger => this.client.logger.error(error, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR }))
 					.then(async (): Promise<GuildMember> => member.ban())
 					.then((): void => {
 						fatalities.push(member);
 					})
 					.catch((err): void => {
-						this.client.logger.error(err, { topic: 'DISCORD', event: 'COMMAND ERROR' });
+						this.client.logger.error(err, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR });
 						survivors.push({
 							member,
 							error: err
