@@ -25,9 +25,11 @@ export default class MessageUpdateListener extends Listener {
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
 			if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
-				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)![2];
-				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/)![2];
-				if (strippedOldMessage === strippedNewMessage) return;
+				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/);
+				if (!strippedOldMessage) return;
+				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/);
+				if (!strippedNewMessage) return;
+				if (strippedOldMessage[2] === strippedNewMessage[2]) return;
 				const diffMessage = diff.diffLines(strippedOldMessage, strippedNewMessage, { newlineIsToken: true });
 				for (const part of diffMessage) {
 					if (part.value === '\n') continue;
