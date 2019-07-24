@@ -18,10 +18,10 @@ export default class ToggletokenFilteringCommand extends Command {
 		const tokenFiltering = this.client.settings.get(message.guild!, 'tokenFiltering', undefined);
 		if (tokenFiltering) {
 			this.client.settings.set(message.guild!, 'tokenFiltering', false);
-			return message.util!.reply('disabled token filtering commands!');
+			return message.util!.reply('disabled token filtering!');
 		}
 		this.client.settings.set(message.guild!, 'tokenFiltering', true);
 
-		return message.util!.reply('activated token filtering commands!');
+		return message.util!.reply('activated token filtering!');
 	}
 }
