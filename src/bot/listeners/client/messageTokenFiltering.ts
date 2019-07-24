@@ -1,5 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
 export default class MessageTokenFilteringListener extends Listener {
 	public constructor() {
@@ -22,7 +23,12 @@ export default class MessageTokenFilteringListener extends Listener {
 			// Convert the first part of the token to a bot ID (throws if invalid)
 			BigInt(Buffer.from(botID, 'base64').toString());
 			if (message.deletable) await message.delete({ reason: 'Token Filtering: Message contained bot token' });
-			message.util!.reply("the message you posted contained a bot token! You should reset your bot's token");
+			message.util!.reply(stripIndents`
+				> Go to <https://discordapp.com/developers/applications> and then click on the application that corresponds with your bot
+				> Click "Bot" on the left side 
+				> Click the "Regenerate" button and then "Yes, do it!" on the popup.
+
+				https://i.imgur.com/XtQsR9s.png`);
 		} catch {}
 	}
 }
