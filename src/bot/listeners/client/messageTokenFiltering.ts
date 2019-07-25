@@ -23,7 +23,7 @@ export default class MessageTokenFilteringListener extends Listener {
 			// Convert the first part of the token to a bot ID (throws if invalid)
 			BigInt(Buffer.from(botID, 'base64').toString());
 			if (message.deletable) await message.delete({ reason: 'Token Filtering: Message contained bot token' });
-			message.util!.reply(stripIndents`the message you posted contained a bot token, you should reset it!
+			message.channel.send(stripIndents`${message.author}, the message you posted contained a bot token, you should reset it!
 
 				> Go to <https://discordapp.com/developers/applications> and then click on the application that corresponds with your bot
 				> Click "Bot" on the left side 
