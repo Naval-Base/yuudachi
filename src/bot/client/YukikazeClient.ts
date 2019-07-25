@@ -153,12 +153,15 @@ export default class YukikazeClient extends AkairoClient {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
-			const tag = await tagsRepo.findOne({
-				where: [
-					{ name: phrase, guild: message.guild!.id },
-					{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
-				]
-			});
+			let tag;
+			try {
+				tag = await tagsRepo.findOne({
+					where: [
+						{ name: phrase, guild: message.guild!.id },
+						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
+					]
+				});
+			} catch {}
 
 			return tag || Flag.fail(phrase);
 		});
@@ -166,12 +169,15 @@ export default class YukikazeClient extends AkairoClient {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
-			const tag = await tagsRepo.findOne({
-				where: [
-					{ name: phrase, guild: message.guild!.id },
-					{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
-				]
-			});
+			let tag;
+			try {
+				tag = await tagsRepo.findOne({
+					where: [
+						{ name: phrase, guild: message.guild!.id },
+						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
+					]
+				});
+			} catch {}
 
 			return tag ? Flag.fail(phrase) : phrase;
 		});

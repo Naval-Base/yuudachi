@@ -34,12 +34,15 @@ export default class TagShowCommand extends Command {
 		}
 		name = Util.cleanContent(name, message);
 		const tagsRepo = this.client.db.getRepository(Tag);
-		const tag = await tagsRepo.findOne({
-			where: [
-				{ name, guild: message.guild!.id },
-				{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${name}']`), guild: message.guild!.id }
-			]
-		});
+		let tag;
+		try {
+			tag = await tagsRepo.findOne({
+				where: [
+					{ name, guild: message.guild!.id },
+					{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${name}']`), guild: message.guild!.id }
+				]
+			});
+		} catch {}
 		if (!tag) return;
 		tag.uses += 1;
 		await tagsRepo.save(tag);
