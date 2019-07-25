@@ -30,7 +30,7 @@ export default class MessageUpdateListener extends Listener {
 				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/);
 				if (!strippedNewMessage || !strippedNewMessage[2]) return;
 				if (strippedOldMessage[2] === strippedNewMessage[2]) return;
-				const diffMessage = diff.diffLines(strippedOldMessage, strippedNewMessage, { newlineIsToken: true });
+				const diffMessage = diff.diffLines(strippedOldMessage[2], strippedNewMessage[2], { newlineIsToken: true });
 				for (const part of diffMessage) {
 					if (part.value === '\n') continue;
 					const d = part.added ? '+ ' : part.removed ? '- ' : '';
