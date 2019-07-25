@@ -16,7 +16,7 @@ export default class MessageTokenFilteringListener extends Listener {
 		const tokenFiltering = this.client.settings.get(message.guild, 'tokenFiltering', undefined);
 		if (!tokenFiltering) return;
 		// Bot ID: 24, Timestamp: 6, Cryptographic: Rest
-		const matches = /(\S+)\.(\S+)\.(\S+)/g.exec(message.content);
+		const matches = /([\w-]+={0,2})\.([\w-]+={0,2})\.([\w-]+={0,2})/g.exec(message.content);
 		if (!matches) return;
 		const [, botID] = matches;
 		try {
