@@ -3115,11 +3115,6 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.0.0.tgz#23c0df14f6a88077f5f986c0d167ec03c3d5537c"
   integrity sha512-Phlt0plgpIIBOGTT/ehfFnbNlfsDEiqmzE2KRXoX1bLIlir4X/MR+zSyBEkL05ffWgnRSf/DXv+WrUAVr93/ow==
 
-binarytf@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/binarytf/-/binarytf-1.0.0.tgz#dcf339922fa286511fa8603e2d5ef8e4483eb623"
-  integrity sha512-H2b3ax8maE7AilKMAA0mSHECHWn1aEIgmiMsUcAVfseZ49pPZsVxRiwMyi3CqGyQQ9Syyg2UZXIc3TSaU2ohdA==
-
 bindings@^1.3.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
@@ -13127,12 +13122,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-veza@^0.7.0-next.0:
-  version "0.7.0-next.0"
-  resolved "https://registry.yarnpkg.com/veza/-/veza-0.7.0-next.0.tgz#dbb7ed09cf32efaddb1eb80aca68e2c246d96fb5"
-  integrity sha512-qt+Ua7U5gcuUK8QkzuYtMCdH0pQ+lQC3h5YQC7PfIQv9ARuRn6LCSBuJOKHsSXTboNo6a7ds45aKi+2F8wBpYg==
-  dependencies:
-    binarytf "1.0.0"
+veza@0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/veza/-/veza-0.5.1.tgz#a4f326b7ec8326b3c0ef37c222cb0ce2d1ff4a77"
+  integrity sha512-MrqMS+z9YAIw6lb6GK+kus9SpWWuwEymVwhlbbko5o5rMHS9myRmqgAYL1JqmHVm4QONDXVQx4TRXrJfYSLllQ==
 
 vinyl-fs@^3.0.0, vinyl-fs@^3.0.3:
   version "3.0.3"
