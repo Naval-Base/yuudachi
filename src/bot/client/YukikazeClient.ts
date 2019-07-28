@@ -12,7 +12,7 @@ import { Connection, Raw } from 'typeorm';
 import { Case } from '../models/Cases';
 import { Reminder } from '../models/Reminders';
 import { Tag } from '../models/Tags';
-import { Counter, register } from 'prom-client';
+import { Counter, register, Registry } from 'prom-client';
 import { createServer, Server } from 'http';
 import { parse } from 'url';
 import { init } from '@sentry/node';
@@ -34,8 +34,10 @@ declare module 'discord-akairo' {
 		muteScheduler: MuteScheduler;
 		remindScheduler: RemindScheduler;
 		prometheus: {
+			messagesCounter: Counter;
 			commandCounter: Counter;
 			lewdcarioAvatarCounter: Counter;
+			register: Registry;
 		};
 
 		promServer: Server;
