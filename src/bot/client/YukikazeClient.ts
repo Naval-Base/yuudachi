@@ -19,6 +19,7 @@ import { init } from '@sentry/node';
 import { RewriteFrames } from '@sentry/integrations';
 import { Node, NodeMessage } from 'veza';
 import { VERSION } from '../util/version';
+import { __rootdir__ } from '../root';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
@@ -201,7 +202,7 @@ export default class YukikazeClient extends AkairoClient {
 				serverName: 'yukikaze_bot',
 				integrations: [
 					new RewriteFrames({
-						root: __dirname || process.cwd()
+						root: __rootdir__
 					})
 				]
 			});

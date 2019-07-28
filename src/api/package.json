@@ -2,12 +2,13 @@
 	"name": "api",
 	"version": "0.1.0",
 	"description": "",
+	"main": "dist/index.js",
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "UNLICENSED",
 	"private": true,
 	"scripts": {
 		"prebuild": "yarn lint",
-		"build": "gulp",
+		"build": "rimraf dist && tsc",
 		"lint": "eslint . --ext .ts",
 		"dev": "node -r dotenv/config dist/index.js"
 	},
@@ -38,11 +39,6 @@
 		"@typescript-eslint/parser": "^1.13.0",
 		"eslint": "^6.1.0",
 		"eslint-config-marine": "^3.0.3",
-		"fs-nextra": "^0.4.5",
-		"gulp": "^4.0.2",
-		"gulp-sourcemaps": "^2.6.5",
-		"gulp-typescript": "^5.0.1",
-		"nodemon": "^1.19.1",
 		"typescript": "^3.5.3"
 	},
 	"eslintConfig": {

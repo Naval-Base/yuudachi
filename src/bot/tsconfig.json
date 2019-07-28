@@ -10,6 +10,11 @@
 			"esnext.intl",
 			"esnext.symbol"
 		],
-		"outDir": "dist"
+		"sourceMap": false,
+		"inlineSourceMap": true,
+		"inlineSources": true,
+		"sourceRoot": "/",
+		"outDir": "dist",
+		"incremental": true
 	}
 }
