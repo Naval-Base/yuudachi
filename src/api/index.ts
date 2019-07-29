@@ -8,7 +8,7 @@ import { Connection } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 import * as cors from 'cors';
 import * as cookie from 'cookie';
-import { Client } from 'veza';
+import { Client, ClientSocket } from 'veza';
 
 import { GuildResolver } from './gql/resolvers/Guild';
 import { OAuthUser, OAuthUserResolver } from './gql/resolvers/User';
@@ -25,7 +25,7 @@ declare module 'http' {
 export interface Context {
 	req: IncomingMessage;
 	db: Connection;
-	node: Client;
+	node: ClientSocket;
 }
 
 async function main(): Promise<void> {
@@ -49,7 +49,7 @@ async function main(): Promise<void> {
 		context: ({ req }: { req: IncomingMessage }) => ({
 			req,
 			db,
-			node
+			node: node.client
 		})
 	});
 
