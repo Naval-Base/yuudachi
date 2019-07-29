@@ -1,4 +1,7 @@
-FROM node:10-alpine AS build
+FROM node:10-alpine
+LABEL name "Yukikaze Dashboard"
+LABEL version "0.1.0"
+LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
 WORKDIR /usr/src/yukikaze/dashboard
 COPY src/dashboard/package.json yarn.lock .yarnclean ./
 RUN apk add --update \
@@ -6,13 +9,6 @@ RUN apk add --update \
 && apk add --no-cache --virtual .build-deps git curl build-base python g++ make \
 && yarn install --ignore-engines \
 && apk del .build-deps
-
-FROM node:10-alpine
-LABEL name "Yukikaze Dashboard"
-LABEL version "0.1.0"
-LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
-WORKDIR /usr/src/yukikaze/dashboard
-COPY --from=build /usr/src/yukikaze/dashboard .
 COPY src/dashboard .
 COPY tsconfig.json /usr/src/
 EXPOSE 3200
