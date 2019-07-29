@@ -25,7 +25,7 @@ declare module 'http' {
 export interface Context {
 	req: IncomingMessage;
 	db: Connection;
-	node: ClientSocket;
+	node: Client;
 }
 
 async function main(): Promise<void> {
