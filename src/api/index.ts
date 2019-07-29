@@ -8,7 +8,7 @@ import { Connection } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 import * as cors from 'cors';
 import * as cookie from 'cookie';
-import { Node, NodeSocket } from 'veza';
+import { Client } from 'veza';
 
 import { GuildResolver } from './gql/resolvers/Guild';
 import { OAuthUser, OAuthUserResolver } from './gql/resolvers/User';
@@ -25,7 +25,7 @@ declare module 'http' {
 export interface Context {
 	req: IncomingMessage;
 	db: Connection;
-	node: NodeSocket;
+	node: Client;
 }
 
 async function main(): Promise<void> {
@@ -33,12 +33,11 @@ async function main(): Promise<void> {
 	await db.connect();
 
 	// @ts-ignore
-	const node = await new Node('api')
-		.on('error', (error, client) => console.error(`> IPC error from ${client.name}`, error))
-		.on('client.disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
-		.on('client.destroy', client => console.log(`> IPC client destroyed: ${client.name}`))
-		.on('client.connect', client => console.log(`> IPC connected to: ${client.name}`))
-		.on('client.ready', client => console.log(`> IPC ready: ${client.name}`))
+	const node = await new Client('api')
+		.on('error', (error, client) => console.error(`> IPC error from ${client!.name}`, error))
+		.on('connect', client => console.log(`> IPC connected to: ${client.name}`))
+		.on('disconnect', client => console.log(`> IPC client diconnected: ${client.name}`))
+		.on('ready', client => console.log(`> IPC ready: ${client.name}`))
 		.connectTo(9512);
 
 	const schema = await buildSchema({

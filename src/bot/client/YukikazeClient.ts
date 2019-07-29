@@ -17,7 +17,7 @@ import { createServer, Server } from 'http';
 import { parse } from 'url';
 import { init } from '@sentry/node';
 import { RewriteFrames } from '@sentry/integrations';
-import { Node, NodeMessage } from 'veza';
+import { Server as IPCServer, NodeMessage } from 'veza';
 import { VERSION } from '../util/version';
 import { __rootdir__ } from '../root';
 
@@ -25,7 +25,7 @@ declare module 'discord-akairo' {
 	interface AkairoClient {
 		logger: Logger;
 		db: Connection;
-		node: Node;
+		node: IPCServer;
 		nodeMessage: (m: NodeMessage) => void;
 		settings: TypeORMProvider;
 		commandHandler: CommandHandler;
@@ -55,7 +55,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public db!: Connection;
 
-	public node!: Node;
+	public node!: IPCServer;
 
 	public nodeMessage = (m: NodeMessage) => {
 		let res;
@@ -234,15 +234,13 @@ export default class YukikazeClient extends AkairoClient {
 		this.db = database.get('yukikaze');
 		await this.db.connect();
 		this.logger.info(`Connected to database ${this.db.name}`, { topic: TOPICS.POSTGRES, event: EVENTS.INIT });
-		this.node = await new Node('bot')
-			.on('error', (error, client) => this.logger.error(`${client.name} ${error}`, { topic: TOPICS.RPC, event: EVENTS.ERROR }))
-			.on('server.destroy', () => this.logger.info('Server destroyed', { topic: TOPICS.RPC, event: EVENTS.DESTROY }))
-			.on('server.ready', () => this.logger.info('Server ready', { topic: TOPICS.RPC, event: EVENTS.READY }))
-			.on('client.connect', client => this.logger.info(`${client.name} connected`, { topic: TOPICS.RPC, event: EVENTS.CONNECT }))
-			.on('client.identify', client => this.logger.info(`${client.name} identified`, { topic: TOPICS.RPC, event: EVENTS.IDENTIFY }))
-			.on('client.disconnect', client => this.logger.info(`${client.name}, disconnected`, { topic: TOPICS.RPC, event: EVENTS.DISCONNECT }))
-			.on('client.destroy', client => this.logger.info(`${client.name} destroyed`, { topic: TOPICS.RPC, event: EVENTS.DESTROY }))
-			.serve(9512);
+		this.node = await new IPCServer('bot')
+			.on('error', (error, client) => this.logger.error(`${client!.name} ${error}`, { topic: TOPICS.RPC, event: EVENTS.ERROR }))
+			.on('open', () => this.logger.info('Server ready', { topic: TOPICS.RPC, event: EVENTS.READY }))
+			.on('close', () => this.logger.info('Server destroyed', { topic: TOPICS.RPC, event: EVENTS.DESTROY }))
+			.on('connect', client => this.logger.info(`${client.name} connected`, { topic: TOPICS.RPC, event: EVENTS.CONNECT }))
+			.on('disconnect', client => this.logger.info(`${client.name}, disconnected`, { topic: TOPICS.RPC, event: EVENTS.DISCONNECT }))
+			.listen(9512);
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
 		this.logger.info('Bot settings initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
