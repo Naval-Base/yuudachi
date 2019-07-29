@@ -35,7 +35,7 @@ export class GuildMemberResolver implements ResolverInterface<GuildMember> {
 		@Root() member: GuildMember,
 		@Ctx() context: Context
 	): Promise<Role[] | undefined> {
-		const promises = (member.roles as unknown as string[]).map((r: string) => context.node.send({ type: 'ROLE', guildId: member.guildID, id: r }));
+		const promises = (member.roles as unknown as string[]).map((r: string) => context.node.sendTo('bot', { type: 'ROLE', guildId: member.guildID, id: r }));
 		const resolved = await Promise.all(promises);
 		return resolved.map(({ d }: { d: Role }) => d);
 	}

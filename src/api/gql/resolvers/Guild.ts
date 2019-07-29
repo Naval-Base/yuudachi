@@ -139,7 +139,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		@Arg('id') id: string
 	): Promise<IPCGuild | undefined> {
 		if (!context.req.user) return undefined;
-		const { success, d }: { success: boolean; d: IPCGuild } = await context.node.send({ type: 'GUILD', id });
+		const { success, d }: { success: boolean; d: IPCGuild } = await context.node.sendTo('bot', { type: 'GUILD', id });
 		if (!success) return undefined;
 		return d;
 	}
@@ -150,7 +150,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		@Ctx() context: Context,
 		@Arg('id') id: string
 	): Promise<GuildMember | undefined> {
-		const { success, d }: { success: boolean; d: GuildMember } = await context.node.send({ type: 'GUILD_MEMBER', id, guildId: guild.id });
+		const { success, d }: { success: boolean; d: GuildMember } = await context.node.sendTo('bot', { type: 'GUILD_MEMBER', id, guildId: guild.id });
 		if (!success) return undefined;
 		return d;
 	}
@@ -160,9 +160,9 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		@Root() guild: Guild,
 		@Ctx() context: Context
 	): Promise<Array<typeof channelUnion> | undefined> {
-		const { success, d }: { success: boolean; d: { channels: string[] } } = await context.node.send({ type: 'GUILD', id: guild.id });
+		const { success, d }: { success: boolean; d: { channels: string[] } } = await context.node.sendTo('bot', { type: 'GUILD', id: guild.id });
 		if (!success) return undefined;
-		const promises = d.channels.map((c: string) => context.node.send({ type: 'CHANNEL', id: c }));
+		const promises = d.channels.map((c: string) => context.node.sendTo('bot', { type: 'CHANNEL', id: c }));
 		const resolved = await Promise.all(promises);
 		return resolved.map(({ d }: { d: typeof channelUnion }) => d);
 	}
@@ -172,9 +172,9 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		@Root() guild: Guild,
 		@Ctx() context: Context
 	): Promise<Role[] | undefined> {
-		const { success, d }: { success: boolean; d: { roles: string[] } } = await context.node.send({ type: 'GUILD', id: guild.id });
+		const { success, d }: { success: boolean; d: { roles: string[] } } = await context.node.sendTo('bot', { type: 'GUILD', id: guild.id });
 		if (!success) return undefined;
-		const promises = d.roles.map((r: string) => context.node.send({ type: 'ROLE', guildId: guild.id, id: r }));
+		const promises = d.roles.map((r: string) => context.node.sendTo('bot', { type: 'ROLE', guildId: guild.id, id: r }));
 		const resolved = await Promise.all(promises);
 		return resolved.map(({ d }: { d: Role }) => d);
 	}

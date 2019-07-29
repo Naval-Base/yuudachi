@@ -68,7 +68,7 @@ export class TagResolver {
 		const dbSettings = await settings.findOne(guild_id);
 		if (!dbSettings!.settings.moderation) return undefined;
 		if (!dbSettings!.settings.modRole) return undefined;
-		const { success, d }: { success: boolean; d: GuildMember } = await context.node.send({ type: 'GUILD_MEMBER', id: context.req.user.id, guildId: guild_id });
+		const { success, d }: { success: boolean; d: GuildMember } = await context.node.sendTo('bot', { type: 'GUILD_MEMBER', id: context.req.user.id, guildId: guild_id });
 		if (!success) return undefined;
 		if (!d.roles!.includes(dbSettings!.settings.modRole)) return undefined;
 
@@ -95,7 +95,7 @@ export class TagResolver {
 		@Root() tag: Tag,
 		@Ctx() context: Context
 	): Promise<IPCUser | undefined> {
-		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'USER', id: tag.user });
+		const { success, d }: { success: boolean; d: any } = await context.node.sendTo('bot', { type: 'USER', id: tag.user });
 		if (!success) return undefined;
 		return d;
 	}
@@ -105,7 +105,7 @@ export class TagResolver {
 		@Root() tag: Tag,
 		@Ctx() context: Context
 	): Promise<IPCGuild | undefined> {
-		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'GUILD', id: tag.guild });
+		const { success, d }: { success: boolean; d: any } = await context.node.sendTo('bot', { type: 'GUILD', id: tag.guild });
 		if (!success) return undefined;
 		return d;
 	}
@@ -115,7 +115,7 @@ export class TagResolver {
 		@Root() tag: Tag,
 		@Ctx() context: Context
 	): Promise<IPCUser | undefined> {
-		const { success, d }: { success: boolean; d: any } = await context.node.send({ type: 'USER', id: tag.last_modified });
+		const { success, d }: { success: boolean; d: any } = await context.node.sendTo('bot', { type: 'USER', id: tag.last_modified });
 		if (!success) return undefined;
 		return d;
 	}
