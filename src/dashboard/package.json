@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"@nuxtjs/apollo": "^4.0.0-rc9",
-		"cookie-universal-nuxt": "^2.0.16",
+		"cookie-universal-nuxt": "^2.0.17",
 		"discord-markdown": "^2.1.2",
 		"graphql-tag": "^2.10.1",
 		"nuxt": "^2.8.1",
