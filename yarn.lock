@@ -4622,7 +4622,8 @@ discord-markdown@^2.1.2:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/e562564123912f09725a6e03ecf4ba44d85de35a"
+  uid "5af8cb8e6e7591e81f758a8b0f6748db7c2f12f1"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/5af8cb8e6e7591e81f758a8b0f6748db7c2f12f1"
   dependencies:
     form-data "^2.3.3"
     node-fetch "^2.3.0"
