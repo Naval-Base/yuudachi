@@ -13,7 +13,7 @@
 		"dev": "node -r dotenv/config dist/index.js"
 	},
 	"dependencies": {
-		"apollo-server-express": "^2.7.2",
+		"apollo-server-express": "^2.8.0",
 		"cookie": "^0.4.0",
 		"cors": "^2.8.5",
 		"dotenv": "^8.0.0",
