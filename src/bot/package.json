@@ -51,7 +51,11 @@
 		"rimraf": "^2.6.3",
 		"typescript": "^3.5.3"
 	},
-	"optionalDependencies": {},
+	"optionalDependencies": {
+		"bufferutil": "^4.0.1",
+		"utf-8-validate": "^5.0.2",
+		"zlib-sync": "^0.1.5"
+	},
 	"eslintConfig": {
 		"extends": "marine/node",
 		"globals": {
