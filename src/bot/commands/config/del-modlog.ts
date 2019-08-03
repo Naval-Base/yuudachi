@@ -16,6 +16,6 @@ export default class DeleteConfigModChannelCommand extends Command {
 
 	public async exec(message: Message): Promise<Message | Message[]> {
 		this.client.settings.delete(message.guild!, 'modLogChannel');
-		return message.util!.reply('set moderation log channel.');
+		return message.util!.reply('deleted moderation log channel.');
 	}
 }
