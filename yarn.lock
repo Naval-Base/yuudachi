@@ -11550,10 +11550,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-veza@^0.7.0-next.5:
-  version "0.7.0-next.5"
-  resolved "https://registry.yarnpkg.com/veza/-/veza-0.7.0-next.5.tgz#6c0afc3cde66fb056293b1c8f52ea6c57ea74b52"
-  integrity sha512-UciYsDbJGELAdIdi5iSYVD+aF3Srre3YFOyK74iZpd3f7iAc7Z64R4DGv+WMGFQFPI1xDIVHVquzjcamj61/kw==
+veza@^0.7.0-next.6:
+  version "0.7.0-next.6"
+  resolved "https://registry.yarnpkg.com/veza/-/veza-0.7.0-next.6.tgz#5f6bf5f0b05b36abe99ef45b652dd6722e58d627"
+  integrity sha512-nIAV13x+INm8aZDnoJYzgV+P36pZiewPAoVv1y3XH/W8DnSeATotDACBa4EP6C4GEOf6QCkHQqwWg4jJ3jHoAw==
   dependencies:
     binarytf "2.0.0"
 
