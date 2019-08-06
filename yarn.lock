@@ -2943,7 +2943,7 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.0.0.tgz#23c0df14f6a88077f5f986c0d167ec03c3d5537c"
   integrity sha512-Phlt0plgpIIBOGTT/ehfFnbNlfsDEiqmzE2KRXoX1bLIlir4X/MR+zSyBEkL05ffWgnRSf/DXv+WrUAVr93/ow==
 
-binarytf@2.0.0:
+binarytf@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/binarytf/-/binarytf-2.0.0.tgz#c5476cc5cdf023d075b9b8fa62612b86d36f666c"
   integrity sha512-CS0MvijAFAHBBw4LgIHBP7wzdW3KWEB0KeMjblK0rHOyyhnkoMu3puW7uhJXlnS5WDn5M2XQFaQBtw00FwRfcA==
@@ -11550,12 +11550,12 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-veza@^0.7.0-next.6:
-  version "0.7.0-next.6"
-  resolved "https://registry.yarnpkg.com/veza/-/veza-0.7.0-next.6.tgz#5f6bf5f0b05b36abe99ef45b652dd6722e58d627"
-  integrity sha512-nIAV13x+INm8aZDnoJYzgV+P36pZiewPAoVv1y3XH/W8DnSeATotDACBa4EP6C4GEOf6QCkHQqwWg4jJ3jHoAw==
+veza@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/veza/-/veza-1.0.0.tgz#d526f19f0aff4802e679cd91165aabbe633488f4"
+  integrity sha512-Bt6AWYsl+mA0blnIreMkqRW6OCeF81beiw39o1IVK8GSt760B10IORnIzxbSYV813ZVTtGvToab0gX+ZqQKjew==
   dependencies:
-    binarytf "2.0.0"
+    binarytf "^2.0.0"
 
 vm-browserify@^1.0.1:
   version "1.1.0"
