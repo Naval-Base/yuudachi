@@ -40,7 +40,7 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^12.7.0",
+		"@types/node": "^12.7.1",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.5.0",
 		"@types/ws": "^6.0.2",
