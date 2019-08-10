@@ -85,11 +85,11 @@ export default class MuteScheduler {
 	}
 
 	public async init(): Promise<void> {
-		await this._check();
-		this.checkInterval = this.client.setInterval(this._check.bind(this), this.checkRate);
+		await this.check();
+		this.checkInterval = this.client.setInterval(this.check.bind(this), this.checkRate);
 	}
 
-	private async _check(): Promise<void> {
+	public async check(): Promise<void> {
 		const mutes = await this.repo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false });
 		const now = new Date();
 

@@ -17,7 +17,10 @@ export default class GuildMemberAddListener extends Listener {
 			const roleStateRepo = this.client.db.getRepository(RoleState);
 			const user = await roleStateRepo.findOne({ guild: member.guild.id, user: member.id });
 			try {
-				if (user && member.roles) await member.roles.add(user.roles, 'Automatic role state');
+				if (user && member.roles) {
+					await this.client.muteScheduler.check();
+					await member.roles.add(user.roles, 'Automatic role state');
+				}
 			} catch {}
 		}
 	}
