@@ -44,7 +44,7 @@
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.5.0",
 		"@types/ws": "^6.0.2",
-		"@typescript-eslint/eslint-plugin": "^1.13.0",
+		"@typescript-eslint/eslint-plugin": "^2.0.0",
 		"@typescript-eslint/parser": "^1.13.0",
 		"eslint": "^6.1.0",
 		"eslint-config-marine": "^3.0.3",
