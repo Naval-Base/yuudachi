@@ -48,7 +48,7 @@
 		"@typescript-eslint/parser": "^2.0.0",
 		"eslint": "^6.1.0",
 		"eslint-config-marine": "^3.0.3",
-		"rimraf": "^2.7.0",
+		"rimraf": "^3.0.0",
 		"typescript": "^3.5.3"
 	},
 	"optionalDependencies": {
