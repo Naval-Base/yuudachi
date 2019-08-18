@@ -8,7 +8,7 @@ import { Connection } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 import * as cors from 'cors';
 import * as cookie from 'cookie';
-import { Client, ClientSocket } from 'veza';
+import { Client } from 'veza';
 
 import { GuildResolver } from './gql/resolvers/Guild';
 import { OAuthUser, OAuthUserResolver } from './gql/resolvers/User';

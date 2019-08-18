@@ -25,15 +25,15 @@ export default class HeaderComponent extends Vue {
 	@Getter
 	public user!: any;
 
-	get auth() {
+	public get auth() {
 		return this.authenticated;
 	}
 
-	get username() {
+	public get username() {
 		return this.user ? this.user.username : 'Login';
 	}
 
-	get authURL() {
+	public get authURL() {
 		return process.env.DISCORD_CALLBACK || 'http://localhost:8000/discord';
 	}
 }

@@ -61,11 +61,11 @@ export default class GuildTagsComponent extends Vue {
 
 	public tags: string[] | null = null;
 
-	public message: string = 'Loading...';
+	public message = 'Loading...';
 
-	public loading: boolean = true;
+	public loading = true;
 
-	async mounted() {
+	public async mounted() {
 		try {
 			// @ts-ignore
 			const { data } = await this.$apollo.query({
@@ -117,15 +117,15 @@ export default class GuildTagsComponent extends Vue {
 		if (this.tags && this.tags!.length) this.loading = false;
 	}
 
-	beforeDestroy() {
+	public beforeDestroy() {
 		this.showTagModal(false);
 	}
 
-	get guild() {
+	public get guild() {
 		return this.selectedGuild;
 	}
 
-	openTag(id: number) {
+	public openTag(id: number) {
 		this.selectTag(id);
 		this.showTagModal(true);
 	}

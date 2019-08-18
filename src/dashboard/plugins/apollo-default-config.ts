@@ -1,4 +1,4 @@
-export default function(): any {
+export default function() {
 	return {
 		httpEndpoint: process.env.GRAPHQL_API || 'http://localhost:5000/graphql',
 		httpLinkOptions: {

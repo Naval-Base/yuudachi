@@ -16,7 +16,7 @@
 		"apollo-server-express": "^2.8.1",
 		"cookie": "^0.4.0",
 		"cors": "^2.8.5",
-		"dotenv": "^8.0.0",
+		"dotenv": "^8.1.0",
 		"graphql": "^14.4.2",
 		"graphql-iso-date": "^3.6.1",
 		"jsonwebtoken": "^8.5.1",
@@ -24,7 +24,7 @@
 		"pg": "^7.12.1",
 		"polka": "^0.5.2",
 		"reflect-metadata": "^0.1.13",
-		"type-graphql": "^0.17.4",
+		"type-graphql": "^0.17.5",
 		"typeorm": "^0.2.18",
 		"veza": "^1.0.0"
 	},
@@ -38,7 +38,7 @@
 		"@typescript-eslint/eslint-plugin": "^2.0.0",
 		"@typescript-eslint/parser": "^2.0.0",
 		"eslint": "^6.1.0",
-		"eslint-config-marine": "^3.0.3",
+		"eslint-config-marine": "^4.2.0",
 		"typescript": "^3.5.3"
 	},
 	"eslintConfig": {

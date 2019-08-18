@@ -96,9 +96,9 @@ export default class GuildSettingsComponent extends Vue {
 
 	public defaultSettings: any = null;
 
-	public message: string = 'Loading..';
+	public message = 'Loading..';
 
-	public loading: boolean = true;
+	public loading = true;
 
 	public settingsChange: SettingsChange = {
 		prefix: false,
@@ -110,7 +110,7 @@ export default class GuildSettingsComponent extends Vue {
 		guildLogs: false
 	};
 
-	async mounted() {
+	public async mounted() {
 		try {
 			// @ts-ignore
 			const { data } = await this.$apollo.query({
@@ -176,39 +176,39 @@ export default class GuildSettingsComponent extends Vue {
 		if (!this.settings) this.message = 'Not in this guild; No settings.';
 	}
 
-	get setting() {
+	public get setting() {
 		return this.settings;
 	}
 
-	get moderator() {
+	public get moderator() {
 		return this.guildManageable(this.selectedGuild);
 	}
 
-	guildManageable(guild: Guild) {
+	public guildManageable(guild: Guild) {
 		return (guild.permissions & (1 << 5)) === 1 << 5;
 	}
 
-	databaseChannel(id: string) {
+	public databaseChannel(id: string) {
 		return this.channels.find((channel: any) => channel.id === id);
 	}
 
-	databaseRole(id: string) {
+	public databaseRole(id: string) {
 		return this.roles.find((role: any) => role.id === id);
 	}
 
-	inputChange(type: string) {
+	public inputChange(type: string) {
 		if (this.settings[type] === this.defaultSettings[type]) this.settingsChange[type] = false;
 		else this.settingsChange[type] = true;
 	}
 
-	post() {
+	public post() {
 		if (true) {
 			console.error('no can do');
 		}
 		console.log('yes can do');
 	}
 
-	reset() {
+	public reset() {
 		this.settings = { ...this.defaultSettings };
 		for (const [k] of Object.entries(this.settingsChange)) this.settingsChange[k] = false;
 	}

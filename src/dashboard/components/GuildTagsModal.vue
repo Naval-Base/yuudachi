@@ -70,17 +70,17 @@ export default class GuildTagsModalComponent extends Vue {
 
 	public md = discordMarkdown.toHTML;
 
-	public activeTab: string = 'tagPreview';
+	public activeTab = 'tagPreview';
 
 	public tag: any = null;
 
 	public resetTag: any = null;
 
-	public message: string = 'Loading...';
+	public message = 'Loading...';
 
-	public loading: boolean = true;
+	public loading = true;
 
-	async mounted() {
+	public async mounted() {
 		document.body.classList.add('no-scroll');
 
 		try {
@@ -117,15 +117,15 @@ export default class GuildTagsModalComponent extends Vue {
 		if (this.tag) this.loading = false;
 	}
 
-	beforeDestroy() {
+	public beforeDestroy() {
 		document.body.classList.remove('no-scroll');
 	}
 
-	get moderator() {
+	public get moderator() {
 		return this.currentGuild.member && this.currentGuild.member.roles.some((r: { id: string }) => r.id === this.currentGuild.settings.modRole);
 	}
 
-	tagContent() {
+	public tagContent() {
 		// Only embed pure image links
 		const linkRegex = /^https?:\/\/(?:\w+\.)?[\w-]+\.[\w]{2,3}(?:\/[\w-_.]+)+\.(?:png|jpg|jpeg|gif|gifv|webp).*$/;
 		const linkMatch = this.tag.content.match(linkRegex);
@@ -135,15 +135,15 @@ export default class GuildTagsModalComponent extends Vue {
 		return this.md(this.tag.content);
 	}
 
-	switchTab(key: string) {
+	public switchTab(key: string) {
 		this.activeTab = key;
 	}
 
-	hideModal() {
+	public hideModal() {
 		this.showTagModal(!this.tagModal);
 	}
 
-	async post() {
+	public async post() {
 		this.loading = true;
 		this.message = 'Loading...';
 		try {
@@ -184,7 +184,7 @@ export default class GuildTagsModalComponent extends Vue {
 		if (this.tag) this.loading = false;
 	}
 
-	reset() {
+	public reset() {
 		this.tag = { ...this.resetTag };
 	}
 }

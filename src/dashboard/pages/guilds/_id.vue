@@ -54,18 +54,18 @@ export default class GuildPage extends Vue {
 	@Action
 	public selectTag!: any;
 
-	public activeTab: string = 'guildSettings';
+	public activeTab = 'guildSettings';
 
-	beforeDestroy() {
+	public beforeDestroy() {
 		this.selectGuild({ id: null, settings: null });
 		this.selectTag(null);
 	}
 
-	get guild() {
+	public get guild() {
 		return this.guilds.find(guild => guild.id === this.$route.params.id);
 	}
 
-	switchTab(key: string) {
+	public switchTab(key: string) {
 		this.activeTab = key;
 		this.$router.push({ query: Object.assign({}, this.$route.query, { tab: key }) });
 	}

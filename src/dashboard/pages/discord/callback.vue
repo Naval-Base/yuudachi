@@ -26,7 +26,7 @@ export default class DiscordCallbackPage extends Vue {
 	@Mutation
 	public setGuilds: any;
 
-	async mounted() {
+	public async mounted() {
 		let json;
 		try {
 			const res = await fetch(`${process.env.DISCORD_CALLBACK || `http://localhost:8000/discord`}/callback?code=${this.$route.query.code}`, { credentials: 'include' });

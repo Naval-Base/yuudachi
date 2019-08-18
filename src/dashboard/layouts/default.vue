@@ -28,15 +28,15 @@ export default class DefaultLayout extends Vue {
 	@Getter
 	public tagModal!: boolean;
 
-	get auth() {
+	public get auth() {
 		return this.authenticated;
 	}
 
-	get username() {
+	public get username() {
 		return this.user ? this.user.username : 'Login';
 	}
 
-	get showModal() {
+	public get showModal() {
 		return this.tagModal;
 	}
 }

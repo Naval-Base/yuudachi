@@ -41,19 +41,19 @@ export default class GuildListComponent extends Vue {
 	@Action
 	public selectGuild!: any;
 
-	guildManageable(guild: Guild) {
+	public guildManageable(guild: Guild) {
 		return guild ? (guild.permissions & (1 << 5)) === 1 << 5 : false;
 	}
 
-	get auth() {
+	public get auth() {
 		return this.authenticated;
 	}
 
-	get manageableGuilds() {
+	public get manageableGuilds() {
 		return this.guilds.length ? this.guilds.filter((guild: Guild) => this.guildManageable(guild)) : [];
 	}
 
-	get memberGuilds() {
+	public get memberGuilds() {
 		return this.guilds.length ? this.guilds.filter((guild: Guild) => !this.guildManageable(guild)) : [];
 	}
 }

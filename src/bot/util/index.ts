@@ -22,7 +22,6 @@ const ACTIONS: Actions = {
 };
 
 export default {
-	/* eslint-disable @typescript-eslint/no-object-literal-type-assertion */
 	CONSTANTS: {
 		ACTIONS: {
 			BAN: 1,
@@ -49,7 +48,6 @@ export default {
 			TAG: 16776960
 		} as { [key: string]: number }
 	},
-	/* eslint-enable @typescript-eslint/no-object-literal-type-assertion */
 	reminderEmbed: (message: Message, reminders: any): MessageEmbed => {
 		const truncate = (str: string, len: number): string => str.length > len ? `${str.slice(0, len)}…` : str;
 		return new MessageEmbed()
