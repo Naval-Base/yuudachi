@@ -3,7 +3,6 @@
 		"strict": true,
 		"moduleResolution": "node",
 		"declaration": false,
-		"sourceMap": true,
 		"removeComments": false,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
