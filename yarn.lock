@@ -1038,13 +1038,13 @@
     webpack-node-externals "^1.7.2"
     webpackbar "^4.0.0"
 
-"@nuxtjs/apollo@^4.0.0-rc10":
-  version "4.0.0-rc10"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/apollo/-/apollo-4.0.0-rc10.tgz#0a7ed15f1a4a7d3d4b6ca3652ed0314085dc3ffe"
-  integrity sha512-c8bxYpaOGQe7ZAXwYTne+48EViXYyCOV3T5khAhNk7YFFAkz6r12ouUYZ1aZr/BYczKZNPAlcJdmWAldE29Qzg==
+"@nuxtjs/apollo@^4.0.0-rc11":
+  version "4.0.0-rc11"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/apollo/-/apollo-4.0.0-rc11.tgz#1dce2c4cbcced3d2cbc218c04c2211b1baa8594a"
+  integrity sha512-I9fq11LGwOxGa4aVkX0q+wxz/zA4B3JE+v7GSsJYK01nUT9kQAfzxlQnb6KFZanpEIl13hfqlk3Jz7D1xo67hw==
   dependencies:
-    cookie-universal "^2.0.16"
     isomorphic-fetch "^2.2.1"
+    universal-cookie "^4.0.2"
     vue-apollo "^3.0.0-rc.2"
     vue-cli-plugin-apollo "^0.21.0"
     webpack-node-externals "^1.7.2"
@@ -1624,6 +1624,11 @@
   version "11.13.19"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.19.tgz#c7bd7009aa850464775d8a814e18138d633cd676"
   integrity sha512-tLRDU1hmcWamtgRT2iVRdraAQVGFQGgtcqracSo9XyMN1VeZLSVGb8RJJxVqab7UGbijoUijGPVFMjmqzyZIUw==
+
+"@types/object-assign@^4.0.30":
+  version "4.0.30"
+  resolved "https://registry.yarnpkg.com/@types/object-assign/-/object-assign-4.0.30.tgz#8949371d5a99f4381ee0f1df0a9b7a187e07e652"
+  integrity sha1-iUk3HVqZ9Dge4PHfCpt6GH4H5lI=
 
 "@types/optimize-css-assets-webpack-plugin@^1.3.4":
   version "1.3.4"
@@ -11482,6 +11487,16 @@ unique-string@^1.0.0:
   integrity sha1-nhBXzKhRq7kzmPizOuGHuZyuwRo=
   dependencies:
     crypto-random-string "^1.0.0"
+
+universal-cookie@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-4.0.2.tgz#c3398a64c72ff0c31fecb1ac4966c424e8669c6d"
+  integrity sha512-n14lhA//lQeYRweP9j9uXsshN9Cs4LunVSnvAGmnA69SofwsjpUU03geaCaPC9LlsH2rkBy99o3zxQyVOldGvA==
+  dependencies:
+    "@types/cookie" "^0.3.3"
+    "@types/object-assign" "^4.0.30"
+    cookie "^0.4.0"
+    object-assign "^4.1.1"
 
 universalify@^0.1.0:
   version "0.1.2"
