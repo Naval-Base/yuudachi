@@ -30,7 +30,7 @@
 	},
 	"devDependencies": {
 		"@types/cookie": "^0.3.3",
-		"@types/cors": "^2.8.5",
+		"@types/cors": "^2.8.6",
 		"@types/graphql": "^14.2.3",
 		"@types/jsonwebtoken": "^8.3.3",
 		"@types/node": "^12.7.2",
