@@ -29,7 +29,7 @@
 		"@types/node": "^12.7.2",
 		"@typescript-eslint/eslint-plugin": "1.13.0",
 		"@typescript-eslint/parser": "1.13.0",
-		"eslint": "^6.2.0",
+		"eslint": "^6.2.1",
 		"eslint-config-marine": "^4.2.0",
 		"eslint-plugin-vue": "^5.2.3",
 		"node-sass": "^4.12.0",
