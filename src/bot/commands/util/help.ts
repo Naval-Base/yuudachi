@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 
@@ -23,8 +23,7 @@ export default class HelpCommand extends Command {
 	}
 
 	public async exec(message: Message, { command }: { command: Command }): Promise<Message | Message[]> {
-		// @ts-ignore
-		const prefix = this.handler.prefix(message);
+		const prefix = (this.handler.prefix as PrefixSupplier)(message)
 		if (!command) {
 			const embed = new MessageEmbed()
 				.setColor(3447003)
