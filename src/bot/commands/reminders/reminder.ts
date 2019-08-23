@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { stripIndents } from 'common-tags';
 
@@ -43,8 +43,7 @@ export default class ReminderCommand extends Command {
 
 	public async exec(message: Message, { method, name }: { method: string; name: string }): Promise<Message | Message[] | boolean | null> {
 		if (!method) {
-			// @ts-ignore
-			const prefix = this.handler.prefix(message);
+			const prefix = (this.handler.prefix as PrefixSupplier)(message);
 			return message.util!.send(stripIndents`
 				When you beg me so much I just can't not help you~
 				Check \`${prefix}help reminder\` for more information.

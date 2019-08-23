@@ -1,4 +1,4 @@
-import { Command, Flag } from 'discord-akairo';
+import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { stripIndents } from 'common-tags';
 
@@ -36,8 +36,7 @@ export default class CasesCommand extends Command {
 				['case-delete', 'delete', 'del', 'remove', 'rm']
 			],
 			otherwise: (msg: Message): string => {
-				// @ts-ignore
-				const prefix = this.handler.prefix(msg);
+				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return stripIndents`
 					When you beg me so much I just can't not help you~
 					Check \`${prefix}help cases\` for more information.

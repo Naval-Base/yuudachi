@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import Util from '../../util';
@@ -95,8 +95,7 @@ export default class SoftbanCommand extends Command {
 		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
 
 		if (!reason) {
-			// @ts-ignore
-			const prefix = this.handler.prefix(message);
+			const prefix = (this.handler.prefix as PrefixSupplier)(message);
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
