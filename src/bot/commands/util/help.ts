@@ -23,7 +23,7 @@ export default class HelpCommand extends Command {
 	}
 
 	public async exec(message: Message, { command }: { command: Command }): Promise<Message | Message[]> {
-		const prefix = (this.handler.prefix as PrefixSupplier)(message)
+		const prefix = (this.handler.prefix as PrefixSupplier)(message);
 		if (!command) {
 			const embed = new MessageEmbed()
 				.setColor(3447003)
