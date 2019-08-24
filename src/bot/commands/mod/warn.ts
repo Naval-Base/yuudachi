@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import Util from '../../util';
 import { Case } from '../../models/Cases';
@@ -60,8 +60,7 @@ export default class WarnCommand extends Command {
 		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
 
 		if (!reason) {
-			// @ts-ignore
-			const prefix = this.handler.prefix(message);
+			const prefix = (this.handler.prefix as PrefixSupplier)(message);
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 

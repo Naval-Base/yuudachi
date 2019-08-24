@@ -1,4 +1,4 @@
-import { Listener } from 'discord-akairo';
+import { Listener, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import { RoleState } from '../../models/RoleStates';
 import { Case } from '../../models/Cases';
@@ -82,8 +82,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 
 			let modMessage;
 			if (modLogChannel) {
-				// @ts-ignore
-				const prefix = this.client.commandHandler.prefix({ guild: newMember.guild });
+				const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild: newMember.guild } as Message);
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 				const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === action)!.split(' ')[0].toUpperCase();
 				const embed = (await Util.logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason })).setColor(Util.CONSTANTS.COLORS[color]);
