@@ -34,7 +34,7 @@ export default class NPMCommand extends Command {
 			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
 		}
 		const body = await res.json();
-		if (body.time.unpublished) {
+		if (body.time && body.time.unpublished) {
 			return message.util!.reply('whoever was the Commander of this package decided to unpublish it, what a fool.');
 		}
 		const version = body.versions[body['dist-tags'].latest];
