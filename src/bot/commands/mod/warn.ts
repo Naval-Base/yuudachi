@@ -10,7 +10,7 @@ export default class WarnCommand extends Command {
 			category: 'mod',
 			description: {
 				content: 'Warns a user, duh.',
-				usage: '<member> <...reason>',
+				usage: '<member> [--ref=number] [...reason]',
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --ref=1234 no u', '@Souji --ref=1234']
 			},
 			channel: 'guild',
