@@ -39,7 +39,7 @@
 		"@typescript-eslint/parser": "^2.0.0",
 		"eslint": "^6.2.2",
 		"eslint-config-marine": "^4.2.0",
-		"typescript": "^3.5.3"
+		"typescript": "^3.6.2"
 	},
 	"eslintConfig": {
 		"extends": "marine/node"
