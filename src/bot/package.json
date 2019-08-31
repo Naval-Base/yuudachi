@@ -32,7 +32,7 @@
 		"reflect-metadata": "^0.1.13",
 		"turndown": "^5.0.3",
 		"typeorm": "^0.2.18",
-		"veza": "^1.0.0",
+		"veza": "^1.1.0",
 		"winston": "^3.2.1",
 		"winston-daily-rotate-file": "^3.10.0",
 		"winston-loki": "^4.0.1"
