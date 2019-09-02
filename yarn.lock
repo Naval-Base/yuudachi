@@ -8225,13 +8225,13 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nuxt-property-decorator@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/nuxt-property-decorator/-/nuxt-property-decorator-2.3.0.tgz#ccce37516914bfc77df86f3aa492b74bd7df4d96"
-  integrity sha512-g7etxgkJvmYeyYRBp1lgIJD3XB08yKdbGGfPnotS3hFqJPhE/4yCu71X01YscKPZuJR9nMrEhskA7nHEK9lDGg==
+nuxt-property-decorator@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/nuxt-property-decorator/-/nuxt-property-decorator-2.4.0.tgz#39de5de530945de78ea9225ee95b8b0a454c9197"
+  integrity sha512-7tgBXT1oqucLo303lQyk5tZzuxbW2s5DryTS3pARFZzi0kOW9v5FZnLz2rShv8KfeOyEWTbjSfyRT0ltqA4k6Q==
   dependencies:
     vue-class-component "7.1.0"
-    vue-property-decorator "^8.1.1"
+    vue-property-decorator "^8.2.2"
     vuex "^3.1.1"
     vuex-class "^0.3.2"
 
@@ -11870,7 +11870,7 @@ vue-no-ssr@^1.1.1:
   resolved "https://registry.yarnpkg.com/vue-no-ssr/-/vue-no-ssr-1.1.1.tgz#875f3be6fb0ae41568a837f3ac1a80eaa137b998"
   integrity sha512-ZMjqRpWabMPqPc7gIrG0Nw6vRf1+itwf0Itft7LbMXs2g3Zs/NFmevjZGN1x7K3Q95GmIjWbQZTVerxiBxI+0g==
 
-vue-property-decorator@^8.1.1, vue-property-decorator@^8.2.2:
+vue-property-decorator@^8.2.2:
   version "8.2.2"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.2.2.tgz#ac895e9508ee1bf86e3a28568d94d842c2c8e42f"
   integrity sha512-3gRrIeoUtjXvkoMX2stJsVs7805Pa9MXEndnk21ej+sWO7AIc5HF1TKqK0Pox5TEjpO02UbadIF0QWNrx6ZwXQ==
