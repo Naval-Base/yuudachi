@@ -45,7 +45,7 @@
 		"@types/node-fetch": "^2.5.0",
 		"@types/ws": "^6.0.3",
 		"@typescript-eslint/eslint-plugin": "^2.0.0",
-		"@typescript-eslint/parser": "^2.0.0",
+		"@typescript-eslint/parser": "^2.1.0",
 		"eslint": "^6.3.0",
 		"eslint-config-marine": "^4.2.0",
 		"rimraf": "^3.0.0",
