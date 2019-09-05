@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Util } from 'discord.js';
 import { Reminder } from '../../models/Reminders';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
@@ -71,7 +71,7 @@ export default class ReminderAddCommand extends Command {
 			user: message.author!.id,
 			// @ts-ignore
 			channel: message.channel.type === 'dm' || dm ? null : message.channel.id,
-			reason,
+			reason: Util.cleanContent(reason, message),
 			trigger: message.url,
 			triggers_at: new Date(Date.now() + time)
 		});
