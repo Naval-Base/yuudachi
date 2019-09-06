@@ -1,5 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
-import { Message, GuildMember, User } from 'discord.js';
+import { Message, GuildMember } from 'discord.js';
 import Util from '../../util';
 import { Case } from '../../models/Cases';
 
@@ -20,20 +20,20 @@ export default class HistoryCommand extends Command {
 				{
 					'id': 'member',
 					'match': 'content',
-					'type': Argument.union('member', async (_, phrase): Promise<{ id: string; user: User } | null> => {
+					'type': Argument.union('member', async (_, phrase) => {
 						if (!phrase) return null;
 						const m = await this.client.users.fetch(phrase);
 						if (m) return { id: m.id, user: m };
 						return null;
 					}),
-					'default': (message: Message): GuildMember => message.member!
+					'default': (message: Message) => message.member!
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { member }: { member: GuildMember }): Promise<Message | Message[]> {
-		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
+	public async exec(message: Message, { member }: { member: GuildMember }) {
+		const staffRole = message.member!.roles.has(this.client.settings.get<string>(message.guild!, 'modRole', undefined));
 		if (!staffRole && message.author!.id !== member.id) return message.reply('you know, I know, we should just leave it at that.');
 
 		const casesRepo = this.client.db.getRepository(Case);

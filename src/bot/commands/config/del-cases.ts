@@ -14,7 +14,7 @@ export default class DeleteConfigCasesCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		this.client.settings.delete(message.guild!, 'caseTotal');
 		return message.util!.reply('deleted cases.');
 	}

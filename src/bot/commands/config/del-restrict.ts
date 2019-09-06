@@ -14,7 +14,7 @@ export default class DeleteConfigRestrictRolesCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		this.client.settings.delete(message.guild!, 'restrictRoles');
 		return message.util!.reply('deleted restricted roles.');
 	}

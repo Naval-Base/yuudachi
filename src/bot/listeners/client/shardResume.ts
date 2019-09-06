@@ -10,7 +10,7 @@ export default class ShardResumeListener extends Listener {
 		});
 	}
 
-	public exec(id: number): void {
+	public exec(id: number) {
 		this.client.logger.info(`You made it out fine thanks to my luck! You ought to be thankful!`, { topic: TOPICS.DISCORD, event: `SHARD ${id} RESUME` });
 		this.client.promServer.listen(5500);
 		this.client.node.on('message', this.client.nodeMessage);

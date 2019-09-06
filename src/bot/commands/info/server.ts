@@ -30,14 +30,14 @@ export default class ServerInfoCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${message.guild!.name}** (ID: ${message.guild!.id})`)
 			.addField(
 				'❯ Channels',
 				stripIndents`
-				• ${message.guild!.channels.filter((ch): boolean => ch.type === 'text').size} Text, ${message.guild!.channels.filter((ch): boolean => ch.type === 'voice').size} Voice
+				• ${message.guild!.channels.filter(ch => ch.type === 'text').size} Text, ${message.guild!.channels.filter(ch => ch.type === 'voice').size} Voice
 				• AFK: ${message.guild!.afkChannelID ? `<#${message.guild!.afkChannelID}> after ${message.guild!.afkTimeout / 60}min` : 'None'}
 			`
 			)

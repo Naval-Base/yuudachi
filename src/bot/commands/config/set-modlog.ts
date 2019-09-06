@@ -23,7 +23,7 @@ export default class SetConfigModChannelCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { channel }: { channel: TextChannel }): Promise<Message | Message[]> {
+	public async exec(message: Message, { channel }: { channel: TextChannel }) {
 		this.client.settings.set(message.guild!, 'modLogChannel', channel.id);
 		return message.util!.reply(`set moderation log channel to **${channel.name}**`);
 	}

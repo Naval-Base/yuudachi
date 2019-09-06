@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { DMChannel, GuildChannel, TextChannel, Message, MessageEmbed } from 'discord.js';
+import { TextChannel, Message, MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
@@ -22,13 +22,13 @@ export default class ChannelInfoCommand extends Command {
 					'id': 'channel',
 					'match': 'content',
 					'type': 'channel',
-					'default': (message: Message): GuildChannel | DMChannel => message.channel
+					'default': (message: Message) => message.channel
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { channel }: { channel: TextChannel }): Promise<Message | Message[]> {
+	public async exec(message: Message, { channel }: { channel: TextChannel }) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`Info about **${channel.name}** (ID: ${channel.id})`)

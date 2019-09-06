@@ -14,7 +14,7 @@ export default class DeleteConfigMuteRoleCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		this.client.settings.delete(message.guild!, 'muteRole');
 		return message.util!.reply('deleted mute role.');
 	}

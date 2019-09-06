@@ -22,8 +22,8 @@ export default class MuteCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what member do you want to mute?`,
-						retry: (message: Message): string => `${message.author}, please mention a member.`
+						start: (message: Message) => `${message.author}, what member do you want to mute?`,
+						retry: (message: Message) => `${message.author}, please mention a member.`
 					}
 				},
 				{
@@ -35,8 +35,8 @@ export default class MuteCommand extends Command {
 						return null;
 					},
 					prompt: {
-						start: (message: Message): string => `${message.author}, for how long do you want the mute to last?`,
-						retry: (message: Message): string => `${message.author}, please use a proper time format.`
+						start: (message: Message) => `${message.author}, for how long do you want the mute to last?`,
+						retry: (message: Message) => `${message.author}, please use a proper time format.`
 					}
 				},
 				{
@@ -56,21 +56,21 @@ export default class MuteCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { member, duration, ref, reason }: { member: GuildMember; duration: number; ref: number; reason: string }): Promise<Message | Message[] | void> {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public async exec(message: Message, { member, duration, ref, reason }: { member: GuildMember; duration: number; ref: number; reason: string }) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		if (member.id === message.author!.id) return;
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const muteRole = this.client.settings.get(message.guild!, 'muteRole', undefined);
+		const muteRole = this.client.settings.get<string>(message.guild!, 'muteRole', undefined);
 		if (!muteRole) return message.reply('there is no mute role configured on this server.');
 
 		const key = `${message.guild!.id}:${member.id}:MUTE`;
@@ -79,7 +79,7 @@ export default class MuteCommand extends Command {
 		}
 		this.client.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number + 1;
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
 			await member.roles.add(muteRole, `Muted by ${message.author!.tag} | Case #${totalCases}`);
@@ -97,11 +97,11 @@ export default class MuteCommand extends Command {
 
 		const casesRepo = this.client.db.getRepository(Case);
 
-		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
 			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Mute', duration, caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.MUTE);
-			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
+			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
 		await this.client.muteScheduler.addMute({

@@ -17,16 +17,16 @@ export default class SetConfigRestrictRolesReactionCommand extends Command {
 					id: 'reaction',
 					type: 'role',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what role should act as the reaction restricted role?`,
-						retry: (message: Message): string => `${message.author}, please mention a proper role to be the reaction restricted role.`
+						start: (message: Message) => `${message.author}, what role should act as the reaction restricted role?`,
+						retry: (message: Message) => `${message.author}, please mention a proper role to be the reaction restricted role.`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { reaction }: { reaction: Role }): Promise<Message | Message[]> {
-		const roles = this.client.settings.get(message.guild!, 'restrictRoles', {});
+	public async exec(message: Message, { reaction }: { reaction: Role }) {
+		const roles = this.client.settings.get<{ reaction: string }>(message.guild!, 'restrictRoles', {});
 		roles.reaction = reaction.id;
 		this.client.settings.set(message.guild!, 'restrictRoles', roles);
 		return message.util!.reply(`set restricted role for reactions to **${reaction.name}**`);

@@ -22,7 +22,7 @@ export default class HelpCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { command }: { command: Command }): Promise<Message | Message[]> {
+	public async exec(message: Message, { command }: { command: Command }) {
 		const prefix = (this.handler.prefix as PrefixSupplier)(message);
 		if (!command) {
 			const embed = new MessageEmbed()
@@ -32,7 +32,7 @@ export default class HelpCommand extends Command {
 				`);
 
 			for (const category of this.handler.categories.values()) {
-				embed.addField(`❯ ${category.id.replace(/(\b\w)/gi, (lc): string => lc.toUpperCase())}`, `${category.filter((cmd): boolean => cmd.aliases.length > 0).map((cmd): string => `\`${cmd.aliases[0]}\``).join(' ')}`);
+				embed.addField(`❯ ${category.id.replace(/(\b\w)/gi, lc => lc.toUpperCase())}`, `${category.filter(cmd => cmd.aliases.length > 0).map(cmd => `\`${cmd.aliases[0]}\``).join(' ')}`);
 			}
 
 			return message.util!.send(embed);

@@ -19,16 +19,16 @@ export default class TagShowCommand extends Command {
 					match: 'content',
 					type: 'lowercase',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what tag would you like to see?`
+						start: (message: Message) => `${message.author}, what tag would you like to see?`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { name }: { name: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { name }: { name: string }) {
 		if (!name) return;
-		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
 		if (restrictedRoles) {
 			if (message.member!.roles.has(restrictedRoles.tag)) return;
 		}
@@ -39,7 +39,7 @@ export default class TagShowCommand extends Command {
 			tag = await tagsRepo.findOne({
 				where: [
 					{ name, guild: message.guild!.id },
-					{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${name}']`), guild: message.guild!.id }
+					{ aliases: Raw(alias => `${alias} @> ARRAY['${name}']`), guild: message.guild!.id }
 				]
 			});
 		} catch {}

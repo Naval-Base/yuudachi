@@ -10,11 +10,11 @@ export default class MessageDeleteListener extends Listener {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[] | void> {
+	public async exec(message: Message) {
 		if (message.author!.bot) return;
 		if (!message.guild) return;
 		if (!message.content) return;
-		const guildLogs = this.client.settings.get(message.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(message.guild, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;

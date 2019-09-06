@@ -26,7 +26,7 @@ export default class SetConfigCommand extends Command {
 				['config-set-repo', 'githubRepository', 'repo', 'repository'],
 				['config-set-restrict', 'restrictRoles', 'restrict', 'restrict-roles']
 			],
-			otherwise: (msg: Message): string => {
+			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return stripIndents`
 					When you beg me so much I just can't not help you~

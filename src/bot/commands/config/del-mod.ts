@@ -14,7 +14,7 @@ export default class DeleteConfigModRoleCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		this.client.settings.delete(message.guild!, 'modRole');
 		return message.util!.reply('deleted moderation role.');
 	}

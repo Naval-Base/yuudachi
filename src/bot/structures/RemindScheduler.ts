@@ -21,7 +21,7 @@ export default class RemindScheduler {
 		this.checkRate = checkRate;
 	}
 
-	public async addReminder(reminder: Reminder): Promise<void> {
+	public async addReminder(reminder: Reminder) {
 		const rmd = new Reminder();
 		rmd.user = reminder.user;
 		if (reminder.channel) rmd.channel = reminder.channel;
@@ -34,13 +34,13 @@ export default class RemindScheduler {
 		}
 	}
 
-	public cancelReminder(id: string): boolean {
+	public cancelReminder(id: string) {
 		const schedule = this.queuedSchedules.get(id);
 		if (schedule) this.client.clearTimeout(schedule);
 		return this.queuedSchedules.delete(id);
 	}
 
-	public async deleteReminder(reminder: Reminder): Promise<Reminder> {
+	public async deleteReminder(reminder: Reminder) {
 		const schedule = this.queuedSchedules.get(reminder.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(reminder.id);
@@ -48,13 +48,13 @@ export default class RemindScheduler {
 		return deleted;
 	}
 
-	public queueReminder(reminder: Reminder): void {
+	public queueReminder(reminder: Reminder) {
 		this.queuedSchedules.set(reminder.id, this.client.setTimeout((): void => {
 			this.runReminder(reminder);
 		}, reminder.triggers_at.getTime() - Date.now()));
 	}
 
-	public async runReminder(reminder: Reminder): Promise<void> {
+	public async runReminder(reminder: Reminder) {
 		try {
 			const reason = reminder.reason || `${reminder.channel ? 'y' : 'Y'}ou wanted me to remind you around this time!`;
 			const content = `${reminder.channel ? `<@${reminder.user}>, ` : ''} ${reason}\n\n<${reminder.trigger}>`;
@@ -77,12 +77,12 @@ export default class RemindScheduler {
 		}
 	}
 
-	public async init(): Promise<void> {
+	public async init() {
 		await this._check();
 		this.checkInterval = this.client.setInterval(this._check.bind(this), this.checkRate);
 	}
 
-	private async _check(): Promise<void> {
+	private async _check() {
 		const reminders = await this.repo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) });
 		const now = new Date();
 

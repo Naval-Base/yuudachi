@@ -41,7 +41,7 @@ export default class ReminderCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { method, name }: { method: string; name: string }): Promise<Message | Message[] | boolean | null> {
+	public async exec(message: Message, { method, name }: { method: string; name: string }) {
 		if (!method) {
 			const prefix = (this.handler.prefix as PrefixSupplier)(message);
 			return message.util!.send(stripIndents`
@@ -49,7 +49,7 @@ export default class ReminderCommand extends Command {
 				Check \`${prefix}help reminder\` for more information.
 			`);
 		}
-		// eslint-disable-next-line
+
 		const command = ({
 			'add': this.handler.modules.get('reminder-add'),
 			'cancel': this.handler.modules.get('reminder-delete'),

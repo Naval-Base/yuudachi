@@ -11,13 +11,13 @@ export default class GuildMemberUpdateRoleStateListener extends Listener {
 		});
 	}
 
-	public async exec(_: GuildMember, newMember: GuildMember): Promise<void> {
-		const roleState = this.client.settings.get(newMember.guild, 'roleState', undefined);
+	public async exec(_: GuildMember, newMember: GuildMember) {
+		const roleState = this.client.settings.get<string>(newMember.guild, 'roleState', undefined);
 		if (roleState) {
 			await newMember.guild.members.fetch(newMember.id);
 			if (newMember.roles) {
 				const roleStateRepo = this.client.db.getRepository(RoleState);
-				const roles = newMember.roles.filter((role): boolean => role.id !== newMember.guild.id).map((role): string => role.id);
+				const roles = newMember.roles.filter(role => role.id !== newMember.guild.id).map(role => role.id);
 				if (roles.length) {
 					await roleStateRepo.createQueryBuilder()
 						.insert()

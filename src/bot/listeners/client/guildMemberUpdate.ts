@@ -13,7 +13,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 		});
 	}
 
-	public async exec(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+	public async exec(oldMember: GuildMember, newMember: GuildMember) {
 		const moderation = this.client.settings.get(newMember.guild, 'moderation', undefined);
 		if (moderation) {
 			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
@@ -22,10 +22,10 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:REACTION`)) return;
 			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:TAG`)) return;
 
-			const modRole = this.client.settings.get(newMember.guild, 'modRole', undefined);
+			const modRole = this.client.settings.get<string>(newMember.guild, 'modRole', undefined);
 			if (modRole && newMember.roles.has(modRole)) return;
-			const muteRole = this.client.settings.get(newMember.guild, 'muteRole', undefined);
-			const restrictRoles = this.client.settings.get(newMember.guild, 'restrictRoles', undefined);
+			const muteRole = this.client.settings.get<string>(newMember.guild, 'muteRole', undefined);
+			const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string; tag: string }>(newMember.guild, 'restrictRoles', undefined);
 			if (!muteRole && !restrictRoles) return;
 			const roleStatesRepo = this.client.db.getRepository(RoleState);
 			const automaticRoleState = await roleStatesRepo.findOne({ user: newMember.id });
@@ -37,8 +37,8 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				automaticRoleState.roles.includes(restrictRoles.reaction) ||
 				automaticRoleState.roles.includes(restrictRoles.tag))
 			) return;
-			const modLogChannel = this.client.settings.get(newMember.guild, 'modLogChannel', undefined);
-			const role = newMember.roles.filter((r): boolean => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
+			const modLogChannel = this.client.settings.get<string>(newMember.guild, 'modLogChannel', undefined);
+			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			const casesRepo = this.client.db.getRepository(Case);
 			if (!role) {
 				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
@@ -77,16 +77,16 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 					return;
 			}
 
-			const totalCases = this.client.settings.get(newMember.guild, 'caseTotal', 0) as number + 1;
+			const totalCases = this.client.settings.get<number>(newMember.guild, 'caseTotal', 0) + 1;
 			this.client.settings.set(newMember.guild, 'caseTotal', totalCases);
 
 			let modMessage;
 			if (modLogChannel) {
 				const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild: newMember.guild } as Message);
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-				const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === action)!.split(' ')[0].toUpperCase();
+				const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === action)!.split(' ')[0].toUpperCase();
 				const embed = (await Util.logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason })).setColor(Util.CONSTANTS.COLORS[color]);
-				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
+				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 			}
 			const dbCase = new Case();
 			dbCase.guild = newMember.guild.id;

@@ -19,13 +19,13 @@ export default class UnbanCommand extends Command {
 			args: [
 				{
 					id: 'user',
-					type: async (_, id): Promise<User> => {
+					type: async (_, id) => {
 						const user = await this.client.users.fetch(id);
 						return user;
 					},
 					prompt: {
-						start: (message: Message): string => `${message.author}, what member do you want to unban?`,
-						retry: (message: Message): string => `${message.author}, please mention a member.`
+						start: (message: Message) => `${message.author}, what member do you want to unban?`,
+						retry: (message: Message) => `${message.author}, please mention a member.`
 					}
 				},
 				{
@@ -45,14 +45,14 @@ export default class UnbanCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { user, ref, reason }: { user: User; ref: number; reason: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { user, ref, reason }: { user: User; ref: number; reason: string }) {
 		if (user.id === message.author!.id) return;
 
 		const key = `${message.guild!.id}:${user.id}:UNBAN`;
@@ -61,7 +61,7 @@ export default class UnbanCommand extends Command {
 		}
 		this.client.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number + 1;
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
 			await message.guild!.members.unban(user, `Unbanned by ${message.author!.tag} | Case #${totalCases}`);
@@ -79,11 +79,11 @@ export default class UnbanCommand extends Command {
 
 		const casesRepo = this.client.db.getRepository(Case);
 
-		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
 			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member: user, action: 'Unban', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.UNBAN);
-			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
+			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
 		const dbCase = new Case();

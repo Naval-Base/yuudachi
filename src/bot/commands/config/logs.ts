@@ -18,14 +18,14 @@ export default class ToggleLogsCommand extends Command {
 					match: 'content',
 					type: 'string',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what Webhook should send the messages?`
+						start: (message: Message) => `${message.author}, what Webhook should send the messages?`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { webhook }: { webhook: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { webhook }: { webhook: string }) {
 		const guildLogs = this.client.settings.get(message.guild!, 'guildLogs', undefined);
 		if (guildLogs) {
 			this.client.settings.delete(message.guild!, 'guildLogs');

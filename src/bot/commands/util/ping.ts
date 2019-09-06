@@ -28,7 +28,7 @@ export default class PingCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		const msg = await message.util!.send('Pinging...') as Message;
 
 		return message.util!.send(

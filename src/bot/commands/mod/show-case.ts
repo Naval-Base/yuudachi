@@ -38,8 +38,8 @@ export default class CaseCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: (message: Message): string => `${message.author}, what case do you want to look up?`,
-						retry: (message: Message): string => `${message.author}, please enter a case number.`
+						start: (message: Message) => `${message.author}, what case do you want to look up?`,
+						retry: (message: Message) => `${message.author}, please enter a case number.`
 					}
 				}
 			]
@@ -47,16 +47,16 @@ export default class CaseCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { caseNum }: { caseNum: number | string }): Promise<Message | Message[]> {
-		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0);
-		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
+	public async exec(message: Message, { caseNum }: { caseNum: number | string }) {
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
+		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum as number;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
 		const casesRepo = this.client.db.getRepository(Case);
 		const dbCase = await casesRepo.findOne({ guild: message.guild!.id, case_id: caseToFind });
@@ -68,7 +68,7 @@ export default class CaseCommand extends Command {
 		try {
 			moderator = await message.guild!.members.fetch(dbCase.mod_id);
 		} catch {}
-		const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
+		const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
 			.setAuthor(dbCase.mod_id ? `${dbCase.mod_tag} (${dbCase.mod_id})` : 'No moderator', dbCase.mod_id && moderator ? moderator.user.displayAvatarURL() : '')
 			.setColor(Util.CONSTANTS.COLORS[color])

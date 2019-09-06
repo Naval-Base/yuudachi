@@ -21,8 +21,8 @@ export default class WarnCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what member do you want to warn?`,
-						retry: (message: Message): string => `${message.author}, please mention a member.`
+						start: (message: Message) => `${message.author}, what member do you want to warn?`,
+						retry: (message: Message) => `${message.author}, please mention a member.`
 					}
 				},
 				{
@@ -42,21 +42,21 @@ export default class WarnCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }): Promise<Message | Message[] | void> {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		if (member.id === message.author!.id) return;
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number + 1;
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
 
 		if (!reason) {
@@ -66,11 +66,11 @@ export default class WarnCommand extends Command {
 
 		const casesRepo = this.client.db.getRepository(Case);
 
-		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
 			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Warn', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.WARN);
-			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
+			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
 		const dbCase = new Case();

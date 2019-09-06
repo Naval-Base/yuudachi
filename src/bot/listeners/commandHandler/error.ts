@@ -12,7 +12,7 @@ export default class CommandErrorListener extends Listener {
 		});
 	}
 
-	public exec(error: Error, message: Message, command: Command): void {
+	public exec(error: Error, message: Message, command: Command) {
 		// @ts-ignore
 		this.client.logger.error(error, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.COMMAND_ERROR });
 		addBreadcrumb({

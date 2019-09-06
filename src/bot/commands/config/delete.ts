@@ -16,7 +16,7 @@ export default class DeleteConfigCommand extends Command {
 		});
 	}
 
-	public *args(): object {
+	public *args() {
 		const key = yield {
 			type: [
 				['config-del-cases', 'cases'],

@@ -32,7 +32,7 @@ export default class ToggleCommand extends Command {
 				['toggle-role-state', 'role', 'rolestate', 'role-state'],
 				['toggle-token-filtering', 'tokenfiltering', 'token']
 			],
-			otherwise: (msg: Message): string => {
+			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return stripIndents`
 					When you beg me so much I just can't not help you~

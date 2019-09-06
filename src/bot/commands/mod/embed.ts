@@ -19,8 +19,8 @@ export default class RestrictEmbedCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what member do you want to restrict?`,
-						retry: (message: Message): string => `${message.author}, please mention a member.`
+						start: (message: Message) => `${message.author}, what member do you want to restrict?`,
+						retry: (message: Message) => `${message.author}, please mention a member.`
 					}
 				},
 				{
@@ -40,21 +40,21 @@ export default class RestrictEmbedCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }): Promise<Message | Message[] | void> {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		if (member.id === message.author!.id) return;
 		if (member.roles.has(staffRole)) {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const restrictRoles = this.client.settings.get(message.guild!, 'restrictRoles', undefined);
+		const restrictRoles = this.client.settings.get<{ embed: string }>(message.guild!, 'restrictRoles', undefined);
 		if (!restrictRoles) return message.reply('there are no restricted roles configured on this server.');
 
 		const key = `${message.guild!.id}:${member.id}:EMBED`;
@@ -63,7 +63,7 @@ export default class RestrictEmbedCommand extends Command {
 		}
 		this.client.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number + 1;
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
 			await member.roles.add(restrictRoles.embed, `Embed restricted by ${message.author!.tag} | Case #${totalCases}`);
@@ -81,11 +81,11 @@ export default class RestrictEmbedCommand extends Command {
 
 		const casesRepo = this.client.db.getRepository(Case);
 
-		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
 			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Embed restriction', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.EMBED);
-			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
+			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
 		const dbCase = new Case();

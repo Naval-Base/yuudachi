@@ -39,8 +39,8 @@ export default class CaseDeleteCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: (message: Message): string => `${message.author}, what case do you want to delete?`,
-						retry: (message: Message): string => `${message.author}, please enter a case number.`
+						start: (message: Message) => `${message.author}, what case do you want to delete?`,
+						retry: (message: Message) => `${message.author}, please enter a case number.`
 					}
 				},
 				{
@@ -53,16 +53,16 @@ export default class CaseDeleteCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { caseNum, removeRole }: { caseNum: number | string; removeRole: boolean }): Promise<Message | Message[] | void> {
-		let totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0);
-		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
+	public async exec(message: Message, { caseNum, removeRole }: { caseNum: number | string; removeRole: boolean }) {
+		let totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
+		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum as number;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
 		const casesRepo = this.client.db.getRepository(Case);
 		const dbCase = await casesRepo.findOne({ guild: message.guild!.id, case_id: caseToFind });
@@ -74,7 +74,7 @@ export default class CaseDeleteCommand extends Command {
 		try {
 			moderator = await message.guild!.members.fetch(dbCase.mod_id);
 		} catch {}
-		const color = Object.keys(Util.CONSTANTS.ACTIONS).find((key): boolean => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
+		const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
 		const embed = new MessageEmbed()
 			.setAuthor(dbCase.mod_id ? `${dbCase.mod_tag} (${dbCase.mod_id})` : 'No moderator', dbCase.mod_id && moderator ? moderator.user.displayAvatarURL() : '')
 			.setColor(Util.CONSTANTS.COLORS[color])
@@ -87,7 +87,7 @@ export default class CaseDeleteCommand extends Command {
 			.setTimestamp(new Date(dbCase.createdAt));
 
 		await message.channel.send('You sure you want me to delete this case?', { embed });
-		const responses = await message.channel.awaitMessages((msg): boolean => msg.author.id === message.author!.id, {
+		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author!.id, {
 			max: 1,
 			time: 10000
 		});
@@ -97,15 +97,15 @@ export default class CaseDeleteCommand extends Command {
 
 		let sentMessage;
 		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
-			sentMessage = await message.channel.send(`Deleting **${dbCase.case_id}**...`) as Message;
+			sentMessage = await message.channel.send(`Deleting **${dbCase.case_id}**...`);
 		} else {
 			return message.reply('cancelled delete.');
 		}
 
-		totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number - 1;
+		totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) - 1;
 		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
 
-		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		if (modLogChannel) {
 			const chan = await this.client.channels.get(modLogChannel) as TextChannel;
 			try {
@@ -115,7 +115,7 @@ export default class CaseDeleteCommand extends Command {
 			this._fixCases(dbCase.case_id, message.guild!.id, modLogChannel);
 		}
 
-		const restrictRoles = this.client.settings.get(message.guild!, 'restrictRoles', undefined);
+		const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string }>(message.guild!, 'restrictRoles', undefined);
 		if (restrictRoles && !removeRole) {
 			switch (dbCase.action) {
 				case 5:
@@ -189,7 +189,7 @@ export default class CaseDeleteCommand extends Command {
 		return sentMessage.edit(`Successfully deleted case **${dbCase.case_id}**`);
 	}
 
-	private async _fixCases(caseNum: number, guild: string, modLogChannel: string): Promise<void> {
+	private async _fixCases(caseNum: number, guild: string, modLogChannel: string) {
 		const casesRepo = this.client.db.getRepository(Case);
 		const cases = await casesRepo.find({ where: { guild, case_id: MoreThan(caseNum) }, order: { id: 'ASC' } });
 		let newCaseNum = caseNum;

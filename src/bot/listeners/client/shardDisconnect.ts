@@ -10,7 +10,7 @@ export default class ShardDisconnectListener extends Listener {
 		});
 	}
 
-	public exec(event: any, id: number): void {
+	public exec(event: any, id: number) {
 		this.client.logger.warn(`Hmm, I have to hide the fact I was defeated... I'll let you go this time! (${event.code})`, { topic: TOPICS.DISCORD, event: `SHARD ${id} DISCONNECT` });
 		this.client.promServer.close();
 		this.client.node.removeListener('message', this.client.nodeMessage);

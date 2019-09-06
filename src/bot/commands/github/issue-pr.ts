@@ -29,7 +29,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, args: any): Promise<Message | Message[]> {
+	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
 			return message.util!.reply(oneLine`
 				my commander has not set a valid GitHub API key,
@@ -39,7 +39,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		let owner;
 		let repo;
 		if ((args.match && args.match[1] === 'g') || !args.match) {
-			const repository = this.client.settings.get(message.guild!, 'githubRepository', undefined);
+			const repository = this.client.settings.get<string>(message.guild!, 'githubRepository', undefined);
 			if (!repository) return message.util!.reply("the guild owner didn't set a GitHub repository yet.");
 			owner = repository.split('/')[0];
 			repo = repository.split('/')[1];
@@ -157,12 +157,12 @@ export default class GitHubPROrIssueCommand extends Command {
 			.addField('Type', data.commits ? 'PULL REQUEST' : 'ISSUE', true)
 			.addField(
 				'Labels',
-				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }): string => node.name) : 'NO LABEL(S)',
+				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
 				true
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
 			.setTimestamp(new Date(data.publishedAt));
-		if (!['guide'].includes(repo) && data.commits) {
+		if (repo && !['guide'].includes(repo) && data.commits) {
 			embed.addField(
 				'Install with',
 				`\`npm i ${owner}/${repo}#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``
@@ -177,7 +177,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
+				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 				{ max: 1, time: 10000, errors: ['time'] }
 			);
 		} catch (error) {

@@ -133,7 +133,7 @@ export default class YukikazeClient extends AkairoClient {
 		register
 	};
 
-	public promServer = createServer((req, res): void => {
+	public promServer = createServer((req, res) => {
 		if (parse(req.url!).pathname === '/metrics') {
 			res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
 			res.write(this.prometheus.register.metrics());
@@ -148,11 +148,11 @@ export default class YukikazeClient extends AkairoClient {
 			disabledEvents: ['TYPING_START']
 		});
 
-		this.on('message', (): void => {
+		this.on('message', () => {
 			this.prometheus.messagesCounter.inc();
 		});
 
-		this.commandHandler.resolver.addType('tag', async (message, phrase): Promise<any> => {
+		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
@@ -168,7 +168,7 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag || Flag.fail(phrase);
 		});
-		this.commandHandler.resolver.addType('existingTag', async (message, phrase): Promise<any> => {
+		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
@@ -184,7 +184,7 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag ? Flag.fail(phrase) : phrase;
 		});
-		this.commandHandler.resolver.addType('tagContent', async (message, phrase): Promise<any> => {
+		this.commandHandler.resolver.addType('tagContent', async (message, phrase) => {
 			if (!phrase) phrase = '';
 			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
@@ -207,7 +207,7 @@ export default class YukikazeClient extends AkairoClient {
 				]
 			});
 		} else {
-			process.on('unhandledRejection', (err: any): Logger => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
+			process.on('unhandledRejection', (err: any) => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
 		}
 
 		if (process.env.LOGS) {
@@ -215,7 +215,7 @@ export default class YukikazeClient extends AkairoClient {
 		}
 	}
 
-	private async _init(): Promise<void> {
+	private async _init() {
 		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		this.commandHandler.useListenerHandler(this.listenerHandler);
 		this.listenerHandler.setEmitters({
@@ -252,7 +252,7 @@ export default class YukikazeClient extends AkairoClient {
 		this.logger.info('Remind scheduler initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 	}
 
-	public async start(): Promise<string> {
+	public async start() {
 		await this._init();
 		return this.login(this.config.token);
 	}

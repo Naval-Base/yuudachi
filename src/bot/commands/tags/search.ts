@@ -20,7 +20,7 @@ export default class SearchTagCommand extends Command {
 					match: 'content',
 					type: 'lowercase',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what would you like to search for?`
+						start: (message: Message) => `${message.author}, what would you like to search for?`
 					}
 				}
 			]
@@ -28,21 +28,21 @@ export default class SearchTagCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+	public userPermissions(message: Message) {
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
-	public async exec(message: Message, { name }: { name: string }): Promise<Message | Message[]> {
+	public async exec(message: Message, { name }: { name: string }) {
 		name = Util.cleanContent(name, message);
 		const tagsRepo = this.client.db.getRepository(Tag);
 		const tags = await tagsRepo.find({ name: Like(`%${name}%`), guild: message.guild!.id });
 		if (!tags.length) return message.util!.reply(`No results found with query ${name}.`);
 		const search = tags
-			.map((tag): string => `\`${tag.name}\``)
+			.map(tag => `\`${tag.name}\``)
 			.sort()
 			.join(', ');
 		if (search.length >= 1950) {

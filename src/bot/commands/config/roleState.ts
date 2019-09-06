@@ -15,7 +15,7 @@ export default class ToggleRoleStateCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		const roleState = this.client.settings.get(message.guild!, 'roleState', undefined);
 		if (roleState) {
 			this.client.settings.set(message.guild!, 'roleState', false);
@@ -32,7 +32,7 @@ export default class ToggleRoleStateCommand extends Command {
 			const rs = new RoleState();
 			rs.guild = message.guild!.id;
 			rs.user = member.id;
-			rs.roles = member.roles.filter((role): boolean => role.id !== message.guild!.id).map((role): string => role.id);
+			rs.roles = member.roles.filter(role => role.id !== message.guild!.id).map(role => role.id);
 			records.push(rs);
 		}
 		const userRepo = this.client.db.getRepository(RoleState);

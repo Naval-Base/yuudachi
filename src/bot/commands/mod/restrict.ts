@@ -40,14 +40,14 @@ export default class RestrictCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public *args(): object {
+	public *args() {
 		const key = yield {
 			type: [
 				['restrict-embed', 'embed', 'embeds', 'image', 'images', 'img'],
@@ -55,7 +55,7 @@ export default class RestrictCommand extends Command {
 				['restrict-reaction', 'reaction', 'react'],
 				['restrict-tag', 'tag']
 			],
-			otherwise: (msg: Message): string => {
+			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return stripIndents`
 					When you beg me so much I just can't not help you~

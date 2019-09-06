@@ -20,16 +20,16 @@ export default class MDNCommand extends Command {
 				{
 					id: 'query',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what would you like to search for?`
+						start: (message: Message) => `${message.author}, what would you like to search for?`
 					},
 					match: 'content',
-					type: (_, query): string | null => query ? query.replace(/#/g, '.prototype.') : null
+					type: (_, query) => query ? query.replace(/#/g, '.prototype.') : null
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { query, match }: { query: string; match: any }): Promise<Message | Message[]> {
+	public async exec(message: Message, { query, match }: { query: string; match: any }) {
 		if (!query && match) query = match[1];
 		const queryString = qs.stringify({ q: query });
 		const res = await fetch(`https://mdn.pleb.xyz/search?${queryString}`);
@@ -40,7 +40,7 @@ export default class MDNCommand extends Command {
 		const turndown = new Turndown();
 		turndown.addRule('hyperlink', {
 			filter: 'a',
-			replacement: (text: string, node: { href: string }): string => `[${text}](https://developer.mozilla.org${node.href})`
+			replacement: (text: string, node: { href: string }) => `[${text}](https://developer.mozilla.org${node.href})`
 		});
 		const summary = body.Summary.replace(/<code><strong>(.+)<\/strong><\/code>/g, '<strong><code>$1<\/code><\/strong>');
 		const embed = new MessageEmbed()

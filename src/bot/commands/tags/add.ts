@@ -18,8 +18,8 @@ export default class TagAddCommand extends Command {
 					id: 'name',
 					type: 'existingTag',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what should the tag be named?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** already exists.`
+						start: (message: Message) => `${message.author}, what should the tag be named?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
 					}
 				},
 				{
@@ -27,7 +27,7 @@ export default class TagAddCommand extends Command {
 					match: 'rest',
 					type: 'tagContent',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what should the content of the tag be?`
+						start: (message: Message) => `${message.author}, what should the content of the tag be?`
 					}
 				},
 				{
@@ -40,15 +40,15 @@ export default class TagAddCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+	public userPermissions(message: Message) {
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
-	public async exec(message: Message, { name, content, hoist }: { name: any; content: string; hoist: boolean }): Promise<Message | Message[]> {
+	public async exec(message: Message, { name, content, hoist }: { name: string; content: string; hoist: boolean }) {
 		if (name && name.length >= 1900) {
 			return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
 		}

@@ -20,7 +20,7 @@ export default class MuteScheduler {
 		this.checkRate = checkRate;
 	}
 
-	public async addMute(mute: Case, reschedule = false): Promise<void> {
+	public async addMute(mute: Case, reschedule = false) {
 		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		if (reschedule) this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		if (!reschedule) {
@@ -43,10 +43,10 @@ export default class MuteScheduler {
 		}
 	}
 
-	public async cancelMute(mute: Case): Promise<boolean> {
+	public async cancelMute(mute: Case) {
 		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		const guild = this.client.guilds.get(mute.guild);
-		const muteRole = this.client.settings.get(guild!, 'muteRole', undefined);
+		const muteRole = this.client.settings.get<string>(guild!, 'muteRole', undefined);
 		let member;
 		try {
 			member = await guild!.members.fetch(mute.target_id);
@@ -63,7 +63,7 @@ export default class MuteScheduler {
 		return this.queuedSchedules.delete(mute.id);
 	}
 
-	public async deleteMute(mute: Case): Promise<Case> {
+	public async deleteMute(mute: Case) {
 		const schedule = this.queuedSchedules.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(mute.id);
@@ -71,25 +71,25 @@ export default class MuteScheduler {
 		return deleted;
 	}
 
-	public queueMute(mute: Case): void {
-		this.queuedSchedules.set(mute.id, this.client.setTimeout((): void => {
+	public queueMute(mute: Case) {
+		this.queuedSchedules.set(mute.id, this.client.setTimeout(() => {
 			this.cancelMute(mute);
 		}, mute.action_duration.getTime() - Date.now()));
 	}
 
-	public rescheduleMute(mute: Case): void {
+	public rescheduleMute(mute: Case) {
 		const schedule = this.queuedSchedules.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queuedSchedules.delete(mute.id);
 		this.addMute(mute, true);
 	}
 
-	public async init(): Promise<void> {
+	public async init() {
 		await this.check();
 		this.checkInterval = this.client.setInterval(this.check.bind(this), this.checkRate);
 	}
 
-	public async check(): Promise<void> {
+	public async check() {
 		const mutes = await this.repo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false });
 		const now = new Date();
 

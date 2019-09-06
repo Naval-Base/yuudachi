@@ -16,7 +16,7 @@ export default class SetConfigRestrictRolesCommand extends Command {
 		});
 	}
 
-	public *args(): object {
+	public *args() {
 		const key = yield {
 			type: [
 				['config-set-restrict-embed', 'embed'],
@@ -24,7 +24,7 @@ export default class SetConfigRestrictRolesCommand extends Command {
 				['config-set-restrict-reaction', 'reaction'],
 				['config-set-restrict-tag', 'tag']
 			],
-			otherwise: (msg: Message): string => {
+			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return stripIndent`
 					When you beg me so much I just can't not help you~

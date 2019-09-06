@@ -16,7 +16,7 @@ export default class ReminderListCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const reminders = await remindersRepo.find({ user: message.author!.id });
 

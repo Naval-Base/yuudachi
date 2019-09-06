@@ -29,27 +29,23 @@ export default class EvalCommand extends Command {
 					match: 'content',
 					type: 'string',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what would you like to evaluate?`
+						start: (message: Message) => `${message.author}, what would you like to evaluate?`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { code }: { code: string }): Promise<Message | Message[]> {
+	public async exec(message: Message, { code }: { code: string }) {
 		/* eslint-disable */
 		const msg = message;
 		const { client, lastResult } = this;
-		const doReply = (val: any) => {
+		const doReply = (val: string | Error) => {
 			if (val instanceof Error) {
 				message.util!.send(`Callback error: \`${val}\``);
 			} else {
 				const result = this._result(val, process.hrtime(this.hrStart));
-				if (Array.isArray(result)) {
-					for (const res of result) message.util!.send(res);
-				}
-
-				message.util!.send(result);
+				for (const res of result) message.util!.send(res);
 			}
 		};
 		/* eslint-enable */
@@ -66,11 +62,11 @@ export default class EvalCommand extends Command {
 		this.hrStart = process.hrtime();
 		const result = this._result(this.lastResult, hrDiff, code);
 		// @ts-ignore
-		if (Array.isArray(result)) return result.map(async (res): Promise<Message | Message[]> => message.util!.send(res));
+		if (Array.isArray(result)) return result.map(async res => message.util!.send(res));
 		return message.util!.send(result);
 	}
 
-	private _result(result: any, hrDiff: [number, number], input: string | null = null): string | string[] {
+	private _result(result: string, hrDiff: [number, number], input: string | null = null) {
 		const inspected = util.inspect(result, { depth: 0 })
 			.replace(NL_PATTERN, '\n')
 			.replace(this.sensitivePattern, '--snip--');
@@ -97,7 +93,7 @@ export default class EvalCommand extends Command {
 		`, { maxLength: 1900, prepend, append });
 	}
 
-	private get sensitivePattern(): any {
+	private get sensitivePattern() {
 		if (!this._sensitivePattern) {
 			const token = this.client.token!.split('').join('[^]{0,2}');
 			const revToken = this.client.token!.split('').reverse().join('[^]{0,2}');

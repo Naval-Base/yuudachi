@@ -19,7 +19,7 @@ export default class StatsCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`**${this.client.user!.username} Statistics**`)

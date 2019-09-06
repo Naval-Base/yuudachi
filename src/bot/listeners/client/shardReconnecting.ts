@@ -10,7 +10,7 @@ export default class ShardReconnectListener extends Listener {
 		});
 	}
 
-	public exec(id: number): void {
+	public exec(id: number) {
 		this.client.logger.info(`Come at me if you don't value your life!`, { topic: TOPICS.DISCORD, event: `SHARD ${id} RECONNECTING` });
 		this.client.promServer.close();
 		this.client.node.removeListener('message', this.client.nodeMessage);

@@ -23,7 +23,7 @@ export default class ReminderDeleteCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { all }: { all: boolean }): Promise<Message | Message[]> {
+	public async exec(message: Message, { all }: { all: boolean }) {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		if (all) {
 			const reminders = await remindersRepo.find({ user: message.author!.id });
@@ -40,7 +40,7 @@ export default class ReminderDeleteCommand extends Command {
 			await message.util!.send(Util.reminderEmbed(message, reminders).setFooter('Send a message with the reminder\'s number to delete it or \`cancel\` to cancel'));
 
 			const messages = await message.channel.awaitMessages(
-				(m): boolean => m.author.id === message.author!.id && ((m.content > 0 && m.content <= reminders.length) || m.content.toLowerCase() === 'cancel'),
+				m => m.author.id === message.author!.id && ((m.content > 0 && m.content <= reminders.length) || m.content.toLowerCase() === 'cancel'),
 				{ max: 1, time: 20000 }
 			);
 			if (!messages.size) return message.util!.send('Looks like you\'ve run out of time!');

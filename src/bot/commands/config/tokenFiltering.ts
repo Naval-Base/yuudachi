@@ -14,7 +14,7 @@ export default class ToggletokenFilteringCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		const tokenFiltering = this.client.settings.get(message.guild!, 'tokenFiltering', undefined);
 		if (tokenFiltering) {
 			this.client.settings.set(message.guild!, 'tokenFiltering', false);

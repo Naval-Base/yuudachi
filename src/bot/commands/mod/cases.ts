@@ -23,19 +23,19 @@ export default class CasesCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public *args(): object {
+	public *args() {
 		const method = yield {
 			type: [
 				['case-show', 'case', 'show', 'view'],
 				['case-delete', 'delete', 'del', 'remove', 'rm']
 			],
-			otherwise: (msg: Message): string => {
+			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return stripIndents`
 					When you beg me so much I just can't not help you~

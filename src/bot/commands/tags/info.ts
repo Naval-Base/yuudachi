@@ -21,8 +21,8 @@ export default class TagInfoCommand extends Command {
 					match: 'content',
 					type: 'tag',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what tag do you want information on?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** does not exist.`
+						start: (message: Message) => `${message.author}, what tag do you want information on?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 					}
 				}
 			]
@@ -30,15 +30,15 @@ export default class TagInfoCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+	public userPermissions(message: Message) {
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
-	public async exec(message: Message, { tag }: { tag: Tag }): Promise<Message | Message[]> {
+	public async exec(message: Message, { tag }: { tag: Tag }) {
 		const user = await this.client.users.fetch(tag.user);
 		let lastModifiedBy;
 		try {
@@ -52,7 +52,7 @@ export default class TagInfoCommand extends Command {
 			.addField('❯ Name', tag.name)
 			.addField('❯ User', user ? `${user.tag} (ID: ${user.id})` : "Couldn't fetch user.")
 			.addField('❯ Guild', guild ? `${guild.name}` : "Couldn't fetch guild.")
-			.addField('❯ Aliases', tag.aliases.length ? tag.aliases.map((t): string => `\`${t}\``).sort().join(', ') : 'No aliases.')
+			.addField('❯ Aliases', tag.aliases.length ? tag.aliases.map(t => `\`${t}\``).sort().join(', ') : 'No aliases.')
 			.addField('❯ Uses', tag.uses)
 			.addField('❯ Created at', moment.utc(tag.createdAt).format('YYYY/MM/DD hh:mm:ss'))
 			.addField('❯ Modified at', moment.utc(tag.updatedAt).format('YYYY/MM/DD hh:mm:ss'));
