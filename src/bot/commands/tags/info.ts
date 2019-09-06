@@ -42,7 +42,7 @@ export default class TagInfoCommand extends Command {
 		const user = await this.client.users.fetch(tag.user);
 		let lastModifiedBy;
 		try {
-			lastModifiedBy = await this.client.users.fetch(tag.last_modified);
+			lastModifiedBy = await this.client.users.fetch(tag.last_modified!);
 		} catch (error) {
 			lastModifiedBy = null;
 		}

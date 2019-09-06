@@ -1,7 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import Util, { ACTIONS, COLORS } from '../../util';
+import { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
@@ -66,7 +66,7 @@ export default class CaseCommand extends Command {
 
 		let moderator;
 		try {
-			moderator = await message.guild!.members.fetch(dbCase.mod_id);
+			moderator = await message.guild!.members.fetch(dbCase.mod_id!);
 		} catch {}
 		const color = ACTIONS[dbCase.action] as keyof typeof ACTIONS;
 		const embed = new MessageEmbed()
@@ -74,7 +74,7 @@ export default class CaseCommand extends Command {
 			.setColor(COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
-				**Action:** ${ACTION_KEYS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
+				**Action:** ${ACTION_KEYS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration!.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
 				${dbCase.reason ? `**Reason:** ${dbCase.reason}` : ''}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
 			`)
 			.setFooter(`Case ${dbCase.case_id}`)

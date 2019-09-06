@@ -1,6 +1,6 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import Util, { ACTIONS, COLORS } from '../../util';
+import { ACTIONS } from '../../util';
 import { Case } from '../../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 

@@ -1,7 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import Util, { ACTIONS, COLORS } from '../../util';
+import { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 import { MoreThan } from 'typeorm';
 const ms = require('@naval-base/ms'); // eslint-disable-line
@@ -72,7 +72,7 @@ export default class CaseDeleteCommand extends Command {
 
 		let moderator;
 		try {
-			moderator = await message.guild!.members.fetch(dbCase.mod_id);
+			moderator = await message.guild!.members.fetch(dbCase.mod_id!);
 		} catch {}
 		const color = ACTIONS[dbCase.action] as keyof typeof ACTIONS;
 		const embed = new MessageEmbed()
@@ -80,7 +80,7 @@ export default class CaseDeleteCommand extends Command {
 			.setColor(COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
-				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 && dbCase.action_duration ? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
+				**Action:** ${ACTION_KEYS[dbCase.action]}${dbCase.action === 5 && dbCase.action_duration ? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
 				${dbCase.reason ? `**Reason:** ${dbCase.reason}` : ''}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
 			`)
 			.setFooter(`Case ${dbCase.case_id}`)
@@ -109,7 +109,7 @@ export default class CaseDeleteCommand extends Command {
 		if (modLogChannel) {
 			const chan = await this.client.channels.get(modLogChannel) as TextChannel;
 			try {
-				const msgToDelete = await chan.messages.fetch(dbCase.message);
+				const msgToDelete = await chan.messages.fetch(dbCase.message!);
 				await msgToDelete.delete();
 			} catch {}
 			this._fixCases(dbCase.case_id, message.guild!.id, modLogChannel);
@@ -197,7 +197,7 @@ export default class CaseDeleteCommand extends Command {
 		for (const c of cases) {
 			const chan = this.client.channels.get(modLogChannel) as TextChannel;
 			try {
-				const msg = await chan.messages.fetch(c.message);
+				const msg = await chan.messages.fetch(c.message!);
 				await msg.edit({ embed: msg.embeds[0].setFooter(`Case ${newCaseNum}`) });
 			} catch {}
 			c.case_id = newCaseNum;
