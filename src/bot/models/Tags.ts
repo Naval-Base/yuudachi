@@ -30,7 +30,7 @@ export class Tag {
 	public uses!: number;
 
 	@Column({ type: 'bigint', nullable: true })
-	public last_modified!: string;
+	public last_modified?: string;
 
 	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
 	public createdAt!: Date;

@@ -4,15 +4,15 @@ import { Case } from '../models/Cases';
 import { TOPICS, EVENTS } from '../util/logger';
 
 export default class MuteScheduler {
-	protected client: YukikazeClient;
+	private client: YukikazeClient;
 
-	protected repo: Repository<Case>;
+	private repo: Repository<Case>;
 
-	protected checkRate: number;
+	private checkRate: number;
 
-	protected checkInterval!: NodeJS.Timeout;
+	private checkInterval!: NodeJS.Timeout;
 
-	protected queuedSchedules = new Map();
+	private queued = new Map();
 
 	public constructor(client: YukikazeClient, repository: Repository<Case>, { checkRate = 5 * 60 * 1000 } = {}) {
 		this.client = client;
@@ -20,7 +20,7 @@ export default class MuteScheduler {
 		this.checkRate = checkRate;
 	}
 
-	public async addMute(mute: Case, reschedule = false) {
+	public async add(mute: Omit<Case, 'id' | 'createdAt'>, reschedule = false) {
 		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		if (reschedule) this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		if (!reschedule) {
@@ -38,12 +38,12 @@ export default class MuteScheduler {
 			cs.reason = mute.reason;
 			mute = await this.repo.save(cs);
 		}
-		if (mute.action_duration.getTime() < (Date.now() + this.checkRate)) {
-			this.queueMute(mute);
+		if (mute.action_duration!.getTime() < (Date.now() + this.checkRate)) {
+			this.queue(mute as Case);
 		}
 	}
 
-	public async cancelMute(mute: Case) {
+	public async cancel(mute: Case) {
 		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		const guild = this.client.guilds.get(mute.guild);
 		const muteRole = this.client.settings.get<string>(guild!, 'muteRole', undefined);
@@ -58,30 +58,30 @@ export default class MuteScheduler {
 				await member.roles.remove(muteRole, 'Unmuted automatically based on duration.');
 			} catch {}
 		}
-		const schedule = this.queuedSchedules.get(mute.id);
+		const schedule = this.queued.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
-		return this.queuedSchedules.delete(mute.id);
+		return this.queued.delete(mute.id);
 	}
 
-	public async deleteMute(mute: Case) {
-		const schedule = this.queuedSchedules.get(mute.id);
+	public async delete(mute: Case) {
+		const schedule = this.queued.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
-		this.queuedSchedules.delete(mute.id);
+		this.queued.delete(mute.id);
 		const deleted = await this.repo.remove(mute);
 		return deleted;
 	}
 
-	public queueMute(mute: Case) {
-		this.queuedSchedules.set(mute.id, this.client.setTimeout(() => {
-			this.cancelMute(mute);
-		}, mute.action_duration.getTime() - Date.now()));
+	public queue(mute: Case) {
+		this.queued.set(mute.id, this.client.setTimeout(() => {
+			this.cancel(mute);
+		}, mute.action_duration!.getTime() - Date.now()));
 	}
 
-	public rescheduleMute(mute: Case) {
-		const schedule = this.queuedSchedules.get(mute.id);
+	public reschedule(mute: Case) {
+		const schedule = this.queued.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
-		this.queuedSchedules.delete(mute.id);
-		this.addMute(mute, true);
+		this.queued.delete(mute.id);
+		this.add(mute, true);
 	}
 
 	public async init() {
@@ -94,12 +94,12 @@ export default class MuteScheduler {
 		const now = new Date();
 
 		for (const mute of mutes) {
-			if (this.queuedSchedules.has(mute.id)) continue;
+			if (this.queued.has(mute.id)) continue;
 
-			if (mute.action_duration < now) {
-				this.cancelMute(mute);
+			if (mute.action_duration! < now) {
+				this.cancel(mute);
 			} else {
-				this.queueMute(mute);
+				this.queue(mute);
 			}
 		}
 	}

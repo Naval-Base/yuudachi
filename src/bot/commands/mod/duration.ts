@@ -66,7 +66,8 @@ export default class DurationCommand extends Command {
 
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		if (modLogChannel) {
-			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
+			let caseEmbed;
+			if (dbCase.message) caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (dbCase.action_duration) {
@@ -78,7 +79,7 @@ export default class DurationCommand extends Command {
 		}
 		dbCase.action_duration = new Date(Date.now() + duration);
 		await casesRepo.save(dbCase);
-		this.client.muteScheduler.rescheduleMute(dbCase);
+		this.client.muteScheduler.reschedule(dbCase);
 
 		return message.util!.send(`Successfully updated duration for case **#${caseToFind}**`);
 	}

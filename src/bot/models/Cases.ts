@@ -10,14 +10,14 @@ export class Case {
 	public guild!: string;
 
 	@Column({ type: 'bigint', nullable: true })
-	public message!: string;
+	public message?: string;
 
 	@Index()
 	@Column()
 	public case_id!: number;
 
 	@Column({ nullable: true })
-	public ref_id!: number;
+	public ref_id?: number;
 
 	@Index()
 	@Column({ type: 'bigint' })
@@ -27,19 +27,19 @@ export class Case {
 	public target_tag!: string;
 
 	@Column({ type: 'bigint', nullable: true })
-	public mod_id!: string;
+	public mod_id?: string;
 
 	@Column({ type: 'text', nullable: true })
-	public mod_tag!: string;
+	public mod_tag?: string;
 
 	@Column()
 	public action!: number;
 
 	@Column({ type: 'text', nullable: true })
-	public reason!: string;
+	public reason?: string;
 
 	@Column({ type: 'timestamptz', nullable: true })
-	public action_duration!: Date;
+	public action_duration?: Date;
 
 	@Index()
 	@Column({ 'default': true })

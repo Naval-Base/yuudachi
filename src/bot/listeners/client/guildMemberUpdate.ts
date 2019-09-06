@@ -43,7 +43,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (!role) {
 				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
 					const dbCase = await casesRepo.findOne({ target_id: newMember.id, action_processed: false });
-					if (dbCase) this.client.muteScheduler.cancelMute(dbCase);
+					if (dbCase) this.client.muteScheduler.cancel(dbCase);
 				}
 				return;
 			}

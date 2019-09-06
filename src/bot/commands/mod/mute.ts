@@ -104,10 +104,9 @@ export default class MuteCommand extends Command {
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
-		await this.client.muteScheduler.addMute({
+		await this.client.muteScheduler.add({
 			guild: message.guild!.id,
-			// @ts-ignore
-			message: modMessage ? modMessage.id : null,
+			message: modMessage ? modMessage.id : undefined,
 			case_id: totalCases,
 			target_id: member.id,
 			target_tag: member.user.tag,
