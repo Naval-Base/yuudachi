@@ -1,7 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, GuildMember } from 'discord.js';
-import Util from '../../util';
-import { Case } from '../../models/Cases';
 
 export default class HistoryCommand extends Command {
 	public constructor() {
@@ -36,10 +34,7 @@ export default class HistoryCommand extends Command {
 		const staffRole = message.member!.roles.has(this.client.settings.get<string>(message.guild!, 'modRole', undefined));
 		if (!staffRole && message.author!.id !== member.id) return message.reply('you know, I know, we should just leave it at that.');
 
-		const casesRepo = this.client.db.getRepository(Case);
-		const dbCases = await casesRepo.find({ target_id: member.id });
-		const embed = Util.historyEmbed(member, dbCases);
-
+		const embed = await this.client.caseHandler.history(member);
 		return message.util!.send(embed);
 	}
 }

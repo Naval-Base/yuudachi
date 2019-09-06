@@ -5,6 +5,7 @@ import { Logger } from 'winston';
 import { logger, TOPICS, EVENTS } from '../util/logger';
 import database from '../structures/Database';
 import TypeORMProvider from '../structures/SettingsProvider';
+import CaseHandler from '../structures/CaseHandler';
 import MuteScheduler from '../structures/MuteScheduler';
 import RemindScheduler from '../structures/RemindScheduler';
 import { Setting } from '../models/Settings';
@@ -32,6 +33,7 @@ declare module 'discord-akairo' {
 		config: YukikazeOptions;
 		webhooks: Collection<string, Webhook>;
 		cachedCases: Set<string>;
+		caseHandler: CaseHandler;
 		muteScheduler: MuteScheduler;
 		remindScheduler: RemindScheduler;
 		prometheus: {
@@ -121,6 +123,8 @@ export default class YukikazeClient extends AkairoClient {
 	public config: YukikazeOptions;
 
 	public cachedCases = new Set<string>();
+
+	public caseHandler!: CaseHandler;
 
 	public muteScheduler!: MuteScheduler;
 
@@ -244,6 +248,8 @@ export default class YukikazeClient extends AkairoClient {
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
 		this.logger.info('Bot settings initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.caseHandler = new CaseHandler(this, this.db.getRepository(Case));
+		this.logger.info('Case handler initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Case));
 		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();

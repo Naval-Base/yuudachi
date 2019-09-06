@@ -1,7 +1,6 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
-import Util, { ACTIONS, COLORS } from '../../util';
-import { Case } from '../../models/Cases';
+import { ACTIONS, COLORS } from '../../util';
 
 export default class RestrictReactionCommand extends Command {
 	public constructor() {
@@ -79,26 +78,24 @@ export default class RestrictReactionCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
-		const casesRepo = this.client.db.getRepository(Case);
-
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Reaction restriction', caseNum: totalCases, reason, ref })).setColor(COLORS.REACTION);
+			const embed = (await this.client.caseHandler.log(member, 'Reaction restriction', totalCases, reason, message, undefined, ref)).setColor(COLORS.REACTION);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
-		const dbCase = new Case();
-		dbCase.guild = message.guild!.id;
-		if (modMessage) dbCase.message = modMessage.id;
-		dbCase.case_id = totalCases;
-		dbCase.target_id = member.id;
-		dbCase.target_tag = member.user.tag;
-		dbCase.mod_id = message.author!.id;
-		dbCase.mod_tag = message.author!.tag;
-		dbCase.action = ACTIONS.REACTION;
-		dbCase.reason = reason;
-		await casesRepo.save(dbCase);
+		await this.client.caseHandler.create({
+			guild: message.guild!.id,
+			message: modMessage ? modMessage.id : undefined,
+			case_id: totalCases,
+			target_id: member.id,
+			target_tag: member.user.tag,
+			mod_id: message.author!.id,
+			mod_tag: message.author!.tag,
+			action: ACTIONS.REACTION,
+			reason
+		});
 
 		return message.util!.send(`Successfully reaction restricted **${member.user.tag}**`);
 	}

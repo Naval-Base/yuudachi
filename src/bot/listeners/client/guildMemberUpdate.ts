@@ -2,7 +2,7 @@ import { Listener, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import { RoleState } from '../../models/RoleStates';
 import { Case } from '../../models/Cases';
-import Util, { ACTIONS, COLORS } from '../../util';
+import { ACTIONS, COLORS } from '../../util';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {
@@ -85,18 +85,19 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild: newMember.guild } as Message);
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 				const color = ACTIONS[action] as keyof typeof ACTIONS;
-				const embed = (await Util.logEmbed({ member: newMember, action: actionName, caseNum: totalCases, reason })).setColor(COLORS[color]);
+				const embed = (await this.client.caseHandler.log(newMember, actionName, totalCases, reason, { author: null, guild: newMember.guild })).setColor(COLORS[color]);
 				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 			}
-			const dbCase = new Case();
-			dbCase.guild = newMember.guild.id;
-			if (modMessage) dbCase.message = modMessage.id;
-			dbCase.case_id = totalCases;
-			dbCase.target_id = newMember.id;
-			dbCase.target_tag = newMember.user.tag;
-			dbCase.action = action;
-			dbCase.action_processed = processed;
-			await casesRepo.save(dbCase);
+
+			await this.client.caseHandler.create({
+				guild: newMember.guild.id,
+				message: modMessage ? modMessage.id : undefined,
+				case_id: totalCases,
+				target_id: newMember.id,
+				target_tag: newMember.user.tag,
+				action,
+				action_processed: processed
+			});
 		}
 	}
 }

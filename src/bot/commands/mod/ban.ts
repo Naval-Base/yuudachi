@@ -1,8 +1,7 @@
 import { Argument, Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import Util, { ACTIONS, COLORS } from '../../util';
-import { Case } from '../../models/Cases';
+import { ACTIONS, COLORS } from '../../util';
 
 export default class BanCommand extends Command {
 	public constructor() {
@@ -79,9 +78,7 @@ export default class BanCommand extends Command {
 		}
 		this.client.cachedCases.add(key);
 
-		const casesRepo = this.client.db.getRepository(Case);
-		const dbCases = await casesRepo.find({ target_id: member.id });
-		const embed = Util.historyEmbed(member, dbCases);
+		const embed = await this.client.caseHandler.history(member);
 		await message.channel.send('You sure you want me to ban this [no gender specified]?', { embed });
 		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author!.id, {
 			max: 1,
@@ -129,24 +126,24 @@ export default class BanCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
-		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(member.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const e = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Ban', caseNum: totalCases, reason, ref })).setColor(COLORS.BAN);
+			const e = (await this.client.caseHandler.log(member, 'Ban', totalCases, reason, message, undefined, ref)).setColor(COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(e);
 		}
 
-		const dbCase = new Case();
-		dbCase.guild = message.guild!.id;
-		if (modMessage) dbCase.message = modMessage.id;
-		dbCase.case_id = totalCases;
-		dbCase.target_id = member.id;
-		dbCase.target_tag = member.user.tag;
-		dbCase.mod_id = message.author!.id;
-		dbCase.mod_tag = message.author!.tag;
-		dbCase.action = ACTIONS.BAN;
-		dbCase.reason = reason;
-		await casesRepo.save(dbCase);
+		await this.client.caseHandler.create({
+			guild: message.guild!.id,
+			message: modMessage ? modMessage.id : undefined,
+			case_id: totalCases,
+			target_id: member.id,
+			target_tag: member.user.tag,
+			mod_id: message.author!.id,
+			mod_tag: message.author!.tag,
+			action: ACTIONS.BAN,
+			reason
+		});
 
 		return sentMessage.edit(`Successfully banned **${member.user.tag}**`);
 	}

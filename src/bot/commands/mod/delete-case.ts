@@ -1,9 +1,8 @@
 import { Argument, Command } from 'discord-akairo';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
-import { MoreThan } from 'typeorm';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {
@@ -106,103 +105,10 @@ export default class CaseDeleteCommand extends Command {
 		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
 
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
-		if (modLogChannel) {
-			const chan = await this.client.channels.get(modLogChannel) as TextChannel;
-			try {
-				const msgToDelete = await chan.messages.fetch(dbCase.message!);
-				await msgToDelete.delete();
-			} catch {}
-			this._fixCases(dbCase.case_id, message.guild!.id, modLogChannel);
-		}
-
 		const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string }>(message.guild!, 'restrictRoles', undefined);
-		if (restrictRoles && !removeRole) {
-			switch (dbCase.action) {
-				case 5:
-					// eslint-disable-next-line no-case-declarations
-					let member;
-					try {
-						member = await message.guild!.members.fetch(dbCase.target_id);
-					} catch {
-						break;
-					}
-					if (!member) break;
-					// eslint-disable-next-line no-case-declarations
-					const key = `${message.guild!.id}:${member.id}:MUTE`;
-					try {
-						this.client.cachedCases.add(key);
-						await member.roles.remove(restrictRoles.embed, `Mute removed by ${message.author!.tag} | Removed Case #${dbCase.case_id}`);
-					} catch (error) {
-						this.client.cachedCases.delete(key);
-						message.reply(`there was an error removing the mute on this member: \`${error}\``);
-					}
-					break;
-				case 6:
-					try {
-						let member;
-						try {
-							member = await message.guild!.members.fetch(dbCase.target_id);
-						} catch {
-							break;
-						}
-						if (!member) break;
-						await member.roles.remove(restrictRoles.embed, `Embed restriction removed by ${message.author!.tag} | Removed Case #${dbCase.case_id}`);
-					} catch (error) {
-						message.reply(`there was an error removing the embed restriction on this member: \`${error}\``);
-					}
-					break;
-				case 7:
-					try {
-						let member;
-						try {
-							member = await message.guild!.members.fetch(dbCase.target_id);
-						} catch {
-							break;
-						}
-						if (!member) break;
-						await member.roles.remove(restrictRoles.emoji, `Emoji restriction removed by ${message.author!.tag} | Removed Case #${dbCase.case_id}`);
-					} catch (error) {
-						message.reply(`there was an error removing the emoji restriction on this member: \`${error}\``);
-					}
-					break;
-				case 8:
-					try {
-						let member;
-						try {
-							member = await message.guild!.members.fetch(dbCase.target_id);
-						} catch {
-							break;
-						}
-						if (!member) break;
-						await member.roles.remove(restrictRoles.reaction, `Reaction restriction removed by ${message.author!.tag} | Removed Case #${dbCase.case_id}`);
-					} catch (error) {
-						message.reply(`there was an error removing the reaction restriction on this member: \`${error}\``);
-					}
-					break;
-				default:
-					break;
-			}
-		}
 
-		await casesRepo.remove(dbCase);
+		await this.client.caseHandler.delete(message, caseToFind, modLogChannel, restrictRoles, removeRole);
 
 		return sentMessage.edit(`Successfully deleted case **${dbCase.case_id}**`);
-	}
-
-	private async _fixCases(caseNum: number, guild: string, modLogChannel: string) {
-		const casesRepo = this.client.db.getRepository(Case);
-		const cases = await casesRepo.find({ where: { guild, case_id: MoreThan(caseNum) }, order: { id: 'ASC' } });
-		let newCaseNum = caseNum;
-
-		for (const c of cases) {
-			const chan = this.client.channels.get(modLogChannel) as TextChannel;
-			try {
-				const msg = await chan.messages.fetch(c.message!);
-				await msg.edit({ embed: msg.embeds[0].setFooter(`Case ${newCaseNum}`) });
-			} catch {}
-			c.case_id = newCaseNum;
-			await casesRepo.save(c);
-			newCaseNum++;
-		}
 	}
 }

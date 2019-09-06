@@ -1,7 +1,6 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
-import Util, { ACTIONS, COLORS } from '../../util';
-import { Case } from '../../models/Cases';
+import { ACTIONS, COLORS } from '../../util';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class MuteCommand extends Command {
@@ -95,12 +94,10 @@ export default class MuteCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
-		const casesRepo = this.client.db.getRepository(Case);
-
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Mute', duration, caseNum: totalCases, reason, ref })).setColor(COLORS.MUTE);
+			const embed = (await this.client.caseHandler.log(member, 'Mute', totalCases, reason, message, duration, ref)).setColor(COLORS.MUTE);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
