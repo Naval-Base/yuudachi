@@ -4586,7 +4586,8 @@ discord-markdown@^2.2.0:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/89a3a3a6daa7b5e25bd277b4e2ec6bccb368f1df"
+  uid c5cbf8677e72522a366d03c9c90e313b864ff582
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/c5cbf8677e72522a366d03c9c90e313b864ff582"
   dependencies:
     abort-controller "^3.0.0"
     form-data "^2.3.3"
