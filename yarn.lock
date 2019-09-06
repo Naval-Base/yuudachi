@@ -4597,7 +4597,8 @@ diffie-hellman@^5.0.0:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-beta.8"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/817327e64546062353ac595d64b52924896d032a"
+  uid "1580c436807cbf48c6ec2e6f3520fd4246917a41"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/1580c436807cbf48c6ec2e6f3520fd4246917a41"
 
 discord-markdown@^2.2.0:
   version "2.2.0"
