@@ -1,16 +1,16 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import Util from '../../util';
+import Util, { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 import { MoreThan } from 'typeorm';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
-interface Actions {
+interface ActionKeys {
 	[key: number]: string;
 }
 
-const ACTIONS: Actions = {
+const ACTION_KEYS: ActionKeys = {
 	1: 'Ban',
 	2: 'Unban',
 	3: 'Softban',
@@ -74,10 +74,10 @@ export default class CaseDeleteCommand extends Command {
 		try {
 			moderator = await message.guild!.members.fetch(dbCase.mod_id);
 		} catch {}
-		const color = Object.keys(Util.CONSTANTS.ACTIONS).find(key => Util.CONSTANTS.ACTIONS[key] === dbCase.action)!.split(' ')[0].toUpperCase();
+		const color = ACTIONS[dbCase.action] as keyof typeof ACTIONS;
 		const embed = new MessageEmbed()
 			.setAuthor(dbCase.mod_id ? `${dbCase.mod_tag} (${dbCase.mod_id})` : 'No moderator', dbCase.mod_id && moderator ? moderator.user.displayAvatarURL() : '')
-			.setColor(Util.CONSTANTS.COLORS[color])
+			.setColor(COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
 				**Action:** ${ACTIONS[dbCase.action]}${dbCase.action === 5 && dbCase.action_duration ? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}

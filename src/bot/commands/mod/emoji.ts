@@ -1,6 +1,6 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
-import Util from '../../util';
+import Util, { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 
 export default class RestrictEmojiCommand extends Command {
@@ -84,7 +84,7 @@ export default class RestrictEmojiCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Emoji restriction', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.EMOJI);
+			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Emoji restriction', caseNum: totalCases, reason, ref })).setColor(COLORS.EMOJI);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -96,7 +96,7 @@ export default class RestrictEmojiCommand extends Command {
 		dbCase.target_tag = member.user.tag;
 		dbCase.mod_id = message.author!.id;
 		dbCase.mod_tag = message.author!.tag;
-		dbCase.action = Util.CONSTANTS.ACTIONS.EMOJI;
+		dbCase.action = ACTIONS.EMOJI;
 		dbCase.reason = reason;
 		await casesRepo.save(dbCase);
 

@@ -1,6 +1,6 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, User, TextChannel } from 'discord.js';
-import Util from '../../util';
+import Util, { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 
 export default class UnbanCommand extends Command {
@@ -82,7 +82,7 @@ export default class UnbanCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member: user, action: 'Unban', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.UNBAN);
+			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member: user, action: 'Unban', caseNum: totalCases, reason, ref })).setColor(COLORS.UNBAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -94,7 +94,7 @@ export default class UnbanCommand extends Command {
 		dbCase.target_tag = user.tag;
 		dbCase.mod_id = message.author!.id;
 		dbCase.mod_tag = message.author!.tag;
-		dbCase.action = Util.CONSTANTS.ACTIONS.UNBAN;
+		dbCase.action = ACTIONS.UNBAN;
 		dbCase.reason = reason;
 		await casesRepo.save(dbCase);
 

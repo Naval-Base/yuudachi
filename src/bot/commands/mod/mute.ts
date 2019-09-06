@@ -1,6 +1,6 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
-import Util from '../../util';
+import Util, { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
@@ -100,7 +100,7 @@ export default class MuteCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Mute', duration, caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.MUTE);
+			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Mute', duration, caseNum: totalCases, reason, ref })).setColor(COLORS.MUTE);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -113,7 +113,7 @@ export default class MuteCommand extends Command {
 			target_tag: member.user.tag,
 			mod_id: message.author!.id,
 			mod_tag: message.author!.tag,
-			action: Util.CONSTANTS.ACTIONS.MUTE,
+			action: ACTIONS.MUTE,
 			action_duration: new Date(Date.now() + duration),
 			action_processed: false,
 			reason

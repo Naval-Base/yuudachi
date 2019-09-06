@@ -1,6 +1,6 @@
 import { Listener, PrefixSupplier } from 'discord-akairo';
 import { Message, Guild, User, TextChannel } from 'discord.js';
-import Util from '../../util';
+import Util, { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 
 export default class GuildBanAddListener extends Listener {
@@ -22,7 +22,7 @@ export default class GuildBanAddListener extends Listener {
 		if (modLogChannel) {
 			const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild } as Message);
 			const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-			const embed = (await Util.logEmbed({ member: user, action: 'Ban', caseNum: totalCases, reason })).setColor(Util.CONSTANTS.COLORS.BAN);
+			const embed = (await Util.logEmbed({ member: user, action: 'Ban', caseNum: totalCases, reason })).setColor(COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 		const casesRepo = this.client.db.getRepository(Case);
@@ -32,7 +32,7 @@ export default class GuildBanAddListener extends Listener {
 		dbCase.case_id = totalCases;
 		dbCase.target_id = user.id;
 		dbCase.target_tag = user.tag;
-		dbCase.action = Util.CONSTANTS.ACTIONS.BAN;
+		dbCase.action = ACTIONS.BAN;
 		await casesRepo.save(dbCase);
 	}
 }

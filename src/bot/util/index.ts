@@ -4,11 +4,11 @@ import { Repository } from 'typeorm';
 import { Case } from '../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
-interface Actions {
+interface ActionKeys {
 	[key: number]: string;
 }
 
-const ACTIONS: Actions = {
+const ACTION_KEYS: ActionKeys = {
 	1: 'ban',
 	2: 'unban',
 	3: 'kick',
@@ -21,33 +21,33 @@ const ACTIONS: Actions = {
 	10: 'restriction'
 };
 
+export enum ACTIONS {
+	BAN = 1,
+	UNBAN,
+	SOFTBAN,
+	KICK,
+	MUTE,
+	EMBED,
+	EMOJI,
+	REACTION,
+	WARN,
+	TAG
+}
+
+export enum COLORS {
+	BAN = 16718080,
+	UNBAN = 8450847,
+	SOFTBAN = 16745216,
+	KICK = 16745216,
+	MUTE = 16763904,
+	EMBED = 16776960,
+	EMOJI = 16776960,
+	REACTION = 16776960,
+	WARN = 16776960,
+	TAG = 16776960
+}
+
 export default {
-	CONSTANTS: {
-		ACTIONS: {
-			BAN: 1,
-			UNBAN: 2,
-			SOFTBAN: 3,
-			KICK: 4,
-			MUTE: 5,
-			EMBED: 6,
-			EMOJI: 7,
-			REACTION: 8,
-			WARN: 9,
-			TAG: 10
-		} as { [key: string]: number },
-		COLORS: {
-			BAN: 16718080,
-			UNBAN: 8450847,
-			SOFTBAN: 16745216,
-			KICK: 16745216,
-			MUTE: 16763904,
-			EMBED: 16776960,
-			EMOJI: 16776960,
-			REACTION: 16776960,
-			WARN: 16776960,
-			TAG: 16776960
-		} as { [key: string]: number }
-	},
 	reminderEmbed: (message: Message, reminders: any): MessageEmbed => {
 		const truncate = (str: string, len: number): string => str.length > len ? `${str.slice(0, len)}…` : str;
 		return new MessageEmbed()
@@ -86,7 +86,7 @@ export default {
 	},
 	historyEmbed: (member: GuildMember, cases: any): MessageEmbed => {
 		const footer = cases.reduce((count: any, c: any): string => {
-			const action = ACTIONS[c.action];
+			const action = ACTION_KEYS[c.action];
 			count[action] = (count[action] || 0) as number + 1;
 			return count;
 		}, {});

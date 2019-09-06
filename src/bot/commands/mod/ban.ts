@@ -1,7 +1,7 @@
 import { Argument, Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import Util from '../../util';
+import Util, { ACTIONS, COLORS } from '../../util';
 import { Case } from '../../models/Cases';
 
 export default class BanCommand extends Command {
@@ -132,7 +132,7 @@ export default class BanCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const e = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Ban', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.BAN);
+			const e = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member, action: 'Ban', caseNum: totalCases, reason, ref })).setColor(COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(e);
 		}
 
@@ -144,7 +144,7 @@ export default class BanCommand extends Command {
 		dbCase.target_tag = member.user.tag;
 		dbCase.mod_id = message.author!.id;
 		dbCase.mod_tag = message.author!.tag;
-		dbCase.action = Util.CONSTANTS.ACTIONS.BAN;
+		dbCase.action = ACTIONS.BAN;
 		dbCase.reason = reason;
 		await casesRepo.save(dbCase);
 
