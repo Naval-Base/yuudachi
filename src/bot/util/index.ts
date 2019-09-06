@@ -48,18 +48,6 @@ export enum COLORS {
 }
 
 export default {
-	reminderEmbed: (message: Message, reminders: any): MessageEmbed => {
-		const truncate = (str: string, len: number): string => str.length > len ? `${str.slice(0, len)}…` : str;
-		return new MessageEmbed()
-			.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
-			.setColor(0x30A9ED)
-			.setThumbnail(message.author!.displayAvatarURL())
-			.setDescription(reminders.length
-				? reminders.sort((a: { triggers_at: number }, b: { triggers_at: number }): number => a.triggers_at - b.triggers_at).map(
-					(reminder: any, i: number): string => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
-				).join('\n')
-				: 'No reminders');
-	},
 	logEmbed: async ({ message = null, db = null, channel, member, action, duration = null, caseNum, reason, ref = null }: { message?: Message | null; db?: Repository<Case> | null; channel?: string; member: GuildMember | User; action: string; duration?: number | null; caseNum: number; reason: string; ref?: number | null }): Promise<MessageEmbed> => {
 		const embed = new MessageEmbed();
 		if (message) {

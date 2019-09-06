@@ -67,10 +67,9 @@ export default class ReminderAddCommand extends Command {
 			return message.util!.reply('I\'m sure you have better memory than that.');
 		}
 
-		await this.client.remindScheduler.addReminder({
+		await this.client.remindScheduler.add({
 			user: message.author!.id,
-			// @ts-ignore
-			channel: message.channel.type === 'dm' || dm ? null : message.channel.id,
+			channel: message.channel.type === 'dm' || dm ? undefined : message.channel.id,
 			reason: Util.cleanContent(reason, message),
 			trigger: message.url,
 			triggers_at: new Date(Date.now() + time)

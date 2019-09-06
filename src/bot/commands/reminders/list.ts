@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import Util from '../../util';
 import { Reminder } from '../../models/Reminders';
+import RemindScheduler from '../../structures/RemindScheduler';
 
 export default class ReminderListCommand extends Command {
 	public constructor() {
@@ -20,6 +20,6 @@ export default class ReminderListCommand extends Command {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const reminders = await remindersRepo.find({ user: message.author!.id });
 
-		return message.util!.send(Util.reminderEmbed(message, reminders));
+		return message.util!.send(RemindScheduler.embed(message, reminders));
 	}
 }
