@@ -138,6 +138,7 @@ export default class CaseHandler {
 	private async removeRoles(cs: Case, message: Message, roles: { embed: string; emoji: string; reaction: string }) {
 		switch (cs.action) {
 			case 5:
+				// eslint-disable-next-line no-case-declarations
 				let member;
 				try {
 					member = await message.guild!.members.fetch(cs.target_id);
@@ -145,6 +146,7 @@ export default class CaseHandler {
 					break;
 				}
 				if (!member) break;
+				// eslint-disable-next-line no-case-declarations
 				const key = `${message.guild!.id}:${member.id}:MUTE`;
 				try {
 					this.cachedCases.add(key);

@@ -1,6 +1,6 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { RoleState } from '../../models/RoleStates';
+import { RoleState } from '../../../models/RoleStates';
 
 export default class ToggleRoleStateCommand extends Command {
 	public constructor() {
