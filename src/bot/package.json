@@ -19,7 +19,7 @@
 		"@sentry/node": "^5.6.2",
 		"common-tags": "^1.8.0",
 		"diff": "^4.0.1",
-		"discord-akairo": "1Computer1/discord-akairo",
+		"discord-akairo": "discord-akairo/discord-akairo",
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^8.1.0",
 		"moment": "^2.24.0",

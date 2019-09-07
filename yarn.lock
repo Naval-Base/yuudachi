@@ -4572,9 +4572,9 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-discord-akairo@1Computer1/discord-akairo:
+discord-akairo@discord-akairo/discord-akairo:
   version "8.0.0-beta.8"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/1580c436807cbf48c6ec2e6f3520fd4246917a41"
+  resolved "https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/2fd87796b135b1d79bf8c0fa6798becb73a37140"
 
 discord-markdown@^2.2.0:
   version "2.2.0"
@@ -4586,7 +4586,7 @@ discord-markdown@^2.2.0:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/89a3a3a6daa7b5e25bd277b4e2ec6bccb368f1df"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/c5cbf8677e72522a366d03c9c90e313b864ff582"
   dependencies:
     abort-controller "^3.0.0"
     form-data "^2.3.3"
