@@ -16,11 +16,11 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 	public async exec(oldMember: GuildMember, newMember: GuildMember) {
 		const moderation = this.client.settings.get(newMember.guild, 'moderation', undefined);
 		if (moderation) {
-			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
-			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMBED`)) return;
-			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMOJI`)) return;
-			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:REACTION`)) return;
-			if (this.client.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:TAG`)) return;
+			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
+			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMBED`)) return;
+			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMOJI`)) return;
+			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:REACTION`)) return;
+			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:TAG`)) return;
 
 			const modRole = this.client.settings.get<string>(newMember.guild, 'modRole', undefined);
 			if (modRole && newMember.roles.has(modRole)) return;

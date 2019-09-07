@@ -64,11 +64,11 @@ export default class SoftbanCommand extends Command {
 		}
 
 		const keys = [`${message.guild!.id}:${member.id}:BAN`, `${message.guild!.id}:${member.id}:UNBAN`];
-		if (this.client.cachedCases.has(keys[0]) && this.client.cachedCases.has(keys[1])) {
+		if (this.client.caseHandler.cachedCases.has(keys[0]) && this.client.caseHandler.cachedCases.has(keys[1])) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
-		this.client.cachedCases.add(keys[0]);
-		this.client.cachedCases.add(keys[1]);
+		this.client.caseHandler.cachedCases.add(keys[0]);
+		this.client.caseHandler.cachedCases.add(keys[1]);
 
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
@@ -86,8 +86,8 @@ export default class SoftbanCommand extends Command {
 			await member.ban({ days, reason: `Softbanned by ${message.author!.tag} | Case #${totalCases}` });
 			await message.guild!.members.unban(member, `Softbanned by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
-			this.client.cachedCases.delete(keys[0]);
-			this.client.cachedCases.delete(keys[1]);
+			this.client.caseHandler.cachedCases.delete(keys[0]);
+			this.client.caseHandler.cachedCases.delete(keys[1]);
 			return message.reply(`there was an error softbanning this member: \`${error}\``);
 		}
 

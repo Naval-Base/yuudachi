@@ -73,10 +73,10 @@ export default class BanCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 		const key = `${message.guild!.id}:${member.id}:BAN`;
-		if (this.client.cachedCases.has(key)) {
+		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
-		this.client.cachedCases.add(key);
+		this.client.caseHandler.cachedCases.add(key);
 
 		const embed = await this.client.caseHandler.history(member);
 		await message.channel.send('You sure you want me to ban this [no gender specified]?', { embed });
@@ -86,7 +86,7 @@ export default class BanCommand extends Command {
 		});
 
 		if (!responses || responses.size !== 1) {
-			this.client.cachedCases.delete(key);
+			this.client.caseHandler.cachedCases.delete(key);
 			return message.reply('timed out. Cancelled ban.');
 		}
 		const response = responses.first();
@@ -95,7 +95,7 @@ export default class BanCommand extends Command {
 		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
 			sentMessage = await message.channel.send(`Banning **${member.user.tag}**...`);
 		} else {
-			this.client.cachedCases.delete(key);
+			this.client.caseHandler.cachedCases.delete(key);
 			return message.reply('cancelled ban.');
 		}
 
@@ -114,7 +114,7 @@ export default class BanCommand extends Command {
 			try {
 				await message.guild!.members.ban(member.id, { days, reason: `Banned by ${message.author!.tag} | Case #${totalCases}` });
 			} catch (error) {
-				this.client.cachedCases.delete(key);
+				this.client.caseHandler.cachedCases.delete(key);
 				return message.reply(`there was an error banning this member: \`${error}\``);
 			}
 		}

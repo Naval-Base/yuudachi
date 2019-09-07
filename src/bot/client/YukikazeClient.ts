@@ -32,7 +32,6 @@ declare module 'discord-akairo' {
 		commandHandler: CommandHandler;
 		config: YukikazeOptions;
 		webhooks: Collection<string, Webhook>;
-		cachedCases: Set<string>;
 		caseHandler: CaseHandler;
 		muteScheduler: MuteScheduler;
 		remindScheduler: RemindScheduler;
@@ -121,8 +120,6 @@ export default class YukikazeClient extends AkairoClient {
 	public listenerHandler = new ListenerHandler(this, { directory: join(__dirname, '..', 'listeners') });
 
 	public config: YukikazeOptions;
-
-	public cachedCases = new Set<string>();
 
 	public caseHandler!: CaseHandler;
 

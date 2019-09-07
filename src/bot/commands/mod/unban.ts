@@ -55,17 +55,17 @@ export default class UnbanCommand extends Command {
 		if (user.id === message.author!.id) return;
 
 		const key = `${message.guild!.id}:${user.id}:UNBAN`;
-		if (this.client.cachedCases.has(key)) {
+		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
-		this.client.cachedCases.add(key);
+		this.client.caseHandler.cachedCases.add(key);
 
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
 			await message.guild!.members.unban(user, `Unbanned by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
-			this.client.cachedCases.delete(key);
+			this.client.caseHandler.cachedCases.delete(key);
 			return message.reply(`there was an error unbanning this user: \`${error}\``);
 		}
 

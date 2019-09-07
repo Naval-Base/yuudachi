@@ -73,17 +73,17 @@ export default class MuteCommand extends Command {
 		if (!muteRole) return message.reply('there is no mute role configured on this server.');
 
 		const key = `${message.guild!.id}:${member.id}:MUTE`;
-		if (this.client.cachedCases.has(key)) {
+		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
-		this.client.cachedCases.add(key);
+		this.client.caseHandler.cachedCases.add(key);
 
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
 			await member.roles.add(muteRole, `Muted by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
-			this.client.cachedCases.delete(key);
+			this.client.caseHandler.cachedCases.delete(key);
 			return message.reply(`there was an error muting this member: \`${error}\``);
 		}
 

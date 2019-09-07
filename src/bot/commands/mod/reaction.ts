@@ -57,17 +57,17 @@ export default class RestrictReactionCommand extends Command {
 		if (!restrictRoles) return message.reply('there are no restricted roles configured on this server.');
 
 		const key = `${message.guild!.id}:${member.id}:REACTION`;
-		if (this.client.cachedCases.has(key)) {
+		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
-		this.client.cachedCases.add(key);
+		this.client.caseHandler.cachedCases.add(key);
 
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
 			await member.roles.add(restrictRoles.reaction, `Embed restricted by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
-			this.client.cachedCases.delete(key);
+			this.client.caseHandler.cachedCases.delete(key);
 			return message.reply(`there was an error muting this member: \`${error}\``);
 		}
 

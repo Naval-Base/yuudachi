@@ -48,6 +48,8 @@ export default class CaseHandler {
 
 	private repo: Repository<Case>;
 
+	public cachedCases = new Set<string>();
+
 	public constructor(client: YukikazeClient, repository: Repository<Case>) {
 		this.client = client;
 		this.repo = repository;
@@ -93,10 +95,10 @@ export default class CaseHandler {
 					// eslint-disable-next-line no-case-declarations
 					const key = `${message.guild!.id}:${member.id}:MUTE`;
 					try {
-						this.client.cachedCases.add(key);
+						this.cachedCases.add(key);
 						await member.roles.remove(restrictRoles.embed, `Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
 					} catch (error) {
-						this.client.cachedCases.delete(key);
+						this.cachedCases.delete(key);
 						message.reply(`there was an error removing the mute on this member: \`${error}\``);
 					}
 					break;
