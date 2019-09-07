@@ -78,76 +78,10 @@ export default class CaseHandler {
 				const msgToDelete = await chan.messages.fetch(cs.message!);
 				await msgToDelete.delete();
 			} catch {}
-			this.fixCases(cs.case_id, message.guild!.id, channel);
+			this.fix(cs.case_id, message.guild!.id, channel);
 		}
 
-		if (restrictRoles && !removeRole) {
-			switch (cs.action) {
-				case 5:
-					// eslint-disable-next-line no-case-declarations
-					let member;
-					try {
-						member = await message.guild!.members.fetch(cs.target_id);
-					} catch {
-						break;
-					}
-					if (!member) break;
-					// eslint-disable-next-line no-case-declarations
-					const key = `${message.guild!.id}:${member.id}:MUTE`;
-					try {
-						this.cachedCases.add(key);
-						await member.roles.remove(restrictRoles.embed, `Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
-					} catch (error) {
-						this.cachedCases.delete(key);
-						message.reply(`there was an error removing the mute on this member: \`${error}\``);
-					}
-					break;
-				case 6:
-					try {
-						let member;
-						try {
-							member = await message.guild!.members.fetch(cs.target_id);
-						} catch {
-							break;
-						}
-						if (!member) break;
-						await member.roles.remove(restrictRoles.embed, `Embed restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
-					} catch (error) {
-						message.reply(`there was an error removing the embed restriction on this member: \`${error}\``);
-					}
-					break;
-				case 7:
-					try {
-						let member;
-						try {
-							member = await message.guild!.members.fetch(cs.target_id);
-						} catch {
-							break;
-						}
-						if (!member) break;
-						await member.roles.remove(restrictRoles.emoji, `Emoji restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
-					} catch (error) {
-						message.reply(`there was an error removing the emoji restriction on this member: \`${error}\``);
-					}
-					break;
-				case 8:
-					try {
-						let member;
-						try {
-							member = await message.guild!.members.fetch(cs.target_id);
-						} catch {
-							break;
-						}
-						if (!member) break;
-						await member.roles.remove(restrictRoles.reaction, `Reaction restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
-					} catch (error) {
-						message.reply(`there was an error removing the reaction restriction on this member: \`${error}\``);
-					}
-					break;
-				default:
-					break;
-			}
-		}
+		if (restrictRoles && !removeRole) this.removeRoles(cs, message, restrictRoles);
 	}
 
 	public async log(member: GuildMember | User, action: string, caseNum: number, reason: string, message?: Pick<Message, 'author' | 'guild'>, duration?: number, ref?: number) {
@@ -201,7 +135,73 @@ export default class CaseHandler {
 			`);
 	}
 
-	private async fixCases(caseNum: number, guild: string, channel: string) {
+	private async removeRoles(cs: Case, message: Message, roles: { embed: string; emoji: string; reaction: string }) {
+		switch (cs.action) {
+			case 5:
+				let member;
+				try {
+					member = await message.guild!.members.fetch(cs.target_id);
+				} catch {
+					break;
+				}
+				if (!member) break;
+				const key = `${message.guild!.id}:${member.id}:MUTE`;
+				try {
+					this.cachedCases.add(key);
+					await member.roles.remove(roles.embed, `Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+				} catch (error) {
+					this.cachedCases.delete(key);
+					message.reply(`there was an error removing the mute on this member: \`${error}\``);
+				}
+				break;
+			case 6:
+				try {
+					let member;
+					try {
+						member = await message.guild!.members.fetch(cs.target_id);
+					} catch {
+						break;
+					}
+					if (!member) break;
+					await member.roles.remove(roles.embed, `Embed restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+				} catch (error) {
+					message.reply(`there was an error removing the embed restriction on this member: \`${error}\``);
+				}
+				break;
+			case 7:
+				try {
+					let member;
+					try {
+						member = await message.guild!.members.fetch(cs.target_id);
+					} catch {
+						break;
+					}
+					if (!member) break;
+					await member.roles.remove(roles.emoji, `Emoji restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+				} catch (error) {
+					message.reply(`there was an error removing the emoji restriction on this member: \`${error}\``);
+				}
+				break;
+			case 8:
+				try {
+					let member;
+					try {
+						member = await message.guild!.members.fetch(cs.target_id);
+					} catch {
+						break;
+					}
+					if (!member) break;
+					await member.roles.remove(roles.reaction, `Reaction restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+				} catch (error) {
+					message.reply(`there was an error removing the reaction restriction on this member: \`${error}\``);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	private async fix(caseNum: number, guild: string, channel: string) {
 		const cases = await this.repo.find({ where: { guild, case_id: MoreThan(caseNum) }, order: { id: 'ASC' } });
 		let newCaseNum = caseNum;
 
