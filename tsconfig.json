@@ -8,12 +8,6 @@
 		"emitDecoratorMetadata": true,
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
-		"pretty": true,
-		"baseUrl": "./src",
-		"paths": {
-			"~/*": [
-				"dashboard/*"
-			]
-		}
+		"pretty": true
 	}
 }
