@@ -12,6 +12,7 @@ export default class ToggleCommand extends Command {
 					 • mod
 					 • rolestate
 					 • tokenfiltering
+					 • mentionraiding
 
 					Required: \`<>\` | Optional: \`[]\`
 				`,
@@ -30,7 +31,8 @@ export default class ToggleCommand extends Command {
 				['toggle-logs', 'logs'],
 				['toggle-moderation', 'mod', 'moderation'],
 				['toggle-role-state', 'role', 'rolestate', 'role-state'],
-				['toggle-token-filtering', 'tokenfiltering', 'token']
+				['toggle-token-filtering', 'tokenfiltering', 'token'],
+				['toggle-mention-raiding', 'mentionraiding', 'mention-raiding']
 			],
 			otherwise: (msg: Message): string => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
