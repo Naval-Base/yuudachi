@@ -34,7 +34,7 @@
 		"typeorm": "^0.2.18",
 		"veza": "^1.1.0",
 		"winston": "^3.2.1",
-		"winston-daily-rotate-file": "^3.10.0",
+		"winston-daily-rotate-file": "^4.1.0",
 		"winston-loki": "^4.0.1"
 	},
 	"devDependencies": {
