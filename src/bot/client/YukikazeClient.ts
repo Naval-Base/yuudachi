@@ -19,7 +19,6 @@ import { parse } from 'url';
 import { init } from '@sentry/node';
 import { RewriteFrames } from '@sentry/integrations';
 import { Server as IPCServer, NodeMessage } from 'veza';
-import { VERSION } from '../util/version';
 import { __rootdir__ } from '../root';
 
 declare module 'discord-akairo' {
@@ -199,7 +198,7 @@ export default class YukikazeClient extends AkairoClient {
 			init({
 				dsn: process.env.SENTRY,
 				environment: process.env.NODE_ENV,
-				release: VERSION,
+				release: process.env.VERSION!,
 				serverName: 'yukikaze_bot',
 				integrations: [
 					new RewriteFrames({
