@@ -43,33 +43,45 @@ const ACTION_KEYS: ActionKeys = {
 	10: 'restriction'
 };
 
+interface Log {
+	member: GuildMember | User;
+	action: string;
+	caseNum: number;
+	reason: string;
+	message?: Pick<Message, 'author' | 'guild'>;
+	duration?: number;
+	ref?: number;
+}
+
 export default class CaseHandler {
-	private client: YukikazeClient;
-
-	private repo: Repository<Case>;
-
 	public cachedCases = new Set<string>();
 
-	public constructor(client: YukikazeClient, repository: Repository<Case>) {
-		this.client = client;
-		this.repo = repository;
-	}
+	public constructor(
+		private client: YukikazeClient,
+		private repo: Repository<Case>
+	) {}
 
 	public async create(newCase: Optional<Omit<Case, 'id' | 'createdAt'>, 'action_processed'>) {
-		const cs = new Case();
-		cs.guild = newCase.guild;
-		if (cs.message) cs.message = newCase.message;
-		cs.case_id = newCase.case_id;
-		cs.target_id = newCase.target_id;
-		cs.target_tag = newCase.target_tag;
-		cs.mod_id = newCase.mod_id;
-		cs.mod_tag = newCase.mod_tag;
-		cs.action = newCase.action;
-		cs.reason = newCase.reason;
-		await this.repo.save(cs);
+		return this.repo.insert({
+			guild: newCase.guild,
+			message: newCase.message,
+			case_id: newCase.case_id,
+			target_id: newCase.target_id,
+			target_tag: newCase.target_tag,
+			mod_id: newCase.mod_id,
+			mod_tag: newCase.mod_tag,
+			action: newCase.action,
+			reason: newCase.reason
+		});
 	}
 
-	public async delete(message: Message, caseNum: number, channel?: string, restrictRoles?: { embed: string; emoji: string; reaction: string }, removeRole?: boolean) {
+	public async delete(
+		message: Message,
+		caseNum: number,
+		channel?: string,
+		restrictRoles?: { embed: string; emoji: string; reaction: string },
+		removeRole?: boolean
+	) {
 		const cs = await this.repo.findOne({ guild: message.guild!.id, case_id: caseNum }) as Case;
 
 		if (channel) {
@@ -84,7 +96,7 @@ export default class CaseHandler {
 		if (restrictRoles && !removeRole) this.removeRoles(cs, message, restrictRoles);
 	}
 
-	public async log(member: GuildMember | User, action: string, caseNum: number, reason: string, message?: Pick<Message, 'author' | 'guild'>, duration?: number, ref?: number) {
+	public async log({ member, action, caseNum, reason, message, duration, ref }: Log) {
 		const embed = new MessageEmbed();
 		if (message && message.author) {
 			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());

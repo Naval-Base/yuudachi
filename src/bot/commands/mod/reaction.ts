@@ -81,7 +81,16 @@ export default class RestrictReactionCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Reaction restriction', totalCases, reason, message, undefined, ref)).setColor(COLORS.REACTION);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Reaction restriction',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.REACTION);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

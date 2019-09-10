@@ -129,7 +129,16 @@ export default class BanCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(member.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const e = (await this.client.caseHandler.log(member, 'Ban', totalCases, reason, message, undefined, ref)).setColor(COLORS.BAN);
+			const e = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Ban',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(e);
 		}
 

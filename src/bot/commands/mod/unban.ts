@@ -79,7 +79,16 @@ export default class UnbanCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(user, 'Unban', totalCases, reason, message, undefined, ref)).setColor(COLORS.UNBAN);
+			const embed = (
+				await this.client.caseHandler.log({
+					member: user,
+					action: 'Unban',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.UNBAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

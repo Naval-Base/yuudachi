@@ -81,7 +81,16 @@ export default class RestrictEmbedCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Embed restriction', totalCases, reason, message, undefined, ref)).setColor(COLORS.EMBED);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Embed restriction',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.EMBED);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

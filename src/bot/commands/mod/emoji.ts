@@ -81,7 +81,16 @@ export default class RestrictEmojiCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Emoji restriction', totalCases, reason, message, undefined, ref)).setColor(COLORS.EMOJI);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Emoji restriction',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+			})
+			).setColor(COLORS.EMOJI);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

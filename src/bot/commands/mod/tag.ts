@@ -81,7 +81,16 @@ export default class RestrictTagCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Tag restriction', totalCases, reason, message, undefined, ref)).setColor(COLORS.TAG);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Tag restriction',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.TAG);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

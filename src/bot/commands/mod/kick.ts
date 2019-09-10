@@ -83,7 +83,16 @@ export default class KickCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Kick', totalCases, reason, message, undefined, ref)).setColor(COLORS.KICK);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Kick',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.KICK);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

@@ -101,7 +101,16 @@ export default class SoftbanCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Softban', totalCases, reason, message, undefined, ref)).setColor(COLORS.SOFTBAN);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Softban',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.SOFTBAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

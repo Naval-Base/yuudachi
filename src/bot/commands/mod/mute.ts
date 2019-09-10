@@ -97,7 +97,17 @@ export default class MuteCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Mute', totalCases, reason, message, duration, ref)).setColor(COLORS.MUTE);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Mute',
+					caseNum: totalCases,
+					reason,
+					message,
+					duration,
+					ref
+				})
+			).setColor(COLORS.MUTE);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

@@ -66,7 +66,16 @@ export default class WarnCommand extends Command {
 		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await this.client.caseHandler.log(member, 'Warn', totalCases, reason, message, undefined, ref)).setColor(COLORS.WARN);
+			const embed = (
+				await this.client.caseHandler.log({
+					member,
+					action: 'Warn',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.WARN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
