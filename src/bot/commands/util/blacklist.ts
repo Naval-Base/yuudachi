@@ -19,15 +19,15 @@ export default class BlacklistCommand extends Command {
 					match: 'content',
 					type: 'user',
 					prompt: {
-						start: (message: Message): string => `${message.author}, who would you like to blacklist/unblacklist?`
+						start: (message: Message) => `${message.author}, who would you like to blacklist/unblacklist?`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { user }: { user: User }): Promise<Message | Message[]> {
-		const blacklist = this.client.settings.get('global', 'blacklist', []);
+	public async exec(message: Message, { user }: { user: User }) {
+		const blacklist = this.client.settings.get<string[]>('global', 'blacklist', []);
 		if (blacklist.includes(user.id)) {
 			const index = blacklist.indexOf(user.id);
 			blacklist.splice(index, 1);

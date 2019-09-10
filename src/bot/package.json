@@ -19,7 +19,7 @@
 		"@sentry/node": "^5.6.2",
 		"common-tags": "^1.8.0",
 		"diff": "^4.0.1",
-		"discord-akairo": "1Computer1/discord-akairo",
+		"discord-akairo": "discord-akairo/discord-akairo",
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^8.1.0",
 		"moment": "^2.24.0",
@@ -34,7 +34,7 @@
 		"typeorm": "^0.2.18",
 		"veza": "^1.1.0",
 		"winston": "^3.2.1",
-		"winston-daily-rotate-file": "^3.10.0",
+		"winston-daily-rotate-file": "^4.1.0",
 		"winston-loki": "^4.0.1"
 	},
 	"devDependencies": {
@@ -44,12 +44,13 @@
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.5.0",
 		"@types/ws": "^6.0.3",
-		"@typescript-eslint/eslint-plugin": "^2.1.0",
-		"@typescript-eslint/parser": "^2.1.0",
+		"@typescript-eslint/eslint-plugin": "^2.2.0",
+		"@typescript-eslint/parser": "^2.2.0",
 		"eslint": "^6.3.0",
 		"eslint-config-marine": "^4.2.1",
 		"rimraf": "^3.0.0",
-		"typescript": "^3.6.2"
+		"typescript": "^3.6.3",
+		"utility-types": "^3.7.0"
 	},
 	"optionalDependencies": {
 		"bufferutil": "^4.0.1",

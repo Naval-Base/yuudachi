@@ -137,7 +137,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 	public async guild(
 		@Ctx() context: Context,
 		@Arg('id') id: string
-	): Promise<IPCGuild | undefined> {
+	) {
 		if (!context.req.user) return undefined;
 		const { success, d }: { success: boolean; d: IPCGuild } = await context.node.sendTo('bot', { type: 'GUILD', id });
 		if (!success) return undefined;
@@ -149,7 +149,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		@Root() guild: Guild,
 		@Ctx() context: Context,
 		@Arg('id') id: string
-	): Promise<GuildMember | undefined> {
+	) {
 		const { success, d }: { success: boolean; d: GuildMember } = await context.node.sendTo('bot', { type: 'GUILD_MEMBER', id, guildId: guild.id });
 		if (!success) return undefined;
 		return d;
@@ -159,7 +159,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 	public async channels(
 		@Root() guild: Guild,
 		@Ctx() context: Context
-	): Promise<Array<typeof channelUnion> | undefined> {
+	) {
 		const { success, d }: { success: boolean; d: { channels: string[] } } = await context.node.sendTo('bot', { type: 'GUILD', id: guild.id });
 		if (!success) return undefined;
 		const promises = d.channels.map((c: string) => context.node.sendTo('bot', { type: 'CHANNEL', id: c }));
@@ -171,7 +171,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 	public async roles(
 		@Root() guild: Guild,
 		@Ctx() context: Context
-	): Promise<Role[] | undefined> {
+	) {
 		const { success, d }: { success: boolean; d: { roles: string[] } } = await context.node.sendTo('bot', { type: 'GUILD', id: guild.id });
 		if (!success) return undefined;
 		const promises = d.roles.map((r: string) => context.node.sendTo('bot', { type: 'ROLE', guildId: guild.id, id: r }));
@@ -183,7 +183,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 	public async settings(
 		@Root() guild: Guild,
 		@Ctx() context: Context
-	): Promise<GuildSettings | undefined> {
+	) {
 		const settings = context.db.getRepository(Setting);
 		const dbGuild = await settings.findOne(guild.id);
 		if (!dbGuild) return undefined;
@@ -195,7 +195,7 @@ export class GuildResolver implements ResolverInterface<IPCGuild> {
 		@Root() guild: Guild,
 		@Ctx() context: Context,
 		@Arg('user_id', { nullable: true }) user_id?: string
-	): Promise<Tag[] | undefined> {
+	) {
 		const tags = context.db.getRepository(Tag);
 		const where: FindOption = { guild: guild.id };
 		if (user_id) where.user = user_id;

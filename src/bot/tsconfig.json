@@ -13,7 +13,7 @@
 		"sourceMap": false,
 		"inlineSourceMap": true,
 		"inlineSources": true,
-		"sourceRoot": "/",
+		"sourceRoot": "./",
 		"outDir": "dist",
 		"incremental": true
 	}

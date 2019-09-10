@@ -32,7 +32,7 @@ export class TagResolver {
 	public async tag(
 		@Ctx() context: Context,
 		@Arg('id', () => Int) id: number
-	): Promise<Tag | undefined> {
+	) {
 		if (!context.req.user) return undefined;
 		const tags = context.db.getRepository(Tag);
 		const dbTag = await tags.findOne(id);
@@ -45,7 +45,7 @@ export class TagResolver {
 		@Ctx() context: Context,
 		@Arg('guild_id', { nullable: true }) guild_id?: string,
 		@Arg('user_id', { nullable: true }) user_id?: string
-	): Promise<Tag[] | undefined> {
+	) {
 		if (!context.req.user) return undefined;
 		const tags = context.db.getRepository(Tag);
 		const where: FindOption = {};
@@ -62,7 +62,7 @@ export class TagResolver {
 		@Arg('id', () => Int) id: number,
 		@Arg('guild_id') guild_id: string,
 		@Arg('data') data: EditTagInput
-	): Promise<Tag | undefined> {
+	) {
 		if (!context.req.user) return undefined;
 		const settings = context.db.getRepository(Setting);
 		const dbSettings = await settings.findOne(guild_id);
@@ -94,7 +94,7 @@ export class TagResolver {
 	public async user(
 		@Root() tag: Tag,
 		@Ctx() context: Context
-	): Promise<IPCUser | undefined> {
+	) {
 		const { success, d }: { success: boolean; d: any } = await context.node.sendTo('bot', { type: 'USER', id: tag.user });
 		if (!success) return undefined;
 		return d;
@@ -104,7 +104,7 @@ export class TagResolver {
 	public async guild(
 		@Root() tag: Tag,
 		@Ctx() context: Context
-	): Promise<IPCGuild | undefined> {
+	) {
 		const { success, d }: { success: boolean; d: any } = await context.node.sendTo('bot', { type: 'GUILD', id: tag.guild });
 		if (!success) return undefined;
 		return d;
@@ -114,7 +114,7 @@ export class TagResolver {
 	public async last_modified(
 		@Root() tag: Tag,
 		@Ctx() context: Context
-	): Promise<IPCUser | undefined> {
+	) {
 		const { success, d }: { success: boolean; d: any } = await context.node.sendTo('bot', { type: 'USER', id: tag.last_modified });
 		if (!success) return undefined;
 		return d;

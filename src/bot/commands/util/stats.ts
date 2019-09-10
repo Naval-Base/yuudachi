@@ -4,8 +4,6 @@ import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
 
-const { version } = require('../../../package.json'); // eslint-disable-line
-
 export default class StatsCommand extends Command {
 	public constructor() {
 		super('stats', {
@@ -19,7 +17,7 @@ export default class StatsCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[]> {
+	public async exec(message: Message) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setDescription(`**${this.client.user!.username} Statistics**`)
@@ -33,7 +31,7 @@ export default class StatsCommand extends Command {
 			`,
 				true
 			)
-			.addField('❯ Version', `v${version}`, true)
+			.addField('❯ Version', `[${process.env.VERSION!}](https://github.com/Naval-Base/yukikaze/commit/${process.env.VERSION!})`, true)
 			.addField('❯ Source Code', '[View Here](https://github.com/Naval-Base/yukikaze)', true)
 			.addField(
 				'❯ Library',

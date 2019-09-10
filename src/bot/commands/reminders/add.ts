@@ -19,15 +19,15 @@ export default class ReminderAddCommand extends Command {
 			args: [
 				{
 					id: 'time',
-					type: (_, str): number | null => {
+					type: (_, str) => {
 						if (!str) return null;
 						const duration = ms(str);
 						if (duration && duration >= 180000 && !isNaN(duration)) return duration;
 						return null;
 					},
 					prompt: {
-						start: (message: Message): string => `${message.author}, when do you want me to remind you?`,
-						retry: (message: Message): string => `${message.author}, please use a proper time format.`
+						start: (message: Message) => `${message.author}, when do you want me to remind you?`,
+						retry: (message: Message) => `${message.author}, please use a proper time format.`
 					}
 				},
 				{
@@ -35,7 +35,7 @@ export default class ReminderAddCommand extends Command {
 					match: 'rest',
 					type: 'string',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what do you want me to remind you of?`
+						start: (message: Message) => `${message.author}, what do you want me to remind you of?`
 					}
 				},
 				{
@@ -47,7 +47,7 @@ export default class ReminderAddCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { time, reason, dm }: { time: number; reason: string; dm: boolean }): Promise<Message | Message[]> {
+	public async exec(message: Message, { time, reason, dm }: { time: number; reason: string; dm: boolean }) {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const reminderCount = await remindersRepo.count({ user: message.author!.id });
 		if (reminderCount > REMINDER_LIMIT) {
@@ -67,10 +67,9 @@ export default class ReminderAddCommand extends Command {
 			return message.util!.reply('I\'m sure you have better memory than that.');
 		}
 
-		await this.client.remindScheduler.addReminder({
+		await this.client.remindScheduler.add({
 			user: message.author!.id,
-			// @ts-ignore
-			channel: message.channel.type === 'dm' || dm ? null : message.channel.id,
+			channel: message.channel.type === 'dm' || dm ? undefined : message.channel.id,
 			reason: Util.cleanContent(reason, message),
 			trigger: message.url,
 			triggers_at: new Date(Date.now() + time)

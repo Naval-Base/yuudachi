@@ -17,4 +17,5 @@ RUN yarn build
 ENV NODE_ENV= \
 	DISCORD= \
 	GRAPHQL=
+ENV VERSION=
 CMD ["yarn", "start"]

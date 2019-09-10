@@ -103,7 +103,7 @@ export class OAuthUserResolver implements ResolverInterface<OAuthUser> {
 	@Query(() => OAuthUser, { nullable: true })
 	public me(
 		@Ctx() context: Context
-	): OAuthUser | undefined {
+	) {
 		if (!context.req.user) return undefined;
 		return context.req.user;
 	}
@@ -113,7 +113,7 @@ export class OAuthUserResolver implements ResolverInterface<OAuthUser> {
 		@Root() _: OAuthUser,
 		@Ctx() context: Context,
 		@Arg('id', { nullable: true }) id?: string
-	): Promise<OAuthGuild[]> {
+	) {
 		const guilds = await (await fetch('https://discordapp.com/api/users/@me/guilds', {
 			headers: {
 				authorization: `Bearer ${context.req.token}`

@@ -10,7 +10,7 @@ export class Reminder {
 	public user!: string;
 
 	@Column({ type: 'bigint', nullable: true })
-	public channel!: string;
+	public channel?: string;
 
 	@Column({ nullable: true })
 	public reason!: string;

@@ -10,7 +10,7 @@ export default class DebugListener extends Listener {
 		});
 	}
 
-	public exec(event: any): void {
+	public exec(event: any) {
 		this.client.logger.debug(event, { topic: TOPICS.DISCORD, event: EVENTS.DEBUG });
 	}
 }

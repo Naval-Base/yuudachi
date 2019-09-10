@@ -23,8 +23,8 @@ export default class TagSourceCommand extends Command {
 					match: 'rest',
 					type: 'tag',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what tag would you like to see the source of?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** does not exist.`
+						start: (message: Message) => `${message.author}, what tag would you like to see the source of?`,
+						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 					}
 				}
 			]
@@ -32,15 +32,15 @@ export default class TagSourceCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+	public userPermissions(message: Message) {
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
-	public async exec(message: Message, { tag, file }: { tag: Tag; file: boolean }): Promise<Message | Message[]> {
+	public async exec(message: Message, { tag, file }: { tag: Tag; file: boolean }) {
 		return message.util!.send(tag.content, {
 			code: 'md',
 			files: file

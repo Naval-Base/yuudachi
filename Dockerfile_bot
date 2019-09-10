@@ -23,4 +23,5 @@ ENV NODE_ENV= \
 	DB= \
 	SENTRY= \
 	GITHUB_API_KEY=
+ENV VERSION=
 CMD ["node", "dist/bot.js"]

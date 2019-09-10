@@ -748,6 +748,11 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@discordjs/collection@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.0.tgz#7dbef30a19a7383816ef0ccbcf83f56078cc4994"
+  integrity sha512-MMJiDWw2amsyRTAFyIq7mVC5Ks014pc8Ldj4q96I24tzOVsMSvEt7kBeDs8/5O1+V9hCW1IsqBPOAr8j++2LjA==
+
 "@endemolshinegroup/cosmiconfig-typescript-loader@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@endemolshinegroup/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-1.0.1.tgz#484ee6f4e9209ffde5d3edbdacf03e0bc5ee0c67"
@@ -1765,45 +1770,45 @@
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.0.tgz#8b63ab7f1aa5321248aad5ac890a485656dcea4d"
   integrity sha512-te5lMAWii1uEJ4FwLjzdlbw3+n0FZNOvFXHxQDKeT0dilh7HOzdMzV2TrJVUzq8ep7J4Na8OUYPRLSQkJHAlrg==
 
-"@typescript-eslint/eslint-plugin@2.1.0", "@typescript-eslint/eslint-plugin@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-2.1.0.tgz#4bcd978d88419ea971613675f2620dde39920d69"
-  integrity sha512-3i/dLPwxaVfCsaLu3HkB8CAA1Uw3McAegrTs+VBJ0BrGRKW7nUwSqRfHfCS7sw7zSbf62q3v0v6pOS8MyaYItg==
+"@typescript-eslint/eslint-plugin@2.2.0", "@typescript-eslint/eslint-plugin@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-2.2.0.tgz#cba8caa6ad8df544c46bca674125a31af8c9ac2f"
+  integrity sha512-rOodtI+IvaO8USa6ValYOrdWm9eQBgqwsY+B0PPiB+aSiK6p6Z4l9jLn/jI3z3WM4mkABAhKIqvGIBl0AFRaLQ==
   dependencies:
-    "@typescript-eslint/experimental-utils" "2.1.0"
-    eslint-utils "^1.4.0"
+    "@typescript-eslint/experimental-utils" "2.2.0"
+    eslint-utils "^1.4.2"
     functional-red-black-tree "^1.0.1"
     regexpp "^2.0.1"
-    tsutils "^3.14.0"
+    tsutils "^3.17.1"
 
-"@typescript-eslint/experimental-utils@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-2.1.0.tgz#0837229f0e75a32db0db9bf662ad0eface914453"
-  integrity sha512-ZJGLYXa4nxjNzomaEk1qts38B/vludg2LOM7dRc7SppEKsMPTS1swaTKS/pom+x4d/luJGoG00BDIss7PR1NQA==
+"@typescript-eslint/experimental-utils@2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-2.2.0.tgz#31d855fbc425168ecf56960c777aacfcca391cff"
+  integrity sha512-IMhbewFs27Frd/ICHBRfIcsUCK213B8MsEUqvKFK14SDPjPR5JF6jgOGPlroybFTrGWpMvN5tMZdXAf+xcmxsA==
   dependencies:
     "@types/json-schema" "^7.0.3"
-    "@typescript-eslint/typescript-estree" "2.1.0"
-    eslint-scope "^4.0.0"
+    "@typescript-eslint/typescript-estree" "2.2.0"
+    eslint-scope "^5.0.0"
 
-"@typescript-eslint/parser@2.1.0", "@typescript-eslint/parser@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-2.1.0.tgz#ca62b26fa6a5a34ecdec4a000f22baf103791830"
-  integrity sha512-0+hzirRJoqE1T4lSSvCfKD+kWjIpDWfbGBiisK5CENcr+22pPkHB2sfV1giON+UxHV4A08SSrQonZk7X2zIQdw==
+"@typescript-eslint/parser@2.2.0", "@typescript-eslint/parser@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-2.2.0.tgz#3cd758ed85ae9be06667beb61bbdf8060f274fb7"
+  integrity sha512-0mf893kj9L65O5sA7wP6EoYvTybefuRFavUNhT7w9kjhkdZodoViwVS+k3D+ZxKhvtL7xGtP/y/cNMJX9S8W4A==
   dependencies:
     "@types/eslint-visitor-keys" "^1.0.0"
-    "@typescript-eslint/experimental-utils" "2.1.0"
-    "@typescript-eslint/typescript-estree" "2.1.0"
-    eslint-visitor-keys "^1.0.0"
+    "@typescript-eslint/experimental-utils" "2.2.0"
+    "@typescript-eslint/typescript-estree" "2.2.0"
+    eslint-visitor-keys "^1.1.0"
 
-"@typescript-eslint/typescript-estree@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-2.1.0.tgz#88e676cc9760516711f6fe43958adc31b93de8e5"
-  integrity sha512-482ErJJ7QYghBh+KA9G+Fwcuk/PLTy+9NBMz8S+6UFrUUnVvHRNAL7I70kdws2te0FBYEZW7pkDaXoT+y8UARw==
+"@typescript-eslint/typescript-estree@2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-2.2.0.tgz#1e2aad5ed573f9f7a8e3261eb79404264c4fc57f"
+  integrity sha512-9/6x23A3HwWWRjEQbuR24on5XIfVmV96cDpGR9671eJv1ebFKHj2sGVVAwkAVXR2UNuhY1NeKS2QMv5P8kQb2Q==
   dependencies:
     glob "^7.1.4"
     is-glob "^4.0.1"
     lodash.unescape "4.0.1"
-    semver "^6.2.0"
+    semver "^6.3.0"
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.0.0":
   version "1.0.0"
@@ -4361,11 +4366,6 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-cycle@~1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/cycle/-/cycle-1.0.3.tgz#21e80b2be8580f98b468f379430662b046c34ad2"
-  integrity sha1-IegLK+hYD5i0aPN5QwZisEbDStI=
-
 cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
@@ -4572,9 +4572,9 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-discord-akairo@1Computer1/discord-akairo:
+discord-akairo@discord-akairo/discord-akairo:
   version "8.0.0-beta.8"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/1580c436807cbf48c6ec2e6f3520fd4246917a41"
+  resolved "https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/2fd87796b135b1d79bf8c0fa6798becb73a37140"
 
 discord-markdown@^2.2.0:
   version "2.2.0"
@@ -4586,7 +4586,7 @@ discord-markdown@^2.2.0:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/89a3a3a6daa7b5e25bd277b4e2ec6bccb368f1df"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/ac44a7fc5717e4dfad52285658e2c529fcc60875"
   dependencies:
     abort-controller "^3.0.0"
     form-data "^2.3.3"
@@ -4953,7 +4953,7 @@ eslint-scope@^5.0.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-utils@^1.4.0, eslint-utils@^1.4.2:
+eslint-utils@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/eslint-utils/-/eslint-utils-1.4.2.tgz#166a5180ef6ab7eb462f162fd0e6f2463d7309ab"
   integrity sha512-eAZS2sEUMlIeCjBeubdj45dmBHQwPHWyBcT1VSYB7o9x9WRRqKxyUoiXlRjyAwzN7YEzHJlYg0NmzDRWx6GP4Q==
@@ -5357,10 +5357,10 @@ file-loader@^4.2.0:
     loader-utils "^1.2.3"
     schema-utils "^2.0.0"
 
-file-stream-rotator@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/file-stream-rotator/-/file-stream-rotator-0.4.1.tgz#09f67b86d6ea589d20b7852c51c59de55d916d6d"
-  integrity sha512-W3aa3QJEc8BS2MmdVpQiYLKHj3ijpto1gMDlsgCRSKfIUe6MwkcpODGPQ3vZfb0XvCeCqlu9CBQTN7oQri2TZQ==
+file-stream-rotator@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/file-stream-rotator/-/file-stream-rotator-0.5.5.tgz#61701413100ec866e302094f794304df535dbacb"
+  integrity sha512-XzvE1ogpxUbARtZPZLICaDRAeWxoQLFMKS3ZwADoCQmurKEwuDD2jEfDVPm/R1HeKYsRYEl9PzVIezjQ3VTTPQ==
   dependencies:
     moment "^2.11.2"
 
@@ -7353,17 +7353,6 @@ log-update@^2.3.0:
     ansi-escapes "^3.0.0"
     cli-cursor "^2.0.0"
     wrap-ansi "^3.0.1"
-
-logform@^1.6.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/logform/-/logform-1.10.0.tgz#c9d5598714c92b546e23f4e78147c40f1e02012e"
-  integrity sha512-em5ojIhU18fIMOw/333mD+ZLE2fis0EzXl1ZwHx4iQzmpQi6odNiY/t+ITNr33JZhT9/KEaH+UPIipr6a9EjWg==
-  dependencies:
-    colors "^1.2.1"
-    fast-safe-stringify "^2.0.4"
-    fecha "^2.3.3"
-    ms "^2.1.1"
-    triple-beam "^1.2.0"
 
 logform@^2.1.1:
   version "2.1.2"
@@ -11233,7 +11222,7 @@ tslib@^1, tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
-tsutils@^3.14.0:
+tsutils@^3.17.1:
   version "3.17.1"
   resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.17.1.tgz#ed719917f11ca0dee586272b2ac49e015a2dd759"
   integrity sha512-kzeQ5B8H3w60nFY2g8cJIuH7JDpsALXySGtwGJ0p2LSjLgay3NdIpqq5SoOBe46bKDW2iq25irHCr8wjomUS2g==
@@ -11339,10 +11328,15 @@ typeorm@^0.2.18:
     yargonaut "^1.1.2"
     yargs "^13.2.1"
 
-typescript@^3.5.1, typescript@^3.6.2:
+typescript@^3.5.1:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.2.tgz#105b0f1934119dde543ac8eb71af3a91009efe54"
   integrity sha512-lmQ4L+J6mnu3xweP8+rOrUwzmN+MRAj7TgtJtDaXE5PMyX2kCrklhg3rvOsOIfNeAWMQWO2F1GPc1kMD2vLAfw==
+
+typescript@^3.6.3:
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
+  integrity sha512-N7bceJL1CtRQ2RiG0AQME13ksR7DiuQh/QehubYcghzv20tnh+MQnQIuJddTmsbqYj+dztchykemz0zFzlvdQw==
 
 ua-parser-js@^0.7.20:
   version "0.7.20"
@@ -11603,6 +11597,11 @@ utila@^0.4.0, utila@~0.4:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
   integrity sha1-ihagXURWV6Oupe7MWxKk+lN5dyw=
+
+utility-types@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.7.0.tgz#51f1c29fa35d4267488345706efcf3f68f2b1933"
+  integrity sha512-mqRJXN7dEArK/NZNJUubjr9kbFFVZcmF/JHDc9jt5O/aYXUVmopHYujDMhLmLil1Bxo2+khe6KAIVvDH9Yc4VA==
 
 utils-merge@1.0.1:
   version "1.0.1"
@@ -12066,25 +12065,14 @@ widest-line@^3.1.0:
   dependencies:
     string-width "^4.0.0"
 
-winston-compat@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/winston-compat/-/winston-compat-0.1.4.tgz#599b4ce807ffe728713ecc25ede3f6b89425b739"
-  integrity sha512-mMEfFsSm6GmkFF+f4/0UJtG4N1vSaczGmXLVJYmS/+u2zUaIPcw2ZRuwUg2TvVBjswgiraN+vNnAG8z4fRUZ4w==
+winston-daily-rotate-file@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-4.1.0.tgz#bddd2e932d60cde96a4a3c437fa39acdc909b475"
+  integrity sha512-Y3wcdrgNwC75Lc2BiFDZUyfxNjyhqVzEou8uOyZMUkDJ23/UN+rq8arpJDaXwX512GIM7g6NpTDPac29fsCvcQ==
   dependencies:
-    cycle "~1.0.3"
-    logform "^1.6.0"
-    triple-beam "^1.2.0"
-
-winston-daily-rotate-file@^3.10.0:
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-3.10.0.tgz#c49047d227f82a1f191c8298772aaeb7b67d5906"
-  integrity sha512-KO8CfbI2CvdR3PaFApEH02GPXiwJ+vbkF1mCkTlvRIoXFI8EFlf1ACcuaahXTEiDEKCii6cNe95gsL4ZkbnphA==
-  dependencies:
-    file-stream-rotator "^0.4.1"
+    file-stream-rotator "^0.5.5"
     object-hash "^1.3.0"
-    semver "^6.2.0"
     triple-beam "^1.3.0"
-    winston-compat "^0.1.4"
     winston-transport "^4.2.0"
 
 winston-loki@^4.0.1:

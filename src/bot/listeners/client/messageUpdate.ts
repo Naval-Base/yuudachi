@@ -11,11 +11,11 @@ export default class MessageUpdateListener extends Listener {
 		});
 	}
 
-	public async exec(oldMessage: Message, newMessage: Message): Promise<Message | Message[] | void> {
+	public async exec(oldMessage: Message, newMessage: Message) {
 		if (oldMessage.author!.bot || newMessage.author!.bot) return;
 		if (!newMessage.guild) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
-		const guildLogs = this.client.settings.get(newMessage.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(newMessage.guild, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;

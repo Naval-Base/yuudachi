@@ -6,5 +6,5 @@ export class Setting {
 	public guild!: string;
 
 	@Column({ 'type': 'jsonb', 'default': (): string => "'{}'" })
-	public settings: any;
+	public settings!: any;
 }

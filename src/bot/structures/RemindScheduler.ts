@@ -1,60 +1,72 @@
 import YukikazeClient from '../client/YukikazeClient';
-import { TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Repository, LessThan } from 'typeorm';
 import { Reminder } from '../models/Reminders';
 import { TOPICS, EVENTS } from '../util/logger';
 
 export default class RemindScheduler {
-	protected client: YukikazeClient;
+	private checkRate: number;
 
-	protected repo: Repository<Reminder>;
+	private checkInterval!: NodeJS.Timeout;
 
-	protected checkRate: number;
+	private queued = new Map();
 
-	protected checkInterval!: NodeJS.Timeout;
+	public static embed(message: Message, reminders: Reminder[]) {
+		const truncate = (str: string, len: number) => str.length > len ? `${str.slice(0, len)}…` : str;
+		return new MessageEmbed()
+			.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
+			.setColor(0x30A9ED)
+			.setThumbnail(message.author!.displayAvatarURL())
+			.setDescription(reminders.length
+				? reminders.sort((a, b) => a.triggers_at.getTime() - b.triggers_at.getTime()).map(
+					(reminder, i) => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
+				).join('\n')
+				: 'No reminders');
+	}
 
-	protected queuedSchedules = new Map();
-
-	public constructor(client: YukikazeClient, repository: Repository<Reminder>, { checkRate = 5 * 60 * 1000 } = {}) {
-		this.client = client;
-		this.repo = repository;
+	public constructor(
+		private client: YukikazeClient,
+		private repo: Repository<Reminder>,
+		{ checkRate = 5 * 60 * 1000 } = {}
+	) {
 		this.checkRate = checkRate;
 	}
 
-	public async addReminder(reminder: Reminder): Promise<void> {
-		const rmd = new Reminder();
-		rmd.user = reminder.user;
-		if (reminder.channel) rmd.channel = reminder.channel;
-		rmd.reason = reminder.reason;
-		rmd.trigger = reminder.trigger;
-		rmd.triggers_at = reminder.triggers_at;
+	public async add(reminder: Omit<Reminder, 'id'>) {
+		const rmd = this.repo.create({
+			user: reminder.user,
+			channel: reminder.channel,
+			reason: reminder.reason,
+			trigger: reminder.trigger,
+			triggers_at: reminder.triggers_at
+		});
 		const dbReminder = await this.repo.save(rmd);
 		if (dbReminder.triggers_at.getTime() < (Date.now() + this.checkRate)) {
-			this.queueReminder(dbReminder);
+			this.queue(dbReminder);
 		}
 	}
 
-	public cancelReminder(id: string): boolean {
-		const schedule = this.queuedSchedules.get(id);
+	public cancel(id: string) {
+		const schedule = this.queued.get(id);
 		if (schedule) this.client.clearTimeout(schedule);
-		return this.queuedSchedules.delete(id);
+		return this.queued.delete(id);
 	}
 
-	public async deleteReminder(reminder: Reminder): Promise<Reminder> {
-		const schedule = this.queuedSchedules.get(reminder.id);
+	public async delete(reminder: Reminder) {
+		const schedule = this.queued.get(reminder.id);
 		if (schedule) this.client.clearTimeout(schedule);
-		this.queuedSchedules.delete(reminder.id);
+		this.queued.delete(reminder.id);
 		const deleted = await this.repo.remove(reminder);
 		return deleted;
 	}
 
-	public queueReminder(reminder: Reminder): void {
-		this.queuedSchedules.set(reminder.id, this.client.setTimeout((): void => {
-			this.runReminder(reminder);
+	public queue(reminder: Reminder) {
+		this.queued.set(reminder.id, this.client.setTimeout((): void => {
+			this.run(reminder);
 		}, reminder.triggers_at.getTime() - Date.now()));
 	}
 
-	public async runReminder(reminder: Reminder): Promise<void> {
+	public async run(reminder: Reminder) {
 		try {
 			const reason = reminder.reason || `${reminder.channel ? 'y' : 'Y'}ou wanted me to remind you around this time!`;
 			const content = `${reminder.channel ? `<@${reminder.user}>, ` : ''} ${reason}\n\n<${reminder.trigger}>`;
@@ -71,28 +83,28 @@ export default class RemindScheduler {
 		}
 
 		try {
-			await this.deleteReminder(reminder);
+			await this.delete(reminder);
 		} catch (error) {
 			this.client.logger.error(error, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.REMINDER });
 		}
 	}
 
-	public async init(): Promise<void> {
+	public async init() {
 		await this._check();
 		this.checkInterval = this.client.setInterval(this._check.bind(this), this.checkRate);
 	}
 
-	private async _check(): Promise<void> {
+	private async _check() {
 		const reminders = await this.repo.find({ triggers_at: LessThan(new Date(Date.now() + this.checkRate)) });
 		const now = new Date();
 
 		for (const reminder of reminders) {
-			if (this.queuedSchedules.has(reminder.id)) continue;
+			if (this.queued.has(reminder.id)) continue;
 
 			if (reminder.triggers_at < now) {
-				this.runReminder(reminder);
+				this.run(reminder);
 			} else {
-				this.queueReminder(reminder);
+				this.queue(reminder);
 			}
 		}
 	}

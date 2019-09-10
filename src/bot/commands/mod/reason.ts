@@ -20,8 +20,8 @@ export default class ReasonCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: (message: Message): string => `${message.author}, what case do you want to add a reason to?`,
-						retry: (message: Message): string => `${message.author}, please enter a case number.`
+						start: (message: Message) => `${message.author}, what case do you want to add a reason to?`,
+						retry: (message: Message) => `${message.author}, please enter a case number.`
 					}
 				},
 				{
@@ -40,16 +40,16 @@ export default class ReasonCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { caseNum, ref, reason }: { caseNum: number | string; ref: number; reason: string }): Promise<Message | Message[]> {
-		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0);
-		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum;
+	public async exec(message: Message, { caseNum, ref, reason }: { caseNum: number | string; ref: number; reason: string }) {
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
+		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum as number;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
 		const casesRepo = this.client.db.getRepository(Case);
 		const dbCase = await casesRepo.findOne({ case_id: caseToFind });
@@ -60,9 +60,9 @@ export default class ReasonCommand extends Command {
 			return message.reply('you\'d be wrong in thinking I would let you fiddle with other peoples achievements!');
 		}
 
-		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		if (modLogChannel) {
-			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
+			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message!);
 			if (!caseEmbed) return message.reply('looks like the message doesn\'t exist anymore!');
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());

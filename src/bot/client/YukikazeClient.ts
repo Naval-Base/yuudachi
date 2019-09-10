@@ -5,6 +5,7 @@ import { Logger } from 'winston';
 import { logger, TOPICS, EVENTS } from '../util/logger';
 import database from '../structures/Database';
 import TypeORMProvider from '../structures/SettingsProvider';
+import CaseHandler from '../structures/CaseHandler';
 import MuteScheduler from '../structures/MuteScheduler';
 import RemindScheduler from '../structures/RemindScheduler';
 import { Setting } from '../models/Settings';
@@ -18,7 +19,6 @@ import { parse } from 'url';
 import { init } from '@sentry/node';
 import { RewriteFrames } from '@sentry/integrations';
 import { Server as IPCServer, NodeMessage } from 'veza';
-import { VERSION } from '../util/version';
 import { __rootdir__ } from '../root';
 
 declare module 'discord-akairo' {
@@ -31,7 +31,7 @@ declare module 'discord-akairo' {
 		commandHandler: CommandHandler;
 		config: YukikazeOptions;
 		webhooks: Collection<string, Webhook>;
-		cachedCases: Set<string>;
+		caseHandler: CaseHandler;
 		muteScheduler: MuteScheduler;
 		remindScheduler: RemindScheduler;
 		prometheus: {
@@ -120,7 +120,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public config: YukikazeOptions;
 
-	public cachedCases = new Set<string>();
+	public caseHandler!: CaseHandler;
 
 	public muteScheduler!: MuteScheduler;
 
@@ -133,7 +133,7 @@ export default class YukikazeClient extends AkairoClient {
 		register
 	};
 
-	public promServer = createServer((req, res): void => {
+	public promServer = createServer((req, res) => {
 		if (parse(req.url!).pathname === '/metrics') {
 			res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
 			res.write(this.prometheus.register.metrics());
@@ -148,11 +148,11 @@ export default class YukikazeClient extends AkairoClient {
 			disabledEvents: ['TYPING_START']
 		});
 
-		this.on('message', (): void => {
+		this.on('message', () => {
 			this.prometheus.messagesCounter.inc();
 		});
 
-		this.commandHandler.resolver.addType('tag', async (message, phrase): Promise<any> => {
+		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
@@ -168,7 +168,7 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag || Flag.fail(phrase);
 		});
-		this.commandHandler.resolver.addType('existingTag', async (message, phrase): Promise<any> => {
+		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const tagsRepo = this.db.getRepository(Tag);
@@ -184,7 +184,7 @@ export default class YukikazeClient extends AkairoClient {
 
 			return tag ? Flag.fail(phrase) : phrase;
 		});
-		this.commandHandler.resolver.addType('tagContent', async (message, phrase): Promise<any> => {
+		this.commandHandler.resolver.addType('tagContent', async (message, phrase) => {
 			if (!phrase) phrase = '';
 			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
@@ -198,7 +198,7 @@ export default class YukikazeClient extends AkairoClient {
 			init({
 				dsn: process.env.SENTRY,
 				environment: process.env.NODE_ENV,
-				release: VERSION,
+				release: process.env.VERSION!,
 				serverName: 'yukikaze_bot',
 				integrations: [
 					new RewriteFrames({
@@ -207,7 +207,7 @@ export default class YukikazeClient extends AkairoClient {
 				]
 			});
 		} else {
-			process.on('unhandledRejection', (err: any): Logger => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
+			process.on('unhandledRejection', (err: any) => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
 		}
 
 		if (process.env.LOGS) {
@@ -215,7 +215,7 @@ export default class YukikazeClient extends AkairoClient {
 		}
 	}
 
-	private async _init(): Promise<void> {
+	private async _init() {
 		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		this.commandHandler.useListenerHandler(this.listenerHandler);
 		this.listenerHandler.setEmitters({
@@ -244,6 +244,8 @@ export default class YukikazeClient extends AkairoClient {
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
 		this.logger.info('Bot settings initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.caseHandler = new CaseHandler(this, this.db.getRepository(Case));
+		this.logger.info('Case handler initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Case));
 		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();
@@ -252,7 +254,7 @@ export default class YukikazeClient extends AkairoClient {
 		this.logger.info('Remind scheduler initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 	}
 
-	public async start(): Promise<string> {
+	public async start() {
 		await this._init();
 		return this.login(this.config.token);
 	}

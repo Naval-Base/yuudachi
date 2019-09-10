@@ -8,9 +8,9 @@ export default class ModerationInhibitor extends Inhibitor {
 		});
 	}
 
-	public exec(message: Message): boolean {
+	public exec(message: Message) {
 		if (message.util!.parsed! && message.util!.parsed!.command && message.util!.parsed!.command!.categoryID !== 'mod') return false;
-		if (!this.client.settings.get(message.guild!, 'moderation', undefined)) {
+		if (!this.client.settings.get<boolean>(message.guild!, 'moderation', undefined)) {
 			return true;
 		}
 		return false;

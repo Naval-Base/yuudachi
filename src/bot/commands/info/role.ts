@@ -57,16 +57,16 @@ export default class RoleInfoCommand extends Command {
 					'id': 'role',
 					'match': 'content',
 					'type': 'role',
-					'default': (message: Message): Role => message.member!.roles.highest
+					'default': (message: Message) => message.member!.roles.highest
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { role }: { role: Role }): Promise<Message | Message[]> {
+	public async exec(message: Message, { role }: { role: Role }) {
 		const permissions = Object.keys(PERMISSIONS).filter(
 			// @ts-ignore
-			(permission): string => role.permissions.serialize()[permission]
+			permission => role.permissions.serialize()[permission]
 		);
 		const embed = new MessageEmbed()
 			.setColor(3447003)
@@ -83,7 +83,7 @@ export default class RoleInfoCommand extends Command {
 			.addField(
 				'❯ Permissions',
 				stripIndents`
-				${permissions.map((permission): string => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
+				${permissions.map(permission => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
 			`
 			)
 			.setThumbnail(message.guild!.iconURL()!);

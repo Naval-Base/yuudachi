@@ -11,7 +11,7 @@ export default class CommandFinishedListener extends Listener {
 		});
 	}
 
-	public exec(message: Message, command: Command, args: any): void {
+	public exec(message: Message, command: Command, args: any) {
 		this.client.logger.info(`Finished ${command.id} on ${message.guild ? `${message.guild.name} (${message.guild.id})` : 'DM'}${Object.keys(args).length && !args.command ? ` with arguments ${JSON.stringify(args)}` : ''}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.COMMAND_FINISHED });
 	}
 }

@@ -19,20 +19,20 @@ export default class TagEditCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const restrictedRoles = this.client.settings.get(message.guild!, 'restrictedRoles', undefined);
+	public userPermissions(message: Message) {
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
-	public *args(): object {
+	public *args() {
 		const tag = yield {
 			type: 'tag',
 			prompt: {
-				start: (message: Message): string => `${message.author}, what tag do you want to edit?`,
-				retry: (message: Message, { failure }: { failure: { value: string } }): string => `${message.author}, a tag with the name **${failure.value}** does not exist.`
+				start: (message: Message) => `${message.author}, what tag do you want to edit?`,
+				retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
 			}
 		};
 
@@ -56,7 +56,7 @@ export default class TagEditCommand extends Command {
 					match: 'rest',
 					type: 'tagContent',
 					prompt: {
-						start: (message: Message): string => `${message.author}, what should the new content be?`
+						start: (message: Message) => `${message.author}, what should the new content be?`
 					}
 				}
 		);
@@ -64,7 +64,7 @@ export default class TagEditCommand extends Command {
 		return { tag, hoist, unhoist, content };
 	}
 
-	public async exec(message: Message, { tag, hoist, unhoist, content }: { tag: Tag; hoist: boolean; unhoist: boolean; content: string }): Promise<Message | Message[]> {
+	public async exec(message: Message, { tag, hoist, unhoist, content }: { tag: Tag; hoist: boolean; unhoist: boolean; content: string }) {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
 		if (tag.user !== message.author!.id && !staffRole) {
 			return message.util!.reply('Losers are only allowed to edit their own tags! Hah hah hah!');

@@ -32,7 +32,7 @@ export default class GitHubSearchCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { repo, commit }: { repo: string; commit: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { repo, commit }: { repo: string; commit: string }) {
 		if (!GITHUB_API_KEY) {
 			return message.reply(oneLine`
 				my master has not set a valid GitHub API key,
@@ -90,7 +90,7 @@ export default class GitHubSearchCommand extends Command {
 				.setThumbnail(body.author ? body.author.avatar_url : '')
 				.setTimestamp(new Date(body.commit.author.date));
 
-			if (message.guild && !(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+			if (!(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 				return message.util!.send(embed);
 			}
 			const msg = await message.util!.send(embed) as Message;
@@ -98,7 +98,7 @@ export default class GitHubSearchCommand extends Command {
 			let react;
 			try {
 				react = await msg.awaitReactions(
-					(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
+					(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 					{ max: 1, time: 10000, errors: ['time'] }
 				);
 			} catch (error) {
@@ -218,7 +218,7 @@ export default class GitHubSearchCommand extends Command {
 			);
 		}
 
-		if (message.guild && !(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (!(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
 			return message.util!.send(embed);
 		}
 		const msg = await message.util!.send(embed) as Message;

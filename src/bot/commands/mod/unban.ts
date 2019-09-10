@@ -1,7 +1,6 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, User, TextChannel } from 'discord.js';
-import Util from '../../util';
-import { Case } from '../../models/Cases';
+import { ACTIONS, COLORS } from '../../util';
 
 export default class UnbanCommand extends Command {
 	public constructor() {
@@ -19,13 +18,13 @@ export default class UnbanCommand extends Command {
 			args: [
 				{
 					id: 'user',
-					type: async (_, id): Promise<User> => {
+					type: async (_, id) => {
 						const user = await this.client.users.fetch(id);
 						return user;
 					},
 					prompt: {
-						start: (message: Message): string => `${message.author}, what member do you want to unban?`,
-						retry: (message: Message): string => `${message.author}, please mention a member.`
+						start: (message: Message) => `${message.author}, what member do you want to unban?`,
+						retry: (message: Message) => `${message.author}, please mention a member.`
 					}
 				},
 				{
@@ -45,28 +44,28 @@ export default class UnbanCommand extends Command {
 	}
 
 	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, 'modRole', undefined);
+	public userPermissions(message: Message) {
+		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { user, ref, reason }: { user: User; ref: number; reason: string }): Promise<Message | Message[] | void> {
+	public async exec(message: Message, { user, ref, reason }: { user: User; ref: number; reason: string }) {
 		if (user.id === message.author!.id) return;
 
 		const key = `${message.guild!.id}:${user.id}:UNBAN`;
-		if (this.client.cachedCases.has(key)) {
+		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
-		this.client.cachedCases.add(key);
+		this.client.caseHandler.cachedCases.add(key);
 
-		const totalCases = this.client.settings.get(message.guild!, 'caseTotal', 0) as number + 1;
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
 			await message.guild!.members.unban(user, `Unbanned by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
-			this.client.cachedCases.delete(key);
+			this.client.caseHandler.cachedCases.delete(key);
 			return message.reply(`there was an error unbanning this user: \`${error}\``);
 		}
 
@@ -77,26 +76,33 @@ export default class UnbanCommand extends Command {
 			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 		}
 
-		const casesRepo = this.client.db.getRepository(Case);
-
-		const modLogChannel = this.client.settings.get(message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
 		let modMessage;
 		if (modLogChannel) {
-			const embed = (await Util.logEmbed({ message, db: casesRepo, channel: modLogChannel, member: user, action: 'Unban', caseNum: totalCases, reason, ref })).setColor(Util.CONSTANTS.COLORS.UNBAN);
-			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed) as Message;
+			const embed = (
+				await this.client.caseHandler.log({
+					member: user,
+					action: 'Unban',
+					caseNum: totalCases,
+					reason,
+					message,
+					ref
+				})
+			).setColor(COLORS.UNBAN);
+			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
-		const dbCase = new Case();
-		dbCase.guild = message.guild!.id;
-		if (modMessage) dbCase.message = modMessage.id;
-		dbCase.case_id = totalCases;
-		dbCase.target_id = user.id;
-		dbCase.target_tag = user.tag;
-		dbCase.mod_id = message.author!.id;
-		dbCase.mod_tag = message.author!.tag;
-		dbCase.action = Util.CONSTANTS.ACTIONS.UNBAN;
-		dbCase.reason = reason;
-		await casesRepo.save(dbCase);
+		await this.client.caseHandler.create({
+			guild: message.guild!.id,
+			message: modMessage ? modMessage.id : undefined,
+			case_id: totalCases,
+			target_id: user.id,
+			target_tag: user.tag,
+			mod_id: message.author!.id,
+			mod_tag: message.author!.tag,
+			action: ACTIONS.UNBAN,
+			reason
+		});
 
 		return message.util!.send(`Successfully unbanned **${user.tag}**`);
 	}

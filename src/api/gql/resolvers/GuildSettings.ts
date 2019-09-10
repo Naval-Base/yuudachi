@@ -55,7 +55,7 @@ export class GuildSettingsResolver {
 	public async setting(
 		@Arg('id') id: string,
 		@Ctx() context: Context
-	): Promise<GuildSettings | undefined> {
+	) {
 		const settings = context.db.getRepository(Setting);
 		const dbGuild = await settings.findOne(id);
 		if (!dbGuild) return undefined;

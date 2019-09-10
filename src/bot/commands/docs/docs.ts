@@ -22,7 +22,7 @@ export default class DocsCommand extends Command {
 		});
 	}
 
-	public *args(): object {
+	public *args() {
 		const defaultDocs = yield {
 			match: 'option',
 			flag: '--default='
@@ -37,7 +37,7 @@ export default class DocsCommand extends Command {
 			match: 'rest',
 			type: 'lowercase',
 			prompt: {
-				start: (message: Message): string => `${message.author}, what would you like to search?`,
+				start: (message: Message) => `${message.author}, what would you like to search?`,
 				optional: defaultDocs ? true : false
 			}
 		};
@@ -45,7 +45,7 @@ export default class DocsCommand extends Command {
 		return { defaultDocs, force, query };
 	}
 
-	public async exec(message: Message, { defaultDocs, query, force }: { defaultDocs: string; query: string; force: boolean }): Promise<Message | Message[]> {
+	public async exec(message: Message, { defaultDocs, query, force }: { defaultDocs: string; query: string; force: boolean }) {
 		if (defaultDocs) {
 			const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
 			if (!staffRole) return message.util!.reply('what makes you think you can do that, huh?');
@@ -54,7 +54,7 @@ export default class DocsCommand extends Command {
 		}
 
 		const q = query.split(' ');
-		const docs = this.client.settings.get(message.guild!, 'defaultDocs', 'stable');
+		const docs = this.client.settings.get<string>(message.guild!, 'defaultDocs', 'stable');
 		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : docs;
 		if (source === '11.5-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
@@ -73,7 +73,7 @@ export default class DocsCommand extends Command {
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
+				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
 				{ max: 1, time: 5000, errors: ['time'] }
 			);
 		} catch (error) {

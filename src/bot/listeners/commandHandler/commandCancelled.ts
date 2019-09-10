@@ -11,7 +11,7 @@ export default class CommandCancelledListener extends Listener {
 		});
 	}
 
-	public exec(message: Message, command: Command): void {
+	public exec(message: Message, command: Command) {
 		this.client.logger.info(`Cancelled ${command.id} on ${message.guild ? `${message.guild.name} (${message.guild.id})` : 'DM'}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.COMMAND_CANCELLED });
 	}
 }

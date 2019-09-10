@@ -11,9 +11,9 @@ export default class MessageTokenFilteringListener extends Listener {
 		});
 	}
 
-	public async exec(message: Message): Promise<Message | Message[] | void> {
+	public async exec(message: Message) {
 		if (!message.guild) return;
-		const tokenFiltering = this.client.settings.get(message.guild, 'tokenFiltering', undefined);
+		const tokenFiltering = this.client.settings.get<boolean>(message.guild, 'tokenFiltering', undefined);
 		if (!tokenFiltering) return;
 		// Bot ID: 24, Timestamp: 6, Cryptographic: Rest
 		const matches = /([\w-]+={0,2})\.([\w-]+={0,2})\.([\w-]+={0,2})/g.exec(message.content);

@@ -12,13 +12,13 @@ export default class MessageDeleteBulkListener extends Listener {
 		});
 	}
 
-	public async exec(messages: Collection<string, Message>): Promise<Message | Message[] | void> {
+	public async exec(messages: Collection<string, Message>) {
 		if (messages.first()!.author!.bot) return;
-		const guildLogs = this.client.settings.get(messages.first()!.guild!, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(messages.first()!.guild!, 'guildLogs', undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
-			const output = messages.reduce((out: string, msg): string => {
+			const output = messages.reduce((out, msg) => {
 				const attachment = msg.attachments.first();
 				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author!.tag} (${msg.author!.id}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${attachment ? `\r\n${attachment.url}` : ''}\r\n`;
 				return out;

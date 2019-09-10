@@ -24,21 +24,21 @@ export default class EmojiInfoCommand extends Command {
 				{
 					id: 'emoji',
 					match: 'content',
-					type: async (message, content): Promise<any> => {
+					type: async (message, content) => {
 						if (EMOJI_REGEX.test(content)) [, content] = content.match(EMOJI_REGEX)!;
-						if (!isNaN(content as any)) return message.guild!.emojis.get(content);
-						return message.guild!.emojis.find((e: GuildEmoji): boolean => e.name === content) || emojis.find(content);
+						if (!isNaN(content as unknown as number)) return message.guild!.emojis.get(content);
+						return message.guild!.emojis.find(e => e.name === content) || emojis.find(content);
 					},
 					prompt: {
-						start: (message: Message): string => `${message.author}, what emoji would you like information about?`,
-						retry: (message: Message): string => `${message.author}, please provide a valid emoji!`
+						start: (message: Message) => `${message.author}, what emoji would you like information about?`,
+						retry: (message: Message) => `${message.author}, please provide a valid emoji!`
 					}
 				}
 			]
 		});
 	}
 
-	public async exec(message: Message, { emoji }: { emoji: any }): Promise<Message | Message[]> {
+	public async exec(message: Message, { emoji }: { emoji: GuildEmoji | emojis.Emoji }) {
 		const embed = new MessageEmbed()
 			.setColor(3447003);
 
@@ -60,7 +60,7 @@ export default class EmojiInfoCommand extends Command {
 				stripIndents`
 				• Name: \`${emoji.key}\`
 				• Raw: \`${emoji.emoji}\`
-				• Unicode: \`${punycode.ucs2.decode(emoji.emoji).map((e: any): string => `\\u${e.toString(16).toUpperCase().padStart(4, '0')}`).join('')}\`
+				• Unicode: \`${punycode.ucs2.decode(emoji.emoji).map((e: any) => `\\u${e.toString(16).toUpperCase().padStart(4, '0')}`).join('')}\`
 				`
 			);
 		}

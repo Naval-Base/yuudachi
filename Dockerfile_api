@@ -20,4 +20,5 @@ ENV NODE_ENV= \
 	SENTRY= \
 	LOKI= \
 	GITHUB_API_KEY=
+ENV VERSION=
 CMD ["node", "dist/index.js"]
