@@ -1,13 +1,13 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
-import { ACTIONS, COLORS } from '../../util';
+import { ACTIONS, COLORS } from '../../../util';
 
-export default class RestrictTagCommand extends Command {
+export default class RestrictEmbedCommand extends Command {
 	public constructor() {
-		super('restrict-tag', {
+		super('restrict-embed', {
 			category: 'mod',
 			description: {
-				content: 'Restrict a members ability to create/edit/delete/download/list/search tags.',
+				content: 'Restrict a members ability to post embeds/upload files.',
 				usage: '<member> [--ref=number] [...reason]'
 			},
 			channel: 'guild',
@@ -53,10 +53,10 @@ export default class RestrictTagCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const restrictRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictRoles', undefined);
+		const restrictRoles = this.client.settings.get<{ embed: string }>(message.guild!, 'restrictRoles', undefined);
 		if (!restrictRoles) return message.reply('there are no restricted roles configured on this server.');
 
-		const key = `${message.guild!.id}:${member.id}:TAG`;
+		const key = `${message.guild!.id}:${member.id}:EMBED`;
 		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
@@ -65,7 +65,7 @@ export default class RestrictTagCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
-			await member.roles.add(restrictRoles.tag, `Tag restricted by ${message.author!.tag} | Case #${totalCases}`);
+			await member.roles.add(restrictRoles.embed, `Embed restricted by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(key);
 			return message.reply(`there was an error embed retricting this member: \`${error}\``);
@@ -84,13 +84,13 @@ export default class RestrictTagCommand extends Command {
 			const embed = (
 				await this.client.caseHandler.log({
 					member,
-					action: 'Tag restriction',
+					action: 'Embed restriction',
 					caseNum: totalCases,
 					reason,
 					message,
 					ref
 				})
-			).setColor(COLORS.TAG);
+			).setColor(COLORS.EMBED);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -102,10 +102,10 @@ export default class RestrictTagCommand extends Command {
 			target_tag: member.user.tag,
 			mod_id: message.author!.id,
 			mod_tag: message.author!.tag,
-			action: ACTIONS.TAG,
+			action: ACTIONS.EMBED,
 			reason
 		});
 
-		return message.util!.send(`Successfully tag restricted **${member.user.tag}**`);
+		return message.util!.send(`Successfully embed restricted **${member.user.tag}**`);
 	}
 }

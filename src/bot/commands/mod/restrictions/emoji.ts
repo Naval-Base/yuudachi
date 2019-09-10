@@ -1,13 +1,13 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
-import { ACTIONS, COLORS } from '../../util';
+import { ACTIONS, COLORS } from '../../../util';
 
-export default class RestrictReactionCommand extends Command {
+export default class RestrictEmojiCommand extends Command {
 	public constructor() {
-		super('restrict-reaction', {
+		super('restrict-emoji', {
 			category: 'mod',
 			description: {
-				content: 'Restrict a members ability to use reactions.',
+				content: 'Restrict a members ability to use custom emoji.',
 				usage: '<member> [--ref=number] [...reason]'
 			},
 			channel: 'guild',
@@ -53,10 +53,10 @@ export default class RestrictReactionCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const restrictRoles = this.client.settings.get<{ reaction: string }>(message.guild!, 'restrictRoles', undefined);
+		const restrictRoles = this.client.settings.get<{ emoji: string }>(message.guild!, 'restrictRoles', undefined);
 		if (!restrictRoles) return message.reply('there are no restricted roles configured on this server.');
 
-		const key = `${message.guild!.id}:${member.id}:REACTION`;
+		const key = `${message.guild!.id}:${member.id}:EMOJI`;
 		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
@@ -65,10 +65,10 @@ export default class RestrictReactionCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
-			await member.roles.add(restrictRoles.reaction, `Embed restricted by ${message.author!.tag} | Case #${totalCases}`);
+			await member.roles.add(restrictRoles.emoji, `Embed restricted by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(key);
-			return message.reply(`there was an error muting this member: \`${error}\``);
+			return message.reply(`there was an error emoji restricting this member: \`${error}\``);
 		}
 
 		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
@@ -84,13 +84,13 @@ export default class RestrictReactionCommand extends Command {
 			const embed = (
 				await this.client.caseHandler.log({
 					member,
-					action: 'Reaction restriction',
+					action: 'Emoji restriction',
 					caseNum: totalCases,
 					reason,
 					message,
 					ref
 				})
-			).setColor(COLORS.REACTION);
+			).setColor(COLORS.EMOJI);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -102,10 +102,10 @@ export default class RestrictReactionCommand extends Command {
 			target_tag: member.user.tag,
 			mod_id: message.author!.id,
 			mod_tag: message.author!.tag,
-			action: ACTIONS.REACTION,
+			action: ACTIONS.EMOJI,
 			reason
 		});
 
-		return message.util!.send(`Successfully reaction restricted **${member.user.tag}**`);
+		return message.util!.send(`Successfully emoji restricted **${member.user.tag}**`);
 	}
 }

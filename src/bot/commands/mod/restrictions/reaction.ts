@@ -1,13 +1,13 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, GuildMember, TextChannel } from 'discord.js';
-import { ACTIONS, COLORS } from '../../util';
+import { ACTIONS, COLORS } from '../../../util';
 
-export default class RestrictEmbedCommand extends Command {
+export default class RestrictReactionCommand extends Command {
 	public constructor() {
-		super('restrict-embed', {
+		super('restrict-reaction', {
 			category: 'mod',
 			description: {
-				content: 'Restrict a members ability to post embeds/upload files.',
+				content: 'Restrict a members ability to use reactions.',
 				usage: '<member> [--ref=number] [...reason]'
 			},
 			channel: 'guild',
@@ -53,10 +53,10 @@ export default class RestrictEmbedCommand extends Command {
 			return message.reply('nuh-uh! You know you can\'t do this.');
 		}
 
-		const restrictRoles = this.client.settings.get<{ embed: string }>(message.guild!, 'restrictRoles', undefined);
+		const restrictRoles = this.client.settings.get<{ reaction: string }>(message.guild!, 'restrictRoles', undefined);
 		if (!restrictRoles) return message.reply('there are no restricted roles configured on this server.');
 
-		const key = `${message.guild!.id}:${member.id}:EMBED`;
+		const key = `${message.guild!.id}:${member.id}:REACTION`;
 		if (this.client.caseHandler.cachedCases.has(key)) {
 			return message.reply('that user is currently being moderated by someone else.');
 		}
@@ -65,10 +65,10 @@ export default class RestrictEmbedCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
 
 		try {
-			await member.roles.add(restrictRoles.embed, `Embed restricted by ${message.author!.tag} | Case #${totalCases}`);
+			await member.roles.add(restrictRoles.reaction, `Embed restricted by ${message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(key);
-			return message.reply(`there was an error embed retricting this member: \`${error}\``);
+			return message.reply(`there was an error muting this member: \`${error}\``);
 		}
 
 		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
@@ -84,13 +84,13 @@ export default class RestrictEmbedCommand extends Command {
 			const embed = (
 				await this.client.caseHandler.log({
 					member,
-					action: 'Embed restriction',
+					action: 'Reaction restriction',
 					caseNum: totalCases,
 					reason,
 					message,
 					ref
 				})
-			).setColor(COLORS.EMBED);
+			).setColor(COLORS.REACTION);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -102,10 +102,10 @@ export default class RestrictEmbedCommand extends Command {
 			target_tag: member.user.tag,
 			mod_id: message.author!.id,
 			mod_tag: message.author!.tag,
-			action: ACTIONS.EMBED,
+			action: ACTIONS.REACTION,
 			reason
 		});
 
-		return message.util!.send(`Successfully embed restricted **${member.user.tag}**`);
+		return message.util!.send(`Successfully reaction restricted **${member.user.tag}**`);
 	}
 }

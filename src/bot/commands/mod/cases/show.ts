@@ -1,8 +1,8 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { ACTIONS, COLORS } from '../../util';
-import { Case } from '../../models/Cases';
+import { ACTIONS, COLORS } from '../../../util';
+import { Case } from '../../../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {
@@ -21,12 +21,12 @@ const ACTION_KEYS: ActionKeys = {
 	9: 'Warn'
 };
 
-export default class CaseDeleteCommand extends Command {
+export default class CaseCommand extends Command {
 	public constructor() {
-		super('case-delete', {
+		super('case-show', {
 			category: 'mod',
 			description: {
-				content: 'Delete a case from the database.',
+				content: 'Inspect a case, pulled from the database.',
 				usage: '<case>',
 				examples: ['1234']
 			},
@@ -38,14 +38,9 @@ export default class CaseDeleteCommand extends Command {
 					id: 'caseNum',
 					type: Argument.union('number', 'string'),
 					prompt: {
-						start: (message: Message) => `${message.author}, what case do you want to delete?`,
+						start: (message: Message) => `${message.author}, what case do you want to look up?`,
 						retry: (message: Message) => `${message.author}, please enter a case number.`
 					}
-				},
-				{
-					id: 'removeRole',
-					match: 'flag',
-					flag: ['--role']
 				}
 			]
 		});
@@ -59,8 +54,8 @@ export default class CaseDeleteCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { caseNum, removeRole }: { caseNum: number | string; removeRole: boolean }) {
-		let totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
+	public async exec(message: Message, { caseNum }: { caseNum: number | string }) {
+		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum as number;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
 		const casesRepo = this.client.db.getRepository(Case);
@@ -79,36 +74,12 @@ export default class CaseDeleteCommand extends Command {
 			.setColor(COLORS[color])
 			.setDescription(stripIndents`
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
-				**Action:** ${ACTION_KEYS[dbCase.action]}${dbCase.action === 5 && dbCase.action_duration ? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
+				**Action:** ${ACTION_KEYS[dbCase.action]}${dbCase.action === 5 ? `\n**Length:** ${ms(dbCase.action_duration!.getTime() - dbCase.createdAt.getTime(), { 'long': true })}` : ''}
 				${dbCase.reason ? `**Reason:** ${dbCase.reason}` : ''}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
 			`)
 			.setFooter(`Case ${dbCase.case_id}`)
 			.setTimestamp(new Date(dbCase.createdAt));
 
-		await message.channel.send('You sure you want me to delete this case?', { embed });
-		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author!.id, {
-			max: 1,
-			time: 10000
-		});
-
-		if (!responses || responses.size !== 1) return message.reply('timed out. Cancelled delete.');
-		const response = responses.first();
-
-		let sentMessage;
-		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
-			sentMessage = await message.channel.send(`Deleting **${dbCase.case_id}**...`);
-		} else {
-			return message.reply('cancelled delete.');
-		}
-
-		totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) - 1;
-		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
-
-		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
-		const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string }>(message.guild!, 'restrictRoles', undefined);
-
-		await this.client.caseHandler.delete(message, caseToFind, modLogChannel, restrictRoles, removeRole);
-
-		return sentMessage.edit(`Successfully deleted case **${dbCase.case_id}**`);
+		return message.util!.send(embed);
 	}
 }
