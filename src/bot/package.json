@@ -49,7 +49,7 @@
 		"eslint": "^6.3.0",
 		"eslint-config-marine": "^4.2.1",
 		"rimraf": "^3.0.0",
-		"typescript": "^3.6.2"
+		"typescript": "^3.6.3"
 	},
 	"optionalDependencies": {
 		"bufferutil": "^4.0.1",
