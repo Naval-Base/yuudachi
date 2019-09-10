@@ -56,10 +56,11 @@ interface Log {
 export default class CaseHandler {
 	public cachedCases = new Set<string>();
 
+	// eslint-disable-next-line no-useless-constructor
 	public constructor(
 		private client: YukikazeClient,
 		private repo: Repository<Case>
-	) {} // eslint-disable-line no-useless-constructor
+	) {}
 
 	public async create(newCase: Optional<Omit<Case, 'id' | 'createdAt'>, 'action_processed'>) {
 		return this.repo.insert({
