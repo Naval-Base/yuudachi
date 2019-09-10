@@ -1,0 +1,25 @@
+name: Publish container
+on: push
+jobs:
+  publish:
+    name: Build, tag, and publish container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Login to GitHub docker registry
+        uses: azure/container-actions/docker-login@master
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          login-server: 'docker.pkg.github.com'
+
+      - name: Build, tag, and push container
+        run: |
+          sed -i 's/ENV VERSION=/ENV VERSION='"`git rev-parse HEAD`"'/' Dockerfile*
+          docker build . --file Dockerfile_bot --tag docker.pkg.github.com/${{ github.repository }}/yukikaze_bot:latest
+          docker push docker.pkg.github.com/${{ github.repository }}/yukikaze_bot:latest
+
+      - name: Logout of GitHub docker registry
+        uses: azure/container-actions/docker-logout@master
