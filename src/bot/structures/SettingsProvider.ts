@@ -4,12 +4,8 @@ import { Repository } from 'typeorm';
 import { Setting } from '../models/Settings';
 
 export default class TypeORMProvider extends Provider {
-	public repo: Repository<Setting>;
-
-	public constructor(repository: Repository<Setting>) {
+	public constructor(public repo: Repository<Setting>) {
 		super();
-
-		this.repo = repository;
 	}
 
 	public async init() {

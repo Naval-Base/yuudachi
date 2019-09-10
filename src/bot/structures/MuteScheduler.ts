@@ -4,19 +4,17 @@ import { Case } from '../models/Cases';
 import { TOPICS, EVENTS } from '../util/logger';
 
 export default class MuteScheduler {
-	private client: YukikazeClient;
-
-	private repo: Repository<Case>;
-
 	private checkRate: number;
 
 	private checkInterval!: NodeJS.Timeout;
 
 	private queued = new Map();
 
-	public constructor(client: YukikazeClient, repository: Repository<Case>, { checkRate = 5 * 60 * 1000 } = {}) {
-		this.client = client;
-		this.repo = repository;
+	public constructor(
+		private client: YukikazeClient,
+		private repo: Repository<Case>,
+		{ checkRate = 5 * 60 * 1000 } = {}
+	) {
 		this.checkRate = checkRate;
 	}
 
@@ -24,19 +22,20 @@ export default class MuteScheduler {
 		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		if (reschedule) this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
 		if (!reschedule) {
-			const cs = new Case();
-			cs.guild = mute.guild;
-			if (mute.message) cs.message = mute.message;
-			cs.case_id = mute.case_id;
-			cs.target_id = mute.target_id;
-			cs.target_tag = mute.target_tag;
-			cs.mod_id = mute.mod_id;
-			cs.mod_tag = mute.mod_tag;
-			cs.action = mute.action;
-			cs.action_duration = mute.action_duration;
-			cs.action_processed = mute.action_processed;
-			cs.reason = mute.reason;
-			mute = await this.repo.save(cs);
+			mute = this.repo.create({
+				guild: mute.guild,
+				message: mute.message,
+				case_id: mute.case_id,
+				target_id: mute.target_id,
+				target_tag: mute.target_tag,
+				mod_id: mute.mod_id,
+				mod_tag: mute.mod_tag,
+				action: mute.action,
+				action_duration: mute.action_duration,
+				action_processed: mute.action_processed,
+				reason: mute.reason
+			});
+			mute = await this.repo.save(mute);
 		}
 		if (mute.action_duration!.getTime() < (Date.now() + this.checkRate)) {
 			this.queue(mute as Case);

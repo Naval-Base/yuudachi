@@ -5,10 +5,6 @@ import { Reminder } from '../models/Reminders';
 import { TOPICS, EVENTS } from '../util/logger';
 
 export default class RemindScheduler {
-	private client: YukikazeClient;
-
-	private repo: Repository<Reminder>;
-
 	private checkRate: number;
 
 	private checkInterval!: NodeJS.Timeout;
@@ -16,31 +12,34 @@ export default class RemindScheduler {
 	private queued = new Map();
 
 	public static embed(message: Message, reminders: Reminder[]) {
-		const truncate = (str: string, len: number): string => str.length > len ? `${str.slice(0, len)}…` : str;
+		const truncate = (str: string, len: number) => str.length > len ? `${str.slice(0, len)}…` : str;
 		return new MessageEmbed()
 			.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
 			.setColor(0x30A9ED)
 			.setThumbnail(message.author!.displayAvatarURL())
 			.setDescription(reminders.length
-				? reminders.sort((a, b): number => a.triggers_at.getTime() - b.triggers_at.getTime()).map(
-					(reminder: any, i: number): string => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
+				? reminders.sort((a, b) => a.triggers_at.getTime() - b.triggers_at.getTime()).map(
+					(reminder, i) => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
 				).join('\n')
 				: 'No reminders');
 	}
 
-	public constructor(client: YukikazeClient, repository: Repository<Reminder>, { checkRate = 5 * 60 * 1000 } = {}) {
-		this.client = client;
-		this.repo = repository;
+	public constructor(
+		private client: YukikazeClient,
+		private repo: Repository<Reminder>,
+		{ checkRate = 5 * 60 * 1000 } = {}
+	) {
 		this.checkRate = checkRate;
 	}
 
 	public async add(reminder: Omit<Reminder, 'id'>) {
-		const rmd = new Reminder();
-		rmd.user = reminder.user;
-		if (reminder.channel) rmd.channel = reminder.channel;
-		rmd.reason = reminder.reason;
-		rmd.trigger = reminder.trigger;
-		rmd.triggers_at = reminder.triggers_at;
+		const rmd = this.repo.create({
+			user: reminder.user,
+			channel: reminder.channel,
+			reason: reminder.reason,
+			trigger: reminder.trigger,
+			triggers_at: reminder.triggers_at
+		})
 		const dbReminder = await this.repo.save(rmd);
 		if (dbReminder.triggers_at.getTime() < (Date.now() + this.checkRate)) {
 			this.queue(dbReminder);
