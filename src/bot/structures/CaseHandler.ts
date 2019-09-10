@@ -59,7 +59,7 @@ export default class CaseHandler {
 	public constructor(
 		private client: YukikazeClient,
 		private repo: Repository<Case>
-	) {}
+	) {} // eslint-disable-line no-useless-constructor
 
 	public async create(newCase: Optional<Omit<Case, 'id' | 'createdAt'>, 'action_processed'>) {
 		return this.repo.insert({

@@ -39,7 +39,7 @@ export default class RemindScheduler {
 			reason: reminder.reason,
 			trigger: reminder.trigger,
 			triggers_at: reminder.triggers_at
-		})
+		});
 		const dbReminder = await this.repo.save(rmd);
 		if (dbReminder.triggers_at.getTime() < (Date.now() + this.checkRate)) {
 			this.queue(dbReminder);
