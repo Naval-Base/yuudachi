@@ -764,10 +764,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@discordjs/collection@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.0.tgz#7dbef30a19a7383816ef0ccbcf83f56078cc4994"
-  integrity sha512-MMJiDWw2amsyRTAFyIq7mVC5Ks014pc8Ldj4q96I24tzOVsMSvEt7kBeDs8/5O1+V9hCW1IsqBPOAr8j++2LjA==
+"@discordjs/collection@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.1.tgz#372b126186c3bdf77f32bb284a72d7a75b394323"
+  integrity sha512-T5AGaxlR2vszMM/a0cKoHFjSCNwE/sON4fW0ZGuLRwbJVdkezsSzy/TYU/IOQqOLTyzEeIh0EjGikrwH5+dUHA==
 
 "@endemolshinegroup/cosmiconfig-typescript-loader@^1.0.0":
   version "1.0.1"
@@ -4592,9 +4592,9 @@ discord-markdown@^2.2.0:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/ac44a7fc5717e4dfad52285658e2c529fcc60875"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/33ecdd4c5039bc2e2c50f8f5a24783e2df21e4f7"
   dependencies:
-    "@discordjs/collection" "^0.1.0"
+    "@discordjs/collection" "^0.1.1"
     abort-controller "^3.0.0"
     form-data "^2.3.3"
     node-fetch "^2.3.0"
