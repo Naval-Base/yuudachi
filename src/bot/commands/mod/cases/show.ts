@@ -1,8 +1,7 @@
+import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { stripIndents } from 'common-tags';
 import { ACTIONS, COLORS } from '../../../util';
-import { Case } from '../../../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {
@@ -58,8 +57,7 @@ export default class CaseCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum as number;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
-		const casesRepo = this.client.db.getRepository(Case);
-		const dbCase = await casesRepo.findOne({ guild: message.guild!.id, case_id: caseToFind });
+		const dbCase = await this.client.caseHandler.repo.findOne({ guild: message.guild!.id, case_id: caseToFind });
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}

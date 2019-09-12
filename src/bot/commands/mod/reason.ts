@@ -1,6 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { Case } from '../../models/Cases';
 
 export default class ReasonCommand extends Command {
 	public constructor() {
@@ -51,8 +50,7 @@ export default class ReasonCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum as number;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
-		const casesRepo = this.client.db.getRepository(Case);
-		const dbCase = await casesRepo.findOne({ case_id: caseToFind });
+		const dbCase = await this.client.caseHandler.repo.findOne({ case_id: caseToFind });
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id, maybe look for something that actually exists next time!');
 		}
@@ -70,7 +68,7 @@ export default class ReasonCommand extends Command {
 			if (ref) {
 				let reference;
 				try {
-					reference = await casesRepo.findOne({ guild: message.guild!.id, case_id: ref });
+					reference = await this.client.caseHandler.repo.findOne({ guild: message.guild!.id, case_id: ref });
 				} catch (error) {
 					reference = null;
 				}
@@ -88,7 +86,7 @@ export default class ReasonCommand extends Command {
 		dbCase.mod_id = message.author!.id;
 		dbCase.mod_tag = message.author!.tag;
 		dbCase.reason = reason;
-		await casesRepo.save(dbCase);
+		await this.client.caseHandler.repo.save(dbCase);
 
 		return message.util!.send(`Successfully set reason for case **#${caseToFind}**`);
 	}

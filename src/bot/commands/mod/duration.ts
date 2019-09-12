@@ -1,7 +1,6 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import { ACTIONS } from '../../util';
-import { Case } from '../../models/Cases';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class DurationCommand extends Command {
@@ -55,8 +54,7 @@ export default class DurationCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : caseNum as number;
 		if (isNaN(caseToFind)) return message.reply('at least provide me with a correct number.');
-		const casesRepo = this.client.db.getRepository(Case);
-		const dbCase = await casesRepo.findOne({ case_id: caseToFind, action: ACTIONS.MUTE, action_processed: false });
+		const dbCase = await this.client.caseHandler.repo.findOne({ case_id: caseToFind, action: ACTIONS.MUTE, action_processed: false });
 		if (!dbCase) {
 			return message.reply('I looked where I could, but I couldn\'t find a case with that Id and action, maybe look for something that actually exists next time!');
 		}
@@ -78,7 +76,7 @@ export default class DurationCommand extends Command {
 			await caseEmbed.edit(embed);
 		}
 		dbCase.action_duration = new Date(Date.now() + duration);
-		await casesRepo.save(dbCase);
+		await this.client.caseHandler.repo.save(dbCase);
 		this.client.muteScheduler.reschedule(dbCase);
 
 		return message.util!.send(`Successfully updated duration for case **#${caseToFind}**`);
