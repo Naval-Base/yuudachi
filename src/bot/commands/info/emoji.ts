@@ -1,6 +1,6 @@
-import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, GuildEmoji } from 'discord.js';
 import { stripIndents } from 'common-tags';
+import { Command } from 'discord-akairo';
+import { GuildEmoji, Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import * as emojis from 'node-emoji';
 const punycode = require('punycode'); // eslint-disable-line

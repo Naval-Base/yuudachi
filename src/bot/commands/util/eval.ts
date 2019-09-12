@@ -1,7 +1,7 @@
+import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import * as util from 'util';
-import { stripIndents } from 'common-tags';
 
 const NL = '!!NL!!';
 const NL_PATTERN = new RegExp(NL, 'g');

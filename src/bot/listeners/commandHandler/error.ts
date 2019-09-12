@@ -1,7 +1,7 @@
-import { Listener, Command } from 'discord-akairo';
+import { addBreadcrumb, captureException, setContext, Severity } from '@sentry/node';
+import { Command, Listener } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { addBreadcrumb, setContext, captureException, Severity } from '@sentry/node';
-import { TOPICS, EVENTS } from '../../util/logger';
+import { EVENTS, TOPICS } from '../../util/logger';
 
 export default class CommandErrorListener extends Listener {
 	public constructor() {

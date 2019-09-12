@@ -1,8 +1,8 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
 import * as moment from 'moment';
 import 'moment-duration-format';
+import fetch from 'node-fetch';
 
 export default class NPMCommand extends Command {
 	public constructor() {

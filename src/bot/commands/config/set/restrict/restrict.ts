@@ -1,6 +1,6 @@
+import { stripIndent } from 'common-tags';
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { stripIndent } from 'common-tags';
 
 export default class SetConfigRestrictRolesCommand extends Command {
 	public constructor() {

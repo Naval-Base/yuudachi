@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
-import { Tag } from '../../models/Tags';
 import { Like } from 'typeorm';
+import { Tag } from '../../models/Tags';
 
 export default class SearchTagCommand extends Command {
 	public constructor() {

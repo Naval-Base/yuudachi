@@ -1,6 +1,6 @@
+import { stripIndents } from 'common-tags';
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { stripIndents } from 'common-tags';
 
 export default class SetConfigCommand extends Command {
 	public constructor() {

@@ -1,7 +1,7 @@
+import { oneLine } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
-import { oneLine } from 'common-tags';
 
 const { GITHUB_API_KEY } = process.env;
 

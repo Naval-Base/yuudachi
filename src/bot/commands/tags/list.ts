@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, GuildMember } from 'discord.js';
+import { GuildMember, Message, MessageEmbed } from 'discord.js';
 import { Tag } from '../../models/Tags';
 
 export default class TagListCommand extends Command {

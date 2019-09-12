@@ -1,6 +1,6 @@
-import { Listener, Command } from 'discord-akairo';
+import { Command, Listener } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { TOPICS, EVENTS } from '../../util/logger';
+import { EVENTS, TOPICS } from '../../util/logger';
 
 export default class CommandCancelledListener extends Listener {
 	public constructor() {

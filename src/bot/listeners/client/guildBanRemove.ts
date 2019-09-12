@@ -1,5 +1,5 @@
 import { Listener, PrefixSupplier } from 'discord-akairo';
-import { Message, Guild, User, TextChannel } from 'discord.js';
+import { Guild, Message, TextChannel, User } from 'discord.js';
 import { ACTIONS, COLORS } from '../../util';
 
 export default class GuildBanRemoveListener extends Listener {

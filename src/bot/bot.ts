@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import YukikazeClient from './client/YukikazeClient';
-import { TOPICS, EVENTS } from './util/logger';
+import { EVENTS, TOPICS } from './util/logger';
 
 const client = new YukikazeClient({ owner: process.env.OWNERS, token: process.env.TOKEN });
 

@@ -1,6 +1,6 @@
+import { stripIndents } from 'common-tags';
 import { Listener } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { stripIndents } from 'common-tags';
 
 export default class MessageTokenFilteringListener extends Listener {
 	public constructor() {

@@ -1,4 +1,4 @@
-import { createLogger, transports, format } from 'winston';
+import { createLogger, format, transports } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 const LokiTransport = require('winston-loki'); // eslint-disable-line

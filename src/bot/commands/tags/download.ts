@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, GuildMember } from 'discord.js';
+import { GuildMember, Message } from 'discord.js';
 import { Tag } from '../../models/Tags';
 
 export default class TagDownloadCommand extends Command {

@@ -1,7 +1,7 @@
-import { Argument, Command } from 'discord-akairo';
-import { Message, GuildMember } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { TOPICS, EVENTS } from '../../util/logger';
+import { Argument, Command } from 'discord-akairo';
+import { GuildMember, Message } from 'discord.js';
+import { EVENTS, TOPICS } from '../../util/logger';
 
 export default class LaunchCybernukeCommand extends Command {
 	public constructor() {

@@ -1,5 +1,5 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
-import { Message, GuildMember, TextChannel } from 'discord.js';
+import { GuildMember, Message, TextChannel } from 'discord.js';
 import { ACTIONS, COLORS } from '../../../util';
 
 export default class RestrictTagCommand extends Command {

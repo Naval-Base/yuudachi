@@ -1,7 +1,7 @@
-import YukikazeClient from '../client/YukikazeClient';
 import { LessThan, Repository } from 'typeorm';
+import YukikazeClient from '../client/YukikazeClient';
 import { Case } from '../models/Cases';
-import { TOPICS, EVENTS } from '../util/logger';
+import { EVENTS, TOPICS } from '../util/logger';
 
 export default class MuteScheduler {
 	private checkRate: number;

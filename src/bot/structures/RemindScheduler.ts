@@ -1,8 +1,8 @@
-import YukikazeClient from '../client/YukikazeClient';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { Repository, LessThan } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
+import YukikazeClient from '../client/YukikazeClient';
 import { Reminder } from '../models/Reminders';
-import { TOPICS, EVENTS } from '../util/logger';
+import { EVENTS, TOPICS } from '../util/logger';
 
 export default class RemindScheduler {
 	private checkRate: number;

@@ -1,6 +1,6 @@
-import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, GuildMember } from 'discord.js';
 import { stripIndents } from 'common-tags';
+import { Command } from 'discord-akairo';
+import { GuildMember, Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
 

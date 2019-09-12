@@ -1,5 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
-import { Message, GuildMember } from 'discord.js';
+import { GuildMember, Message } from 'discord.js';
 
 export default class HistoryCommand extends Command {
 	public constructor() {

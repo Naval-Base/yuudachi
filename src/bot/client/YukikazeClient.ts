@@ -1,25 +1,25 @@
-import { join } from 'path';
-import { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, Flag } from 'discord-akairo';
+import { RewriteFrames } from '@sentry/integrations';
+import { init } from '@sentry/node';
+import { AkairoClient, CommandHandler, Flag, InhibitorHandler, ListenerHandler } from 'discord-akairo';
 import { Collection, Message, Util, Webhook } from 'discord.js';
-import { Logger } from 'winston';
-import { logger, TOPICS, EVENTS } from '../util/logger';
-import database from '../structures/Database';
-import TypeORMProvider from '../structures/SettingsProvider';
-import CaseHandler from '../structures/CaseHandler';
-import MuteScheduler from '../structures/MuteScheduler';
-import RemindScheduler from '../structures/RemindScheduler';
-import { Setting } from '../models/Settings';
+import { createServer, Server } from 'http';
+import { join } from 'path';
+import { Counter, register, Registry } from 'prom-client';
 import { Connection, Raw } from 'typeorm';
+import { parse } from 'url';
+import { NodeMessage, Server as IPCServer } from 'veza';
+import { Logger } from 'winston';
 import { Case } from '../models/Cases';
 import { Reminder } from '../models/Reminders';
+import { Setting } from '../models/Settings';
 import { Tag } from '../models/Tags';
-import { Counter, register, Registry } from 'prom-client';
-import { createServer, Server } from 'http';
-import { parse } from 'url';
-import { init } from '@sentry/node';
-import { RewriteFrames } from '@sentry/integrations';
-import { Server as IPCServer, NodeMessage } from 'veza';
 import { __rootdir__ } from '../root';
+import CaseHandler from '../structures/case/CaseHandler';
+import database from '../structures/Database';
+import MuteScheduler from '../structures/MuteScheduler';
+import RemindScheduler from '../structures/RemindScheduler';
+import TypeORMProvider from '../structures/SettingsProvider';
+import { EVENTS, logger, TOPICS } from '../util/logger';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
