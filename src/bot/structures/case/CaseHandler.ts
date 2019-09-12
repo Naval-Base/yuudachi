@@ -1,25 +1,11 @@
-import YukikazeClient from '../client/YukikazeClient';
-import { GuildMember, Message, MessageEmbed, User, TextChannel } from 'discord.js';
-import { stripIndents, oneLine } from 'common-tags';
+import { oneLine, stripIndents } from 'common-tags';
+import { GuildMember, Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import { MoreThan, Repository } from 'typeorm';
-import { Case } from '../models/Cases';
 import { Optional } from 'utility-types';
+import YukikazeClient from '../../client/YukikazeClient';
+import { Case } from '../../models/Cases';
 
 const ms = require('@naval-base/ms'); // eslint-disable-line
-
-interface ActionKeys {
-	1: 'ban';
-	2: 'unban';
-	3: 'kick';
-	4: 'kick';
-	5: 'mute';
-	6: 'restriction';
-	7: 'restriction';
-	8: 'restriction';
-	9: 'warn';
-	10: 'restriction';
-	[key: number]: string;
-}
 
 interface Footer {
 	warn?: number;
@@ -30,18 +16,19 @@ interface Footer {
 	[key: string]: number | undefined;
 }
 
-const ACTION_KEYS: ActionKeys = {
-	1: 'ban',
-	2: 'unban',
-	3: 'kick',
-	4: 'kick',
-	5: 'mute',
-	6: 'restriction',
-	7: 'restriction',
-	8: 'restriction',
-	9: 'warn',
-	10: 'restriction'
-};
+export const ACTION_KEYS = [
+	'',
+	'ban',
+	'unban',
+	'kick',
+	'kick',
+	'mute',
+	'restriction',
+	'restriction',
+	'restriction',
+	'warn',
+	'restriction'
+];
 
 interface Log {
 	member: GuildMember | User;
@@ -59,7 +46,7 @@ export default class CaseHandler {
 	// eslint-disable-next-line no-useless-constructor
 	public constructor(
 		private client: YukikazeClient,
-		private repo: Repository<Case>
+		public repo: Repository<Case>
 	) {}
 
 	public async create(newCase: Optional<Omit<Case, 'id' | 'createdAt'>, 'action_processed'>) {
@@ -123,7 +110,7 @@ export default class CaseHandler {
 		return embed;
 	}
 
-	public async history(member: GuildMember) {
+	public async history(member: GuildMember | User) {
 		const cases = await this.repo.find({ target_id: member.id });
 		const footer = cases.reduce((count: Footer, c) => {
 			const action = ACTION_KEYS[c.action];
@@ -137,9 +124,9 @@ export default class CaseHandler {
 		const colorIndex = Math.min(values.reduce((a: number, b: number): number => a + b), colors.length - 1);
 
 		return new MessageEmbed()
-			.setAuthor(`${member.user.tag} (${member.id})`, member.user.displayAvatarURL())
+			.setAuthor(`${member instanceof User ? member.tag : member.user.tag} (${member.id})`, member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
 			.setColor(colors[colorIndex])
-			.setThumbnail(member.user.displayAvatarURL())
+			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
 			.setFooter(oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
 				${restriction} restriction${restriction > 1 || restriction === 0 ? 's' : ''},
 				${mute} mute${mute > 1 || mute === 0 ? 's' : ''},

@@ -1,6 +1,6 @@
-import { Command, PrefixSupplier } from 'discord-akairo';
-import { Message, GuildMember, TextChannel } from 'discord.js';
-import { ACTIONS, COLORS } from '../../util';
+import { Command } from 'discord-akairo';
+import { GuildMember, Message } from 'discord.js';
+import WarnAction from '../../structures/case/actions/Warn';
 
 export default class WarnCommand extends Command {
 	public constructor() {
@@ -49,48 +49,18 @@ export default class WarnCommand extends Command {
 	}
 
 	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
-		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
 		if (member.id === message.author!.id) return;
-		if (member.roles.has(staffRole)) {
-			return message.reply('nuh-uh! You know you can\'t do this.');
+		const key = `${message.guild!.id}:${member.id}:WARN`;
+		try {
+			await new WarnAction({
+				message,
+				member,
+				keys: key,
+				reason,
+				ref
+			}).commit();
+		} catch (error) {
+			return message.util!.reply(error.message);
 		}
-
-		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0) + 1;
-		this.client.settings.set(message.guild!, 'caseTotal', totalCases);
-
-		if (!reason) {
-			const prefix = (this.handler.prefix as PrefixSupplier)(message);
-			reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-		}
-
-		const modLogChannel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
-		let modMessage;
-		if (modLogChannel) {
-			const embed = (
-				await this.client.caseHandler.log({
-					member,
-					action: 'Warn',
-					caseNum: totalCases,
-					reason,
-					message,
-					ref
-				})
-			).setColor(COLORS.WARN);
-			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
-		}
-
-		await this.client.caseHandler.create({
-			guild: message.guild!.id,
-			message: modMessage ? modMessage.id : undefined,
-			case_id: totalCases,
-			target_id: member.id,
-			target_tag: member.user.tag,
-			mod_id: message.author!.id,
-			mod_tag: message.author!.tag,
-			action: ACTIONS.WARN,
-			reason
-		});
-
-		return message.util!.send(`Successfully warned **${member.user.tag}**`);
 	}
 }
