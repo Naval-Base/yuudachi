@@ -24,7 +24,7 @@ export default class DocsCommand extends Command {
 			category: 'docs',
 			clientPermissions: ['EMBED_LINKS'],
 			ratelimit: 2,
-			flags: ['--force', '-f'],
+			flags: ['--force', '-f', '--private', '-p'],
 			optionFlags: ['--default=']
 		});
 	}
