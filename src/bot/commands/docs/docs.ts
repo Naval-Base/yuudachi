@@ -5,6 +5,13 @@ import * as qs from 'querystring';
 
 const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev'];
 
+interface DocsCommandArguments {
+	defaultDocs: string;
+	force: boolean;
+	includePrivate: boolean;
+	query: string;
+}
+
 export default class DocsCommand extends Command {
 	public constructor() {
 		super('docs', {
@@ -33,6 +40,11 @@ export default class DocsCommand extends Command {
 			flag: ['--force', '-f']
 		};
 
+		const includePrivate = yield {
+			match: 'flag',
+			flag: ['--private', '-p']
+		};
+
 		const query = yield {
 			match: 'rest',
 			type: 'lowercase',
@@ -42,10 +54,10 @@ export default class DocsCommand extends Command {
 			}
 		};
 
-		return { defaultDocs, force, query };
+		return { defaultDocs, force, includePrivate, query };
 	}
 
-	public async exec(message: Message, { defaultDocs, query, force }: { defaultDocs: string; query: string; force: boolean }) {
+	public async exec(message: Message, { defaultDocs, force, includePrivate, query }: DocsCommandArguments) {
 		if (defaultDocs) {
 			const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, 'modRole', undefined));
 			if (!staffRole) return message.util!.reply('what makes you think you can do that, huh?');
@@ -59,7 +71,7 @@ export default class DocsCommand extends Command {
 		if (source === '11.5-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
 		}
-		const queryString = qs.stringify({ src: source, q: q.join(' '), force });
+		const queryString = qs.stringify({ src: source, q: q.join(' '), force, includePrivate });
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?${queryString}`);
 		const embed = await res.json();
 		if (!embed) {
