@@ -40,7 +40,7 @@ export default class EmbedAction extends Action {
 			await this.member.roles.add(restrictRoles.embed, `Embed restricted by ${this.message.author!.tag} | Case #${totalCases}`);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
-			throw new Error(`there was an error emoji restricting this member \`${error.message}\``);
+			throw new Error(`there was an error embed restricting this member \`${error.message}\``);
 		}
 
 		this.client.settings.set(this.message.guild!, 'caseTotal', totalCases);

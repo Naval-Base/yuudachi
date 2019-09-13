@@ -26,7 +26,7 @@ export default class UnbanAction extends Action {
 		if (this.member instanceof GuildMember) return;
 		const totalCases = this.client.settings.get<number>(this.message.guild!, 'caseTotal', 0) + 1;
 
-		const sentMessage = await this.message.channel.send(`Banning **${this.member.tag}**...`);
+		const sentMessage = await this.message.channel.send(`Unbanning **${this.member.tag}**...`);
 
 		try {
 			await this.message.guild!.members.unban(this.member, `Unbanned by ${this.message.author!.tag} | Case #${totalCases}`);
