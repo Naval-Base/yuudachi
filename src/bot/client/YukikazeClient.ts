@@ -19,6 +19,7 @@ import database from '../structures/Database';
 import MuteScheduler from '../structures/MuteScheduler';
 import RemindScheduler from '../structures/RemindScheduler';
 import TypeORMProvider from '../structures/SettingsProvider';
+import { MESSAGES, PROMETHEUS } from '../util/constants';
 import { EVENTS, logger, TOPICS } from '../util/logger';
 
 declare module 'discord-akairo' {
@@ -102,11 +103,11 @@ export default class YukikazeClient extends AkairoClient {
 		defaultCooldown: 3000,
 		argumentDefaults: {
 			prompt: {
-				modifyStart: (_, str): string => `${str}\n\nType \`cancel\` to cancel the command.`,
-				modifyRetry: (_, str): string => `${str}\n\nType \`cancel\` to cancel the command.`,
-				timeout: 'Guess you took too long, the command has been cancelled.',
-				ended: "More than 3 tries and you still didn't quite get it. The command has been cancelled",
-				cancel: 'The command has been cancelled.',
+				modifyStart: (_, str) => MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_START(str),
+				modifyRetry: (_, str) => MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_RETRY(str),
+				timeout: MESSAGES.COMMAND_HANDLER.PROMPT.TIMEOUT,
+				ended: MESSAGES.COMMAND_HANDLER.PROMPT.ENDED,
+				cancel: MESSAGES.COMMAND_HANDLER.PROMPT.CANCEL,
 				retries: 3,
 				time: 30000
 			},
@@ -127,9 +128,9 @@ export default class YukikazeClient extends AkairoClient {
 	public remindScheduler!: RemindScheduler;
 
 	public prometheus = {
-		messagesCounter: new Counter({ name: 'yukikaze_messages_total', help: 'Total number of messages Yukikaze has seen' }),
-		commandCounter: new Counter({ name: 'yukikaze_commands_total', help: 'Total number of commands used' }),
-		lewdcarioAvatarCounter: new Counter({ name: 'yukikaze_lewdcario_avatar_total', help: 'Total number of avatar changes from Lewdcario' }),
+		messagesCounter: new Counter({ name: PROMETHEUS.MESSAGE_COUNTER, help: PROMETHEUS.HELP.MESSAGE_COUNTER }),
+		commandCounter: new Counter({ name: PROMETHEUS.COMMAND_COUNTER, help: PROMETHEUS.HELP.COMMAND_COUNTER }),
+		lewdcarioAvatarCounter: new Counter({ name: PROMETHEUS.LEWDCARIO_AVATAR_COUNTER, help: PROMETHEUS.HELP.LEWDCARIO_AVATAR_COUNTER }),
 		register
 	};
 
@@ -225,33 +226,33 @@ export default class YukikazeClient extends AkairoClient {
 		});
 
 		this.commandHandler.loadAll();
-		this.logger.info('Command handler loaded', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.COMMAND_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.inhibitorHandler.loadAll();
-		this.logger.info('Inhibitor handler loaded', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.INHIBITOR_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.listenerHandler.loadAll();
-		this.logger.info('Listener handler loaded', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.LISTENER_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 
 		this.db = database.get('yukikaze');
 		await this.db.connect();
-		this.logger.info(`Connected to database ${this.db.name}`, { topic: TOPICS.POSTGRES, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.DATABASE.LOADED(this.db.name), { topic: TOPICS.POSTGRES, event: EVENTS.INIT });
 		this.node = await new IPCServer('bot')
-			.on('error', (error, client) => this.logger.error(`${client!.name} ${error}`, { topic: TOPICS.RPC, event: EVENTS.ERROR }))
-			.on('open', () => this.logger.info('Server ready', { topic: TOPICS.RPC, event: EVENTS.READY }))
-			.on('close', () => this.logger.info('Server destroyed', { topic: TOPICS.RPC, event: EVENTS.DESTROY }))
-			.on('connect', client => this.logger.info(`${client.name} connected`, { topic: TOPICS.RPC, event: EVENTS.CONNECT }))
-			.on('disconnect', client => this.logger.info(`${client.name}, disconnected`, { topic: TOPICS.RPC, event: EVENTS.DISCONNECT }))
+			.on('error', (error, client) => this.logger.error(MESSAGES.IPC.ERROR(client!.name!, error), { topic: TOPICS.RPC, event: EVENTS.ERROR }))
+			.on('open', () => this.logger.info(MESSAGES.IPC.OPEN, { topic: TOPICS.RPC, event: EVENTS.READY }))
+			.on('close', () => this.logger.info(MESSAGES.IPC.CLOSE, { topic: TOPICS.RPC, event: EVENTS.DESTROY }))
+			.on('connect', client => this.logger.info(MESSAGES.IPC.CONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.CONNECT }))
+			.on('disconnect', client => this.logger.info(MESSAGES.IPC.DISCONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.DISCONNECT }))
 			.listen(9512);
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
-		this.logger.info('Bot settings initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.SETTINGS.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.caseHandler = new CaseHandler(this, this.db.getRepository(Case));
-		this.logger.info('Case handler initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.CASE_HANDLER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Case));
 		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();
-		this.logger.info('Mute scheduler initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.MUTE_SCHEDULER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		await this.remindScheduler.init();
-		this.logger.info('Remind scheduler initialized', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.REMIND_SCHEDULER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 	}
 
 	public async start() {

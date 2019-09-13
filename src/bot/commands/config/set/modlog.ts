@@ -1,11 +1,12 @@
 import { Command } from 'discord-akairo';
 import { Message, TextChannel } from 'discord.js';
+import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class SetConfigModChannelCommand extends Command {
 	public constructor() {
 		super('config-set-modlog', {
 			description: {
-				content: 'Sets the mod log many of the commands use to log moderation actions.',
+				content: MESSAGES.COMMANDS.CONFIG.SET.MOD_LOG.DESCRIPTION,
 				usage: '<channel>',
 				examples: ['#mod-log', 'mog-log']
 			},
@@ -24,7 +25,7 @@ export default class SetConfigModChannelCommand extends Command {
 	}
 
 	public async exec(message: Message, { channel }: { channel: TextChannel }) {
-		this.client.settings.set(message.guild!, 'modLogChannel', channel.id);
-		return message.util!.reply(`set moderation log channel to **${channel.name}**`);
+		this.client.settings.set(message.guild!, SETTINGS.MOD_LOG, channel.id);
+		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.MOD_LOG.REPLY(channel.name));
 	}
 }

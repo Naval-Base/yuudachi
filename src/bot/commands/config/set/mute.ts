@@ -1,11 +1,12 @@
 import { Command } from 'discord-akairo';
 import { Message, Role } from 'discord.js';
+import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class SetConfigMuteRoleCommand extends Command {
 	public constructor() {
-		super('config-set-muted', {
+		super('config-set-mute', {
 			description: {
-				content: 'Sets the mute role of the guild.',
+				content: MESSAGES.COMMANDS.CONFIG.SET.MUTE.DESCRIPTION,
 				usage: '<role>',
 				examples: ['@Muted', 'Muted']
 			},
@@ -24,7 +25,7 @@ export default class SetConfigMuteRoleCommand extends Command {
 	}
 
 	public async exec(message: Message, { role }: { role: Role }) {
-		this.client.settings.set(message.guild!, 'muteRole', role.id);
-		return message.util!.reply(`set mute role to **${role.name}**`);
+		this.client.settings.set(message.guild!, SETTINGS.MUTE_ROLE, role.id);
+		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.MUTE.REPLY(role.name));
 	}
 }

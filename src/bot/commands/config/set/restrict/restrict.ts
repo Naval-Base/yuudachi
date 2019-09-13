@@ -1,12 +1,12 @@
-import { stripIndent } from 'common-tags';
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { MESSAGES } from '../../../../util/constants';
 
 export default class SetConfigRestrictRolesCommand extends Command {
 	public constructor() {
 		super('config-set-restrict', {
 			description: {
-				content: 'Sets the restriction roles of the guild.',
+				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.DESCRIPTION,
 				usage: '<key> <...arguments>'
 			},
 			category: 'config',
@@ -26,10 +26,7 @@ export default class SetConfigRestrictRolesCommand extends Command {
 			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
-				return stripIndent`
-					When you beg me so much I just can't not help you~
-					Check \`${prefix}help config\` for more information.
-				`;
+				return MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.REPLY(prefix);
 			}
 		};
 
