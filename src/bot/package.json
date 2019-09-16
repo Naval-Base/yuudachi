@@ -11,6 +11,7 @@
 		"prebuild": "yarn lint",
 		"build": "rimraf dist && tsc",
 		"lint": "eslint . --ext .ts",
+		"lint:fix": "eslint . --ext .ts --fix",
 		"dev": "node -r dotenv/config dist/bot.js"
 	},
 	"dependencies": {
