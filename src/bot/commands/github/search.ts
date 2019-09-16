@@ -1,7 +1,8 @@
-import { oneLine, stripIndents } from 'common-tags';
+import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
+import { MESSAGES } from '../../util/constants';
 
 const { GITHUB_API_KEY } = process.env;
 
@@ -10,9 +11,9 @@ export default class GitHubSearchCommand extends Command {
 		super('gh-search', {
 			aliases: ['gh-search'],
 			description: {
-				content: 'Get info on an issue or PR from a repository.',
+				content: MESSAGES.COMMANDS.GITHUB.SEARCH.DESCRIPTION,
 				usage: '<commit/pr/issue>',
-				examples: ['1Computer1/discord-akairo#1', 'discordjs/discord.js#1', 'discordjs.discord.js#24']
+				examples: ['1Computer1/discord-akairo#1', 'discordjs/discord.js#1', 'discordjs.discord.js#24'],
 			},
 			category: 'github',
 			channel: 'guild',
@@ -21,45 +22,44 @@ export default class GitHubSearchCommand extends Command {
 			args: [
 				{
 					id: 'repo',
-					type: 'string'
+					type: 'string',
 				},
 				{
-					'id': 'commit',
-					'type': 'string',
-					'default': ''
-				}
-			]
+					id: 'commit',
+					type: 'string',
+					default: '',
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, { repo, commit }: { repo: string; commit: string }) {
 		if (!GITHUB_API_KEY) {
-			return message.reply(oneLine`
-				my master has not set a valid GitHub API key,
-				therefore this command is not available.
-			`);
+			return message.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.NO_GITHUB_API_KEY);
 		}
 		if (!repo) return;
 		const owner = repo.split('/')[0];
+		// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 		if (commit.match(/[a-f0-9]{40}$/i)) {
 			const repository = repo.split('/')[1];
 			let body;
 			try {
-				const res = await fetch(`https://api.github.com/repos/${owner}/${repository}/commits/${commit}`,
-					{ headers: { Authorization: `token ${GITHUB_API_KEY}` } });
+				const res = await fetch(`https://api.github.com/repos/${owner}/${repository}/commits/${commit}`, {
+					headers: { Authorization: `token ${GITHUB_API_KEY}` },
+				});
 				body = await res.json();
 			} catch (error) {
-				return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+				return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 			}
 			if (!body) {
-				return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+				return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 			}
 			const embed = new MessageEmbed()
 				.setColor(3447003)
 				.setAuthor(
-					body.author ? body.author.login ? body.author.login : 'Unknown' : 'Unknown',
-					body.author ? body.author.avatar_url ? body.author.avatar_url : '' : '',
-					body.author ? body.author.html_url ? body.author.html_url : '' : ''
+					body.author ? (body.author.login ? body.author.login : 'Unknown') : 'Unknown',
+					body.author ? (body.author.avatar_url ? body.author.avatar_url : '') : '',
+					body.author ? (body.author.html_url ? body.author.html_url : '') : '',
 				)
 				.setTitle(body.commit.message.split('\n')[0])
 				.setURL(body.html_url)
@@ -71,7 +71,7 @@ export default class GitHubSearchCommand extends Command {
 						.slice(1)
 						.join('\n')
 						.substring(0, 300)} ...
-				`
+				`,
 				)
 				.addField(
 					'Stats',
@@ -80,26 +80,30 @@ export default class GitHubSearchCommand extends Command {
 						• Additions: ${body.stats.additions}
 						• Deletions: ${body.stats.deletions}
 					`,
-					true
+					true,
 				)
 				.addField(
 					'Committer',
 					body.committer ? `• [**${body.committer.login}**](${body.committer.html_url})` : 'Unknown',
-					true
+					true,
 				)
 				.setThumbnail(body.author ? body.author.avatar_url : '')
 				.setTimestamp(new Date(body.commit.author.date));
 
-			if (!(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+			if (
+				!(message.channel as TextChannel)
+					.permissionsFor(this.client.user!)!
+					.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+			) {
 				return message.util!.send(embed);
 			}
-			const msg = await message.util!.send(embed) as Message;
+			const msg = (await message.util!.send(embed)) as Message;
 			const ownReaction = await msg.react('🗑');
 			let react;
 			try {
 				react = await msg.awaitReactions(
 					(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
-					{ max: 1, time: 10000, errors: ['time'] }
+					{ max: 1, time: 10000, errors: ['time'] },
 				);
 			} catch (error) {
 				if (message.guild) msg.reactions.removeAll();
@@ -180,22 +184,22 @@ export default class GitHubSearchCommand extends Command {
 			const res = await fetch('https://api.github.com/graphql', {
 				method: 'POST',
 				headers: { Authorization: `Bearer ${GITHUB_API_KEY}` },
-				body: JSON.stringify({ query })
+				body: JSON.stringify({ query }),
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 		}
 		if (!body || !body.data || !body.data.repository) {
-			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 		}
 		const data = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
 			.setColor(data.merged ? 0x9c27b0 : data.state === 'OPEN' ? 0x43a047 : 0xef6c00)
 			.setAuthor(
-				data.author ? data.author.login ? data.author.login : 'Unknown' : 'Unknown',
-				data.author ? data.author.avatarUrl ? data.author.avatarUrl : '' : '',
-				data.author ? data.author.url ? data.author.url : '' : ''
+				data.author ? (data.author.login ? data.author.login : 'Unknown') : 'Unknown',
+				data.author ? (data.author.avatarUrl ? data.author.avatarUrl : '') : '',
+				data.author ? (data.author.url ? data.author.url : '') : '',
 			)
 			.setTitle(data.title)
 			.setURL(data.url)
@@ -207,27 +211,31 @@ export default class GitHubSearchCommand extends Command {
 			.addField(
 				'Labels',
 				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }): string => node.name) : 'NO LABEL(S)',
-				true
+				true,
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
 			.setTimestamp(new Date(data.publishedAt));
 		if (data.commits) {
 			embed.addField(
 				'Install with',
-				`\`npm i discordjs/discord.js#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``
+				`\`npm i discordjs/discord.js#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``,
 			);
 		}
 
-		if (!(message.channel as TextChannel).permissionsFor(this.client.user!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (
+			!(message.channel as TextChannel)
+				.permissionsFor(this.client.user!)!
+				.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+		) {
 			return message.util!.send(embed);
 		}
-		const msg = await message.util!.send(embed) as Message;
+		const msg = (await message.util!.send(embed)) as Message;
 		const ownReaction = await msg.react('🗑');
 		let react;
 		try {
 			react = await msg.awaitReactions(
 				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
-				{ max: 1, time: 10000, errors: ['time'] }
+				{ max: 1, time: 10000, errors: ['time'] },
 			);
 		} catch (error) {
 			if (message.guild) msg.reactions.removeAll();

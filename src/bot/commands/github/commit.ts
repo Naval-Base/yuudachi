@@ -1,7 +1,8 @@
-import { oneLine, stripIndents } from 'common-tags';
+import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 const { GITHUB_API_KEY } = process.env;
 
@@ -10,9 +11,9 @@ export default class GitHubCommitCommand extends Command {
 		super('gh-commit', {
 			aliases: ['gh-commit', 'commit'],
 			description: {
-				content: 'Get information on a commit in a predefined repository.',
+				content: MESSAGES.COMMANDS.GITHUB.COMMIT.DESCRIPTION,
 				usage: '<commit>',
-				examples: ['8335f499c5e0cfac1267d426d854a2209416595f', 'd9f772cdc1139b9a118be4321fe719ffa0dfc2fa']
+				examples: ['8335f499c5e0cfac1267d426d854a2209416595f', 'd9f772cdc1139b9a118be4321fe719ffa0dfc2fa'],
 			},
 			regex: /\bgc#[a-f0-9]{40}$/i,
 			category: 'github',
@@ -23,41 +24,39 @@ export default class GitHubCommitCommand extends Command {
 				{
 					id: 'commit',
 					match: 'content',
-					type: Argument.validate('string', (_, str) => str.length >= 40)
-				}
-			]
+					type: Argument.validate('string', (_, str) => str.length >= 40),
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
-			return message.util!.reply(oneLine`
-				my master has not set a valid GitHub API key,
-				therefore this command is not available.
-			`);
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_API_KEY);
 		}
-		const repository = this.client.settings.get<string>(message.guild!, 'githubRepository', undefined);
-		if (!repository) return message.reply("the guild owner didn't set a GitHub repository yet.");
+		const repository = this.client.settings.get<string>(message.guild!, SETTINGS.GITHUB_REPO, undefined);
+		if (!repository) return message.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_REPO);
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
 		const commit = args.match ? args.match[0].split('#')[1] : args.commit;
 		let body;
 		try {
-			const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${commit}`,
-				{ headers: { Authorization: `token ${GITHUB_API_KEY}` } });
+			const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${commit}`, {
+				headers: { Authorization: `token ${GITHUB_API_KEY}` },
+			});
 			body = await res.json();
 		} catch (error) {
-			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
 		if (!body || !body.commit) {
-			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.setAuthor(
-				body.author ? body.author.login ? body.author.login : 'Unknown' : 'Unknown',
-				body.author ? body.author.avatar_url ? body.author.avatar_url : '' : '',
-				body.author ? body.author.html_url ? body.author.html_url : '' : ''
+				body.author ? (body.author.login ? body.author.login : 'Unknown') : 'Unknown',
+				body.author ? (body.author.avatar_url ? body.author.avatar_url : '') : '',
+				body.author ? (body.author.html_url ? body.author.html_url : '') : '',
 			)
 			.setTitle(body.commit.message.split('\n')[0])
 			.setURL(body.html_url)
@@ -69,7 +68,7 @@ export default class GitHubCommitCommand extends Command {
 					.slice(1)
 					.join('\n')
 					.substring(0, 300)} ...
-			`
+			`,
 			)
 			.addField(
 				'Stats',
@@ -78,26 +77,30 @@ export default class GitHubCommitCommand extends Command {
 					• Additions: ${body.stats.additions}
 					• Deletions: ${body.stats.deletions}
 				`,
-				true
+				true,
 			)
 			.addField(
 				'Committer',
 				body.committer ? `• [**${body.committer.login}**](${body.committer.html_url})` : 'Unknown',
-				true
+				true,
 			)
 			.setThumbnail(body.author ? body.author.avatar_url : '')
 			.setTimestamp(new Date(body.commit.author.date));
 
-		if (!(message.channel as TextChannel).permissionsFor(message.guild!.me!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (
+			!(message.channel as TextChannel)
+				.permissionsFor(message.guild!.me!)!
+				.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+		) {
 			return message.util!.send(embed);
 		}
-		const msg = await message.util!.send(embed) as Message;
+		const msg = (await message.util!.send(embed)) as Message;
 		msg.react('🗑');
 		let react;
 		try {
 			react = await msg.awaitReactions(
 				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
-				{ max: 1, time: 10000, errors: ['time'] }
+				{ max: 1, time: 10000, errors: ['time'] },
 			);
 		} catch (error) {
 			msg.reactions.removeAll();

@@ -12,6 +12,7 @@ export enum SETTINGS {
 	GUILD_LOGS = 'guildLogs',
 	ROLE_STATE = 'roleState',
 	TOKEN_FILTER = 'tokenFiltering',
+	DEFAULT_DOCS = 'defaultDocs',
 }
 
 export const MESSAGES = {
@@ -224,6 +225,59 @@ export const MESSAGES = {
 					REPLY_ACTIVATED: 'successfully activated token filtering!',
 					REPLY_DEACTIVATED: 'successfully deactivated token filtering!',
 				},
+			},
+		},
+		DOCS: {
+			DOCS: {
+				DESCRIPTION: 'Searches discord.js documentation.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what would you like to search for?`,
+				},
+				FAILURE:
+					"Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!",
+				DEFAULT_DOCS: {
+					SUCCESS: (docs: string) => `set the default docs for this server to ${docs}`,
+					FAILURE: 'what makes you think you can do that, huh?',
+				},
+			},
+			MDN: {
+				DESCRIPTION: 'Searches MDN for your query.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what would you like to search for?`,
+				},
+				FAILURE:
+					"Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!",
+			},
+			NPM: {
+				DESCRIPTION: 'Responds with information on an NPM package.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what would you like to search for?`,
+				},
+				FAILURE:
+					"Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!",
+				UNPUBLISH: 'whoever was the Commander of this package decided to unpublish it, what a fool.',
+			},
+		},
+		GITHUB: {
+			COMMIT: {
+				DESCRIPTION: 'Get information on a commit in a predefined repository.',
+				FAILURE:
+					"Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!",
+				NO_GITHUB_API_KEY: 'my master has not set a valid GitHub API key, therefore this command is not available.',
+				NO_GITHUB_REPO: "the guild owner didn't set a GitHub repository yet.",
+			},
+			ISSUE_PR: {
+				DESCRIPTION: 'Get information on an issue or PR from a predefined repository.',
+				FAILURE:
+					"Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!",
+				NO_GITHUB_API_KEY: 'my master has not set a valid GitHub API key, therefore this command is not available.',
+				NO_GITHUB_REPO: "the guild owner didn't set a GitHub repository yet.",
+			},
+			SEARCH: {
+				DESCRIPTION: 'Get information on a commit, issue, or PR from a repository.',
+				FAILURE:
+					"Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!",
+				NO_GITHUB_API_KEY: 'my master has not set a valid GitHub API key, therefore this command is not available.',
 			},
 		},
 	},
