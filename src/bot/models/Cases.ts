@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('cases')
 export class Case {
@@ -42,9 +42,9 @@ export class Case {
 	public action_duration?: Date;
 
 	@Index()
-	@Column({ 'default': true })
+	@Column({ default: true })
 	public action_processed!: boolean;
 
-	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
+	@Column({ type: 'timestamptz', default: (): string => 'now()' })
 	public createdAt!: Date;
 }

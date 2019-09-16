@@ -30,10 +30,10 @@
 		"@typescript-eslint/eslint-plugin": "2.2.0",
 		"@typescript-eslint/parser": "2.2.0",
 		"eslint": "^6.4.0",
-		"eslint-config-marine": "^4.2.1",
+		"eslint-config-marine": "^5.0.0",
 		"eslint-plugin-vue": "^5.2.3",
 		"node-sass": "^4.12.0",
-		"sass-loader": "^7.3.1",
+		"sass-loader": "^8.0.0",
 		"typescript": "^3.6.3"
 	},
 	"eslintConfig": {

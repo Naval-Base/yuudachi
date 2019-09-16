@@ -1,26 +1,19 @@
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { stripIndents } from 'common-tags';
+import { MESSAGES } from '../../../util/constants';
 
 export default class ToggleCommand extends Command {
 	public constructor() {
 		super('toggle', {
 			aliases: ['toggle'],
 			description: {
-				content: stripIndents`Available keys:
-					 • logs \`<webhook>\`
-					 • mod
-					 • rolestate
-					 • tokenfiltering
-
-					Required: \`<>\` | Optional: \`[]\`
-				`,
-				usage: '<method> <...arguments>'
+				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.DESCRIPTION,
+				usage: '<method> <...arguments>',
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 
@@ -30,15 +23,12 @@ export default class ToggleCommand extends Command {
 				['toggle-logs', 'logs'],
 				['toggle-moderation', 'mod', 'moderation'],
 				['toggle-role-state', 'role', 'rolestate', 'role-state'],
-				['toggle-token-filtering', 'tokenfiltering', 'token']
+				['toggle-token-filtering', 'tokenfilter', 'tokenfiltering', 'token'],
 			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
-				return stripIndents`
-					When you beg me so much I just can't not help you~
-					Check \`${prefix}help toggle\` for more information.
-				`;
-			}
+				return MESSAGES.COMMANDS.CONFIG.TOGGLE.REPLY(prefix);
+			},
 		};
 
 		return Flag.continue(method);

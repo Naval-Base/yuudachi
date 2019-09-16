@@ -1,12 +1,12 @@
 import { Listener } from 'discord-akairo';
-import { TOPICS, EVENTS } from '../../util/logger';
+import { EVENTS, TOPICS } from '../../util/logger';
 
 export default class DebugListener extends Listener {
 	public constructor() {
 		super('debug', {
 			emitter: 'client',
 			event: 'debug',
-			category: 'client'
+			category: 'client',
 		});
 	}
 

@@ -9,10 +9,10 @@ export default class ReminderListCommand extends Command {
 			aliases: ['reminders'],
 			category: 'reminders',
 			description: {
-				content: 'Lists all of your ongoing reminders.'
+				content: 'Lists all of your ongoing reminders.',
 			},
 			clientPermissions: ['EMBED_LINKS'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 

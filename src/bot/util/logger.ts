@@ -1,4 +1,4 @@
-import { createLogger, transports, format } from 'winston';
+import { createLogger, format, transports } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 const LokiTransport = require('winston-loki'); // eslint-disable-line
@@ -9,7 +9,7 @@ export enum TOPICS {
 	DISCORD_AKAIRO = 'DISCORD_AKAIRO',
 	RPC = 'RPC',
 	POSTGRES = 'POSTGRES',
-	METRICS = 'METRICS'
+	METRICS = 'METRICS',
 }
 
 export enum EVENTS {
@@ -29,7 +29,7 @@ export enum EVENTS {
 	COMMAND_FINISHED = 'COMMAND_FINISHED',
 	MESSAGE_BLOCKED = 'MESSAGE_BLOCKED',
 	MUTE = 'MUTE',
-	REMINDER = 'REMINDER'
+	REMINDER = 'REMINDER',
 }
 
 export const logger = createLogger({
@@ -39,26 +39,25 @@ export const logger = createLogger({
 		format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
 		format.printf((info: any): string => {
 			const { timestamp, label, level, message, topic, event, ...rest } = info;
-			return `[${timestamp}][${label}][${level.toUpperCase()}][${topic}]${event ? `[${event}]` : ''}: ${message}${Object.keys(rest).length ? `\n${JSON.stringify(rest, null, 2)}` : ''}`;
-		})
+			return `[${timestamp}][${label}][${level.toUpperCase()}][${topic}]${event ? `[${event}]` : ''}: ${message}${
+				Object.keys(rest).length ? `\n${JSON.stringify(rest, null, 2)}` : ''
+			}`;
+		}),
 	),
 	transports: [
 		new transports.Console({
 			format: format.colorize({ level: true }),
-			level: 'info'
+			level: 'info',
 		}),
 		new LokiTransport({
 			level: 'debug',
-			host: process.env.LOKI!
+			host: process.env.LOKI!,
 		}),
 		new DailyRotateFile({
-			format: format.combine(
-				format.timestamp(),
-				format.json()
-			),
+			format: format.combine(format.timestamp(), format.json()),
 			level: 'debug',
 			filename: 'yukikaze-%DATE%.log',
-			maxFiles: '14d'
-		})
-	]
+			maxFiles: '14d',
+		}),
+	],
 });

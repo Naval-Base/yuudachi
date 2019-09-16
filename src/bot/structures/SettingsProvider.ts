@@ -31,7 +31,8 @@ export default class TypeORMProvider extends Provider {
 		data[key] = value;
 		this.items.set(id, data);
 
-		return this.repo.createQueryBuilder()
+		return this.repo
+			.createQueryBuilder()
 			.insert()
 			.into(Setting)
 			.values({ guild: id, settings: data })
@@ -45,7 +46,8 @@ export default class TypeORMProvider extends Provider {
 		const data = this.items.get(id) || {};
 		delete data[key];
 
-		return this.repo.createQueryBuilder()
+		return this.repo
+			.createQueryBuilder()
 			.insert()
 			.into(Setting)
 			.values({ guild: id, settings: data })

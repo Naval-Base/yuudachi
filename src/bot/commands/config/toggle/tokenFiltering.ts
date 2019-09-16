@@ -1,27 +1,28 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class ToggletokenFilteringCommand extends Command {
 	public constructor() {
 		super('toggle-token-filtering', {
 			description: {
-				content: 'Toggle token filtering feature on the server.'
+				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.DESCRIPTION,
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 
 	public async exec(message: Message) {
-		const tokenFiltering = this.client.settings.get(message.guild!, 'tokenFiltering', undefined);
+		const tokenFiltering = this.client.settings.get(message.guild!, SETTINGS.TOKEN_FILTER, undefined);
 		if (tokenFiltering) {
-			this.client.settings.set(message.guild!, 'tokenFiltering', false);
-			return message.util!.reply('disabled token filtering!');
+			this.client.settings.set(message.guild!, SETTINGS.TOKEN_FILTER, false);
+			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.REPLY_DEACTIVATED);
 		}
-		this.client.settings.set(message.guild!, 'tokenFiltering', true);
+		this.client.settings.set(message.guild!, SETTINGS.TOKEN_FILTER, true);
 
-		return message.util!.reply('activated token filtering!');
+		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.REPLY_ACTIVATED);
 	}
 }

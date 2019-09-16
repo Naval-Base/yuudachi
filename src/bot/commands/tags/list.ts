@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, GuildMember } from 'discord.js';
+import { GuildMember, Message, MessageEmbed } from 'discord.js';
 import { Tag } from '../../models/Tags';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class TagListCommand extends Command {
 	public constructor() {
@@ -8,7 +9,7 @@ export default class TagListCommand extends Command {
 			aliases: ['tags'],
 			category: 'tags',
 			description: {
-				content: 'Lists all server tags.'
+				content: MESSAGES.COMMANDS.TAGS.LIST.DESCRIPTION,
 			},
 			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
@@ -16,15 +17,19 @@ export default class TagListCommand extends Command {
 			args: [
 				{
 					id: 'member',
-					type: 'member'
-				}
-			]
+					type: 'member',
+				},
+			],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(
+			message.guild!,
+			SETTINGS.RESTRICT_ROLES,
+			undefined,
+		);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
@@ -36,8 +41,8 @@ export default class TagListCommand extends Command {
 		if (member) {
 			const tags = await tagsRepo.find({ user: member.id, guild: message.guild!.id });
 			if (!tags.length) {
-				if (member.id === message.author!.id) return message.util!.reply("you don't have any tags.");
-				return message.util!.reply(`**${member.displayName}** doesn't have any tags.`);
+				if (member.id === message.author!.id) return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS());
+				return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS(member.displayName));
 			}
 			const embed = new MessageEmbed()
 				.setColor(0x30a9ed)
@@ -46,13 +51,13 @@ export default class TagListCommand extends Command {
 					tags
 						.map(tag => `\`${tag.name}\``)
 						.sort()
-						.join(', ')
+						.join(', '),
 				);
 
 			return message.util!.send(embed);
 		}
 		const tags = await tagsRepo.find({ guild: message.guild!.id });
-		if (!tags.length) return message.util!.send(`**${message.guild!.name}** doesn't have any tags. Why not add some?`);
+		if (!tags.length) return message.util!.send(MESSAGES.COMMANDS.TAGS.LIST.GUILD_NO_TAGS(message.guild!.name));
 		const hoistedTags = tags
 			.filter(tag => tag.hoisted)
 			.map(tag => `\`${tag.name}\``)

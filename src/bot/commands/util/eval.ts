@@ -1,7 +1,8 @@
+import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import * as util from 'util';
-import { stripIndents } from 'common-tags';
+import { MESSAGES } from '../../util/constants';
 
 const NL = '!!NL!!';
 const NL_PATTERN = new RegExp(NL, 'g');
@@ -17,8 +18,8 @@ export default class EvalCommand extends Command {
 		super('eval', {
 			aliases: ['eval'],
 			description: {
-				content: 'You can\'t use this anyway, so why explain.',
-				usage: '<code>'
+				content: MESSAGES.COMMANDS.UTIL.EVAL.DESCRIPTION,
+				usage: '<code>',
 			},
 			category: 'util',
 			ownerOnly: true,
@@ -29,10 +30,10 @@ export default class EvalCommand extends Command {
 					match: 'content',
 					type: 'string',
 					prompt: {
-						start: (message: Message) => `${message.author}, what would you like to evaluate?`
-					}
-				}
-			]
+						start: (message: Message) => MESSAGES.COMMANDS.UTIL.EVAL.PROMPT.START(message.author),
+					},
+				},
+			],
 		});
 	}
 
@@ -40,7 +41,7 @@ export default class EvalCommand extends Command {
 		/* eslint-disable */
 		const msg = message;
 		const { client, lastResult } = this;
-		const doReply = (val: string | Error) => {
+		const doReply = (val: string | Error) => {
 			if (val instanceof Error) {
 				message.util!.send(`Callback error: \`${val}\``);
 			} else {
@@ -67,36 +68,49 @@ export default class EvalCommand extends Command {
 	}
 
 	private _result(result: string, hrDiff: [number, number], input: string | null = null) {
-		const inspected = util.inspect(result, { depth: 0 })
+		const inspected = util
+			.inspect(result, { depth: 0 })
 			.replace(NL_PATTERN, '\n')
 			.replace(this.sensitivePattern, '--snip--');
 		const split = inspected.split('\n');
 		const last = inspected.length - 1;
 		const prependPart = inspected[0] !== '{' && inspected[0] !== '[' && inspected[0] !== "'" ? split[0] : inspected[0];
-		const appendPart = inspected[last] !== '}' && inspected[last] !== ']' && inspected[last] !== "'" ? split[split.length - 1] : inspected[last];
+		const appendPart =
+			inspected[last] !== '}' && inspected[last] !== ']' && inspected[last] !== "'"
+				? split[split.length - 1]
+				: inspected[last];
 		const prepend = `\`\`\`javascript\n${prependPart}\n`;
 		const append = `\n${appendPart}\n\`\`\``;
 		if (input) {
-			return Util.splitMessage(stripIndents`
+			return Util.splitMessage(
+				stripIndents`
 				*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
 				\`\`\`
-			`, { maxLength: 1900, prepend, append });
+			`,
+				{ maxLength: 1900, prepend, append },
+			);
 		}
 
-		return Util.splitMessage(stripIndents`
+		return Util.splitMessage(
+			stripIndents`
 			*Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 			\`\`\`javascript
 			${inspected}
 			\`\`\`
-		`, { maxLength: 1900, prepend, append });
+		`,
+			{ maxLength: 1900, prepend, append },
+		);
 	}
 
 	private get sensitivePattern() {
 		if (!this._sensitivePattern) {
 			const token = this.client.token!.split('').join('[^]{0,2}');
-			const revToken = this.client.token!.split('').reverse().join('[^]{0,2}');
+			const revToken = this.client
+				.token!.split('')
+				.reverse()
+				.join('[^]{0,2}');
 			Object.defineProperty(this, '_sensitivePattern', { value: new RegExp(`${token}|${revToken}`, 'g') });
 		}
 		return this._sensitivePattern;

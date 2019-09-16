@@ -1,5 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
+import { SETTINGS } from '../../util/constants';
 const diff = require('diff'); // eslint-disable-line
 
 export default class MessageUpdateListener extends Listener {
@@ -7,7 +8,7 @@ export default class MessageUpdateListener extends Listener {
 		super('messageUpdate', {
 			emitter: 'client',
 			event: 'messageUpdate',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -15,7 +16,7 @@ export default class MessageUpdateListener extends Listener {
 		if (oldMessage.author!.bot || newMessage.author!.bot) return;
 		if (!newMessage.guild) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
-		const guildLogs = this.client.settings.get<string>(newMessage.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(newMessage.guild, SETTINGS.GUILD_LOGS, undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
@@ -25,8 +26,10 @@ export default class MessageUpdateListener extends Listener {
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
 			if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
+				// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/);
 				if (!strippedOldMessage || !strippedOldMessage[2]) return;
+				// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/);
 				if (!strippedNewMessage || !strippedNewMessage[2]) return;
 				if (strippedOldMessage[2] === strippedNewMessage[2]) return;
@@ -40,7 +43,10 @@ export default class MessageUpdateListener extends Listener {
 				const append = '\n```';
 				embed.addField('❯ Message', `${prepend}${msg.substring(0, 1000)}${append}`);
 			} else {
-				const diffMessage = diff.diffWords(Util.escapeMarkdown(oldMessage.content), Util.escapeMarkdown(newMessage.content));
+				const diffMessage = diff.diffWords(
+					Util.escapeMarkdown(oldMessage.content),
+					Util.escapeMarkdown(newMessage.content),
+				);
 				for (const part of diffMessage) {
 					const markdown = part.added ? '**' : part.removed ? '~~' : '';
 					msg += `${markdown}${part.value}${markdown}`;
@@ -54,7 +60,7 @@ export default class MessageUpdateListener extends Listener {
 			return webhook.send({
 				embeds: [embed],
 				username: 'Logs: MESSAGE UPDATED',
-				avatarURL: 'https://i.imgur.com/wnC4KmC.png'
+				avatarURL: 'https://i.imgur.com/wnC4KmC.png',
 			});
 		}
 	}

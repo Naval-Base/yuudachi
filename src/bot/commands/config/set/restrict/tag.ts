@@ -1,12 +1,13 @@
 import { Command } from 'discord-akairo';
 import { Message, Role } from 'discord.js';
+import { MESSAGES, SETTINGS } from '../../../../util/constants';
 
 export default class SetConfigRestrictRolesTagCommand extends Command {
 	public constructor() {
 		super('config-set-restrict-tag', {
 			description: {
-				content: 'Sets the restriction role for tags of the guild.',
-				usage: '<Role/RoleId>'
+				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.DESCRIPTION,
+				usage: '<Role/RoleId>',
 			},
 			category: 'config',
 			channel: 'guild',
@@ -17,18 +18,18 @@ export default class SetConfigRestrictRolesTagCommand extends Command {
 					id: 'tag',
 					type: 'role',
 					prompt: {
-						start: (message: Message) => `${message.author}, what role should act as the tag restricted role?`,
-						retry: (message: Message) => `${message.author}, please mention a proper role to be the tag restricted role.`
-					}
-				}
-			]
+						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.PROMPT.RETRY(message.author),
+					},
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, { tag }: { tag: Role }) {
-		const roles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictRoles', {});
+		const roles = this.client.settings.get<{ tag: string }>(message.guild!, SETTINGS.RESTRICT_ROLES, {});
 		roles.tag = tag.id;
-		this.client.settings.set(message.guild!, 'restrictRoles', roles);
-		return message.util!.reply(`set restricted role for tags to **${tag.name}**`);
+		this.client.settings.set(message.guild!, SETTINGS.RESTRICT_ROLES, roles);
+		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.REPLY(tag.name));
 	}
 }

@@ -1,28 +1,13 @@
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { stripIndents } from 'common-tags';
+import { MESSAGES } from '../../util/constants';
 
 export default class TagCommand extends Command {
 	public constructor() {
 		super('tag', {
 			aliases: ['tag'],
 			description: {
-				content: stripIndents`Available methods:
-					 • show \`<tag>\`
-					 • add \`[--hoist/--pin] <tag> <content>\`
-					 • alias \`<--add/--del> <tag> <tagalias>\`
-					 • del \`<tag>\`
-					 • edit \`[--hoist/--unhoist] <tag> <content>\`
-					 • source \`[--file] <tag>\`
-					 • info \`<tag>\`
-					 • search \`<tag>\`
-					 • list \`[member]\`
-					 • download \`[member]\`
-
-					Required: \`<>\` | Optional: \`[]\`
-
-					For additional \`<...arguments>\` usage refer to the examples below.
-				`,
+				content: MESSAGES.COMMANDS.TAGS.DESCRIPTION,
 				usage: '<method> <...arguments>',
 				examples: [
 					'show Test',
@@ -40,12 +25,12 @@ export default class TagCommand extends Command {
 					'info Test',
 					'search Test',
 					'list @Crawl',
-					'download @Crawl'
-				]
+					'download @Crawl',
+				],
 			},
 			category: 'tags',
 			channel: 'guild',
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 
@@ -61,17 +46,12 @@ export default class TagCommand extends Command {
 				['tag-info', 'info'],
 				['tag-search', 'search'],
 				['tag-list', 'list'],
-				['tag-download', 'download', 'dl']
+				['tag-download', 'download', 'dl'],
 			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
-				return stripIndents`
-					When you beg me so much I just can't not help you~
-					Check \`${prefix}help tag\` for more information.
-
-					Hmph, you probably wanted to use \`${prefix}tag show\` or something!
-				`;
-			}
+				return MESSAGES.COMMANDS.TAGS.REPLY(prefix);
+			},
 		};
 
 		return Flag.continue(method);

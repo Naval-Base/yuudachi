@@ -1,33 +1,42 @@
-import YukikazeClient from '../client/YukikazeClient';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { Repository, LessThan } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
+import YukikazeClient from '../client/YukikazeClient';
 import { Reminder } from '../models/Reminders';
-import { TOPICS, EVENTS } from '../util/logger';
+import { EVENTS, TOPICS } from '../util/logger';
 
 export default class RemindScheduler {
-	private checkRate: number;
+	private readonly checkRate: number;
 
 	private checkInterval!: NodeJS.Timeout;
 
-	private queued = new Map();
+	private readonly queued = new Map();
 
 	public static embed(message: Message, reminders: Reminder[]) {
-		const truncate = (str: string, len: number) => str.length > len ? `${str.slice(0, len)}…` : str;
+		const truncate = (str: string, len: number) => (str.length > len ? `${str.slice(0, len)}…` : str);
 		return new MessageEmbed()
 			.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
-			.setColor(0x30A9ED)
+			.setColor(0x30a9ed)
 			.setThumbnail(message.author!.displayAvatarURL())
-			.setDescription(reminders.length
-				? reminders.sort((a, b) => a.triggers_at.getTime() - b.triggers_at.getTime()).map(
-					(reminder, i) => `${i + 1}. ${truncate(reminder.reason || 'reasonless', 30)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`
-				).join('\n')
-				: 'No reminders');
+			.setDescription(
+				reminders.length
+					? reminders
+							.sort((a, b) => a.triggers_at.getTime() - b.triggers_at.getTime())
+							.map(
+								(reminder, i) =>
+									`${i + 1}. ${truncate(
+										reminder.reason || 'reasonless',
+										30,
+									)} \`${reminder.triggers_at.toUTCString()}\`${reminder.channel ? '' : ' (DM)'}`,
+							)
+							.join('\n')
+					: 'No reminders',
+			);
 	}
 
 	public constructor(
-		private client: YukikazeClient,
-		private repo: Repository<Reminder>,
-		{ checkRate = 5 * 60 * 1000 } = {}
+		private readonly client: YukikazeClient,
+		private readonly repo: Repository<Reminder>,
+		{ checkRate = 5 * 60 * 1000 } = {},
 	) {
 		this.checkRate = checkRate;
 	}
@@ -38,10 +47,10 @@ export default class RemindScheduler {
 			channel: reminder.channel,
 			reason: reminder.reason,
 			trigger: reminder.trigger,
-			triggers_at: reminder.triggers_at
+			triggers_at: reminder.triggers_at,
 		});
 		const dbReminder = await this.repo.save(rmd);
-		if (dbReminder.triggers_at.getTime() < (Date.now() + this.checkRate)) {
+		if (dbReminder.triggers_at.getTime() < Date.now() + this.checkRate) {
 			this.queue(dbReminder);
 		}
 	}
@@ -61,16 +70,19 @@ export default class RemindScheduler {
 	}
 
 	public queue(reminder: Reminder) {
-		this.queued.set(reminder.id, this.client.setTimeout((): void => {
-			this.run(reminder);
-		}, reminder.triggers_at.getTime() - Date.now()));
+		this.queued.set(
+			reminder.id,
+			this.client.setTimeout((): void => {
+				this.run(reminder);
+			}, reminder.triggers_at.getTime() - Date.now()),
+		);
 	}
 
 	public async run(reminder: Reminder) {
 		try {
 			const reason = reminder.reason || `${reminder.channel ? 'y' : 'Y'}ou wanted me to remind you around this time!`;
 			const content = `${reminder.channel ? `<@${reminder.user}>, ` : ''} ${reason}\n\n<${reminder.trigger}>`;
-			const channel = reminder.channel && this.client.channels.get(reminder.channel) as TextChannel;
+			const channel = reminder.channel && (this.client.channels.get(reminder.channel) as TextChannel);
 
 			if (channel) {
 				await channel.send(content);

@@ -1,12 +1,13 @@
 import { Command } from 'discord-akairo';
 import { Message, Role } from 'discord.js';
+import { MESSAGES, SETTINGS } from '../../../../util/constants';
 
 export default class SetConfigRestrictRolesEmbedCommand extends Command {
 	public constructor() {
 		super('config-set-restrict-embed', {
 			description: {
-				content: 'Sets the restriction role for embeds of the guild.',
-				usage: '<Role/RoleId>'
+				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.DESCRIPTION,
+				usage: '<Role/RoleId>',
 			},
 			category: 'config',
 			channel: 'guild',
@@ -17,18 +18,18 @@ export default class SetConfigRestrictRolesEmbedCommand extends Command {
 					id: 'embed',
 					type: 'role',
 					prompt: {
-						start: (message: Message) => `${message.author}, what role should act as the embed restricted role?`,
-						retry: (message: Message) => `${message.author}, please mention a proper role to be the embed restricted role.`
-					}
-				}
-			]
+						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.PROMPT.RETRY(message.author),
+					},
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, { embed }: { embed: Role }) {
-		const roles = this.client.settings.get<{ embed: string }>(message.guild!, 'restrictRoles', {});
+		const roles = this.client.settings.get<{ embed: string }>(message.guild!, SETTINGS.RESTRICT_ROLES, {});
 		roles.embed = embed.id;
-		this.client.settings.set(message.guild!, 'restrictRoles', roles);
-		return message.util!.reply(`set restricted role for embeds to **${embed.name}**`);
+		this.client.settings.set(message.guild!, SETTINGS.RESTRICT_ROLES, roles);
+		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.REPLY(embed.name));
 	}
 }

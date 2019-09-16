@@ -1,12 +1,13 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import { SETTINGS } from '../../util/constants';
 
 export default class MessageDeleteListener extends Listener {
 	public constructor() {
 		super('messageDelete', {
 			emitter: 'client',
 			event: 'messageDelete',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -14,7 +15,7 @@ export default class MessageDeleteListener extends Listener {
 		if (message.author!.bot) return;
 		if (!message.guild) return;
 		if (!message.content) return;
-		const guildLogs = this.client.settings.get<string>(message.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(message.guild, SETTINGS.GUILD_LOGS, undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
@@ -31,7 +32,7 @@ export default class MessageDeleteListener extends Listener {
 			return webhook.send({
 				embeds: [embed],
 				username: 'Logs: MESSAGE DELETED',
-				avatarURL: 'https://i.imgur.com/EUGvQJJ.png'
+				avatarURL: 'https://i.imgur.com/EUGvQJJ.png',
 			});
 		}
 	}

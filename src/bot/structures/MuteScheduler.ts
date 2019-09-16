@@ -1,26 +1,34 @@
-import YukikazeClient from '../client/YukikazeClient';
 import { LessThan, Repository } from 'typeorm';
+import YukikazeClient from '../client/YukikazeClient';
 import { Case } from '../models/Cases';
-import { TOPICS, EVENTS } from '../util/logger';
+import { SETTINGS } from '../util/constants';
+import { EVENTS, TOPICS } from '../util/logger';
 
 export default class MuteScheduler {
-	private checkRate: number;
+	private readonly checkRate: number;
 
 	private checkInterval!: NodeJS.Timeout;
 
-	private queued = new Map();
+	private readonly queued = new Map();
 
 	public constructor(
-		private client: YukikazeClient,
-		private repo: Repository<Case>,
-		{ checkRate = 5 * 60 * 1000 } = {}
+		private readonly client: YukikazeClient,
+		private readonly repo: Repository<Case>,
+		{ checkRate = 5 * 60 * 1000 } = {},
 	) {
 		this.checkRate = checkRate;
 	}
 
 	public async add(mute: Omit<Case, 'id' | 'createdAt'>, reschedule = false) {
-		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
-		if (reschedule) this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
+		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
+			topic: TOPICS.DISCORD_AKAIRO,
+			event: EVENTS.MUTE,
+		});
+		if (reschedule)
+			this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
+				topic: TOPICS.DISCORD_AKAIRO,
+				event: EVENTS.MUTE,
+			});
 		if (!reschedule) {
 			mute = this.repo.create({
 				guild: mute.guild,
@@ -33,19 +41,22 @@ export default class MuteScheduler {
 				action: mute.action,
 				action_duration: mute.action_duration,
 				action_processed: mute.action_processed,
-				reason: mute.reason
+				reason: mute.reason,
 			});
 			mute = await this.repo.save(mute);
 		}
-		if (mute.action_duration!.getTime() < (Date.now() + this.checkRate)) {
+		if (mute.action_duration!.getTime() < Date.now() + this.checkRate) {
 			this.queue(mute as Case);
 		}
 	}
 
 	public async cancel(mute: Case) {
-		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.MUTE });
+		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
+			topic: TOPICS.DISCORD_AKAIRO,
+			event: EVENTS.MUTE,
+		});
 		const guild = this.client.guilds.get(mute.guild);
-		const muteRole = this.client.settings.get<string>(guild!, 'muteRole', undefined);
+		const muteRole = this.client.settings.get<string>(guild!, SETTINGS.MUTE_ROLE, undefined);
 		let member;
 		try {
 			member = await guild!.members.fetch(mute.target_id);
@@ -71,9 +82,12 @@ export default class MuteScheduler {
 	}
 
 	public queue(mute: Case) {
-		this.queued.set(mute.id, this.client.setTimeout(() => {
-			this.cancel(mute);
-		}, mute.action_duration!.getTime() - Date.now()));
+		this.queued.set(
+			mute.id,
+			this.client.setTimeout(() => {
+				this.cancel(mute);
+			}, mute.action_duration!.getTime() - Date.now()),
+		);
 	}
 
 	public reschedule(mute: Case) {
@@ -89,7 +103,10 @@ export default class MuteScheduler {
 	}
 
 	public async check() {
-		const mutes = await this.repo.find({ action_duration: LessThan(new Date(Date.now() + this.checkRate)), action_processed: false });
+		const mutes = await this.repo.find({
+			action_duration: LessThan(new Date(Date.now() + this.checkRate)),
+			action_processed: false,
+		});
 		const now = new Date();
 
 		for (const mute of mutes) {

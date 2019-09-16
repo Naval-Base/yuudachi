@@ -1,14 +1,14 @@
-import { Listener, Command } from 'discord-akairo';
+import { addBreadcrumb, captureException, setContext, Severity } from '@sentry/node';
+import { Command, Listener } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { addBreadcrumb, setContext, captureException, Severity } from '@sentry/node';
-import { TOPICS, EVENTS } from '../../util/logger';
+import { EVENTS, TOPICS } from '../../util/logger';
 
 export default class CommandErrorListener extends Listener {
 	public constructor() {
 		super('error', {
 			emitter: 'commandHandler',
 			event: 'error',
-			category: 'commandHandler'
+			category: 'commandHandler',
 		});
 	}
 
@@ -22,49 +22,49 @@ export default class CommandErrorListener extends Listener {
 			data: {
 				user: {
 					id: message.author!.id,
-					username: message.author!.tag
+					username: message.author!.tag,
 				},
 				guild: message.guild
 					? {
-						id: message.guild.id,
-						name: message.guild.name
-					}
+							id: message.guild.id,
+							name: message.guild.name,
+					  }
 					: null,
 				command: command
 					? {
-						id: command.id,
-						aliases: command.aliases,
-						category: command.category.id
-					}
+							id: command.id,
+							aliases: command.aliases,
+							category: command.category.id,
+					  }
 					: null,
 				message: {
 					id: message.id,
-					content: message.content
-				}
-			}
+					content: message.content,
+				},
+			},
 		});
 		setContext('command_started', {
 			user: {
 				id: message.author!.id,
-				username: message.author!.tag
+				username: message.author!.tag,
 			},
 			extra: {
 				guild: message.guild
 					? {
-						id: message.guild.id,
-						name: message.guild.name
-					}
+							id: message.guild.id,
+							name: message.guild.name,
+					  }
 					: null,
 				command: {
 					id: command.id,
 					aliases: command.aliases,
-					category: command.category.id
+					category: command.category.id,
 				},
 				message: {
 					id: message.id,
-					content: message.content
-				}
-			}
+					content: message.content,
+				},
+			},
 		});
 		captureException(error);
 	}

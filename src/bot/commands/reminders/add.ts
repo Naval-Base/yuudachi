@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import { Reminder } from '../../models/Reminders';
+import { MESSAGES } from '../../util/constants';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 const REMINDER_LIMIT = 15;
@@ -11,9 +12,9 @@ export default class ReminderAddCommand extends Command {
 			aliases: ['remind-me'],
 			category: 'reminders',
 			description: {
-				content: 'Adds a reminder that triggers at the given time and tells you the given reason.',
+				content: MESSAGES.COMMANDS.REMINDERS.ADD.DESCRIPTION,
 				usage: '[--dm/--pm] <time> <...reason>',
-				examples: []
+				examples: [],
 			},
 			ratelimit: 2,
 			args: [
@@ -26,24 +27,24 @@ export default class ReminderAddCommand extends Command {
 						return null;
 					},
 					prompt: {
-						start: (message: Message) => `${message.author}, when do you want me to remind you?`,
-						retry: (message: Message) => `${message.author}, please use a proper time format.`
-					}
+						start: (message: Message) => MESSAGES.COMMANDS.REMINDERS.ADD.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.REMINDERS.ADD.PROMPT.RETRY(message.author),
+					},
 				},
 				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
 					prompt: {
-						start: (message: Message) => `${message.author}, what do you want me to remind you of?`
-					}
+						start: (message: Message) => MESSAGES.COMMANDS.REMINDERS.ADD.PROMPT_2.START(message.author),
+					},
 				},
 				{
 					id: 'dm',
 					match: 'flag',
-					flag: ['--dm', '--pm']
-				}
-			]
+					flag: ['--dm', '--pm'],
+				},
+			],
 		});
 	}
 
@@ -51,20 +52,20 @@ export default class ReminderAddCommand extends Command {
 		const remindersRepo = this.client.db.getRepository(Reminder);
 		const reminderCount = await remindersRepo.count({ user: message.author!.id });
 		if (reminderCount > REMINDER_LIMIT) {
-			return message.util!.reply(`you already have ${REMINDER_LIMIT} ongoing reminders... do you really need more?`);
+			return message.util!.reply(MESSAGES.COMMANDS.REMINDERS.ADD.REMINDER_LIMIT(REMINDER_LIMIT));
 		}
 
 		if (reason && reason.length >= 1850) {
-			return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
+			return message.util!.reply(MESSAGES.COMMANDS.REMINDERS.ADD.CHARACTER_LIMIT);
 		}
 		if (!time) {
-			return message.util!.reply('I can\'t tell what time I\'m supposed to remind you at!');
+			return message.util!.reply(MESSAGES.COMMANDS.REMINDERS.ADD.INVALID_TIME_1);
 		}
-		if ((Date.now() + time) < Date.now()) {
-			return message.util!.reply('sorry, I don\'t have access to time travel yet!');
+		if (Date.now() + time < Date.now()) {
+			return message.util!.reply(MESSAGES.COMMANDS.REMINDERS.ADD.INVALID_TIME_2);
 		}
-		if ((Date.now() + time) < (Date.now() + 5000)) {
-			return message.util!.reply('I\'m sure you have better memory than that.');
+		if (Date.now() + time < Date.now() + 5000) {
+			return message.util!.reply(MESSAGES.COMMANDS.REMINDERS.ADD.INVALID_TIME_3);
 		}
 
 		await this.client.remindScheduler.add({
@@ -72,9 +73,9 @@ export default class ReminderAddCommand extends Command {
 			channel: message.channel.type === 'dm' || dm ? undefined : message.channel.id,
 			reason: Util.cleanContent(reason, message),
 			trigger: message.url,
-			triggers_at: new Date(Date.now() + time)
+			triggers_at: new Date(Date.now() + time),
 		});
 
-		return message.util!.reply(`I'll remind you in ${ms(time)}`);
+		return message.util!.reply(MESSAGES.COMMANDS.REMINDERS.ADD.REPLY(ms(time)));
 	}
 }

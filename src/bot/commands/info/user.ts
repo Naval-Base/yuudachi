@@ -1,17 +1,18 @@
-import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, GuildMember } from 'discord.js';
 import { stripIndents } from 'common-tags';
+import { Command } from 'discord-akairo';
+import { GuildMember, Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
+import { MESSAGES } from '../../util/constants';
 
 export default class UserInfoCommand extends Command {
 	public constructor() {
 		super('user', {
 			aliases: ['user', 'member', 'user-info'],
 			description: {
-				content: 'Get info about a member.',
+				content: MESSAGES.COMMANDS.INFO.USER.DESCRIPTION,
 				usage: '[member]',
-				examples: ['Crawl', '@Crawl', '81440962496172032']
+				examples: ['Crawl', '@Crawl', '81440962496172032'],
 			},
 			category: 'info',
 			channel: 'guild',
@@ -19,12 +20,12 @@ export default class UserInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					'id': 'member',
-					'match': 'content',
-					'type': 'member',
-					'default': (message: Message) => message.member!
-				}
-			]
+					id: 'member',
+					match: 'content',
+					type: 'member',
+					default: (message: Message) => message.member!,
+				},
+			],
 		});
 	}
 
@@ -39,7 +40,7 @@ export default class UserInfoCommand extends Command {
 				${member.nickname == undefined /* eslint-disable-line */ ? '• No nickname' : ` • Nickname: ${member.nickname}`}
 				• Roles: ${member.roles.map(roles => `\`${roles.name}\``).join(' ')}
 				• Joined at: ${moment.utc(member.joinedAt!).format('YYYY/MM/DD hh:mm:ss')}
-			`
+			`,
 			)
 			.addField(
 				'❯ User Details',
@@ -49,7 +50,7 @@ export default class UserInfoCommand extends Command {
 				• Created at: ${moment.utc(user.createdAt).format('YYYY/MM/DD hh:mm:ss')}${user.bot ? '\n• Is a bot account' : ''}
 				• Status: ${user.presence.status.toUpperCase()}
 				• Activity: ${user.presence.activity ? user.presence.activity.name : 'None'}
-			`
+			`,
 			)
 			.setThumbnail(user.displayAvatarURL());
 

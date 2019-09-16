@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
-import { oneLine } from 'common-tags';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 const { GITHUB_API_KEY } = process.env;
 
@@ -10,9 +10,9 @@ export default class GitHubPROrIssueCommand extends Command {
 		super('gh-issue-pr', {
 			aliases: ['gh-issue-pr', 'issue-pr', 'gh-pr', 'gh-issue'],
 			description: {
-				content: 'Get info on an issue or PR from a predefined repository.',
+				content: MESSAGES.COMMANDS.GITHUB.ISSUE_PR.DESCRIPTION,
 				usage: '<pr/issue>',
-				examples: ['1', '24', '100']
+				examples: ['1', '24', '100'],
 			},
 			regex: /\b(g|djs|commando|guide|rpc)#(\d+)/i,
 			category: 'github',
@@ -23,24 +23,21 @@ export default class GitHubPROrIssueCommand extends Command {
 				{
 					id: 'pr_issue',
 					match: 'content',
-					type: 'number'
-				}
-			]
+					type: 'number',
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
-			return message.util!.reply(oneLine`
-				my commander has not set a valid GitHub API key,
-				therefore this command is not available.
-			`);
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_API_KEY);
 		}
 		let owner;
 		let repo;
 		if ((args.match && args.match[1] === 'g') || !args.match) {
-			const repository = this.client.settings.get<string>(message.guild!, 'githubRepository', undefined);
-			if (!repository) return message.util!.reply("the guild owner didn't set a GitHub repository yet.");
+			const repository = this.client.settings.get<string>(message.guild!, SETTINGS.GITHUB_REPO, undefined);
+			if (!repository) return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_REPO);
 			owner = repository.split('/')[0];
 			repo = repository.split('/')[1];
 		}
@@ -131,22 +128,22 @@ export default class GitHubPROrIssueCommand extends Command {
 			const res = await fetch('https://api.github.com/graphql', {
 				method: 'POST',
 				headers: { Authorization: `Bearer ${GITHUB_API_KEY}` },
-				body: JSON.stringify({ query })
+				body: JSON.stringify({ query }),
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
 		}
 		if (!body || !body.data || !body.data.repository || !body.data.repository.issueOrPullRequest) {
-			return message.util!.reply("Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!");
+			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
 		}
 		const data = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
 			.setColor(data.merged ? 0x9c27b0 : data.state === 'OPEN' ? 0x43a047 : 0xef6c00)
 			.setAuthor(
-				data.author ? data.author.login ? data.author.login : 'Unknown' : 'Unknown',
-				data.author ? data.author.avatarUrl ? data.author.avatarUrl : '' : '',
-				data.author ? data.author.url ? data.author.url : '' : ''
+				data.author ? (data.author.login ? data.author.login : 'Unknown') : 'Unknown',
+				data.author ? (data.author.avatarUrl ? data.author.avatarUrl : '') : '',
+				data.author ? (data.author.url ? data.author.url : '') : '',
 			)
 			.setTitle(data.title)
 			.setURL(data.url)
@@ -158,27 +155,28 @@ export default class GitHubPROrIssueCommand extends Command {
 			.addField(
 				'Labels',
 				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
-				true
+				true,
 			)
 			.setThumbnail(data.author ? data.author.avatarUrl : '')
 			.setTimestamp(new Date(data.publishedAt));
 		if (repo && !['guide'].includes(repo) && data.commits) {
-			embed.addField(
-				'Install with',
-				`\`npm i ${owner}/${repo}#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``
-			);
+			embed.addField('Install with', `\`npm i ${owner}/${repo}#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``);
 		}
 
-		if (!(message.channel as TextChannel).permissionsFor(message.guild!.me!)!.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)) {
+		if (
+			!(message.channel as TextChannel)
+				.permissionsFor(message.guild!.me!)!
+				.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+		) {
 			return message.util!.send(embed);
 		}
-		const msg = await message.util!.send(embed) as Message;
+		const msg = (await message.util!.send(embed)) as Message;
 		msg.react('🗑');
 		let react;
 		try {
 			react = await msg.awaitReactions(
 				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
-				{ max: 1, time: 10000, errors: ['time'] }
+				{ max: 1, time: 10000, errors: ['time'] },
 			);
 		} catch (error) {
 			msg.reactions.removeAll();

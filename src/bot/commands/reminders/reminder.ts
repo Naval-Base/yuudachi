@@ -1,63 +1,30 @@
-import { Command, PrefixSupplier } from 'discord-akairo';
+import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { stripIndents } from 'common-tags';
+import { MESSAGES } from '../../util/constants';
 
 export default class ReminderCommand extends Command {
 	public constructor() {
 		super('reminder', {
 			aliases: ['remind', 'reminder'],
 			description: {
-				content: stripIndents`Available methods:
-					 • add \`[--hoist/--pin] <tag> <content>\`
-					 • del \`[--all]\`
-					 • list
-
-					Required: \`<>\` | Optional: \`[]\`
-
-					For additional \`<...arguments>\` usage refer to the examples below.
-				`,
+				content: MESSAGES.COMMANDS.REMINDERS.DESCRIPTION,
 				usage: '<method> <...arguments>',
-				examples: [
-					'add leave in 5 minutes',
-					'add --dm ban Dim in 6 months',
-					'delete',
-					'delete --all',
-					'list'
-				]
+				examples: ['add leave in 5 minutes', 'add --dm ban Dim in 6 months', 'delete', 'delete --all', 'list'],
 			},
 			category: 'reminders',
 			ratelimit: 2,
-			args: [
-				{
-					id: 'method',
-					type: ['add', 'del', 'delete', 'list']
-				},
-				{
-					'id': 'name',
-					'match': 'rest',
-					'default': ''
-				}
-			]
 		});
 	}
 
-	public async exec(message: Message, { method, name }: { method: string; name: string }) {
-		if (!method) {
-			const prefix = (this.handler.prefix as PrefixSupplier)(message);
-			return message.util!.send(stripIndents`
-				When you beg me so much I just can't not help you~
-				Check \`${prefix}help reminder\` for more information.
-			`);
-		}
+	public *args() {
+		const method = yield {
+			type: [['reminder-add', 'add'], ['reminder-delete', 'delete', 'del', 'cancel'], ['reminder-list', 'list', 'ls']],
+			otherwise: (msg: Message) => {
+				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
+				return MESSAGES.COMMANDS.REMINDERS.REPLY(prefix);
+			},
+		};
 
-		const command = ({
-			'add': this.handler.modules.get('reminder-add'),
-			'cancel': this.handler.modules.get('reminder-delete'),
-			'del': this.handler.modules.get('reminder-delete'),
-			'delete': this.handler.modules.get('reminder-delete'),
-			'list': this.handler.modules.get('reminder-list')
-		} as { [key: string]: Command })[method];
-
-		return this.handler.handleDirectCommand(message, name, command, true);
+		return Flag.continue(method);
 	}
 }

@@ -1,19 +1,20 @@
+import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
+import { MESSAGES } from '../../util/constants';
 
 export default class StatsCommand extends Command {
 	public constructor() {
 		super('stats', {
 			aliases: ['stats'],
 			description: {
-				content: 'Displays statistics about the bot.'
+				content: MESSAGES.COMMANDS.UTIL.STATS.DESCRIPTION,
 			},
 			category: 'util',
 			clientPermissions: ['EMBED_LINKS'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 
@@ -29,14 +30,18 @@ export default class StatsCommand extends Command {
 				• Guilds: ${this.client.guilds.size}
 				• Channels: ${this.client.channels.size}
 			`,
-				true
+				true,
 			)
-			.addField('❯ Version', `[${process.env.VERSION!}](https://github.com/Naval-Base/yukikaze/commit/${process.env.VERSION!})`, true)
+			.addField(
+				'❯ Version',
+				`[${process.env.VERSION!}](https://github.com/Naval-Base/yukikaze/commit/${process.env.VERSION!})`,
+				true,
+			)
 			.addField('❯ Source Code', '[View Here](https://github.com/Naval-Base/yukikaze)', true)
 			.addField(
 				'❯ Library',
 				'[discord.js](https://discord.js.org)[-akairo](https://github.com/1Computer1/discord-akairo)',
-				true
+				true,
 			)
 			.setThumbnail(this.client.user!.displayAvatarURL())
 			.setFooter(`© 2018-2019 ${this.client.users.get(this.client.config.owner!)!.tag}`);

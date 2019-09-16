@@ -1,8 +1,9 @@
+import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Role } from 'discord.js';
-import { stripIndents } from 'common-tags';
 import * as moment from 'moment';
 import 'moment-duration-format';
+import { MESSAGES } from '../../util/constants';
 
 interface Permissions {
 	[key: string]: string;
@@ -36,7 +37,7 @@ const PERMISSIONS: Permissions = {
 	MUTE_MEMBERS: 'Mute members',
 	DEAFEN_MEMBERS: 'Deafen members',
 	MOVE_MEMBERS: 'Move members',
-	USE_VAD: 'Use voice activity'
+	USE_VAD: 'Use voice activity',
 };
 
 export default class RoleInfoCommand extends Command {
@@ -44,9 +45,9 @@ export default class RoleInfoCommand extends Command {
 		super('role', {
 			aliases: ['role', 'role-info'],
 			description: {
-				content: 'Get info about a role.',
+				content: MESSAGES.COMMANDS.INFO.ROLE.DESCRIPTION,
 				usage: '[role]',
-				examples: ['Mod', '@Mod']
+				examples: ['Mod', '@Mod'],
 			},
 			category: 'info',
 			channel: 'guild',
@@ -54,19 +55,19 @@ export default class RoleInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					'id': 'role',
-					'match': 'content',
-					'type': 'role',
-					'default': (message: Message) => message.member!.roles.highest
-				}
-			]
+					id: 'role',
+					match: 'content',
+					type: 'role',
+					default: (message: Message) => message.member!.roles.highest,
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, { role }: { role: Role }) {
 		const permissions = Object.keys(PERMISSIONS).filter(
 			// @ts-ignore
-			permission => role.permissions.serialize()[permission]
+			permission => role.permissions.serialize()[permission],
 		);
 		const embed = new MessageEmbed()
 			.setColor(3447003)
@@ -78,13 +79,13 @@ export default class RoleInfoCommand extends Command {
 				• Hoisted: ${role.hoist ? 'Yes' : 'No'}
 				• Mentionable: ${role.mentionable ? 'Yes' : 'No'}
 				• Creation Date: ${moment.utc(role.createdAt).format('YYYY/MM/DD hh:mm:ss')}
-			`
+			`,
 			)
 			.addField(
 				'❯ Permissions',
 				stripIndents`
 				${permissions.map(permission => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
-			`
+			`,
 			)
 			.setThumbnail(message.guild!.iconURL()!);
 

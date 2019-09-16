@@ -1,20 +1,20 @@
 import { Listener, PrefixSupplier } from 'discord-akairo';
-import { Message, GuildMember, TextChannel } from 'discord.js';
-import { RoleState } from '../../models/RoleStates';
+import { GuildMember, Message, TextChannel } from 'discord.js';
 import { Case } from '../../models/Cases';
-import { ACTIONS, COLORS } from '../../util';
+import { RoleState } from '../../models/RoleStates';
+import { ACTIONS, COLORS, SETTINGS } from '../../util/constants';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {
 		super('guildMemberUpdateModeration', {
 			emitter: 'client',
 			event: 'guildMemberUpdate',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
 	public async exec(oldMember: GuildMember, newMember: GuildMember) {
-		const moderation = this.client.settings.get(newMember.guild, 'moderation', undefined);
+		const moderation = this.client.settings.get(newMember.guild, SETTINGS.MOD, undefined);
 		if (moderation) {
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMBED`)) return;
@@ -22,22 +22,27 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:REACTION`)) return;
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:TAG`)) return;
 
-			const modRole = this.client.settings.get<string>(newMember.guild, 'modRole', undefined);
+			const modRole = this.client.settings.get<string>(newMember.guild, SETTINGS.MOD_ROLE, undefined);
 			if (modRole && newMember.roles.has(modRole)) return;
-			const muteRole = this.client.settings.get<string>(newMember.guild, 'muteRole', undefined);
-			const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string; tag: string }>(newMember.guild, 'restrictRoles', undefined);
+			const muteRole = this.client.settings.get<string>(newMember.guild, SETTINGS.MUTE_ROLE, undefined);
+			const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string; tag: string }>(
+				newMember.guild,
+				SETTINGS.RESTRICT_ROLES,
+				undefined,
+			);
 			if (!muteRole && !restrictRoles) return;
 			const roleStatesRepo = this.client.db.getRepository(RoleState);
 			const automaticRoleState = await roleStatesRepo.findOne({ user: newMember.id });
 			if (
 				automaticRoleState &&
 				(automaticRoleState.roles.includes(muteRole) ||
-				automaticRoleState.roles.includes(restrictRoles.embed) ||
-				automaticRoleState.roles.includes(restrictRoles.emoji) ||
-				automaticRoleState.roles.includes(restrictRoles.reaction) ||
-				automaticRoleState.roles.includes(restrictRoles.tag))
-			) return;
-			const modLogChannel = this.client.settings.get<string>(newMember.guild, 'modLogChannel', undefined);
+					automaticRoleState.roles.includes(restrictRoles.embed) ||
+					automaticRoleState.roles.includes(restrictRoles.emoji) ||
+					automaticRoleState.roles.includes(restrictRoles.reaction) ||
+					automaticRoleState.roles.includes(restrictRoles.tag))
+			)
+				return;
+			const modLogChannel = this.client.settings.get<string>(newMember.guild, SETTINGS.MOD_LOG, undefined);
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			const casesRepo = this.client.db.getRepository(Case);
 			if (!role) {
@@ -77,23 +82,21 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 					return;
 			}
 
-			const totalCases = this.client.settings.get<number>(newMember.guild, 'caseTotal', 0) + 1;
-			this.client.settings.set(newMember.guild, 'caseTotal', totalCases);
+			const totalCases = this.client.settings.get<number>(newMember.guild, SETTINGS.CASES, 0) + 1;
+			this.client.settings.set(newMember.guild, SETTINGS.CASES, totalCases);
 
 			let modMessage;
 			if (modLogChannel) {
 				const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild: newMember.guild } as Message);
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 				const color = ACTIONS[action] as keyof typeof ACTIONS;
-				const embed = (
-					await this.client.caseHandler.log({
-						member: newMember,
-						action: actionName,
-						caseNum: totalCases,
-						reason,
-						message: { author: null, guild: newMember.guild }
-					})
-				).setColor(COLORS[color]);
+				const embed = (await this.client.caseHandler.log({
+					member: newMember,
+					action: actionName,
+					caseNum: totalCases,
+					reason,
+					message: { author: null, guild: newMember.guild },
+				})).setColor(COLORS[color]);
 				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 			}
 
@@ -104,7 +107,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				target_id: newMember.id,
 				target_tag: newMember.user.tag,
 				action,
-				action_processed: processed
+				action_processed: processed,
 			});
 		}
 	}

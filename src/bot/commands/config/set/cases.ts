@@ -1,13 +1,14 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class SetConfigCasesCommand extends Command {
 	public constructor() {
 		super('config-set-cases', {
 			description: {
-				content: 'Sets the case number of the guild.',
+				content: MESSAGES.COMMANDS.CONFIG.SET.CASES.DESCRIPTION,
 				usage: '<cases>',
-				examples: ['5']
+				examples: ['5'],
 			},
 			category: 'config',
 			channel: 'guild',
@@ -17,14 +18,14 @@ export default class SetConfigCasesCommand extends Command {
 				{
 					id: 'cases',
 					match: 'content',
-					type: 'integer'
-				}
-			]
+					type: 'integer',
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, { cases }: { cases: number }) {
-		this.client.settings.set(message.guild!, 'caseTotal', cases);
-		return message.util!.reply(`set cases to **${cases}**`);
+		this.client.settings.set(message.guild!, SETTINGS.CASES, cases);
+		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.CASES.REPLY(cases));
 	}
 }
