@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, User } from 'discord.js';
 import UnbanAction from '../../structures/case/actions/Unban';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class UnbanCommand extends Command {
 	public constructor() {
@@ -8,9 +9,9 @@ export default class UnbanCommand extends Command {
 			aliases: ['unban'],
 			category: 'mod',
 			description: {
-				content: 'Unbans a user, duh.',
+				content: MESSAGES.COMMANDS.MOD.UNBAN.DESCRIPTION,
 				usage: '<member> [--ref=number] [...reason]',
-				examples: ['@Crawl', '@Crawl appealed', '@Souji --ref=1234 appealed', '@Souji --ref=1234']
+				examples: ['@Crawl', '@Crawl appealed', '@Souji --ref=1234 appealed', '@Souji --ref=1234'],
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -23,29 +24,29 @@ export default class UnbanCommand extends Command {
 						return user;
 					},
 					prompt: {
-						start: (message: Message) => `${message.author}, what member do you want to unban?`,
-						retry: (message: Message) => `${message.author}, please mention a member.`
-					}
+						start: (message: Message) => MESSAGES.COMMANDS.MOD.UNBAN.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.MOD.UNBAN.PROMPT.RETRY(message.author),
+					},
 				},
 				{
 					id: 'ref',
 					type: 'integer',
 					match: 'option',
-					flag: ['--ref=', '-r=']
+					flag: ['--ref=', '-r='],
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
-				}
-			]
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: '',
+				},
+			],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
+		const staffRole = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_ROLE, undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
@@ -60,7 +61,7 @@ export default class UnbanCommand extends Command {
 				member: user,
 				keys: key,
 				reason,
-				ref
+				ref,
 			}).commit();
 		} catch (error) {
 			return message.util!.reply(error.message);

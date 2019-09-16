@@ -1,14 +1,15 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { MESSAGES } from '../../util/constants';
 
 export default class PrefixCommand extends Command {
 	public constructor() {
 		super('prefix', {
 			aliases: ['prefix'],
 			description: {
-				content: 'Displays or changes the prefix of the guild.',
+				content: MESSAGES.COMMANDS.UTIL.PREFIX.DESCRIPTION,
 				usage: '[prefix]',
-				examples: ['*', 'Yukikaze']
+				examples: ['*', 'Yukikaze'],
 			},
 			category: 'util',
 			channel: 'guild',
@@ -17,18 +18,19 @@ export default class PrefixCommand extends Command {
 			args: [
 				{
 					id: 'prefix',
-					type: 'string'
-				}
-			]
+					type: 'string',
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, { prefix }: { prefix: string }) {
-		if (!prefix) return message.util!.send(`The current prefix for this guild is: \`${(this.handler.prefix as PrefixSupplier)(message)}\``);
+		if (!prefix)
+			return message.util!.send(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY((this.handler.prefix as PrefixSupplier)(message)));
 		this.client.settings.set(message.guild!, 'prefix', prefix);
 		if (prefix === process.env.COMMAND_PREFIX) {
-			return message.util!.reply(`the prefix has been reset to \`${prefix}\``);
+			return message.util!.reply(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY_2(prefix));
 		}
-		return message.util!.reply(`the prefix has been set to \`${prefix}\``);
+		return message.util!.reply(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY_3(prefix));
 	}
 }

@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message } from 'discord.js';
 import MuteAction from '../../structures/case/actions/Mute';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class MuteCommand extends Command {
@@ -9,9 +10,9 @@ export default class MuteCommand extends Command {
 			aliases: ['mute'],
 			category: 'mod',
 			description: {
-				content: 'Mutes a member, duh.',
+				content: MESSAGES.COMMANDS.MOD.MUTE.DESCRIPTION,
 				usage: '<member> <duration> [--ref=number] [...reason]',
-				examples: ['@Crawl 20m', '@Crawl 20m no u', '@Souji 14d --ref=1234 just stop']
+				examples: ['@Crawl 20m', '@Crawl 20m no u', '@Souji 14d --ref=1234 just stop'],
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -21,9 +22,9 @@ export default class MuteCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: (message: Message) => `${message.author}, what member do you want to mute?`,
-						retry: (message: Message) => `${message.author}, please mention a member.`
-					}
+						start: (message: Message) => MESSAGES.COMMANDS.MOD.MUTE.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.MOD.MUTE.PROMPT.RETRY(message.author),
+					},
 				},
 				{
 					id: 'duration',
@@ -34,35 +35,38 @@ export default class MuteCommand extends Command {
 						return null;
 					},
 					prompt: {
-						start: (message: Message) => `${message.author}, for how long do you want the mute to last?`,
-						retry: (message: Message) => `${message.author}, please use a proper time format.`
-					}
+						start: (message: Message) => MESSAGES.COMMANDS.MOD.MUTE.PROMPT_2.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.MOD.MUTE.PROMPT_2.RETRY(message.author),
+					},
 				},
 				{
 					id: 'ref',
 					type: 'integer',
 					match: 'option',
-					flag: ['--ref=', '-r=']
+					flag: ['--ref=', '-r='],
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
-				}
-			]
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: '',
+				},
+			],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
+		const staffRole = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_ROLE, undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { member, duration, ref, reason }: { member: GuildMember; duration: number; ref: number; reason: string }) {
+	public async exec(
+		message: Message,
+		{ member, duration, ref, reason }: { member: GuildMember; duration: number; ref: number; reason: string },
+	) {
 		if (member.id === message.author!.id) return;
 		const key = `${message.guild!.id}:${member.id}:MUTE`;
 		try {
@@ -72,7 +76,7 @@ export default class MuteCommand extends Command {
 				keys: key,
 				reason,
 				ref,
-				duration
+				duration,
 			}).commit();
 		} catch (error) {
 			return message.util!.reply(error.message);

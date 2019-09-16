@@ -1,6 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { GuildMember, Message } from 'discord.js';
 import BanAction from '../../structures/case/actions/Ban';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class BanCommand extends Command {
 	public constructor() {
@@ -8,9 +9,9 @@ export default class BanCommand extends Command {
 			aliases: ['ban'],
 			category: 'mod',
 			description: {
-				content: 'Bans a member, duh.',
+				content: MESSAGES.COMMANDS.MOD.BAN.DESCRIPTION,
 				usage: '<member> [--days=number] [--ref=number] [...reason]',
-				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no']
+				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no'],
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
@@ -24,42 +25,45 @@ export default class BanCommand extends Command {
 						return null;
 					}),
 					prompt: {
-						start: (message: Message) => `${message.author}, what member do you want to ban?`,
-						retry: (message: Message) => `${message.author}, please mention a member.`
-					}
+						start: (message: Message) => MESSAGES.COMMANDS.MOD.BAN.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.MOD.BAN.PROMPT.RETRY(message.author),
+					},
 				},
 				{
-					'id': 'days',
-					'type': 'integer',
-					'match': 'option',
-					'flag': ['--days=', '-d='],
-					'default': 7
+					id: 'days',
+					type: 'integer',
+					match: 'option',
+					flag: ['--days=', '-d='],
+					default: 7,
 				},
 				{
 					id: 'ref',
 					type: 'integer',
 					match: 'option',
-					flag: ['--ref=', '-r=']
+					flag: ['--ref=', '-r='],
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
-				}
-			]
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: '',
+				},
+			],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
+		const staffRole = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_ROLE, undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
-	public async exec(message: Message, { member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string }) {
+	public async exec(
+		message: Message,
+		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
+	) {
 		const key = `${message.guild!.id}:${member.id}:BAN`;
 		try {
 			await new BanAction({
@@ -68,7 +72,7 @@ export default class BanCommand extends Command {
 				keys: key,
 				reason,
 				ref,
-				days
+				days,
 			}).commit();
 		} catch (error) {
 			return message.util!.reply(error.message);

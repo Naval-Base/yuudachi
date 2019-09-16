@@ -3,15 +3,16 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
+import { MESSAGES } from '../../util/constants';
 
 export default class ChannelInfoCommand extends Command {
 	public constructor() {
 		super('channel', {
 			aliases: ['channel', 'channel-info'],
 			description: {
-				content: 'Get info about a channel.',
+				content: MESSAGES.COMMANDS.INFO.CHANNEL.DESCRIPTION,
 				usage: '[channel]',
-				examples: ['#general', 'general', '222197033908436994']
+				examples: ['#general', 'general', '222197033908436994'],
 			},
 			category: 'info',
 			channel: 'guild',
@@ -19,12 +20,12 @@ export default class ChannelInfoCommand extends Command {
 			ratelimit: 2,
 			args: [
 				{
-					'id': 'channel',
-					'match': 'content',
-					'type': 'channel',
-					'default': (message: Message) => message.channel
-				}
-			]
+					id: 'channel',
+					match: 'content',
+					type: 'channel',
+					default: (message: Message) => message.channel,
+				},
+			],
 		});
 	}
 
@@ -39,7 +40,7 @@ export default class ChannelInfoCommand extends Command {
 				• Topic ${channel.topic ? channel.topic : 'None'}
 				• NSFW: ${Boolean(channel.nsfw)}
 				• Creation Date: ${moment.utc(channel.createdAt).format('YYYY/MM/DD hh:mm:ss')}
-			`
+			`,
 			)
 			.setThumbnail(message.guild!.iconURL()!);
 

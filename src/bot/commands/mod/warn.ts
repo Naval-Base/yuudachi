@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message } from 'discord.js';
 import WarnAction from '../../structures/case/actions/Warn';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class WarnCommand extends Command {
 	public constructor() {
@@ -8,9 +9,9 @@ export default class WarnCommand extends Command {
 			aliases: ['warn'],
 			category: 'mod',
 			description: {
-				content: 'Warns a user, duh.',
+				content: MESSAGES.COMMANDS.MOD.WARN.DESCRIPTION,
 				usage: '<member> [--ref=number] [...reason]',
-				examples: ['@Crawl', '@Crawl dumb', '@Souji --ref=1234 no u', '@Souji --ref=1234']
+				examples: ['@Crawl', '@Crawl dumb', '@Souji --ref=1234 no u', '@Souji --ref=1234'],
 			},
 			channel: 'guild',
 			clientPermissions: ['MANAGE_ROLES'],
@@ -20,29 +21,29 @@ export default class WarnCommand extends Command {
 					id: 'member',
 					type: 'member',
 					prompt: {
-						start: (message: Message) => `${message.author}, what member do you want to warn?`,
-						retry: (message: Message) => `${message.author}, please mention a member.`
-					}
+						start: (message: Message) => MESSAGES.COMMANDS.MOD.WARN.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.MOD.WARN.PROMPT.RETRY(message.author),
+					},
 				},
 				{
 					id: 'ref',
 					type: 'integer',
 					match: 'option',
-					flag: ['--ref=', '-r=']
+					flag: ['--ref=', '-r='],
 				},
 				{
-					'id': 'reason',
-					'match': 'rest',
-					'type': 'string',
-					'default': ''
-				}
-			]
+					id: 'reason',
+					match: 'rest',
+					type: 'string',
+					default: '',
+				},
+			],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get<string>(message.guild!, 'modRole', undefined);
+		const staffRole = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_ROLE, undefined);
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
@@ -57,7 +58,7 @@ export default class WarnCommand extends Command {
 				member,
 				keys: key,
 				reason,
-				ref
+				ref,
 			}).commit();
 		} catch (error) {
 			return message.util!.reply(error.message);

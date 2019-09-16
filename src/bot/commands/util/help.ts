@@ -1,14 +1,14 @@
-import { stripIndents } from 'common-tags';
 import { Command, PrefixSupplier } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import { MESSAGES } from '../../util/constants';
 
 export default class HelpCommand extends Command {
 	public constructor() {
 		super('help', {
 			aliases: ['help'],
 			description: {
-				content: 'Displays a list of available commands, or detailed information for a specified command.',
-				usage: '[command]'
+				content: MESSAGES.COMMANDS.UTIL.HELP.DESCRIPTION,
+				usage: '[command]',
 			},
 			category: 'util',
 			clientPermissions: ['EMBED_LINKS'],
@@ -16,9 +16,9 @@ export default class HelpCommand extends Command {
 			args: [
 				{
 					id: 'command',
-					type: 'commandAlias'
-				}
-			]
+					type: 'commandAlias',
+				},
+			],
 		});
 	}
 
@@ -27,12 +27,16 @@ export default class HelpCommand extends Command {
 		if (!command) {
 			const embed = new MessageEmbed()
 				.setColor(3447003)
-				.addField('❯ Commands', stripIndents`A list of available commands.
-					For additional info on a command, type \`${prefix}help <command>\`
-				`);
+				.addField('❯ Commands', MESSAGES.COMMANDS.UTIL.HELP.REPLY(prefix));
 
 			for (const category of this.handler.categories.values()) {
-				embed.addField(`❯ ${category.id.replace(/(\b\w)/gi, lc => lc.toUpperCase())}`, `${category.filter(cmd => cmd.aliases.length > 0).map(cmd => `\`${cmd.aliases[0]}\``).join(' ')}`);
+				embed.addField(
+					`❯ ${category.id.replace(/(\b\w)/gi, lc => lc.toUpperCase())}`,
+					`${category
+						.filter(cmd => cmd.aliases.length > 0)
+						.map(cmd => `\`${cmd.aliases[0]}\``)
+						.join(' ')}`,
+				);
 			}
 
 			return message.util!.send(embed);
@@ -44,7 +48,12 @@ export default class HelpCommand extends Command {
 			.addField('❯ Description', command.description.content || '\u200b');
 
 		if (command.aliases.length > 1) embed.addField('❯ Aliases', `\`${command.aliases.join('` `')}\``, true);
-		if (command.description.examples && command.description.examples.length) embed.addField('❯ Examples', `\`${command.aliases[0]} ${command.description.examples.join(`\`\n\`${command.aliases[0]} `)}\``, true);
+		if (command.description.examples && command.description.examples.length)
+			embed.addField(
+				'❯ Examples',
+				`\`${command.aliases[0]} ${command.description.examples.join(`\`\n\`${command.aliases[0]} `)}\``,
+				true,
+			);
 
 		return message.util!.send(embed);
 	}

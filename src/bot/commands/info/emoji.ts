@@ -3,6 +3,7 @@ import { Command } from 'discord-akairo';
 import { GuildEmoji, Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import * as emojis from 'node-emoji';
+import { MESSAGES } from '../../util/constants';
 const punycode = require('punycode'); // eslint-disable-line
 
 const EMOJI_REGEX = /<(?:a)?:(?:\w{2,32}):(\d{17,19})>?/;
@@ -12,9 +13,9 @@ export default class EmojiInfoCommand extends Command {
 		super('emoji', {
 			aliases: ['emoji', 'emoji-info'],
 			description: {
-				content: 'Get information about an emoji.',
+				content: MESSAGES.COMMANDS.INFO.EMOJI.DESCRIPTION,
 				usage: '<emoji>',
-				examples: ['🤔', 'thinking_face', '264701195573133315', '<:Thonk:264701195573133315>']
+				examples: ['🤔', 'thinking_face', '264701195573133315', '<:Thonk:264701195573133315>'],
 			},
 			category: 'info',
 			channel: 'guild',
@@ -25,22 +26,22 @@ export default class EmojiInfoCommand extends Command {
 					id: 'emoji',
 					match: 'content',
 					type: async (message, content) => {
+						// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 						if (EMOJI_REGEX.test(content)) [, content] = content.match(EMOJI_REGEX)!;
-						if (!isNaN(content as unknown as number)) return message.guild!.emojis.get(content);
+						if (!isNaN((content as unknown) as number)) return message.guild!.emojis.get(content);
 						return message.guild!.emojis.find(e => e.name === content) || emojis.find(content);
 					},
 					prompt: {
-						start: (message: Message) => `${message.author}, what emoji would you like information about?`,
-						retry: (message: Message) => `${message.author}, please provide a valid emoji!`
-					}
-				}
-			]
+						start: (message: Message) => MESSAGES.COMMANDS.INFO.EMOJI.PROMPT.START(message.author),
+						retry: (message: Message) => MESSAGES.COMMANDS.INFO.EMOJI.PROMPT.RETRY(message.author),
+					},
+				},
+			],
 		});
 	}
 
 	public async exec(message: Message, { emoji }: { emoji: GuildEmoji | emojis.Emoji }) {
-		const embed = new MessageEmbed()
-			.setColor(3447003);
+		const embed = new MessageEmbed().setColor(3447003);
 
 		if (emoji instanceof GuildEmoji) {
 			embed.setDescription(`Info about ${emoji.name} (ID: ${emoji.id})`);
@@ -51,7 +52,7 @@ export default class EmojiInfoCommand extends Command {
 				• Identifier: \`<${emoji.identifier}>\`
 				• Creation Date: ${moment.utc(emoji.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 				• URL: ${emoji.url}
-				`
+				`,
 			);
 		} else {
 			embed.setDescription(`Info about ${emoji.emoji}`);
@@ -60,8 +61,17 @@ export default class EmojiInfoCommand extends Command {
 				stripIndents`
 				• Name: \`${emoji.key}\`
 				• Raw: \`${emoji.emoji}\`
-				• Unicode: \`${punycode.ucs2.decode(emoji.emoji).map((e: any) => `\\u${e.toString(16).toUpperCase().padStart(4, '0')}`).join('')}\`
-				`
+				• Unicode: \`${punycode.ucs2
+					.decode(emoji.emoji)
+					.map(
+						(e: any) =>
+							`\\u${e
+								.toString(16)
+								.toUpperCase()
+								.padStart(4, '0')}`,
+					)
+					.join('')}\`
+				`,
 			);
 		}
 
