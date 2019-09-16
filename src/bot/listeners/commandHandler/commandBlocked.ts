@@ -7,11 +7,16 @@ export default class CommandBlockedListener extends Listener {
 		super('commandBlocked', {
 			emitter: 'commandHandler',
 			event: 'commandBlocked',
-			category: 'commandHandler'
+			category: 'commandHandler',
 		});
 	}
 
 	public exec(message: Message, command: Command, reason: string) {
-		this.client.logger.info(`Blocked ${command.id} on ${message.guild ? `${message.guild.name} (${message.guild.id})` : 'DM'} with reason ${reason}`, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.COMMAND_BLOCKED });
+		this.client.logger.info(
+			`Blocked ${command.id} on ${
+				message.guild ? `${message.guild.name} (${message.guild.id})` : 'DM'
+			} with reason ${reason}`,
+			{ topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.COMMAND_BLOCKED },
+		);
 	}
 }

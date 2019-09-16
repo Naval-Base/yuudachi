@@ -8,7 +8,7 @@ export default class SetConfigModChannelCommand extends Command {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.MOD_LOG.DESCRIPTION,
 				usage: '<channel>',
-				examples: ['#mod-log', 'mog-log']
+				examples: ['#mod-log', 'mog-log'],
 			},
 			category: 'config',
 			channel: 'guild',
@@ -18,9 +18,9 @@ export default class SetConfigModChannelCommand extends Command {
 				{
 					id: 'channel',
 					match: 'content',
-					type: 'textChannel'
-				}
-			]
+					type: 'textChannel',
+				},
+			],
 		});
 	}
 

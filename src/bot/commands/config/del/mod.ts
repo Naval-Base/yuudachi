@@ -6,12 +6,12 @@ export default class DeleteConfigModRoleCommand extends Command {
 	public constructor() {
 		super('config-del-mod', {
 			description: {
-				content: MESSAGES.COMMANDS.CONFIG.DELETE.MOD.DESCRIPTION
+				content: MESSAGES.COMMANDS.CONFIG.DELETE.MOD.DESCRIPTION,
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 

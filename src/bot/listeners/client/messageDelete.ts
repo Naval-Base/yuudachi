@@ -6,7 +6,7 @@ export default class MessageDeleteListener extends Listener {
 		super('messageDelete', {
 			emitter: 'client',
 			event: 'messageDelete',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -31,7 +31,7 @@ export default class MessageDeleteListener extends Listener {
 			return webhook.send({
 				embeds: [embed],
 				username: 'Logs: MESSAGE DELETED',
-				avatarURL: 'https://i.imgur.com/EUGvQJJ.png'
+				avatarURL: 'https://i.imgur.com/EUGvQJJ.png',
 			});
 		}
 	}

@@ -7,7 +7,7 @@ export default class SetConfigRestrictRolesTagCommand extends Command {
 		super('config-set-restrict-tag', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.DESCRIPTION,
-				usage: '<Role/RoleId>'
+				usage: '<Role/RoleId>',
 			},
 			category: 'config',
 			channel: 'guild',
@@ -19,10 +19,10 @@ export default class SetConfigRestrictRolesTagCommand extends Command {
 					type: 'role',
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.PROMPT.START(message.author),
-						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.PROMPT.RETRY(message.author)
-					}
-				}
-			]
+						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.PROMPT.RETRY(message.author),
+					},
+				},
+			],
 		});
 	}
 

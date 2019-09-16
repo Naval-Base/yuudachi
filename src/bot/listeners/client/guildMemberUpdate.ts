@@ -9,7 +9,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 		super('guildMemberUpdateModeration', {
 			emitter: 'client',
 			event: 'guildMemberUpdate',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -25,18 +25,23 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			const modRole = this.client.settings.get<string>(newMember.guild, 'modRole', undefined);
 			if (modRole && newMember.roles.has(modRole)) return;
 			const muteRole = this.client.settings.get<string>(newMember.guild, 'muteRole', undefined);
-			const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string; tag: string }>(newMember.guild, 'restrictRoles', undefined);
+			const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string; tag: string }>(
+				newMember.guild,
+				'restrictRoles',
+				undefined,
+			);
 			if (!muteRole && !restrictRoles) return;
 			const roleStatesRepo = this.client.db.getRepository(RoleState);
 			const automaticRoleState = await roleStatesRepo.findOne({ user: newMember.id });
 			if (
 				automaticRoleState &&
 				(automaticRoleState.roles.includes(muteRole) ||
-				automaticRoleState.roles.includes(restrictRoles.embed) ||
-				automaticRoleState.roles.includes(restrictRoles.emoji) ||
-				automaticRoleState.roles.includes(restrictRoles.reaction) ||
-				automaticRoleState.roles.includes(restrictRoles.tag))
-			) return;
+					automaticRoleState.roles.includes(restrictRoles.embed) ||
+					automaticRoleState.roles.includes(restrictRoles.emoji) ||
+					automaticRoleState.roles.includes(restrictRoles.reaction) ||
+					automaticRoleState.roles.includes(restrictRoles.tag))
+			)
+				return;
 			const modLogChannel = this.client.settings.get<string>(newMember.guild, 'modLogChannel', undefined);
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			const casesRepo = this.client.db.getRepository(Case);
@@ -85,15 +90,13 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild: newMember.guild } as Message);
 				const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 				const color = ACTIONS[action] as keyof typeof ACTIONS;
-				const embed = (
-					await this.client.caseHandler.log({
-						member: newMember,
-						action: actionName,
-						caseNum: totalCases,
-						reason,
-						message: { author: null, guild: newMember.guild }
-					})
-				).setColor(COLORS[color]);
+				const embed = (await this.client.caseHandler.log({
+					member: newMember,
+					action: actionName,
+					caseNum: totalCases,
+					reason,
+					message: { author: null, guild: newMember.guild },
+				})).setColor(COLORS[color]);
 				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 			}
 
@@ -104,7 +107,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				target_id: newMember.id,
 				target_tag: newMember.user.tag,
 				action,
-				action_processed: processed
+				action_processed: processed,
 			});
 		}
 	}

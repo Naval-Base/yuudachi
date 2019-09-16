@@ -8,7 +8,7 @@ export default class MessageDeleteBulkListener extends Listener {
 		super('messageDeleteBulk', {
 			emitter: 'client',
 			event: 'messageDeleteBulk',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -20,12 +20,19 @@ export default class MessageDeleteBulkListener extends Listener {
 			if (!webhook) return;
 			const output = messages.reduce((out, msg) => {
 				const attachment = msg.attachments.first();
-				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author!.tag} (${msg.author!.id}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${attachment ? `\r\n${attachment.url}` : ''}\r\n`;
+				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author!.tag} (${
+					msg.author!.id
+				}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${
+					attachment ? `\r\n${attachment.url}` : ''
+				}\r\n`;
 				return out;
 			}, '');
 			const embed = new MessageEmbed()
 				.setColor(0x824aee)
-				.setAuthor(`${messages.first()!.author!.tag} (${messages.first()!.author!.id})`, messages.first()!.author!.displayAvatarURL())
+				.setAuthor(
+					`${messages.first()!.author!.tag} (${messages.first()!.author!.id})`,
+					messages.first()!.author!.displayAvatarURL(),
+				)
 				.addField('❯ Logs', 'See attachment file for full logs (possibly above this embed)')
 				.setTimestamp(new Date())
 				.setFooter('Bulk Deleted');
@@ -34,7 +41,7 @@ export default class MessageDeleteBulkListener extends Listener {
 				embeds: [embed],
 				files: [{ attachment: Buffer.from(output, 'utf8'), name: 'logs.txt' }],
 				username: 'Logs: MESSAGE DELETED BULK',
-				avatarURL: 'https://i.imgur.com/EUGvQJJ.png'
+				avatarURL: 'https://i.imgur.com/EUGvQJJ.png',
 			});
 		}
 	}

@@ -7,7 +7,7 @@ export default class GuildBanRemoveListener extends Listener {
 		super('guildBanRemove', {
 			emitter: 'client',
 			event: 'guildBanRemove',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -21,15 +21,13 @@ export default class GuildBanRemoveListener extends Listener {
 		if (modLogChannel) {
 			const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild } as Message);
 			const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-			const embed = (
-				await this.client.caseHandler.log({
-					member: user,
-					action: 'Unban',
-					caseNum: totalCases,
-					reason,
-					message: { author: null, guild }
-				})
-			).setColor(COLORS.UNBAN);
+			const embed = (await this.client.caseHandler.log({
+				member: user,
+				action: 'Unban',
+				caseNum: totalCases,
+				reason,
+				message: { author: null, guild },
+			})).setColor(COLORS.UNBAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -39,7 +37,7 @@ export default class GuildBanRemoveListener extends Listener {
 			case_id: totalCases,
 			target_id: user.id,
 			target_tag: user.tag,
-			action: ACTIONS.UNBAN
+			action: ACTIONS.UNBAN,
 		});
 	}
 }

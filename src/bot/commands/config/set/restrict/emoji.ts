@@ -7,7 +7,7 @@ export default class SetConfigRestrictRolesEmojiCommand extends Command {
 		super('config-set-restrict-emoji', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMOJI.DESCRIPTION,
-				usage: '<Role/RoleId>'
+				usage: '<Role/RoleId>',
 			},
 			category: 'config',
 			channel: 'guild',
@@ -19,10 +19,10 @@ export default class SetConfigRestrictRolesEmojiCommand extends Command {
 					type: 'role',
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMOJI.PROMPT.START(message.author),
-						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMOJI.PROMPT.RETRY(message.author)
-					}
-				}
-			]
+						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMOJI.PROMPT.RETRY(message.author),
+					},
+				},
+			],
 		});
 	}
 

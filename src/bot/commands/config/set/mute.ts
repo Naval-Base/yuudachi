@@ -8,7 +8,7 @@ export default class SetConfigMuteRoleCommand extends Command {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.MUTE.DESCRIPTION,
 				usage: '<role>',
-				examples: ['@Muted', 'Muted']
+				examples: ['@Muted', 'Muted'],
 			},
 			category: 'config',
 			channel: 'guild',
@@ -18,9 +18,9 @@ export default class SetConfigMuteRoleCommand extends Command {
 				{
 					id: 'role',
 					match: 'content',
-					type: 'role'
-				}
-			]
+					type: 'role',
+				},
+			],
 		});
 	}
 

@@ -8,7 +8,7 @@ export default class SetConfigModRoleCommand extends Command {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.MOD.DESCRIPTION,
 				usage: '<role>',
-				examples: ['@Mod', 'Mods']
+				examples: ['@Mod', 'Mods'],
 			},
 			category: 'config',
 			channel: 'guild',
@@ -18,9 +18,9 @@ export default class SetConfigModRoleCommand extends Command {
 				{
 					id: 'role',
 					match: 'content',
-					type: 'role'
-				}
-			]
+					type: 'role',
+				},
+			],
 		});
 	}
 

@@ -109,10 +109,10 @@ export default class YukikazeClient extends AkairoClient {
 				ended: MESSAGES.COMMAND_HANDLER.PROMPT.ENDED,
 				cancel: MESSAGES.COMMAND_HANDLER.PROMPT.CANCEL,
 				retries: 3,
-				time: 30000
+				time: 30000,
 			},
-			otherwise: ''
-		}
+			otherwise: '',
+		},
 	});
 
 	public inhibitorHandler = new InhibitorHandler(this, { directory: join(__dirname, '..', 'inhibitors') });
@@ -130,8 +130,11 @@ export default class YukikazeClient extends AkairoClient {
 	public prometheus = {
 		messagesCounter: new Counter({ name: PROMETHEUS.MESSAGE_COUNTER, help: PROMETHEUS.HELP.MESSAGE_COUNTER }),
 		commandCounter: new Counter({ name: PROMETHEUS.COMMAND_COUNTER, help: PROMETHEUS.HELP.COMMAND_COUNTER }),
-		lewdcarioAvatarCounter: new Counter({ name: PROMETHEUS.LEWDCARIO_AVATAR_COUNTER, help: PROMETHEUS.HELP.LEWDCARIO_AVATAR_COUNTER }),
-		register
+		lewdcarioAvatarCounter: new Counter({
+			name: PROMETHEUS.LEWDCARIO_AVATAR_COUNTER,
+			help: PROMETHEUS.HELP.LEWDCARIO_AVATAR_COUNTER,
+		}),
+		register,
 	};
 
 	public promServer = createServer((req, res) => {
@@ -143,11 +146,14 @@ export default class YukikazeClient extends AkairoClient {
 	});
 
 	public constructor(config: YukikazeOptions) {
-		super({ ownerID: config.owner }, {
-			messageCacheMaxSize: 1000,
-			disableEveryone: true,
-			disabledEvents: ['TYPING_START']
-		});
+		super(
+			{ ownerID: config.owner },
+			{
+				messageCacheMaxSize: 1000,
+				disableEveryone: true,
+				disabledEvents: ['TYPING_START'],
+			},
+		);
 
 		this.on('message', () => {
 			this.prometheus.messagesCounter.inc();
@@ -162,8 +168,8 @@ export default class YukikazeClient extends AkairoClient {
 				tag = await tagsRepo.findOne({
 					where: [
 						{ name: phrase, guild: message.guild!.id },
-						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
-					]
+						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id },
+					],
 				});
 			} catch {}
 
@@ -178,8 +184,8 @@ export default class YukikazeClient extends AkairoClient {
 				tag = await tagsRepo.findOne({
 					where: [
 						{ name: phrase, guild: message.guild!.id },
-						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id }
-					]
+						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id },
+					],
 				});
 			} catch {}
 
@@ -203,9 +209,9 @@ export default class YukikazeClient extends AkairoClient {
 				serverName: 'yukikaze_bot',
 				integrations: [
 					new RewriteFrames({
-						root: __rootdir__
-					})
-				]
+						root: __rootdir__,
+					}),
+				],
 			});
 		} else {
 			process.on('unhandledRejection', (err: any) => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
@@ -222,7 +228,7 @@ export default class YukikazeClient extends AkairoClient {
 		this.listenerHandler.setEmitters({
 			commandHandler: this.commandHandler,
 			inhibitorHandler: this.inhibitorHandler,
-			listenerHandler: this.listenerHandler
+			listenerHandler: this.listenerHandler,
 		});
 
 		this.commandHandler.loadAll();
@@ -236,11 +242,17 @@ export default class YukikazeClient extends AkairoClient {
 		await this.db.connect();
 		this.logger.info(MESSAGES.DATABASE.LOADED(this.db.name), { topic: TOPICS.POSTGRES, event: EVENTS.INIT });
 		this.node = await new IPCServer('bot')
-			.on('error', (error, client) => this.logger.error(MESSAGES.IPC.ERROR(client!.name!, error), { topic: TOPICS.RPC, event: EVENTS.ERROR }))
+			.on('error', (error, client) =>
+				this.logger.error(MESSAGES.IPC.ERROR(client!.name!, error), { topic: TOPICS.RPC, event: EVENTS.ERROR }),
+			)
 			.on('open', () => this.logger.info(MESSAGES.IPC.OPEN, { topic: TOPICS.RPC, event: EVENTS.READY }))
 			.on('close', () => this.logger.info(MESSAGES.IPC.CLOSE, { topic: TOPICS.RPC, event: EVENTS.DESTROY }))
-			.on('connect', client => this.logger.info(MESSAGES.IPC.CONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.CONNECT }))
-			.on('disconnect', client => this.logger.info(MESSAGES.IPC.DISCONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.DISCONNECT }))
+			.on('connect', client =>
+				this.logger.info(MESSAGES.IPC.CONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.CONNECT }),
+			)
+			.on('disconnect', client =>
+				this.logger.info(MESSAGES.IPC.DISCONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.DISCONNECT }),
+			)
 			.listen(9512);
 		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();

@@ -10,7 +10,7 @@ connectionManager.create({
 	name: 'yukikaze',
 	type: 'postgres',
 	url: process.env.DB,
-	entities: [Setting, Tag, RoleState, Case, Reminder]
+	entities: [Setting, Tag, RoleState, Case, Reminder],
 });
 
 export default connectionManager;

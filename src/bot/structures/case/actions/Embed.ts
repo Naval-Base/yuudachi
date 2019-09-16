@@ -15,7 +15,7 @@ export default class EmbedAction extends Action {
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error('nuh-uh! You know you can\'t do this.');
+			throw new Error("nuh-uh! You know you can't do this.");
 		}
 
 		const restrictRoles = this.client.settings.get<{ embed: string }>(this.message.guild!, 'restrictRoles', undefined);
@@ -37,7 +37,10 @@ export default class EmbedAction extends Action {
 		const sentMessage = await this.message.channel.send(`Embed restricting **${this.member.user.tag}**...`);
 
 		try {
-			await this.member.roles.add(restrictRoles.embed, `Embed restricted by ${this.message.author!.tag} | Case #${totalCases}`);
+			await this.member.roles.add(
+				restrictRoles.embed,
+				`Embed restricted by ${this.message.author!.tag} | Case #${totalCases}`,
+			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(`there was an error embed restricting this member \`${error.message}\``);

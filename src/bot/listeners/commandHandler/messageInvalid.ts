@@ -6,7 +6,7 @@ export default class MessageInvalidListener extends Listener {
 		super('messageInvalid', {
 			emitter: 'commandHandler',
 			event: 'messageInvalid',
-			category: 'commandHandler'
+			category: 'commandHandler',
 		});
 	}
 
@@ -14,7 +14,11 @@ export default class MessageInvalidListener extends Listener {
 		if (message.guild && message.util!.parsed!.prefix) {
 			if (!message.util!.parsed!.alias || !message.util!.parsed!.afterPrefix) return;
 			const command = this.client.commandHandler.modules.get('tag-show');
-			return this.client.commandHandler.runCommand(message, command!, await command!.parse(message, message.util!.parsed!.afterPrefix!));
+			return this.client.commandHandler.runCommand(
+				message,
+				command!,
+				await command!.parse(message, message.util!.parsed!.afterPrefix),
+			);
 		}
 	}
 }

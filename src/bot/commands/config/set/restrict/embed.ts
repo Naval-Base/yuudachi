@@ -7,7 +7,7 @@ export default class SetConfigRestrictRolesEmbedCommand extends Command {
 		super('config-set-restrict-embed', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.DESCRIPTION,
-				usage: '<Role/RoleId>'
+				usage: '<Role/RoleId>',
 			},
 			category: 'config',
 			channel: 'guild',
@@ -19,10 +19,10 @@ export default class SetConfigRestrictRolesEmbedCommand extends Command {
 					type: 'role',
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.PROMPT.START(message.author),
-						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.PROMPT.RETRY(message.author)
-					}
-				}
-			]
+						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.PROMPT.RETRY(message.author),
+					},
+				},
+			],
 		});
 	}
 

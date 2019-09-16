@@ -16,7 +16,7 @@ export default class KickAction extends Action {
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error('nuh-uh! You know you can\'t do this.');
+			throw new Error("nuh-uh! You know you can't do this.");
 		}
 		this.client.caseHandler.cachedCases.add(this.keys as string);
 

@@ -6,7 +6,9 @@ const client = new YukikazeClient({ owner: process.env.OWNERS, token: process.en
 
 client
 	.on('error', err => client.logger.error(err.message, { topic: TOPICS.DISCORD, event: EVENTS.ERROR }))
-	.on('shardError', (err, id) => client.logger.error(err.message, { topic: TOPICS.DISCORD, event: `SHARD ${id} ERROR` }))
+	.on('shardError', (err, id) =>
+		client.logger.error(err.message, { topic: TOPICS.DISCORD, event: `SHARD ${id} ERROR` }),
+	)
 	.on('warn', info => client.logger.warn(info, { topic: TOPICS.DISCORD, event: EVENTS.WARN }));
 
 client.start();

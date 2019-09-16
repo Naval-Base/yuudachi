@@ -29,7 +29,10 @@ export default class UnbanAction extends Action {
 		const sentMessage = await this.message.channel.send(`Unbanning **${this.member.tag}**...`);
 
 		try {
-			await this.message.guild!.members.unban(this.member, `Unbanned by ${this.message.author!.tag} | Case #${totalCases}`);
+			await this.message.guild!.members.unban(
+				this.member,
+				`Unbanned by ${this.message.author!.tag} | Case #${totalCases}`,
+			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(`there was an error unbanning this member \`${error.message}\``);

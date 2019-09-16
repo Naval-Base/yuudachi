@@ -8,7 +8,7 @@ export enum ACTIONS {
 	EMOJI,
 	REACTION,
 	WARN,
-	TAG
+	TAG,
 }
 
 export enum COLORS {
@@ -21,5 +21,5 @@ export enum COLORS {
 	EMOJI = 16776960,
 	REACTION = 16776960,
 	WARN = 16776960,
-	TAG = 16776960
+	TAG = 16776960,
 }

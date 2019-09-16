@@ -31,7 +31,7 @@
 		"punycode": "^2.1.1",
 		"reflect-metadata": "^0.1.13",
 		"turndown": "^5.0.3",
-		"typeorm": "^0.2.18",
+		"typeorm": "^0.2.19",
 		"veza": "^1.1.0",
 		"winston": "^3.2.1",
 		"winston-daily-rotate-file": "^4.1.0",
@@ -46,8 +46,11 @@
 		"@types/ws": "^6.0.3",
 		"@typescript-eslint/eslint-plugin": "^2.2.0",
 		"@typescript-eslint/parser": "^2.2.0",
-		"eslint": "^6.3.0",
-		"eslint-config-marine": "^4.2.1",
+		"eslint": "^6.4.0",
+		"eslint-config-marine": "^5.0.0",
+		"eslint-config-prettier": "^6.3.0",
+		"eslint-plugin-prettier": "^3.1.0",
+		"prettier": "^1.18.2",
 		"rimraf": "^3.0.0",
 		"typescript": "^3.6.3",
 		"utility-types": "^3.7.0"
@@ -58,7 +61,7 @@
 		"zlib-sync": "^0.1.5"
 	},
 	"eslintConfig": {
-		"extends": "marine/node",
+		"extends": "marine/prettier/node",
 		"globals": {
 			"BigInt": true
 		}

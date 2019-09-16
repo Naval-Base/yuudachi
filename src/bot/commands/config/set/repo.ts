@@ -8,7 +8,7 @@ export default class SetConfigGitHubRepositoryCommand extends Command {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.REPO.DESCRIPTION,
 				usage: '<repo>',
-				examples: ['1Computer1/discord-akairo', 'discordjs/discord.js']
+				examples: ['1Computer1/discord-akairo', 'discordjs/discord.js'],
 			},
 			category: 'config',
 			channel: 'guild',
@@ -17,9 +17,9 @@ export default class SetConfigGitHubRepositoryCommand extends Command {
 			args: [
 				{
 					id: 'repository',
-					type: 'string'
-				}
-			]
+					type: 'string',
+				},
+			],
 		});
 	}
 

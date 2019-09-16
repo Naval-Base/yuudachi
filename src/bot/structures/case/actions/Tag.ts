@@ -15,7 +15,7 @@ export default class TagAction extends Action {
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error('nuh-uh! You know you can\'t do this.');
+			throw new Error("nuh-uh! You know you can't do this.");
 		}
 
 		const restrictRoles = this.client.settings.get<{ tag: string }>(this.message.guild!, 'restrictRoles', undefined);
@@ -37,7 +37,10 @@ export default class TagAction extends Action {
 		const sentMessage = await this.message.channel.send(`Tag restricting **${this.member.user.tag}**...`);
 
 		try {
-			await this.member.roles.add(restrictRoles.tag, `Tag restricted by ${this.message.author!.tag} | Case #${totalCases}`);
+			await this.member.roles.add(
+				restrictRoles.tag,
+				`Tag restricted by ${this.message.author!.tag} | Case #${totalCases}`,
+			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(`there was an error tag restricting this member \`${error.message}\``);

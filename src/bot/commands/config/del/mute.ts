@@ -6,12 +6,12 @@ export default class DeleteConfigMuteRoleCommand extends Command {
 	public constructor() {
 		super('config-del-mute', {
 			description: {
-				content: MESSAGES.COMMANDS.CONFIG.DELETE.MUTE.DESCRIPTION
+				content: MESSAGES.COMMANDS.CONFIG.DELETE.MUTE.DESCRIPTION,
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 

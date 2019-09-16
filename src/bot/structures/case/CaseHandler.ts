@@ -27,7 +27,7 @@ export const ACTION_KEYS = [
 	'restriction',
 	'restriction',
 	'warn',
-	'restriction'
+	'restriction',
 ];
 
 interface Log {
@@ -44,10 +44,7 @@ export default class CaseHandler {
 	public cachedCases = new Set<string>();
 
 	// eslint-disable-next-line no-useless-constructor
-	public constructor(
-		private client: YukikazeClient,
-		public repo: Repository<Case>
-	) {}
+	public constructor(private readonly client: YukikazeClient, public repo: Repository<Case>) {}
 
 	public async create(newCase: Optional<Omit<Case, 'id' | 'createdAt'>, 'action_processed'>) {
 		return this.repo.insert({
@@ -59,7 +56,7 @@ export default class CaseHandler {
 			mod_id: newCase.mod_id,
 			mod_tag: newCase.mod_tag,
 			action: newCase.action,
-			reason: newCase.reason
+			reason: newCase.reason,
 		});
 	}
 
@@ -68,12 +65,12 @@ export default class CaseHandler {
 		caseNum: number,
 		channel?: string,
 		restrictRoles?: { embed: string; emoji: string; reaction: string },
-		removeRole?: boolean
+		removeRole?: boolean,
 	) {
-		const cs = await this.repo.findOne({ guild: message.guild!.id, case_id: caseNum }) as Case;
+		const cs = (await this.repo.findOne({ guild: message.guild!.id, case_id: caseNum })) as Case;
 
 		if (channel) {
-			const chan = await this.client.channels.get(channel) as TextChannel;
+			const chan = this.client.channels.get(channel) as TextChannel;
 			try {
 				const msgToDelete = await chan.messages.fetch(cs.message!);
 				await msgToDelete.delete();
@@ -87,7 +84,7 @@ export default class CaseHandler {
 	public async log({ member, action, caseNum, reason, message, duration, ref }: Log) {
 		const embed = new MessageEmbed();
 		if (message && message.author) {
-			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());
+			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
 		}
 		let reference;
 		let channel;
@@ -98,11 +95,18 @@ export default class CaseHandler {
 			} catch {}
 		}
 
-		embed.setDescription(stripIndents`
+		embed
+			.setDescription(
+				stripIndents`
 				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
-				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { 'long': true })}` : ''}
-				**Reason:** ${reason}${reference ? `\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})` : ''}
-			`)
+				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { long: true })}` : ''}
+				**Reason:** ${reason}${
+					reference
+						? `\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})`
+						: ''
+				}
+			`,
+			)
 			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
 			.setFooter(`Case ${caseNum}`)
 			.setTimestamp(new Date());
@@ -114,7 +118,7 @@ export default class CaseHandler {
 		const cases = await this.repo.find({ target_id: member.id });
 		const footer = cases.reduce((count: Footer, c) => {
 			const action = ACTION_KEYS[c.action];
-			count[action] = (count[action] || 0) as number + 1;
+			count[action] = (count[action] || 0) + 1;
 			return count;
 		}, {});
 
@@ -124,7 +128,10 @@ export default class CaseHandler {
 		const colorIndex = Math.min(values.reduce((a: number, b: number): number => a + b), colors.length - 1);
 
 		return new MessageEmbed()
-			.setAuthor(`${member instanceof User ? member.tag : member.user.tag} (${member.id})`, member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
+			.setAuthor(
+				`${member instanceof User ? member.tag : member.user.tag} (${member.id})`,
+				member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL(),
+			)
 			.setColor(colors[colorIndex])
 			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
 			.setFooter(oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
@@ -150,7 +157,10 @@ export default class CaseHandler {
 				const key = `${message.guild!.id}:${member.id}:MUTE`;
 				try {
 					this.cachedCases.add(key);
-					await member.roles.remove(roles.embed, `Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+					await member.roles.remove(
+						roles.embed,
+						`Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+					);
 				} catch (error) {
 					this.cachedCases.delete(key);
 					message.reply(`there was an error removing the mute on this member: \`${error}\``);
@@ -165,7 +175,10 @@ export default class CaseHandler {
 						break;
 					}
 					if (!member) break;
-					await member.roles.remove(roles.embed, `Embed restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+					await member.roles.remove(
+						roles.embed,
+						`Embed restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+					);
 				} catch (error) {
 					message.reply(`there was an error removing the embed restriction on this member: \`${error}\``);
 				}
@@ -179,7 +192,10 @@ export default class CaseHandler {
 						break;
 					}
 					if (!member) break;
-					await member.roles.remove(roles.emoji, `Emoji restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+					await member.roles.remove(
+						roles.emoji,
+						`Emoji restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+					);
 				} catch (error) {
 					message.reply(`there was an error removing the emoji restriction on this member: \`${error}\``);
 				}
@@ -193,7 +209,10 @@ export default class CaseHandler {
 						break;
 					}
 					if (!member) break;
-					await member.roles.remove(roles.reaction, `Reaction restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+					await member.roles.remove(
+						roles.reaction,
+						`Reaction restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+					);
 				} catch (error) {
 					message.reply(`there was an error removing the reaction restriction on this member: \`${error}\``);
 				}

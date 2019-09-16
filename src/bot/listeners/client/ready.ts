@@ -6,12 +6,15 @@ export default class ReadyListener extends Listener {
 		super('ready', {
 			emitter: 'client',
 			event: 'ready',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
 	public async exec() {
-		this.client.logger.info(`Yawn... Hmph, ${this.client.user!.tag} (${this.client.user!.id}) is only with you because she's in a good mood!`, { topic: TOPICS.DISCORD, event: EVENTS.READY });
+		this.client.logger.info(
+			`Yawn... Hmph, ${this.client.user!.tag} (${this.client.user!.id}) is only with you because she's in a good mood!`,
+			{ topic: TOPICS.DISCORD, event: EVENTS.READY },
+		);
 		this.client.user!.setActivity(`@${this.client.user!.username} help 💖`);
 		this.client.promServer.listen(5500);
 		this.client.node.on('message', this.client.nodeMessage);

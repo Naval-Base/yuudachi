@@ -6,12 +6,12 @@ export default class DeleteConfigGitHubRepositoryCommand extends Command {
 	public constructor() {
 		super('config-del-repo', {
 			description: {
-				content: MESSAGES.COMMANDS.CONFIG.DELETE.REPO.DESCRIPTION
+				content: MESSAGES.COMMANDS.CONFIG.DELETE.REPO.DESCRIPTION,
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 

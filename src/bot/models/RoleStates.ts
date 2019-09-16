@@ -14,6 +14,6 @@ export class RoleState {
 	@Column({ type: 'bigint' })
 	public user!: string;
 
-	@Column({ 'type': 'text', 'array': true, 'default': (): string => 'ARRAY[]::text[]' })
+	@Column({ type: 'text', array: true, default: (): string => 'ARRAY[]::text[]' })
 	public roles!: string[];
 }

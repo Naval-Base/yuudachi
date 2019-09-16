@@ -7,7 +7,7 @@ export default class GuildMemberUpdateRoleStateListener extends Listener {
 		super('guildMemberUpdateRoleState', {
 			emitter: 'client',
 			event: 'guildMemberUpdate',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -19,7 +19,8 @@ export default class GuildMemberUpdateRoleStateListener extends Listener {
 				const roleStateRepo = this.client.db.getRepository(RoleState);
 				const roles = newMember.roles.filter(role => role.id !== newMember.guild.id).map(role => role.id);
 				if (roles.length) {
-					await roleStateRepo.createQueryBuilder()
+					await roleStateRepo
+						.createQueryBuilder()
 						.insert()
 						.into(RoleState)
 						.values({ guild: newMember.guild.id, user: newMember.id, roles })

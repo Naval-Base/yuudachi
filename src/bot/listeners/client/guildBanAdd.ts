@@ -7,7 +7,7 @@ export default class GuildBanAddListener extends Listener {
 		super('guildBanAdd', {
 			emitter: 'client',
 			event: 'guildBanAdd',
-			category: 'client'
+			category: 'client',
 		});
 	}
 
@@ -21,15 +21,13 @@ export default class GuildBanAddListener extends Listener {
 		if (modLogChannel) {
 			const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild } as Message);
 			const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-			const embed = (
-				await this.client.caseHandler.log({
-					member: user,
-					action: 'Ban',
-					caseNum: totalCases,
-					reason,
-					message: { author: null, guild }
-				})
-			).setColor(COLORS.BAN);
+			const embed = (await this.client.caseHandler.log({
+				member: user,
+				action: 'Ban',
+				caseNum: totalCases,
+				reason,
+				message: { author: null, guild },
+			})).setColor(COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 
@@ -39,7 +37,7 @@ export default class GuildBanAddListener extends Listener {
 			case_id: totalCases,
 			target_id: user.id,
 			target_tag: user.tag,
-			action: ACTIONS.BAN
+			action: ACTIONS.BAN,
 		});
 	}
 }

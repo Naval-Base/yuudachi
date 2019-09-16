@@ -6,12 +6,12 @@ export default class ClearConfigCommand extends Command {
 	public constructor() {
 		super('config-clear', {
 			description: {
-				content: MESSAGES.COMMANDS.CONFIG.CLEAR.DESCRIPTION
+				content: MESSAGES.COMMANDS.CONFIG.CLEAR.DESCRIPTION,
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 

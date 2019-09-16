@@ -6,7 +6,7 @@ export default class UserUpdateLewdcarioAvatarListener extends Listener {
 		super('userUpdateLewdcarioAvatar', {
 			emitter: 'client',
 			event: 'userUpdate',
-			category: 'client'
+			category: 'client',
 		});
 	}
 

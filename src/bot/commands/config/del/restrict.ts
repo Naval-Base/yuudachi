@@ -6,12 +6,12 @@ export default class DeleteConfigRestrictRolesCommand extends Command {
 	public constructor() {
 		super('config-del-restrict', {
 			description: {
-				content: MESSAGES.COMMANDS.CONFIG.DELETE.RESTRICT.DESCRIPTION
+				content: MESSAGES.COMMANDS.CONFIG.DELETE.RESTRICT.DESCRIPTION,
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 

@@ -16,7 +16,7 @@ export default class BanAction extends Action {
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error('nuh-uh! You know you can\'t do this.');
+			throw new Error("nuh-uh! You know you can't do this.");
 		}
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
@@ -28,7 +28,7 @@ export default class BanAction extends Action {
 		await this.message.channel.send('You sure you want me to ban this [no gender specified]?', { embed });
 		const responses = await this.message.channel.awaitMessages(msg => msg.author.id === this.message.author!.id, {
 			max: 1,
-			time: 10000
+			time: 10000,
 		});
 
 		if (!responses || responses.size !== 1) {
@@ -58,7 +58,7 @@ export default class BanAction extends Action {
 					${this.reason ? `\n**Reason:** ${this.reason}\n` : ''}
 					You can appeal your ban by DMing \`Crawl#0002\` with a message why you think you deserve to have your ban lifted.
 				`);
-			} catch { }
+			} catch {}
 			await this.member.ban({ days: this.days, reason: `Banned by ${this.message.author!.tag} | Case #${totalCases}` });
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);

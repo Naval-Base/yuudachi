@@ -7,12 +7,12 @@ export default class SetConfigRestrictRolesCommand extends Command {
 		super('config-set-restrict', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.DESCRIPTION,
-				usage: '<key> <...arguments>'
+				usage: '<key> <...arguments>',
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 
@@ -22,12 +22,12 @@ export default class SetConfigRestrictRolesCommand extends Command {
 				['config-set-restrict-embed', 'embed'],
 				['config-set-restrict-emoji', 'emoji'],
 				['config-set-restrict-reaction', 'reaction'],
-				['config-set-restrict-tag', 'tag']
+				['config-set-restrict-tag', 'tag'],
 			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.REPLY(prefix);
-			}
+			},
 		};
 
 		return Flag.continue(key);

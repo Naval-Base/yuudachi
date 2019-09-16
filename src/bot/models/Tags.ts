@@ -17,24 +17,24 @@ export class Tag {
 	@Column()
 	public name!: string;
 
-	@Column({ 'type': 'text', 'array': true, 'default': (): string => 'ARRAY[]::text[]' })
+	@Column({ type: 'text', array: true, default: (): string => 'ARRAY[]::text[]' })
 	public aliases!: string[];
 
 	@Column()
 	public content!: string;
 
-	@Column({ 'default': false })
+	@Column({ default: false })
 	public hoisted!: boolean;
 
-	@Column({ 'default': 0 })
+	@Column({ default: 0 })
 	public uses!: number;
 
 	@Column({ type: 'bigint', nullable: true })
 	public last_modified?: string;
 
-	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
+	@Column({ type: 'timestamptz', default: (): string => 'now()' })
 	public createdAt!: Date;
 
-	@Column({ 'type': 'timestamptz', 'default': (): string => 'now()' })
+	@Column({ type: 'timestamptz', default: (): string => 'now()' })
 	public updatedAt!: Date;
 }

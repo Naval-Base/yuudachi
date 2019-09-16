@@ -4,7 +4,7 @@ import { Message } from 'discord.js';
 export default class BlacklistInhibitor extends Inhibitor {
 	public constructor() {
 		super('blacklist', {
-			reason: 'blacklist'
+			reason: 'blacklist',
 		});
 	}
 

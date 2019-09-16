@@ -7,12 +7,12 @@ export default class DeleteConfigCommand extends Command {
 		super('config-delete', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.DELETE.DESCRIPTION,
-				usage: '<key>'
+				usage: '<key>',
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 
@@ -24,12 +24,12 @@ export default class DeleteConfigCommand extends Command {
 				['config-del-modlog', 'modLogChannel', 'modlog', 'modchan', 'mod-channel'],
 				['config-del-mute', 'muteRole', 'mute', 'mute-role'],
 				['config-del-repo', 'githubRepository', 'repo', 'repository'],
-				['config-del-restrict', 'restrictRoles', 'restrict', 'restrict-roles']
+				['config-del-restrict', 'restrictRoles', 'restrict', 'restrict-roles'],
 			],
 			otherwise: (msg: Message): string => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return MESSAGES.COMMANDS.CONFIG.DELETE.REPLY(prefix);
-			}
+			},
 		};
 
 		return Flag.continue(key);

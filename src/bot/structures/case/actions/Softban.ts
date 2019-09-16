@@ -16,10 +16,13 @@ export default class SoftbanAction extends Action {
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error('nuh-uh! You know you can\'t do this.');
+			throw new Error("nuh-uh! You know you can't do this.");
 		}
 
-		if (this.client.caseHandler.cachedCases.has(this.keys![0]) && this.client.caseHandler.cachedCases.has(this.keys![1])) {
+		if (
+			this.client.caseHandler.cachedCases.has(this.keys![0]) &&
+			this.client.caseHandler.cachedCases.has(this.keys![1])
+		) {
 			throw new Error('that user is currently being moderated by someone else.');
 		}
 		this.client.caseHandler.cachedCases.add(this.keys![0]);
@@ -43,8 +46,14 @@ export default class SoftbanAction extends Action {
 					You may rejoin whenever.
 				`);
 			} catch {}
-			await this.member.ban({ days: this.days, reason: `Softbanned by ${this.message.author!.tag} | Case #${totalCases}` });
-			await this.message.guild!.members.unban(this.member, `Softbanned by ${this.message.author!.tag} | Case #${totalCases}`);
+			await this.member.ban({
+				days: this.days,
+				reason: `Softbanned by ${this.message.author!.tag} | Case #${totalCases}`,
+			});
+			await this.message.guild!.members.unban(
+				this.member,
+				`Softbanned by ${this.message.author!.tag} | Case #${totalCases}`,
+			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys![0]);
 			this.client.caseHandler.cachedCases.delete(this.keys![1]);

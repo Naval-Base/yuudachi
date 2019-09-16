@@ -8,7 +8,7 @@ export default class SetConfigCasesCommand extends Command {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.CASES.DESCRIPTION,
 				usage: '<cases>',
-				examples: ['5']
+				examples: ['5'],
 			},
 			category: 'config',
 			channel: 'guild',
@@ -18,9 +18,9 @@ export default class SetConfigCasesCommand extends Command {
 				{
 					id: 'cases',
 					match: 'content',
-					type: 'integer'
-				}
-			]
+					type: 'integer',
+				},
+			],
 		});
 	}
 

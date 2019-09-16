@@ -7,12 +7,12 @@ export default class SetConfigCommand extends Command {
 		super('config-set', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.DESCRIPTION,
-				usage: '<key> <...arguments>'
+				usage: '<key> <...arguments>',
 			},
 			category: 'config',
 			channel: 'guild',
 			userPermissions: ['MANAGE_GUILD'],
-			ratelimit: 2
+			ratelimit: 2,
 		});
 	}
 
@@ -24,12 +24,12 @@ export default class SetConfigCommand extends Command {
 				['config-set-modlog', 'modLogChannel', 'modLog', 'modlog', 'modChan', 'modchan', 'mod-channel'],
 				['config-set-mute', 'muteRole', 'mute', 'mute-role'],
 				['config-set-repo', 'githubRepository', 'repo', 'repository'],
-				['config-set-restrict', 'restrictRoles', 'restrict', 'restrict-roles']
+				['config-set-restrict', 'restrictRoles', 'restrict', 'restrict-roles'],
 			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return MESSAGES.COMMANDS.CONFIG.SET.REPLY(prefix);
-			}
+			},
 		};
 
 		return Flag.continue(key);

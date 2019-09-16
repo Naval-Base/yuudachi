@@ -7,7 +7,7 @@ export default class SetConfigRestrictRolesReactionCommand extends Command {
 		super('config-set-restrict-reaction', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.REACTION.DESCRIPTION,
-				usage: '<Role/RoleId>'
+				usage: '<Role/RoleId>',
 			},
 			category: 'config',
 			channel: 'guild',
@@ -19,10 +19,10 @@ export default class SetConfigRestrictRolesReactionCommand extends Command {
 					type: 'role',
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.REACTION.PROMPT.START(message.author),
-						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.REACTION.PROMPT.RETRY(message.author)
-					}
-				}
-			]
+						retry: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.REACTION.PROMPT.RETRY(message.author),
+					},
+				},
+			],
 		});
 	}
 
