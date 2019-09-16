@@ -1,5 +1,6 @@
 import { GuildMember } from 'discord.js';
 import { ACTIONS } from '../../../util';
+import { SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type UnbanData = Omit<ActionData, 'days' | 'duration'>;
@@ -24,7 +25,7 @@ export default class UnbanAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof GuildMember) return;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
 
 		const sentMessage = await this.message.channel.send(`Unbanning **${this.member.tag}**...`);
 
@@ -38,7 +39,7 @@ export default class UnbanAction extends Action {
 			throw new Error(`there was an error unbanning this member \`${error.message}\``);
 		}
 
-		this.client.settings.set(this.message.guild!, 'caseTotal', totalCases);
+		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
 		sentMessage.edit(`Successfully unbanned **${this.member.tag}**`);
 	}

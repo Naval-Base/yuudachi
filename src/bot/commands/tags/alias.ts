@@ -1,24 +1,30 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { Tag } from '../../models/Tags';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class TagAliasCommand extends Command {
 	public constructor() {
 		super('tag-alias', {
 			category: 'tags',
 			description: {
+				content: MESSAGES.COMMANDS.TAGS.ALIAS.DESCRIPTION,
 				usage: '<--add/--del> <tag> <tagalias>',
-				examples: ['--add Test1 Test2', '--del "Test 2" "Test 3"', '"Test 3" "Test 4" --add']
+				examples: ['--add Test1 Test2', '--del "Test 2" "Test 3"', '"Test 3" "Test 4" --add'],
 			},
 			channel: 'guild',
 			ratelimit: 2,
-			flags: ['--add', '--del']
+			flags: ['--add', '--del'],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(
+			message.guild!,
+			SETTINGS.RESTRICT_ROLES,
+			undefined,
+		);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
@@ -29,48 +35,52 @@ export default class TagAliasCommand extends Command {
 		const first = yield {
 			type: 'tag',
 			prompt: {
-				start: (message: Message) => `${message.author}, what's the tag you want to alias?`,
-				retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
-			}
+				start: (message: Message) => MESSAGES.COMMANDS.TAGS.ALIAS.PROMPT.START(message.author),
+				retry: (message: Message, { failure }: { failure: { value: string } }) =>
+					MESSAGES.COMMANDS.TAGS.ALIAS.PROMPT.RETRY(message.author, failure.value),
+			},
 		};
 
 		const add = yield {
 			match: 'flag',
-			flag: '--add'
+			flag: '--add',
 		};
 
 		const del = yield {
 			match: 'flag',
-			flag: '--del'
+			flag: '--del',
 		};
 
-		const second = yield (
-			add
-				? {
+		const second = yield add
+			? {
 					match: 'rest',
 					type: 'existingTag',
 					prompt: {
-						start: (message: Message) => `${message.author}, what's the alias you want to apply to this tag?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
-					}
-				}
-				: {
+						start: (message: Message) => MESSAGES.COMMANDS.TAGS.ALIAS.PROMPT_2.START(message.author),
+						retry: (message: Message, { failure }: { failure: { value: string } }) =>
+							MESSAGES.COMMANDS.TAGS.ALIAS.PROMPT_2.RETRY(message.author, failure.value),
+					},
+			  }
+			: {
 					match: 'rest',
 					type: 'string',
 					prompt: {
-						start: (message: Message) => `${message.author}, what's the alias you want to remove from this tag?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** already exists.`
-					}
-				}
-		);
+						start: (message: Message) => MESSAGES.COMMANDS.TAGS.ALIAS.PROMPT_3.START(message.author),
+						retry: (message: Message, { failure }: { failure: { value: string } }) =>
+							MESSAGES.COMMANDS.TAGS.ALIAS.PROMPT_3.RETRY(message.author, failure.value),
+					},
+			  };
 
 		return { first, second, add, del };
 	}
 
-	public async exec(message: Message, { first, second, add, del }: { first: Tag; second: string; add: boolean; del: boolean }) {
+	public async exec(
+		message: Message,
+		{ first, second, add, del }: { first: Tag; second: string; add: boolean; del: boolean },
+	) {
 		if (add) {
 			if (second && second.length >= 1900) {
-				return message.util!.reply('you must still have water behind your ears to not realize that messages have a limit of 2000 characters!');
+				return message.util!.reply(MESSAGES.COMMANDS.TAGS.ALIAS.TOO_LONG);
 			}
 			first.aliases.push(second);
 		} else if (del) {
@@ -83,6 +93,6 @@ export default class TagAliasCommand extends Command {
 		first.last_modified = message.author!.id;
 		await tagsRepo.save(first);
 
-		return message.util!.reply(`alias ${second.substring(0, 1900)} ${add ? 'added to' : 'deleted from'} tag ${first.name}.`);
+		return message.util!.reply(MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, second.substring(0, 1900), add));
 	}
 }

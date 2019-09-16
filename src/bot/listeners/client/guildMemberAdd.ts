@@ -1,6 +1,7 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
 import { RoleState } from '../../models/RoleStates';
+import { SETTINGS } from '../../util/constants';
 
 export default class GuildMemberAddListener extends Listener {
 	public constructor() {
@@ -12,7 +13,7 @@ export default class GuildMemberAddListener extends Listener {
 	}
 
 	public async exec(member: GuildMember) {
-		const roleState = this.client.settings.get<boolean>(member.guild, 'roleState', undefined);
+		const roleState = this.client.settings.get<boolean>(member.guild, SETTINGS.ROLE_STATE, undefined);
 		if (roleState) {
 			const roleStateRepo = this.client.db.getRepository(RoleState);
 			const user = await roleStateRepo.findOne({ guild: member.guild.id, user: member.id });

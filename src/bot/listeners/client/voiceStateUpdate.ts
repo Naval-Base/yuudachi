@@ -1,5 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { MessageEmbed, VoiceState } from 'discord.js';
+import { SETTINGS } from '../../util/constants';
 
 export default class VoiceStateUpdateListener extends Listener {
 	public constructor() {
@@ -13,7 +14,7 @@ export default class VoiceStateUpdateListener extends Listener {
 	public async exec(oldState: VoiceState, newState: VoiceState) {
 		if ((oldState && oldState.member && oldState.member.user.bot) || (newState.member && newState.member.user.bot))
 			return;
-		const guildLogs = this.client.settings.get<string>(newState.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(newState.guild, SETTINGS.GUILD_LOGS, undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;

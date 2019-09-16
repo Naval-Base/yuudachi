@@ -1,5 +1,6 @@
 import { Inhibitor } from 'discord-akairo';
 import { Message } from 'discord.js';
+import { SETTINGS } from '../util/constants';
 
 export default class BlacklistInhibitor extends Inhibitor {
 	public constructor() {
@@ -9,7 +10,7 @@ export default class BlacklistInhibitor extends Inhibitor {
 	}
 
 	public exec(message: Message) {
-		const blacklist = this.client.settings.get<string[]>('global', 'blacklist', []);
+		const blacklist = this.client.settings.get<string[]>('global', SETTINGS.BLACKLIST, []);
 		return blacklist.includes(message.author!.id);
 	}
 }

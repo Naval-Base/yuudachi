@@ -2,14 +2,15 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
 import { Like } from 'typeorm';
 import { Tag } from '../../models/Tags';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class SearchTagCommand extends Command {
 	public constructor() {
 		super('tag-search', {
 			category: 'tags',
 			description: {
-				content: 'Searches a tag.',
-				usage: '<tag>'
+				content: MESSAGES.COMMANDS.TAGS.SEARCH.DESCRIPTION,
+				usage: '<tag>',
 			},
 			channel: 'guild',
 			clientPermissions: ['EMBED_LINKS'],
@@ -20,16 +21,20 @@ export default class SearchTagCommand extends Command {
 					match: 'content',
 					type: 'lowercase',
 					prompt: {
-						start: (message: Message) => `${message.author}, what would you like to search for?`
-					}
-				}
-			]
+						start: (message: Message) => MESSAGES.COMMANDS.TAGS.SEARCH.PROMPT.START(message.author),
+					},
+				},
+			],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(
+			message.guild!,
+			SETTINGS.RESTRICT_ROLES,
+			undefined,
+		);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
@@ -40,13 +45,13 @@ export default class SearchTagCommand extends Command {
 		name = Util.cleanContent(name, message);
 		const tagsRepo = this.client.db.getRepository(Tag);
 		const tags = await tagsRepo.find({ name: Like(`%${name}%`), guild: message.guild!.id });
-		if (!tags.length) return message.util!.reply(`No results found with query ${name}.`);
+		if (!tags.length) return message.util!.reply(MESSAGES.COMMANDS.TAGS.SEARCH.NO_RESULT(name));
 		const search = tags
 			.map(tag => `\`${tag.name}\``)
 			.sort()
 			.join(', ');
 		if (search.length >= 1950) {
-			return message.util!.reply('the output is way too big to display, make your search more specific and try again!');
+			return message.util!.reply(MESSAGES.COMMANDS.TAGS.SEARCH.TOO_BIG);
 		}
 		const embed = new MessageEmbed()
 			.setColor(0x30a9ed)

@@ -3,6 +3,7 @@ import { GuildMember, Message, TextChannel } from 'discord.js';
 import { Case } from '../../models/Cases';
 import { RoleState } from '../../models/RoleStates';
 import { ACTIONS, COLORS } from '../../util';
+import { SETTINGS } from '../../util/constants';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {
@@ -14,7 +15,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 	}
 
 	public async exec(oldMember: GuildMember, newMember: GuildMember) {
-		const moderation = this.client.settings.get(newMember.guild, 'moderation', undefined);
+		const moderation = this.client.settings.get(newMember.guild, SETTINGS.MOD, undefined);
 		if (moderation) {
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMBED`)) return;
@@ -22,12 +23,12 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:REACTION`)) return;
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:TAG`)) return;
 
-			const modRole = this.client.settings.get<string>(newMember.guild, 'modRole', undefined);
+			const modRole = this.client.settings.get<string>(newMember.guild, SETTINGS.MOD_ROLE, undefined);
 			if (modRole && newMember.roles.has(modRole)) return;
-			const muteRole = this.client.settings.get<string>(newMember.guild, 'muteRole', undefined);
+			const muteRole = this.client.settings.get<string>(newMember.guild, SETTINGS.MUTE_ROLE, undefined);
 			const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string; tag: string }>(
 				newMember.guild,
-				'restrictRoles',
+				SETTINGS.RESTRICT_ROLES,
 				undefined,
 			);
 			if (!muteRole && !restrictRoles) return;
@@ -42,7 +43,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 					automaticRoleState.roles.includes(restrictRoles.tag))
 			)
 				return;
-			const modLogChannel = this.client.settings.get<string>(newMember.guild, 'modLogChannel', undefined);
+			const modLogChannel = this.client.settings.get<string>(newMember.guild, SETTINGS.MOD_LOG, undefined);
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			const casesRepo = this.client.db.getRepository(Case);
 			if (!role) {
@@ -82,8 +83,8 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 					return;
 			}
 
-			const totalCases = this.client.settings.get<number>(newMember.guild, 'caseTotal', 0) + 1;
-			this.client.settings.set(newMember.guild, 'caseTotal', totalCases);
+			const totalCases = this.client.settings.get<number>(newMember.guild, SETTINGS.CASES, 0) + 1;
+			this.client.settings.set(newMember.guild, SETTINGS.CASES, totalCases);
 
 			let modMessage;
 			if (modLogChannel) {

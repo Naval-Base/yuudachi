@@ -4,6 +4,7 @@ import { MoreThan, Repository } from 'typeorm';
 import { Optional } from 'utility-types';
 import YukikazeClient from '../../client/YukikazeClient';
 import { Case } from '../../models/Cases';
+import { SETTINGS } from '../../util/constants';
 
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
@@ -91,7 +92,7 @@ export default class CaseHandler {
 		if (message && ref) {
 			try {
 				reference = await this.repo.findOne({ guild: message.guild!.id, case_id: ref });
-				channel = this.client.settings.get<string>(message.guild!, 'modLogChannel', undefined);
+				channel = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_LOG, undefined);
 			} catch {}
 		}
 

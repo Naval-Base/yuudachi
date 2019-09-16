@@ -1,5 +1,6 @@
 import { TextChannel, User } from 'discord.js';
 import { ACTIONS } from '../../../util';
+import { SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type MuteData = Omit<ActionData, 'days'>;
@@ -13,12 +14,12 @@ export default class MuteAction extends Action {
 		if (this.member instanceof User) {
 			throw new Error('you have to provide a valid user on this guild.');
 		}
-		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
+		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
 			throw new Error("nuh-uh! You know you can't do this.");
 		}
 
-		const muteRole = this.client.settings.get<string>(this.message.guild!, 'muteRole', undefined);
+		const muteRole = this.client.settings.get<string>(this.message.guild!, SETTINGS.MUTE_ROLE, undefined);
 		if (!muteRole) throw new Error('there is no mute role configured on this server.');
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
@@ -31,8 +32,8 @@ export default class MuteAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, 'caseTotal', 0) + 1;
-		const muteRole = this.client.settings.get<string>(this.message.guild!, 'muteRole', undefined);
+		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const muteRole = this.client.settings.get<string>(this.message.guild!, SETTINGS.MUTE_ROLE, undefined);
 
 		const sentMessage = await this.message.channel.send(`Muting **${this.member.user.tag}**...`);
 
@@ -43,13 +44,13 @@ export default class MuteAction extends Action {
 			throw new Error(`there was an error muting this member \`${error.message}\``);
 		}
 
-		this.client.settings.set(this.message.guild!, 'caseTotal', totalCases);
+		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
 		sentMessage.edit(`Successfully muted **${this.member.user.tag}**`);
 	}
 
 	public async after() {
-		const totalCases = this.client.settings.get<number>(this.message.guild!, 'caseTotal', 0);
+		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0);
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.muteScheduler.add({
 			guild: this.message.guild!.id,
@@ -64,7 +65,7 @@ export default class MuteAction extends Action {
 			action_processed: false,
 		});
 
-		const modLogChannel = this.client.settings.get<string>(this.message.guild!, 'modLogChannel', undefined);
+		const modLogChannel = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_LOG, undefined);
 		if (modLogChannel) {
 			const dbCase = await this.client.caseHandler.repo.findOne({ case_id: totalCases });
 			if (dbCase) {

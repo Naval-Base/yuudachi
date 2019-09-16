@@ -1,6 +1,7 @@
 import { stripIndents } from 'common-tags';
 import { User } from 'discord.js';
 import { ACTIONS } from '../../../util';
+import { SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type KickData = Omit<ActionData, 'days' | 'duration'>;
@@ -14,7 +15,7 @@ export default class KickAction extends Action {
 		if (this.member instanceof User) {
 			throw new Error('you have to provide a valid user on this guild.');
 		}
-		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
+		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
 			throw new Error("nuh-uh! You know you can't do this.");
 		}
@@ -25,7 +26,7 @@ export default class KickAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, 'caseTotal', 0) + 1;
+		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
 
 		const sentMessage = await this.message.channel.send(`Kicking **${this.member.user.tag}**...`);
 
@@ -42,7 +43,7 @@ export default class KickAction extends Action {
 			throw new Error(`there was an error kicking this member \`${error.message}\``);
 		}
 
-		this.client.settings.set(this.message.guild!, 'caseTotal', totalCases);
+		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
 		this.client.caseHandler.cachedCases.delete(this.keys as string);
 

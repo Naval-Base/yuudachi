@@ -1,5 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
+import { SETTINGS } from '../../util/constants';
 const diff = require('diff'); // eslint-disable-line
 
 export default class MessageUpdateListener extends Listener {
@@ -15,7 +16,7 @@ export default class MessageUpdateListener extends Listener {
 		if (oldMessage.author!.bot || newMessage.author!.bot) return;
 		if (!newMessage.guild) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
-		const guildLogs = this.client.settings.get<string>(newMessage.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(newMessage.guild, SETTINGS.GUILD_LOGS, undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;

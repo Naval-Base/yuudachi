@@ -1,6 +1,7 @@
 import { LessThan, Repository } from 'typeorm';
 import YukikazeClient from '../client/YukikazeClient';
 import { Case } from '../models/Cases';
+import { SETTINGS } from '../util/constants';
 import { EVENTS, TOPICS } from '../util/logger';
 
 export default class MuteScheduler {
@@ -55,7 +56,7 @@ export default class MuteScheduler {
 			event: EVENTS.MUTE,
 		});
 		const guild = this.client.guilds.get(mute.guild);
-		const muteRole = this.client.settings.get<string>(guild!, 'muteRole', undefined);
+		const muteRole = this.client.settings.get<string>(guild!, SETTINGS.MUTE_ROLE, undefined);
 		let member;
 		try {
 			member = await guild!.members.fetch(mute.target_id);

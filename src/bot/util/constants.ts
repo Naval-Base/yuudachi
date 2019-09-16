@@ -513,7 +513,122 @@ export const MESSAGES = {
 				REPLY_2: 'Welp, looks like all of your reminders are gone!',
 			},
 		},
-		TAGS: {},
+		TAGS: {
+			DESCRIPTION: stripIndents`Available methods:
+				 • show \`<tag>\`
+				 • add \`[--hoist/--pin] <tag> <content>\`
+				 • alias \`<--add/--del> <tag> <tagalias>\`
+				 • del \`<tag>\`
+				 • edit \`[--hoist/--unhoist] <tag> <content>\`
+				 • source \`[--file] <tag>\`
+				 • info \`<tag>\`
+				 • search \`<tag>\`
+				 • list \`[member]\`
+				 • download \`[member]\`
+
+				Required: \`<>\` | Optional: \`[]\`
+
+				For additional \`<...arguments>\` usage refer to the examples below.
+			`,
+			REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`
+				When you beg me so much I just can't not help you~
+				Check \`${prefix}help tag\` for more information.
+			`,
+
+			ADD: {
+				DESCRIPTION: 'Adds a tag, usable for everyone on the server (Markdown can be used).',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what should the tag be named?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** already exists.`,
+				},
+				PROMPT_2: {
+					START: (author: User | null) => `${author}, what should the content of the tag be?`,
+				},
+				TOO_LONG:
+					'you must still have water behind your ears to not realize that messages have a limit of 2000 characters!',
+				REPLY: (name: string) => `leave it to me! A tag with the name **${name}** has been added.`,
+			},
+			ALIAS: {
+				DESCRIPTION: 'Alias a tag.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what tag do you want to alias?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+				},
+				PROMPT_2: {
+					START: (author: User | null) => `${author}, what alias do you want to apply to this tag?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** already exists.`,
+				},
+				PROMPT_3: {
+					START: (author: User | null) => `${author}, what alias do you want to remove to this tag?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** already exists.`,
+				},
+				TOO_LONG:
+					'you must still have water behind your ears to not realize that messages have a limit of 2000 characters!',
+				REPLY: (first: string, second: string, add: boolean) =>
+					`alias ${second.substring(0, 1900)} ${add ? 'added to' : 'deleted from'} tag ${first}.`,
+			},
+			DELETE: {
+				DESCRIPTION: 'Deletes a tag.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what tag do you want to delete?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+				},
+				OWN_TAG: 'you can only delete your own tags.',
+				REPLY: (tag: string) => `successfully deleted **${tag}**.`,
+			},
+			DOWNLOAD: {
+				DESCRIPTION: 'Downloads a/all tag(s).',
+				REPLY: 'Haiiiii~',
+			},
+			EDIT: {
+				DESCRIPTION: 'Edit a tag (Markdown can be used).',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what tag do you want to edit?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+				},
+				PROMPT_2: {
+					START: (author: User | null) => `${author}, what should the new content be?`,
+				},
+				OWN_TAG: 'losers are only allowed to edit their own tags! Hah hah hah!',
+				TOO_LONG:
+					'you must still have water behind your ears to not realize that messages have a limit of 2000 characters!',
+				REPLY: (tag: string, hoist: boolean, staff: boolean) =>
+					`successfully edited **${tag}**${hoist && staff ? ' to be hoisted.' : '.'}`,
+			},
+			INFO: {
+				DESCRIPTION: 'Displays information about a tag.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what tag do you want information on?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+				},
+			},
+			LIST: {
+				DESCRIPTION: 'Lists all server tags.',
+				NO_TAGS: (member?: string) => (member ? `**${member}** doesn't have any tags.` : "you don't have any tags."),
+				GUILD_NO_TAGS: (guild: string) => `**${guild}** doesn't have any tags. Why not add some?`,
+			},
+			SEARCH: {
+				DESCRIPTION: 'Searches a tag.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what do you want to search for?`,
+				},
+				NO_RESULT: (query: string) => `No results found with query ${query}.`,
+				TOO_BIG: 'the output is way too big to display, make your search more specific and try again!',
+			},
+			SHOW: {
+				DESCRIPTION: 'Displays a tag.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what tag do you want to see?`,
+				},
+			},
+			SOURCE: {
+				DESCRIPTION: 'Displays a tags source (Highlighted with Markdown).',
+				PROMPT: {
+					START: (author: User | null) => `${author}, what tag do you want to see the source of?`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+				},
+			},
+		},
 		UTIL: {
 			BLACKLIST: {
 				DESCRIPTION: 'Prohibit/Allow a user from using Yukikaze.',

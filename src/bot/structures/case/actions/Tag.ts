@@ -1,5 +1,6 @@
 import { User } from 'discord.js';
 import { ACTIONS } from '../../../util';
+import { SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type TagData = Omit<ActionData, 'days' | 'duration'>;
@@ -13,12 +14,16 @@ export default class TagAction extends Action {
 		if (this.member instanceof User) {
 			throw new Error('you have to provide a valid user on this guild.');
 		}
-		const staff = this.client.settings.get<string>(this.message.guild!, 'modRole', undefined);
+		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
 			throw new Error("nuh-uh! You know you can't do this.");
 		}
 
-		const restrictRoles = this.client.settings.get<{ tag: string }>(this.message.guild!, 'restrictRoles', undefined);
+		const restrictRoles = this.client.settings.get<{ tag: string }>(
+			this.message.guild!,
+			SETTINGS.RESTRICT_ROLES,
+			undefined,
+		);
 		if (!restrictRoles) throw new Error('there are no restricted roles configured on this server.');
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
@@ -31,8 +36,12 @@ export default class TagAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, 'caseTotal', 0) + 1;
-		const restrictRoles = this.client.settings.get<{ tag: string }>(this.message.guild!, 'restrictRoles', undefined);
+		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const restrictRoles = this.client.settings.get<{ tag: string }>(
+			this.message.guild!,
+			SETTINGS.RESTRICT_ROLES,
+			undefined,
+		);
 
 		const sentMessage = await this.message.channel.send(`Tag restricting **${this.member.user.tag}**...`);
 
@@ -46,7 +55,7 @@ export default class TagAction extends Action {
 			throw new Error(`there was an error tag restricting this member \`${error.message}\``);
 		}
 
-		this.client.settings.set(this.message.guild!, 'caseTotal', totalCases);
+		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
 		sentMessage.edit(`Successfully tag restricted **${this.member.user.tag}**`);
 	}

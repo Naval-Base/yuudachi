@@ -1,14 +1,15 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { Tag } from '../../models/Tags';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class TagSourceCommand extends Command {
 	public constructor() {
 		super('tag-source', {
 			category: 'tags',
 			description: {
-				content: 'Displays a tags source (Highlighted with Markdown).',
-				usage: '[--file/-f] <tag>'
+				content: MESSAGES.COMMANDS.TAGS.SOURCE.DESCRIPTION,
+				usage: '[--file/-f] <tag>',
 			},
 			channel: 'guild',
 			ratelimit: 2,
@@ -16,24 +17,29 @@ export default class TagSourceCommand extends Command {
 				{
 					id: 'file',
 					match: 'flag',
-					flag: ['--file', '-f']
+					flag: ['--file', '-f'],
 				},
 				{
 					id: 'tag',
 					match: 'rest',
 					type: 'tag',
 					prompt: {
-						start: (message: Message) => `${message.author}, what tag would you like to see the source of?`,
-						retry: (message: Message, { failure }: { failure: { value: string } }) => `${message.author}, a tag with the name **${failure.value}** does not exist.`
-					}
-				}
-			]
+						start: (message: Message) => MESSAGES.COMMANDS.TAGS.SOURCE.PROMPT.START(message.author),
+						retry: (message: Message, { failure }: { failure: { value: string } }) =>
+							MESSAGES.COMMANDS.TAGS.SOURCE.PROMPT.RETRY(message.author, failure.value),
+					},
+				},
+			],
 		});
 	}
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ tag: string }>(message.guild!, 'restrictedRoles', undefined);
+		const restrictedRoles = this.client.settings.get<{ tag: string }>(
+			message.guild!,
+			SETTINGS.RESTRICT_ROLES,
+			undefined,
+		);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
 		if (hasRestrictedRole) return 'Restricted';
@@ -44,11 +50,13 @@ export default class TagSourceCommand extends Command {
 		return message.util!.send(tag.content, {
 			code: 'md',
 			files: file
-				? [{
-					attachment: Buffer.from(tag.content.replace(/\n/g, '\r\n'), 'utf8'),
-					name: `${tag.name}_source.txt`
-				}]
-				: undefined
+				? [
+						{
+							attachment: Buffer.from(tag.content.replace(/\n/g, '\r\n'), 'utf8'),
+							name: `${tag.name}_source.txt`,
+						},
+				  ]
+				: undefined,
 		});
 	}
 }

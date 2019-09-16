@@ -1,4 +1,5 @@
 import { Listener } from 'discord-akairo';
+import { SETTINGS } from '../../util/constants';
 import { EVENTS, TOPICS } from '../../util/logger';
 
 export default class ReadyListener extends Listener {
@@ -20,7 +21,7 @@ export default class ReadyListener extends Listener {
 		this.client.node.on('message', this.client.nodeMessage);
 		this.client.logger.info('Metrics listening on 5500', { topic: TOPICS.METRICS, event: EVENTS.READY });
 		for (const guild of this.client.guilds.values()) {
-			const logs = this.client.settings.get<string>(guild, 'guildLogs', undefined);
+			const logs = this.client.settings.get<string>(guild, SETTINGS.GUILD_LOGS, undefined);
 			if (!logs) continue;
 			const webhook = (await guild.fetchWebhooks()).get(logs);
 			if (!webhook) continue;

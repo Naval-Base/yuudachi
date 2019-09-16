@@ -1,5 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import { SETTINGS } from '../../util/constants';
 
 export default class MessageDeleteListener extends Listener {
 	public constructor() {
@@ -14,7 +15,7 @@ export default class MessageDeleteListener extends Listener {
 		if (message.author!.bot) return;
 		if (!message.guild) return;
 		if (!message.content) return;
-		const guildLogs = this.client.settings.get<string>(message.guild, 'guildLogs', undefined);
+		const guildLogs = this.client.settings.get<string>(message.guild, SETTINGS.GUILD_LOGS, undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
