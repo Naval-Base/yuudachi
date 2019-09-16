@@ -26,7 +26,7 @@ export default class DocsCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			ratelimit: 2,
 			flags: ['--force', '-f', '--private', '-p'],
-			optionFlags: ['--default=']
+			optionFlags: ['--default='],
 		});
 	}
 
@@ -43,7 +43,7 @@ export default class DocsCommand extends Command {
 
 		const includePrivate = yield {
 			match: 'flag',
-			flag: ['--private', '-p']
+			flag: ['--private', '-p'],
 		};
 
 		const query = yield {
