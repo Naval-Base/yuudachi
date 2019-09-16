@@ -1,6 +1,5 @@
 import { User } from 'discord.js';
-import { ACTIONS } from '../../../util';
-import { SETTINGS } from '../../../util/constants';
+import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type EmbedData = Omit<ActionData, 'days' | 'duration'>;
@@ -12,11 +11,11 @@ export default class EmbedAction extends Action {
 
 	public async before() {
 		if (this.member instanceof User) {
-			throw new Error('you have to provide a valid user on this guild.');
+			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error("nuh-uh! You know you can't do this.");
+			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
 		const restrictRoles = this.client.settings.get<{ embed: string }>(
@@ -24,10 +23,10 @@ export default class EmbedAction extends Action {
 			SETTINGS.RESTRICT_ROLES,
 			undefined,
 		);
-		if (!restrictRoles) throw new Error('there are no restricted roles configured on this server.');
+		if (!restrictRoles) throw new Error(MESSAGES.ACTIONS.NO_RESTRICT);
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
-			throw new Error('that user is currently being moderated by someone else.');
+			throw new Error(MESSAGES.ACTIONS.CURRENTLY_MODERATED);
 		}
 		this.client.caseHandler.cachedCases.add(this.keys as string);
 
@@ -43,20 +42,20 @@ export default class EmbedAction extends Action {
 			undefined,
 		);
 
-		const sentMessage = await this.message.channel.send(`Embed restricting **${this.member.user.tag}**...`);
+		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.EMBED.PRE_REPLY(this.member.user.tag));
 
 		try {
 			await this.member.roles.add(
 				restrictRoles.embed,
-				`Embed restricted by ${this.message.author!.tag} | Case #${totalCases}`,
+				MESSAGES.ACTIONS.EMBED.AUDIT(this.message.author!.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
-			throw new Error(`there was an error embed restricting this member \`${error.message}\``);
+			throw new Error(MESSAGES.ACTIONS.EMBED.ERROR(error.message));
 		}
 
 		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(`Successfully embed restricted **${this.member.user.tag}**`);
+		sentMessage.edit(MESSAGES.ACTIONS.EMBED.REPLY(this.member.user.tag));
 	}
 }

@@ -1,7 +1,5 @@
-import { stripIndents } from 'common-tags';
 import { User } from 'discord.js';
-import { ACTIONS } from '../../../util';
-import { SETTINGS } from '../../../util/constants';
+import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type SoftbanData = Omit<ActionData, 'duration'>;
@@ -13,18 +11,18 @@ export default class SoftbanAction extends Action {
 
 	public async before() {
 		if (this.member instanceof User) {
-			throw new Error('you have to provide a valid user on this guild.');
+			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error("nuh-uh! You know you can't do this.");
+			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
 		if (
 			this.client.caseHandler.cachedCases.has(this.keys![0]) &&
 			this.client.caseHandler.cachedCases.has(this.keys![1])
 		) {
-			throw new Error('that user is currently being moderated by someone else.');
+			throw new Error(MESSAGES.ACTIONS.CURRENTLY_MODERATED);
 		}
 		this.client.caseHandler.cachedCases.add(this.keys![0]);
 		this.client.caseHandler.cachedCases.add(this.keys![1]);
@@ -36,33 +34,28 @@ export default class SoftbanAction extends Action {
 		if (this.member instanceof User) return;
 		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
 
-		const sentMessage = await this.message.channel.send(`Softbanning **${this.member.user.tag}**...`);
+		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.SOFTBAN.PRE_REPLY(this.member.user.tag));
 
 		try {
 			try {
-				await this.member.send(stripIndents`
-					**You have been softbanned from ${this.message.guild!.name}**
-					${this.reason ? `\n**Reason:** ${this.reason}\n` : ''}
-					A softban is a kick that uses ban + unban to remove your messages from the server.
-					You may rejoin whenever.
-				`);
+				await this.member.send(MESSAGES.ACTIONS.SOFTBAN.MESSAGE(this.message.guild!.name, this._reason));
 			} catch {}
 			await this.member.ban({
 				days: this.days,
-				reason: `Softbanned by ${this.message.author!.tag} | Case #${totalCases}`,
+				reason: MESSAGES.ACTIONS.SOFTBAN.AUDIT(this.message.author!.tag, totalCases),
 			});
 			await this.message.guild!.members.unban(
 				this.member,
-				`Softbanned by ${this.message.author!.tag} | Case #${totalCases}`,
+				MESSAGES.ACTIONS.SOFTBAN.AUDIT(this.message.author!.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys![0]);
 			this.client.caseHandler.cachedCases.delete(this.keys![1]);
-			throw new Error(`there was an error softbanning this member \`${error.message}\``);
+			throw new Error(MESSAGES.ACTIONS.SOFTBAN.ERROR(error.message));
 		}
 
 		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(`Successfully softbanned **${this.member.user.tag}**`);
+		sentMessage.edit(MESSAGES.ACTIONS.SOFTBAN.REPLY(this.member.user.tag));
 	}
 }

@@ -2,6 +2,32 @@ import { stripIndents } from 'common-tags';
 import { User } from 'discord.js';
 import { Reminder } from '../models/Reminders';
 
+export enum ACTIONS {
+	BAN = 1,
+	UNBAN,
+	SOFTBAN,
+	KICK,
+	MUTE,
+	EMBED,
+	EMOJI,
+	REACTION,
+	WARN,
+	TAG,
+}
+
+export enum COLORS {
+	BAN = 16718080,
+	UNBAN = 8450847,
+	SOFTBAN = 16745216,
+	KICK = 16745216,
+	MUTE = 16763904,
+	EMBED = 16776960,
+	EMOJI = 16776960,
+	REACTION = 16776960,
+	WARN = 16776960,
+	TAG = 16776960,
+}
+
 export enum SETTINGS {
 	CASES = 'caseTotal',
 	MOD = 'moderation',
@@ -716,6 +742,93 @@ export const MESSAGES = {
 		},
 		SHARD_RESUME: {
 			LOG: 'You made it out fine thanks to my luck! You ought to be thankful!',
+		},
+	},
+
+	ACTIONS: {
+		INVALID_MEMBER: 'you have to provide a valid user on this guild.',
+		INVALID_USER: 'you have to provide a valid user not on this guild.',
+		NO_STAFF: "nuh-uh! You know you can't do this.",
+		CURRENTLY_MODERATED: 'that user is currently being moderated by someone else.',
+		NO_RESTRICT: 'there are no restricted roles configured on this server.',
+		NO_MUTE: 'there is no mute role configured on this server.',
+
+		BAN: {
+			AWAIT_MESSAGE: 'You sure you want me to ban this [no gender specified]?',
+			TIMEOUT: 'timed out. Cancelled ban.',
+			CANCEL: 'cancelled ban.',
+			MESSAGE: (guild: string, reason?: string) => stripIndents`
+				**You have been banned from ${guild}**
+				${reason ? `\n**Reason:** ${reason}\n` : ''}
+				You can appeal your ban by DMing \`Crawl#0002\` with a message why you think you deserve to have your ban lifted.
+			`,
+			AUDIT: (tag: string, cases: number) => `Banned by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error banning this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Banning **${tag}**...`,
+			REPLY: (tag: string) => `Successfully banned **${tag}**`,
+		},
+		EMBED: {
+			AUDIT: (tag: string, cases: number) => `Embed restricted by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error embed restricting this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Embed restricting **${tag}**...`,
+			REPLY: (tag: string) => `Successfully embed restricted **${tag}**`,
+		},
+		EMOJI: {
+			AUDIT: (tag: string, cases: number) => `Emoji restricted by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error emoji restricting this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Emoji restricting **${tag}**...`,
+			REPLY: (tag: string) => `Successfully emoji restricted **${tag}**`,
+		},
+		KICK: {
+			MESSAGE: (guild: string, reason?: string) => stripIndents`
+				**You have been kicked from ${guild}**
+				${reason ? `\n**Reason:** ${reason}\n` : ''}
+				You may rejoin whenever.
+			`,
+			AUDIT: (tag: string, cases: number) => `Kicked by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error kicking this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Kicking **${tag}**...`,
+			REPLY: (tag: string) => `Successfully kicked **${tag}**`,
+		},
+		MUTE: {
+			AUDIT: (tag: string, cases: number) => `Muted by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error muting this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Muting **${tag}**...`,
+			REPLY: (tag: string) => `Successfully muted **${tag}**`,
+		},
+		REACTION: {
+			AUDIT: (tag: string, cases: number) => `Reaction restricted by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error reaction restricted this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Reaction restricting **${tag}**...`,
+			REPLY: (tag: string) => `Successfully reaction restricted **${tag}**`,
+		},
+		SOFTBAN: {
+			MESSAGE: (guild: string, reason?: string) => stripIndents`
+				**You have been softbanned from ${guild}**
+				${reason ? `\n**Reason:** ${reason}\n` : ''}
+				A softban is a kick that uses ban + unban to remove your messages from the server.
+				You may rejoin whenever.
+			`,
+			AUDIT: (tag: string, cases: number) => `Softbanned by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error softbanning this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Softbanning **${tag}**...`,
+			REPLY: (tag: string) => `Successfully softbanned **${tag}**`,
+		},
+		TAG: {
+			AUDIT: (tag: string, cases: number) => `Tag restricted by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error tag restricting this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Tag restricting **${tag}**...`,
+			REPLY: (tag: string) => `Successfully tag restricted **${tag}**`,
+		},
+		UNBAN: {
+			AUDIT: (tag: string, cases: number) => `Unbanned by ${tag} | Case #${cases}`,
+			ERROR: (error: string) => `there was an error unbanning this member \`${error}\``,
+			PRE_REPLY: (tag: string) => `Unbanning **${tag}**...`,
+			REPLY: (tag: string) => `Successfully unbanned **${tag}**`,
+		},
+		WARN: {
+			PRE_REPLY: (tag: string) => `Warning **${tag}**...`,
+			REPLY: (tag: string) => `Successfully warned **${tag}**`,
 		},
 	},
 };

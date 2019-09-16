@@ -2,8 +2,7 @@ import { Listener, PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel } from 'discord.js';
 import { Case } from '../../models/Cases';
 import { RoleState } from '../../models/RoleStates';
-import { ACTIONS, COLORS } from '../../util';
-import { SETTINGS } from '../../util/constants';
+import { ACTIONS, COLORS, SETTINGS } from '../../util/constants';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {

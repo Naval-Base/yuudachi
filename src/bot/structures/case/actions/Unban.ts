@@ -1,6 +1,5 @@
 import { GuildMember } from 'discord.js';
-import { ACTIONS } from '../../../util';
-import { SETTINGS } from '../../../util/constants';
+import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type UnbanData = Omit<ActionData, 'days' | 'duration'>;
@@ -12,11 +11,11 @@ export default class UnbanAction extends Action {
 
 	public async before() {
 		if (this.member instanceof GuildMember) {
-			throw new Error('you have to provide a valid user not on this guild.');
+			throw new Error(MESSAGES.ACTIONS.INVALID_USER);
 		}
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
-			throw new Error('that user is currently being moderated by someone else.');
+			throw new Error(MESSAGES.ACTIONS.CURRENTLY_MODERATED);
 		}
 		this.client.caseHandler.cachedCases.add(this.keys as string);
 
@@ -27,20 +26,20 @@ export default class UnbanAction extends Action {
 		if (this.member instanceof GuildMember) return;
 		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
 
-		const sentMessage = await this.message.channel.send(`Unbanning **${this.member.tag}**...`);
+		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.UNBAN.PRE_REPLY(this.member.tag));
 
 		try {
 			await this.message.guild!.members.unban(
 				this.member,
-				`Unbanned by ${this.message.author!.tag} | Case #${totalCases}`,
+				MESSAGES.ACTIONS.UNBAN.AUDIT(this.message.author!.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
-			throw new Error(`there was an error unbanning this member \`${error.message}\``);
+			throw new Error(MESSAGES.ACTIONS.UNBAN.ERROR(error.message));
 		}
 
 		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(`Successfully unbanned **${this.member.tag}**`);
+		sentMessage.edit(MESSAGES.ACTIONS.UNBAN.REPLY(this.member.tag));
 	}
 }

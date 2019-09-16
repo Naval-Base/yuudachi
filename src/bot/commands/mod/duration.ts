@@ -1,7 +1,6 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { ACTIONS } from '../../util';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { ACTIONS, MESSAGES, SETTINGS } from '../../util/constants';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class DurationCommand extends Command {

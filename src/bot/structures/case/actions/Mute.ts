@@ -1,6 +1,5 @@
 import { TextChannel, User } from 'discord.js';
-import { ACTIONS } from '../../../util';
-import { SETTINGS } from '../../../util/constants';
+import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
 type MuteData = Omit<ActionData, 'days'>;
@@ -12,18 +11,18 @@ export default class MuteAction extends Action {
 
 	public async before() {
 		if (this.member instanceof User) {
-			throw new Error('you have to provide a valid user on this guild.');
+			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
 		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
 		if (this.member.roles && this.member.roles.has(staff)) {
-			throw new Error("nuh-uh! You know you can't do this.");
+			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
 		const muteRole = this.client.settings.get<string>(this.message.guild!, SETTINGS.MUTE_ROLE, undefined);
-		if (!muteRole) throw new Error('there is no mute role configured on this server.');
+		if (!muteRole) throw new Error(MESSAGES.ACTIONS.NO_MUTE);
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
-			throw new Error('that user is currently being moderated by someone else.');
+			throw new Error(MESSAGES.ACTIONS.CURRENTLY_MODERATED);
 		}
 		this.client.caseHandler.cachedCases.add(this.keys as string);
 
@@ -35,18 +34,18 @@ export default class MuteAction extends Action {
 		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
 		const muteRole = this.client.settings.get<string>(this.message.guild!, SETTINGS.MUTE_ROLE, undefined);
 
-		const sentMessage = await this.message.channel.send(`Muting **${this.member.user.tag}**...`);
+		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.MUTE.PRE_REPLY(this.member.user.tag));
 
 		try {
-			await this.member.roles.add(muteRole, `Muted by ${this.message.author!.tag} | Case #${totalCases}`);
+			await this.member.roles.add(muteRole, MESSAGES.ACTIONS.MUTE.AUDIT(this.message.author!.tag, totalCases));
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
-			throw new Error(`there was an error muting this member \`${error.message}\``);
+			throw new Error(MESSAGES.ACTIONS.MUTE.ERROR(error.message));
 		}
 
 		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(`Successfully muted **${this.member.user.tag}**`);
+		sentMessage.edit(MESSAGES.ACTIONS.MUTE.REPLY(this.member.user.tag));
 	}
 
 	public async after() {

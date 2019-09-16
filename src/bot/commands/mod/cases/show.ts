@@ -1,8 +1,7 @@
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { ACTIONS, COLORS } from '../../../util';
-import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { ACTIONS, COLORS, MESSAGES, SETTINGS } from '../../../util/constants';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {

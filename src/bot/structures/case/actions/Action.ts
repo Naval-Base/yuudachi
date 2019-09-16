@@ -1,8 +1,7 @@
 import { PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../../../client/YukikazeClient';
-import { ACTIONS, COLORS } from '../../../util';
-import { SETTINGS } from '../../../util/constants';
+import { ACTIONS, COLORS, SETTINGS } from '../../../util/constants';
 
 export interface ActionData {
 	message: Message;
