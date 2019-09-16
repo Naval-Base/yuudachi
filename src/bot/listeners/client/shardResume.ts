@@ -1,4 +1,5 @@
 import { Listener } from 'discord-akairo';
+import { MESSAGES } from '../../util/constants';
 import { TOPICS } from '../../util/logger';
 
 export default class ShardResumeListener extends Listener {
@@ -11,7 +12,7 @@ export default class ShardResumeListener extends Listener {
 	}
 
 	public exec(id: number) {
-		this.client.logger.info(`You made it out fine thanks to my luck! You ought to be thankful!`, {
+		this.client.logger.info(MESSAGES.EVENTS.SHARD_RESUME.LOG, {
 			topic: TOPICS.DISCORD,
 			event: `SHARD ${id} RESUME`,
 		});

@@ -1,7 +1,7 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
 import { RoleState } from '../../models/RoleStates';
-import { SETTINGS } from '../../util/constants';
+import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class GuildMemberAddListener extends Listener {
 	public constructor() {
@@ -20,7 +20,7 @@ export default class GuildMemberAddListener extends Listener {
 			try {
 				if (user && member.roles) {
 					await this.client.muteScheduler.check();
-					await member.roles.add(user.roles, 'Automatic role state');
+					await member.roles.add(user.roles, MESSAGES.EVENTS.GUILD_MEMBER_ADD.ROLE_STATE);
 				}
 			} catch {}
 		}

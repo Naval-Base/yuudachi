@@ -28,15 +28,19 @@ export const MESSAGES = {
 		},
 		LOADED: 'Command handler loaded',
 	},
+
 	INHIBITOR_HANDLER: {
 		LOADED: 'Inhibitor handler loaded',
 	},
+
 	LISTENER_HANDLER: {
 		LOADED: 'Listener handler loaded',
 	},
+
 	DATABASE: {
 		LOADED: (db: string) => `Connected to database ${db}`,
 	},
+
 	IPC: {
 		ERROR: (client: string, error: Error) => `${client} ${error}`,
 		OPEN: 'Server ready',
@@ -44,15 +48,19 @@ export const MESSAGES = {
 		CONNECT: (client: string) => `${client} connected`,
 		DISCONNECT: (client: string) => `${client}, disconnected`,
 	},
+
 	SETTINGS: {
 		INIT: 'Bot settings initialized',
 	},
+
 	CASE_HANDLER: {
 		INIT: 'Case handler initialized',
 	},
+
 	MUTE_SCHEDULER: {
 		INIT: 'Mute scheduler initialized',
 	},
+
 	REMIND_SCHEDULER: {
 		INIT: 'Remind scheduler initialized',
 	},
@@ -689,6 +697,25 @@ export const MESSAGES = {
 			STATS: {
 				DESCRIPTION: 'Displays statistics about the bot.',
 			},
+		},
+	},
+
+	EVENTS: {
+		GUILD_MEMBER_ADD: {
+			ROLE_STATE: 'Automatic role state',
+		},
+		READY: {
+			LOG: (tag: string, id: string) => `Yawn... Hmph, ${tag} (${id}) is only with you because she's in a good mood!`,
+			ACTIVITY: (username: string) => `@${username} help 💖`,
+		},
+		SHARD_DISCONNECT: {
+			LOG: (code: any) => `Hmm, I have to hide the fact I was defeated... I'll let you go this time! (${code})`,
+		},
+		SHARD_RECONNECT: {
+			LOG: "Come at me if you don't value your life!",
+		},
+		SHARD_RESUME: {
+			LOG: 'You made it out fine thanks to my luck! You ought to be thankful!',
 		},
 	},
 };

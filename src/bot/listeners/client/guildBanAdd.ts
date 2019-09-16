@@ -13,10 +13,10 @@ export default class GuildBanAddListener extends Listener {
 	}
 
 	public async exec(guild: Guild, user: User) {
-		if (!this.client.settings.get<boolean>(guild, 'moderation', undefined)) return;
+		if (!this.client.settings.get<boolean>(guild, SETTINGS.MOD, undefined)) return;
 		if (this.client.caseHandler.cachedCases.delete(`${guild.id}:${user.id}:BAN`)) return;
 		const totalCases = this.client.settings.get<number>(guild, SETTINGS.CASES, 0) + 1;
-		this.client.settings.set(guild, 'caseTotal', totalCases);
+		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 		const modLogChannel = this.client.settings.get<string>(guild, SETTINGS.MOD_LOG, undefined);
 		let modMessage;
 		if (modLogChannel) {
