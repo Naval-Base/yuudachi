@@ -4,8 +4,7 @@ import { MESSAGES } from '../../../util/constants';
 
 export default class ToggleCommand extends Command {
 	public constructor() {
-		super('toggle', {
-			aliases: ['toggle'],
+		super('config-toggle', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.DESCRIPTION,
 				usage: '<method> <...arguments>',
@@ -20,10 +19,10 @@ export default class ToggleCommand extends Command {
 	public *args(): object {
 		const method = yield {
 			type: [
-				['toggle-logs', 'logs'],
-				['toggle-moderation', 'mod', 'moderation'],
-				['toggle-role-state', 'role', 'rolestate', 'role-state'],
-				['toggle-token-filtering', 'tokenfilter', 'tokenfiltering', 'token'],
+				['config-toggle-logs', 'logs'],
+				['config-toggle-moderation', 'mod', 'moderation'],
+				['config-toggle-role-state', 'role', 'rolestate', 'role-state'],
+				['config-toggle-token-filtering', 'tokenfilter', 'tokenfiltering', 'token'],
 			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);

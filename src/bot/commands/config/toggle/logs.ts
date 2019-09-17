@@ -4,7 +4,7 @@ import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class ToggleLogsCommand extends Command {
 	public constructor() {
-		super('toggle-logs', {
+		super('config-toggle-logs', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.LOGS.DESCRIPTION,
 			},

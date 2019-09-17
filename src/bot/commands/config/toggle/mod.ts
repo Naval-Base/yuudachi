@@ -4,7 +4,7 @@ import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class ToggleModerationCommand extends Command {
 	public constructor() {
-		super('toggle-moderation', {
+		super('config-toggle-moderation', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.MOD.DESCRIPTION,
 			},

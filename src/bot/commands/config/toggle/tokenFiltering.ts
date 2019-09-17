@@ -4,7 +4,7 @@ import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class ToggletokenFilteringCommand extends Command {
 	public constructor() {
-		super('toggle-token-filtering', {
+		super('config-toggle-token-filtering', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.DESCRIPTION,
 			},

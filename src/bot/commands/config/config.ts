@@ -18,7 +18,12 @@ export default class ConfigCommand extends Command {
 
 	public *args() {
 		const method = yield {
-			type: [['config-set', 'set'], ['config-delete', 'delete', 'del', 'remove', 'rm'], ['config-clear', 'clear']],
+			type: [
+				['config-set', 'set'],
+				['config-delete', 'delete', 'del', 'remove', 'rm'],
+				['config-clear', 'clear'],
+				['config-toggle', 'toggle'],
+			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return MESSAGES.COMMANDS.CONFIG.REPLY(prefix);

@@ -5,7 +5,7 @@ import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class ToggleRoleStateCommand extends Command {
 	public constructor() {
-		super('toggle-role-state', {
+		super('config-toggle-role-state', {
 			description: {
 				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.ROLE_STATE.DESCRIPTION,
 			},

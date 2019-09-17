@@ -97,6 +97,7 @@ export const MESSAGES = {
 				 • set \`<key> <...arguments>\`
 				 • delete \`<key>\`
 				 • clear
+				 • toggle \`<key>\`
 
 				Available keys:
 				 • cases \`<number>\`
@@ -109,6 +110,10 @@ export const MESSAGES = {
 				 • • emoji \`<Role/RoleId>\`
 				 • • reaction \`<Role/RoleId>\`
 				 • • tag \`<Role/RoleId>\`
+				 • logs \`<webhook>\`
+				 • mod
+				 • rolestate
+				 • tokenfiltering
 
 				Required: \`<>\` | Optional: \`[]\`
 			`,
@@ -225,17 +230,10 @@ export const MESSAGES = {
 				},
 			},
 			TOGGLE: {
-				DESCRIPTION: stripIndents`Available keys:
-					 • logs \`<webhook>\`
-					 • mod
-					 • rolestate
-					 • tokenfiltering
-
-					Required: \`<>\` | Optional: \`[]\`
-				`,
+				DESCRIPTION: 'Toggles a value in the config.',
 				REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`
 					When you beg me so much I just can't not help you~
-					Check \`${prefix}help toggle\` for more information.
+					Check \`${prefix}help config\` for more information.
 				`,
 
 				LOGS: {
