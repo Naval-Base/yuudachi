@@ -14,7 +14,7 @@
 		"lint:fix": "eslint . --ext .ts --fix",
 		"dev": "node -r dotenv/config dist/bot.js",
 		"sentry:release": "sentry-cli releases new --finalize $VERSION",
-		"sentry:sourcemaps": "sentry-cli releases files $VERSION upload-sourcemaps dist"
+		"sentry:sourcemaps": "sentry-cli releases files $VERSION upload-sourcemaps --ext map dist"
 	},
 	"dependencies": {
 		"@naval-base/ms": "^2.2.1",
