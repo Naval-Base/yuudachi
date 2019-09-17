@@ -30,10 +30,12 @@ export default class ToggleRoleStateCommand extends Command {
 		const members = await message.guild!.members.fetch();
 		const records: RoleState[] = [];
 		for (const member of members.values()) {
+			const roles = member.roles.filter(role => role.id !== message.guild!.id).map(role => role.id);
+			if (!roles) continue;
 			const rs = new RoleState();
 			rs.guild = message.guild!.id;
 			rs.user = member.id;
-			rs.roles = member.roles.filter(role => role.id !== message.guild!.id).map(role => role.id);
+			rs.roles = roles;
 			records.push(rs);
 		}
 		const userRepo = this.client.db.getRepository(RoleState);
