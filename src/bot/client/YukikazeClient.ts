@@ -13,7 +13,6 @@ import { Case } from '../models/Cases';
 import { Reminder } from '../models/Reminders';
 import { Setting } from '../models/Settings';
 import { Tag } from '../models/Tags';
-import { __rootdir__ } from '../root';
 import CaseHandler from '../structures/case/CaseHandler';
 import database from '../structures/Database';
 import MuteScheduler from '../structures/MuteScheduler';
@@ -49,9 +48,12 @@ declare module 'discord-akairo' {
 interface YukikazeOptions {
 	owner?: string;
 	token?: string;
+	root: string;
 }
 
 export default class YukikazeClient extends AkairoClient {
+	public root: string;
+
 	public logger = logger;
 
 	public db!: Connection;
@@ -155,6 +157,8 @@ export default class YukikazeClient extends AkairoClient {
 			},
 		);
 
+		this.root = config.root;
+
 		this.on('message', () => {
 			this.prometheus.messagesCounter.inc();
 		});
@@ -209,7 +213,7 @@ export default class YukikazeClient extends AkairoClient {
 				serverName: 'yukikaze_bot',
 				integrations: [
 					new RewriteFrames({
-						root: __rootdir__,
+						root: this.root,
 					}),
 				],
 			});

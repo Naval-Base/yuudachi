@@ -2,6 +2,21 @@ FROM node:10-alpine
 LABEL name "Yukikaze Bot"
 LABEL version "0.1.0"
 LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
+ENV NODE_ENV= \
+	COMMAND_PREFIX= \
+	OWNERS= \
+	TOKEN= \
+	LOGS= \
+	WEBHOOK_ID= \
+	WEBHOOK_TOKEN= \
+	DB= \
+	SENTRY= \
+	GITHUB_API_KEY= \
+	SENTRY_URL= \
+	SENTRY_AUTH_TOKEN= \
+	SENTRY_ORG= \
+	SENTRY_PROJECT=
+ENV VERSION=
 WORKDIR /usr/yukikaze
 COPY src/bot/package.json .yarnclean /usr/yukikaze/src/bot/
 COPY tsconfig.json package.json yarn.lock .yarnclean /usr/yukikaze/
@@ -13,15 +28,6 @@ RUN apk add --update \
 COPY src/bot /usr/yukikaze/src/bot/
 WORKDIR /usr/yukikaze/src/bot
 RUN yarn build
-ENV NODE_ENV= \
-	COMMAND_PREFIX= \
-	OWNERS= \
-	TOKEN= \
-	LOGS= \
-	WEBHOOK_ID= \
-	WEBHOOK_TOKEN= \
-	DB= \
-	SENTRY= \
-	GITHUB_API_KEY=
-ENV VERSION=
+RUN yarn sentry:release
+RUN yarn sentry:sourcemaps
 CMD ["node", "dist/bot.js"]

@@ -12,7 +12,9 @@
 		"build": "rimraf dist && tsc",
 		"lint": "eslint . --ext .ts",
 		"lint:fix": "eslint . --ext .ts --fix",
-		"dev": "node -r dotenv/config dist/bot.js"
+		"dev": "node -r dotenv/config dist/bot.js",
+		"sentry:release": "sentry-cli releases new --finalize $VERSION",
+		"sentry:sourcemaps": "sentry-cli releases files $VERSION upload-sourcemaps dist"
 	},
 	"dependencies": {
 		"@naval-base/ms": "^2.2.1",
@@ -39,6 +41,7 @@
 		"winston-loki": "^4.0.1"
 	},
 	"devDependencies": {
+		"@sentry/cli": "^1.47.1",
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
 		"@types/node": "^12.7.5",

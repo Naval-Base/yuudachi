@@ -1,8 +1,9 @@
 import 'reflect-metadata';
 import YukikazeClient from './client/YukikazeClient';
+import { __rootdir__ } from './root';
 import { EVENTS, TOPICS } from './util/logger';
 
-const client = new YukikazeClient({ owner: process.env.OWNERS, token: process.env.TOKEN });
+const client = new YukikazeClient({ owner: process.env.OWNERS, token: process.env.TOKEN, root: __rootdir__ });
 
 client
 	.on('error', err => client.logger.error(err.message, { topic: TOPICS.DISCORD, event: EVENTS.ERROR }))
