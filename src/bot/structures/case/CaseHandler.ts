@@ -61,14 +61,16 @@ export default class CaseHandler {
 		});
 	}
 
-	public async delete(
-		message: Message,
-		caseNum: number,
-		channel?: string,
-		restrictRoles?: { EMBED: string; EMOJI: string; REACTION: string },
-		removeRole?: boolean,
-	) {
+	public async delete(message: Message, caseNum: number, removeRole?: boolean) {
 		const cs = (await this.repo.findOne({ guild: message.guild!.id, case_id: caseNum })) as Case;
+
+		const channel = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_LOG, undefined);
+		const restrictRoles = this.client.settings.get<{ EMBED: string; EMOJI: string; REACTION: string }>(
+			message.guild!,
+			SETTINGS.RESTRICT_ROLES,
+			undefined,
+		);
+		const muteRole = this.client.settings.get<string>(message.guild!, SETTINGS.MUTE_ROLE, undefined);
 
 		if (channel) {
 			const chan = this.client.channels.get(channel) as TextChannel;
@@ -79,7 +81,7 @@ export default class CaseHandler {
 			this.fix(cs.case_id, message.guild!.id, channel);
 		}
 
-		if (restrictRoles && !removeRole) this.removeRoles(cs, message, restrictRoles);
+		if ((restrictRoles || muteRole) && !removeRole) this.removeRoles(cs, message, restrictRoles, muteRole);
 	}
 
 	public async log({ member, action, caseNum, reason, message, duration, ref }: Log) {
@@ -143,7 +145,12 @@ export default class CaseHandler {
 			`);
 	}
 
-	private async removeRoles(cs: Case, message: Message, roles: { EMBED: string; EMOJI: string; REACTION: string }) {
+	private async removeRoles(
+		cs: Case,
+		message: Message,
+		roles: { EMBED: string; EMOJI: string; REACTION: string },
+		mute: string,
+	) {
 		switch (cs.action) {
 			case 5:
 				// eslint-disable-next-line no-case-declarations
@@ -158,10 +165,7 @@ export default class CaseHandler {
 				const key = `${message.guild!.id}:${member.id}:MUTE`;
 				try {
 					this.cachedCases.add(key);
-					await member.roles.remove(
-						roles.embed,
-						`Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
-					);
+					await member.roles.remove(mute, `Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
 				} catch (error) {
 					this.cachedCases.delete(key);
 					message.reply(`there was an error removing the mute on this member: \`${error}\``);
@@ -177,7 +181,7 @@ export default class CaseHandler {
 					}
 					if (!member) break;
 					await member.roles.remove(
-						roles.embed,
+						roles.EMBED,
 						`Embed restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
 					);
 				} catch (error) {
@@ -194,7 +198,7 @@ export default class CaseHandler {
 					}
 					if (!member) break;
 					await member.roles.remove(
-						roles.emoji,
+						roles.EMOJI,
 						`Emoji restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
 					);
 				} catch (error) {
@@ -211,7 +215,7 @@ export default class CaseHandler {
 					}
 					if (!member) break;
 					await member.roles.remove(
-						roles.reaction,
+						roles.REACTION,
 						`Reaction restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
 					);
 				} catch (error) {

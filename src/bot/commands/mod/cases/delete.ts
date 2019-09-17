@@ -111,14 +111,7 @@ export default class CaseDeleteCommand extends Command {
 		totalCases = this.client.settings.get<number>(message.guild!, SETTINGS.CASES, 0) - 1;
 		this.client.settings.set(message.guild!, SETTINGS.CASES, totalCases);
 
-		const modLogChannel = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_LOG, undefined);
-		const restrictRoles = this.client.settings.get<{ EMBED: string; EMOJI: string; REACTION: string }>(
-			message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
-
-		await this.client.caseHandler.delete(message, caseToFind, modLogChannel, restrictRoles, removeRole);
+		await this.client.caseHandler.delete(message, caseToFind, removeRole);
 
 		return sentMessage.edit(MESSAGES.COMMANDS.MOD.CASES.DELETE.REPLY(dbCase.case_id));
 	}
