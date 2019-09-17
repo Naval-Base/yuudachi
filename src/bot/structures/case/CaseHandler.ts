@@ -65,7 +65,7 @@ export default class CaseHandler {
 		message: Message,
 		caseNum: number,
 		channel?: string,
-		restrictRoles?: { embed: string; emoji: string; reaction: string },
+		restrictRoles?: { EMBED: string; EMOJI: string; REACTION: string },
 		removeRole?: boolean,
 	) {
 		const cs = (await this.repo.findOne({ guild: message.guild!.id, case_id: caseNum })) as Case;
@@ -143,7 +143,7 @@ export default class CaseHandler {
 			`);
 	}
 
-	private async removeRoles(cs: Case, message: Message, roles: { embed: string; emoji: string; reaction: string }) {
+	private async removeRoles(cs: Case, message: Message, roles: { EMBED: string; EMOJI: string; REACTION: string }) {
 		switch (cs.action) {
 			case 5:
 				// eslint-disable-next-line no-case-declarations

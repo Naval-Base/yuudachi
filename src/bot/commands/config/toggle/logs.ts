@@ -27,13 +27,13 @@ export default class ToggleLogsCommand extends Command {
 	}
 
 	public async exec(message: Message, { webhook }: { webhook: string }) {
-		const guildLogs = this.client.settings.get(message.guild!, SETTINGS.GUILD_LOGS, undefined);
+		const guildLogs = this.client.settings.get(message.guild!, SETTINGS.GUILD_LOG, undefined);
 		if (guildLogs) {
-			this.client.settings.delete(message.guild!, SETTINGS.GUILD_LOGS);
+			this.client.settings.delete(message.guild!, SETTINGS.GUILD_LOG);
 			this.client.webhooks.delete(webhook);
 			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.LOGS.REPLY_DEACTIVATED);
 		}
-		this.client.settings.set(message.guild!, SETTINGS.GUILD_LOGS, webhook);
+		this.client.settings.set(message.guild!, SETTINGS.GUILD_LOG, webhook);
 		const wh = (await message.guild!.fetchWebhooks()).get(webhook);
 		if (!wh) return;
 		this.client.webhooks.set(wh.id, wh);

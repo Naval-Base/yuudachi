@@ -112,7 +112,7 @@ export default class CaseDeleteCommand extends Command {
 		this.client.settings.set(message.guild!, SETTINGS.CASES, totalCases);
 
 		const modLogChannel = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_LOG, undefined);
-		const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string }>(
+		const restrictRoles = this.client.settings.get<{ EMBED: string; EMOJI: string; REACTION: string }>(
 			message.guild!,
 			SETTINGS.RESTRICT_ROLES,
 			undefined,

@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile_bot
-    restart: always
+    restart: unless-stopped
     env_file:
       - ./src/bot/.env
     network_mode: 'host'

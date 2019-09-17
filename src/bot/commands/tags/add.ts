@@ -43,13 +43,13 @@ export default class TagAddCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ tag: string }>(
+		const restrictedRoles = this.client.settings.get<{ TAG: string }>(
 			message.guild!,
 			SETTINGS.RESTRICT_ROLES,
 			undefined,
 		);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.tag);
+		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}

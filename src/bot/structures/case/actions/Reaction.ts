@@ -18,7 +18,7 @@ export default class ReactionAction extends Action {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
-		const restrictRoles = this.client.settings.get<{ reaction: string }>(
+		const restrictRoles = this.client.settings.get<{ REACTION: string }>(
 			this.message.guild!,
 			SETTINGS.RESTRICT_ROLES,
 			undefined,
@@ -36,7 +36,7 @@ export default class ReactionAction extends Action {
 	public async exec() {
 		if (this.member instanceof User) return;
 		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
-		const restrictRoles = this.client.settings.get<{ reaction: string }>(
+		const restrictRoles = this.client.settings.get<{ REACTION: string }>(
 			this.message.guild!,
 			SETTINGS.RESTRICT_ROLES,
 			undefined,
@@ -46,7 +46,7 @@ export default class ReactionAction extends Action {
 
 		try {
 			await this.member.roles.add(
-				restrictRoles.reaction,
+				restrictRoles.REACTION,
 				MESSAGES.ACTIONS.REACTION.AUDIT(this.message.author!.tag, totalCases),
 			);
 		} catch (error) {

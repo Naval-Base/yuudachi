@@ -18,7 +18,7 @@ export default class EmojiAction extends Action {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
-		const restrictRoles = this.client.settings.get<{ emoji: string }>(
+		const restrictRoles = this.client.settings.get<{ EMOJI: string }>(
 			this.message.guild!,
 			SETTINGS.RESTRICT_ROLES,
 			undefined,
@@ -36,7 +36,7 @@ export default class EmojiAction extends Action {
 	public async exec() {
 		if (this.member instanceof User) return;
 		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
-		const restrictRoles = this.client.settings.get<{ emoji: string }>(
+		const restrictRoles = this.client.settings.get<{ EMOJI: string }>(
 			this.message.guild!,
 			SETTINGS.RESTRICT_ROLES,
 			undefined,
@@ -46,7 +46,7 @@ export default class EmojiAction extends Action {
 
 		try {
 			await this.member.roles.add(
-				restrictRoles.emoji,
+				restrictRoles.EMOJI,
 				MESSAGES.ACTIONS.EMOJI.AUDIT(this.message.author!.tag, totalCases),
 			);
 		} catch (error) {

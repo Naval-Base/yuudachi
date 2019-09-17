@@ -29,18 +29,18 @@ export enum COLORS {
 }
 
 export enum SETTINGS {
-	CASES = 'caseTotal',
-	MOD = 'moderation',
-	MOD_ROLE = 'modRole',
-	MOD_LOG = 'modLogChannel',
-	MUTE_ROLE = 'muteRole',
-	GITHUB_REPO = 'githubRepository',
-	RESTRICT_ROLES = 'restrictRoles',
-	GUILD_LOGS = 'guildLogs',
-	ROLE_STATE = 'roleState',
-	TOKEN_FILTER = 'tokenFiltering',
-	DEFAULT_DOCS = 'defaultDocs',
-	BLACKLIST = 'blacklist',
+	CASES = 'CASES',
+	MODERATION = 'MODERATION',
+	MOD_ROLE = 'MOD_ROLE',
+	MOD_LOG = 'MOD_LOG',
+	MUTE_ROLE = 'MUTE_ROLE',
+	GITHUB_REPO = 'GITHUB_REPO',
+	RESTRICT_ROLES = 'RESTRICT_ROLES',
+	GUILD_LOG = 'GUILD_LOG',
+	ROLE_STATE = 'ROLE_STATE',
+	TOKEN_FILTER = 'TOKEN_FILTER',
+	DEFAULT_DOCS = 'DEFAULT_DOCS',
+	BLACKLIST = 'BLACKLIST',
 }
 
 export const MESSAGES = {

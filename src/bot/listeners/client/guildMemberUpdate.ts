@@ -14,7 +14,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 	}
 
 	public async exec(oldMember: GuildMember, newMember: GuildMember) {
-		const moderation = this.client.settings.get(newMember.guild, SETTINGS.MOD, undefined);
+		const moderation = this.client.settings.get(newMember.guild, SETTINGS.MODERATION, undefined);
 		if (moderation) {
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:MUTE`)) return;
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:EMBED`)) return;
@@ -25,7 +25,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			const modRole = this.client.settings.get<string>(newMember.guild, SETTINGS.MOD_ROLE, undefined);
 			if (modRole && newMember.roles.has(modRole)) return;
 			const muteRole = this.client.settings.get<string>(newMember.guild, SETTINGS.MUTE_ROLE, undefined);
-			const restrictRoles = this.client.settings.get<{ embed: string; emoji: string; reaction: string; tag: string }>(
+			const restrictRoles = this.client.settings.get<{ EMBED: string; EMOJI: string; REACTION: string; TAG: string }>(
 				newMember.guild,
 				SETTINGS.RESTRICT_ROLES,
 				undefined,
@@ -36,10 +36,10 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (
 				automaticRoleState &&
 				(automaticRoleState.roles.includes(muteRole) ||
-					automaticRoleState.roles.includes(restrictRoles.embed) ||
-					automaticRoleState.roles.includes(restrictRoles.emoji) ||
-					automaticRoleState.roles.includes(restrictRoles.reaction) ||
-					automaticRoleState.roles.includes(restrictRoles.tag))
+					automaticRoleState.roles.includes(restrictRoles.EMBED) ||
+					automaticRoleState.roles.includes(restrictRoles.EMOJI) ||
+					automaticRoleState.roles.includes(restrictRoles.REACTION) ||
+					automaticRoleState.roles.includes(restrictRoles.TAG))
 			)
 				return;
 			const modLogChannel = this.client.settings.get<string>(newMember.guild, SETTINGS.MOD_LOG, undefined);
@@ -62,19 +62,19 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 					action = ACTIONS.MUTE;
 					processed = false;
 					break;
-				case restrictRoles.embed:
+				case restrictRoles.EMBED:
 					actionName = 'Embed restriction';
 					action = ACTIONS.EMBED;
 					break;
-				case restrictRoles.emoji:
+				case restrictRoles.EMOJI:
 					actionName = 'Emoji restriction';
 					action = ACTIONS.EMOJI;
 					break;
-				case restrictRoles.reaction:
+				case restrictRoles.REACTION:
 					actionName = 'Reaction restriction';
 					action = ACTIONS.REACTION;
 					break;
-				case restrictRoles.tag:
+				case restrictRoles.TAG:
 					actionName = 'Tag restriction';
 					action = ACTIONS.TAG;
 					break;

@@ -15,7 +15,7 @@ export default class MessageDeleteListener extends Listener {
 		if (message.author!.bot) return;
 		if (!message.guild) return;
 		if (!message.content) return;
-		const guildLogs = this.client.settings.get<string>(message.guild, SETTINGS.GUILD_LOGS, undefined);
+		const guildLogs = this.client.settings.get<string>(message.guild, SETTINGS.GUILD_LOG, undefined);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;

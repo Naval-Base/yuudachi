@@ -27,8 +27,8 @@ export default class SetConfigRestrictRolesReactionCommand extends Command {
 	}
 
 	public async exec(message: Message, { reaction }: { reaction: Role }) {
-		const roles = this.client.settings.get<{ reaction: string }>(message.guild!, SETTINGS.RESTRICT_ROLES, {});
-		roles.reaction = reaction.id;
+		const roles = this.client.settings.get<{ REACTION: string }>(message.guild!, SETTINGS.RESTRICT_ROLES, {});
+		roles.REACTION = reaction.id;
 		this.client.settings.set(message.guild!, SETTINGS.RESTRICT_ROLES, roles);
 		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.REACTION.REPLY(reaction.name));
 	}
