@@ -23,6 +23,11 @@ jobs:
           sed -i 's/ENV VERSION=/ENV VERSION='"`git rev-parse HEAD`"'/' Dockerfile*
           docker build . --file Dockerfile_bot --tag docker.pkg.github.com/naval-base/yukikaze/yukikaze_bot:latest
           docker push docker.pkg.github.com/naval-base/yukikaze/yukikaze_bot:latest
+        env:
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
       - name: Logout of GitHub docker registry
         uses: azure/container-actions/docker-logout@master
