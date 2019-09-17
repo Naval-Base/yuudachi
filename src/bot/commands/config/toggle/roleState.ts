@@ -31,7 +31,7 @@ export default class ToggleRoleStateCommand extends Command {
 		const records: RoleState[] = [];
 		for (const member of members.values()) {
 			const roles = member.roles.filter(role => role.id !== message.guild!.id).map(role => role.id);
-			if (!roles) continue;
+			if (!roles.length) continue;
 			const rs = new RoleState();
 			rs.guild = message.guild!.id;
 			rs.user = member.id;
