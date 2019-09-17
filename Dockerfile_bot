@@ -29,6 +29,4 @@ RUN apk add --update \
 COPY src/bot /usr/yukikaze/src/bot/
 WORKDIR /usr/yukikaze/src/bot
 RUN yarn build
-RUN yarn sentry:release
-RUN yarn sentry:sourcemaps
 CMD ["node", "dist/bot.js"]
