@@ -4,8 +4,8 @@ on:
     branches:
       - master
 jobs:
-  publish:
-    name: Build, tag, and publish container
+  push_bot:
+    name: Build, tag, and push container
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,18 +20,8 @@ jobs:
 
       - name: Build, tag, and push container
         run: |
-          sed -i 's/ENV VERSION=/ENV VERSION='$(git rev-parse HEAD)'/' Dockerfile_bot
-          sed -i 's/ENV SENTRY_URL=/ENV SENTRY_URL='$SENTRY_URL'/' Dockerfile_bot
-          sed -i 's/ENV SENTRY_AUTH_TOKEN=/ENV SENTRY_AUTH_TOKEN='$SENTRY_AUTH_TOKEN'/' Dockerfile_bot
-          sed -i 's/ENV SENTRY_ORG=/ENV SENTRY_ORG='$SENTRY_ORG'/' Dockerfile_bot
-          sed -i 's/ENV SENTRY_PROJECT=/ENV SENTRY_PROJECT='$SENTRY_PROJECT'/' Dockerfile_bot
-          docker build . --file Dockerfile_bot --tag docker.pkg.github.com/naval-base/yukikaze/yukikaze_bot:latest
+          docker build . --build-arg VERSION=$(git rev-parse HEAD)  --file Dockerfile_bot --tag docker.pkg.github.com/naval-base/yukikaze/yukikaze_bot:latest
           docker push docker.pkg.github.com/naval-base/yukikaze/yukikaze_bot:latest
-        env:
-          SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
       - name: Logout of GitHub docker registry
         uses: azure/container-actions/docker-logout@master

@@ -1,0 +1,33 @@
+name: Sentry
+on:
+  push:
+    branches:
+      - master
+jobs:
+  sentry_bot:
+    name: Create sentry release and upload sourcemaps
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Install Node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn workspace bot build
+
+      - name: Create sentry release and upload sourcemaps
+        run: |
+          yarn workspace bot sentry:release
+          yarn workspace bot sentry:sourcemaps
+        env:
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}

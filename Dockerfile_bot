@@ -2,6 +2,7 @@ FROM node:10-alpine
 LABEL name "Yukikaze Bot"
 LABEL version "0.1.0"
 LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
+ARG VERSION
 ENV NODE_ENV= \
 	COMMAND_PREFIX= \
 	OWNERS= \
@@ -11,12 +12,12 @@ ENV NODE_ENV= \
 	WEBHOOK_TOKEN= \
 	DB= \
 	SENTRY= \
-	GITHUB_API_KEY=
-ENV SENTRY_URL=
-ENV SENTRY_AUTH_TOKEN=
-ENV SENTRY_ORG=
-ENV SENTRY_PROJECT=
-ENV VERSION=
+	GITHUB_API_KEY= \
+	SENTRY_URL= \
+	SENTRY_AUTH_TOKEN= \
+	SENTRY_ORG= \
+	SENTRY_PROJECT= \
+	VERSION=$VERSION
 WORKDIR /usr/yukikaze
 COPY src/bot/package.json .yarnclean /usr/yukikaze/src/bot/
 COPY tsconfig.json package.json yarn.lock .yarnclean /usr/yukikaze/
