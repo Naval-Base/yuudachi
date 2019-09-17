@@ -25,6 +25,7 @@ jobs:
       - name: Create sentry release and upload sourcemaps
         run: |
           yarn workspace bot sentry:release
+          yarn workspace bot sentry:commits
           yarn workspace bot sentry:sourcemaps
         env:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
