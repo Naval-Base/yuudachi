@@ -51,7 +51,7 @@ export default class ReasonCommand extends Command {
 		message: Message,
 		{ caseNum, ref, reason }: { caseNum: number | string; ref: number; reason: string },
 	) {
-		const totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
+		const totalCases = this.client.settings.get<number>(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE_NUMBER);
 		const dbCase = await this.client.caseHandler.repo.findOne({ case_id: caseToFind });
