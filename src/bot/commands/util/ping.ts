@@ -15,7 +15,7 @@ export default class PingCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const msg = (await message.util!.send('Pinging...')) as Message;
+		const msg = await message.util!.send('Pinging...');
 
 		return message.util!.send(
 			MESSAGES.COMMANDS.UTIL.PING.RESPONSES[Math.floor(Math.random() * MESSAGES.COMMANDS.UTIL.PING.RESPONSES.length)]

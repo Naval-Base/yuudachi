@@ -88,7 +88,7 @@ export default class DocsCommand extends Command {
 		) {
 			return message.util!.send({ embed });
 		}
-		const msg = (await message.util!.send({ embed })) as Message;
+		const msg = await message.util!.send({ embed });
 		msg.react('🗑');
 		let react;
 		try {
