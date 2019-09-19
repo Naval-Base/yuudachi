@@ -4592,7 +4592,8 @@ dimport@^1.0.0:
 
 discord-akairo@discord-akairo/discord-akairo:
   version "8.0.0-beta.8"
-  resolved "https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/2fd87796b135b1d79bf8c0fa6798becb73a37140"
+  uid "563d57b428ab7dfee3cdedf04834f6d3d606481e"
+  resolved "https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/563d57b428ab7dfee3cdedf04834f6d3d606481e"
 
 discord-markdown@^2.2.0:
   version "2.2.0"
