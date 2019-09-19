@@ -229,7 +229,7 @@ export default class GitHubSearchCommand extends Command {
 		) {
 			return message.util!.send(embed);
 		}
-		const msg = (await message.util!.send(embed));
+		const msg = await message.util!.send(embed);
 		const ownReaction = await msg.react('🗑');
 		let react;
 		try {
