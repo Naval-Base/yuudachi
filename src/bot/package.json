@@ -42,7 +42,7 @@
 		"winston-loki": "^4.0.1"
 	},
 	"devDependencies": {
-		"@sentry/cli": "^1.47.1",
+		"@sentry/cli": "^1.47.2",
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
 		"@types/node": "^12.7.5",
