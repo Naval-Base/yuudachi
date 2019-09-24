@@ -45,7 +45,7 @@
 		"@sentry/cli": "^1.47.2",
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^12.7.5",
+		"@types/node": "^12.7.7",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.5.2",
 		"@types/ws": "^6.0.3",
