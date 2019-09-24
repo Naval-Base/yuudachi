@@ -51,16 +51,14 @@ export default class KickCommand extends Command {
 
 	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
 		const key = `${message.guild!.id}:${member.id}:KICK`;
-		try {
-			await new KickAction({
+		message.guild!.caseQueue.add(async () =>
+			new KickAction({
 				message,
 				member,
 				keys: key,
 				reason,
 				ref,
-			}).commit();
-		} catch (error) {
-			return message.util!.reply(error.message);
-		}
+			}).commit(),
+		);
 	}
 }

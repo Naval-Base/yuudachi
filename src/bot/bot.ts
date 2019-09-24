@@ -1,8 +1,10 @@
 import 'reflect-metadata';
 import YukikazeClient from './client/YukikazeClient';
 import { __rootdir__ } from './root';
+import YukikazeGuild from './structures/YukikazeGuild';
 import { EVENTS, TOPICS } from './util/logger';
 
+YukikazeGuild();
 const client = new YukikazeClient({ owner: process.env.OWNERS, token: process.env.TOKEN, root: __rootdir__ });
 
 client

@@ -1,7 +1,8 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagAliasCommand extends Command {
 	public constructor() {
@@ -76,7 +77,7 @@ export default class TagAliasCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ first, second, add, del }: { first: Tag; second: string; add: boolean; del: boolean },
+		{ first, second, add, del }: { first: Tags; second: string; add: boolean; del: boolean },
 	) {
 		if (add) {
 			if (second && second.length >= 1900) {
@@ -89,9 +90,14 @@ export default class TagAliasCommand extends Command {
 		} else {
 			return message.util!.reply('you have to either supply `--add` or `--del.`');
 		}
-		const tagsRepo = this.client.db.getRepository(Tag);
-		first.last_modified = message.author!.id;
-		await tagsRepo.save(first);
+		await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.UPDATE_TAG_ALIASES,
+			variables: {
+				id: first.id,
+				aliases: `{${first.aliases.join(',')}}`,
+				last_modified: message.author!.id,
+			},
+		});
 
 		return message.util!.reply(MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, second.substring(0, 1900), add));
 	}

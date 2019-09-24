@@ -1,7 +1,8 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagDeleteCommand extends Command {
 	public constructor() {
@@ -41,13 +42,17 @@ export default class TagDeleteCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { tag }: { tag: Tag }) {
+	public async exec(message: Message, { tag }: { tag: Tags }) {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE, undefined));
 		if (tag.user !== message.author!.id && !staffRole) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.DELETE.OWN_TAG);
 		}
-		const tagsRepo = this.client.db.getRepository(Tag);
-		await tagsRepo.remove(tag);
+		await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.DELETE_TAG,
+			variables: {
+				id: tag.id,
+			},
+		});
 
 		return message.util!.reply(MESSAGES.COMMANDS.TAGS.DELETE.REPLY(tag.name.substring(0, 1900)));
 	}

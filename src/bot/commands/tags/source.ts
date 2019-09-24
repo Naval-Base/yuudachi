@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { Tag } from '../../models/Tags';
 import { MESSAGES, SETTINGS } from '../../util/constants';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagSourceCommand extends Command {
 	public constructor() {
@@ -46,7 +46,7 @@ export default class TagSourceCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { tag, file }: { tag: Tag; file: boolean }) {
+	public async exec(message: Message, { tag, file }: { tag: Tags; file: boolean }) {
 		return message.util!.send(tag.content, {
 			code: 'md',
 			files: file

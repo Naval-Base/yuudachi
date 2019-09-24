@@ -8,7 +8,9 @@
 			"esnext.array",
 			"esnext.asynciterable",
 			"esnext.intl",
-			"esnext.symbol"
+			"esnext.symbol",
+			// ApolloClient 🙄
+			"dom"
 		],
 		"sourceMap": true,
 		"inlineSources": true,

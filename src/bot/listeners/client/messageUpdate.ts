@@ -26,11 +26,9 @@ export default class MessageUpdateListener extends Listener {
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
 			if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
-				// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-				const strippedOldMessage = oldMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/);
+				const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
 				if (!strippedOldMessage || !strippedOldMessage[2]) return;
-				// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-				const strippedNewMessage = newMessage.content.match(/```(?:(\S+)\n)?\s*([^]+?)\s*```/);
+				const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
 				if (!strippedNewMessage || !strippedNewMessage[2]) return;
 				if (strippedOldMessage[2] === strippedNewMessage[2]) return;
 				const diffMessage = diff.diffLines(strippedOldMessage[2], strippedNewMessage[2], { newlineIsToken: true });

@@ -50,16 +50,14 @@ export default class RestrictReactionCommand extends Command {
 	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
 		if (member.id === message.author!.id) return;
 		const key = `${message.guild!.id}:${member.id}:REACTION`;
-		try {
-			await new ReactionAction({
+		message.guild!.caseQueue.add(async () =>
+			new ReactionAction({
 				message,
 				member,
 				keys: key,
 				reason,
 				ref,
-			}).commit();
-		} catch (error) {
-			return message.util!.reply(error.message);
-		}
+			}).commit(),
+		);
 	}
 }

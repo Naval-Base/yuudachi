@@ -18,7 +18,6 @@ export default class ReadyListener extends Listener {
 		});
 		this.client.user!.setActivity(MESSAGES.EVENTS.READY.ACTIVITY(this.client.user!.username));
 		this.client.promServer.listen(5500);
-		this.client.node.on('message', this.client.nodeMessage);
 		this.client.logger.info('Metrics listening on 5500', { topic: TOPICS.METRICS, event: EVENTS.READY });
 		for (const guild of this.client.guilds.values()) {
 			const logs = this.client.settings.get<string>(guild, SETTINGS.GUILD_LOG, undefined);

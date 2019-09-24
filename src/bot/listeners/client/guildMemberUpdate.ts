@@ -1,8 +1,8 @@
 import { Listener, PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel } from 'discord.js';
-import { Case } from '../../models/Cases';
-import { RoleState } from '../../models/RoleStates';
-import { ACTIONS, COLORS, SETTINGS } from '../../util/constants';
+import { ACTIONS, COLORS, GRAPHQL, PRODUCTION, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Cases, RoleStates } from '../../util/graphQLTypes';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {
@@ -31,8 +31,16 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				undefined,
 			);
 			if (!muteRole && !restrictRoles) return;
-			const roleStatesRepo = this.client.db.getRepository(RoleState);
-			const automaticRoleState = await roleStatesRepo.findOne({ user: newMember.id });
+			const { data } = await graphQLClient.query({
+				query: GRAPHQL.QUERY.ROLE_STATES,
+				variables: {
+					guild: newMember.guild.id,
+					member: newMember.id,
+				},
+			});
+			let automaticRoleState: RoleStates;
+			if (PRODUCTION) automaticRoleState = data.role_states[0];
+			else automaticRoleState = data.staging_role_states[0];
 			if (
 				automaticRoleState &&
 				(automaticRoleState.roles.includes(muteRole) ||
@@ -44,10 +52,19 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				return;
 			const modLogChannel = this.client.settings.get<string>(newMember.guild, SETTINGS.MOD_LOG, undefined);
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
-			const casesRepo = this.client.db.getRepository(Case);
 			if (!role) {
 				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
-					const dbCase = await casesRepo.findOne({ target_id: newMember.id, action_processed: false });
+					const { data } = await graphQLClient.query({
+						query: GRAPHQL.QUERY.MUTE_MEMBER,
+						variables: {
+							guild: newMember.guild.id,
+							target_id: newMember.id,
+							action_processed: false,
+						},
+					});
+					let dbCase: Cases;
+					if (PRODUCTION) dbCase = data.cases[0];
+					else dbCase = data.staging_cases[0];
 					if (dbCase) this.client.muteScheduler.cancel(dbCase);
 				}
 				return;

@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "staging"."settings"
+  type: run_sql

@@ -1,8 +1,8 @@
 import { Command } from 'discord-akairo';
-import { Message, Util } from 'discord.js';
-import * as moment from 'moment';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { Message } from 'discord.js';
+import { GRAPHQL, MESSAGES, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagEditCommand extends Command {
 	public constructor() {
@@ -70,7 +70,7 @@ export default class TagEditCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ tag, hoist, unhoist, content }: { tag: Tag; hoist: boolean; unhoist: boolean; content: string },
+		{ tag, hoist, unhoist, content }: { tag: Tags; hoist: boolean; unhoist: boolean; content: string },
 	) {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE, undefined));
 		if (tag.user !== message.author!.id && !staffRole) {
@@ -79,17 +79,24 @@ export default class TagEditCommand extends Command {
 		if (content && content.length >= 1950) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.TOO_LONG);
 		}
-		const tagRepo = this.client.db.getRepository(Tag);
 		if (hoist) hoist = true;
 		else if (unhoist) hoist = false;
-		if ((hoist || unhoist) && staffRole) tag.hoisted = hoist;
-		if (typeof content === 'string') {
-			content = Util.cleanContent(content, message);
-			tag.content = content;
-		}
-		tag.last_modified = message.author!.id;
-		tag.updatedAt = moment.utc().toDate();
-		await tagRepo.save(tag);
+		const vars = content
+			? {
+					id: tag.id,
+					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
+					content,
+					last_modified: message.author!.id,
+			  }
+			: {
+					id: tag.id,
+					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
+					last_modified: message.author!.id,
+			  };
+		await graphQLClient.mutate({
+			mutation: content ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
+			variables: vars,
+		});
 
 		return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.REPLY(tag.name, hoist, staffRole));
 	}

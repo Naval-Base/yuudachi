@@ -1,6 +1,8 @@
 import { stripIndents } from 'common-tags';
 import { User } from 'discord.js';
-import { Reminder } from '../models/Reminders';
+import gql from 'graphql-tag';
+
+export const PRODUCTION = process.env.NODE_ENV === 'production';
 
 export enum ACTIONS {
 	BAN = 1,
@@ -43,6 +45,455 @@ export enum SETTINGS {
 	BLACKLIST = 'BLACKLIST',
 }
 
+export const GRAPHQL = {
+	ENDPOINT: process.env.GRAPHQL_ENDPOINT!,
+
+	QUERY: {
+		SETTINGS: gql`
+			query {
+				${PRODUCTION ? '' : 'staging_'}settings {
+					guild
+					settings
+				}
+			}
+		`,
+
+		CASES: gql`
+			query($guild: String!, $case_id: Int!) {
+				${PRODUCTION ? '' : 'staging_'}cases(where: {
+					guild: { _eq: $guild },
+					case_id: { _eq: $case_id }
+				}) {
+					action
+					action_duration
+					case_id
+					created_at
+					id
+					message
+					mod_id
+					mod_tag
+					target_id
+					target_tag
+					reason
+					ref_id
+				}
+			}
+		`,
+
+		LOG_CASE: gql`
+			query($guild: String!, $case_id: Int!) {
+				${PRODUCTION ? '' : 'staging_'}cases(where: {
+					guild: { _eq: $guild },
+					case_id: { _eq: $case_id }
+				}, order_by: { case_id: asc }) {
+					id
+					message
+				}
+			}
+		`,
+
+		HISTORY_CASE: gql`
+			query($target_id: String!) {
+				${PRODUCTION ? '' : 'staging_'}cases(where: {
+					target_id: { _eq: $target_id }
+				}) {
+					action
+				}
+			}
+		`,
+
+		FIX_CASES: gql`
+			query($guild: String!, $case_id: Int!) {
+				${PRODUCTION ? '' : 'staging_'}cases(where: {
+					guild: { _eq: $guild },
+					case_id: { _gt: $case_id }
+				}, order_by: { case_id: asc }) {
+					id
+					message
+				}
+			}
+		`,
+
+		MUTES: gql`
+			query($action_duration: timestamptz!, $action_processed: Boolean!) {
+				${PRODUCTION ? '' : 'staging_'}cases(where: {
+					action_duration: { _gt: $action_duration },
+					action_processed: { _eq: $action_processed }
+				}) {
+					action_duration
+					guild
+					id
+					target_id
+					target_tag
+				}
+			}
+		`,
+
+		MUTE_DURATION: gql`
+			query($guild: String!, $case_id: Int!, $action: Int!, $action_processed: Boolean!) {
+				${PRODUCTION ? '' : 'staging_'}cases(where: {
+					guild: { _eq: $guild },
+					case_id: { _eq: $case_id },
+					action: { _eq: $action },
+					action_processed: { _eq: $action_processed }
+				}) {
+					action
+					action_duration
+					action_processed
+					case_id
+					created_at
+					guild
+					id
+					message
+					mod_id
+					mod_tag
+					reason
+					ref_id
+					target_id
+					target_tag
+				}
+			}
+		`,
+
+		MUTE_MEMBER: gql`
+			query($guild: String!, $target_id: String!, $action_processed: Boolean!) {
+				${PRODUCTION ? '' : 'staging_'}cases(where: {
+					guild: { _eq: $guild },
+					target_id: { _eq: $target_id }
+					action_processed: { _eq: $action_processed },
+				}) {
+					action
+					action_duration
+					action_processed
+					case_id
+					created_at
+					guild
+					id
+					message
+					mod_id
+					mod_tag
+					reason
+					ref_id
+					target_id
+					target_tag
+				}
+			}
+		`,
+
+		ROLE_STATES: gql`
+			query($guild: String!, $member: String!) {
+				${PRODUCTION ? '' : 'staging_'}role_states(where: {
+					guild: { _eq: $guild },
+					member: { _eq: $member }
+				}) {
+					roles
+				}
+			}
+		`,
+
+		TAGS: gql`
+			query($guild: String!) {
+				${PRODUCTION ? '' : 'staging_'}tags(where: {
+					guild: { _eq: $guild }
+				}) {
+					content
+					hoisted
+					name
+					user
+				}
+			}
+		`,
+
+		TAGS_MEMBER: gql`
+			query($guild: String!, $user: String!) {
+				${PRODUCTION ? '' : 'staging_'}tags(where: {
+					guild: { _eq: $guild },
+					user: { _eq: $user }
+				}) {
+					content
+					hoisted
+					name
+					user
+				}
+			}
+		`,
+
+		TAGS_TYPE: gql`
+			query($guild: String!) {
+				${PRODUCTION ? '' : 'staging_'}tags(where: {
+					guild: { _eq: $guild }
+				}) {
+					aliases
+					content
+					created_at
+					guild
+					id
+					last_modified
+					name
+					updated_at
+					user
+					uses
+				}
+			}
+		`,
+	},
+
+	MUTATION: {
+		UPDATE_SETTINGS: gql`
+			mutation($guild: String!, $settings: jsonb!) {
+				insert${PRODUCTION ? '' : '_staging'}_settings(
+					objects: { guild: $guild, settings: $settings },
+					on_conflict: { constraint: settings_pkey, update_columns: settings }
+				) {
+					returning {
+						guild
+						settings
+					}
+				}
+			}
+		`,
+
+		DELETE_SETTINGS: gql`
+			mutation($guild: String!) {
+				delete${PRODUCTION ? '' : '_staging'}_settings(where: { guild: { _eq: $guild } }) {
+					returning {
+						guild
+						settings
+					}
+				}
+			}
+		`,
+
+		INSERT_ROLE_STATE: gql`
+			mutation($objects: [${PRODUCTION ? '' : 'staging_'}role_states_insert_input!]!) {
+				insert${PRODUCTION ? '' : '_staging'}_role_states(objects: $objects) {
+					affected_rows
+				}
+			}
+		`,
+
+		DELETE_ROLE_STATE: gql`
+			mutation($guild: String!) {
+				delete${PRODUCTION ? '' : '_staging'}_role_states(where: {
+					guild: { _eq: $guild }
+				}) {
+					affected_rows
+				}
+			}
+		`,
+
+		DELETE_MEMBER_ROLE_STATE: gql`
+			mutation($guild: String!, $member: String!) {
+				delete${PRODUCTION ? '' : '_staging'}_role_states(where: {
+					guild: { _eq: $guild },
+					member: { _eq: $member }
+				}) {
+					affected_rows
+				}
+			}
+		`,
+
+		UPDATE_ROLE_STATE: gql`
+			mutation($guild: String!, $member: String!, $roles: _text!) {
+				insert${PRODUCTION ? '' : '_staging'}_role_states(
+					objects: { guild: $guild, member: $member, roles: $roles },
+					on_conflict: { constraint: role_states_guild_member_key, update_columns: roles }
+				) {
+					affected_rows
+				}
+			}
+		`,
+
+		INSERT_CASES: gql`
+			mutation(
+				$action: Int!,
+				$action_duration: timestamptz,
+				$action_processed: Boolean,
+				$case_id: Int!,
+				$guild: String!,
+				$message: String,
+				$mod_id: String,
+				$mod_tag: String,
+				$reason: String,
+				$ref_id: Int,
+				$target_id: String,
+				$target_tag: String
+			) {
+				insert${PRODUCTION ? '' : '_staging'}_cases(objects: {
+					action: $action,
+					action_duration: $action_duration
+					action_processed: $action_processed
+					case_id: $case_id,
+					guild: $guild,
+					message: $message
+					mod_id: $mod_id,
+					mod_tag: $mod_tag,
+					reason: $reason
+					ref_id: $ref_id
+					target_id: $target_id,
+					target_tag: $target_tag
+				}) {
+					returning {
+						action
+						action_duration
+						action_processed
+						case_id
+						created_at
+						guild
+						id
+						message
+						mod_id
+						mod_tag
+						reason
+						ref_id
+						target_id
+						target_tag
+					}
+				}
+			}
+		`,
+
+		LOG_CASE: gql`
+			mutation($id: uuid!, $message: String!) {
+				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+					id: { _eq: $id }
+				}, _set: { message: $message }) {
+					affected_rows
+				}
+			}
+		`,
+
+		FIX_CASE: gql`
+			mutation($id: uuid!, $case_id: Int!) {
+				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+					id: { _eq: $id }
+				}, _set: { case_id: $case_id }) {
+					affected_rows
+				}
+			}
+		`,
+
+		DELETE_CASE: gql`
+			mutation($id: uuid!) {
+				delete${PRODUCTION ? '' : '_staging'}_cases(where: {
+					id: { _eq: $id }
+				}) {
+					affected_rows
+				}
+			}
+		`,
+
+		CANCEL_MUTE: gql`
+			mutation($id: uuid!, $action_processed: Boolean!) {
+				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+					id: { _eq: $id }
+				}, _set: { action_processed: $action_processed }) {
+					affected_rows
+				}
+			}
+		`,
+
+		UPDATE_DURATION_MUTE: gql`
+			mutation($id: uuid!, $action_duration: timestamptz!) {
+				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+					id: { _eq: $id }
+				}, _set: { action_duration: $action_duration }) {
+					returning {
+						action
+						action_duration
+						action_processed
+						case_id
+						created_at
+						guild
+						id
+						message
+						mod_id
+						mod_tag
+						reason
+						ref_id
+						target_id
+						target_tag
+					}
+				}
+			}
+		`,
+
+		UPDATE_REASON: gql`
+			mutation($id: uuid!, $mod_id: String!, $mod_tag: String!, $reason: String!) {
+				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+					id: { _eq: $id }
+				}, _set: { mod_id: $mod_id, mod_tag: $mod_tag, reason: $reason }) {
+					affected_rows
+				}
+			}
+		`,
+
+		INSERT_TAG: gql`
+			mutation($guild: String!, $user: String!, $name: String!, $hoisted: Boolean, $content: String!) {
+				insert${PRODUCTION ? '' : '_staging'}_tags(objects: {
+					guild: $guild,
+					user: $user,
+					name: $name,
+					hoisted: $hoisted,
+					content: $content
+				}) {
+					affected_rows
+				}
+			}
+		`,
+
+		UPDATE_TAG_ALIASES: gql`
+			mutation($id: uuid!, $aliases: _text!, $last_modified: String!) {
+				update${PRODUCTION ? '' : '_staging'}_tags(where: {
+					id: { _eq: $id }
+				}, _set: { aliases: $aliases, last_modified: $last_modified }) {
+					affected_rows
+				}
+			}
+		`,
+
+		UPDATE_TAG_HOIST: gql`
+			mutation($id: uuid!, $hoisted: Boolean, $last_modified: String!) {
+				update${PRODUCTION ? '' : '_staging'}_tags(where: {
+					id: { _eq: $id }
+				}, _set: { hoisted: $hoisted, last_modified: $last_modified }) {
+					affected_rows
+				}
+			}
+		`,
+
+		UPDATE_TAG_CONTENT: gql`
+			mutation($id: uuid!, $hoisted: Boolean, $content: String!, $last_modified: String!) {
+				update${PRODUCTION ? '' : '_staging'}_tags(where: {
+					id: { _eq: $id }
+				}, _set: { hoisted: $hoisted, content: $content, last_modified: $last_modified }) {
+					affected_rows
+				}
+			}
+		`,
+
+		UPDATE_TAG_USAGE: gql`
+			mutation($id: uuid!, $uses: Int!) {
+				update${PRODUCTION ? '' : '_staging'}_tags(where: {
+					id: { _eq: $id }
+				}, _set: { uses: $uses }) {
+					affected_rows
+				}
+			}
+		`,
+
+		DELETE_TAG: gql`
+			mutation($id: uuid!) {
+				delete${PRODUCTION ? '' : '_staging'}_tags(where: {
+					id: { _eq: $id }
+				}) {
+					affected_rows
+				}
+			}
+		`,
+	},
+};
+
 export const MESSAGES = {
 	COMMAND_HANDLER: {
 		PROMPT: {
@@ -52,6 +503,7 @@ export const MESSAGES = {
 			ENDED: "More than 3 tries and you still didn't quite get it. The command has been cancelled.",
 			CANCEL: 'The command has been cancelled.',
 		},
+
 		LOADED: 'Command handler loaded',
 	},
 
@@ -63,32 +515,12 @@ export const MESSAGES = {
 		LOADED: 'Listener handler loaded',
 	},
 
-	DATABASE: {
-		LOADED: (db: string) => `Connected to database ${db}`,
-	},
-
-	IPC: {
-		ERROR: (client: string, error: Error) => `${client} ${error}`,
-		OPEN: 'Server ready',
-		CLOSE: 'Server destroyed',
-		CONNECT: (client: string) => `${client} connected`,
-		DISCONNECT: (client: string) => `${client}, disconnected`,
-	},
-
 	SETTINGS: {
 		INIT: 'Bot settings initialized',
 	},
 
-	CASE_HANDLER: {
-		INIT: 'Case handler initialized',
-	},
-
 	MUTE_SCHEDULER: {
 		INIT: 'Mute scheduler initialized',
-	},
-
-	REMIND_SCHEDULER: {
-		INIT: 'Remind scheduler initialized',
 	},
 
 	COMMANDS: {
@@ -126,6 +558,7 @@ export const MESSAGES = {
 				DESCRIPTION: 'Clears the guild config.',
 				REPLY: 'cleared the guild config.',
 			},
+
 			DELETE: {
 				DESCRIPTION: 'Deletes a value to the config.',
 				REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`
@@ -137,27 +570,33 @@ export const MESSAGES = {
 					DESCRIPTION: 'Deletes the case number of the guild.',
 					REPLY: 'deleted cases.',
 				},
+
 				MOD: {
 					DESCRIPTION: 'Deletes the mod role.',
 					REPLY: 'deleted moderation role.',
 				},
+
 				MOD_LOG: {
 					DESCRIPTION: 'Deletes the mod log.',
 					REPLY: 'deleted moderation log channel.',
 				},
+
 				MUTE: {
 					DESCRIPTION: 'Deletes the mute role of the guild.',
 					REPLY: 'deleted mute role.',
 				},
+
 				REPO: {
 					DESCRIPTION: 'Deletes the repository the GitHub commands use.',
 					REPLY: 'deleted repository.',
 				},
+
 				RESTRICT: {
 					DESCRIPTION: 'Deletes the restriction roles of the guild.',
 					REPLY: 'deleted restricted roles.',
 				},
 			},
+
 			SET: {
 				DESCRIPTION: 'Sets a value to the config.',
 				REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`
@@ -181,6 +620,7 @@ export const MESSAGES = {
 						},
 						REPLY: (role: string) => `set restricted role for embeds to **${role}**`,
 					},
+
 					EMOJI: {
 						DESCRIPTION: 'Sets the restriction role for emojis of the guild.',
 						PROMPT: {
@@ -190,6 +630,7 @@ export const MESSAGES = {
 						},
 						REPLY: (role: string) => `set restricted role for emojis to **${role}**`,
 					},
+
 					REACTION: {
 						DESCRIPTION: 'Sets the restriction role for reactions of the guild.',
 						PROMPT: {
@@ -199,6 +640,7 @@ export const MESSAGES = {
 						},
 						REPLY: (role: string) => `set restricted role for reactions to **${role}**`,
 					},
+
 					TAG: {
 						DESCRIPTION: 'Sets the restriction role for tags of the guild.',
 						PROMPT: {
@@ -208,27 +650,33 @@ export const MESSAGES = {
 						REPLY: (role: string) => `set restricted role for tags to **${role}**`,
 					},
 				},
+
 				CASES: {
 					DESCRIPTION: 'Sets the case number of the guild.',
 					REPLY: (cases: number) => `set cases to **${cases}**`,
 				},
+
 				MOD: {
 					DESCRIPTION: 'Sets the mod role many of the commands use for permission checking.',
 					REPLY: (role: string) => `set moderation role to **${role}**`,
 				},
+
 				MOD_LOG: {
 					DESCRIPTION: 'Sets the mod log many of the commands use to log moderation actions.',
 					REPLY: (channel: string) => `set moderation log channel to **${channel}**`,
 				},
+
 				MUTE: {
 					DESCRIPTION: 'Sets the mute role of the guild.',
 					REPLY: (role: string) => `set mute role to **${role}**`,
 				},
+
 				REPO: {
 					DESCRIPTION: 'Sets the repository the GitHub commands use.',
 					REPLY: (repo: string) => `set repository to **${repo}**`,
 				},
 			},
+
 			TOGGLE: {
 				DESCRIPTION: 'Toggles a value in the config.',
 				REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`
@@ -244,16 +692,19 @@ export const MESSAGES = {
 					REPLY_ACTIVATED: 'successfully activated logs!',
 					REPLY_DEACTIVATED: 'successfully deactivated logs!',
 				},
+
 				MOD: {
 					DESCRIPTION: 'Toggle moderation features on the server.',
 					REPLY_ACTIVATED: 'successfully activated moderation commands!',
 					REPLY_DEACTIVATED: 'successfully deactivated moderation commands!',
 				},
+
 				ROLE_STATE: {
 					DESCRIPTION: 'Toggle role state on the server.',
 					REPLY_ACTIVATED: 'successfully inserted all the records!',
 					REPLY_DEACTIVATED: 'successfully removed all records!',
 				},
+
 				TOKEN_FILTER: {
 					DESCRIPTION: 'Toggle token filtering feature on the server.',
 					REPLY_ACTIVATED: 'successfully activated token filtering!',
@@ -261,6 +712,7 @@ export const MESSAGES = {
 				},
 			},
 		},
+
 		DOCS: {
 			DOCS: {
 				DESCRIPTION: 'Searches discord.js documentation.',
@@ -274,6 +726,7 @@ export const MESSAGES = {
 					FAILURE: 'what makes you think you can do that, huh?',
 				},
 			},
+
 			MDN: {
 				DESCRIPTION: 'Searches MDN for your query.',
 				PROMPT: {
@@ -282,6 +735,7 @@ export const MESSAGES = {
 				FAILURE:
 					"Yukikaze couldn't find the requested information. Maybe look for something that actually exists the next time!",
 			},
+
 			NPM: {
 				DESCRIPTION: 'Responds with information on an NPM package.',
 				PROMPT: {
@@ -292,6 +746,7 @@ export const MESSAGES = {
 				UNPUBLISH: 'whoever was the Commander of this package decided to unpublish it, what a fool.',
 			},
 		},
+
 		GITHUB: {
 			COMMIT: {
 				DESCRIPTION: 'Get information on a commit in a predefined repository.',
@@ -300,6 +755,7 @@ export const MESSAGES = {
 				NO_GITHUB_API_KEY: 'my master has not set a valid GitHub API key, therefore this command is not available.',
 				NO_GITHUB_REPO: "the guild owner didn't set a GitHub repository yet.",
 			},
+
 			ISSUE_PR: {
 				DESCRIPTION: 'Get information on an issue or PR from a predefined repository.',
 				FAILURE:
@@ -307,6 +763,7 @@ export const MESSAGES = {
 				NO_GITHUB_API_KEY: 'my master has not set a valid GitHub API key, therefore this command is not available.',
 				NO_GITHUB_REPO: "the guild owner didn't set a GitHub repository yet.",
 			},
+
 			SEARCH: {
 				DESCRIPTION: 'Get information on a commit, issue, or PR from a repository.',
 				FAILURE:
@@ -314,10 +771,12 @@ export const MESSAGES = {
 				NO_GITHUB_API_KEY: 'my master has not set a valid GitHub API key, therefore this command is not available.',
 			},
 		},
+
 		INFO: {
 			CHANNEL: {
 				DESCRIPTION: 'Get information about a channel.',
 			},
+
 			EMOJI: {
 				DESCRIPTION: 'Get information about an emoji.',
 				PROMPT: {
@@ -325,16 +784,20 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, please provide a valid emoji!`,
 				},
 			},
+
 			ROLE: {
 				DESCRIPTION: 'Get information about a role.',
 			},
+
 			SERVER: {
 				DESCRIPTION: 'Get information on the server.',
 			},
+
 			USER: {
 				DESCRIPTION: 'Get information about a member.',
 			},
 		},
+
 		MOD: {
 			CASES: {
 				DESCRIPTION: stripIndents`Available methods:
@@ -363,6 +826,7 @@ export const MESSAGES = {
 					CANCEL: 'cancelled delete.',
 					REPLY: (id: number) => `Successfully deleted case **${id}**`,
 				},
+
 				SHOW: {
 					DESCRIPTION: 'Inspect a case, pulled from the database.',
 					PROMPT: {
@@ -374,6 +838,7 @@ export const MESSAGES = {
 						"I looked where I could, but I couldn't find a case with that Id, maybe look for something that actually exists next time!",
 				},
 			},
+
 			RESTRICTIONS: {
 				DESCRIPTION: stripIndents`
 					Restrict a members ability to post embeds/use custom emojis/react.
@@ -400,6 +865,7 @@ export const MESSAGES = {
 						RETRY: (author: User | null) => `${author}, please mention a member.`,
 					},
 				},
+
 				EMOJI: {
 					DESCRIPTION: 'Restrict a members ability to use custom emoji.',
 					PROMPT: {
@@ -407,6 +873,7 @@ export const MESSAGES = {
 						RETRY: (author: User | null) => `${author}, please mention a member.`,
 					},
 				},
+
 				REACTION: {
 					DESCRIPTION: 'Restrict a members ability to use reactions.',
 					PROMPT: {
@@ -414,6 +881,7 @@ export const MESSAGES = {
 						RETRY: (author: User | null) => `${author}, please mention a member.`,
 					},
 				},
+
 				TAG: {
 					DESCRIPTION: 'Restrict a members ability to create/edit/delete/download/list/search tags.',
 					PROMPT: {
@@ -422,6 +890,7 @@ export const MESSAGES = {
 					},
 				},
 			},
+
 			BAN: {
 				DESCRIPTION: 'Bans a member, duh.',
 				PROMPT: {
@@ -429,6 +898,7 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, please mention a member.`,
 				},
 			},
+
 			DURATION: {
 				DESCRIPTION: 'Sets the duration for a mute and reschedules it.',
 				PROMPT: {
@@ -446,10 +916,12 @@ export const MESSAGES = {
 				NO_MESSAGE: "looks like the message doesn't exist anymore!",
 				REPLY: (id: number) => `Successfully updated duration for case **#${id}**`,
 			},
+
 			HISTORY: {
 				DESCRIPTION: 'Check the history of a member.',
 				NO_PERMISSION: 'you know, I know, we should just leave it at that.',
 			},
+
 			KICK: {
 				DESCRIPTION: 'Kicks a member, duh.',
 				PROMPT: {
@@ -457,6 +929,7 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, please mention a member.`,
 				},
 			},
+
 			MUTE: {
 				DESCRIPTION: 'Mutes a member, duh.',
 				PROMPT: {
@@ -468,6 +941,7 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, please use a proper time format.`,
 				},
 			},
+
 			REASON: {
 				DESCRIPTION: 'Sets/Updates the reason of a modlog entry.',
 				PROMPT: {
@@ -481,6 +955,7 @@ export const MESSAGES = {
 				NO_MESSAGE: "looks like the message doesn't exist anymore!",
 				REPLY: (id: number) => `Successfully set reason for case **#${id}**`,
 			},
+
 			SOFTBAN: {
 				DESCRIPTION: 'Softbans a member, duh.',
 				PROMPT: {
@@ -488,6 +963,7 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, please mention a member.`,
 				},
 			},
+
 			UNBAN: {
 				DESCRIPTION: 'Unbans a user, duh.',
 				PROMPT: {
@@ -495,6 +971,7 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, please mention a member.`,
 				},
 			},
+
 			WARN: {
 				DESCRIPTION: 'Warns a user, duh.',
 				PROMPT: {
@@ -503,48 +980,7 @@ export const MESSAGES = {
 				},
 			},
 		},
-		REMINDERS: {
-			DESCRIPTION: stripIndents`Available methods:
-				 • add \`[--hoist/--pin] <tag> <content>\`
-				 • del \`[--all]\`
-				 • list
 
-				Required: \`<>\` | Optional: \`[]\`
-
-				For additional \`<...arguments>\` usage refer to the examples below.
-			`,
-			REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`
-				When you beg me so much I just can't not help you~
-				Check \`${prefix}help reminder\` for more information.
-			`,
-
-			ADD: {
-				DESCRIPTION: 'Adds a reminder that triggers at the given time and tells you the given reason.',
-				PROMPT: {
-					START: (author: User | null) => `${author}, when do you want me to remind you?`,
-					RETRY: (author: User | null) => `${author}, please use a proper time format.`,
-				},
-				PROMPT_2: {
-					START: (author: User | null) => `${author}, what do you want me to remind you of?`,
-				},
-				REMINDER_LIMIT: (limit: number) => `you already have ${limit} ongoing reminders... do you really need more?`,
-				CHARACTER_LIMIT:
-					'you must still have water behind your ears to not realize that messages have a limit of 2000 characters!',
-				INVALID_TIME_1: "I can't tell what time I'm supposed to remind you at!",
-				INVALID_TIME_2: "sorry, I don't have access to time travel yet!",
-				INVALID_TIME_3: "I'm sure you have better memory than that.",
-				REPLY: (time: number) => `I'll remind you in ${time}`,
-			},
-			DELETE: {
-				DESCRIPTION: 'Deletes/cancels an ongoing reminder.',
-				NO_REMINDERS: 'you have no ongoing reminders!',
-				AWAIT_MESSAGE: "Send a message with the reminder's number to delete it or `cancel` to cancel",
-				TIME_LIMIT: "Looks like you've run out of time!",
-				CANCEL: "Looks like we're all done here!",
-				REPLY: (reminders: Reminder[]) => `I deleted ${reminders.length} reminder${reminders.length === 1 ? '' : 's'}!`,
-				REPLY_2: 'Welp, looks like all of your reminders are gone!',
-			},
-		},
 		TAGS: {
 			DESCRIPTION: stripIndents`Available methods:
 				 • show \`<tag>\`
@@ -580,6 +1016,7 @@ export const MESSAGES = {
 					'you must still have water behind your ears to not realize that messages have a limit of 2000 characters!',
 				REPLY: (name: string) => `leave it to me! A tag with the name **${name}** has been added.`,
 			},
+
 			ALIAS: {
 				DESCRIPTION: 'Alias a tag.',
 				PROMPT: {
@@ -599,6 +1036,7 @@ export const MESSAGES = {
 				REPLY: (first: string, second: string, add: boolean) =>
 					`alias ${second.substring(0, 1900)} ${add ? 'added to' : 'deleted from'} tag ${first}.`,
 			},
+
 			DELETE: {
 				DESCRIPTION: 'Deletes a tag.',
 				PROMPT: {
@@ -608,10 +1046,12 @@ export const MESSAGES = {
 				OWN_TAG: 'you can only delete your own tags.',
 				REPLY: (tag: string) => `successfully deleted **${tag}**.`,
 			},
+
 			DOWNLOAD: {
 				DESCRIPTION: 'Downloads a/all tag(s).',
 				REPLY: 'Haiiiii~',
 			},
+
 			EDIT: {
 				DESCRIPTION: 'Edit a tag (Markdown can be used).',
 				PROMPT: {
@@ -627,6 +1067,7 @@ export const MESSAGES = {
 				REPLY: (tag: string, hoist: boolean, staff: boolean) =>
 					`successfully edited **${tag}**${hoist && staff ? ' to be hoisted.' : '.'}`,
 			},
+
 			INFO: {
 				DESCRIPTION: 'Displays information about a tag.',
 				PROMPT: {
@@ -634,11 +1075,13 @@ export const MESSAGES = {
 					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
 				},
 			},
+
 			LIST: {
 				DESCRIPTION: 'Lists all server tags.',
 				NO_TAGS: (member?: string) => (member ? `**${member}** doesn't have any tags.` : "you don't have any tags."),
 				GUILD_NO_TAGS: (guild: string) => `**${guild}** doesn't have any tags. Why not add some?`,
 			},
+
 			SEARCH: {
 				DESCRIPTION: 'Searches a tag.',
 				PROMPT: {
@@ -647,12 +1090,14 @@ export const MESSAGES = {
 				NO_RESULT: (query: string) => `No results found with query ${query}.`,
 				TOO_BIG: 'the output is way too big to display, make your search more specific and try again!',
 			},
+
 			SHOW: {
 				DESCRIPTION: 'Displays a tag.',
 				PROMPT: {
 					START: (author: User | null) => `${author}, what tag do you want to see?`,
 				},
 			},
+
 			SOURCE: {
 				DESCRIPTION: 'Displays a tags source (Highlighted with Markdown).',
 				PROMPT: {
@@ -661,6 +1106,7 @@ export const MESSAGES = {
 				},
 			},
 		},
+
 		UTIL: {
 			BLACKLIST: {
 				DESCRIPTION: 'Prohibit/Allow a user from using Yukikaze.',
@@ -670,6 +1116,7 @@ export const MESSAGES = {
 				REPLY: (user: string) => `${user}, have you realized Yukikaze's greatness? You've got good eyes~`,
 				REPLY_2: (user: string) => `${user}, you are not worthy of Yukikaze's luck~`,
 			},
+
 			CYBERNUKE: {
 				DESCRIPTION: 'Bans all members that have joined recently, with new accounts.',
 				PROMPT: {
@@ -683,18 +1130,21 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, the minimum is \`0.1\` minutes.`,
 				},
 			},
+
 			EVAL: {
 				DESCRIPTION: "You can't use this anyway, so why explain.",
 				PROMPT: {
 					START: (author: User | null) => `${author}, what would you like to evaluate?`,
 				},
 			},
+
 			HELP: {
 				DESCRIPTION: 'Displays a list of available commands, or detailed information for a specified command.',
 				REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`A list of available commands.
 					For additional info on a command, type \`${prefix}help <command>\`
 				`,
 			},
+
 			PING: {
 				DESCRIPTION: "Checks the bot's ping to the Discord servers.",
 				RESPONSES: [
@@ -711,6 +1161,7 @@ export const MESSAGES = {
 						Heartbeat: \`$(heartbeat)ms\``,
 				],
 			},
+
 			PREFIX: {
 				DESCRIPTION: 'Displays or changes the prefix of the guild.',
 				REPLY: (prefix: string | string[] | Promise<string | string[]>) =>
@@ -718,6 +1169,7 @@ export const MESSAGES = {
 				REPLY_2: (prefix: string) => `the prefix has been reset to \`${prefix}\``,
 				REPLY_3: (prefix: string) => `the prefix has been set to \`${prefix}\``,
 			},
+
 			STATS: {
 				DESCRIPTION: 'Displays statistics about the bot.',
 			},
@@ -728,16 +1180,20 @@ export const MESSAGES = {
 		GUILD_MEMBER_ADD: {
 			ROLE_STATE: 'Automatic role state',
 		},
+
 		READY: {
 			LOG: (tag: string, id: string) => `Yawn... Hmph, ${tag} (${id}) is only with you because she's in a good mood!`,
 			ACTIVITY: (username: string) => `@${username} help 💖`,
 		},
+
 		SHARD_DISCONNECT: {
 			LOG: (code: any) => `Hmm, I have to hide the fact I was defeated... I'll let you go this time! (${code})`,
 		},
+
 		SHARD_RECONNECT: {
 			LOG: "Come at me if you don't value your life!",
 		},
+
 		SHARD_RESUME: {
 			LOG: 'You made it out fine thanks to my luck! You ought to be thankful!',
 		},
@@ -765,18 +1221,21 @@ export const MESSAGES = {
 			PRE_REPLY: (tag: string) => `Banning **${tag}**...`,
 			REPLY: (tag: string) => `Successfully banned **${tag}**`,
 		},
+
 		EMBED: {
 			AUDIT: (tag: string, cases: number) => `Embed restricted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error embed restricting this member \`${error}\``,
 			PRE_REPLY: (tag: string) => `Embed restricting **${tag}**...`,
 			REPLY: (tag: string) => `Successfully embed restricted **${tag}**`,
 		},
+
 		EMOJI: {
 			AUDIT: (tag: string, cases: number) => `Emoji restricted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error emoji restricting this member \`${error}\``,
 			PRE_REPLY: (tag: string) => `Emoji restricting **${tag}**...`,
 			REPLY: (tag: string) => `Successfully emoji restricted **${tag}**`,
 		},
+
 		KICK: {
 			MESSAGE: (guild: string, reason?: string) => stripIndents`
 				**You have been kicked from ${guild}**
@@ -788,18 +1247,21 @@ export const MESSAGES = {
 			PRE_REPLY: (tag: string) => `Kicking **${tag}**...`,
 			REPLY: (tag: string) => `Successfully kicked **${tag}**`,
 		},
+
 		MUTE: {
 			AUDIT: (tag: string, cases: number) => `Muted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error muting this member \`${error}\``,
 			PRE_REPLY: (tag: string) => `Muting **${tag}**...`,
 			REPLY: (tag: string) => `Successfully muted **${tag}**`,
 		},
+
 		REACTION: {
 			AUDIT: (tag: string, cases: number) => `Reaction restricted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error reaction restricted this member \`${error}\``,
 			PRE_REPLY: (tag: string) => `Reaction restricting **${tag}**...`,
 			REPLY: (tag: string) => `Successfully reaction restricted **${tag}**`,
 		},
+
 		SOFTBAN: {
 			MESSAGE: (guild: string, reason?: string) => stripIndents`
 				**You have been softbanned from ${guild}**
@@ -812,18 +1274,21 @@ export const MESSAGES = {
 			PRE_REPLY: (tag: string) => `Softbanning **${tag}**...`,
 			REPLY: (tag: string) => `Successfully softbanned **${tag}**`,
 		},
+
 		TAG: {
 			AUDIT: (tag: string, cases: number) => `Tag restricted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error tag restricting this member \`${error}\``,
 			PRE_REPLY: (tag: string) => `Tag restricting **${tag}**...`,
 			REPLY: (tag: string) => `Successfully tag restricted **${tag}**`,
 		},
+
 		UNBAN: {
 			AUDIT: (tag: string, cases: number) => `Unbanned by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error unbanning this member \`${error}\``,
 			PRE_REPLY: (tag: string) => `Unbanning **${tag}**...`,
 			REPLY: (tag: string) => `Successfully unbanned **${tag}**`,
 		},
+
 		WARN: {
 			PRE_REPLY: (tag: string) => `Warning **${tag}**...`,
 			REPLY: (tag: string) => `Successfully warned **${tag}**`,

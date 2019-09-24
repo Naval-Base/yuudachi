@@ -1,7 +1,8 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message } from 'discord.js';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagDownloadCommand extends Command {
 	public constructor() {
@@ -39,8 +40,13 @@ export default class TagDownloadCommand extends Command {
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
 		const where = member ? { user: member.id, guild: message.guild!.id } : { guild: message.guild!.id };
-		const tagsRepo = this.client.db.getRepository(Tag);
-		const tags = await tagsRepo.find(where);
+		const { data } = await graphQLClient.query({
+			query: member ? GRAPHQL.QUERY.TAGS_MEMBER : GRAPHQL.QUERY.TAGS,
+			variables: where,
+		});
+		let tags: Pick<Tags, 'content' | 'name' | 'hoisted' | 'user'>[];
+		if (PRODUCTION) tags = data.tags;
+		else tags = data.staging_tags;
 		if (!tags.length) return;
 		const output = tags.reduce((out, t) => {
 			out += `Name: ${t.name}\r\nContent:\r\n${t.content.replace(

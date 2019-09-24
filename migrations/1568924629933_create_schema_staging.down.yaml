@@ -1,0 +1,3 @@
+- args:
+    sql: drop schema "staging" cascade;
+  type: run_sql

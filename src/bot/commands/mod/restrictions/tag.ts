@@ -50,16 +50,14 @@ export default class RestrictTagCommand extends Command {
 	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
 		if (member.id === message.author!.id) return;
 		const key = `${message.guild!.id}:${member.id}:TAG`;
-		try {
-			await new TagAction({
+		message.guild!.caseQueue.add(async () =>
+			new TagAction({
 				message,
 				member,
 				keys: key,
 				reason,
 				ref,
-			}).commit();
-		} catch (error) {
-			return message.util!.reply(error.message);
-		}
+			}).commit(),
+		);
 	}
 }

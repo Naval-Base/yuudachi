@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
 
 export default class TagAddCommand extends Command {
 	public constructor() {
@@ -62,14 +62,16 @@ export default class TagAddCommand extends Command {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE, undefined));
-		const tagsRepo = this.client.db.getRepository(Tag);
-		const tag = new Tag();
-		tag.user = message.author!.id;
-		tag.guild = message.guild!.id;
-		tag.name = name;
-		tag.hoisted = hoist && staffRole ? true : false;
-		tag.content = content;
-		await tagsRepo.save(tag);
+		await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.INSERT_TAG,
+			variables: {
+				guild: message.guild!.id,
+				user: message.author!.id,
+				name,
+				hoisted: hoist && staffRole,
+				content,
+			},
+		});
 
 		return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.REPLY(name.substring(0, 1900)));
 	}

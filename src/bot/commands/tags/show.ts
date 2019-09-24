@@ -1,8 +1,8 @@
 import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
-import { Raw } from 'typeorm';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagShowCommand extends Command {
 	public constructor() {
@@ -38,19 +38,24 @@ export default class TagShowCommand extends Command {
 			if (message.member!.roles.has(restrictedRoles.TAG)) return;
 		}
 		name = Util.cleanContent(name, message);
-		const tagsRepo = this.client.db.getRepository(Tag);
-		let tag;
-		try {
-			tag = await tagsRepo.findOne({
-				where: [
-					{ name, guild: message.guild!.id },
-					{ aliases: Raw(alias => `${alias} @> ARRAY['${name}']`), guild: message.guild!.id },
-				],
-			});
-		} catch {}
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.TAGS_TYPE,
+			variables: {
+				guild: message.guild!.id,
+			},
+		});
+		let tags: Tags[];
+		if (PRODUCTION) tags = data.tags;
+		else tags = data.staging_tags;
+		const [tag] = tags.filter(t => t.name === name || t.aliases.includes(name));
 		if (!tag) return;
-		tag.uses += 1;
-		await tagsRepo.save(tag);
+		graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.UPDATE_TAG_USAGE,
+			variables: {
+				id: tag.id,
+				uses: tag.uses + 1,
+			},
+		});
 
 		return message.util!.send(tag.content);
 	}

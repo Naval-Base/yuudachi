@@ -1,6 +1,8 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { ACTIONS, MESSAGES, SETTINGS } from '../../util/constants';
+import { ACTIONS, GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Cases } from '../../util/graphQLTypes';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class DurationCommand extends Command {
@@ -54,11 +56,18 @@ export default class DurationCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE_NUMBER);
-		const dbCase = await this.client.caseHandler.repo.findOne({
-			case_id: caseToFind,
-			action: ACTIONS.MUTE,
-			action_processed: false,
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.MUTE_DURATION,
+			variables: {
+				guild: message.guild!.id,
+				action: ACTIONS.MUTE,
+				action_processed: false,
+				case_id: caseToFind,
+			},
 		});
+		let dbCase: Cases;
+		if (PRODUCTION) dbCase = data.cases[0];
+		else dbCase = data.staging_cases[0];
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE);
 		}
@@ -90,8 +99,15 @@ export default class DurationCommand extends Command {
 			}
 			await caseEmbed.edit(embed);
 		}
-		dbCase.action_duration = new Date(Date.now() + duration);
-		await this.client.caseHandler.repo.save(dbCase);
+		const { data: res } = await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.UPDATE_DURATION_MUTE,
+			variables: {
+				id: dbCase.id,
+				action_duration: new Date(Date.now() + duration).toISOString(),
+			},
+		});
+		if (PRODUCTION) dbCase = res.update_cases.returning[0];
+		else dbCase = res.update_staging_cases.returning[0];
 		this.client.muteScheduler.reschedule(dbCase);
 
 		return message.util!.send(MESSAGES.COMMANDS.MOD.DURATION.REPLY(caseToFind));
