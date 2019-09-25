@@ -28,10 +28,12 @@ export default class VoiceStateUpdateListener extends Listener {
 
 			if ((!oldState || (oldState && !oldState.channel)) && newState.channel) {
 				embed.addField('❯ Joined', newState.channel);
-			} else if (oldState && oldState.channelID !== newState.channelID) {
+			} else if (oldState && oldState.channel && newState.channel && oldState.channelID !== newState.channelID) {
 				embed.addField('❯ From', oldState.channel).addField('❯ To', newState.channel);
 			} else if (oldState && oldState.channel && !newState.channel) {
 				embed.addField('❯ Left', oldState.channel);
+			} else {
+				return;
 			}
 
 			return webhook.send({
