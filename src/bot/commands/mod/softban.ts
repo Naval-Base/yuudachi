@@ -61,17 +61,15 @@ export default class SoftbanCommand extends Command {
 		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
 	) {
 		const keys = [`${message.guild!.id}:${member.id}:BAN`, `${message.guild!.id}:${member.id}:UNBAN`];
-		try {
-			await new SoftbanAction({
+		message.guild!.caseQueue.add(async () =>
+			new SoftbanAction({
 				message,
 				member,
 				keys: keys,
 				reason,
 				ref,
 				days,
-			}).commit();
-		} catch (error) {
-			return message.util!.reply(error.message);
-		}
+			}).commit(),
+		);
 	}
 }

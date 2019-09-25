@@ -55,16 +55,14 @@ export default class UnbanCommand extends Command {
 	public async exec(message: Message, { user, ref, reason }: { user: User; ref: number; reason: string }) {
 		if (user.id === message.author!.id) return;
 		const key = `${message.guild!.id}:${user.id}:UNBAN`;
-		try {
-			await new UnbanAction({
+		message.guild!.caseQueue.add(async () =>
+			new UnbanAction({
 				message,
 				member: user,
 				keys: key,
 				reason,
 				ref,
-			}).commit();
-		} catch (error) {
-			return message.util!.reply(error.message);
-		}
+			}).commit(),
+		);
 	}
 }

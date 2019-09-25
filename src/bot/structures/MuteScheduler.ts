@@ -1,7 +1,7 @@
-import { LessThan, Repository } from 'typeorm';
 import YukikazeClient from '../client/YukikazeClient';
-import { Case } from '../models/Cases';
-import { SETTINGS } from '../util/constants';
+import { GRAPHQL, PRODUCTION, SETTINGS } from '../util/constants';
+import { graphQLClient } from '../util/graphQL';
+import { Cases } from '../util/graphQLTypes';
 import { EVENTS, TOPICS } from '../util/logger';
 
 export default class MuteScheduler {
@@ -11,15 +11,11 @@ export default class MuteScheduler {
 
 	private readonly queued = new Map();
 
-	public constructor(
-		private readonly client: YukikazeClient,
-		private readonly repo: Repository<Case>,
-		{ checkRate = 5 * 60 * 1000 } = {},
-	) {
+	public constructor(private readonly client: YukikazeClient, { checkRate = 5 * 60 * 1000 } = {}) {
 		this.checkRate = checkRate;
 	}
 
-	public async add(mute: Omit<Case, 'id' | 'createdAt'>, reschedule = false) {
+	public async add(mute: Omit<Cases, 'id' | 'created_at'>, reschedule = false) {
 		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.MUTE,
@@ -30,27 +26,32 @@ export default class MuteScheduler {
 				event: EVENTS.MUTE,
 			});
 		if (!reschedule) {
-			mute = this.repo.create({
-				guild: mute.guild,
-				message: mute.message,
-				case_id: mute.case_id,
-				target_id: mute.target_id,
-				target_tag: mute.target_tag,
-				mod_id: mute.mod_id,
-				mod_tag: mute.mod_tag,
-				action: mute.action,
-				action_duration: mute.action_duration,
-				action_processed: mute.action_processed,
-				reason: mute.reason,
+			const { data } = await graphQLClient.mutate({
+				mutation: GRAPHQL.MUTATION.INSERT_CASES,
+				variables: {
+					action: mute.action,
+					action_duration: mute.action_duration,
+					action_processed: mute.action_processed,
+					case_id: mute.case_id,
+					guild: mute.guild,
+					message: mute.message,
+					mod_id: mute.mod_id,
+					mod_tag: mute.mod_tag,
+					reason: mute.reason,
+					ref_id: mute.ref_id,
+					target_id: mute.target_id,
+					target_tag: mute.target_tag,
+				},
 			});
-			mute = await this.repo.save(mute);
+			if (PRODUCTION) mute = data.insert_cases.returning[0];
+			else mute = data.insert_staging_cases.returning[0];
 		}
-		if (mute.action_duration!.getTime() < Date.now() + this.checkRate) {
-			this.queue(mute as Case);
+		if (new Date(mute.action_duration!).getTime() < Date.now() + this.checkRate) {
+			this.queue(mute as Cases);
 		}
 	}
 
-	public async cancel(mute: Case) {
+	public async cancel(mute: Pick<Cases, 'id' | 'guild' | 'target_id' | 'target_tag'>) {
 		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.MUTE,
@@ -61,8 +62,13 @@ export default class MuteScheduler {
 		try {
 			member = await guild!.members.fetch(mute.target_id);
 		} catch {}
-		mute.action_processed = true;
-		await this.repo.save(mute);
+		await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.CANCEL_MUTE,
+			variables: {
+				id: mute.id,
+				action_processed: true,
+			},
+		});
 		if (member) {
 			try {
 				await member.roles.remove(muteRole, 'Unmuted automatically based on duration.');
@@ -73,24 +79,28 @@ export default class MuteScheduler {
 		return this.queued.delete(mute.id);
 	}
 
-	public async delete(mute: Case) {
+	public async delete(mute: Cases) {
 		const schedule = this.queued.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queued.delete(mute.id);
-		const deleted = await this.repo.remove(mute);
-		return deleted;
+		await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.DELETE_CASE,
+			variables: {
+				id: mute.id,
+			},
+		});
 	}
 
-	public queue(mute: Case) {
+	public queue(mute: Pick<Cases, 'action_duration' | 'id' | 'guild' | 'target_id' | 'target_tag'>) {
 		this.queued.set(
 			mute.id,
 			this.client.setTimeout(() => {
 				this.cancel(mute);
-			}, mute.action_duration!.getTime() - Date.now()),
+			}, new Date(mute.action_duration!).getTime() - Date.now()),
 		);
 	}
 
-	public reschedule(mute: Case) {
+	public reschedule(mute: Cases) {
 		const schedule = this.queued.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queued.delete(mute.id);
@@ -103,16 +113,22 @@ export default class MuteScheduler {
 	}
 
 	public async check() {
-		const mutes = await this.repo.find({
-			action_duration: LessThan(new Date(Date.now() + this.checkRate)),
-			action_processed: false,
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.MUTES,
+			variables: {
+				action_duration: new Date(Date.now() + this.checkRate),
+				action_processed: false,
+			},
 		});
-		const now = new Date();
+		let mutes: Pick<Cases, 'action_duration' | 'guild' | 'id' | 'target_id' | 'target_tag'>[];
+		if (PRODUCTION) mutes = data.cases;
+		else mutes = data.staging_cases;
+		const now = Date.now();
 
 		for (const mute of mutes) {
 			if (this.queued.has(mute.id)) continue;
 
-			if (mute.action_duration! < now) {
+			if (new Date(mute.action_duration!).getTime() < now) {
 				this.cancel(mute);
 			} else {
 				this.queue(mute);

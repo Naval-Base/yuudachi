@@ -1,7 +1,9 @@
 import { PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../../../client/YukikazeClient';
-import { ACTIONS, COLORS, SETTINGS } from '../../../util/constants';
+import { ACTIONS, COLORS, GRAPHQL, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { graphQLClient } from '../../../util/graphQL';
+import { Cases } from '../../../util/graphQLTypes';
 
 export interface ActionData {
 	message: Message;
@@ -124,7 +126,16 @@ export default abstract class Action {
 
 		const modLogChannel = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_LOG, undefined);
 		if (modLogChannel) {
-			const dbCase = await this.client.caseHandler.repo.findOne({ case_id: totalCases });
+			const { data } = await graphQLClient.query({
+				query: GRAPHQL.QUERY.LOG_CASE,
+				variables: {
+					guild: this.message.guild!.id,
+					case_id: totalCases,
+				},
+			});
+			let dbCase: Pick<Cases, 'id' | 'message'>;
+			if (PRODUCTION) dbCase = data.cases[0];
+			else dbCase = data.staging_cases[0];
 			if (dbCase) {
 				const embed = (await this.client.caseHandler.log({
 					member: this.member,
@@ -136,8 +147,13 @@ export default abstract class Action {
 				})).setColor(this.color);
 				try {
 					const modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
-					dbCase.message = modMessage.id;
-					await this.client.caseHandler.repo.save(dbCase);
+					await graphQLClient.mutate({
+						mutation: GRAPHQL.MUTATION.LOG_CASE,
+						variables: {
+							id: dbCase.id,
+							message: modMessage.id,
+						},
+					});
 				} catch (error) {
 					this.client.logger.error(error.message);
 				}

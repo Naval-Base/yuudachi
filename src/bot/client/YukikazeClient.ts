@@ -5,35 +5,26 @@ import { Collection, Message, Util, Webhook } from 'discord.js';
 import { createServer, Server } from 'http';
 import { join } from 'path';
 import { Counter, register, Registry } from 'prom-client';
-import { Connection, Raw } from 'typeorm';
 import { parse } from 'url';
-import { NodeMessage, Server as IPCServer } from 'veza';
 import { Logger } from 'winston';
-import { Case } from '../models/Cases';
-import { Reminder } from '../models/Reminders';
-import { Setting } from '../models/Settings';
-import { Tag } from '../models/Tags';
 import CaseHandler from '../structures/case/CaseHandler';
-import database from '../structures/Database';
 import MuteScheduler from '../structures/MuteScheduler';
-import RemindScheduler from '../structures/RemindScheduler';
-import TypeORMProvider from '../structures/SettingsProvider';
-import { MESSAGES, PROMETHEUS } from '../util/constants';
+import Queue from '../structures/Queue';
+import HasuraProvider from '../structures/SettingsProvider';
+import { GRAPHQL, MESSAGES, PRODUCTION, PROMETHEUS } from '../util/constants';
+import { graphQLClient } from '../util/graphQL';
+import { Tags } from '../util/graphQLTypes';
 import { EVENTS, logger, TOPICS } from '../util/logger';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
 		logger: Logger;
-		db: Connection;
-		node: IPCServer;
-		nodeMessage: (m: NodeMessage) => void;
-		settings: TypeORMProvider;
+		settings: HasuraProvider;
 		commandHandler: CommandHandler;
 		config: YukikazeOptions;
 		webhooks: Collection<string, Webhook>;
 		caseHandler: CaseHandler;
 		muteScheduler: MuteScheduler;
-		remindScheduler: RemindScheduler;
 		prometheus: {
 			messagesCounter: Counter;
 			commandCounter: Counter;
@@ -42,6 +33,12 @@ declare module 'discord-akairo' {
 		};
 
 		promServer: Server;
+	}
+}
+
+declare module 'discord.js' {
+	interface Guild {
+		caseQueue: Queue;
 	}
 }
 
@@ -56,43 +53,7 @@ export default class YukikazeClient extends AkairoClient {
 
 	public logger = logger;
 
-	public db!: Connection;
-
-	public node!: IPCServer;
-
-	public nodeMessage = (m: NodeMessage) => {
-		let res;
-		/* eslint-disable no-case-declarations */
-		switch (m.data.type) {
-			case 'GUILD':
-				const guild = this.guilds.get(m.data.id);
-				if (guild) res = guild.toJSON();
-				break;
-			case 'GUILD_MEMBER':
-				const member = this.guilds.get(m.data.guildId)!.members.get(m.data.id);
-				if (member) res = member.toJSON();
-				break;
-			case 'CHANNEL':
-				const channel = this.channels.get(m.data.id);
-				if (channel) res = channel.toJSON();
-				break;
-			case 'ROLE':
-				const role = this.guilds.get(m.data.guildId)!.roles.get(m.data.id);
-				if (role) res = role.toJSON();
-				break;
-			case 'USER':
-				const user = this.users.get(m.data.id);
-				if (user) res = user.toJSON();
-				break;
-			default:
-				break;
-		}
-		/* eslint-enable no-case-declarations */
-		if (res) return m.reply({ success: true, d: res });
-		return m.reply({ success: false });
-	};
-
-	public settings!: TypeORMProvider;
+	public settings = new HasuraProvider();
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		directory: join(__dirname, '..', 'commands'),
@@ -123,11 +84,9 @@ export default class YukikazeClient extends AkairoClient {
 
 	public config: YukikazeOptions;
 
-	public caseHandler!: CaseHandler;
+	public caseHandler = new CaseHandler(this);
 
-	public muteScheduler!: MuteScheduler;
-
-	public remindScheduler!: RemindScheduler;
+	public muteScheduler = new MuteScheduler(this);
 
 	public prometheus = {
 		messagesCounter: new Counter({ name: PROMETHEUS.MESSAGE_COUNTER, help: PROMETHEUS.HELP.MESSAGE_COUNTER }),
@@ -166,32 +125,32 @@ export default class YukikazeClient extends AkairoClient {
 		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const tagsRepo = this.db.getRepository(Tag);
-			let tag;
-			try {
-				tag = await tagsRepo.findOne({
-					where: [
-						{ name: phrase, guild: message.guild!.id },
-						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id },
-					],
-				});
-			} catch {}
+			const { data } = await graphQLClient.query({
+				query: GRAPHQL.QUERY.TAGS_TYPE,
+				variables: {
+					guild: message.guild!.id,
+				},
+			});
+			let tags: Tags[];
+			if (PRODUCTION) tags = data.tags;
+			else tags = data.staging_tags;
+			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
 
 			return tag || Flag.fail(phrase);
 		});
 		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const tagsRepo = this.db.getRepository(Tag);
-			let tag;
-			try {
-				tag = await tagsRepo.findOne({
-					where: [
-						{ name: phrase, guild: message.guild!.id },
-						{ aliases: Raw((alias?: string) => `${alias} @> ARRAY['${phrase}']`), guild: message.guild!.id },
-					],
-				});
-			} catch {}
+			const { data } = await graphQLClient.query({
+				query: GRAPHQL.QUERY.TAGS_TYPE,
+				variables: {
+					guild: message.guild!.id,
+				},
+			});
+			let tags: Tags[];
+			if (PRODUCTION) tags = data.tags;
+			else tags = data.staging_tags;
+			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
 
 			return tag ? Flag.fail(phrase) : phrase;
 		});
@@ -200,7 +159,7 @@ export default class YukikazeClient extends AkairoClient {
 			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
 
-			return phrase || Flag.fail(phrase);
+			return phrase;
 		});
 
 		this.config = config;
@@ -241,34 +200,10 @@ export default class YukikazeClient extends AkairoClient {
 		this.logger.info(MESSAGES.INHIBITOR_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.listenerHandler.loadAll();
 		this.logger.info(MESSAGES.LISTENER_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
-
-		this.db = database.get('yukikaze');
-		await this.db.connect();
-		this.logger.info(MESSAGES.DATABASE.LOADED(this.db.name), { topic: TOPICS.POSTGRES, event: EVENTS.INIT });
-		this.node = await new IPCServer('bot')
-			.on('error', (error, client) =>
-				this.logger.error(MESSAGES.IPC.ERROR(client!.name!, error), { topic: TOPICS.RPC, event: EVENTS.ERROR }),
-			)
-			.on('open', () => this.logger.info(MESSAGES.IPC.OPEN, { topic: TOPICS.RPC, event: EVENTS.READY }))
-			.on('close', () => this.logger.info(MESSAGES.IPC.CLOSE, { topic: TOPICS.RPC, event: EVENTS.DESTROY }))
-			.on('connect', client =>
-				this.logger.info(MESSAGES.IPC.CONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.CONNECT }),
-			)
-			.on('disconnect', client =>
-				this.logger.info(MESSAGES.IPC.DISCONNECT(client.name!), { topic: TOPICS.RPC, event: EVENTS.DISCONNECT }),
-			)
-			.listen(9512);
-		this.settings = new TypeORMProvider(this.db.getRepository(Setting));
 		await this.settings.init();
 		this.logger.info(MESSAGES.SETTINGS.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
-		this.caseHandler = new CaseHandler(this, this.db.getRepository(Case));
-		this.logger.info(MESSAGES.CASE_HANDLER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
-		this.muteScheduler = new MuteScheduler(this, this.db.getRepository(Case));
-		this.remindScheduler = new RemindScheduler(this, this.db.getRepository(Reminder));
 		await this.muteScheduler.init();
 		this.logger.info(MESSAGES.MUTE_SCHEDULER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
-		await this.remindScheduler.init();
-		this.logger.info(MESSAGES.REMIND_SCHEDULER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 	}
 
 	public async start() {

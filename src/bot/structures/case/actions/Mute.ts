@@ -1,5 +1,7 @@
 import { TextChannel, User } from 'discord.js';
-import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
+import { ACTIONS, GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { graphQLClient } from '../../../util/graphQL';
+import { Cases } from '../../../util/graphQLTypes';
 import Action, { ActionData } from './Action';
 
 type MuteData = Omit<ActionData, 'days'>;
@@ -60,13 +62,22 @@ export default class MuteAction extends Action {
 			mod_tag: this.message.author!.tag,
 			action: this.action,
 			reason: this.reason,
-			action_duration: new Date(Date.now() + this.duration!),
+			action_duration: new Date(Date.now() + this.duration!).toISOString(),
 			action_processed: false,
 		});
 
 		const modLogChannel = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_LOG, undefined);
 		if (modLogChannel) {
-			const dbCase = await this.client.caseHandler.repo.findOne({ case_id: totalCases });
+			const { data } = await graphQLClient.query({
+				query: GRAPHQL.QUERY.LOG_CASE,
+				variables: {
+					guild: this.message.guild!.id,
+					case_id: totalCases,
+				},
+			});
+			let dbCase: Pick<Cases, 'id' | 'message'>;
+			if (PRODUCTION) dbCase = data.cases[0];
+			else dbCase = data.staging_cases[0];
 			if (dbCase) {
 				const embed = (await this.client.caseHandler.log({
 					member: this.member,
@@ -74,12 +85,18 @@ export default class MuteAction extends Action {
 					caseNum: totalCases,
 					reason: this.reason,
 					message: this.message,
+					duration: this.duration,
 					ref: this.ref,
 				})).setColor(this.color);
 				try {
 					const modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
-					dbCase.message = modMessage.id;
-					await this.client.caseHandler.repo.save(dbCase);
+					await graphQLClient.mutate({
+						mutation: GRAPHQL.MUTATION.LOG_CASE,
+						variables: {
+							id: dbCase.id,
+							message: modMessage.id,
+						},
+					});
 				} catch (error) {
 					this.client.logger.error(error.message);
 				}

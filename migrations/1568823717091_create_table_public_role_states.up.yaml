@@ -1,0 +1,12 @@
+- args:
+    sql: CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  type: run_sql
+- args:
+    sql: CREATE TABLE "public"."role_states"("id" uuid NOT NULL DEFAULT gen_random_uuid(),
+      "guild" text NOT NULL, "member" text NOT NULL, "roles" text[] NOT NULL DEFAULT '{}',
+      PRIMARY KEY ("id") , UNIQUE ("guild", "member"));
+  type: run_sql
+- args:
+    name: role_states
+    schema: public
+  type: add_existing_table_or_view

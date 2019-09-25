@@ -1,8 +1,8 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
-import { Like } from 'typeorm';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class SearchTagCommand extends Command {
 	public constructor() {
@@ -43,8 +43,16 @@ export default class SearchTagCommand extends Command {
 
 	public async exec(message: Message, { name }: { name: string }) {
 		name = Util.cleanContent(name, message);
-		const tagsRepo = this.client.db.getRepository(Tag);
-		const tags = await tagsRepo.find({ name: Like(`%${name}%`), guild: message.guild!.id });
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.TAGS_TYPE,
+			variables: {
+				guild: message.guild!.id,
+			},
+		});
+		let tags: Tags[];
+		if (PRODUCTION) tags = data.tags;
+		else tags = data.staging_tags;
+		tags = tags.filter(t => t.name.includes(name) || t.aliases.some(a => a.includes(name)));
 		if (!tags.length) return message.util!.reply(MESSAGES.COMMANDS.TAGS.SEARCH.NO_RESULT(name));
 		const search = tags
 			.map(tag => `\`${tag.name}\``)

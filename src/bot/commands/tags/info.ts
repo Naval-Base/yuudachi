@@ -2,8 +2,8 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { Tag } from '../../models/Tags';
 import { MESSAGES, SETTINGS } from '../../util/constants';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagInfoCommand extends Command {
 	public constructor() {
@@ -44,7 +44,7 @@ export default class TagInfoCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { tag }: { tag: Tag }) {
+	public async exec(message: Message, { tag }: { tag: Tags }) {
 		const user = await this.client.users.fetch(tag.user);
 		let lastModifiedBy;
 		try {
@@ -68,8 +68,8 @@ export default class TagInfoCommand extends Command {
 					: 'No aliases.',
 			)
 			.addField('❯ Uses', tag.uses)
-			.addField('❯ Created at', moment.utc(tag.createdAt).format('YYYY/MM/DD hh:mm:ss'))
-			.addField('❯ Modified at', moment.utc(tag.updatedAt).format('YYYY/MM/DD hh:mm:ss'));
+			.addField('❯ Created at', moment.utc(tag.created_at).format('YYYY/MM/DD hh:mm:ss'))
+			.addField('❯ Modified at', moment.utc(tag.updated_at).format('YYYY/MM/DD hh:mm:ss'));
 		if (lastModifiedBy) {
 			embed.addField(
 				'❯ Last modified by',

@@ -17,7 +17,6 @@ export default class ShardDisconnectListener extends Listener {
 			event: `SHARD ${id} DISCONNECT`,
 		});
 		this.client.promServer.close();
-		this.client.node.removeListener('message', this.client.nodeMessage);
 		this.client.logger.info(`Metrics server closed.`, { topic: TOPICS.METRICS, event: `SHARD ${id} DISCONNECT` });
 	}
 }

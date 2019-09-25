@@ -1,6 +1,8 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Cases } from '../../util/graphQLTypes';
 
 export default class ReasonCommand extends Command {
 	public constructor() {
@@ -54,7 +56,16 @@ export default class ReasonCommand extends Command {
 		const totalCases = this.client.settings.get<number>(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE_NUMBER);
-		const dbCase = await this.client.caseHandler.repo.findOne({ case_id: caseToFind });
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.CASES,
+			variables: {
+				guild: message.guild!.id,
+				case_id: caseToFind,
+			},
+		});
+		let dbCase: Cases;
+		if (PRODUCTION) dbCase = data.cases[0];
+		else dbCase = data.staging_cases[0];
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE);
 		}
@@ -72,7 +83,15 @@ export default class ReasonCommand extends Command {
 			if (ref) {
 				let reference;
 				try {
-					reference = await this.client.caseHandler.repo.findOne({ guild: message.guild!.id, case_id: ref });
+					const { data: res } = await graphQLClient.query({
+						query: GRAPHQL.QUERY.CASES,
+						variables: {
+							guild: message.guild!.id,
+							case_id: ref,
+						},
+					});
+					if (PRODUCTION) reference = res.cases[0];
+					else reference = res.staging_cases[0];
 				} catch (error) {
 					reference = null;
 				}
@@ -88,11 +107,15 @@ export default class ReasonCommand extends Command {
 			}
 			await caseEmbed.edit(embed);
 		}
-
-		dbCase.mod_id = message.author!.id;
-		dbCase.mod_tag = message.author!.tag;
-		dbCase.reason = reason;
-		await this.client.caseHandler.repo.save(dbCase);
+		await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.UPDATE_REASON,
+			variables: {
+				id: dbCase.id,
+				mod_id: message.author!.id,
+				mod_tag: message.author!.tag,
+				reason,
+			},
+		});
 
 		return message.util!.send(MESSAGES.COMMANDS.MOD.REASON.REPLY(caseToFind));
 	}

@@ -65,17 +65,15 @@ export default class BanCommand extends Command {
 		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
 	) {
 		const key = `${message.guild!.id}:${member.id}:BAN`;
-		try {
-			await new BanAction({
+		message.guild!.caseQueue.add(async () =>
+			new BanAction({
 				message,
 				member,
 				keys: key,
 				reason,
 				ref,
 				days,
-			}).commit();
-		} catch (error) {
-			return message.util!.reply(error.message);
-		}
+			}).commit(),
+		);
 	}
 }

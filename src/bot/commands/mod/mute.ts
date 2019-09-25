@@ -69,17 +69,15 @@ export default class MuteCommand extends Command {
 	) {
 		if (member.id === message.author!.id) return;
 		const key = `${message.guild!.id}:${member.id}:MUTE`;
-		try {
-			await new MuteAction({
+		message.guild!.caseQueue.add(async () =>
+			new MuteAction({
 				message,
 				member,
 				keys: key,
 				reason,
-				ref,
 				duration,
-			}).commit();
-		} catch (error) {
-			return message.util!.reply(error.message);
-		}
+				ref,
+			}).commit(),
+		);
 	}
 }

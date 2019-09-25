@@ -1,7 +1,8 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
-import { Tag } from '../../models/Tags';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { graphQLClient } from '../../util/graphQL';
+import { Tags } from '../../util/graphQLTypes';
 
 export default class TagListCommand extends Command {
 	public constructor() {
@@ -37,9 +38,17 @@ export default class TagListCommand extends Command {
 	}
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
-		const tagsRepo = this.client.db.getRepository(Tag);
 		if (member) {
-			const tags = await tagsRepo.find({ user: member.id, guild: message.guild!.id });
+			const { data } = await graphQLClient.query({
+				query: GRAPHQL.QUERY.TAGS_MEMBER,
+				variables: {
+					guild: message.guild!.id,
+					user: member.id,
+				},
+			});
+			let tags: Pick<Tags, 'content' | 'name' | 'hoisted' | 'user'>[];
+			if (PRODUCTION) tags = data.tags;
+			else tags = data.staging_tags;
 			if (!tags.length) {
 				if (member.id === message.author!.id) return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS());
 				return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS(member.displayName));
@@ -56,7 +65,15 @@ export default class TagListCommand extends Command {
 
 			return message.util!.send(embed);
 		}
-		const tags = await tagsRepo.find({ guild: message.guild!.id });
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.TAGS,
+			variables: {
+				guild: message.guild!.id,
+			},
+		});
+		let tags: Tags[];
+		if (PRODUCTION) tags = data.tags;
+		else tags = data.staging_tags;
 		if (!tags.length) return message.util!.send(MESSAGES.COMMANDS.TAGS.LIST.GUILD_NO_TAGS(message.guild!.name));
 		const hoistedTags = tags
 			.filter(tag => tag.hoisted)

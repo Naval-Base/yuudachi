@@ -1,22 +1,27 @@
 import { Provider } from 'discord-akairo';
 import { Guild } from 'discord.js';
-import { Repository } from 'typeorm';
-import { Setting } from '../models/Settings';
+import { GRAPHQL, PRODUCTION } from '../util/constants';
+import { graphQLClient } from '../util/graphQL';
+import { Settings } from '../util/graphQLTypes';
 
-export default class TypeORMProvider extends Provider {
-	public constructor(public repo: Repository<Setting>) {
-		super();
-	}
+export default class HasuraProvider extends Provider {
+	public ['constructor']: typeof HasuraProvider;
 
 	public async init() {
-		const settings = await this.repo.find();
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.SETTINGS,
+		});
+
+		let settings: Settings[];
+		if (PRODUCTION) settings = data.settings;
+		else settings = data.staging_settings;
 		for (const setting of settings) {
 			this.items.set(setting.guild, setting.settings);
 		}
 	}
 
 	public get<T>(guild: string | Guild, key: string, defaultValue: any): T {
-		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
+		const id = this.constructor.getGuildId(guild);
 		if (this.items.has(id)) {
 			const value = this.items.get(id)[key];
 			return value == null ? defaultValue : value;
@@ -26,41 +31,59 @@ export default class TypeORMProvider extends Provider {
 	}
 
 	public async set(guild: string | Guild, key: string, value: any) {
-		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
+		const id = this.constructor.getGuildId(guild);
 		const data = this.items.get(id) || {};
 		data[key] = value;
 		this.items.set(id, data);
 
-		return this.repo
-			.createQueryBuilder()
-			.insert()
-			.into(Setting)
-			.values({ guild: id, settings: data })
-			.onConflict('("guild") DO UPDATE SET "settings" = :settings')
-			.setParameter('settings', data)
-			.execute();
+		const { data: res } = await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.UPDATE_SETTINGS,
+			variables: {
+				guild: id,
+				settings: data,
+			},
+		});
+
+		let settings: Settings;
+		if (PRODUCTION) settings = res.insert_settings.returning[0];
+		else settings = res.insert_staging_settings.returning[0];
+		return settings;
 	}
 
 	public async delete(guild: string | Guild, key: string) {
-		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
+		const id = this.constructor.getGuildId(guild);
 		const data = this.items.get(id) || {};
 		delete data[key];
 
-		return this.repo
-			.createQueryBuilder()
-			.insert()
-			.into(Setting)
-			.values({ guild: id, settings: data })
-			.onConflict('("guild") DO UPDATE SET "settings" = :settings')
-			.setParameter('settings', data)
-			.execute();
+		const { data: res } = await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.UPDATE_SETTINGS,
+			variables: {
+				guild: id,
+				settings: data,
+			},
+		});
+
+		let settings: Settings;
+		if (PRODUCTION) settings = res.insert_settings.returning[0];
+		else settings = res.insert_staging_settings.returning[0];
+		return settings;
 	}
 
 	public async clear(guild: string | Guild) {
-		const id = (this.constructor as typeof TypeORMProvider).getGuildId(guild);
+		const id = this.constructor.getGuildId(guild);
 		this.items.delete(id);
 
-		return this.repo.delete(id);
+		const { data: res } = await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.DELETE_SETTINGS,
+			variables: {
+				guild: id,
+			},
+		});
+
+		let settings: Settings;
+		if (PRODUCTION) settings = res.insert_settings.returning[0];
+		else settings = res.insert_staging_settings.returning[0];
+		return settings;
 	}
 
 	private static getGuildId(guild: string | Guild) {

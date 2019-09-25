@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { RoleState } from '../../../models/RoleStates';
-import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { GRAPHQL, MESSAGES, SETTINGS } from '../../../util/constants';
+import { graphQLClient } from '../../../util/graphQL';
 
 export default class ToggleRoleStateCommand extends Command {
 	public constructor() {
@@ -20,26 +20,33 @@ export default class ToggleRoleStateCommand extends Command {
 		const roleState = this.client.settings.get(message.guild!, SETTINGS.ROLE_STATE, undefined);
 		if (roleState) {
 			this.client.settings.set(message.guild!, SETTINGS.ROLE_STATE, false);
-			const userRepo = this.client.db.getRepository(RoleState);
-			const users = await userRepo.find({ guild: message.guild!.id });
-			for (const user of users) userRepo.remove(user);
+			await graphQLClient.mutate({
+				mutation: GRAPHQL.MUTATION.DELETE_ROLE_STATE,
+				variables: {
+					guild: message.guild!.id,
+				},
+			});
 
 			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.ROLE_STATE.REPLY_DEACTIVATED);
 		}
 		this.client.settings.set(message.guild!, SETTINGS.ROLE_STATE, true);
 		const members = await message.guild!.members.fetch();
-		const records: RoleState[] = [];
+		const records = [];
 		for (const member of members.values()) {
 			const roles = member.roles.filter(role => role.id !== message.guild!.id).map(role => role.id);
 			if (!roles.length) continue;
-			const rs = new RoleState();
-			rs.guild = message.guild!.id;
-			rs.user = member.id;
-			rs.roles = roles;
-			records.push(rs);
+			records.push({
+				guild: message.guild!.id,
+				member: member.id,
+				roles: `{${roles.join(',')}}`,
+			});
 		}
-		const userRepo = this.client.db.getRepository(RoleState);
-		await userRepo.save(records);
+		await graphQLClient.mutate({
+			mutation: GRAPHQL.MUTATION.INSERT_ROLE_STATE,
+			variables: {
+				objects: records,
+			},
+		});
 
 		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.ROLE_STATE.REPLY_ACTIVATED);
 	}

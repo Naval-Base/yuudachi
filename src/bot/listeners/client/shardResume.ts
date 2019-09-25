@@ -17,7 +17,6 @@ export default class ShardResumeListener extends Listener {
 			event: `SHARD ${id} RESUME`,
 		});
 		this.client.promServer.listen(5500);
-		this.client.node.on('message', this.client.nodeMessage);
 		this.client.logger.info(`Metrics listening on 5500`, { topic: TOPICS.METRICS, event: `SHARD ${id} RESUME` });
 	}
 }

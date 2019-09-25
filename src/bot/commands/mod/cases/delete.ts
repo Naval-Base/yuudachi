@@ -1,7 +1,9 @@
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { ACTIONS, COLORS, MESSAGES, SETTINGS } from '../../../util/constants';
+import { ACTIONS, COLORS, GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { graphQLClient } from '../../../util/graphQL';
+import { Cases } from '../../../util/graphQLTypes';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {
@@ -62,7 +64,16 @@ export default class CaseDeleteCommand extends Command {
 		let totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.NO_CASE_NUMBER);
-		const dbCase = await this.client.caseHandler.repo.findOne({ guild: message.guild!.id, case_id: caseToFind });
+		const { data } = await graphQLClient.query({
+			query: GRAPHQL.QUERY.CASES,
+			variables: {
+				guild: message.guild!.id,
+				case_id: caseToFind,
+			},
+		});
+		let dbCase: Omit<Cases, 'action_processed' | 'message'>;
+		if (PRODUCTION) dbCase = data.cases[0];
+		else dbCase = data.staging_cases[0];
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.NO_CASE);
 		}
@@ -83,14 +94,16 @@ export default class CaseDeleteCommand extends Command {
 				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
 				**Action:** ${ACTION_KEYS[dbCase.action]}${
 					dbCase.action === 5 && dbCase.action_duration
-						? `\n**Length:** ${ms(dbCase.action_duration.getTime() - dbCase.createdAt.getTime(), { long: true })}`
+						? `\n**Length:** ${ms(new Date(dbCase.action_duration).getTime() - new Date(dbCase.created_at).getTime(), {
+								long: true,
+						  })}`
 						: ''
 				}
 				${dbCase.reason ? `**Reason:** ${dbCase.reason}` : ''}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
 			`,
 			)
 			.setFooter(`Case ${dbCase.case_id}`)
-			.setTimestamp(new Date(dbCase.createdAt));
+			.setTimestamp(new Date(dbCase.created_at));
 
 		await message.channel.send(MESSAGES.COMMANDS.MOD.CASES.DELETE.DELETE, { embed });
 		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author!.id, {
