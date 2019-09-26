@@ -107,9 +107,8 @@ export default class CaseHandler {
 			try {
 				const msgToDelete = await chan.messages.fetch(cs.message!);
 				await msgToDelete.delete();
-			} catch {
-				this.fix(cs.case_id, message.guild!.id, channel);
-			}
+			} catch {}
+			this.fix(cs.case_id, message.guild!.id, channel);
 
 			if ((restrictRoles || muteRole) && !removeRole) {
 				this.removeRoles(cs, message, restrictRoles, muteRole);
