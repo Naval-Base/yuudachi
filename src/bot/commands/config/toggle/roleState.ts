@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { GRAPHQL, MESSAGES, SETTINGS } from '../../../util/constants';
-import { graphQLClient } from '../../../util/graphQL';
+import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
 
 export default class ToggleRoleStateCommand extends Command {
 	public constructor() {
