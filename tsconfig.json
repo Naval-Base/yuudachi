@@ -4,10 +4,7 @@
 		"moduleResolution": "node",
 		"declaration": false,
 		"removeComments": false,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
 		"alwaysStrict": true,
-		"allowSyntheticDefaultImports": true,
 		"pretty": true
 	}
 }

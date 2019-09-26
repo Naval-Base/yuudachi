@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
-import Turndown from 'turndown';
+import * as Turndown from 'turndown';
 import { MESSAGES } from '../../util/constants';
 
 export default class MDNCommand extends Command {
