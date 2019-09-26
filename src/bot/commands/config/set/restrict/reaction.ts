@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, Role } from 'discord.js';
+import { Message, Permissions, Role } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../../../util/constants';
 
 export default class SetConfigRestrictRolesReactionCommand extends Command {
@@ -11,7 +11,7 @@ export default class SetConfigRestrictRolesReactionCommand extends Command {
 			},
 			category: 'config',
 			channel: 'guild',
-			userPermissions: ['MANAGE_GUILD'],
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			ratelimit: 2,
 			args: [
 				{

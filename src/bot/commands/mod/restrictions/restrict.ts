@@ -1,5 +1,5 @@
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Permissions } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class RestrictCommand extends Command {
@@ -22,7 +22,7 @@ export default class RestrictCommand extends Command {
 			},
 			category: 'mod',
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 		});
 	}

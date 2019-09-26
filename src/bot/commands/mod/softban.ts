@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember, Message, Permissions } from 'discord.js';
 import SoftbanAction from '../../structures/case/actions/Softban';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
@@ -14,7 +14,7 @@ export default class SoftbanCommand extends Command {
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 			args: [
 				{

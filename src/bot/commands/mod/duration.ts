@@ -1,5 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import { ACTIONS, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Cases } from '../../util/graphQLTypes';
@@ -16,7 +16,7 @@ export default class DurationCommand extends Command {
 				examples: ['1234 30m', 'latest 20h'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 			args: [
 				{
@@ -71,7 +71,7 @@ export default class DurationCommand extends Command {
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE);
 		}
-		if (dbCase.mod_id !== message.author!.id && !message.member!.permissions.has('MANAGE_GUILD')) {
+		if (dbCase.mod_id !== message.author!.id && !message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.WRONG_MOD);
 		}
 

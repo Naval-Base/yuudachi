@@ -28,7 +28,7 @@ export enum EVENTS {
 	COMMAND_FINISHED = 'COMMAND_FINISHED',
 	MESSAGE_BLOCKED = 'MESSAGE_BLOCKED',
 	MUTE = 'MUTE',
-	REMINDER = 'REMINDER',
+	LOCKDOWN = 'LOCKDOWN',
 }
 
 export const logger = createLogger({

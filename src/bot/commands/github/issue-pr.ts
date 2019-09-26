@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
@@ -14,10 +14,10 @@ export default class GitHubPROrIssueCommand extends Command {
 				usage: '<pr/issue>',
 				examples: ['1', '24', '100'],
 			},
-			regex: /\b(g|djs|commando|guide|rpc)#(\d+)/i,
+			regex: /\b(g|djs|commando|guide|rpc|collection)#(\d+)/i,
 			category: 'github',
 			channel: 'guild',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{
@@ -58,6 +58,10 @@ export default class GitHubPROrIssueCommand extends Command {
 				case 'rpc':
 					owner = 'discordjs';
 					repo = 'RPC';
+					break;
+				case 'collection':
+					owner = 'discordjs';
+					repo = 'collection';
 					break;
 				default:
 					return message.util!.reply('No u.');
@@ -166,7 +170,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		if (
 			!(message.channel as TextChannel)
 				.permissionsFor(message.guild!.me!)!
-				.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+				.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 		) {
 			return message.util!.send(embed);
 		}

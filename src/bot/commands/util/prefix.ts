@@ -1,5 +1,5 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Permissions } from 'discord.js';
 import { MESSAGES } from '../../util/constants';
 
 export default class PrefixCommand extends Command {
@@ -13,7 +13,7 @@ export default class PrefixCommand extends Command {
 			},
 			category: 'util',
 			channel: 'guild',
-			userPermissions: ['MANAGE_GUILD'],
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			ratelimit: 2,
 			args: [
 				{

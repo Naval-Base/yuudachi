@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember, Message, Permissions } from 'discord.js';
 import { MESSAGES } from '../../util/constants';
 import { EVENTS, TOPICS } from '../../util/logger';
 
@@ -14,8 +14,8 @@ export default class LaunchCybernukeCommand extends Command {
 				examples: ['10 120'],
 			},
 			category: 'util',
-			userPermissions: ['MANAGE_GUILD'],
-			clientPermissions: ['BAN_MEMBERS'],
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
 			ratelimit: 2,
 			args: [
 				{

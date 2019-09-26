@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
 import fetch from 'node-fetch';
@@ -15,7 +15,7 @@ export default class NPMCommand extends Command {
 				usage: '<query>',
 				examples: ['discord.js', 'discord-akairo', 'node-fetch'],
 			},
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			args: [
 				{
 					id: 'pkg',

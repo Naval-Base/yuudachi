@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, Permissions } from 'discord.js';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
 import * as Turndown from 'turndown';
@@ -16,7 +16,7 @@ export default class MDNCommand extends Command {
 				examples: ['Map', 'Map#get', 'Map.set'],
 			},
 			regex: /^(?:mdn,) (.+)/i,
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			args: [
 				{
 					id: 'query',

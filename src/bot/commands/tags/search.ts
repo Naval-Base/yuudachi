@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, Util } from 'discord.js';
+import { Message, MessageEmbed, Permissions, Util } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags } from '../../util/graphQLTypes';
@@ -13,7 +13,7 @@ export default class SearchTagCommand extends Command {
 				usage: '<tag>',
 			},
 			channel: 'guild',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{

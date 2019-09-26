@@ -496,16 +496,175 @@ export interface JsonbComparisonExp {
 	_nin?: Maybe<Array<Scalars['jsonb']>>;
 }
 
+/** columns and relationships of "lockdowns" */
+export interface Lockdowns {
+	channel: Scalars['String'];
+	duration: Scalars['timestamptz'];
+	guild: Scalars['String'];
+	id: Scalars['uuid'];
+}
+
+/** aggregated selection of "lockdowns" */
+export interface LockdownsAggregate {
+	aggregate?: Maybe<LockdownsAggregateFields>;
+	nodes: Array<Lockdowns>;
+}
+
+/** aggregate fields of "lockdowns" */
+export interface LockdownsAggregateFields {
+	count?: Maybe<Scalars['Int']>;
+	max?: Maybe<LockdownsMaxFields>;
+	min?: Maybe<LockdownsMinFields>;
+}
+
+/** aggregate fields of "lockdowns" */
+export interface LockdownsAggregateFieldsCountArgs {
+	columns?: Maybe<Array<LockdownsSelectColumn>>;
+	distinct?: Maybe<Scalars['Boolean']>;
+}
+
+/** order by aggregate values of table "lockdowns" */
+export interface LockdownsAggregateOrderBy {
+	count?: Maybe<OrderBy>;
+	max?: Maybe<LockdownsMaxOrderBy>;
+	min?: Maybe<LockdownsMinOrderBy>;
+}
+
+/** input type for inserting array relation for remote table "lockdowns" */
+export interface LockdownsArrRelInsertInput {
+	data: Array<LockdownsInsertInput>;
+	on_conflict?: Maybe<LockdownsOnConflict>;
+}
+
+/** Boolean expression to filter rows from the table "lockdowns". All fields are combined with a logical 'AND'. */
+export interface LockdownsBoolExp {
+	_and?: Maybe<Array<Maybe<LockdownsBoolExp>>>;
+	_not?: Maybe<LockdownsBoolExp>;
+	_or?: Maybe<Array<Maybe<LockdownsBoolExp>>>;
+	channel?: Maybe<StringComparisonExp>;
+	duration?: Maybe<TimestamptzComparisonExp>;
+	guild?: Maybe<StringComparisonExp>;
+	id?: Maybe<UuidComparisonExp>;
+}
+
+/** unique or primary key constraints on table "lockdowns" */
+export enum LockdownsConstraint {
+	/** unique or primary key constraint */
+	LockdownsGuildChannelKey = 'lockdowns_guild_channel_key',
+	/** unique or primary key constraint */
+	LockdownsPkey = 'lockdowns_pkey',
+}
+
+/** input type for inserting data into table "lockdowns" */
+export interface LockdownsInsertInput {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+	id?: Maybe<Scalars['uuid']>;
+}
+
+/** aggregate max on columns */
+export interface LockdownsMaxFields {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+}
+
+/** order by max() on columns of table "lockdowns" */
+export interface LockdownsMaxOrderBy {
+	channel?: Maybe<OrderBy>;
+	duration?: Maybe<OrderBy>;
+	guild?: Maybe<OrderBy>;
+}
+
+/** aggregate min on columns */
+export interface LockdownsMinFields {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+}
+
+/** order by min() on columns of table "lockdowns" */
+export interface LockdownsMinOrderBy {
+	channel?: Maybe<OrderBy>;
+	duration?: Maybe<OrderBy>;
+	guild?: Maybe<OrderBy>;
+}
+
+/** response of any mutation on the table "lockdowns" */
+export interface LockdownsMutationResponse {
+	/** number of affected rows by the mutation */
+	affected_rows: Scalars['Int'];
+	/** data of the affected rows by the mutation */
+	returning: Array<Lockdowns>;
+}
+
+/** input type for inserting object relation for remote table "lockdowns" */
+export interface LockdownsObjRelInsertInput {
+	data: LockdownsInsertInput;
+	on_conflict?: Maybe<LockdownsOnConflict>;
+}
+
+/** on conflict condition type for table "lockdowns" */
+export interface LockdownsOnConflict {
+	constraint: LockdownsConstraint;
+	update_columns: Array<LockdownsUpdateColumn>;
+}
+
+/** ordering options when selecting data from "lockdowns" */
+export interface LockdownsOrderBy {
+	channel?: Maybe<OrderBy>;
+	duration?: Maybe<OrderBy>;
+	guild?: Maybe<OrderBy>;
+	id?: Maybe<OrderBy>;
+}
+
+/** select columns of table "lockdowns" */
+export enum LockdownsSelectColumn {
+	/** column name */
+	Channel = 'channel',
+	/** column name */
+	Duration = 'duration',
+	/** column name */
+	Guild = 'guild',
+	/** column name */
+	Id = 'id',
+}
+
+/** input type for updating data in table "lockdowns" */
+export interface LockdownsSetInput {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+	id?: Maybe<Scalars['uuid']>;
+}
+
+/** update columns of table "lockdowns" */
+export enum LockdownsUpdateColumn {
+	/** column name */
+	Channel = 'channel',
+	/** column name */
+	Duration = 'duration',
+	/** column name */
+	Guild = 'guild',
+	/** column name */
+	Id = 'id',
+}
+
 /** mutation root */
 export interface MutationRoot {
 	/** delete data from the table: "cases" */
 	delete_cases?: Maybe<CasesMutationResponse>;
+	/** delete data from the table: "lockdowns" */
+	delete_lockdowns?: Maybe<LockdownsMutationResponse>;
 	/** delete data from the table: "role_states" */
 	delete_role_states?: Maybe<RoleStatesMutationResponse>;
 	/** delete data from the table: "settings" */
 	delete_settings?: Maybe<SettingsMutationResponse>;
 	/** delete data from the table: "staging.cases" */
 	delete_staging_cases?: Maybe<StagingCasesMutationResponse>;
+	/** delete data from the table: "staging.lockdowns" */
+	delete_staging_lockdowns?: Maybe<StagingLockdownsMutationResponse>;
 	/** delete data from the table: "staging.role_states" */
 	delete_staging_role_states?: Maybe<StagingRoleStatesMutationResponse>;
 	/** delete data from the table: "staging.settings" */
@@ -516,12 +675,16 @@ export interface MutationRoot {
 	delete_tags?: Maybe<TagsMutationResponse>;
 	/** insert data into the table: "cases" */
 	insert_cases?: Maybe<CasesMutationResponse>;
+	/** insert data into the table: "lockdowns" */
+	insert_lockdowns?: Maybe<LockdownsMutationResponse>;
 	/** insert data into the table: "role_states" */
 	insert_role_states?: Maybe<RoleStatesMutationResponse>;
 	/** insert data into the table: "settings" */
 	insert_settings?: Maybe<SettingsMutationResponse>;
 	/** insert data into the table: "staging.cases" */
 	insert_staging_cases?: Maybe<StagingCasesMutationResponse>;
+	/** insert data into the table: "staging.lockdowns" */
+	insert_staging_lockdowns?: Maybe<StagingLockdownsMutationResponse>;
 	/** insert data into the table: "staging.role_states" */
 	insert_staging_role_states?: Maybe<StagingRoleStatesMutationResponse>;
 	/** insert data into the table: "staging.settings" */
@@ -532,12 +695,16 @@ export interface MutationRoot {
 	insert_tags?: Maybe<TagsMutationResponse>;
 	/** update data of the table: "cases" */
 	update_cases?: Maybe<CasesMutationResponse>;
+	/** update data of the table: "lockdowns" */
+	update_lockdowns?: Maybe<LockdownsMutationResponse>;
 	/** update data of the table: "role_states" */
 	update_role_states?: Maybe<RoleStatesMutationResponse>;
 	/** update data of the table: "settings" */
 	update_settings?: Maybe<SettingsMutationResponse>;
 	/** update data of the table: "staging.cases" */
 	update_staging_cases?: Maybe<StagingCasesMutationResponse>;
+	/** update data of the table: "staging.lockdowns" */
+	update_staging_lockdowns?: Maybe<StagingLockdownsMutationResponse>;
 	/** update data of the table: "staging.role_states" */
 	update_staging_role_states?: Maybe<StagingRoleStatesMutationResponse>;
 	/** update data of the table: "staging.settings" */
@@ -554,6 +721,11 @@ export interface MutationRootDeleteCasesArgs {
 }
 
 /** mutation root */
+export interface MutationRootDeleteLockdownsArgs {
+	where: LockdownsBoolExp;
+}
+
+/** mutation root */
 export interface MutationRootDeleteRoleStatesArgs {
 	where: RoleStatesBoolExp;
 }
@@ -566,6 +738,11 @@ export interface MutationRootDeleteSettingsArgs {
 /** mutation root */
 export interface MutationRootDeleteStagingCasesArgs {
 	where: StagingCasesBoolExp;
+}
+
+/** mutation root */
+export interface MutationRootDeleteStagingLockdownsArgs {
+	where: StagingLockdownsBoolExp;
 }
 
 /** mutation root */
@@ -595,6 +772,12 @@ export interface MutationRootInsertCasesArgs {
 }
 
 /** mutation root */
+export interface MutationRootInsertLockdownsArgs {
+	objects: Array<LockdownsInsertInput>;
+	on_conflict?: Maybe<LockdownsOnConflict>;
+}
+
+/** mutation root */
 export interface MutationRootInsertRoleStatesArgs {
 	objects: Array<RoleStatesInsertInput>;
 	on_conflict?: Maybe<RoleStatesOnConflict>;
@@ -610,6 +793,12 @@ export interface MutationRootInsertSettingsArgs {
 export interface MutationRootInsertStagingCasesArgs {
 	objects: Array<StagingCasesInsertInput>;
 	on_conflict?: Maybe<StagingCasesOnConflict>;
+}
+
+/** mutation root */
+export interface MutationRootInsertStagingLockdownsArgs {
+	objects: Array<StagingLockdownsInsertInput>;
+	on_conflict?: Maybe<StagingLockdownsOnConflict>;
 }
 
 /** mutation root */
@@ -644,6 +833,12 @@ export interface MutationRootUpdateCasesArgs {
 }
 
 /** mutation root */
+export interface MutationRootUpdateLockdownsArgs {
+	_set?: Maybe<LockdownsSetInput>;
+	where: LockdownsBoolExp;
+}
+
+/** mutation root */
 export interface MutationRootUpdateRoleStatesArgs {
 	_set?: Maybe<RoleStatesSetInput>;
 	where: RoleStatesBoolExp;
@@ -665,6 +860,12 @@ export interface MutationRootUpdateStagingCasesArgs {
 	_inc?: Maybe<StagingCasesIncInput>;
 	_set?: Maybe<StagingCasesSetInput>;
 	where: StagingCasesBoolExp;
+}
+
+/** mutation root */
+export interface MutationRootUpdateStagingLockdownsArgs {
+	_set?: Maybe<StagingLockdownsSetInput>;
+	where: StagingLockdownsBoolExp;
 }
 
 /** mutation root */
@@ -722,6 +923,12 @@ export interface QueryRoot {
 	cases_aggregate: CasesAggregate;
 	/** fetch data from the table: "cases" using primary key columns */
 	cases_by_pk?: Maybe<Cases>;
+	/** fetch data from the table: "lockdowns" */
+	lockdowns: Array<Lockdowns>;
+	/** fetch aggregated fields from the table: "lockdowns" */
+	lockdowns_aggregate: LockdownsAggregate;
+	/** fetch data from the table: "lockdowns" using primary key columns */
+	lockdowns_by_pk?: Maybe<Lockdowns>;
 	/** fetch data from the table: "role_states" */
 	role_states: Array<RoleStates>;
 	/** fetch aggregated fields from the table: "role_states" */
@@ -740,6 +947,12 @@ export interface QueryRoot {
 	staging_cases_aggregate: StagingCasesAggregate;
 	/** fetch data from the table: "staging.cases" using primary key columns */
 	staging_cases_by_pk?: Maybe<StagingCases>;
+	/** fetch data from the table: "staging.lockdowns" */
+	staging_lockdowns: Array<StagingLockdowns>;
+	/** fetch aggregated fields from the table: "staging.lockdowns" */
+	staging_lockdowns_aggregate: StagingLockdownsAggregate;
+	/** fetch data from the table: "staging.lockdowns" using primary key columns */
+	staging_lockdowns_by_pk?: Maybe<StagingLockdowns>;
 	/** fetch data from the table: "staging.role_states" */
 	staging_role_states: Array<StagingRoleStates>;
 	/** fetch aggregated fields from the table: "staging.role_states" */
@@ -786,6 +999,29 @@ export interface QueryRootCasesAggregateArgs {
 
 /** query root */
 export interface QueryRootCasesByPkArgs {
+	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootLockdownsArgs {
+	distinct_on?: Maybe<Array<LockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<LockdownsOrderBy>>;
+	where?: Maybe<LockdownsBoolExp>;
+}
+
+/** query root */
+export interface QueryRootLockdownsAggregateArgs {
+	distinct_on?: Maybe<Array<LockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<LockdownsOrderBy>>;
+	where?: Maybe<LockdownsBoolExp>;
+}
+
+/** query root */
+export interface QueryRootLockdownsByPkArgs {
 	id: Scalars['uuid'];
 }
 
@@ -855,6 +1091,29 @@ export interface QueryRootStagingCasesAggregateArgs {
 
 /** query root */
 export interface QueryRootStagingCasesByPkArgs {
+	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootStagingLockdownsArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
+}
+
+/** query root */
+export interface QueryRootStagingLockdownsAggregateArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
+}
+
+/** query root */
+export interface QueryRootStagingLockdownsByPkArgs {
 	id: Scalars['uuid'];
 }
 
@@ -1675,6 +1934,161 @@ export interface StagingCasesVarianceOrderBy {
 	ref_id?: Maybe<OrderBy>;
 }
 
+/** columns and relationships of "staging.lockdowns" */
+export interface StagingLockdowns {
+	channel: Scalars['String'];
+	duration: Scalars['timestamptz'];
+	guild: Scalars['String'];
+	id: Scalars['uuid'];
+}
+
+/** aggregated selection of "staging.lockdowns" */
+export interface StagingLockdownsAggregate {
+	aggregate?: Maybe<StagingLockdownsAggregateFields>;
+	nodes: Array<StagingLockdowns>;
+}
+
+/** aggregate fields of "staging.lockdowns" */
+export interface StagingLockdownsAggregateFields {
+	count?: Maybe<Scalars['Int']>;
+	max?: Maybe<StagingLockdownsMaxFields>;
+	min?: Maybe<StagingLockdownsMinFields>;
+}
+
+/** aggregate fields of "staging.lockdowns" */
+export interface StagingLockdownsAggregateFieldsCountArgs {
+	columns?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	distinct?: Maybe<Scalars['Boolean']>;
+}
+
+/** order by aggregate values of table "staging.lockdowns" */
+export interface StagingLockdownsAggregateOrderBy {
+	count?: Maybe<OrderBy>;
+	max?: Maybe<StagingLockdownsMaxOrderBy>;
+	min?: Maybe<StagingLockdownsMinOrderBy>;
+}
+
+/** input type for inserting array relation for remote table "staging.lockdowns" */
+export interface StagingLockdownsArrRelInsertInput {
+	data: Array<StagingLockdownsInsertInput>;
+	on_conflict?: Maybe<StagingLockdownsOnConflict>;
+}
+
+/** Boolean expression to filter rows from the table "staging.lockdowns". All fields are combined with a logical 'AND'. */
+export interface StagingLockdownsBoolExp {
+	_and?: Maybe<Array<Maybe<StagingLockdownsBoolExp>>>;
+	_not?: Maybe<StagingLockdownsBoolExp>;
+	_or?: Maybe<Array<Maybe<StagingLockdownsBoolExp>>>;
+	channel?: Maybe<StringComparisonExp>;
+	duration?: Maybe<TimestamptzComparisonExp>;
+	guild?: Maybe<StringComparisonExp>;
+	id?: Maybe<UuidComparisonExp>;
+}
+
+/** unique or primary key constraints on table "staging.lockdowns" */
+export enum StagingLockdownsConstraint {
+	/** unique or primary key constraint */
+	LockdownsGuildChannelKey = 'lockdowns_guild_channel_key',
+	/** unique or primary key constraint */
+	LockdownsPkey = 'lockdowns_pkey',
+}
+
+/** input type for inserting data into table "staging.lockdowns" */
+export interface StagingLockdownsInsertInput {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+	id?: Maybe<Scalars['uuid']>;
+}
+
+/** aggregate max on columns */
+export interface StagingLockdownsMaxFields {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+}
+
+/** order by max() on columns of table "staging.lockdowns" */
+export interface StagingLockdownsMaxOrderBy {
+	channel?: Maybe<OrderBy>;
+	duration?: Maybe<OrderBy>;
+	guild?: Maybe<OrderBy>;
+}
+
+/** aggregate min on columns */
+export interface StagingLockdownsMinFields {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+}
+
+/** order by min() on columns of table "staging.lockdowns" */
+export interface StagingLockdownsMinOrderBy {
+	channel?: Maybe<OrderBy>;
+	duration?: Maybe<OrderBy>;
+	guild?: Maybe<OrderBy>;
+}
+
+/** response of any mutation on the table "staging.lockdowns" */
+export interface StagingLockdownsMutationResponse {
+	/** number of affected rows by the mutation */
+	affected_rows: Scalars['Int'];
+	/** data of the affected rows by the mutation */
+	returning: Array<StagingLockdowns>;
+}
+
+/** input type for inserting object relation for remote table "staging.lockdowns" */
+export interface StagingLockdownsObjRelInsertInput {
+	data: StagingLockdownsInsertInput;
+	on_conflict?: Maybe<StagingLockdownsOnConflict>;
+}
+
+/** on conflict condition type for table "staging.lockdowns" */
+export interface StagingLockdownsOnConflict {
+	constraint: StagingLockdownsConstraint;
+	update_columns: Array<StagingLockdownsUpdateColumn>;
+}
+
+/** ordering options when selecting data from "staging.lockdowns" */
+export interface StagingLockdownsOrderBy {
+	channel?: Maybe<OrderBy>;
+	duration?: Maybe<OrderBy>;
+	guild?: Maybe<OrderBy>;
+	id?: Maybe<OrderBy>;
+}
+
+/** select columns of table "staging.lockdowns" */
+export enum StagingLockdownsSelectColumn {
+	/** column name */
+	Channel = 'channel',
+	/** column name */
+	Duration = 'duration',
+	/** column name */
+	Guild = 'guild',
+	/** column name */
+	Id = 'id',
+}
+
+/** input type for updating data in table "staging.lockdowns" */
+export interface StagingLockdownsSetInput {
+	channel?: Maybe<Scalars['String']>;
+	duration?: Maybe<Scalars['timestamptz']>;
+	guild?: Maybe<Scalars['String']>;
+	id?: Maybe<Scalars['uuid']>;
+}
+
+/** update columns of table "staging.lockdowns" */
+export enum StagingLockdownsUpdateColumn {
+	/** column name */
+	Channel = 'channel',
+	/** column name */
+	Duration = 'duration',
+	/** column name */
+	Guild = 'guild',
+	/** column name */
+	Id = 'id',
+}
+
 /** columns and relationships of "staging.role_states" */
 export interface StagingRoleStates {
 	guild: Scalars['String'];
@@ -2352,6 +2766,12 @@ export interface SubscriptionRoot {
 	cases_aggregate: CasesAggregate;
 	/** fetch data from the table: "cases" using primary key columns */
 	cases_by_pk?: Maybe<Cases>;
+	/** fetch data from the table: "lockdowns" */
+	lockdowns: Array<Lockdowns>;
+	/** fetch aggregated fields from the table: "lockdowns" */
+	lockdowns_aggregate: LockdownsAggregate;
+	/** fetch data from the table: "lockdowns" using primary key columns */
+	lockdowns_by_pk?: Maybe<Lockdowns>;
 	/** fetch data from the table: "role_states" */
 	role_states: Array<RoleStates>;
 	/** fetch aggregated fields from the table: "role_states" */
@@ -2370,6 +2790,12 @@ export interface SubscriptionRoot {
 	staging_cases_aggregate: StagingCasesAggregate;
 	/** fetch data from the table: "staging.cases" using primary key columns */
 	staging_cases_by_pk?: Maybe<StagingCases>;
+	/** fetch data from the table: "staging.lockdowns" */
+	staging_lockdowns: Array<StagingLockdowns>;
+	/** fetch aggregated fields from the table: "staging.lockdowns" */
+	staging_lockdowns_aggregate: StagingLockdownsAggregate;
+	/** fetch data from the table: "staging.lockdowns" using primary key columns */
+	staging_lockdowns_by_pk?: Maybe<StagingLockdowns>;
 	/** fetch data from the table: "staging.role_states" */
 	staging_role_states: Array<StagingRoleStates>;
 	/** fetch aggregated fields from the table: "staging.role_states" */
@@ -2416,6 +2842,29 @@ export interface SubscriptionRootCasesAggregateArgs {
 
 /** subscription root */
 export interface SubscriptionRootCasesByPkArgs {
+	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootLockdownsArgs {
+	distinct_on?: Maybe<Array<LockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<LockdownsOrderBy>>;
+	where?: Maybe<LockdownsBoolExp>;
+}
+
+/** subscription root */
+export interface SubscriptionRootLockdownsAggregateArgs {
+	distinct_on?: Maybe<Array<LockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<LockdownsOrderBy>>;
+	where?: Maybe<LockdownsBoolExp>;
+}
+
+/** subscription root */
+export interface SubscriptionRootLockdownsByPkArgs {
 	id: Scalars['uuid'];
 }
 
@@ -2485,6 +2934,29 @@ export interface SubscriptionRootStagingCasesAggregateArgs {
 
 /** subscription root */
 export interface SubscriptionRootStagingCasesByPkArgs {
+	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootStagingLockdownsArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
+}
+
+/** subscription root */
+export interface SubscriptionRootStagingLockdownsAggregateArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
+}
+
+/** subscription root */
+export interface SubscriptionRootStagingLockdownsByPkArgs {
 	id: Scalars['uuid'];
 }
 

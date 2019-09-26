@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember, Message, Permissions } from 'discord.js';
 import MuteAction from '../../structures/case/actions/Mute';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 const ms = require('@naval-base/ms'); // eslint-disable-line
@@ -15,7 +15,7 @@ export default class MuteCommand extends Command {
 				examples: ['@Crawl 20m', '@Crawl 20m no u', '@Souji 14d --ref=1234 just stop'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 			args: [
 				{

@@ -160,6 +160,32 @@ export const GRAPHQL = {
 			}
 		`,
 
+		LOCKDOWNS_DURATION: gql`
+			query($duration: timestamptz!) {
+				${PRODUCTION ? '' : 'staging_'}lockdowns(where: {
+					duration: { _gt: $duration }
+				}) {
+					channel
+					duration
+					guild
+					id
+				}
+			}
+		`,
+
+		LOCKDOWNS_CHANNEL: gql`
+			query($channel: String!) {
+				${PRODUCTION ? '' : 'staging_'}lockdowns(where: {
+					channel: { _eq: $channel }
+				}) {
+					channel
+					duration
+					guild
+					id
+				}
+			}
+		`,
+
 		ROLE_STATES: gql`
 			query($guild: String!, $member: String!) {
 				${PRODUCTION ? '' : 'staging_'}role_states(where: {
@@ -403,6 +429,33 @@ export const GRAPHQL = {
 				update${PRODUCTION ? '' : '_staging'}_cases(where: {
 					id: { _eq: $id }
 				}, _set: { mod_id: $mod_id, mod_tag: $mod_tag, reason: $reason }) {
+					affected_rows
+				}
+			}
+		`,
+
+		INSERT_LOCKDOWNS: gql`
+			mutation($guild: String!, $channel: String!, $duration: timestamptz!) {
+				insert${PRODUCTION ? '' : '_staging'}_lockdowns(objects: {
+					guild: $guild,
+					channel: $channel,
+					duration: $duration
+				}) {
+					returning {
+						id
+						guild
+						channel
+						duration
+					}
+				}
+			}
+		`,
+
+		CANCEL_LOCKDOWN: gql`
+			mutation($id: uuid!) {
+				delete${PRODUCTION ? '' : '_staging'}_lockdowns(where: {
+					id: { _eq: $id }
+				}) {
 					affected_rows
 				}
 			}

@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, Permissions } from 'discord.js';
 import { ACTIONS, COLORS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
 import { Cases } from '../../../util/graphQLTypes';
@@ -32,7 +32,7 @@ export default class CaseDeleteCommand extends Command {
 				examples: ['1234'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{

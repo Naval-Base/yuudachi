@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember, Message, Permissions } from 'discord.js';
 import EmojiAction from '../../../structures/case/actions/Emoji';
 import { MESSAGES, SETTINGS } from '../../../util/constants';
 
@@ -12,7 +12,7 @@ export default class RestrictEmojiCommand extends Command {
 				usage: '<member> [--ref=number] [...reason]',
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 			args: [
 				{

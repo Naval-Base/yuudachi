@@ -1,5 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember, Message, Permissions } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
 export default class HistoryCommand extends Command {
@@ -13,7 +13,7 @@ export default class HistoryCommand extends Command {
 				examples: ['@Crawl'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{

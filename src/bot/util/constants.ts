@@ -1,5 +1,5 @@
 import { stripIndents } from 'common-tags';
-import { User } from 'discord.js';
+import { TextChannel, User } from 'discord.js';
 
 export const PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -75,6 +75,10 @@ export const MESSAGES = {
 
 	MUTE_SCHEDULER: {
 		INIT: 'Mute scheduler initialized',
+	},
+
+	LOCKDOWN_SCHEDULER: {
+		INIT: 'Lockdown scheduler initialized',
 	},
 
 	COMMANDS: {
@@ -498,6 +502,17 @@ export const MESSAGES = {
 					START: (author: User | null) => `${author}, what member do you want to kick?`,
 					RETRY: (author: User | null) => `${author}, please mention a member.`,
 				},
+			},
+
+			LOCKDOWN: {
+				DESCRIPTION: 'Locks down a channel, duh.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, for how long do you want the lockdown to last?`,
+					RETRY: (author: User | null) => `${author}, please use a proper time format.`,
+				},
+
+				REMOVED: (channel: TextChannel) => `Successfully removed lockdown on ${channel}`,
+				REPLY: (channel: TextChannel) => `Successfully locked down ${channel}`,
 			},
 
 			MUTE: {

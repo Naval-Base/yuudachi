@@ -1,5 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Cases } from '../../util/graphQLTypes';
@@ -15,7 +15,7 @@ export default class ReasonCommand extends Command {
 				examples: ['1234 dumb', 'latest dumb', 'latest --ref=1234 cool'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 			args: [
 				{
@@ -69,7 +69,10 @@ export default class ReasonCommand extends Command {
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE);
 		}
-		if (dbCase.mod_id && (dbCase.mod_id !== message.author!.id && !message.member!.permissions.has('MANAGE_GUILD'))) {
+		if (
+			dbCase.mod_id &&
+			(dbCase.mod_id !== message.author!.id && !message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD))
+		) {
 			return message.reply(MESSAGES.COMMANDS.MOD.REASON.WRONG_MOD);
 		}
 

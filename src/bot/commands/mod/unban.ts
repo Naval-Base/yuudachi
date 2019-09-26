@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, User } from 'discord.js';
+import { Message, Permissions, User } from 'discord.js';
 import UnbanAction from '../../structures/case/actions/Unban';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
@@ -14,7 +14,7 @@ export default class UnbanCommand extends Command {
 				examples: ['@Crawl', '@Crawl appealed', '@Souji --ref=1234 appealed', '@Souji --ref=1234'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 			args: [
 				{

@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
 import { MESSAGES } from '../../util/constants';
@@ -13,7 +13,7 @@ export default class StatsCommand extends Command {
 				content: MESSAGES.COMMANDS.UTIL.STATS.DESCRIPTION,
 			},
 			category: 'util',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 		});
 	}

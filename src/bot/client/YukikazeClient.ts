@@ -7,7 +7,8 @@ import { join } from 'path';
 import { Counter, register, Registry } from 'prom-client';
 import { parse } from 'url';
 import { Logger } from 'winston';
-import CaseHandler from '../structures/case/CaseHandler';
+import CaseHandler from '../structures/CaseHandler';
+import LockdownScheduler from '../structures/LockdownScheduler';
 import MuteScheduler from '../structures/MuteScheduler';
 import Queue from '../structures/Queue';
 import HasuraProvider from '../structures/SettingsProvider';
@@ -25,6 +26,7 @@ declare module 'discord-akairo' {
 		webhooks: Collection<string, Webhook>;
 		caseHandler: CaseHandler;
 		muteScheduler: MuteScheduler;
+		lockdownScheduler: LockdownScheduler;
 		prometheus: {
 			messagesCounter: Counter;
 			commandCounter: Counter;
@@ -87,6 +89,8 @@ export default class YukikazeClient extends AkairoClient {
 	public caseHandler = new CaseHandler(this);
 
 	public muteScheduler = new MuteScheduler(this);
+
+	public lockdownScheduler = new LockdownScheduler(this);
 
 	public prometheus = {
 		messagesCounter: new Counter({ name: PROMETHEUS.MESSAGE_COUNTER, help: PROMETHEUS.HELP.MESSAGE_COUNTER }),
@@ -204,6 +208,8 @@ export default class YukikazeClient extends AkairoClient {
 		this.logger.info(MESSAGES.SETTINGS.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		await this.muteScheduler.init();
 		this.logger.info(MESSAGES.MUTE_SCHEDULER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		await this.lockdownScheduler.init();
+		this.logger.info(MESSAGES.LOCKDOWN_SCHEDULER.INIT, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 	}
 
 	public async start() {

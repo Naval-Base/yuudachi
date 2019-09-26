@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
@@ -18,7 +18,7 @@ export default class GitHubCommitCommand extends Command {
 			regex: /\bgc#[a-f0-9]{40}$/i,
 			category: 'github',
 			channel: 'guild',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{
@@ -90,7 +90,7 @@ export default class GitHubCommitCommand extends Command {
 		if (
 			!(message.channel as TextChannel)
 				.permissionsFor(message.guild!.me!)!
-				.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+				.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 		) {
 			return message.util!.send(embed);
 		}

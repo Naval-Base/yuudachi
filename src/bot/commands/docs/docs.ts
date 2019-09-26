@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, TextChannel } from 'discord.js';
+import { Message, Permissions, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
 import { MESSAGES, SETTINGS } from '../../util/constants';
@@ -23,7 +23,7 @@ export default class DocsCommand extends Command {
 				examples: ['TextChannel', 'Client', 'ClientUser#setActivity master'],
 			},
 			category: 'docs',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			flags: ['--force', '-f', '--private', '-p'],
 			optionFlags: ['--default='],

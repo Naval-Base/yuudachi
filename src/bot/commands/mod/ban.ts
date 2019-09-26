@@ -1,5 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember, Message, Permissions } from 'discord.js';
 import BanAction from '../../structures/case/actions/Ban';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
@@ -14,7 +14,7 @@ export default class BanCommand extends Command {
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no'],
 			},
 			channel: 'guild',
-			clientPermissions: ['MANAGE_ROLES', 'EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{

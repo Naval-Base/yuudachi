@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 import { MESSAGES } from '../../util/constants';
 
@@ -17,7 +17,7 @@ export default class GitHubSearchCommand extends Command {
 			},
 			category: 'github',
 			channel: 'guild',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{
@@ -93,7 +93,7 @@ export default class GitHubSearchCommand extends Command {
 			if (
 				!(message.channel as TextChannel)
 					.permissionsFor(this.client.user!)!
-					.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+					.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 			) {
 				return message.util!.send(embed);
 			}
@@ -225,7 +225,7 @@ export default class GitHubSearchCommand extends Command {
 		if (
 			!(message.channel as TextChannel)
 				.permissionsFor(this.client.user!)!
-				.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+				.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 		) {
 			return message.util!.send(embed);
 		}

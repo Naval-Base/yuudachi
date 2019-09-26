@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
-import { GuildMember, Message, MessageEmbed } from 'discord.js';
+import { GuildMember, Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
 import { MESSAGES } from '../../util/constants';
@@ -16,7 +16,7 @@ export default class UserInfoCommand extends Command {
 			},
 			category: 'info',
 			channel: 'guild',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{

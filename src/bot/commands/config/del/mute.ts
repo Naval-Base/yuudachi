@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Permissions } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class DeleteConfigMuteRoleCommand extends Command {
@@ -10,7 +10,7 @@ export default class DeleteConfigMuteRoleCommand extends Command {
 			},
 			category: 'config',
 			channel: 'guild',
-			userPermissions: ['MANAGE_GUILD'],
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			ratelimit: 2,
 		});
 	}

@@ -1,15 +1,15 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
-import { Message, MessageEmbed, Role } from 'discord.js';
+import { Message, MessageEmbed, Permissions, Role } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
 import { MESSAGES } from '../../util/constants';
 
-interface Permissions {
+interface PermissionsIndex {
 	[key: string]: string;
 }
 
-const PERMISSIONS: Permissions = {
+const PERMISSIONS: PermissionsIndex = {
 	ADMINISTRATOR: 'Administrator',
 	VIEW_AUDIT_LOG: 'View audit log',
 	MANAGE_GUILD: 'Manage server',
@@ -51,7 +51,7 @@ export default class RoleInfoCommand extends Command {
 			},
 			category: 'info',
 			channel: 'guild',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{

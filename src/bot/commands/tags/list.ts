@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { GuildMember, Message, MessageEmbed } from 'discord.js';
+import { GuildMember, Message, MessageEmbed, Permissions } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags } from '../../util/graphQLTypes';
@@ -13,7 +13,7 @@ export default class TagListCommand extends Command {
 				content: MESSAGES.COMMANDS.TAGS.LIST.DESCRIPTION,
 			},
 			channel: 'guild',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{

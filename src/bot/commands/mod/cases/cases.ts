@@ -1,17 +1,18 @@
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Permissions } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class CasesCommand extends Command {
 	public constructor() {
 		super('cases', {
 			aliases: ['cases'],
+			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.CASES.DESCRIPTION,
 				usage: '<method> <...arguments>',
 			},
-			category: 'mod',
 			channel: 'guild',
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 		});
 	}

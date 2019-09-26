@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Permissions } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../../util/constants';
 
 export default class SetConfigGuildLogCommand extends Command {
@@ -11,8 +11,8 @@ export default class SetConfigGuildLogCommand extends Command {
 			},
 			category: 'config',
 			channel: 'guild',
-			clientPermissions: ['MANAGE_WEBHOOKS'],
-			userPermissions: ['MANAGE_GUILD'],
+			clientPermissions: [Permissions.FLAGS.MANAGE_WEBHOOKS],
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			ratelimit: 2,
 			args: [
 				{

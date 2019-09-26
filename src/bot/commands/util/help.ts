@@ -1,5 +1,5 @@
 import { Command, PrefixSupplier } from 'discord-akairo';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, Permissions } from 'discord.js';
 import { MESSAGES } from '../../util/constants';
 
 export default class HelpCommand extends Command {
@@ -11,7 +11,7 @@ export default class HelpCommand extends Command {
 				usage: '[command]',
 			},
 			category: 'util',
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			args: [
 				{
