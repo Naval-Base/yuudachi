@@ -20,6 +20,7 @@ export default class DeleteConfigCommand extends Command {
 		const key = yield {
 			type: [
 				['config-del-cases', 'cases'],
+				['config-del-guildlog', 'guildlog', 'guild-log', 'log', 'logs'],
 				['config-del-mod', 'modRole', 'mod', 'mod-role'],
 				['config-del-modlog', 'modLogChannel', 'modlog', 'modchan', 'mod-channel'],
 				['config-del-mute', 'muteRole', 'mute', 'mute-role'],

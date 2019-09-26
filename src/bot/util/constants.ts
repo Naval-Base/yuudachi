@@ -84,6 +84,7 @@ export const MESSAGES = {
 				Available keys:
 				 • cases \`<number>\`
 				 • mod \`<Role/RoleId>\`
+				 • logs \`<webhook>\`
 				 • modLog \`<Channel/ChannelId>\`
 				 • muted \`<Role/RoleId>\`
 				 • repo \`<repository>\`
@@ -92,7 +93,8 @@ export const MESSAGES = {
 				 • • emoji \`<Role/RoleId>\`
 				 • • reaction \`<Role/RoleId>\`
 				 • • tag \`<Role/RoleId>\`
-				 • logs \`<webhook>\`
+
+				Toggle keys:
 				 • mod
 				 • rolestate
 				 • tokenfiltering
@@ -119,6 +121,11 @@ export const MESSAGES = {
 				CASES: {
 					DESCRIPTION: 'Deletes the case number of the guild.',
 					REPLY: 'deleted cases.',
+				},
+
+				GUILD_LOG: {
+					DESCRIPTION: 'Deletes logs on the server.',
+					REPLY: 'successfully deactivated logs!',
 				},
 
 				MOD: {
@@ -206,6 +213,15 @@ export const MESSAGES = {
 					REPLY: (cases: number) => `set cases to **${cases}**`,
 				},
 
+				GUILD_LOG: {
+					DESCRIPTION: 'Sets logs on the server.',
+					PROMPT: {
+						START: (author: User | null) => `${author}, what Webhook should send the messages?`,
+					},
+					REPLY: 'successfully activated logs!',
+					REPLY_DEACTIVATED: 'successfully deactivated logs!',
+				},
+
 				MOD: {
 					DESCRIPTION: 'Sets the mod role many of the commands use for permission checking.',
 					REPLY: (role: string) => `set moderation role to **${role}**`,
@@ -233,15 +249,6 @@ export const MESSAGES = {
 					When you beg me so much I just can't not help you~
 					Check \`${prefix}help config\` for more information.
 				`,
-
-				LOGS: {
-					DESCRIPTION: 'Toggle logs on the server.',
-					PROMPT: {
-						START: (author: User | null) => `${author}, what Webhook should send the messages?`,
-					},
-					REPLY_ACTIVATED: 'successfully activated logs!',
-					REPLY_DEACTIVATED: 'successfully deactivated logs!',
-				},
 
 				MOD: {
 					DESCRIPTION: 'Toggle moderation features on the server.',

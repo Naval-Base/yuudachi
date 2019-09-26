@@ -2,11 +2,12 @@ import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../../util/constants';
 
-export default class ToggleLogsCommand extends Command {
+export default class SetConfigGuildLogCommand extends Command {
 	public constructor() {
-		super('config-toggle-logs', {
+		super('config-set-guildlog', {
 			description: {
-				content: MESSAGES.COMMANDS.CONFIG.TOGGLE.LOGS.DESCRIPTION,
+				content: MESSAGES.COMMANDS.CONFIG.SET.GUILD_LOG.DESCRIPTION,
+				usage: '<webhook>',
 			},
 			category: 'config',
 			channel: 'guild',
@@ -19,7 +20,7 @@ export default class ToggleLogsCommand extends Command {
 					match: 'content',
 					type: 'string',
 					prompt: {
-						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.TOGGLE.LOGS.PROMPT.START(message.author),
+						start: (message: Message) => MESSAGES.COMMANDS.CONFIG.SET.GUILD_LOG.PROMPT.START(message.author),
 					},
 				},
 			],
@@ -27,17 +28,11 @@ export default class ToggleLogsCommand extends Command {
 	}
 
 	public async exec(message: Message, { webhook }: { webhook: string }) {
-		const guildLogs = this.client.settings.get(message.guild!, SETTINGS.GUILD_LOG, undefined);
-		if (guildLogs) {
-			this.client.settings.delete(message.guild!, SETTINGS.GUILD_LOG);
-			this.client.webhooks.delete(webhook);
-			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.LOGS.REPLY_DEACTIVATED);
-		}
 		this.client.settings.set(message.guild!, SETTINGS.GUILD_LOG, webhook);
 		const wh = (await message.guild!.fetchWebhooks()).get(webhook);
 		if (!wh) return;
 		this.client.webhooks.set(wh.id, wh);
 
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.LOGS.REPLY_ACTIVATED);
+		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.GUILD_LOG.REPLY);
 	}
 }

@@ -19,7 +19,6 @@ export default class ToggleCommand extends Command {
 	public *args(): object {
 		const method = yield {
 			type: [
-				['config-toggle-logs', 'logs'],
 				['config-toggle-moderation', 'mod', 'moderation'],
 				['config-toggle-role-state', 'role', 'rolestate', 'role-state'],
 				['config-toggle-token-filtering', 'tokenfilter', 'tokenfiltering', 'token'],
