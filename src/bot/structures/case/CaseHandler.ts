@@ -299,7 +299,7 @@ export default class CaseHandler {
 			const chan = this.client.channels.get(channel) as TextChannel;
 			try {
 				const msg = await chan.messages.fetch(c.message!);
-				await msg.edit({ embed: msg.embeds[0].setFooter(`Case ${newCaseNum}`) });
+				await msg.edit(new MessageEmbed(msg.embeds[0]).setFooter(`Case ${newCaseNum}`));
 			} catch {
 				await graphQLClient.mutate({
 					mutation: GRAPHQL.MUTATION.FIX_CASE,

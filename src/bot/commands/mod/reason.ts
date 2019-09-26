@@ -77,9 +77,9 @@ export default class ReasonCommand extends Command {
 		if (modLogChannel) {
 			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message!);
 			if (!caseEmbed) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_MESSAGE);
-			const embed = new MessageEmbed(caseEmbed.embeds[0]);
-			embed.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());
-			embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+			const embed = new MessageEmbed(caseEmbed.embeds[0])
+				.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
+				.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
 			if (ref) {
 				let reference;
 				try {

@@ -51,9 +51,10 @@ export default class MessageUpdateListener extends Listener {
 				}
 				embed.addField('❯ Message', `${msg.substring(0, 1020)}` || '\u200b');
 			}
-			embed.addField('❯ Message', `[Jump To](${newMessage.url})`, true);
-			embed.setTimestamp(oldMessage.editedAt || newMessage.editedAt || new Date());
-			embed.setFooter('Edited');
+			embed
+				.addField('❯ Message', `[Jump To](${newMessage.url})`, true)
+				.setTimestamp(oldMessage.editedAt || newMessage.editedAt || new Date())
+				.setFooter('Edited');
 
 			return webhook.send({
 				embeds: [embed],
