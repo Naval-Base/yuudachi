@@ -2,11 +2,11 @@ import { Listener } from 'discord-akairo';
 import { Collection, Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { SETTINGS } from '../../util/constants';
+import { SETTINGS } from '../../../util/constants';
 
-export default class MessageDeleteBulkListener extends Listener {
+export default class MessageDeleteBulkGuildLogListener extends Listener {
 	public constructor() {
-		super('messageDeleteBulk', {
+		super('messageDeleteBulkGuildLog', {
 			emitter: 'client',
 			event: 'messageDeleteBulk',
 			category: 'client',

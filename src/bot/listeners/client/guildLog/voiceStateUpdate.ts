@@ -1,10 +1,10 @@
 import { Listener } from 'discord-akairo';
 import { MessageEmbed, VoiceState } from 'discord.js';
-import { SETTINGS } from '../../util/constants';
+import { SETTINGS } from '../../../util/constants';
 
-export default class VoiceStateUpdateListener extends Listener {
+export default class VoiceStateUpdateGuildLogListener extends Listener {
 	public constructor() {
-		super('voiceStateUpdate', {
+		super('voiceStateUpdateGuildLog', {
 			emitter: 'client',
 			event: 'voiceStateUpdate',
 			category: 'client',

@@ -1,8 +1,8 @@
 import { Listener, PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel } from 'discord.js';
-import { ACTIONS, COLORS, PRODUCTION, SETTINGS } from '../../util/constants';
-import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Cases, RoleStates } from '../../util/graphQLTypes';
+import { ACTIONS, COLORS, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
+import { Cases, RoleStates } from '../../../util/graphQLTypes';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {

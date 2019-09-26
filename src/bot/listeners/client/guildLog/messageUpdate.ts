@@ -1,11 +1,11 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
-import { SETTINGS } from '../../util/constants';
+import { SETTINGS } from '../../../util/constants';
 const diff = require('diff'); // eslint-disable-line
 
-export default class MessageUpdateListener extends Listener {
+export default class MessageUpdateGuildLogListener extends Listener {
 	public constructor() {
-		super('messageUpdate', {
+		super('messageUpdateGuildLog', {
 			emitter: 'client',
 			event: 'messageUpdate',
 			category: 'client',

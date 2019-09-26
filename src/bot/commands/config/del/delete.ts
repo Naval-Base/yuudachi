@@ -21,6 +21,7 @@ export default class DeleteConfigCommand extends Command {
 			type: [
 				['config-del-cases', 'cases'],
 				['config-del-guildlog', 'guildlog', 'guild-log', 'log', 'logs'],
+				['config-del-memberlog', 'memberlog', 'member-log', 'member'],
 				['config-del-mod', 'modRole', 'mod', 'mod-role'],
 				['config-del-modlog', 'modLogChannel', 'modlog', 'modchan', 'mod-channel'],
 				['config-del-mute', 'muteRole', 'mute', 'mute-role'],

@@ -1,12 +1,12 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
-import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
-import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { RoleStates } from '../../util/graphQLTypes';
+import { MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
+import { RoleStates } from '../../../util/graphQLTypes';
 
-export default class GuildMemberAddListener extends Listener {
+export default class GuildMemberAddRoleStateListener extends Listener {
 	public constructor() {
-		super('guildMemberAdd', {
+		super('guildMemberAddRoleState', {
 			emitter: 'client',
 			event: 'guildMemberAdd',
 			category: 'client',

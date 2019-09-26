@@ -21,6 +21,7 @@ export default class SetConfigCommand extends Command {
 			type: [
 				['config-set-cases', 'cases'],
 				['config-set-guildlog', 'guildlog', 'guild-log', 'log', 'logs'],
+				['config-set-memberlog', 'memberlog', 'member-log', 'member'],
 				['config-set-mod', 'modRole', 'mod', 'mod-role'],
 				['config-set-modlog', 'modLogChannel', 'modLog', 'modlog', 'modChan', 'modchan', 'mod-channel'],
 				['config-set-mute', 'muteRole', 'mute', 'mute-role'],

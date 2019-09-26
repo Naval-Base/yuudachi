@@ -1,10 +1,10 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { SETTINGS } from '../../util/constants';
+import { SETTINGS } from '../../../util/constants';
 
-export default class MessageDeleteListener extends Listener {
+export default class MessageDeleteGuildLogListener extends Listener {
 	public constructor() {
-		super('messageDelete', {
+		super('messageDeleteGuildLog', {
 			emitter: 'client',
 			event: 'messageDelete',
 			category: 'client',

@@ -1,10 +1,10 @@
 import { Listener, PrefixSupplier } from 'discord-akairo';
 import { Guild, Message, TextChannel, User } from 'discord.js';
-import { ACTIONS, COLORS, SETTINGS } from '../../util/constants';
+import { ACTIONS, COLORS, SETTINGS } from '../../../util/constants';
 
-export default class GuildBanAddListener extends Listener {
+export default class GuildBanAddModerationListener extends Listener {
 	public constructor() {
-		super('guildBanAdd', {
+		super('guildBanAddModeration', {
 			emitter: 'client',
 			event: 'guildBanAdd',
 			category: 'client',

@@ -25,8 +25,11 @@ export enum COLORS {
 	EMBED = 16776960,
 	EMOJI = 16776960,
 	REACTION = 16776960,
-	WARN = 16776960,
 	TAG = 16776960,
+	WARN = 16776960,
+
+	MEMBER_JOIN = 8450847,
+	MEMBER_LEFT = 16745216,
 }
 
 export enum SETTINGS {
@@ -42,6 +45,7 @@ export enum SETTINGS {
 	TOKEN_FILTER = 'TOKEN_FILTER',
 	DEFAULT_DOCS = 'DEFAULT_DOCS',
 	BLACKLIST = 'BLACKLIST',
+	MEMBER_LOG = 'MEMBER_LOG',
 }
 
 export const MESSAGES = {
@@ -125,7 +129,12 @@ export const MESSAGES = {
 
 				GUILD_LOG: {
 					DESCRIPTION: 'Deletes logs on the server.',
-					REPLY: 'successfully deactivated logs!',
+					REPLY: 'deleted guild log channel.',
+				},
+
+				MEMBER_LOG: {
+					DESCRIPTION: 'Deletes member log on the server.',
+					REPLY: 'deleted member log channel.',
 				},
 
 				MOD: {
@@ -214,12 +223,16 @@ export const MESSAGES = {
 				},
 
 				GUILD_LOG: {
-					DESCRIPTION: 'Sets logs on the server.',
+					DESCRIPTION: 'Sets guild log on the server.',
 					PROMPT: {
 						START: (author: User | null) => `${author}, what Webhook should send the messages?`,
 					},
-					REPLY: 'successfully activated logs!',
-					REPLY_DEACTIVATED: 'successfully deactivated logs!',
+					REPLY: 'activated guild logs.',
+				},
+
+				MEMBER_LOG: {
+					DESCRIPTION: 'Sets member log on the server.',
+					REPLY: (channel: string) => `set member log channel to **${channel}**`,
 				},
 
 				MOD: {
