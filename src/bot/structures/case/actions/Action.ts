@@ -1,8 +1,8 @@
 import { PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../../../client/YukikazeClient';
-import { ACTIONS, COLORS, GRAPHQL, PRODUCTION, SETTINGS } from '../../../util/constants';
-import { graphQLClient } from '../../../util/graphQL';
+import { ACTIONS, COLORS, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
 import { Cases } from '../../../util/graphQLTypes';
 
 export interface ActionData {

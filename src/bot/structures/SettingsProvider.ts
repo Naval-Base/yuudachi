@@ -1,7 +1,7 @@
 import { Provider } from 'discord-akairo';
 import { Guild } from 'discord.js';
-import { GRAPHQL, PRODUCTION } from '../util/constants';
-import { graphQLClient } from '../util/graphQL';
+import { PRODUCTION } from '../util/constants';
+import { GRAPHQL, graphQLClient } from '../util/graphQL';
 import { Settings } from '../util/graphQLTypes';
 
 export default class HasuraProvider extends Provider {

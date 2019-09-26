@@ -2,8 +2,8 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
+import Turndown from 'turndown';
 import { MESSAGES } from '../../util/constants';
-const Turndown = require('turndown'); // eslint-disable-line
 
 export default class MDNCommand extends Command {
 	public constructor() {
@@ -41,7 +41,7 @@ export default class MDNCommand extends Command {
 		const turndown = new Turndown();
 		turndown.addRule('hyperlink', {
 			filter: 'a',
-			replacement: (text: string, node: { href: string }) => `[${text}](https://developer.mozilla.org${node.href})`,
+			replacement: (text, node) => `[${text}](https://developer.mozilla.org${(node as HTMLLinkElement).href})`,
 		});
 		const summary = body.Summary.replace(/<code><strong>(.+)<\/strong><\/code>/g, '<strong><code>$1</code></strong>');
 		const embed = new MessageEmbed()

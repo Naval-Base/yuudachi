@@ -1,7 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { ACTIONS, GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
-import { graphQLClient } from '../../util/graphQL';
+import { ACTIONS, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Cases } from '../../util/graphQLTypes';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 

@@ -3,8 +3,8 @@ import { Command } from 'discord-akairo';
 import { GuildEmoji, Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import * as emojis from 'node-emoji';
+import punycode from 'punycode';
 import { MESSAGES } from '../../util/constants';
-const punycode = require('punycode'); // eslint-disable-line
 
 const EMOJI_REGEX = /<(?:a)?:(?:\w{2,32}):(\d{17,19})>?/;
 

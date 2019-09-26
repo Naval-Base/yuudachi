@@ -1,8 +1,8 @@
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { ACTIONS, COLORS, GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
-import { graphQLClient } from '../../../util/graphQL';
+import { ACTIONS, COLORS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
 import { Cases } from '../../../util/graphQLTypes';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 

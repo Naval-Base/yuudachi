@@ -1,7 +1,7 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
-import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
-import { graphQLClient } from '../../util/graphQL';
+import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { RoleStates } from '../../util/graphQLTypes';
 
 export default class GuildMemberAddListener extends Listener {

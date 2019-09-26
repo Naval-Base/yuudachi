@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { GRAPHQL, MESSAGES, SETTINGS } from '../../util/constants';
-import { graphQLClient } from '../../util/graphQL';
+import { MESSAGES, SETTINGS } from '../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags } from '../../util/graphQLTypes';
 
 export default class TagDeleteCommand extends Command {

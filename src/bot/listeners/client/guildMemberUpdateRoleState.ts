@@ -1,7 +1,7 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
-import { GRAPHQL, SETTINGS } from '../../util/constants';
-import { graphQLClient } from '../../util/graphQL';
+import { SETTINGS } from '../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 
 export default class GuildMemberUpdateRoleStateListener extends Listener {
 	public constructor() {

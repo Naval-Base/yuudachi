@@ -1,8 +1,8 @@
 import { oneLine, stripIndents } from 'common-tags';
 import { GuildMember, Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../../client/YukikazeClient';
-import { GRAPHQL, PRODUCTION, SETTINGS } from '../../util/constants';
-import { graphQLClient } from '../../util/graphQL';
+import { PRODUCTION, SETTINGS } from '../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Cases } from '../../util/graphQLTypes';
 
 const ms = require('@naval-base/ms'); // eslint-disable-line

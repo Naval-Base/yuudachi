@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
-import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
-import { graphQLClient } from '../../util/graphQL';
+import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags } from '../../util/graphQLTypes';
 
 export default class TagShowCommand extends Command {

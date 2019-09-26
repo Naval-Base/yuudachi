@@ -1,6 +1,6 @@
 import { TextChannel, User } from 'discord.js';
-import { ACTIONS, GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
-import { graphQLClient } from '../../../util/graphQL';
+import { ACTIONS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
 import { Cases } from '../../../util/graphQLTypes';
 import Action, { ActionData } from './Action';
 

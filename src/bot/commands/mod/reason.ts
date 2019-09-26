@@ -1,7 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { GRAPHQL, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
-import { graphQLClient } from '../../util/graphQL';
+import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Cases } from '../../util/graphQLTypes';
 
 export default class ReasonCommand extends Command {

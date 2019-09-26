@@ -1,6 +1,6 @@
 import YukikazeClient from '../client/YukikazeClient';
-import { GRAPHQL, PRODUCTION, SETTINGS } from '../util/constants';
-import { graphQLClient } from '../util/graphQL';
+import { PRODUCTION, SETTINGS } from '../util/constants';
+import { GRAPHQL, graphQLClient } from '../util/graphQL';
 import { Cases } from '../util/graphQLTypes';
 import { EVENTS, TOPICS } from '../util/logger';
 

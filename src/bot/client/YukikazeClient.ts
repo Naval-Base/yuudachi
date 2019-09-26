@@ -11,8 +11,8 @@ import CaseHandler from '../structures/case/CaseHandler';
 import MuteScheduler from '../structures/MuteScheduler';
 import Queue from '../structures/Queue';
 import HasuraProvider from '../structures/SettingsProvider';
-import { GRAPHQL, MESSAGES, PRODUCTION, PROMETHEUS } from '../util/constants';
-import { graphQLClient } from '../util/graphQL';
+import { MESSAGES, PRODUCTION, PROMETHEUS } from '../util/constants';
+import { GRAPHQL, graphQLClient } from '../util/graphQL';
 import { Tags } from '../util/graphQLTypes';
 import { EVENTS, logger, TOPICS } from '../util/logger';
 
