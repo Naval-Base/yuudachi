@@ -21,13 +21,21 @@ export default class CheckConfigCommand extends Command {
 		const modlog = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
 		const guildlog = this.client.settings.get(message.guild!, SETTINGS.GUILD_LOG);
 		const memberlog = this.client.settings.get(message.guild!, SETTINGS.MEMBER_LOG, { ID: '', MENTION: false });
+		let guildlogChannel;
+		if (guildlog) {
+			guildlogChannel = (await message.guild!.fetchWebhooks()).get(guildlog)!.channelID;
+		}
 
 		return message.util!.send(
 			new MessageEmbed()
 				.addField('❯ Moderation', mod ? '`✅`' : '`❌`')
 				.addField('❯ Mute Role', mute ? `${message.guild!.roles.get(mute)} \`✅\`` : '`❌`', true)
 				.addField('❯ Mod Log', modlog ? `${message.guild!.channels.get(modlog)} \`✅\`` : '`❌`', true)
-				.addField('❯ Guild Log', guildlog ? `${message.guild!.channels.get(guildlog)} \`✅\`` : '`❌`', true)
+				.addField(
+					'❯ Guild Log',
+					guildlogChannel ? `${message.guild!.channels.get(guildlogChannel)} \`✅\`` : '`❌`',
+					true,
+				)
 				.addField(
 					'❯ Member Log',
 					memberlog.ID
