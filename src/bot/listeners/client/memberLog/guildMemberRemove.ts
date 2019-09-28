@@ -20,10 +20,6 @@ export default class GuildMemberRemoveMemberLogListener extends Listener {
 				.setFooter('User left')
 				.setTimestamp(new Date());
 
-			if (memberlog.MENTION) {
-				embed.setDescription(member.user.tag);
-			}
-
 			return (this.client.channels.get(memberlog.ID) as TextChannel).send(embed);
 		}
 	}
