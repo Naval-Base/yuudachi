@@ -23,7 +23,7 @@ export default class CheckConfigCommand extends Command {
 		const memberlog = this.client.settings.get(message.guild!, SETTINGS.MEMBER_LOG, { ID: '', MENTION: false });
 		let guildlogChannel;
 		if (guildlog) {
-			guildlogChannel = (await message.guild!.fetchWebhooks()).get(guildlog)!.channelID;
+			guildlogChannel = this.client.webhooks.get(guildlog)!.channelID;
 		}
 
 		return message.util!.send(
