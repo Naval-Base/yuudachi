@@ -16,7 +16,7 @@ export default class ToggleModerationCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const moderation = this.client.settings.get(message.guild!, SETTINGS.MODERATION, undefined);
+		const moderation = this.client.settings.get(message.guild!, SETTINGS.MODERATION);
 		if (moderation) {
 			this.client.settings.set(message.guild!, SETTINGS.MODERATION, false);
 			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.MOD.REPLY_DEACTIVATED);

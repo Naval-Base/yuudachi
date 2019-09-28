@@ -19,6 +19,7 @@ export default class ConfigCommand extends Command {
 	public *args() {
 		const method = yield {
 			type: [
+				['config-check', 'check'],
 				['config-set', 'set'],
 				['config-delete', 'delete', 'del', 'remove', 'rm'],
 				['config-clear', 'clear'],

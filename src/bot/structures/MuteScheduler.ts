@@ -57,7 +57,7 @@ export default class MuteScheduler {
 			event: EVENTS.MUTE,
 		});
 		const guild = this.client.guilds.get(mute.guild);
-		const muteRole = this.client.settings.get<string>(guild!, SETTINGS.MUTE_ROLE, undefined);
+		const muteRole = this.client.settings.get(guild!, SETTINGS.MUTE_ROLE)!;
 		let member;
 		try {
 			member = await guild!.members.fetch(mute.target_id);

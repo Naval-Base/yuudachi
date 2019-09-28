@@ -46,14 +46,15 @@ export default class DurationCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_ROLE, undefined);
+		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
+		if (!staffRole) return 'No mod role';
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
 	public async exec(message: Message, { caseNum, duration }: { caseNum: number | string; duration: number }) {
-		const totalCases = this.client.settings.get<number>(message.guild!, SETTINGS.CASES, 0);
+		const totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE_NUMBER);
 		const { data } = await graphQLClient.query({
@@ -75,7 +76,7 @@ export default class DurationCommand extends Command {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.WRONG_MOD);
 		}
 
-		const modLogChannel = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_LOG, undefined);
+		const modLogChannel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
 			let caseEmbed;
 			if (dbCase.message)

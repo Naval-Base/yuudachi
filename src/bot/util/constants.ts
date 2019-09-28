@@ -33,6 +33,7 @@ export enum COLORS {
 }
 
 export enum SETTINGS {
+	PREFIX = 'PREFIX',
 	CASES = 'CASES',
 	MODERATION = 'MODERATION',
 	MOD_ROLE = 'MOD_ROLE',
@@ -46,6 +47,31 @@ export enum SETTINGS {
 	DEFAULT_DOCS = 'DEFAULT_DOCS',
 	BLACKLIST = 'BLACKLIST',
 	MEMBER_LOG = 'MEMBER_LOG',
+}
+
+export interface Settings {
+	PREFIX: string;
+	CASES: number;
+	MODERATION: boolean;
+	MOD_ROLE: string;
+	MOD_LOG: string;
+	MUTE_ROLE: string;
+	GITHUB_REPO: string;
+	RESTRICT_ROLES: {
+		EMBED: string;
+		EMOJI: string;
+		REACTION: string;
+		TAG: string;
+	};
+	GUILD_LOG: string;
+	ROLE_STATE: boolean;
+	TOKEN_FILTER: boolean;
+	DEFAULT_DOCS: string;
+	BLACKLIST: string[];
+	MEMBER_LOG: {
+		ID: string;
+		MENTION: boolean;
+	};
 }
 
 export const MESSAGES = {
@@ -113,6 +139,10 @@ export const MESSAGES = {
 				When you beg me so much I just can't not help you~
 				Check \`${prefix}help config\` for more information.
 			`,
+
+			CHECK: {
+				DESCRIPTION: 'Checks the guild config.',
+			},
 
 			CLEAR: {
 				DESCRIPTION: 'Clears the guild config.',

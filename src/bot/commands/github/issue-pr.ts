@@ -36,7 +36,7 @@ export default class GitHubPROrIssueCommand extends Command {
 		let owner;
 		let repo;
 		if ((args.match && args.match[1] === 'g') || !args.match) {
-			const repository = this.client.settings.get<string>(message.guild!, SETTINGS.GITHUB_REPO, undefined);
+			const repository = this.client.settings.get(message.guild!, SETTINGS.GITHUB_REPO);
 			if (!repository) return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_REPO);
 			owner = repository.split('/')[0];
 			repo = repository.split('/')[1];

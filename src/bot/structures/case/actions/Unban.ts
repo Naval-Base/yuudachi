@@ -24,7 +24,7 @@ export default class UnbanAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof GuildMember) return;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
 
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.UNBAN.PRE_REPLY(this.member.tag));
 

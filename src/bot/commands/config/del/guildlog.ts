@@ -16,7 +16,7 @@ export default class DeleteConfigGuildLogCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const guildLogs = this.client.settings.get<string>(message.guild!, SETTINGS.GUILD_LOG, undefined);
+		const guildLogs = this.client.settings.get(message.guild!, SETTINGS.GUILD_LOG);
 		if (guildLogs) {
 			this.client.settings.delete(message.guild!, SETTINGS.GUILD_LOG);
 			this.client.webhooks.delete(guildLogs);

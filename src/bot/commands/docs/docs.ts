@@ -60,16 +60,16 @@ export default class DocsCommand extends Command {
 
 	public async exec(message: Message, { defaultDocs, force, includePrivate, query }: DocsCommandArguments) {
 		if (defaultDocs) {
-			const staffRole = message.member!.roles.has(
-				this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE, undefined),
-			);
+			const staff = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
+			if (!staff) return;
+			const staffRole = message.member!.roles.has(staff);
 			if (!staffRole) return message.util!.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.FAILURE);
 			this.client.settings.set(message.guild!, SETTINGS.DEFAULT_DOCS, defaultDocs);
 			return message.util!.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.SUCCESS(defaultDocs));
 		}
 
 		const q = query.split(' ');
-		const docs = this.client.settings.get<string>(message.guild!, SETTINGS.DEFAULT_DOCS, 'stable');
+		const docs = this.client.settings.get(message.guild!, SETTINGS.DEFAULT_DOCS, 'stable');
 		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : docs;
 		if (source === '11.5-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;

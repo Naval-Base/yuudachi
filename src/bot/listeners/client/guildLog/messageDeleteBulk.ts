@@ -15,7 +15,7 @@ export default class MessageDeleteBulkGuildLogListener extends Listener {
 
 	public async exec(messages: Collection<string, Message>) {
 		if (messages.first()!.author!.bot) return;
-		const guildLogs = this.client.settings.get<string>(messages.first()!.guild!, SETTINGS.GUILD_LOG, undefined);
+		const guildLogs = this.client.settings.get(messages.first()!.guild!, SETTINGS.GUILD_LOG);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;

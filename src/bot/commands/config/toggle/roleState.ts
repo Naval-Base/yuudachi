@@ -17,7 +17,7 @@ export default class ToggleRoleStateCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const roleState = this.client.settings.get(message.guild!, SETTINGS.ROLE_STATE, undefined);
+		const roleState = this.client.settings.get(message.guild!, SETTINGS.ROLE_STATE);
 		if (roleState) {
 			this.client.settings.set(message.guild!, SETTINGS.ROLE_STATE, false);
 			await graphQLClient.mutate({

@@ -12,15 +12,18 @@ export default class GuildMemberAddMemberLogListener extends Listener {
 	}
 
 	public async exec(member: GuildMember) {
-		const memberLog = this.client.settings.get<string>(member.guild, SETTINGS.MEMBER_LOG, undefined);
-		if (memberLog) {
+		const memberlog = this.client.settings.get(member.guild, SETTINGS.MEMBER_LOG);
+		if (memberlog) {
 			const embed = new MessageEmbed()
 				.setColor(COLORS.MEMBER_JOIN)
 				.setAuthor(`${member.user.tag} (${member.id})`, member.user.displayAvatarURL())
 				.setFooter('User joined')
 				.setTimestamp(new Date());
 
-			return (this.client.channels.get(memberLog) as TextChannel).send(embed);
+			if (memberlog.MENTION) {
+				embed.setDescription(member.user.tag);
+			}
+			return (this.client.channels.get(memberlog.ID) as TextChannel).send(embed);
 		}
 	}
 }

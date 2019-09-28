@@ -16,7 +16,7 @@ export default class ToggletokenFilteringCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const tokenFiltering = this.client.settings.get(message.guild!, SETTINGS.TOKEN_FILTER, undefined);
+		const tokenFiltering = this.client.settings.get(message.guild!, SETTINGS.TOKEN_FILTER);
 		if (tokenFiltering) {
 			this.client.settings.set(message.guild!, SETTINGS.TOKEN_FILTER, false);
 			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.REPLY_DEACTIVATED);

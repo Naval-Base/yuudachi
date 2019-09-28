@@ -20,7 +20,7 @@ export default class ReadyListener extends Listener {
 		this.client.promServer.listen(5500);
 		this.client.logger.info('Metrics listening on 5500', { topic: TOPICS.METRICS, event: EVENTS.READY });
 		for (const guild of this.client.guilds.values()) {
-			const logs = this.client.settings.get<string>(guild, SETTINGS.GUILD_LOG, undefined);
+			const logs = this.client.settings.get(guild, SETTINGS.GUILD_LOG);
 			if (!logs) continue;
 			const webhook = (await guild.fetchWebhooks()).get(logs);
 			if (!webhook) continue;

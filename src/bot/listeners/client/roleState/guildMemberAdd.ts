@@ -14,7 +14,7 @@ export default class GuildMemberAddRoleStateListener extends Listener {
 	}
 
 	public async exec(member: GuildMember) {
-		const roleState = this.client.settings.get<boolean>(member.guild, SETTINGS.ROLE_STATE, undefined);
+		const roleState = this.client.settings.get(member.guild, SETTINGS.ROLE_STATE);
 		if (roleState) {
 			const { data } = await graphQLClient.query({
 				query: GRAPHQL.QUERY.ROLE_STATES,

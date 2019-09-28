@@ -54,14 +54,15 @@ export default class CaseDeleteCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_ROLE, undefined);
+		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
+		if (!staffRole) return 'No mod role';
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
 	public async exec(message: Message, { caseNum, removeRole }: { caseNum: number | string; removeRole: boolean }) {
-		let totalCases = this.client.settings.get<number>(message.guild!, 'caseTotal', 0);
+		let totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.NO_CASE_NUMBER);
 		const { data } = await graphQLClient.query({
@@ -121,7 +122,7 @@ export default class CaseDeleteCommand extends Command {
 			return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.CANCEL);
 		}
 
-		totalCases = this.client.settings.get<number>(message.guild!, SETTINGS.CASES, 0) - 1;
+		totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0) - 1;
 		this.client.settings.set(message.guild!, SETTINGS.CASES, totalCases);
 
 		await this.client.caseHandler.delete(message, caseToFind, removeRole);

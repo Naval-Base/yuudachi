@@ -29,11 +29,7 @@ export default class TagShowCommand extends Command {
 
 	public async exec(message: Message, { name }: { name: string }) {
 		if (!name) return;
-		const restrictedRoles = this.client.settings.get<{ TAG: string }>(
-			message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
+		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (restrictedRoles) {
 			if (message.member!.roles.has(restrictedRoles.TAG)) return;
 		}

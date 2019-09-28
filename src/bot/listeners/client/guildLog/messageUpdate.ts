@@ -16,7 +16,7 @@ export default class MessageUpdateGuildLogListener extends Listener {
 		if (oldMessage.author!.bot || newMessage.author!.bot) return;
 		if (!newMessage.guild) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
-		const guildLogs = this.client.settings.get<string>(newMessage.guild, SETTINGS.GUILD_LOG, undefined);
+		const guildLogs = this.client.settings.get(newMessage.guild, SETTINGS.GUILD_LOG);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;

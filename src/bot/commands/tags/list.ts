@@ -26,11 +26,7 @@ export default class TagListCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ TAG: string }>(
-			message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
+		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';

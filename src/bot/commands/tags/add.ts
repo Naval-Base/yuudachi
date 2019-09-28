@@ -43,11 +43,7 @@ export default class TagAddCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ TAG: string }>(
-			message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
+		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
@@ -61,7 +57,7 @@ export default class TagAddCommand extends Command {
 		if (content && content.length >= 1950) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
-		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE, undefined));
+		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
 		await graphQLClient.mutate({
 			mutation: GRAPHQL.MUTATION.INSERT_TAG,
 			variables: {

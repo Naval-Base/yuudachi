@@ -19,7 +19,8 @@ export default class CasesCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_ROLE, undefined);
+		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
+		if (!staffRole) return 'No mod role';
 		const hasStaffRole = message.member!.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;

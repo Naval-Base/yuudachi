@@ -13,7 +13,7 @@ export default class ModerationInhibitor extends Inhibitor {
 		if (message.util!.parsed! && message.util!.parsed!.command && message.util!.parsed!.command.categoryID !== 'mod') {
 			return false;
 		}
-		if (!this.client.settings.get<boolean>(message.guild!, SETTINGS.MODERATION, undefined)) {
+		if (!this.client.settings.get(message.guild!, SETTINGS.MODERATION)) {
 			return true;
 		}
 		return false;

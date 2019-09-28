@@ -1,8 +1,8 @@
 import { Provider } from 'discord-akairo';
 import { Guild } from 'discord.js';
-import { PRODUCTION } from '../util/constants';
+import { PRODUCTION, Settings } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Settings } from '../util/graphQLTypes';
+import { Settings as GraphQLSettings } from '../util/graphQLTypes';
 
 export default class HasuraProvider extends Provider {
 	public ['constructor']: typeof HasuraProvider;
@@ -12,7 +12,7 @@ export default class HasuraProvider extends Provider {
 			query: GRAPHQL.QUERY.SETTINGS,
 		});
 
-		let settings: Settings[];
+		let settings: GraphQLSettings[];
 		if (PRODUCTION) settings = data.settings;
 		else settings = data.staging_settings;
 		for (const setting of settings) {
@@ -20,14 +20,18 @@ export default class HasuraProvider extends Provider {
 		}
 	}
 
-	public get<T>(guild: string | Guild, key: string, defaultValue: any): T {
+	public get<K extends keyof Settings, T = undefined>(
+		guild: string | Guild,
+		key: K,
+		defaultValue?: T,
+	): Settings[K] | T {
 		const id = this.constructor.getGuildId(guild);
 		if (this.items.has(id)) {
 			const value = this.items.get(id)[key];
 			return value == null ? defaultValue : value;
 		}
 
-		return defaultValue;
+		return defaultValue as T;
 	}
 
 	public async set(guild: string | Guild, key: string, value: any) {
@@ -44,7 +48,7 @@ export default class HasuraProvider extends Provider {
 			},
 		});
 
-		let settings: Settings;
+		let settings: GraphQLSettings;
 		if (PRODUCTION) settings = res.insert_settings.returning[0];
 		else settings = res.insert_staging_settings.returning[0];
 		return settings;
@@ -63,7 +67,7 @@ export default class HasuraProvider extends Provider {
 			},
 		});
 
-		let settings: Settings;
+		let settings: GraphQLSettings;
 		if (PRODUCTION) settings = res.insert_settings.returning[0];
 		else settings = res.insert_staging_settings.returning[0];
 		return settings;
@@ -80,7 +84,7 @@ export default class HasuraProvider extends Provider {
 			},
 		});
 
-		let settings: Settings;
+		let settings: GraphQLSettings;
 		if (PRODUCTION) settings = res.insert_settings.returning[0];
 		else settings = res.insert_staging_settings.returning[0];
 		return settings;

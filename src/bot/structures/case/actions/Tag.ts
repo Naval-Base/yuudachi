@@ -13,16 +13,12 @@ export default class TagAction extends Action {
 		if (this.member instanceof User) {
 			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
-		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
+		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE)!;
 		if (this.member.roles && this.member.roles.has(staff)) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
-		const restrictRoles = this.client.settings.get<{ TAG: string }>(
-			this.message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
+		const restrictRoles = this.client.settings.get(this.message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictRoles) throw new Error(MESSAGES.ACTIONS.NO_RESTRICT);
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
@@ -35,12 +31,8 @@ export default class TagAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
-		const restrictRoles = this.client.settings.get<{ TAG: string }>(
-			this.message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
+		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const restrictRoles = this.client.settings.get(this.message.guild!, SETTINGS.RESTRICT_ROLES)!;
 
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.TAG.PRE_REPLY(this.member.user.tag));
 

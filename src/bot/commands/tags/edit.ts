@@ -21,11 +21,7 @@ export default class TagEditCommand extends Command {
 
 	// @ts-ignore
 	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get<{ TAG: string }>(
-			message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
+		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
 		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
@@ -72,7 +68,7 @@ export default class TagEditCommand extends Command {
 		message: Message,
 		{ tag, hoist, unhoist, content }: { tag: Tags; hoist: boolean; unhoist: boolean; content: string },
 	) {
-		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE, undefined));
+		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
 		if (tag.user !== message.author!.id && !staffRole) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.OWN_TAG);
 		}

@@ -94,13 +94,9 @@ export default class CaseHandler {
 		let cs: Cases;
 		if (PRODUCTION) cs = data.cases[0];
 		else cs = data.staging_cases[0];
-		const channel = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_LOG, undefined);
-		const restrictRoles = this.client.settings.get<{ EMBED: string; EMOJI: string; REACTION: string }>(
-			message.guild!,
-			SETTINGS.RESTRICT_ROLES,
-			undefined,
-		);
-		const muteRole = this.client.settings.get<string>(message.guild!, SETTINGS.MUTE_ROLE, undefined);
+		const channel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
+		const restrictRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES)!;
+		const muteRole = this.client.settings.get(message.guild!, SETTINGS.MUTE_ROLE)!;
 
 		if (channel) {
 			const chan = this.client.channels.get(channel) as TextChannel;
@@ -141,7 +137,7 @@ export default class CaseHandler {
 				});
 				if (PRODUCTION) reference = data.cases[0];
 				else reference = data.staging_cases[0];
-				channel = this.client.settings.get<string>(message.guild!, SETTINGS.MOD_LOG, undefined);
+				channel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
 			} catch {}
 		}
 

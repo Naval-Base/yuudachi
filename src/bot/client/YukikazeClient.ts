@@ -12,7 +12,7 @@ import LockdownScheduler from '../structures/LockdownScheduler';
 import MuteScheduler from '../structures/MuteScheduler';
 import Queue from '../structures/Queue';
 import HasuraProvider from '../structures/SettingsProvider';
-import { MESSAGES, PRODUCTION, PROMETHEUS } from '../util/constants';
+import { MESSAGES, PRODUCTION, PROMETHEUS, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
 import { Tags } from '../util/graphQLTypes';
 import { EVENTS, logger, TOPICS } from '../util/logger';
@@ -59,7 +59,8 @@ export default class YukikazeClient extends AkairoClient {
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		directory: join(__dirname, '..', 'commands'),
-		prefix: (message: Message): string => this.settings.get(message.guild!, 'prefix', process.env.COMMAND_PREFIX!),
+		prefix: (message: Message): string =>
+			this.settings.get(message.guild!, SETTINGS.PREFIX, process.env.COMMAND_PREFIX),
 		aliasReplacement: /-/g,
 		allowMention: true,
 		handleEdits: true,

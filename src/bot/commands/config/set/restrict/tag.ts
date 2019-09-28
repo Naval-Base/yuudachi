@@ -27,7 +27,7 @@ export default class SetConfigRestrictRolesTagCommand extends Command {
 	}
 
 	public async exec(message: Message, { tag }: { tag: Role }) {
-		const roles = this.client.settings.get<{ TAG: string }>(message.guild!, SETTINGS.RESTRICT_ROLES, {});
+		const roles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES, { TAG: '' });
 		roles.TAG = tag.id;
 		this.client.settings.set(message.guild!, SETTINGS.RESTRICT_ROLES, roles);
 		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.TAG.REPLY(tag.name));

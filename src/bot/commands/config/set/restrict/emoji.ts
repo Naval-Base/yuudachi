@@ -27,7 +27,7 @@ export default class SetConfigRestrictRolesEmojiCommand extends Command {
 	}
 
 	public async exec(message: Message, { emoji }: { emoji: Role }) {
-		const roles = this.client.settings.get<{ EMOJI: string }>(message.guild!, SETTINGS.RESTRICT_ROLES, {});
+		const roles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES, { EMOJI: '' });
 		roles.EMOJI = emoji.id;
 		this.client.settings.set(message.guild!, SETTINGS.RESTRICT_ROLES, roles);
 		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMOJI.REPLY(emoji.name));

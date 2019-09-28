@@ -15,12 +15,12 @@ export default class MuteAction extends Action {
 		if (this.member instanceof User) {
 			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
-		const staff = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_ROLE, undefined);
+		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE)!;
 		if (this.member.roles && this.member.roles.has(staff)) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
-		const muteRole = this.client.settings.get<string>(this.message.guild!, SETTINGS.MUTE_ROLE, undefined);
+		const muteRole = this.client.settings.get(this.message.guild!, SETTINGS.MUTE_ROLE);
 		if (!muteRole) throw new Error(MESSAGES.ACTIONS.NO_MUTE);
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
@@ -33,8 +33,8 @@ export default class MuteAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0) + 1;
-		const muteRole = this.client.settings.get<string>(this.message.guild!, SETTINGS.MUTE_ROLE, undefined);
+		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const muteRole = this.client.settings.get(this.message.guild!, SETTINGS.MUTE_ROLE)!;
 
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.MUTE.PRE_REPLY(this.member.user.tag));
 
@@ -51,7 +51,7 @@ export default class MuteAction extends Action {
 	}
 
 	public async after() {
-		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0);
+		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0);
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.muteScheduler.add({
 			guild: this.message.guild!.id,
@@ -66,7 +66,7 @@ export default class MuteAction extends Action {
 			action_processed: false,
 		});
 
-		const modLogChannel = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_LOG, undefined);
+		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
 			const { data } = await graphQLClient.query({
 				query: GRAPHQL.QUERY.LOG_CASE,

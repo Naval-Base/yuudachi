@@ -45,7 +45,7 @@ export default abstract class Action {
 
 	protected get reason() {
 		if (this._reason) return this._reason;
-		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0);
+		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0);
 		const prefix = (this.client.commandHandler.prefix as PrefixSupplier)(this.message);
 		return `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
 	}
@@ -111,7 +111,7 @@ export default abstract class Action {
 	public abstract async exec(): Promise<void>;
 
 	public async after() {
-		const totalCases = this.client.settings.get<number>(this.message.guild!, SETTINGS.CASES, 0);
+		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0);
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.caseHandler.create({
 			guild: this.message.guild!.id,
@@ -124,7 +124,7 @@ export default abstract class Action {
 			reason: this.reason,
 		});
 
-		const modLogChannel = this.client.settings.get<string>(this.message.guild!, SETTINGS.MOD_LOG, undefined);
+		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
 			const { data } = await graphQLClient.query({
 				query: GRAPHQL.QUERY.LOG_CASE,

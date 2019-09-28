@@ -34,7 +34,7 @@ export default class GitHubCommitCommand extends Command {
 		if (!GITHUB_API_KEY) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_API_KEY);
 		}
-		const repository = this.client.settings.get<string>(message.guild!, SETTINGS.GITHUB_REPO, undefined);
+		const repository = this.client.settings.get(message.guild!, SETTINGS.GITHUB_REPO);
 		if (!repository) return message.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_REPO);
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];

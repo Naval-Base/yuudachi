@@ -17,10 +17,10 @@ const HUMAN_LEVELS: HumanLevels = {
 	4: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻',
 };
 
-export default class ServerInfoCommand extends Command {
+export default class GuildInfoCommand extends Command {
 	public constructor() {
-		super('server', {
-			aliases: ['server', 'server-info'],
+		super('guild', {
+			aliases: ['guild', 'server', 'server-info'],
 			description: {
 				content: MESSAGES.COMMANDS.INFO.SERVER.DESCRIPTION,
 			},
