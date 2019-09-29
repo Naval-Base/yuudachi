@@ -3723,10 +3723,10 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
-winston-daily-rotate-file@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-4.2.0.tgz#c71d82187ecee141555d8fea80013b721e375493"
-  integrity sha512-V+RiWHKXk8itVhJxIZJd3n7Q5juWMEm99fgaAMyb0qD+b0QPop3BQYudgZL+RCCJtcAEXgjvHgfShat4gpEviQ==
+winston-daily-rotate-file@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-4.1.0.tgz#bddd2e932d60cde96a4a3c437fa39acdc909b475"
+  integrity sha512-Y3wcdrgNwC75Lc2BiFDZUyfxNjyhqVzEou8uOyZMUkDJ23/UN+rq8arpJDaXwX512GIM7g6NpTDPac29fsCvcQ==
   dependencies:
     file-stream-rotator "^0.5.5"
     object-hash "^1.3.0"
