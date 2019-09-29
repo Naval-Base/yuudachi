@@ -21,7 +21,7 @@ export default class GuildMemberAddMemberLogListener extends Listener {
 				.setTimestamp(new Date());
 
 			if (memberlog.MENTION) {
-				embed.setDescription(member.user.tag);
+				embed.setDescription(member);
 			}
 			return (this.client.channels.get(memberlog.ID) as TextChannel).send(embed);
 		}
