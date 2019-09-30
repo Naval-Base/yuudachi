@@ -20,7 +20,7 @@ export default class EvalCommand extends Command {
 			description: {
 				content: MESSAGES.COMMANDS.UTIL.EVAL.DESCRIPTION,
 				usage: '<code>',
-				ownerOnly: true
+				ownerOnly: true,
 			},
 			category: 'util',
 			ownerOnly: true,
