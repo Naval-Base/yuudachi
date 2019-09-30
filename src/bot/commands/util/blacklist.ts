@@ -10,6 +10,7 @@ export default class BlacklistCommand extends Command {
 				content: MESSAGES.COMMANDS.UTIL.BLACKLIST.DESCRIPTION,
 				usage: '<user>',
 				examples: ['Crawl', '@Crawl', '81440962496172032'],
+				ownerOnly: true
 			},
 			category: 'util',
 			ownerOnly: true,
