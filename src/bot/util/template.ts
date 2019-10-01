@@ -37,7 +37,7 @@ export class ParseError extends Error {
 		return i === -1 ? 0 : i;
 	}
 
-	private lineAfter() {
+	private lineAfter(): number {
 		const i = this.input.indexOf('\n', this.position);
 		return i === -1 ? this.input.length : i + this.position;
 	}
