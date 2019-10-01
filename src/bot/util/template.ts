@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-use-before-define: 0 */
+
 export interface Raw {
 	t: 'raw';
 	value: string;
@@ -206,7 +208,7 @@ function pString(s: State, x: string): void {
 		throw new ParseError(
 			`Expected token ${x} but got ${s.input[s.position] || 'unexpected end of input'}`,
 			s.input,
-			s.position
+			s.position,
 		);
 	}
 }
