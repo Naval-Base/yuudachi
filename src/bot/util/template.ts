@@ -47,7 +47,7 @@ export function parse(input: string): Template {
 
 /**
  * EBNF:
- * 
+ *
  * Template    = { Segment }
  * Segment     = Interpolate | Raw
  * Interpolate = "${" _ Alts [ Def ] "}"
@@ -60,10 +60,10 @@ export function parse(input: string): Template {
  * _           = any amount of whitespace
  */
 
-type State = {
+interface State {
 	input: string;
 	position: number;
-};
+}
 
 function pTemplate(s: State, q: boolean): Template {
 	const segments: (string | Raw | Interpolate)[] = [];
@@ -90,13 +90,11 @@ function pTemplate(s: State, q: boolean): Template {
 				} else {
 					segments.push(seg);
 				}
+			} else if (typeof prev === 'string') {
+				segments[segments.length - 1] = { t: 'raw', value: prev };
+				segments.push(seg);
 			} else {
-				if (typeof prev === 'string') {
-					segments[segments.length - 1] = { t: 'raw', value: prev };
-					segments.push(seg);
-				} else {
-					segments.push(seg);
-				}
+				segments.push(seg);
 			}
 		} else {
 			segments.push(seg);
@@ -110,7 +108,7 @@ function pTemplate(s: State, q: boolean): Template {
 		}
 	}
 
-	if (s.position != s.input.length) {
+	if (s.position !== s.input.length) {
 		throw new ParseError('Not enough input', s.input, s.position);
 	}
 
@@ -205,7 +203,11 @@ function pString(s: State, x: string): void {
 	if (testString(s, x)) {
 		s.position += x.length;
 	} else {
-		throw new ParseError(`Expected token ${x} but got ${s.input[s.position] || 'unexpected end of input'}`, s.input, s.position);
+		throw new ParseError(
+			`Expected token ${x} but got ${s.input[s.position] || 'unexpected end of input'}`,
+			s.input,
+			s.position
+		);
 	}
 }
 
@@ -214,5 +216,5 @@ function testString(s: State, x: string): boolean {
 }
 
 function matchRegex(s: State, r: RegExp): RegExpMatchArray | null {
-	return s.input.slice(s.position).match(r);
+	return r.exec(s.input.slice(s.position));
 }
