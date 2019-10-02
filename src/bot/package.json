@@ -45,7 +45,7 @@
 	},
 	"devDependencies": {
 		"@graphql-codegen/add": "^1.8.0",
-		"@graphql-codegen/cli": "^1.7.0",
+		"@graphql-codegen/cli": "^1.8.0",
 		"@graphql-codegen/typescript": "^1.8.0",
 		"@sentry/cli": "^1.47.2",
 		"@types/common-tags": "^1.8.0",
