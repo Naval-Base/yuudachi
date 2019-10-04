@@ -160,7 +160,7 @@ export default class YukikazeClient extends AkairoClient {
 			return tag ? Flag.fail(phrase) : phrase;
 		});
 		this.commandHandler.resolver.addType('tagContent', async (message, phrase) => {
-			if (!phrase) phrase = '';
+			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase, message);
 			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
 

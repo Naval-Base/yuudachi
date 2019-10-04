@@ -1,4 +1,4 @@
-import { Command } from 'discord-akairo';
+import { Command, Flag } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
@@ -77,7 +77,7 @@ export default class TagEditCommand extends Command {
 		}
 		if (hoist) hoist = true;
 		else if (unhoist) hoist = false;
-		const vars = content
+		const vars = Flag.is(content, 'fail')
 			? {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
