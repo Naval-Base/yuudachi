@@ -92,7 +92,7 @@ export default class TagEditCommand extends Command {
 		if (content && content.length >= 1950) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.TOO_LONG);
 		}
-		if (content && (!template || untemplate)) {
+		if (content && (!staffRole || !template || untemplate)) {
 			content = Util.cleanContent(content, message);
 			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
 		}
