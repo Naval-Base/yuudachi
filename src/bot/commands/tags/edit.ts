@@ -82,7 +82,7 @@ export default class TagEditCommand extends Command {
 			unhoist,
 			templated,
 			untemplated,
-			content
+			content,
 		}: { tag: Tags; hoist: boolean; unhoist: boolean; templated: boolean; untemplated: boolean; content: string },
 	) {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
