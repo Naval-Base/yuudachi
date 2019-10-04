@@ -27,7 +27,7 @@ function interpolateTemplate(template: Template, data: InterpolateData) {
 function interpolate(int: Interpolate, data: InterpolateData) {
 	for (const alt of int.alts) {
 		if (Object.prototype.hasOwnProperty.call(data, alt) && data[alt] !== null && data[alt] !== undefined) {
-			return alt;
+			return data[alt];
 		}
 	}
 
