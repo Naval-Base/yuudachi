@@ -3,6 +3,7 @@ import { Message, Util } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags } from '../../util/graphQLTypes';
+import { interpolateString } from '../../util/template';
 
 export default class TagShowCommand extends Command {
 	public constructor() {
@@ -52,6 +53,16 @@ export default class TagShowCommand extends Command {
 				uses: tag.uses + 1,
 			},
 		});
+
+		if (tag.templated) {
+			const output = interpolateString(tag.content, {
+				author: message.author.toString(),
+				channel: message.channel.toString(),
+				guild: message.guild ? message.guild.toString() : null,
+			});
+
+			return message.util!.send(output || 'The output was empty.');
+		}
 
 		return message.util!.send(tag.content);
 	}
