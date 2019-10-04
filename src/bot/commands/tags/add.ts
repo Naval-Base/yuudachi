@@ -37,6 +37,11 @@ export default class TagAddCommand extends Command {
 					match: 'flag',
 					flag: ['--hoist', '--pin'],
 				},
+				{
+					id: 'template',
+					match: 'flag',
+					flag: ['--template'],
+				},
 			],
 		});
 	}
@@ -50,7 +55,10 @@ export default class TagAddCommand extends Command {
 		return null;
 	}
 
-	public async exec(message: Message, { name, content, hoist }: { name: string; content: string; hoist: boolean }) {
+	public async exec(
+		message: Message,
+		{ name, content, hoist, templated }: { name: string; content: string; hoist: boolean, templated: boolean }
+	) {
 		if (name && name.length >= 1900) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
@@ -65,6 +73,7 @@ export default class TagAddCommand extends Command {
 				user: message.author!.id,
 				name,
 				hoisted: hoist && staffRole,
+				templated: templated && staffRole,
 				content,
 			},
 		});
