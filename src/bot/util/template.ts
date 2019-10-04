@@ -2,32 +2,34 @@
 
 import { parse, Interpolate, Template } from './templateParser';
 
-type InterpolateData = { [k: string]: string };
+interface InterpolateData {
+	[k: string]: string;
+}
 
 export function interpolateString(input: string, data: InterpolateData) {
-    const template = parse(input);
-    return interpolateTemplate(template, data);
+	const template = parse(input);
+	return interpolateTemplate(template, data);
 }
 
 function interpolateTemplate(template: Template, data: InterpolateData) {
-    let output = '';
-    for (const segment of template) {
-        if (segment.t === 'raw') {
-            output += segment.value;
-        } else {
-            output += interpolate(segment, data);
-        }
-    }
+	let output = '';
+	for (const segment of template) {
+		if (segment.t === 'raw') {
+			output += segment.value;
+		} else {
+			output += interpolate(segment, data);
+		}
+	}
 
-    return output;
+	return output;
 }
 
 function interpolate(int: Interpolate, data: InterpolateData) {
-    for (const alt of int.alts) {
-        if (Object.prototype.hasOwnProperty.call(data, alt) && data[alt] !== null && data[alt] !== undefined) {
-            return alt;
-        }
-    }
+	for (const alt of int.alts) {
+		if (Object.prototype.hasOwnProperty.call(data, alt) && data[alt] !== null && data[alt] !== undefined) {
+			return alt;
+		}
+	}
 
-    return int.def ? interpolateTemplate(int.def, data) : '';
+	return int.def ? interpolateTemplate(int.def, data) : '';
 }
