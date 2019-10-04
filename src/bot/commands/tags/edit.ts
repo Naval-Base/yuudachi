@@ -1,4 +1,4 @@
-import { Command, Flag } from 'discord-akairo';
+import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
@@ -98,22 +98,22 @@ export default class TagEditCommand extends Command {
 		}
 		if (hoist) hoist = true;
 		else if (unhoist) hoist = false;
-		const vars = Flag.is(content, 'fail')
+		const vars = content
 			? {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
+					content,
 					last_modified: message.author!.id,
 			  }
 			: {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
-					content,
 					last_modified: message.author!.id,
 			  };
 		await graphQLClient.mutate({
-			mutation: Flag.is(content, 'fail') ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
+			mutation: content ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
 			variables: vars,
 		});
 
