@@ -57,7 +57,7 @@ export default class TagAddCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ name, content, hoist, templated }: { name: string; content: string; hoist: boolean; templated: boolean },
+		{ name, content, hoist, template }: { name: string; content: string; hoist: boolean; template: boolean },
 	) {
 		if (name && name.length >= 1900) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
@@ -73,7 +73,7 @@ export default class TagAddCommand extends Command {
 				user: message.author!.id,
 				name,
 				hoisted: hoist && staffRole,
-				templated: templated && staffRole,
+				templated: template && staffRole,
 				content,
 			},
 		});

@@ -48,12 +48,12 @@ export default class TagEditCommand extends Command {
 			flag: ['--unhoist', '--unpin'],
 		};
 
-		const templated = yield {
+		const template = yield {
 			match: 'flag',
 			flag: ['--template'],
 		};
 
-		const untemplated = yield {
+		const untemplate = yield {
 			match: 'flag',
 			flag: ['--untemplate'],
 		};
@@ -71,7 +71,7 @@ export default class TagEditCommand extends Command {
 					},
 			  };
 
-		return { tag, hoist, unhoist, templated, untemplated, content };
+		return { tag, hoist, unhoist, template, untemplate, content };
 	}
 
 	public async exec(
@@ -80,10 +80,10 @@ export default class TagEditCommand extends Command {
 			tag,
 			hoist,
 			unhoist,
-			templated,
-			untemplated,
+			template,
+			untemplate,
 			content,
-		}: { tag: Tags; hoist: boolean; unhoist: boolean; templated: boolean; untemplated: boolean; content: string },
+		}: { tag: Tags; hoist: boolean; unhoist: boolean; template: boolean; untemplate: boolean; content: string },
 	) {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
 		if (tag.user !== message.author!.id && !staffRole) {
@@ -98,14 +98,14 @@ export default class TagEditCommand extends Command {
 			? {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
-					templated: staffRole && (templated || untemplated) ? templated : tag.templated,
+					templated: staffRole && (template || untemplate) ? template : tag.templated,
 					content,
 					last_modified: message.author!.id,
 			  }
 			: {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
-					templated: staffRole && (templated || untemplated) ? templated : tag.templated,
+					templated: staffRole && (template || untemplate) ? template : tag.templated,
 					last_modified: message.author!.id,
 			  };
 		await graphQLClient.mutate({
