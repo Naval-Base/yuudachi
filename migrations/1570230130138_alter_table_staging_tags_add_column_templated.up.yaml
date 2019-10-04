@@ -1,0 +1,4 @@
+- args:
+    sql: ALTER TABLE "staging"."tags" ADD COLUMN "templated" boolean NOT NULL DEFAULT
+      false;
+  type: run_sql
