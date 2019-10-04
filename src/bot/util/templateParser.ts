@@ -24,7 +24,7 @@ export class ParseError extends Error {
 		this.position = position;
 	}
 
-	public formatted(): string {
+	public formatted() {
 		const start = Math.max(this.lineBefore(), this.position - 10);
 		const end = Math.min(this.lineAfter(), this.position + 10);
 		const line = this.input.slice(start, end);
@@ -32,18 +32,18 @@ export class ParseError extends Error {
 		return `${line}\n${'-'.repeat(offset)}^\n${this.message}`;
 	}
 
-	private lineBefore(): number {
+	private lineBefore() {
 		const i = this.input.slice(0, this.position).lastIndexOf('\n');
 		return i === -1 ? 0 : i;
 	}
 
-	private lineAfter(): number {
+	private lineAfter() {
 		const i = this.input.indexOf('\n', this.position);
 		return i === -1 ? this.input.length : i + this.position;
 	}
 }
 
-export function parse(input: string): Template {
+export function parse(input: string) {
 	return pTemplate({ input, position: 0 }, false);
 }
 
@@ -67,7 +67,7 @@ interface State {
 	position: number;
 }
 
-function pTemplate(s: State, q: boolean): Template {
+function pTemplate(s: State, q: boolean) {
 	const segments: (string | Raw | Interpolate)[] = [];
 	while (s.position < s.input.length && (!q || !testString(s, '"'))) {
 		const seg = pSegment(s);
@@ -117,7 +117,7 @@ function pTemplate(s: State, q: boolean): Template {
 	return segments as Template;
 }
 
-function pSegment(s: State): string | Interpolate {
+function pSegment(s: State) {
 	if (testString(s, '${')) {
 		return pInterpolate(s);
 	}
@@ -138,7 +138,7 @@ function pInterpolate(s: State): Interpolate {
 	return { t: 'interpolate', alts, def };
 }
 
-function pAlts(s: State): string[] {
+function pAlts(s: State) {
 	const idents = [];
 	idents.push(pIdent(s));
 	p_(s);
@@ -152,7 +152,7 @@ function pAlts(s: State): string[] {
 	return idents;
 }
 
-function pDef(s: State): Template {
+function pDef(s: State) {
 	pString(s, '=');
 	p_(s);
 	pString(s, '"');
@@ -162,11 +162,11 @@ function pDef(s: State): Template {
 	return x;
 }
 
-function pRaw(s: State): string {
+function pRaw(s: State) {
 	return testString(s, '\\') ? pEscaped(s) : pCharacter(s);
 }
 
-function pEscaped(s: State): string {
+function pEscaped(s: State) {
 	const match = matchRegex(s, /^\\(.)/);
 	if (match === null) {
 		throw new ParseError('Expected an escape character', s.input, s.position);
@@ -176,7 +176,7 @@ function pEscaped(s: State): string {
 	return match[1];
 }
 
-function pCharacter(s: State): string {
+function pCharacter(s: State) {
 	if (s.position >= s.input.length) {
 		throw new ParseError('Unexpected end of input', s.input, s.position);
 	}
@@ -185,7 +185,7 @@ function pCharacter(s: State): string {
 	return s.input[s.position - 1];
 }
 
-function pIdent(s: State): string {
+function pIdent(s: State) {
 	const match = matchRegex(s, /^[A-Za-z0-9]+/);
 	if (match === null) {
 		throw new ParseError('Expected a valid identifier made of alphanumeric characters', s.input, s.position);
@@ -196,12 +196,12 @@ function pIdent(s: State): string {
 	return ident;
 }
 
-function p_(s: State): void {
+function p_(s: State) {
 	const match = matchRegex(s, /^\s*/);
 	s.position += match![0].length;
 }
 
-function pString(s: State, x: string): void {
+function pString(s: State, x: string) {
 	if (testString(s, x)) {
 		s.position += x.length;
 	} else {
@@ -213,10 +213,10 @@ function pString(s: State, x: string): void {
 	}
 }
 
-function testString(s: State, x: string): boolean {
+function testString(s: State, x: string) {
 	return s.input.startsWith(x, s.position);
 }
 
-function matchRegex(s: State, r: RegExp): RegExpMatchArray | null {
+function matchRegex(s: State, r: RegExp) {
 	return r.exec(s.input.slice(s.position));
 }

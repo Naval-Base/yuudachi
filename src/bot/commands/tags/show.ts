@@ -58,7 +58,7 @@ export default class TagShowCommand extends Command {
 			const output = interpolateString(tag.content, {
 				author: message.author.toString(),
 				channel: message.channel.toString(),
-				guild: message.guild ? message.guild.toString() : null
+				guild: message.guild ? message.guild.toString() : null,
 			});
 
 			return message.util!.send(output || 'The output was empty.');

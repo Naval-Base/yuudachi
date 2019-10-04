@@ -1,11 +1,15 @@
-import { parse, Interpolate, Template } from "./templateParser";
+/* eslint @typescript-eslint/no-use-before-define: 0 */
 
-export function interpolateString(input: string, data: any): string {
+import { parse, Interpolate, Template } from './templateParser';
+
+type InterpolateData = { [k: string]: string };
+
+export function interpolateString(input: string, data: InterpolateData) {
     const template = parse(input);
     return interpolateTemplate(template, data);
 }
 
-function interpolateTemplate(template: Template, data: any): string {
+function interpolateTemplate(template: Template, data: InterpolateData) {
     let output = '';
     for (const segment of template) {
         if (segment.t === 'raw') {
@@ -18,9 +22,9 @@ function interpolateTemplate(template: Template, data: any): string {
     return output;
 }
 
-function interpolate(int: Interpolate, data: any): string {
+function interpolate(int: Interpolate, data: InterpolateData) {
     for (const alt of int.alts) {
-        if (Object.prototype.hasOwnProperty.call(data, alt) && data[alt] != null) {
+        if (Object.prototype.hasOwnProperty.call(data, alt) && data[alt] !== null && data[alt] !== undefined) {
             return alt;
         }
     }
