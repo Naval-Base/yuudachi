@@ -236,6 +236,7 @@ export const GRAPHQL = {
 					id
 					last_modified
 					name
+					templated
 					updated_at
 					user
 					uses
@@ -462,12 +463,13 @@ export const GRAPHQL = {
 		`,
 
 		INSERT_TAG: gql`
-			mutation($guild: String!, $user: String!, $name: String!, $hoisted: Boolean, $content: String!) {
+			mutation($guild: String!, $user: String!, $name: String!, $hoisted: Boolean, $templated: Boolean, $content: String!) {
 				insert${PRODUCTION ? '' : '_staging'}_tags(objects: {
 					guild: $guild,
 					user: $user,
 					name: $name,
 					hoisted: $hoisted,
+					templated: $templated,
 					content: $content
 				}) {
 					affected_rows
@@ -485,21 +487,21 @@ export const GRAPHQL = {
 			}
 		`,
 
-		UPDATE_TAG_HOIST: gql`
-			mutation($id: uuid!, $hoisted: Boolean, $last_modified: String!) {
+		UPDATE_TAG_CONTENT: gql`
+			mutation($id: uuid!, $hoisted: Boolean, $templated: Boolean, $content: String!, $last_modified: String!) {
 				update${PRODUCTION ? '' : '_staging'}_tags(where: {
 					id: { _eq: $id }
-				}, _set: { hoisted: $hoisted, last_modified: $last_modified }) {
+				}, _set: { hoisted: $hoisted, content: $content, last_modified: $last_modified }) {
 					affected_rows
 				}
 			}
 		`,
 
-		UPDATE_TAG_CONTENT: gql`
-			mutation($id: uuid!, $hoisted: Boolean, $content: String!, $last_modified: String!) {
+		UPDATE_TAG_HOIST: gql`
+			mutation($id: uuid!, $hoisted: Boolean, $templated: Boolean, $last_modified: String!) {
 				update${PRODUCTION ? '' : '_staging'}_tags(where: {
 					id: { _eq: $id }
-				}, _set: { hoisted: $hoisted, content: $content, last_modified: $last_modified }) {
+				}, _set: { hoisted: $hoisted, last_modified: $last_modified }) {
 					affected_rows
 				}
 			}
