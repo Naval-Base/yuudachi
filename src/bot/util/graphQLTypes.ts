@@ -2410,6 +2410,7 @@ export interface StagingTags {
 	id: Scalars['uuid'];
 	last_modified?: Maybe<Scalars['String']>;
 	name: Scalars['String'];
+	templated: Scalars['Boolean'];
 	updated_at: Scalars['timestamptz'];
 	user: Scalars['String'];
 	uses: Scalars['Int'];
@@ -2486,6 +2487,7 @@ export interface StagingTagsBoolExp {
 	id?: Maybe<UuidComparisonExp>;
 	last_modified?: Maybe<StringComparisonExp>;
 	name?: Maybe<StringComparisonExp>;
+	templated?: Maybe<BooleanComparisonExp>;
 	updated_at?: Maybe<TimestamptzComparisonExp>;
 	user?: Maybe<StringComparisonExp>;
 	uses?: Maybe<IntComparisonExp>;
@@ -2514,6 +2516,7 @@ export interface StagingTagsInsertInput {
 	id?: Maybe<Scalars['uuid']>;
 	last_modified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
+	templated?: Maybe<Scalars['Boolean']>;
 	updated_at?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
@@ -2597,6 +2600,7 @@ export interface StagingTagsOrderBy {
 	id?: Maybe<OrderBy>;
 	last_modified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
+	templated?: Maybe<OrderBy>;
 	updated_at?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
@@ -2621,6 +2625,8 @@ export enum StagingTagsSelectColumn {
 	/** column name */
 	Name = 'name',
 	/** column name */
+	Templated = 'templated',
+	/** column name */
 	UpdatedAt = 'updated_at',
 	/** column name */
 	User = 'user',
@@ -2638,6 +2644,7 @@ export interface StagingTagsSetInput {
 	id?: Maybe<Scalars['uuid']>;
 	last_modified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
+	templated?: Maybe<Scalars['Boolean']>;
 	updated_at?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
@@ -2701,6 +2708,8 @@ export enum StagingTagsUpdateColumn {
 	LastModified = 'last_modified',
 	/** column name */
 	Name = 'name',
+	/** column name */
+	Templated = 'templated',
 	/** column name */
 	UpdatedAt = 'updated_at',
 	/** column name */
@@ -3062,6 +3071,7 @@ export interface Tags {
 	id: Scalars['uuid'];
 	last_modified?: Maybe<Scalars['String']>;
 	name: Scalars['String'];
+	templated: Scalars['Boolean'];
 	updated_at: Scalars['timestamptz'];
 	user: Scalars['String'];
 	uses: Scalars['Int'];
@@ -3138,6 +3148,7 @@ export interface TagsBoolExp {
 	id?: Maybe<UuidComparisonExp>;
 	last_modified?: Maybe<StringComparisonExp>;
 	name?: Maybe<StringComparisonExp>;
+	templated?: Maybe<BooleanComparisonExp>;
 	updated_at?: Maybe<TimestamptzComparisonExp>;
 	user?: Maybe<StringComparisonExp>;
 	uses?: Maybe<IntComparisonExp>;
@@ -3166,6 +3177,7 @@ export interface TagsInsertInput {
 	id?: Maybe<Scalars['uuid']>;
 	last_modified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
+	templated?: Maybe<Scalars['Boolean']>;
 	updated_at?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
@@ -3249,6 +3261,7 @@ export interface TagsOrderBy {
 	id?: Maybe<OrderBy>;
 	last_modified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
+	templated?: Maybe<OrderBy>;
 	updated_at?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
@@ -3273,6 +3286,8 @@ export enum TagsSelectColumn {
 	/** column name */
 	Name = 'name',
 	/** column name */
+	Templated = 'templated',
+	/** column name */
 	UpdatedAt = 'updated_at',
 	/** column name */
 	User = 'user',
@@ -3290,6 +3305,7 @@ export interface TagsSetInput {
 	id?: Maybe<Scalars['uuid']>;
 	last_modified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
+	templated?: Maybe<Scalars['Boolean']>;
 	updated_at?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
@@ -3353,6 +3369,8 @@ export enum TagsUpdateColumn {
 	LastModified = 'last_modified',
 	/** column name */
 	Name = 'name',
+	/** column name */
+	Templated = 'templated',
 	/** column name */
 	UpdatedAt = 'updated_at',
 	/** column name */

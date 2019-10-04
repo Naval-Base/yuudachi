@@ -1,9 +1,9 @@
 /* eslint @typescript-eslint/no-use-before-define: 0 */
 
-import { parse, Interpolate, Template } from './templateParser';
+import { Interpolate, parse, Template } from './templateParser';
 
 interface InterpolateData {
-	[k: string]: string;
+	[k: string]: string | null;
 }
 
 export function interpolateString(input: string, data: InterpolateData) {
