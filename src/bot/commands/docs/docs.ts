@@ -39,7 +39,7 @@ export default class DocsCommand extends Command {
 
 		const source = yield {
 			match: 'option',
-			flag: '--src='
+			flag: '--src=',
 		};
 
 		const force = yield {
