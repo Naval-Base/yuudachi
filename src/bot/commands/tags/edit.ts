@@ -1,5 +1,5 @@
 import { Command, Flag } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Util } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags } from '../../util/graphQLTypes';
@@ -61,11 +61,11 @@ export default class TagEditCommand extends Command {
 		const content = yield hoist || unhoist
 			? {
 					match: 'rest',
-					type: 'tagContent',
+					type: 'string',
 			  }
 			: {
 					match: 'rest',
-					type: 'tagContent',
+					type: 'string',
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.TAGS.EDIT.PROMPT_2.START(message.author),
 					},
@@ -92,6 +92,10 @@ export default class TagEditCommand extends Command {
 		if (content && content.length >= 1950) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.TOO_LONG);
 		}
+		if (content && (!template || untemplate)) {
+			content = Util.cleanContent(content, message);
+			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
+		}
 		if (hoist) hoist = true;
 		else if (unhoist) hoist = false;
 		const vars = Flag.is(content, 'fail')
@@ -99,17 +103,17 @@ export default class TagEditCommand extends Command {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
-					content,
 					last_modified: message.author!.id,
 			  }
 			: {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
+					content,
 					last_modified: message.author!.id,
 			  };
 		await graphQLClient.mutate({
-			mutation: content ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
+			mutation: Flag.is(content, 'fail') ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
 			variables: vars,
 		});
 

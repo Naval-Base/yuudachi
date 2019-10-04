@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, Util } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 
@@ -27,7 +27,7 @@ export default class TagAddCommand extends Command {
 				{
 					id: 'content',
 					match: 'rest',
-					type: 'tagContent',
+					type: 'string',
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.TAGS.ADD.PROMPT_2.START(message.author),
 					},
@@ -66,6 +66,10 @@ export default class TagAddCommand extends Command {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
+		if (!template) {
+			content = Util.cleanContent(content, message);
+			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
+		}
 		await graphQLClient.mutate({
 			mutation: GRAPHQL.MUTATION.INSERT_TAG,
 			variables: {
