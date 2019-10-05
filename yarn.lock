@@ -441,12 +441,12 @@
   resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.3.tgz#af9b1c22ccb2ee5c0cad1e1bd2bc3d82a817b05f"
   integrity sha512-4ek19SmNcPI92942RkuBrZrBK8hg7nG+ae/skkNNDeOaUG+XvxTPkv/jPZVgXwVPDkU5EFsewsI+0n4dTwFvgA==
 
-"@graphql-codegen/add@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.8.0.tgz#51a3c50e2c5b095070c8e3302cf0f67b4ad842b8"
-  integrity sha512-d6jp+j84N8IIl6StzsNhZA+DOhbeNOZzkB1OxqjMmYdZqnVL8UFrA/wnPvW8dSblppyhoP4q7IgCN43tV7Rq6A==
+"@graphql-codegen/add@^1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.8.1.tgz#309a9f2cb5ef6b6e734c7d674b19bc289322d8b3"
+  integrity sha512-RElpbBz/GdhfqBp0KVNu5iNooDIoISIkUYvpXThHfrUJp9E/Ji2SqAQ6tD9peaWaXZuaKHCAXGfZ7+APQlum9A==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.8.0"
+    "@graphql-codegen/plugin-helpers" "1.8.1"
     tslib "1.10.0"
 
 "@graphql-codegen/cli@^1.8.0":
@@ -505,6 +505,16 @@
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.8.0.tgz#530a4df7d196541515a6000aec768f1f9e08c519"
   integrity sha512-0rcAYVaxpNkA48f6gwXhsQ3zn7/nhsW//LZrhg1FK8JD1Ytr64KS0EfMq1zAp1PiHh6/8RmvI0cSeAtuNGkS9g==
+  dependencies:
+    change-case "3.1.0"
+    common-tags "1.8.0"
+    import-from "3.0.0"
+    tslib "1.10.0"
+
+"@graphql-codegen/plugin-helpers@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.8.1.tgz#e84eb40988a0d4c0bdfb386d4a8628bf0901c6e3"
+  integrity sha512-gYvt9h/IN77ti7N88GIuSuX9LSGYNnGzpOovG3YBNdOKo4yYc5VT5TcbirigW101jHzjIPNSZVgFPWWg6HSxug==
   dependencies:
     change-case "3.1.0"
     common-tags "1.8.0"
