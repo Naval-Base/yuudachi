@@ -9,8 +9,8 @@ export default class TagAddCommand extends Command {
 			category: 'tags',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.ADD.DESCRIPTION,
-				usage: '[--hoisted] <tag> <content>',
-				examples: ['Test Test', '--hoisted "Test 2" Test2', '"Test 3" "Some more text" --hoisted'],
+				usage: '[--hoist/--pin/--template] <tag> <content>',
+				examples: ['Test Test', '--hoist "Test 2" Test2', '"Test 3" "Some more text" --hoist'],
 			},
 			channel: 'guild',
 			ratelimit: 2,

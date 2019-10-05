@@ -10,7 +10,7 @@ export default class TagEditCommand extends Command {
 			category: 'tags',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.EDIT.DESCRIPTION,
-				usage: '<tag> [--hoist/--unhoist/--pin/--unpin] <content>',
+				usage: '<tag> [--hoist/--unhoist/--pin/--unpin/--template/--untemplate] <content>',
 				examples: ['Test Some new content', '"Test 1" Some more new content', 'Test --hoist', '"Test 1" --unpin'],
 			},
 			channel: 'guild',
