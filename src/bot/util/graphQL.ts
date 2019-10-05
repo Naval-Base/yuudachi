@@ -491,7 +491,7 @@ export const GRAPHQL = {
 			mutation($id: uuid!, $hoisted: Boolean, $templated: Boolean, $content: String!, $last_modified: String!) {
 				update${PRODUCTION ? '' : '_staging'}_tags(where: {
 					id: { _eq: $id }
-				}, _set: { hoisted: $hoisted, content: $content, last_modified: $last_modified }) {
+				}, _set: { hoisted: $hoisted, templated: $templated, content: $content, last_modified: $last_modified }) {
 					affected_rows
 				}
 			}
@@ -501,7 +501,7 @@ export const GRAPHQL = {
 			mutation($id: uuid!, $hoisted: Boolean, $templated: Boolean, $last_modified: String!) {
 				update${PRODUCTION ? '' : '_staging'}_tags(where: {
 					id: { _eq: $id }
-				}, _set: { hoisted: $hoisted, last_modified: $last_modified }) {
+				}, _set: { hoisted: $hoisted, templated: $templated, last_modified: $last_modified }) {
 					affected_rows
 				}
 			}

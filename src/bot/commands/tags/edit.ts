@@ -96,8 +96,6 @@ export default class TagEditCommand extends Command {
 			content = Util.cleanContent(content, message);
 			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
 		}
-		if (hoist) hoist = true;
-		else if (unhoist) hoist = false;
 		const vars = content
 			? {
 					id: tag.id,
@@ -117,6 +115,6 @@ export default class TagEditCommand extends Command {
 			variables: vars,
 		});
 
-		return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.REPLY(tag.name, hoist, staffRole));
+		return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.REPLY(tag.name, staffRole && (hoist || unhoist)));
 	}
 }

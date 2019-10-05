@@ -679,8 +679,7 @@ export const MESSAGES = {
 				OWN_TAG: 'losers are only allowed to edit their own tags! Hah hah hah!',
 				TOO_LONG:
 					'you must still have water behind your ears to not realize that messages have a limit of 2000 characters!',
-				REPLY: (tag: string, hoist: boolean, staff: boolean) =>
-					`successfully edited **${tag}**${hoist && staff ? ' to be hoisted.' : '.'}`,
+				REPLY: (tag: string, hoist: boolean) => `successfully edited **${tag}**${hoist ? ' to be hoisted.' : '.'}`,
 			},
 
 			INFO: {
