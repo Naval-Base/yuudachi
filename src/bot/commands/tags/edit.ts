@@ -58,7 +58,7 @@ export default class TagEditCommand extends Command {
 			flag: ['--untemplate'],
 		};
 
-		const content = yield hoist || unhoist
+		const content = yield hoist || unhoist || template || untemplate
 			? {
 					match: 'rest',
 					type: 'string',
