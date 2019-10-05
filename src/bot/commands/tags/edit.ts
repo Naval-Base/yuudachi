@@ -115,10 +115,12 @@ export default class TagEditCommand extends Command {
 			variables: vars,
 		});
 
-		return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.REPLY(
-			tag.name,
-			staffRole && (hoist || unhoist),
-			staffRole && (template || untemplate)
-		));
+		return message.util!.reply(
+			MESSAGES.COMMANDS.TAGS.EDIT.REPLY(
+				tag.name,
+				staffRole && (hoist || unhoist),
+				staffRole && (template || untemplate),
+			),
+		);
 	}
 }
