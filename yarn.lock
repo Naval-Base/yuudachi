@@ -643,13 +643,13 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@sentry/cli@^1.47.2":
-  version "1.47.2"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.47.2.tgz#75a23d2816300b333d4e34163c85feeef93bc062"
-  integrity sha512-bUJGyxZQzB8mqnCL3RoeLl169XleoLnn2a1w/xqc8IOBt70IEtpVQQ86jgpZfpY1HqPZlczqEkm1U5kfjCaqLw==
+"@sentry/cli@^1.48.0":
+  version "1.48.0"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.48.0.tgz#cccf2badd3fab9aeaafeaf6ef21bc74e2f6b6790"
+  integrity sha512-Td6UpZP6BoI0R5Guctiq3NIphAfskbyeiboWx4H1yuXPA9p4F0hL+Hrz6k3NNfzkt3AQzEkeAhvpKmIfmUOkjA==
   dependencies:
     fs-copy-file-sync "^1.1.1"
-    https-proxy-agent "^2.2.1"
+    https-proxy-agent "^3.0.0"
     mkdirp "^0.5.1"
     node-fetch "^2.1.2"
     progress "2.0.0"
@@ -2846,10 +2846,10 @@ https-proxy-agent@2.2.1:
     agent-base "^4.1.0"
     debug "^3.1.0"
 
-https-proxy-agent@^2.2.1:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.2.tgz#271ea8e90f836ac9f119daccd39c19ff7dfb0793"
-  integrity sha512-c8Ndjc9Bkpfx/vCJueCPy0jlP4ccCCSNDp8xwCZzPjKJUm+B+u9WX2x98Qx4n1PiMNTWo3D7KK5ifNV/yJyRzg==
+https-proxy-agent@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-3.0.0.tgz#0106efa5d63d6d6f3ab87c999fa4877a3fd1ff97"
+  integrity sha512-y4jAxNEihqvBI5F3SaO2rtsjIOnnNA8sEbuiP+UhJZJHeM2NRm6c09ax2tgqme+SgUUvjao2fJXF4h3D6Cb2HQ==
   dependencies:
     agent-base "^4.3.0"
     debug "^3.1.0"
