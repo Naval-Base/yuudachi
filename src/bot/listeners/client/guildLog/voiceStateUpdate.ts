@@ -12,7 +12,7 @@ export default class VoiceStateUpdateGuildLogListener extends Listener {
 	}
 
 	public async exec(oldState: VoiceState, newState: VoiceState) {
-		if ((oldState && oldState.member && oldState.member.user.bot) || (newState.member && newState.member.user.bot)) {
+		if (oldState?.member?.user.bot || newState.member?.user.bot) {
 			return;
 		}
 		const guildLogs = this.client.settings.get(newState.guild, SETTINGS.GUILD_LOG);
@@ -28,9 +28,9 @@ export default class VoiceStateUpdateGuildLogListener extends Listener {
 
 			if ((!oldState || (oldState && !oldState.channel)) && newState.channel) {
 				embed.addField('❯ Joined', newState.channel);
-			} else if (oldState && oldState.channel && newState.channel && oldState.channelID !== newState.channelID) {
+			} else if (oldState?.channel && newState.channel && oldState.channelID !== newState.channelID) {
 				embed.addField('❯ From', oldState.channel).addField('❯ To', newState.channel);
-			} else if (oldState && oldState.channel && !newState.channel) {
+			} else if (oldState?.channel && !newState.channel) {
 				embed.addField('❯ Left', oldState.channel);
 			} else {
 				return;

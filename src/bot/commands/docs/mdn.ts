@@ -24,7 +24,7 @@ export default class MDNCommand extends Command {
 						start: (message: Message) => MESSAGES.COMMANDS.DOCS.MDN.PROMPT.START(message.author),
 					},
 					match: 'content',
-					type: (_, query) => (query ? query.replace(/#/g, '.prototype.') : null),
+					type: (_, query) => query?.replace(/#/g, '.prototype.'),
 				},
 			],
 		});

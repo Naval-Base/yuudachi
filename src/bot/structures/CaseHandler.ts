@@ -121,7 +121,7 @@ export default class CaseHandler {
 
 	public async log({ member, action, caseNum, reason, message, duration, ref }: Log) {
 		const embed = new MessageEmbed();
-		if (message && message.author) {
+		if (message?.author) {
 			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
 		}
 		let reference: Cases | undefined;
@@ -179,7 +179,7 @@ export default class CaseHandler {
 		const colors = [8450847, 10870283, 13091073, 14917123, 16152591, 16667430, 16462404];
 		const values = [footer.warn || 0, footer.restriction || 0, footer.mute || 0, footer.kick || 0, footer.ban || 0];
 		const [warn, restriction, mute, kick, ban] = values;
-		const colorIndex = Math.min(values.reduce((a: number, b: number) => a + b), colors.length - 1);
+		const colorIndex = Math.min(values.reduce((a, b) => a + b), colors.length - 1);
 
 		return new MessageEmbed()
 			.setAuthor(

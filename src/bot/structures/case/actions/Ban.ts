@@ -14,7 +14,7 @@ export default class BanAction extends Action {
 			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
 		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE)!;
-		if (this.member.roles && this.member.roles.has(staff)) {
+		if (this.member.roles?.has(staff)) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
@@ -30,7 +30,7 @@ export default class BanAction extends Action {
 			time: 10000,
 		});
 
-		if (!responses || responses.size !== 1) {
+		if (responses?.size !== 1) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(MESSAGES.ACTIONS.BAN.TIMEOUT);
 		}

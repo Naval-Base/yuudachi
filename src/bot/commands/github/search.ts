@@ -39,8 +39,7 @@ export default class GitHubSearchCommand extends Command {
 		}
 		if (!repo) return;
 		const owner = repo.split('/')[0];
-		// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-		if (commit.match(/[a-f0-9]{40}$/i)) {
+		if (/[a-f0-9]{40}$/i.exec(commit)) {
 			const repository = repo.split('/')[1];
 			let body;
 			try {
@@ -57,9 +56,9 @@ export default class GitHubSearchCommand extends Command {
 			const embed = new MessageEmbed()
 				.setColor(3447003)
 				.setAuthor(
-					body.author ? (body.author.login ? body.author.login : 'Unknown') : 'Unknown',
-					body.author ? (body.author.avatar_url ? body.author.avatar_url : '') : '',
-					body.author ? (body.author.html_url ? body.author.html_url : '') : '',
+					body.author?.login ?? 'Unknown',
+					body.author?.avatar_url ?? '',
+					body.author?.html_url ?? '',
 				)
 				.setTitle(body.commit.message.split('\n')[0])
 				.setURL(body.html_url)
@@ -87,7 +86,7 @@ export default class GitHubSearchCommand extends Command {
 					body.committer ? `• [**${body.committer.login}**](${body.committer.html_url})` : 'Unknown',
 					true,
 				)
-				.setThumbnail(body.author ? body.author.avatar_url : '')
+				.setThumbnail(body.author?.avatar_url ?? '')
 				.setTimestamp(new Date(body.commit.author.date));
 
 			if (
@@ -190,16 +189,16 @@ export default class GitHubSearchCommand extends Command {
 		} catch (error) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 		}
-		if (!body || !body.data || !body.data.repository) {
+		if (!body?.data?.repository) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 		}
 		const data = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
 			.setColor(data.merged ? 0x9c27b0 : data.state === 'OPEN' ? 0x43a047 : 0xef6c00)
 			.setAuthor(
-				data.author ? (data.author.login ? data.author.login : 'Unknown') : 'Unknown',
-				data.author ? (data.author.avatarUrl ? data.author.avatarUrl : '') : '',
-				data.author ? (data.author.url ? data.author.url : '') : '',
+				data.author?.login ?? 'Unknown',
+				data.author?.avatarUrl ?? '',
+				data.author?.url ?? '',
 			)
 			.setTitle(data.title)
 			.setURL(data.url)
@@ -213,7 +212,7 @@ export default class GitHubSearchCommand extends Command {
 				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }): string => node.name) : 'NO LABEL(S)',
 				true,
 			)
-			.setThumbnail(data.author ? data.author.avatarUrl : '')
+			.setThumbnail(data.author?.avatarUrl ?? '')
 			.setTimestamp(new Date(data.publishedAt));
 		if (data.commits) {
 			embed.addField(

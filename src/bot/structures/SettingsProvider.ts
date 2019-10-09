@@ -28,7 +28,7 @@ export default class HasuraProvider extends Provider {
 		const id = this.constructor.getGuildId(guild);
 		if (this.items.has(id)) {
 			const value = this.items.get(id)[key];
-			return value == null ? defaultValue : value;
+			return value ?? defaultValue;
 		}
 
 		return defaultValue as T;

@@ -33,7 +33,7 @@ export default class GuildBanRemoveModerationListener extends Listener {
 
 		await this.client.caseHandler.create({
 			guild: guild.id,
-			message: modMessage ? modMessage.id : undefined,
+			message: modMessage?.id,
 			case_id: totalCases,
 			target_id: user.id,
 			target_tag: user.tag,
