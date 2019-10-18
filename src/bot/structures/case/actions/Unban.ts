@@ -31,7 +31,7 @@ export default class UnbanAction extends Action {
 		try {
 			await this.message.guild!.members.unban(
 				this.member,
-				MESSAGES.ACTIONS.UNBAN.AUDIT(this.message.author!.tag, totalCases),
+				MESSAGES.ACTIONS.UNBAN.AUDIT(this.message.author.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);

@@ -39,7 +39,7 @@ export default class EmbedAction extends Action {
 		try {
 			await this.member.roles.add(
 				restrictRoles.EMBED,
-				MESSAGES.ACTIONS.EMBED.AUDIT(this.message.author!.tag, totalCases),
+				MESSAGES.ACTIONS.EMBED.AUDIT(this.message.author.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);

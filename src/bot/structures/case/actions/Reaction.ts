@@ -39,7 +39,7 @@ export default class ReactionAction extends Action {
 		try {
 			await this.member.roles.add(
 				restrictRoles.REACTION,
-				MESSAGES.ACTIONS.REACTION.AUDIT(this.message.author!.tag, totalCases),
+				MESSAGES.ACTIONS.REACTION.AUDIT(this.message.author.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);

@@ -91,7 +91,7 @@ export default class TagAliasCommand extends Command {
 			variables: {
 				id: first.id,
 				aliases: `{${first.aliases.join(',')}}`,
-				last_modified: message.author!.id,
+				last_modified: message.author.id,
 			},
 		});
 

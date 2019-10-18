@@ -40,7 +40,7 @@ export default class TagDeleteCommand extends Command {
 
 	public async exec(message: Message, { tag }: { tag: Tags }) {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
-		if (tag.user !== message.author!.id && !staffRole) {
+		if (tag.user !== message.author.id && !staffRole) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.DELETE.OWN_TAG);
 		}
 		await graphQLClient.mutate({

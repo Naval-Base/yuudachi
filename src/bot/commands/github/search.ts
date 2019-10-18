@@ -102,7 +102,7 @@ export default class GitHubSearchCommand extends Command {
 			let react;
 			try {
 				react = await msg.awaitReactions(
-					(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
+					(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
 					{ max: 1, time: 10000, errors: ['time'] },
 				);
 			} catch (error) {
@@ -234,7 +234,7 @@ export default class GitHubSearchCommand extends Command {
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author!.id,
+				(reaction, user): boolean => reaction.emoji.name === '🗑' && user.id === message.author.id,
 				{ max: 1, time: 10000, errors: ['time'] },
 			);
 		} catch (error) {

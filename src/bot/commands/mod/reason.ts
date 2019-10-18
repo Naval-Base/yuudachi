@@ -72,7 +72,7 @@ export default class ReasonCommand extends Command {
 		}
 		if (
 			dbCase.mod_id &&
-			(dbCase.mod_id !== message.author!.id && !message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD))
+			(dbCase.mod_id !== message.author.id && !message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD))
 		) {
 			return message.reply(MESSAGES.COMMANDS.MOD.REASON.WRONG_MOD);
 		}
@@ -82,7 +82,7 @@ export default class ReasonCommand extends Command {
 			const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message!);
 			if (!caseEmbed) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_MESSAGE);
 			const embed = new MessageEmbed(caseEmbed.embeds[0])
-				.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
+				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 				.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
 			if (ref) {
 				let reference;
@@ -115,8 +115,8 @@ export default class ReasonCommand extends Command {
 			mutation: GRAPHQL.MUTATION.UPDATE_REASON,
 			variables: {
 				id: dbCase.id,
-				mod_id: message.author!.id,
-				mod_tag: message.author!.tag,
+				mod_id: message.author.id,
+				mod_tag: message.author.tag,
 				reason,
 			},
 		});

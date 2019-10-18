@@ -216,7 +216,7 @@ export default class CaseHandler {
 				const key = `${message.guild!.id}:${member.id}:MUTE`;
 				try {
 					this.cachedCases.add(key);
-					await member.roles.remove(mute, `Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+					await member.roles.remove(mute, `Mute removed by ${message.author.tag} | Removed Case #${cs.case_id}`);
 				} catch (error) {
 					this.cachedCases.delete(key);
 					message.reply(`there was an error removing the mute on this member: \`${error}\``);
@@ -233,7 +233,7 @@ export default class CaseHandler {
 					if (!member) break;
 					await member.roles.remove(
 						roles.EMBED,
-						`Embed restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+						`Embed restriction removed by ${message.author.tag} | Removed Case #${cs.case_id}`,
 					);
 				} catch (error) {
 					message.reply(`there was an error removing the embed restriction on this member: \`${error}\``);
@@ -250,7 +250,7 @@ export default class CaseHandler {
 					if (!member) break;
 					await member.roles.remove(
 						roles.EMOJI,
-						`Emoji restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+						`Emoji restriction removed by ${message.author.tag} | Removed Case #${cs.case_id}`,
 					);
 				} catch (error) {
 					message.reply(`there was an error removing the emoji restriction on this member: \`${error}\``);
@@ -267,7 +267,7 @@ export default class CaseHandler {
 					if (!member) break;
 					await member.roles.remove(
 						roles.REACTION,
-						`Reaction restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+						`Reaction restriction removed by ${message.author.tag} | Removed Case #${cs.case_id}`,
 					);
 				} catch (error) {
 					message.reply(`there was an error removing the reaction restriction on this member: \`${error}\``);

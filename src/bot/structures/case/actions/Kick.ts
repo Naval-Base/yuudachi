@@ -32,7 +32,7 @@ export default class KickAction extends Action {
 			try {
 				await this.member.send(MESSAGES.ACTIONS.KICK.MESSAGE(this.message.guild!.name, this._reason));
 			} catch {}
-			await this.member.kick(MESSAGES.ACTIONS.KICK.AUDIT(this.message.author!.tag, totalCases));
+			await this.member.kick(MESSAGES.ACTIONS.KICK.AUDIT(this.message.author.tag, totalCases));
 		} catch (error) {
 			throw new Error(MESSAGES.ACTIONS.KICK.ERROR(error.message));
 		}

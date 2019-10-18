@@ -25,10 +25,13 @@ export default class BanAction extends Action {
 
 		const embed = await this.client.caseHandler.history(this.member);
 		await this.message.channel.send(MESSAGES.ACTIONS.BAN.AWAIT_MESSAGE, { embed });
-		const responses = await this.message.channel.awaitMessages(msg => msg.author.id === this.message.author!.id, {
-			max: 1,
-			time: 10000,
-		});
+		const responses = await this.message.channel.awaitMessages(
+			(msg: Message) => msg.author.id === this.message.author.id,
+			{
+				max: 1,
+				time: 10000,
+			},
+		);
 
 		if (!responses || responses.size !== 1) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
@@ -56,7 +59,7 @@ export default class BanAction extends Action {
 			} catch {}
 			await this.member.ban({
 				days: this.days,
-				reason: MESSAGES.ACTIONS.BAN.AUDIT(this.message.author!.tag, totalCases),
+				reason: MESSAGES.ACTIONS.BAN.AUDIT(this.message.author.tag, totalCases),
 			});
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);

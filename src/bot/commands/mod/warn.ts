@@ -51,7 +51,7 @@ export default class WarnCommand extends Command {
 	}
 
 	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
-		if (member.id === message.author!.id) return;
+		if (member.id === message.author.id) return;
 		const key = `${message.guild!.id}:${member.id}:WARN`;
 		message.guild!.caseQueue.add(async () =>
 			new WarnAction({

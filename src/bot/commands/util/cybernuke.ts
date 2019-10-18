@@ -51,7 +51,7 @@ export default class LaunchCybernukeCommand extends Command {
 		await message.util!.send(`Cybernuke will strike ${members.size} members; proceed?`);
 		let statusMessage: Message;
 
-		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author!.id, {
+		const responses = await message.channel.awaitMessages((msg: Message) => msg.author.id === message.author.id, {
 			max: 1,
 			time: 10000,
 		});

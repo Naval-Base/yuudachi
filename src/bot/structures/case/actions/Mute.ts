@@ -39,7 +39,7 @@ export default class MuteAction extends Action {
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.MUTE.PRE_REPLY(this.member.user.tag));
 
 		try {
-			await this.member.roles.add(muteRole, MESSAGES.ACTIONS.MUTE.AUDIT(this.message.author!.tag, totalCases));
+			await this.member.roles.add(muteRole, MESSAGES.ACTIONS.MUTE.AUDIT(this.message.author.tag, totalCases));
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(MESSAGES.ACTIONS.MUTE.ERROR(error.message));
@@ -58,8 +58,8 @@ export default class MuteAction extends Action {
 			case_id: totalCases,
 			target_id: this.member.id,
 			target_tag: memberTag,
-			mod_id: this.message.author!.id,
-			mod_tag: this.message.author!.tag,
+			mod_id: this.message.author.id,
+			mod_tag: this.message.author.tag,
 			action: this.action,
 			reason: this.reason,
 			action_duration: new Date(Date.now() + this.duration!).toISOString(),

@@ -42,11 +42,11 @@ export default class SoftbanAction extends Action {
 			} catch {}
 			await this.member.ban({
 				days: this.days,
-				reason: MESSAGES.ACTIONS.SOFTBAN.AUDIT(this.message.author!.tag, totalCases),
+				reason: MESSAGES.ACTIONS.SOFTBAN.AUDIT(this.message.author.tag, totalCases),
 			});
 			await this.message.guild!.members.unban(
 				this.member,
-				MESSAGES.ACTIONS.SOFTBAN.AUDIT(this.message.author!.tag, totalCases),
+				MESSAGES.ACTIONS.SOFTBAN.AUDIT(this.message.author.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys![0]);

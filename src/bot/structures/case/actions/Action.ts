@@ -118,8 +118,8 @@ export default abstract class Action {
 			case_id: totalCases,
 			target_id: this.member.id,
 			target_tag: memberTag,
-			mod_id: this.message.author!.id,
-			mod_tag: this.message.author!.tag,
+			mod_id: this.message.author.id,
+			mod_tag: this.message.author.tag,
 			action: this.action,
 			reason: this.reason,
 		});

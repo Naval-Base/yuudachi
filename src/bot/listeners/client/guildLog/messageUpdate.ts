@@ -13,7 +13,7 @@ export default class MessageUpdateGuildLogListener extends Listener {
 	}
 
 	public async exec(oldMessage: Message, newMessage: Message) {
-		if (oldMessage.author!.bot || newMessage.author!.bot) return;
+		if (oldMessage.author.bot || newMessage.author.bot) return;
 		if (!newMessage.guild) return;
 		if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) return;
 		const guildLogs = this.client.settings.get(newMessage.guild, SETTINGS.GUILD_LOG);
@@ -22,7 +22,7 @@ export default class MessageUpdateGuildLogListener extends Listener {
 			if (!webhook) return;
 			const embed = new MessageEmbed()
 				.setColor(0x306bff)
-				.setAuthor(`${newMessage.author!.tag} (${newMessage.author!.id})`, newMessage.author!.displayAvatarURL())
+				.setAuthor(`${newMessage.author.tag} (${newMessage.author.id})`, newMessage.author.displayAvatarURL())
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
 			if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
