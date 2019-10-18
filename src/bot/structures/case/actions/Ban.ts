@@ -1,4 +1,4 @@
-import { User } from 'discord.js';
+import { Message, User } from 'discord.js';
 import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
