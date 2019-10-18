@@ -37,7 +37,7 @@ export default class TagAction extends Action {
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.TAG.PRE_REPLY(this.member.user.tag));
 
 		try {
-			await this.member.roles.add(restrictRoles.TAG, MESSAGES.ACTIONS.TAG.AUDIT(this.message.author!.tag, totalCases));
+			await this.member.roles.add(restrictRoles.TAG, MESSAGES.ACTIONS.TAG.AUDIT(this.message.author.tag, totalCases));
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(MESSAGES.ACTIONS.TAG.ERROR(error.message));

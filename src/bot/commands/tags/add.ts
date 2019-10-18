@@ -74,7 +74,7 @@ export default class TagAddCommand extends Command {
 			mutation: GRAPHQL.MUTATION.INSERT_TAG,
 			variables: {
 				guild: message.guild!.id,
-				user: message.author!.id,
+				user: message.author.id,
 				name,
 				hoisted: hoist && staffRole,
 				templated: template && staffRole,

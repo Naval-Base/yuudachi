@@ -46,7 +46,7 @@ export default class TagListCommand extends Command {
 			if (PRODUCTION) tags = data.tags;
 			else tags = data.staging_tags;
 			if (!tags.length) {
-				if (member.id === message.author!.id) return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS());
+				if (member.id === message.author.id) return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS());
 				return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS(member.displayName));
 			}
 			const embed = new MessageEmbed()
@@ -78,13 +78,13 @@ export default class TagListCommand extends Command {
 			.join(', ');
 		const userTags = tags
 			.filter(tag => !tag.hoisted)
-			.filter(tag => tag.user === message.author!.id)
+			.filter(tag => tag.user === message.author.id)
 			.map(tag => `\`${tag.name}\``)
 			.sort()
 			.join(', ');
 		const embed = new MessageEmbed()
 			.setColor(0x30a9ed)
-			.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL());
+			.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
 		if (hoistedTags) embed.addField('❯ Tags', hoistedTags);
 		if (userTags) embed.addField(`❯ ${message.member!.displayName}'s tags`, userTags);
 

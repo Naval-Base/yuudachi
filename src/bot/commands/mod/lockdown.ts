@@ -79,7 +79,7 @@ export default class LockdownCommand extends Command {
 				channel: channel.id,
 			},
 			duration,
-			message.author!,
+			message.author,
 		);
 
 		return message.util!.send(MESSAGES.COMMANDS.MOD.LOCKDOWN.REPLY(channel));

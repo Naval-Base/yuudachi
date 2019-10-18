@@ -39,7 +39,7 @@ export default class EmojiAction extends Action {
 		try {
 			await this.member.roles.add(
 				restrictRoles.EMOJI,
-				MESSAGES.ACTIONS.EMOJI.AUDIT(this.message.author!.tag, totalCases),
+				MESSAGES.ACTIONS.EMOJI.AUDIT(this.message.author.tag, totalCases),
 			);
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);

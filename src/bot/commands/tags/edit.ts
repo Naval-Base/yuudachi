@@ -86,7 +86,7 @@ export default class TagEditCommand extends Command {
 		}: { tag: Tags; hoist: boolean; unhoist: boolean; template: boolean; untemplate: boolean; content: string },
 	) {
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
-		if (tag.user !== message.author!.id && !staffRole) {
+		if (tag.user !== message.author.id && !staffRole) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.OWN_TAG);
 		}
 		if (content?.length >= 1950) {
@@ -102,13 +102,13 @@ export default class TagEditCommand extends Command {
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
 					content,
-					last_modified: message.author!.id,
+					last_modified: message.author.id,
 			  }
 			: {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
-					last_modified: message.author!.id,
+					last_modified: message.author.id,
 			  };
 		await graphQLClient.mutate({
 			mutation: content ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
