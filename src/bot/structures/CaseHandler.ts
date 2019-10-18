@@ -35,10 +35,12 @@ interface Log {
 	action: string;
 	caseNum: number;
 	reason: string;
-	message?: {
-		author: User | null;
-		guild: Guild;
-	};
+	message?:
+		| {
+				author: User | null;
+				guild: Guild;
+		  }
+		| Message;
 	duration?: number;
 	ref?: number;
 }
@@ -134,13 +136,13 @@ export default class CaseHandler {
 				const { data } = await graphQLClient.query({
 					query: GRAPHQL.QUERY.CASES,
 					variables: {
-						guild: message.guild.id,
+						guild: message.guild!.id,
 						case_id: ref,
 					},
 				});
 				if (PRODUCTION) reference = data.cases[0];
 				else reference = data.staging_cases[0];
-				channel = this.client.settings.get(message.guild, SETTINGS.MOD_LOG);
+				channel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
 			} catch {}
 		}
 
