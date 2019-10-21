@@ -34,6 +34,7 @@ export default class MessageDeleteBulkGuildLogListener extends Listener {
 					`${messages.first()!.author.tag} (${messages.first()!.author.id})`,
 					messages.first()!.author.displayAvatarURL(),
 				)
+				.addField('❯ Channel', messages.first()!.channel)
 				.addField('❯ Logs', 'See attachment file for full logs (possibly above this embed)')
 				.setTimestamp(new Date())
 				.setFooter('Bulk Deleted');

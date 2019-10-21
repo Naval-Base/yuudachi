@@ -24,7 +24,8 @@ export default class MessageDeleteGuildLogListener extends Listener {
 				.setColor(0x824aee)
 				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 				.addField('❯ Channel', message.channel)
-				.addField('❯ Message', `${message.content.substring(0, 1020)}`);
+				.addField('❯ Message', `${message.content.substring(0, 1020)}`)
+				.addField('❯ Message', `[Jump To](${message.url})`, true);
 			if (attachment) embed.addField('❯ Attachment(s)', attachment.url);
 			embed.setTimestamp(new Date());
 			embed.setFooter('Deleted');
