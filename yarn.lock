@@ -521,23 +521,23 @@
     import-from "3.0.0"
     tslib "1.10.0"
 
-"@graphql-codegen/typescript@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.8.1.tgz#5580d27d099f68af1f34d36819f25c0c5196926d"
-  integrity sha512-oNLO/V78PrJUsUGhdhExguZUIl6sVv1J14XNPpyQeNVtua5wQNyKHkzPqMGP4H63S4BDtA6wI3IqU7qHH5Io9w==
+"@graphql-codegen/typescript@^1.8.2":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.8.2.tgz#1faef5428a7f2a5a20ee80325850c947fa227300"
+  integrity sha512-QAS+DGo+7lxalqfvPI0RF6/Svm34tU/5V3gaGkQXoIdcdXJvzh/XJy5KuGK3CgvM4LVek/6QX55Y6dOYA8kyOQ==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.8.1"
-    "@graphql-codegen/visitor-plugin-common" "1.8.1"
-    auto-bind "2.0.0"
+    "@graphql-codegen/plugin-helpers" "1.8.2"
+    "@graphql-codegen/visitor-plugin-common" "1.8.2"
+    auto-bind "3.0.0"
     tslib "1.10.0"
 
-"@graphql-codegen/visitor-plugin-common@1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-1.8.1.tgz#659cbd932147a1cc4bf6b87e813d73c71ab6ec8b"
-  integrity sha512-vhIeTCfiEijWZJJniJ/qYahgfIvQT5rGkXk4yDYsDuMOSi6dNcgpnwuyMDifUidBMac9beliiB9Mw7OeYYelFQ==
+"@graphql-codegen/visitor-plugin-common@1.8.2":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-1.8.2.tgz#25915d791ab7ecf126b87551b735ee00813b6622"
+  integrity sha512-Ma2TBYvu2i+D4Wgo5spODMDOcD6w4xI7wEhxUs+WGyjOVPs4TEUfstMQkDFJbcwlQbZKlDaswJfgY8zQ5JgMMw==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.8.1"
-    auto-bind "2.0.0"
+    "@graphql-codegen/plugin-helpers" "1.8.2"
+    auto-bind "3.0.0"
     dependency-graph "0.8.0"
     graphql-tag "2.10.1"
     relay-compiler "6.0.0"
@@ -1212,10 +1212,10 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-auto-bind@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/auto-bind/-/auto-bind-2.0.0.tgz#9a55a461b521f58daf955169203bed1a07a970a9"
-  integrity sha512-rvRBv0/O7iriUMqSzTDhAfyAD1vVnElAEruo5rMSFeYLA0iKDEzLPSJiwMnL86+IPpTlhfOIAzjoKZ9TaySYdA==
+auto-bind@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/auto-bind/-/auto-bind-3.0.0.tgz#67773e64899b228f6d2a841709e7e086cfed31a3"
+  integrity sha512-v0A231a/lfOo6kxQtmEkdBfTApvC21aJYukA8pkKnoTvVqh3Wmm7/Rwy4GBCHTTHVoLVA5qsBDDvf1XY1nIV2g==
 
 aws-sign2@~0.7.0:
   version "0.7.0"
