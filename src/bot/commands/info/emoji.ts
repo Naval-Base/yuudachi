@@ -44,12 +44,12 @@ export default class EmojiInfoCommand extends Command {
 
 		if (emoji instanceof GuildEmoji) {
 			embed.setDescription(`Info about ${emoji.name} (ID: ${emoji.id})`);
-			embed.setThumbnail(emoji.url);
+			embed.setThumbnail(emoji.url || '');
 			embed.addField(
 				'❯ Info',
 				stripIndents`
 				• Identifier: \`<${emoji.identifier}>\`
-				• Creation Date: ${moment.utc(emoji.createdAt).format('YYYY/MM/DD hh:mm:ss')}
+				• Creation Date: ${moment.utc(emoji.createdAt || 0).format('YYYY/MM/DD hh:mm:ss')}
 				• URL: ${emoji.url}
 				`,
 			);
