@@ -62,6 +62,7 @@ export default class MuteAction extends Action {
 			mod_tag: this.message.author.tag,
 			action: this.action,
 			reason: this.reason,
+			ref_id: this.ref,
 			action_duration: new Date(Date.now() + this.duration!).toISOString(),
 			action_processed: false,
 		});

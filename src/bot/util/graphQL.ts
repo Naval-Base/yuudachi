@@ -48,6 +48,7 @@ export const GRAPHQL = {
 					action_duration
 					case_id
 					created_at
+					guild
 					id
 					message
 					mod_id
