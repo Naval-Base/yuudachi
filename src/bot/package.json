@@ -44,13 +44,13 @@
 		"winston-loki": "^4.0.1"
 	},
 	"devDependencies": {
-		"@graphql-codegen/add": "^1.8.1",
-		"@graphql-codegen/cli": "^1.8.1",
-		"@graphql-codegen/typescript": "^1.8.1",
+		"@graphql-codegen/add": "^1.8.2",
+		"@graphql-codegen/cli": "^1.8.2",
+		"@graphql-codegen/typescript": "^1.8.2",
 		"@sentry/cli": "^1.48.0",
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^12.11.5",
+		"@types/node": "^12.11.7",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.5.2",
 		"@types/punycode": "^2.1.0",

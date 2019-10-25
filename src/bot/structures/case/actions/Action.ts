@@ -122,6 +122,7 @@ export default abstract class Action {
 			mod_tag: this.message.author.tag,
 			action: this.action,
 			reason: this.reason,
+			ref_id: this.ref,
 		});
 
 		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
