@@ -5436,9 +5436,9 @@ zen-observable@^0.8.0:
   resolved "https://registry.yarnpkg.com/zen-observable/-/zen-observable-0.8.14.tgz#d33058359d335bc0db1f0af66158b32872af3bf7"
   integrity sha512-kQz39uonEjEESwh+qCi83kcC3rZJGh4mrZW7xjkSQYXkq//JZHTtKo+6yuVloTgMtzsIWOJrjIrKvk/dqm0L5g==
 
-zlib-sync@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/zlib-sync/-/zlib-sync-0.1.5.tgz#bc8e39d11ea31f6583b94e1452cb48fe493a160a"
-  integrity sha512-+i+0BAu0fGs9hjImLWGJ6UXCLVj7VS9XBEYRot/pdFbVoUgqV2CFBRdrgsKLjIbbwHVXxHyESLhZcCx3eoFH5w==
+zlib-sync@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/zlib-sync/-/zlib-sync-0.1.6.tgz#9136ba8b66a75485fefe51aa68f9b49a5ae420eb"
+  integrity sha512-B2XGrhlXs/izEks+705vn/aL+nWyPgnS1glyCeH8wgZdOvztRn3ZEdqclj6GoJSeA/iRSqaTlznG2KO1M/GuWg==
   dependencies:
     nan "^2.14.0"
