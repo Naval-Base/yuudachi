@@ -1,8 +1,8 @@
 name: Lint
 on: [push, pull_request]
 jobs:
-  eslint:
-    name: ESLint
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -16,9 +16,5 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run ESLint
-        uses: icrawl/action-eslint@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          job-name: ESLint
+      - name: Run Lint
+        run: yarn workspace bot build
