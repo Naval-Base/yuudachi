@@ -50,27 +50,27 @@
 		"@sentry/cli": "^1.48.0",
 		"@types/common-tags": "^1.8.0",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^12.11.7",
+		"@types/node": "^12.12.3",
 		"@types/node-emoji": "^1.8.1",
 		"@types/node-fetch": "^2.5.2",
 		"@types/punycode": "^2.1.0",
 		"@types/turndown": "^5.0.0",
 		"@types/ws": "^6.0.3",
-		"@typescript-eslint/eslint-plugin": "^2.5.0",
-		"@typescript-eslint/parser": "^2.5.0",
-		"eslint": "^6.5.1",
-		"eslint-config-marine": "^5.1.0",
-		"eslint-config-prettier": "^6.4.0",
+		"@typescript-eslint/eslint-plugin": "^2.6.0",
+		"@typescript-eslint/parser": "^2.6.0",
+		"eslint": "^6.6.0",
+		"eslint-config-marine": "^5.3.2",
+		"eslint-config-prettier": "^6.5.0",
 		"eslint-plugin-prettier": "^3.1.1",
 		"prettier": "^1.18.2",
 		"rimraf": "^3.0.0",
 		"typescript": "^3.7.0-beta",
-		"utility-types": "^3.8.0"
+		"utility-types": "^3.9.0"
 	},
 	"optionalDependencies": {
 		"bufferutil": "^4.0.1",
 		"utf-8-validate": "^5.0.2",
-		"zlib-sync": "^0.1.5"
+		"zlib-sync": "^0.1.6"
 	},
 	"eslintConfig": {
 		"extends": "marine/prettier/node",

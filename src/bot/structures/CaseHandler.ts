@@ -301,16 +301,15 @@ export default class CaseHandler {
 			try {
 				const msg = await chan.messages.fetch(c.message!);
 				await msg.edit(new MessageEmbed(msg.embeds[0]).setFooter(`Case ${newCaseNum}`));
-			} catch {
-				await graphQLClient.mutate({
-					mutation: GRAPHQL.MUTATION.FIX_CASE,
-					variables: {
-						id: c.id,
-						case_id: newCaseNum,
-					},
-				});
-				newCaseNum++;
-			}
+			} catch {}
+			await graphQLClient.mutate({
+				mutation: GRAPHQL.MUTATION.FIX_CASE,
+				variables: {
+					id: c.id,
+					case_id: newCaseNum,
+				},
+			});
+			newCaseNum++;
 		}
 	}
 }
