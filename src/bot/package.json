@@ -7,7 +7,7 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"scripts": {
-		"1prebuild": "yarn lint",
+		"prebuild": "yarn lint",
 		"build": "rimraf dist && tsc",
 		"lint": "eslint . --ext .ts",
 		"lint:fix": "eslint . --ext .ts --fix",
