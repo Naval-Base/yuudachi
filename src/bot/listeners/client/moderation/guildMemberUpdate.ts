@@ -37,7 +37,8 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			let automaticRoleState: RoleStates;
 			if (PRODUCTION) automaticRoleState = data.role_states[0];
 			else automaticRoleState = data.staging_role_states[0];
-			if (automaticRoleState?.roles.includes(muteRole) ||
+			if (
+				automaticRoleState?.roles.includes(muteRole) ||
 				automaticRoleState?.roles.includes(restrictRoles.EMBED) ||
 				automaticRoleState?.roles.includes(restrictRoles.EMOJI) ||
 				automaticRoleState?.roles.includes(restrictRoles.REACTION) ||

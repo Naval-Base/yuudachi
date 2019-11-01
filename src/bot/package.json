@@ -62,9 +62,9 @@
 		"eslint-config-marine": "^5.3.2",
 		"eslint-config-prettier": "^6.5.0",
 		"eslint-plugin-prettier": "^3.1.1",
-		"prettier": "^1.18.2",
+		"prettier": "prettier/prettier",
 		"rimraf": "^3.0.0",
-		"typescript": "^3.7.0-beta",
+		"typescript": "^3.7.1-rc",
 		"utility-types": "^3.9.0"
 	},
 	"optionalDependencies": {

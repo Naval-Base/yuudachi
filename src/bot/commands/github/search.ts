@@ -55,11 +55,7 @@ export default class GitHubSearchCommand extends Command {
 			}
 			const embed = new MessageEmbed()
 				.setColor(3447003)
-				.setAuthor(
-					body.author?.login ?? 'Unknown',
-					body.author?.avatar_url ?? '',
-					body.author?.html_url ?? '',
-				)
+				.setAuthor(body.author?.login ?? 'Unknown', body.author?.avatar_url ?? '', body.author?.html_url ?? '')
 				.setTitle(body.commit.message.split('\n')[0])
 				.setURL(body.html_url)
 				.setDescription(
@@ -192,32 +188,28 @@ export default class GitHubSearchCommand extends Command {
 		if (!body?.data?.repository) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 		}
-		const data = body.data.repository.issueOrPullRequest;
+		const d = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
-			.setColor(data.merged ? 0x9c27b0 : data.state === 'OPEN' ? 0x43a047 : 0xef6c00)
-			.setAuthor(
-				data.author?.login ?? 'Unknown',
-				data.author?.avatarUrl ?? '',
-				data.author?.url ?? '',
-			)
-			.setTitle(data.title)
-			.setURL(data.url)
-			.setDescription(`${data.body.substring(0, 500)} ...`)
-			.addField('State', data.state, true)
-			.addField('Comments', data.comments.totalCount, true)
-			.addField('Repo & Number', `${body.data.repository.name}#${data.number}`, true)
-			.addField('Type', data.commits ? 'PULL REQUEST' : 'ISSUE', true)
+			.setColor(d.merged ? 0x9c27b0 : d.state === 'OPEN' ? 0x43a047 : 0xef6c00)
+			.setAuthor(d.author?.login ?? 'Unknown', d.author?.avatarUrl ?? '', d.author?.url ?? '')
+			.setTitle(d.title)
+			.setURL(d.url)
+			.setDescription(`${d.body.substring(0, 500)} ...`)
+			.addField('State', d.state, true)
+			.addField('Comments', d.comments.totalCount, true)
+			.addField('Repo & Number', `${body.data.repository.name}#${d.number}`, true)
+			.addField('Type', d.commits ? 'PULL REQUEST' : 'ISSUE', true)
 			.addField(
 				'Labels',
-				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }): string => node.name) : 'NO LABEL(S)',
+				d.labels.nodes.length ? d.labels.nodes.map((node: { name: string }): string => node.name) : 'NO LABEL(S)',
 				true,
 			)
-			.setThumbnail(data.author?.avatarUrl ?? '')
-			.setTimestamp(new Date(data.publishedAt));
-		if (data.commits) {
+			.setThumbnail(d.author?.avatarUrl ?? '')
+			.setTimestamp(new Date(d.publishedAt));
+		if (d.commits) {
 			embed.addField(
 				'Install with',
-				`\`npm i discordjs/discord.js#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``,
+				`\`npm i discordjs/discord.js#${d.commits.nodes[0].commit.oid.substring(0, 12)}\``,
 			);
 		}
 

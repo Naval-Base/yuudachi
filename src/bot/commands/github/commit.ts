@@ -53,11 +53,7 @@ export default class GitHubCommitCommand extends Command {
 		}
 		const embed = new MessageEmbed()
 			.setColor(3447003)
-			.setAuthor(
-				body.author?.login ?? 'Unknown',
-				body.author?.avatar_url ?? '',
-				body.author?.html_url ?? '',
-			)
+			.setAuthor(body.author?.login ?? 'Unknown', body.author?.avatar_url ?? '', body.author?.html_url ?? '')
 			.setTitle(body.commit.message.split('\n')[0])
 			.setURL(body.html_url)
 			.setDescription(
