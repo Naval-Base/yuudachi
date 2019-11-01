@@ -52,7 +52,7 @@
 		"@types/moment-duration-format": "^2.2.2",
 		"@types/node": "^12.12.4",
 		"@types/node-emoji": "^1.8.1",
-		"@types/node-fetch": "^2.5.2",
+		"@types/node-fetch": "^2.5.3",
 		"@types/punycode": "^2.1.0",
 		"@types/turndown": "^5.0.0",
 		"@types/ws": "^6.0.3",
