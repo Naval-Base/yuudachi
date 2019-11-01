@@ -48,16 +48,12 @@ export default class GitHubCommitCommand extends Command {
 		} catch (error) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
-		if (!body || !body.commit) {
+		if (!body?.commit) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
 		const embed = new MessageEmbed()
 			.setColor(3447003)
-			.setAuthor(
-				body.author ? (body.author.login ? body.author.login : 'Unknown') : 'Unknown',
-				body.author ? (body.author.avatar_url ? body.author.avatar_url : '') : '',
-				body.author ? (body.author.html_url ? body.author.html_url : '') : '',
-			)
+			.setAuthor(body.author?.login ?? 'Unknown', body.author?.avatar_url ?? '', body.author?.html_url ?? '')
 			.setTitle(body.commit.message.split('\n')[0])
 			.setURL(body.html_url)
 			.setDescription(
@@ -84,7 +80,7 @@ export default class GitHubCommitCommand extends Command {
 				body.committer ? `• [**${body.committer.login}**](${body.committer.html_url})` : 'Unknown',
 				true,
 			)
-			.setThumbnail(body.author ? body.author.avatar_url : '')
+			.setThumbnail(body.author?.avatar_url ?? '')
 			.setTimestamp(new Date(body.commit.author.date));
 
 		if (

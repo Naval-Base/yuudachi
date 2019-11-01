@@ -35,13 +35,13 @@ export default class GitHubPROrIssueCommand extends Command {
 		}
 		let owner;
 		let repo;
-		if ((args.match && args.match[1] === 'g') || !args.match) {
+		if (args.match?.[1] === 'g' || !args.match) {
 			const repository = this.client.settings.get(message.guild!, SETTINGS.GITHUB_REPO);
 			if (!repository) return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_REPO);
 			owner = repository.split('/')[0];
 			repo = repository.split('/')[1];
 		}
-		if (args.match && args.match[1] !== 'g') {
+		if (args.match?.[1] !== 'g') {
 			switch (args.match[1]) {
 				case 'djs':
 					owner = 'discordjs';
@@ -67,7 +67,7 @@ export default class GitHubPROrIssueCommand extends Command {
 					return message.util!.reply('No u.');
 			}
 		}
-		const num = args.match ? args.match[2] : args.pr_issue;
+		const num = args.match?.[2] || args.pr_issue;
 		const query = `
 			{
 				repository(owner: "${owner}", name: "${repo}") {
@@ -138,33 +138,29 @@ export default class GitHubPROrIssueCommand extends Command {
 		} catch (error) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
 		}
-		if (!body || !body.data || !body.data.repository || !body.data.repository.issueOrPullRequest) {
+		if (!body?.data?.repository?.issueOrPullRequest) {
 			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
 		}
-		const data = body.data.repository.issueOrPullRequest;
+		const d = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
-			.setColor(data.merged ? 0x9c27b0 : data.state === 'OPEN' ? 0x43a047 : 0xef6c00)
-			.setAuthor(
-				data.author ? (data.author.login ? data.author.login : 'Unknown') : 'Unknown',
-				data.author ? (data.author.avatarUrl ? data.author.avatarUrl : '') : '',
-				data.author ? (data.author.url ? data.author.url : '') : '',
-			)
-			.setTitle(data.title)
-			.setURL(data.url)
-			.setDescription(`${data.body.substring(0, 500)} ...`)
-			.addField('State', data.state, true)
-			.addField('Comments', data.comments.totalCount, true)
-			.addField('Repo & Number', `${body.data.repository.name}#${data.number}`, true)
-			.addField('Type', data.commits ? 'PULL REQUEST' : 'ISSUE', true)
+			.setColor(d.merged ? 0x9c27b0 : d.state === 'OPEN' ? 0x43a047 : 0xef6c00)
+			.setAuthor(d.author?.login ?? 'Unknown', d.author?.avatarUrl ?? '', d.author?.url ?? '')
+			.setTitle(d.title)
+			.setURL(d.url)
+			.setDescription(`${d.body.substring(0, 500)} ...`)
+			.addField('State', d.state, true)
+			.addField('Comments', d.comments.totalCount, true)
+			.addField('Repo & Number', `${body.data.repository.name}#${d.number}`, true)
+			.addField('Type', d.commits ? 'PULL REQUEST' : 'ISSUE', true)
 			.addField(
 				'Labels',
-				data.labels.nodes.length ? data.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
+				d.labels.nodes.length ? d.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
 				true,
 			)
-			.setThumbnail(data.author ? data.author.avatarUrl : '')
-			.setTimestamp(new Date(data.publishedAt));
-		if (repo && !['guide'].includes(repo) && data.commits) {
-			embed.addField('Install with', `\`npm i ${owner}/${repo}#${data.commits.nodes[0].commit.oid.substring(0, 12)}\``);
+			.setThumbnail(d.author?.avatarUrl ?? '')
+			.setTimestamp(new Date(d.publishedAt));
+		if (repo && !['guide'].includes(repo) && d.commits) {
+			embed.addField('Install with', `\`npm i ${owner}/${repo}#${d.commits.nodes[0].commit.oid.substring(0, 12)}\``);
 		}
 
 		if (

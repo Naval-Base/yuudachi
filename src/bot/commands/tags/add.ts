@@ -59,10 +59,10 @@ export default class TagAddCommand extends Command {
 		message: Message,
 		{ name, content, hoist, template }: { name: string; content: string; hoist: boolean; template: boolean },
 	) {
-		if (name && name.length >= 1900) {
+		if (name?.length >= 1900) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
-		if (content && content.length >= 1950) {
+		if (content?.length >= 1950) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
 		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));

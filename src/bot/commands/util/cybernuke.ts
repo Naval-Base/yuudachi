@@ -56,7 +56,7 @@ export default class LaunchCybernukeCommand extends Command {
 			time: 10000,
 		});
 
-		if (!responses || responses.size !== 1) {
+		if (responses?.size !== 1) {
 			await message.reply('Cybernuke cancelled.');
 			return null;
 		}

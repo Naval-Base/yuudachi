@@ -38,12 +38,11 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (PRODUCTION) automaticRoleState = data.role_states[0];
 			else automaticRoleState = data.staging_role_states[0];
 			if (
-				automaticRoleState &&
-				(automaticRoleState.roles.includes(muteRole) ||
-					automaticRoleState.roles.includes(restrictRoles.EMBED) ||
-					automaticRoleState.roles.includes(restrictRoles.EMOJI) ||
-					automaticRoleState.roles.includes(restrictRoles.REACTION) ||
-					automaticRoleState.roles.includes(restrictRoles.TAG))
+				automaticRoleState?.roles.includes(muteRole) ||
+				automaticRoleState?.roles.includes(restrictRoles.EMBED) ||
+				automaticRoleState?.roles.includes(restrictRoles.EMOJI) ||
+				automaticRoleState?.roles.includes(restrictRoles.REACTION) ||
+				automaticRoleState?.roles.includes(restrictRoles.TAG)
 			)
 				return;
 			const modLogChannel = this.client.settings.get(newMember.guild, SETTINGS.MOD_LOG);
@@ -115,7 +114,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 
 			await this.client.caseHandler.create({
 				guild: newMember.guild.id,
-				message: modMessage ? modMessage.id : undefined,
+				message: modMessage?.id,
 				case_id: totalCases,
 				target_id: newMember.id,
 				target_tag: newMember.user.tag,

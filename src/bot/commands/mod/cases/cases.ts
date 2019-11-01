@@ -28,7 +28,10 @@ export default class CasesCommand extends Command {
 
 	public *args() {
 		const method = yield {
-			type: [['case-show', 'case', 'show', 'view'], ['case-delete', 'delete', 'del', 'remove', 'rm']],
+			type: [
+				['case-show', 'case', 'show', 'view'],
+				['case-delete', 'delete', 'del', 'remove', 'rm'],
+			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return MESSAGES.COMMANDS.MOD.CASES.REPLY(prefix);

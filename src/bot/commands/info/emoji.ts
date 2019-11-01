@@ -26,8 +26,7 @@ export default class EmojiInfoCommand extends Command {
 					id: 'emoji',
 					match: 'content',
 					type: async (message, content) => {
-						// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-						if (EMOJI_REGEX.test(content)) [, content] = content.match(EMOJI_REGEX)!;
+						if (EMOJI_REGEX.test(content)) [, content] = EMOJI_REGEX.exec(content)!;
 						if (!isNaN((content as unknown) as number)) return message.guild!.emojis.get(content);
 						return message.guild!.emojis.find(e => e.name === content) || emojis.find(content);
 					},
@@ -45,12 +44,12 @@ export default class EmojiInfoCommand extends Command {
 
 		if (emoji instanceof GuildEmoji) {
 			embed.setDescription(`Info about ${emoji.name} (ID: ${emoji.id})`);
-			embed.setThumbnail(emoji.url || '');
+			embed.setThumbnail(emoji.url ?? '');
 			embed.addField(
 				'❯ Info',
 				stripIndents`
 				• Identifier: \`<${emoji.identifier}>\`
-				• Creation Date: ${moment.utc(emoji.createdAt || 0).format('YYYY/MM/DD hh:mm:ss')}
+				• Creation Date: ${moment.utc(emoji.createdAt ?? 0).format('YYYY/MM/DD hh:mm:ss')}
 				• URL: ${emoji.url}
 				`,
 			);

@@ -89,7 +89,7 @@ export default class TagEditCommand extends Command {
 		if (tag.user !== message.author.id && !staffRole) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.OWN_TAG);
 		}
-		if (content && content.length >= 1950) {
+		if (content?.length >= 1950) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.TOO_LONG);
 		}
 		if (content && (!staffRole || !template || untemplate)) {

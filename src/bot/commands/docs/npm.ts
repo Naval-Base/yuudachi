@@ -35,7 +35,7 @@ export default class NPMCommand extends Command {
 			return message.util!.reply(MESSAGES.COMMANDS.DOCS.NPM.FAILURE);
 		}
 		const body = await res.json();
-		if (body.time && body.time.unpublished) {
+		if (body.time?.unpublished) {
 			return message.util!.reply(MESSAGES.COMMANDS.DOCS.NPM.UNPUBLISH);
 		}
 		const version = body.versions[body['dist-tags'].latest];
@@ -53,7 +53,7 @@ export default class NPMCommand extends Command {
 			.addField('❯ Creation Date', moment.utc(body.time.created).format('YYYY/MM/DD hh:mm:ss'), true)
 			.addField('❯ Modification Date', moment.utc(body.time.modified).format('YYYY/MM/DD hh:mm:ss'), true)
 			.addField('❯ Main File', version.main || 'index.js', true)
-			.addField('❯ Dependencies', dependencies && dependencies.length ? dependencies.join(', ') : 'None')
+			.addField('❯ Dependencies', dependencies?.length ? dependencies.join(', ') : 'None')
 			.addField('❯ Maintainers', maintainers.join(', '));
 
 		return message.util!.send(embed);
