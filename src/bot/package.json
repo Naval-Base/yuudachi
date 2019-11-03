@@ -44,7 +44,7 @@
 		"winston-loki": "^4.0.1"
 	},
 	"devDependencies": {
-		"@graphql-codegen/add": "^1.8.2",
+		"@graphql-codegen/add": "^1.8.3",
 		"@graphql-codegen/cli": "^1.8.2",
 		"@graphql-codegen/typescript": "^1.8.3",
 		"@sentry/cli": "^1.48.0",
