@@ -72,7 +72,11 @@ export default class DurationCommand extends Command {
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE);
 		}
-		if (dbCase.mod_id !== message.author.id && !message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+		if (
+			dbCase.mod_id &&
+			dbCase.mod_id !== message.author.id &&
+			!message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD)
+		) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.WRONG_MOD);
 		}
 

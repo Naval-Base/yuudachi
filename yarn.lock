@@ -1160,6 +1160,13 @@ angular-html-parser@1.2.0:
   dependencies:
     tslib "^1.9.3"
 
+angular-html-parser@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/angular-html-parser/-/angular-html-parser-1.3.0.tgz#2b87c3c1b7535a972a00e35604221df3c51e6c6e"
+  integrity sha512-FCLuM8ZUt30qwiV5KlW8uWL9cwlS2loOIGq8wUQFypkJ1QZqJk829yxTsvp2DvCMZ7uLwfjIaIrKV5N2+RLiSQ==
+  dependencies:
+    tslib "^1.9.3"
+
 ansi-escapes@^3.0.0, ansi-escapes@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-3.2.0.tgz#8780b98ff9dbf5638152d1f1fe5c1d7b4442976b"
@@ -4681,9 +4688,8 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@1.18.2, prettier@prettier/prettier:
+prettier@1.18.2:
   version "1.18.2"
-  uid e66e34a43553dad3c8cd7a4fc29e79552dcec219
   resolved "https://codeload.github.com/prettier/prettier/tar.gz/e66e34a43553dad3c8cd7a4fc29e79552dcec219"
   dependencies:
     "@angular/compiler" "8.2.7"
@@ -4694,6 +4700,69 @@ prettier@1.18.2, prettier@prettier/prettier:
     "@typescript-eslint/typescript-estree" "2.6.0"
     angular-estree-parser "1.1.5"
     angular-html-parser "1.2.0"
+    camelcase "5.3.1"
+    chalk "2.4.2"
+    cjk-regex "2.0.0"
+    cosmiconfig "5.2.1"
+    dashify "2.0.0"
+    dedent "0.7.0"
+    diff "4.0.1"
+    editorconfig "0.15.3"
+    editorconfig-to-prettier "0.1.1"
+    escape-string-regexp "1.0.5"
+    esutils "2.0.3"
+    find-parent-dir "0.3.0"
+    find-project-root "1.1.1"
+    flow-parser "0.89.0"
+    get-stream "5.1.0"
+    globby "6.1.0"
+    graphql "14.5.8"
+    html-element-attributes "2.2.0"
+    html-styles "1.0.0"
+    html-tag-names "1.1.4"
+    ignore "4.0.6"
+    is-ci "2.0.0"
+    jest-docblock "24.9.0"
+    json-stable-stringify "1.0.1"
+    leven "3.1.0"
+    lines-and-columns "1.1.6"
+    linguist-languages "7.6.0"
+    lodash.uniqby "4.7.0"
+    mem "5.1.1"
+    minimatch "3.0.4"
+    minimist "1.2.0"
+    n-readlines "1.0.0"
+    normalize-path "3.0.0"
+    parse-srcset ikatyang/parse-srcset#54eb9c1cb21db5c62b4d0e275d7249516df6f0ee
+    postcss-less "1.1.5"
+    postcss-media-query-parser "0.2.3"
+    postcss-scss "2.0.0"
+    postcss-selector-parser "2.2.3"
+    postcss-values-parser "1.5.0"
+    regexp-util "1.2.2"
+    remark-math "1.0.6"
+    remark-parse "5.0.0"
+    resolve "1.12.0"
+    semver "6.3.0"
+    string-width "4.1.0"
+    typescript "3.7.1-rc"
+    unicode-regex "3.0.0"
+    unified "8.4.1"
+    vnopts "1.0.2"
+    yaml-unist-parser "1.1.1"
+
+prettier@prettier/prettier:
+  version "1.18.2"
+  resolved "https://codeload.github.com/prettier/prettier/tar.gz/12ba99720714ef965c2c9580a6d922519bc282f8"
+  dependencies:
+    "@angular/compiler" "8.2.7"
+    "@babel/code-frame" "7.5.5"
+    "@babel/parser" "7.6.4"
+    "@glimmer/syntax" "0.41.0"
+    "@iarna/toml" "2.2.3"
+    "@typescript-eslint/typescript-estree" "2.6.0"
+    angular-estree-parser "1.1.5"
+    angular-html-parser "1.3.0"
     camelcase "5.3.1"
     chalk "2.4.2"
     cjk-regex "2.0.0"
@@ -5808,9 +5877,9 @@ ua-parser-js@^0.7.18:
   integrity sha512-8OaIKfzL5cpx8eCMAhhvTlft8GYF8b2eQr6JkCyVdrgjcytyOmPCXrqXFcUnhonRpLlh5yxEZVohm6mzaowUOw==
 
 uglify-js@^3.1.4:
-  version "3.6.5"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.6.5.tgz#b0ee796d2ae7e25672e04f65629b997cd4b30bd6"
-  integrity sha512-7L3W+Npia1OCr5Blp4/Vw83tK1mu5gnoIURtT1fUVfQ3Kf8WStWV6NJz0fdoBJZls0KlweruRTLVe6XLafmy5g==
+  version "3.6.7"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.6.7.tgz#15f49211df6b8a01ee91322bbe46fa33223175dc"
+  integrity sha512-4sXQDzmdnoXiO+xvmTzQsfIiwrjUCSA95rSP4SEd8tDb51W2TiDOlL76Hl+Kw0Ie42PSItCW8/t6pBNCF2R48A==
   dependencies:
     commander "~2.20.3"
     source-map "~0.6.1"
