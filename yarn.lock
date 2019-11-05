@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@angular/compiler@8.2.7":
-  version "8.2.7"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-8.2.7.tgz#d5b457359708088ab821b5834c204dcaa8b246dc"
-  integrity sha512-RLXJMe+YW5a6mOj1Cxx4AkjaZX0JuerPQs4KgKx2mQXRP0LtI4+6qg2+Kds6gIJxUd1Fx9oqAflRGDPchyJaxA==
+"@angular/compiler@8.2.13":
+  version "8.2.13"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-8.2.13.tgz#76d35761918df8cadeb1624418377712d259347f"
+  integrity sha512-u2NWCvEn4SjbMvn2PG6sYcf+rR5u3aYMv3/mNQ9k+2UmCIu3yJrcuCzebjo5SdlDVqKD2vzbyMZnr8VB9OcceQ==
   dependencies:
     tslib "^1.9.0"
 
@@ -4696,9 +4696,10 @@ prettier-linter-helpers@^1.0.0:
 
 prettier@1.18.2, prettier@prettier/prettier:
   version "1.18.2"
-  resolved "https://codeload.github.com/prettier/prettier/tar.gz/12ba99720714ef965c2c9580a6d922519bc282f8"
+  uid "82257bc091b7d2ec0d4bfb36e3ea3a9329680cba"
+  resolved "https://codeload.github.com/prettier/prettier/tar.gz/82257bc091b7d2ec0d4bfb36e3ea3a9329680cba"
   dependencies:
-    "@angular/compiler" "8.2.7"
+    "@angular/compiler" "8.2.13"
     "@babel/code-frame" "7.5.5"
     "@babel/parser" "7.6.4"
     "@glimmer/syntax" "0.41.0"
