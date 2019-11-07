@@ -2206,7 +2206,6 @@ discord-akairo@discord-akairo/discord-akairo:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  uid "38d370fb18fdbf079b1c91793c0550e77667eccd"
   resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/38d370fb18fdbf079b1c91793c0550e77667eccd"
   dependencies:
     "@discordjs/collection" "^0.1.1"
@@ -4690,7 +4689,6 @@ prettier-linter-helpers@^1.0.0:
 
 prettier@1.18.2, prettier@prettier/prettier:
   version "1.18.2"
-  uid d4a7a47b048b8ced046e71d44dfc5de417b89221
   resolved "https://codeload.github.com/prettier/prettier/tar.gz/d4a7a47b048b8ced046e71d44dfc5de417b89221"
   dependencies:
     "@angular/compiler" "8.2.13"

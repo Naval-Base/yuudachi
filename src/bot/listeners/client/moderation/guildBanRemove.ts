@@ -21,13 +21,15 @@ export default class GuildBanRemoveModerationListener extends Listener {
 		if (modLogChannel) {
 			const prefix = (this.client.commandHandler.prefix as PrefixSupplier)({ guild } as Message);
 			const reason = `Use \`${prefix}reason ${totalCases} <...reason>\` to set a reason for this case`;
-			const embed = (await this.client.caseHandler.log({
-				member: user,
-				action: 'Unban',
-				caseNum: totalCases,
-				reason,
-				message: { author: null, guild },
-			})).setColor(COLORS.UNBAN);
+			const embed = (
+				await this.client.caseHandler.log({
+					member: user,
+					action: 'Unban',
+					caseNum: totalCases,
+					reason,
+					message: { author: null, guild },
+				})
+			).setColor(COLORS.UNBAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 		}
 

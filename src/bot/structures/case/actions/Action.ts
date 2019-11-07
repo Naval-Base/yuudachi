@@ -138,14 +138,16 @@ export default abstract class Action {
 			if (PRODUCTION) dbCase = data.cases[0];
 			else dbCase = data.staging_cases[0];
 			if (dbCase) {
-				const embed = (await this.client.caseHandler.log({
-					member: this.member,
-					action: this.actionName,
-					caseNum: totalCases,
-					reason: this.reason,
-					message: this.message,
-					ref: this.ref,
-				})).setColor(this.color);
+				const embed = (
+					await this.client.caseHandler.log({
+						member: this.member,
+						action: this.actionName,
+						caseNum: totalCases,
+						reason: this.reason,
+						message: this.message,
+						ref: this.ref,
+					})
+				).setColor(this.color);
 				try {
 					const modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
 					await graphQLClient.mutate({
