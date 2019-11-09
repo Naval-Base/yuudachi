@@ -2860,6 +2860,13 @@ get-stdin@^6.0.0:
   resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-6.0.0.tgz#9e09bf712b360ab9225e812048f71fde9c89657b"
   integrity sha512-jp4tHawyV7+fkkSKyvjuLZswblUtz+SQKzSWnBbii16BuZksJlU1wuBYXY75r+duh/llF1ur6oNwi+2ZzjKZ7g==
 
+get-stream@4.1.0, get-stream@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-4.1.0.tgz#c1b255575f3dc21d59bfc79cd3d2b46b1c3a54b5"
+  integrity sha512-GMat4EJ5161kIy2HevLlr4luNjBgvmj413KaQA7jt4V8B4RDsfpHk7WQ9GVqfYyyx8OS/L66Kox+rJRNklLK7w==
+  dependencies:
+    pump "^3.0.0"
+
 get-stream@5.1.0, get-stream@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-5.1.0.tgz#01203cdc92597f9b909067c3e656cc1f4d3c4dc9"
@@ -2871,13 +2878,6 @@ get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
   integrity sha1-jpQ9E1jcN1VQVOy+LtsFqhdO3hQ=
-
-get-stream@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-4.1.0.tgz#c1b255575f3dc21d59bfc79cd3d2b46b1c3a54b5"
-  integrity sha512-GMat4EJ5161kIy2HevLlr4luNjBgvmj413KaQA7jt4V8B4RDsfpHk7WQ9GVqfYyyx8OS/L66Kox+rJRNklLK7w==
-  dependencies:
-    pump "^3.0.0"
 
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
@@ -4770,8 +4770,8 @@ prettier@1.18.2:
 
 prettier@prettier/prettier:
   version "1.20.0-dev"
-  uid "98d27c7de29891f986aa36af7b1bf0e424619f4e"
-  resolved "https://codeload.github.com/prettier/prettier/tar.gz/98d27c7de29891f986aa36af7b1bf0e424619f4e"
+  uid b56f95c97522e2099d46f02af5139a9dd178b6c5
+  resolved "https://codeload.github.com/prettier/prettier/tar.gz/b56f95c97522e2099d46f02af5139a9dd178b6c5"
   dependencies:
     "@angular/compiler" "8.2.13"
     "@babel/code-frame" "7.5.5"
@@ -4795,7 +4795,7 @@ prettier@prettier/prettier:
     find-parent-dir "0.3.0"
     find-project-root "1.1.1"
     flow-parser "0.111.3"
-    get-stream "5.1.0"
+    get-stream "4.1.0"
     globby "6.1.0"
     graphql "14.5.8"
     html-element-attributes "2.2.0"
