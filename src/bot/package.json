@@ -65,7 +65,7 @@
 		"prettier": "prettier/prettier",
 		"rimraf": "^3.0.0",
 		"typescript": "^3.7.2",
-		"utility-types": "^3.9.0"
+		"utility-types": "^3.10.0"
 	},
 	"optionalDependencies": {
 		"bufferutil": "^4.0.1",
