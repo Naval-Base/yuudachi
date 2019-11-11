@@ -2,7 +2,7 @@ import { Listener, PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel } from 'discord.js';
 import { ACTIONS, COLORS, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { Cases, RoleStates } from '../../../util/graphQLTypes';
+import { Cases, RoleStates, RoleStatesInsertInput, CasesInsertInput } from '../../../util/graphQLTypes';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {
@@ -27,7 +27,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			const muteRole = this.client.settings.get(newMember.guild, SETTINGS.MUTE_ROLE);
 			const restrictRoles = this.client.settings.get(newMember.guild, SETTINGS.RESTRICT_ROLES);
 			if (!muteRole || !restrictRoles) return;
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, RoleStatesInsertInput>({
 				query: GRAPHQL.QUERY.ROLE_STATES,
 				variables: {
 					guild: newMember.guild.id,
@@ -35,8 +35,8 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				},
 			});
 			let automaticRoleState: RoleStates;
-			if (PRODUCTION) automaticRoleState = data.role_states[0];
-			else automaticRoleState = data.staging_role_states[0];
+			if (PRODUCTION) automaticRoleState = data.roleStates[0];
+			else automaticRoleState = data.roleStatesStaging[0];
 			if (
 				automaticRoleState?.roles.includes(muteRole) ||
 				automaticRoleState?.roles.includes(restrictRoles.EMBED) ||
@@ -49,17 +49,17 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
 			if (!role) {
 				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
-					const { data } = await graphQLClient.query({
+					const { data } = await graphQLClient.query<any, CasesInsertInput>({
 						query: GRAPHQL.QUERY.MUTE_MEMBER,
 						variables: {
 							guild: newMember.guild.id,
-							target_id: newMember.id,
-							action_processed: false,
+							targetId: newMember.id,
+							actionProcessed: false,
 						},
 					});
 					let dbCase: Cases;
 					if (PRODUCTION) dbCase = data.cases[0];
-					else dbCase = data.staging_cases[0];
+					else dbCase = data.casesStaging[0];
 					if (dbCase) this.client.muteScheduler.cancel(dbCase);
 				}
 				return;
@@ -117,11 +117,11 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			await this.client.caseHandler.create({
 				guild: newMember.guild.id,
 				message: modMessage?.id,
-				case_id: totalCases,
-				target_id: newMember.id,
-				target_tag: newMember.user.tag,
+				caseId: totalCases,
+				targetId: newMember.id,
+				targetTag: newMember.user.tag,
 				action,
-				action_processed: processed,
+				actionProcessed: processed,
 			});
 		}
 	}

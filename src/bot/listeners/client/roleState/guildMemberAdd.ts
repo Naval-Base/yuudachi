@@ -2,7 +2,7 @@ import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { RoleStates } from '../../../util/graphQLTypes';
+import { RoleStates, RoleStatesInsertInput } from '../../../util/graphQLTypes';
 
 export default class GuildMemberAddRoleStateListener extends Listener {
 	public constructor() {
@@ -16,7 +16,7 @@ export default class GuildMemberAddRoleStateListener extends Listener {
 	public async exec(member: GuildMember) {
 		const roleState = this.client.settings.get(member.guild, SETTINGS.ROLE_STATE);
 		if (roleState) {
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, RoleStatesInsertInput>({
 				query: GRAPHQL.QUERY.ROLE_STATES,
 				variables: {
 					guild: member.guild.id,
@@ -24,8 +24,8 @@ export default class GuildMemberAddRoleStateListener extends Listener {
 				},
 			});
 			let user: RoleStates;
-			if (PRODUCTION) user = data.role_states[0];
-			else user = data.staging_role_states[0];
+			if (PRODUCTION) user = data.roleStates[0];
+			else user = data.roleStatesStaging[0];
 			try {
 				if (user && member.roles) {
 					await this.client.muteScheduler.check();

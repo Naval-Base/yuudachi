@@ -3,7 +3,7 @@ import { GuildMember, Message, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../../../client/YukikazeClient';
 import { ACTIONS, COLORS, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { Cases } from '../../../util/graphQLTypes';
+import { Cases, CasesInsertInput } from '../../../util/graphQLTypes';
 
 export interface ActionData {
 	message: Message;
@@ -115,28 +115,28 @@ export default abstract class Action {
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.caseHandler.create({
 			guild: this.message.guild!.id,
-			case_id: totalCases,
-			target_id: this.member.id,
-			target_tag: memberTag,
-			mod_id: this.message.author.id,
-			mod_tag: this.message.author.tag,
+			caseId: totalCases,
+			targetId: this.member.id,
+			targetTag: memberTag,
+			modId: this.message.author.id,
+			modTag: this.message.author.tag,
 			action: this.action,
 			reason: this.reason,
-			ref_id: this.ref,
+			refId: this.ref,
 		});
 
 		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, CasesInsertInput>({
 				query: GRAPHQL.QUERY.LOG_CASE,
 				variables: {
 					guild: this.message.guild!.id,
-					case_id: totalCases,
+					caseId: totalCases,
 				},
 			});
 			let dbCase: Pick<Cases, 'id' | 'message'>;
 			if (PRODUCTION) dbCase = data.cases[0];
-			else dbCase = data.staging_cases[0];
+			else dbCase = data.casesStaging[0];
 			if (dbCase) {
 				const embed = (
 					await this.client.caseHandler.log({
@@ -150,7 +150,7 @@ export default abstract class Action {
 				).setColor(this.color);
 				try {
 					const modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
-					await graphQLClient.mutate({
+					await graphQLClient.mutate<any, CasesInsertInput>({
 						mutation: GRAPHQL.MUTATION.LOG_CASE,
 						variables: {
 							id: dbCase.id,

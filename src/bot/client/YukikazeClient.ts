@@ -14,7 +14,7 @@ import Queue from '../structures/Queue';
 import HasuraProvider from '../structures/SettingsProvider';
 import { MESSAGES, PRODUCTION, PROMETHEUS, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Tags } from '../util/graphQLTypes';
+import { Tags, TagsInsertInput } from '../util/graphQLTypes';
 import { EVENTS, logger, TOPICS } from '../util/logger';
 
 declare module 'discord-akairo' {
@@ -130,7 +130,7 @@ export default class YukikazeClient extends AkairoClient {
 		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
 					guild: message.guild!.id,
@@ -138,7 +138,7 @@ export default class YukikazeClient extends AkairoClient {
 			});
 			let tags: Tags[];
 			if (PRODUCTION) tags = data.tags;
-			else tags = data.staging_tags;
+			else tags = data.tagsStaging;
 			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
 
 			return tag || Flag.fail(phrase);
@@ -146,7 +146,7 @@ export default class YukikazeClient extends AkairoClient {
 		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
 					guild: message.guild!.id,
@@ -154,7 +154,7 @@ export default class YukikazeClient extends AkairoClient {
 			});
 			let tags: Tags[];
 			if (PRODUCTION) tags = data.tags;
-			else tags = data.staging_tags;
+			else tags = data.tagsStaging;
 			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
 
 			return tag ? Flag.fail(phrase) : phrase;

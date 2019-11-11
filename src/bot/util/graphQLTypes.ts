@@ -40,20 +40,32 @@ export interface BooleanComparisonExp {
 
 /** columns and relationships of "cases" */
 export interface Cases {
+	/** The action of this case */
 	action: Scalars['Int'];
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	action_processed?: Maybe<Scalars['Boolean']>;
-	case_id: Scalars['Int'];
-	created_at: Scalars['timestamptz'];
+	/** The duration of this case */
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	/** Whether this case has been processed or not */
+	actionProcessed?: Maybe<Scalars['Boolean']>;
+	/** The case id */
+	caseId: Scalars['Int'];
+	createdAt: Scalars['timestamptz'];
+	/** The id of the guild this case belongs to */
 	guild: Scalars['String'];
 	id: Scalars['uuid'];
+	/** The id of the message this case belongs to */
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	/** The id of the moderator this case belongs to */
+	modId?: Maybe<Scalars['String']>;
+	/** The tag of the moderator this case belongs to */
+	modTag?: Maybe<Scalars['String']>;
+	/** The reason of this case */
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id: Scalars['String'];
-	target_tag: Scalars['String'];
+	/** The id of the case this case references */
+	refId?: Maybe<Scalars['Int']>;
+	/** The id of the target this case belongs to */
+	targetId: Scalars['String'];
+	/** The tag of the target this case belongs to */
+	targetTag: Scalars['String'];
 }
 
 /** aggregated selection of "cases" */
@@ -107,15 +119,15 @@ export interface CasesArrRelInsertInput {
 /** aggregate avg on columns */
 export interface CasesAvgFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by avg() on columns of table "cases" */
 export interface CasesAvgOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** Boolean expression to filter rows from the table "cases". All fields are combined with a logical 'AND'. */
@@ -124,19 +136,19 @@ export interface CasesBoolExp {
 	_not?: Maybe<CasesBoolExp>;
 	_or?: Maybe<Array<Maybe<CasesBoolExp>>>;
 	action?: Maybe<IntComparisonExp>;
-	action_duration?: Maybe<TimestamptzComparisonExp>;
-	action_processed?: Maybe<BooleanComparisonExp>;
-	case_id?: Maybe<IntComparisonExp>;
-	created_at?: Maybe<TimestamptzComparisonExp>;
+	actionDuration?: Maybe<TimestamptzComparisonExp>;
+	actionProcessed?: Maybe<BooleanComparisonExp>;
+	caseId?: Maybe<IntComparisonExp>;
+	createdAt?: Maybe<TimestamptzComparisonExp>;
 	guild?: Maybe<StringComparisonExp>;
 	id?: Maybe<UuidComparisonExp>;
 	message?: Maybe<StringComparisonExp>;
-	mod_id?: Maybe<StringComparisonExp>;
-	mod_tag?: Maybe<StringComparisonExp>;
+	modId?: Maybe<StringComparisonExp>;
+	modTag?: Maybe<StringComparisonExp>;
 	reason?: Maybe<StringComparisonExp>;
-	ref_id?: Maybe<IntComparisonExp>;
-	target_id?: Maybe<StringComparisonExp>;
-	target_tag?: Maybe<StringComparisonExp>;
+	refId?: Maybe<IntComparisonExp>;
+	targetId?: Maybe<StringComparisonExp>;
+	targetTag?: Maybe<StringComparisonExp>;
 }
 
 /** unique or primary key constraints on table "cases" */
@@ -148,90 +160,90 @@ export enum CasesConstraint {
 /** input type for incrementing integer columne in table "cases" */
 export interface CasesIncInput {
 	action?: Maybe<Scalars['Int']>;
-	case_id?: Maybe<Scalars['Int']>;
-	ref_id?: Maybe<Scalars['Int']>;
+	caseId?: Maybe<Scalars['Int']>;
+	refId?: Maybe<Scalars['Int']>;
 }
 
 /** input type for inserting data into table "cases" */
 export interface CasesInsertInput {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	action_processed?: Maybe<Scalars['Boolean']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	actionProcessed?: Maybe<Scalars['Boolean']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	id?: Maybe<Scalars['uuid']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** aggregate max on columns */
 export interface CasesMaxFields {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** order by max() on columns of table "cases" */
 export interface CasesMaxOrderBy {
 	action?: Maybe<OrderBy>;
-	action_duration?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	actionDuration?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	message?: Maybe<OrderBy>;
-	mod_id?: Maybe<OrderBy>;
-	mod_tag?: Maybe<OrderBy>;
+	modId?: Maybe<OrderBy>;
+	modTag?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
-	target_id?: Maybe<OrderBy>;
-	target_tag?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
+	targetId?: Maybe<OrderBy>;
+	targetTag?: Maybe<OrderBy>;
 }
 
 /** aggregate min on columns */
 export interface CasesMinFields {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** order by min() on columns of table "cases" */
 export interface CasesMinOrderBy {
 	action?: Maybe<OrderBy>;
-	action_duration?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	actionDuration?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	message?: Maybe<OrderBy>;
-	mod_id?: Maybe<OrderBy>;
-	mod_tag?: Maybe<OrderBy>;
+	modId?: Maybe<OrderBy>;
+	modTag?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
-	target_id?: Maybe<OrderBy>;
-	target_tag?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
+	targetId?: Maybe<OrderBy>;
+	targetTag?: Maybe<OrderBy>;
 }
 
 /** response of any mutation on the table "cases" */
@@ -252,24 +264,25 @@ export interface CasesObjRelInsertInput {
 export interface CasesOnConflict {
 	constraint: CasesConstraint;
 	update_columns: Array<CasesUpdateColumn>;
+	where?: Maybe<CasesBoolExp>;
 }
 
 /** ordering options when selecting data from "cases" */
 export interface CasesOrderBy {
 	action?: Maybe<OrderBy>;
-	action_duration?: Maybe<OrderBy>;
-	action_processed?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	actionDuration?: Maybe<OrderBy>;
+	actionProcessed?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	id?: Maybe<OrderBy>;
 	message?: Maybe<OrderBy>;
-	mod_id?: Maybe<OrderBy>;
-	mod_tag?: Maybe<OrderBy>;
+	modId?: Maybe<OrderBy>;
+	modTag?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
-	target_id?: Maybe<OrderBy>;
-	target_tag?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
+	targetId?: Maybe<OrderBy>;
+	targetTag?: Maybe<OrderBy>;
 }
 
 /** select columns of table "cases" */
@@ -277,13 +290,13 @@ export enum CasesSelectColumn {
 	/** column name */
 	Action = 'action',
 	/** column name */
-	ActionDuration = 'action_duration',
+	ActionDuration = 'actionDuration',
 	/** column name */
-	ActionProcessed = 'action_processed',
+	ActionProcessed = 'actionProcessed',
 	/** column name */
-	CaseId = 'case_id',
+	CaseId = 'caseId',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -291,91 +304,91 @@ export enum CasesSelectColumn {
 	/** column name */
 	Message = 'message',
 	/** column name */
-	ModId = 'mod_id',
+	ModId = 'modId',
 	/** column name */
-	ModTag = 'mod_tag',
+	ModTag = 'modTag',
 	/** column name */
 	Reason = 'reason',
 	/** column name */
-	RefId = 'ref_id',
+	RefId = 'refId',
 	/** column name */
-	TargetId = 'target_id',
+	TargetId = 'targetId',
 	/** column name */
-	TargetTag = 'target_tag',
+	TargetTag = 'targetTag',
 }
 
 /** input type for updating data in table "cases" */
 export interface CasesSetInput {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	action_processed?: Maybe<Scalars['Boolean']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	actionProcessed?: Maybe<Scalars['Boolean']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	id?: Maybe<Scalars['uuid']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** aggregate stddev on columns */
 export interface CasesStddevFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by stddev() on columns of table "cases" */
 export interface CasesStddevOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate stddev_pop on columns */
 export interface CasesStddevPopFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by stddev_pop() on columns of table "cases" */
 export interface CasesStddevPopOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate stddev_samp on columns */
 export interface CasesStddevSampFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by stddev_samp() on columns of table "cases" */
 export interface CasesStddevSampOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate sum on columns */
 export interface CasesSumFields {
 	action?: Maybe<Scalars['Int']>;
-	case_id?: Maybe<Scalars['Int']>;
-	ref_id?: Maybe<Scalars['Int']>;
+	caseId?: Maybe<Scalars['Int']>;
+	refId?: Maybe<Scalars['Int']>;
 }
 
 /** order by sum() on columns of table "cases" */
 export interface CasesSumOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** update columns of table "cases" */
@@ -383,13 +396,13 @@ export enum CasesUpdateColumn {
 	/** column name */
 	Action = 'action',
 	/** column name */
-	ActionDuration = 'action_duration',
+	ActionDuration = 'actionDuration',
 	/** column name */
-	ActionProcessed = 'action_processed',
+	ActionProcessed = 'actionProcessed',
 	/** column name */
-	CaseId = 'case_id',
+	CaseId = 'caseId',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -397,67 +410,59 @@ export enum CasesUpdateColumn {
 	/** column name */
 	Message = 'message',
 	/** column name */
-	ModId = 'mod_id',
+	ModId = 'modId',
 	/** column name */
-	ModTag = 'mod_tag',
+	ModTag = 'modTag',
 	/** column name */
 	Reason = 'reason',
 	/** column name */
-	RefId = 'ref_id',
+	RefId = 'refId',
 	/** column name */
-	TargetId = 'target_id',
+	TargetId = 'targetId',
 	/** column name */
-	TargetTag = 'target_tag',
+	TargetTag = 'targetTag',
 }
 
 /** aggregate var_pop on columns */
 export interface CasesVarPopFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by var_pop() on columns of table "cases" */
 export interface CasesVarPopOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate var_samp on columns */
 export interface CasesVarSampFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by var_samp() on columns of table "cases" */
 export interface CasesVarSampOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate variance on columns */
 export interface CasesVarianceFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by variance() on columns of table "cases" */
 export interface CasesVarianceOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
-}
-
-/** conflict action */
-export enum ConflictAction {
-	/** ignore the insert on this row */
-	Ignore = 'ignore',
-	/** update the row with the given values */
-	Update = 'update',
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** expression to compare columns of type Int. All fields are combined with logical 'AND'. */
@@ -498,8 +503,11 @@ export interface JsonbComparisonExp {
 
 /** columns and relationships of "lockdowns" */
 export interface Lockdowns {
+	/** The id of the channel this lockdown belongs to */
 	channel: Scalars['String'];
+	/** The duration of the lockdown */
 	duration: Scalars['timestamptz'];
+	/** The id of the guild this lockdown belongs to */
 	guild: Scalars['String'];
 	id: Scalars['uuid'];
 }
@@ -609,6 +617,7 @@ export interface LockdownsObjRelInsertInput {
 export interface LockdownsOnConflict {
 	constraint: LockdownsConstraint;
 	update_columns: Array<LockdownsUpdateColumn>;
+	where?: Maybe<LockdownsBoolExp>;
 }
 
 /** ordering options when selecting data from "lockdowns" */
@@ -654,65 +663,65 @@ export enum LockdownsUpdateColumn {
 /** mutation root */
 export interface MutationRoot {
 	/** delete data from the table: "cases" */
-	delete_cases?: Maybe<CasesMutationResponse>;
-	/** delete data from the table: "lockdowns" */
-	delete_lockdowns?: Maybe<LockdownsMutationResponse>;
-	/** delete data from the table: "role_states" */
-	delete_role_states?: Maybe<RoleStatesMutationResponse>;
-	/** delete data from the table: "settings" */
-	delete_settings?: Maybe<SettingsMutationResponse>;
+	deleteCases?: Maybe<CasesMutationResponse>;
 	/** delete data from the table: "staging.cases" */
-	delete_staging_cases?: Maybe<StagingCasesMutationResponse>;
+	deleteCasesStaging?: Maybe<StagingCasesMutationResponse>;
+	/** delete data from the table: "lockdowns" */
+	deleteLockdowns?: Maybe<LockdownsMutationResponse>;
 	/** delete data from the table: "staging.lockdowns" */
-	delete_staging_lockdowns?: Maybe<StagingLockdownsMutationResponse>;
+	deleteLockdownsStaging?: Maybe<StagingLockdownsMutationResponse>;
+	/** delete data from the table: "role_states" */
+	deleteRoleStates?: Maybe<RoleStatesMutationResponse>;
 	/** delete data from the table: "staging.role_states" */
-	delete_staging_role_states?: Maybe<StagingRoleStatesMutationResponse>;
+	deleteRoleStatesStaging?: Maybe<StagingRoleStatesMutationResponse>;
+	/** delete data from the table: "settings" */
+	deleteSettings?: Maybe<SettingsMutationResponse>;
 	/** delete data from the table: "staging.settings" */
-	delete_staging_settings?: Maybe<StagingSettingsMutationResponse>;
-	/** delete data from the table: "staging.tags" */
-	delete_staging_tags?: Maybe<StagingTagsMutationResponse>;
+	deleteSettingsStaging?: Maybe<StagingSettingsMutationResponse>;
 	/** delete data from the table: "tags" */
-	delete_tags?: Maybe<TagsMutationResponse>;
+	deleteTags?: Maybe<TagsMutationResponse>;
+	/** delete data from the table: "staging.tags" */
+	deleteTagsStaging?: Maybe<StagingTagsMutationResponse>;
 	/** insert data into the table: "cases" */
-	insert_cases?: Maybe<CasesMutationResponse>;
-	/** insert data into the table: "lockdowns" */
-	insert_lockdowns?: Maybe<LockdownsMutationResponse>;
-	/** insert data into the table: "role_states" */
-	insert_role_states?: Maybe<RoleStatesMutationResponse>;
-	/** insert data into the table: "settings" */
-	insert_settings?: Maybe<SettingsMutationResponse>;
+	insertCases?: Maybe<CasesMutationResponse>;
 	/** insert data into the table: "staging.cases" */
-	insert_staging_cases?: Maybe<StagingCasesMutationResponse>;
+	insertCasesStaging?: Maybe<StagingCasesMutationResponse>;
+	/** insert data into the table: "lockdowns" */
+	insertLockdowns?: Maybe<LockdownsMutationResponse>;
 	/** insert data into the table: "staging.lockdowns" */
-	insert_staging_lockdowns?: Maybe<StagingLockdownsMutationResponse>;
+	insertLockdownsStaging?: Maybe<StagingLockdownsMutationResponse>;
+	/** insert data into the table: "role_states" */
+	insertRoleStates?: Maybe<RoleStatesMutationResponse>;
 	/** insert data into the table: "staging.role_states" */
-	insert_staging_role_states?: Maybe<StagingRoleStatesMutationResponse>;
+	insertRoleStatesStaging?: Maybe<StagingRoleStatesMutationResponse>;
+	/** insert data into the table: "settings" */
+	insertSettings?: Maybe<SettingsMutationResponse>;
 	/** insert data into the table: "staging.settings" */
-	insert_staging_settings?: Maybe<StagingSettingsMutationResponse>;
-	/** insert data into the table: "staging.tags" */
-	insert_staging_tags?: Maybe<StagingTagsMutationResponse>;
+	insertSettingsStaging?: Maybe<StagingSettingsMutationResponse>;
 	/** insert data into the table: "tags" */
-	insert_tags?: Maybe<TagsMutationResponse>;
+	insertTags?: Maybe<TagsMutationResponse>;
+	/** insert data into the table: "staging.tags" */
+	insertTagsStaging?: Maybe<StagingTagsMutationResponse>;
 	/** update data of the table: "cases" */
-	update_cases?: Maybe<CasesMutationResponse>;
-	/** update data of the table: "lockdowns" */
-	update_lockdowns?: Maybe<LockdownsMutationResponse>;
-	/** update data of the table: "role_states" */
-	update_role_states?: Maybe<RoleStatesMutationResponse>;
-	/** update data of the table: "settings" */
-	update_settings?: Maybe<SettingsMutationResponse>;
+	updateCases?: Maybe<CasesMutationResponse>;
 	/** update data of the table: "staging.cases" */
-	update_staging_cases?: Maybe<StagingCasesMutationResponse>;
+	updateCasesStaging?: Maybe<StagingCasesMutationResponse>;
+	/** update data of the table: "lockdowns" */
+	updateLockdowns?: Maybe<LockdownsMutationResponse>;
 	/** update data of the table: "staging.lockdowns" */
-	update_staging_lockdowns?: Maybe<StagingLockdownsMutationResponse>;
+	updateLockdownsStaging?: Maybe<StagingLockdownsMutationResponse>;
+	/** update data of the table: "role_states" */
+	updateRoleStates?: Maybe<RoleStatesMutationResponse>;
 	/** update data of the table: "staging.role_states" */
-	update_staging_role_states?: Maybe<StagingRoleStatesMutationResponse>;
+	updateRoleStatesStaging?: Maybe<StagingRoleStatesMutationResponse>;
+	/** update data of the table: "settings" */
+	updateSettings?: Maybe<SettingsMutationResponse>;
 	/** update data of the table: "staging.settings" */
-	update_staging_settings?: Maybe<StagingSettingsMutationResponse>;
-	/** update data of the table: "staging.tags" */
-	update_staging_tags?: Maybe<StagingTagsMutationResponse>;
+	updateSettingsStaging?: Maybe<StagingSettingsMutationResponse>;
 	/** update data of the table: "tags" */
-	update_tags?: Maybe<TagsMutationResponse>;
+	updateTags?: Maybe<TagsMutationResponse>;
+	/** update data of the table: "staging.tags" */
+	updateTagsStaging?: Maybe<StagingTagsMutationResponse>;
 }
 
 /** mutation root */
@@ -721,8 +730,18 @@ export interface MutationRootDeleteCasesArgs {
 }
 
 /** mutation root */
+export interface MutationRootDeleteCasesStagingArgs {
+	where: StagingCasesBoolExp;
+}
+
+/** mutation root */
 export interface MutationRootDeleteLockdownsArgs {
 	where: LockdownsBoolExp;
+}
+
+/** mutation root */
+export interface MutationRootDeleteLockdownsStagingArgs {
+	where: StagingLockdownsBoolExp;
 }
 
 /** mutation root */
@@ -731,38 +750,28 @@ export interface MutationRootDeleteRoleStatesArgs {
 }
 
 /** mutation root */
+export interface MutationRootDeleteRoleStatesStagingArgs {
+	where: StagingRoleStatesBoolExp;
+}
+
+/** mutation root */
 export interface MutationRootDeleteSettingsArgs {
 	where: SettingsBoolExp;
 }
 
 /** mutation root */
-export interface MutationRootDeleteStagingCasesArgs {
-	where: StagingCasesBoolExp;
-}
-
-/** mutation root */
-export interface MutationRootDeleteStagingLockdownsArgs {
-	where: StagingLockdownsBoolExp;
-}
-
-/** mutation root */
-export interface MutationRootDeleteStagingRoleStatesArgs {
-	where: StagingRoleStatesBoolExp;
-}
-
-/** mutation root */
-export interface MutationRootDeleteStagingSettingsArgs {
+export interface MutationRootDeleteSettingsStagingArgs {
 	where: StagingSettingsBoolExp;
-}
-
-/** mutation root */
-export interface MutationRootDeleteStagingTagsArgs {
-	where: StagingTagsBoolExp;
 }
 
 /** mutation root */
 export interface MutationRootDeleteTagsArgs {
 	where: TagsBoolExp;
+}
+
+/** mutation root */
+export interface MutationRootDeleteTagsStagingArgs {
+	where: StagingTagsBoolExp;
 }
 
 /** mutation root */
@@ -772,9 +781,21 @@ export interface MutationRootInsertCasesArgs {
 }
 
 /** mutation root */
+export interface MutationRootInsertCasesStagingArgs {
+	objects: Array<StagingCasesInsertInput>;
+	on_conflict?: Maybe<StagingCasesOnConflict>;
+}
+
+/** mutation root */
 export interface MutationRootInsertLockdownsArgs {
 	objects: Array<LockdownsInsertInput>;
 	on_conflict?: Maybe<LockdownsOnConflict>;
+}
+
+/** mutation root */
+export interface MutationRootInsertLockdownsStagingArgs {
+	objects: Array<StagingLockdownsInsertInput>;
+	on_conflict?: Maybe<StagingLockdownsOnConflict>;
 }
 
 /** mutation root */
@@ -784,45 +805,33 @@ export interface MutationRootInsertRoleStatesArgs {
 }
 
 /** mutation root */
+export interface MutationRootInsertRoleStatesStagingArgs {
+	objects: Array<StagingRoleStatesInsertInput>;
+	on_conflict?: Maybe<StagingRoleStatesOnConflict>;
+}
+
+/** mutation root */
 export interface MutationRootInsertSettingsArgs {
 	objects: Array<SettingsInsertInput>;
 	on_conflict?: Maybe<SettingsOnConflict>;
 }
 
 /** mutation root */
-export interface MutationRootInsertStagingCasesArgs {
-	objects: Array<StagingCasesInsertInput>;
-	on_conflict?: Maybe<StagingCasesOnConflict>;
-}
-
-/** mutation root */
-export interface MutationRootInsertStagingLockdownsArgs {
-	objects: Array<StagingLockdownsInsertInput>;
-	on_conflict?: Maybe<StagingLockdownsOnConflict>;
-}
-
-/** mutation root */
-export interface MutationRootInsertStagingRoleStatesArgs {
-	objects: Array<StagingRoleStatesInsertInput>;
-	on_conflict?: Maybe<StagingRoleStatesOnConflict>;
-}
-
-/** mutation root */
-export interface MutationRootInsertStagingSettingsArgs {
+export interface MutationRootInsertSettingsStagingArgs {
 	objects: Array<StagingSettingsInsertInput>;
 	on_conflict?: Maybe<StagingSettingsOnConflict>;
-}
-
-/** mutation root */
-export interface MutationRootInsertStagingTagsArgs {
-	objects: Array<StagingTagsInsertInput>;
-	on_conflict?: Maybe<StagingTagsOnConflict>;
 }
 
 /** mutation root */
 export interface MutationRootInsertTagsArgs {
 	objects: Array<TagsInsertInput>;
 	on_conflict?: Maybe<TagsOnConflict>;
+}
+
+/** mutation root */
+export interface MutationRootInsertTagsStagingArgs {
+	objects: Array<StagingTagsInsertInput>;
+	on_conflict?: Maybe<StagingTagsOnConflict>;
 }
 
 /** mutation root */
@@ -833,15 +842,34 @@ export interface MutationRootUpdateCasesArgs {
 }
 
 /** mutation root */
+export interface MutationRootUpdateCasesStagingArgs {
+	_inc?: Maybe<StagingCasesIncInput>;
+	_set?: Maybe<StagingCasesSetInput>;
+	where: StagingCasesBoolExp;
+}
+
+/** mutation root */
 export interface MutationRootUpdateLockdownsArgs {
 	_set?: Maybe<LockdownsSetInput>;
 	where: LockdownsBoolExp;
 }
 
 /** mutation root */
+export interface MutationRootUpdateLockdownsStagingArgs {
+	_set?: Maybe<StagingLockdownsSetInput>;
+	where: StagingLockdownsBoolExp;
+}
+
+/** mutation root */
 export interface MutationRootUpdateRoleStatesArgs {
 	_set?: Maybe<RoleStatesSetInput>;
 	where: RoleStatesBoolExp;
+}
+
+/** mutation root */
+export interface MutationRootUpdateRoleStatesStagingArgs {
+	_set?: Maybe<StagingRoleStatesSetInput>;
+	where: StagingRoleStatesBoolExp;
 }
 
 /** mutation root */
@@ -856,26 +884,7 @@ export interface MutationRootUpdateSettingsArgs {
 }
 
 /** mutation root */
-export interface MutationRootUpdateStagingCasesArgs {
-	_inc?: Maybe<StagingCasesIncInput>;
-	_set?: Maybe<StagingCasesSetInput>;
-	where: StagingCasesBoolExp;
-}
-
-/** mutation root */
-export interface MutationRootUpdateStagingLockdownsArgs {
-	_set?: Maybe<StagingLockdownsSetInput>;
-	where: StagingLockdownsBoolExp;
-}
-
-/** mutation root */
-export interface MutationRootUpdateStagingRoleStatesArgs {
-	_set?: Maybe<StagingRoleStatesSetInput>;
-	where: StagingRoleStatesBoolExp;
-}
-
-/** mutation root */
-export interface MutationRootUpdateStagingSettingsArgs {
+export interface MutationRootUpdateSettingsStagingArgs {
 	_append?: Maybe<StagingSettingsAppendInput>;
 	_delete_at_path?: Maybe<StagingSettingsDeleteAtPathInput>;
 	_delete_elem?: Maybe<StagingSettingsDeleteElemInput>;
@@ -886,17 +895,17 @@ export interface MutationRootUpdateStagingSettingsArgs {
 }
 
 /** mutation root */
-export interface MutationRootUpdateStagingTagsArgs {
-	_inc?: Maybe<StagingTagsIncInput>;
-	_set?: Maybe<StagingTagsSetInput>;
-	where: StagingTagsBoolExp;
-}
-
-/** mutation root */
 export interface MutationRootUpdateTagsArgs {
 	_inc?: Maybe<TagsIncInput>;
 	_set?: Maybe<TagsSetInput>;
 	where: TagsBoolExp;
+}
+
+/** mutation root */
+export interface MutationRootUpdateTagsStagingArgs {
+	_inc?: Maybe<StagingTagsIncInput>;
+	_set?: Maybe<StagingTagsSetInput>;
+	where: StagingTagsBoolExp;
 }
 
 /** column ordering options */
@@ -920,63 +929,63 @@ export interface QueryRoot {
 	/** fetch data from the table: "cases" */
 	cases: Array<Cases>;
 	/** fetch aggregated fields from the table: "cases" */
-	cases_aggregate: CasesAggregate;
+	casesAggregate: CasesAggregate;
+	/** fetch aggregated fields from the table: "staging.cases" */
+	casesAggregateStaging: StagingCasesAggregate;
 	/** fetch data from the table: "cases" using primary key columns */
-	cases_by_pk?: Maybe<Cases>;
+	casesByPk?: Maybe<Cases>;
+	/** fetch data from the table: "staging.cases" using primary key columns */
+	casesByPkStaging?: Maybe<StagingCases>;
+	/** fetch data from the table: "staging.cases" */
+	casesStaging: Array<StagingCases>;
 	/** fetch data from the table: "lockdowns" */
 	lockdowns: Array<Lockdowns>;
 	/** fetch aggregated fields from the table: "lockdowns" */
-	lockdowns_aggregate: LockdownsAggregate;
+	lockdownsAggregate: LockdownsAggregate;
+	/** fetch aggregated fields from the table: "staging.lockdowns" */
+	lockdownsAggregateStaging: StagingLockdownsAggregate;
 	/** fetch data from the table: "lockdowns" using primary key columns */
-	lockdowns_by_pk?: Maybe<Lockdowns>;
+	lockdownsByPk?: Maybe<Lockdowns>;
+	/** fetch data from the table: "staging.lockdowns" using primary key columns */
+	lockdownsByPkStaging?: Maybe<StagingLockdowns>;
+	/** fetch data from the table: "staging.lockdowns" */
+	lockdownsStaging: Array<StagingLockdowns>;
 	/** fetch data from the table: "role_states" */
-	role_states: Array<RoleStates>;
+	roleStates: Array<RoleStates>;
 	/** fetch aggregated fields from the table: "role_states" */
-	role_states_aggregate: RoleStatesAggregate;
+	roleStatesAggregate: RoleStatesAggregate;
+	/** fetch aggregated fields from the table: "staging.role_states" */
+	roleStatesAggregateStaging: StagingRoleStatesAggregate;
 	/** fetch data from the table: "role_states" using primary key columns */
-	role_states_by_pk?: Maybe<RoleStates>;
+	roleStatesByPk?: Maybe<RoleStates>;
+	/** fetch data from the table: "staging.role_states" using primary key columns */
+	roleStatesByPkStaging?: Maybe<StagingRoleStates>;
+	/** fetch data from the table: "staging.role_states" */
+	roleStatesStaging: Array<StagingRoleStates>;
 	/** fetch data from the table: "settings" */
 	settings: Array<Settings>;
 	/** fetch aggregated fields from the table: "settings" */
-	settings_aggregate: SettingsAggregate;
-	/** fetch data from the table: "settings" using primary key columns */
-	settings_by_pk?: Maybe<Settings>;
-	/** fetch data from the table: "staging.cases" */
-	staging_cases: Array<StagingCases>;
-	/** fetch aggregated fields from the table: "staging.cases" */
-	staging_cases_aggregate: StagingCasesAggregate;
-	/** fetch data from the table: "staging.cases" using primary key columns */
-	staging_cases_by_pk?: Maybe<StagingCases>;
-	/** fetch data from the table: "staging.lockdowns" */
-	staging_lockdowns: Array<StagingLockdowns>;
-	/** fetch aggregated fields from the table: "staging.lockdowns" */
-	staging_lockdowns_aggregate: StagingLockdownsAggregate;
-	/** fetch data from the table: "staging.lockdowns" using primary key columns */
-	staging_lockdowns_by_pk?: Maybe<StagingLockdowns>;
-	/** fetch data from the table: "staging.role_states" */
-	staging_role_states: Array<StagingRoleStates>;
-	/** fetch aggregated fields from the table: "staging.role_states" */
-	staging_role_states_aggregate: StagingRoleStatesAggregate;
-	/** fetch data from the table: "staging.role_states" using primary key columns */
-	staging_role_states_by_pk?: Maybe<StagingRoleStates>;
-	/** fetch data from the table: "staging.settings" */
-	staging_settings: Array<StagingSettings>;
+	settingsAggregate: SettingsAggregate;
 	/** fetch aggregated fields from the table: "staging.settings" */
-	staging_settings_aggregate: StagingSettingsAggregate;
+	settingsAggregateStaging: StagingSettingsAggregate;
+	/** fetch data from the table: "settings" using primary key columns */
+	settingsByPk?: Maybe<Settings>;
 	/** fetch data from the table: "staging.settings" using primary key columns */
-	staging_settings_by_pk?: Maybe<StagingSettings>;
-	/** fetch data from the table: "staging.tags" */
-	staging_tags: Array<StagingTags>;
-	/** fetch aggregated fields from the table: "staging.tags" */
-	staging_tags_aggregate: StagingTagsAggregate;
-	/** fetch data from the table: "staging.tags" using primary key columns */
-	staging_tags_by_pk?: Maybe<StagingTags>;
+	settingsByPkStaging?: Maybe<StagingSettings>;
+	/** fetch data from the table: "staging.settings" */
+	settingsStaging: Array<StagingSettings>;
 	/** fetch data from the table: "tags" */
 	tags: Array<Tags>;
 	/** fetch aggregated fields from the table: "tags" */
-	tags_aggregate: TagsAggregate;
+	tagsAggregate: TagsAggregate;
+	/** fetch aggregated fields from the table: "staging.tags" */
+	tagsAggregateStaging: StagingTagsAggregate;
 	/** fetch data from the table: "tags" using primary key columns */
-	tags_by_pk?: Maybe<Tags>;
+	tagsByPk?: Maybe<Tags>;
+	/** fetch data from the table: "staging.tags" using primary key columns */
+	tagsByPkStaging?: Maybe<StagingTags>;
+	/** fetch data from the table: "staging.tags" */
+	tagsStaging: Array<StagingTags>;
 }
 
 /** query root */
@@ -998,8 +1007,31 @@ export interface QueryRootCasesAggregateArgs {
 }
 
 /** query root */
+export interface QueryRootCasesAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingCasesOrderBy>>;
+	where?: Maybe<StagingCasesBoolExp>;
+}
+
+/** query root */
 export interface QueryRootCasesByPkArgs {
 	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootCasesByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootCasesStagingArgs {
+	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingCasesOrderBy>>;
+	where?: Maybe<StagingCasesBoolExp>;
 }
 
 /** query root */
@@ -1021,8 +1053,31 @@ export interface QueryRootLockdownsAggregateArgs {
 }
 
 /** query root */
+export interface QueryRootLockdownsAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
+}
+
+/** query root */
 export interface QueryRootLockdownsByPkArgs {
 	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootLockdownsByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootLockdownsStagingArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
 }
 
 /** query root */
@@ -1044,8 +1099,31 @@ export interface QueryRootRoleStatesAggregateArgs {
 }
 
 /** query root */
+export interface QueryRootRoleStatesAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
+	where?: Maybe<StagingRoleStatesBoolExp>;
+}
+
+/** query root */
 export interface QueryRootRoleStatesByPkArgs {
 	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootRoleStatesByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootRoleStatesStagingArgs {
+	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
+	where?: Maybe<StagingRoleStatesBoolExp>;
 }
 
 /** query root */
@@ -1067,123 +1145,31 @@ export interface QueryRootSettingsAggregateArgs {
 }
 
 /** query root */
+export interface QueryRootSettingsAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
+	where?: Maybe<StagingSettingsBoolExp>;
+}
+
+/** query root */
 export interface QueryRootSettingsByPkArgs {
 	guild: Scalars['String'];
 }
 
 /** query root */
-export interface QueryRootStagingCasesArgs {
-	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingCasesOrderBy>>;
-	where?: Maybe<StagingCasesBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingCasesAggregateArgs {
-	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingCasesOrderBy>>;
-	where?: Maybe<StagingCasesBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingCasesByPkArgs {
-	id: Scalars['uuid'];
-}
-
-/** query root */
-export interface QueryRootStagingLockdownsArgs {
-	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
-	where?: Maybe<StagingLockdownsBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingLockdownsAggregateArgs {
-	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
-	where?: Maybe<StagingLockdownsBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingLockdownsByPkArgs {
-	id: Scalars['uuid'];
-}
-
-/** query root */
-export interface QueryRootStagingRoleStatesArgs {
-	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
-	where?: Maybe<StagingRoleStatesBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingRoleStatesAggregateArgs {
-	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
-	where?: Maybe<StagingRoleStatesBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingRoleStatesByPkArgs {
-	id: Scalars['uuid'];
-}
-
-/** query root */
-export interface QueryRootStagingSettingsArgs {
-	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
-	where?: Maybe<StagingSettingsBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingSettingsAggregateArgs {
-	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
-	where?: Maybe<StagingSettingsBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingSettingsByPkArgs {
+export interface QueryRootSettingsByPkStagingArgs {
 	guild: Scalars['String'];
 }
 
 /** query root */
-export interface QueryRootStagingTagsArgs {
-	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
+export interface QueryRootSettingsStagingArgs {
+	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
 	limit?: Maybe<Scalars['Int']>;
 	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingTagsOrderBy>>;
-	where?: Maybe<StagingTagsBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingTagsAggregateArgs {
-	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingTagsOrderBy>>;
-	where?: Maybe<StagingTagsBoolExp>;
-}
-
-/** query root */
-export interface QueryRootStagingTagsByPkArgs {
-	id: Scalars['uuid'];
+	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
+	where?: Maybe<StagingSettingsBoolExp>;
 }
 
 /** query root */
@@ -1205,15 +1191,41 @@ export interface QueryRootTagsAggregateArgs {
 }
 
 /** query root */
+export interface QueryRootTagsAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingTagsOrderBy>>;
+	where?: Maybe<StagingTagsBoolExp>;
+}
+
+/** query root */
 export interface QueryRootTagsByPkArgs {
 	id: Scalars['uuid'];
 }
 
+/** query root */
+export interface QueryRootTagsByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** query root */
+export interface QueryRootTagsStagingArgs {
+	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingTagsOrderBy>>;
+	where?: Maybe<StagingTagsBoolExp>;
+}
+
 /** columns and relationships of "role_states" */
 export interface RoleStates {
+	/** The id of the guild this role state belongs to */
 	guild: Scalars['String'];
 	id: Scalars['uuid'];
+	/** The id of the member this role state belongs to */
 	member: Scalars['String'];
+	/** The roles of this role state */
 	roles: Scalars['_text'];
 }
 
@@ -1318,6 +1330,7 @@ export interface RoleStatesObjRelInsertInput {
 export interface RoleStatesOnConflict {
 	constraint: RoleStatesConstraint;
 	update_columns: Array<RoleStatesUpdateColumn>;
+	where?: Maybe<RoleStatesBoolExp>;
 }
 
 /** ordering options when selecting data from "role_states" */
@@ -1362,6 +1375,7 @@ export enum RoleStatesUpdateColumn {
 
 /** columns and relationships of "settings" */
 export interface Settings {
+	/** The id of the guild this setting belongs to */
 	guild: Scalars['String'];
 	settings: Scalars['jsonb'];
 }
@@ -1419,6 +1433,8 @@ export interface SettingsBoolExp {
 
 /** unique or primary key constraints on table "settings" */
 export enum SettingsConstraint {
+	/** unique or primary key constraint */
+	SettingsGuildKey = 'settings_guild_key',
 	/** unique or primary key constraint */
 	SettingsPkey = 'settings_pkey',
 }
@@ -1485,6 +1501,7 @@ export interface SettingsObjRelInsertInput {
 export interface SettingsOnConflict {
 	constraint: SettingsConstraint;
 	update_columns: Array<SettingsUpdateColumn>;
+	where?: Maybe<SettingsBoolExp>;
 }
 
 /** ordering options when selecting data from "settings" */
@@ -1523,19 +1540,19 @@ export enum SettingsUpdateColumn {
 /** columns and relationships of "staging.cases" */
 export interface StagingCases {
 	action: Scalars['Int'];
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	action_processed?: Maybe<Scalars['Boolean']>;
-	case_id: Scalars['Int'];
-	created_at: Scalars['timestamptz'];
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	actionProcessed?: Maybe<Scalars['Boolean']>;
+	caseId: Scalars['Int'];
+	createdAt: Scalars['timestamptz'];
 	guild: Scalars['String'];
 	id: Scalars['uuid'];
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id: Scalars['String'];
-	target_tag: Scalars['String'];
+	refId?: Maybe<Scalars['Int']>;
+	targetId: Scalars['String'];
+	targetTag: Scalars['String'];
 }
 
 /** aggregated selection of "staging.cases" */
@@ -1589,15 +1606,15 @@ export interface StagingCasesArrRelInsertInput {
 /** aggregate avg on columns */
 export interface StagingCasesAvgFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by avg() on columns of table "staging.cases" */
 export interface StagingCasesAvgOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** Boolean expression to filter rows from the table "staging.cases". All fields are combined with a logical 'AND'. */
@@ -1606,19 +1623,19 @@ export interface StagingCasesBoolExp {
 	_not?: Maybe<StagingCasesBoolExp>;
 	_or?: Maybe<Array<Maybe<StagingCasesBoolExp>>>;
 	action?: Maybe<IntComparisonExp>;
-	action_duration?: Maybe<TimestamptzComparisonExp>;
-	action_processed?: Maybe<BooleanComparisonExp>;
-	case_id?: Maybe<IntComparisonExp>;
-	created_at?: Maybe<TimestamptzComparisonExp>;
+	actionDuration?: Maybe<TimestamptzComparisonExp>;
+	actionProcessed?: Maybe<BooleanComparisonExp>;
+	caseId?: Maybe<IntComparisonExp>;
+	createdAt?: Maybe<TimestamptzComparisonExp>;
 	guild?: Maybe<StringComparisonExp>;
 	id?: Maybe<UuidComparisonExp>;
 	message?: Maybe<StringComparisonExp>;
-	mod_id?: Maybe<StringComparisonExp>;
-	mod_tag?: Maybe<StringComparisonExp>;
+	modId?: Maybe<StringComparisonExp>;
+	modTag?: Maybe<StringComparisonExp>;
 	reason?: Maybe<StringComparisonExp>;
-	ref_id?: Maybe<IntComparisonExp>;
-	target_id?: Maybe<StringComparisonExp>;
-	target_tag?: Maybe<StringComparisonExp>;
+	refId?: Maybe<IntComparisonExp>;
+	targetId?: Maybe<StringComparisonExp>;
+	targetTag?: Maybe<StringComparisonExp>;
 }
 
 /** unique or primary key constraints on table "staging.cases" */
@@ -1630,90 +1647,90 @@ export enum StagingCasesConstraint {
 /** input type for incrementing integer columne in table "staging.cases" */
 export interface StagingCasesIncInput {
 	action?: Maybe<Scalars['Int']>;
-	case_id?: Maybe<Scalars['Int']>;
-	ref_id?: Maybe<Scalars['Int']>;
+	caseId?: Maybe<Scalars['Int']>;
+	refId?: Maybe<Scalars['Int']>;
 }
 
 /** input type for inserting data into table "staging.cases" */
 export interface StagingCasesInsertInput {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	action_processed?: Maybe<Scalars['Boolean']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	actionProcessed?: Maybe<Scalars['Boolean']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	id?: Maybe<Scalars['uuid']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** aggregate max on columns */
 export interface StagingCasesMaxFields {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** order by max() on columns of table "staging.cases" */
 export interface StagingCasesMaxOrderBy {
 	action?: Maybe<OrderBy>;
-	action_duration?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	actionDuration?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	message?: Maybe<OrderBy>;
-	mod_id?: Maybe<OrderBy>;
-	mod_tag?: Maybe<OrderBy>;
+	modId?: Maybe<OrderBy>;
+	modTag?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
-	target_id?: Maybe<OrderBy>;
-	target_tag?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
+	targetId?: Maybe<OrderBy>;
+	targetTag?: Maybe<OrderBy>;
 }
 
 /** aggregate min on columns */
 export interface StagingCasesMinFields {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** order by min() on columns of table "staging.cases" */
 export interface StagingCasesMinOrderBy {
 	action?: Maybe<OrderBy>;
-	action_duration?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	actionDuration?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	message?: Maybe<OrderBy>;
-	mod_id?: Maybe<OrderBy>;
-	mod_tag?: Maybe<OrderBy>;
+	modId?: Maybe<OrderBy>;
+	modTag?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
-	target_id?: Maybe<OrderBy>;
-	target_tag?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
+	targetId?: Maybe<OrderBy>;
+	targetTag?: Maybe<OrderBy>;
 }
 
 /** response of any mutation on the table "staging.cases" */
@@ -1734,24 +1751,25 @@ export interface StagingCasesObjRelInsertInput {
 export interface StagingCasesOnConflict {
 	constraint: StagingCasesConstraint;
 	update_columns: Array<StagingCasesUpdateColumn>;
+	where?: Maybe<StagingCasesBoolExp>;
 }
 
 /** ordering options when selecting data from "staging.cases" */
 export interface StagingCasesOrderBy {
 	action?: Maybe<OrderBy>;
-	action_duration?: Maybe<OrderBy>;
-	action_processed?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	actionDuration?: Maybe<OrderBy>;
+	actionProcessed?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	id?: Maybe<OrderBy>;
 	message?: Maybe<OrderBy>;
-	mod_id?: Maybe<OrderBy>;
-	mod_tag?: Maybe<OrderBy>;
+	modId?: Maybe<OrderBy>;
+	modTag?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
-	target_id?: Maybe<OrderBy>;
-	target_tag?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
+	targetId?: Maybe<OrderBy>;
+	targetTag?: Maybe<OrderBy>;
 }
 
 /** select columns of table "staging.cases" */
@@ -1759,13 +1777,13 @@ export enum StagingCasesSelectColumn {
 	/** column name */
 	Action = 'action',
 	/** column name */
-	ActionDuration = 'action_duration',
+	ActionDuration = 'actionDuration',
 	/** column name */
-	ActionProcessed = 'action_processed',
+	ActionProcessed = 'actionProcessed',
 	/** column name */
-	CaseId = 'case_id',
+	CaseId = 'caseId',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -1773,91 +1791,91 @@ export enum StagingCasesSelectColumn {
 	/** column name */
 	Message = 'message',
 	/** column name */
-	ModId = 'mod_id',
+	ModId = 'modId',
 	/** column name */
-	ModTag = 'mod_tag',
+	ModTag = 'modTag',
 	/** column name */
 	Reason = 'reason',
 	/** column name */
-	RefId = 'ref_id',
+	RefId = 'refId',
 	/** column name */
-	TargetId = 'target_id',
+	TargetId = 'targetId',
 	/** column name */
-	TargetTag = 'target_tag',
+	TargetTag = 'targetTag',
 }
 
 /** input type for updating data in table "staging.cases" */
 export interface StagingCasesSetInput {
 	action?: Maybe<Scalars['Int']>;
-	action_duration?: Maybe<Scalars['timestamptz']>;
-	action_processed?: Maybe<Scalars['Boolean']>;
-	case_id?: Maybe<Scalars['Int']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	actionDuration?: Maybe<Scalars['timestamptz']>;
+	actionProcessed?: Maybe<Scalars['Boolean']>;
+	caseId?: Maybe<Scalars['Int']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	id?: Maybe<Scalars['uuid']>;
 	message?: Maybe<Scalars['String']>;
-	mod_id?: Maybe<Scalars['String']>;
-	mod_tag?: Maybe<Scalars['String']>;
+	modId?: Maybe<Scalars['String']>;
+	modTag?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
-	ref_id?: Maybe<Scalars['Int']>;
-	target_id?: Maybe<Scalars['String']>;
-	target_tag?: Maybe<Scalars['String']>;
+	refId?: Maybe<Scalars['Int']>;
+	targetId?: Maybe<Scalars['String']>;
+	targetTag?: Maybe<Scalars['String']>;
 }
 
 /** aggregate stddev on columns */
 export interface StagingCasesStddevFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by stddev() on columns of table "staging.cases" */
 export interface StagingCasesStddevOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate stddev_pop on columns */
 export interface StagingCasesStddevPopFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by stddev_pop() on columns of table "staging.cases" */
 export interface StagingCasesStddevPopOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate stddev_samp on columns */
 export interface StagingCasesStddevSampFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by stddev_samp() on columns of table "staging.cases" */
 export interface StagingCasesStddevSampOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate sum on columns */
 export interface StagingCasesSumFields {
 	action?: Maybe<Scalars['Int']>;
-	case_id?: Maybe<Scalars['Int']>;
-	ref_id?: Maybe<Scalars['Int']>;
+	caseId?: Maybe<Scalars['Int']>;
+	refId?: Maybe<Scalars['Int']>;
 }
 
 /** order by sum() on columns of table "staging.cases" */
 export interface StagingCasesSumOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** update columns of table "staging.cases" */
@@ -1865,13 +1883,13 @@ export enum StagingCasesUpdateColumn {
 	/** column name */
 	Action = 'action',
 	/** column name */
-	ActionDuration = 'action_duration',
+	ActionDuration = 'actionDuration',
 	/** column name */
-	ActionProcessed = 'action_processed',
+	ActionProcessed = 'actionProcessed',
 	/** column name */
-	CaseId = 'case_id',
+	CaseId = 'caseId',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -1879,59 +1897,59 @@ export enum StagingCasesUpdateColumn {
 	/** column name */
 	Message = 'message',
 	/** column name */
-	ModId = 'mod_id',
+	ModId = 'modId',
 	/** column name */
-	ModTag = 'mod_tag',
+	ModTag = 'modTag',
 	/** column name */
 	Reason = 'reason',
 	/** column name */
-	RefId = 'ref_id',
+	RefId = 'refId',
 	/** column name */
-	TargetId = 'target_id',
+	TargetId = 'targetId',
 	/** column name */
-	TargetTag = 'target_tag',
+	TargetTag = 'targetTag',
 }
 
 /** aggregate var_pop on columns */
 export interface StagingCasesVarPopFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by var_pop() on columns of table "staging.cases" */
 export interface StagingCasesVarPopOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate var_samp on columns */
 export interface StagingCasesVarSampFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by var_samp() on columns of table "staging.cases" */
 export interface StagingCasesVarSampOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** aggregate variance on columns */
 export interface StagingCasesVarianceFields {
 	action?: Maybe<Scalars['Float']>;
-	case_id?: Maybe<Scalars['Float']>;
-	ref_id?: Maybe<Scalars['Float']>;
+	caseId?: Maybe<Scalars['Float']>;
+	refId?: Maybe<Scalars['Float']>;
 }
 
 /** order by variance() on columns of table "staging.cases" */
 export interface StagingCasesVarianceOrderBy {
 	action?: Maybe<OrderBy>;
-	case_id?: Maybe<OrderBy>;
-	ref_id?: Maybe<OrderBy>;
+	caseId?: Maybe<OrderBy>;
+	refId?: Maybe<OrderBy>;
 }
 
 /** columns and relationships of "staging.lockdowns" */
@@ -2047,6 +2065,7 @@ export interface StagingLockdownsObjRelInsertInput {
 export interface StagingLockdownsOnConflict {
 	constraint: StagingLockdownsConstraint;
 	update_columns: Array<StagingLockdownsUpdateColumn>;
+	where?: Maybe<StagingLockdownsBoolExp>;
 }
 
 /** ordering options when selecting data from "staging.lockdowns" */
@@ -2198,6 +2217,7 @@ export interface StagingRoleStatesObjRelInsertInput {
 export interface StagingRoleStatesOnConflict {
 	constraint: StagingRoleStatesConstraint;
 	update_columns: Array<StagingRoleStatesUpdateColumn>;
+	where?: Maybe<StagingRoleStatesBoolExp>;
 }
 
 /** ordering options when selecting data from "staging.role_states" */
@@ -2365,6 +2385,7 @@ export interface StagingSettingsObjRelInsertInput {
 export interface StagingSettingsOnConflict {
 	constraint: StagingSettingsConstraint;
 	update_columns: Array<StagingSettingsUpdateColumn>;
+	where?: Maybe<StagingSettingsBoolExp>;
 }
 
 /** ordering options when selecting data from "staging.settings" */
@@ -2404,14 +2425,14 @@ export enum StagingSettingsUpdateColumn {
 export interface StagingTags {
 	aliases: Scalars['_text'];
 	content: Scalars['String'];
-	created_at: Scalars['timestamptz'];
+	createdAt: Scalars['timestamptz'];
 	guild: Scalars['String'];
 	hoisted?: Maybe<Scalars['Boolean']>;
 	id: Scalars['uuid'];
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name: Scalars['String'];
 	templated: Scalars['Boolean'];
-	updated_at: Scalars['timestamptz'];
+	updatedAt: Scalars['timestamptz'];
 	user: Scalars['String'];
 	uses: Scalars['Int'];
 }
@@ -2481,14 +2502,14 @@ export interface StagingTagsBoolExp {
 	_or?: Maybe<Array<Maybe<StagingTagsBoolExp>>>;
 	aliases?: Maybe<TextComparisonExp>;
 	content?: Maybe<StringComparisonExp>;
-	created_at?: Maybe<TimestamptzComparisonExp>;
+	createdAt?: Maybe<TimestamptzComparisonExp>;
 	guild?: Maybe<StringComparisonExp>;
 	hoisted?: Maybe<BooleanComparisonExp>;
 	id?: Maybe<UuidComparisonExp>;
-	last_modified?: Maybe<StringComparisonExp>;
+	lastModified?: Maybe<StringComparisonExp>;
 	name?: Maybe<StringComparisonExp>;
 	templated?: Maybe<BooleanComparisonExp>;
-	updated_at?: Maybe<TimestamptzComparisonExp>;
+	updatedAt?: Maybe<TimestamptzComparisonExp>;
 	user?: Maybe<StringComparisonExp>;
 	uses?: Maybe<IntComparisonExp>;
 }
@@ -2510,14 +2531,14 @@ export interface StagingTagsIncInput {
 export interface StagingTagsInsertInput {
 	aliases?: Maybe<Scalars['_text']>;
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	hoisted?: Maybe<Scalars['Boolean']>;
 	id?: Maybe<Scalars['uuid']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
 	templated?: Maybe<Scalars['Boolean']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -2525,11 +2546,11 @@ export interface StagingTagsInsertInput {
 /** aggregate max on columns */
 export interface StagingTagsMaxFields {
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -2537,11 +2558,11 @@ export interface StagingTagsMaxFields {
 /** order by max() on columns of table "staging.tags" */
 export interface StagingTagsMaxOrderBy {
 	content?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
-	last_modified?: Maybe<OrderBy>;
+	lastModified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
-	updated_at?: Maybe<OrderBy>;
+	updatedAt?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
 }
@@ -2549,11 +2570,11 @@ export interface StagingTagsMaxOrderBy {
 /** aggregate min on columns */
 export interface StagingTagsMinFields {
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -2561,11 +2582,11 @@ export interface StagingTagsMinFields {
 /** order by min() on columns of table "staging.tags" */
 export interface StagingTagsMinOrderBy {
 	content?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
-	last_modified?: Maybe<OrderBy>;
+	lastModified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
-	updated_at?: Maybe<OrderBy>;
+	updatedAt?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
 }
@@ -2588,20 +2609,21 @@ export interface StagingTagsObjRelInsertInput {
 export interface StagingTagsOnConflict {
 	constraint: StagingTagsConstraint;
 	update_columns: Array<StagingTagsUpdateColumn>;
+	where?: Maybe<StagingTagsBoolExp>;
 }
 
 /** ordering options when selecting data from "staging.tags" */
 export interface StagingTagsOrderBy {
 	aliases?: Maybe<OrderBy>;
 	content?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	hoisted?: Maybe<OrderBy>;
 	id?: Maybe<OrderBy>;
-	last_modified?: Maybe<OrderBy>;
+	lastModified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
 	templated?: Maybe<OrderBy>;
-	updated_at?: Maybe<OrderBy>;
+	updatedAt?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
 }
@@ -2613,7 +2635,7 @@ export enum StagingTagsSelectColumn {
 	/** column name */
 	Content = 'content',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -2621,13 +2643,13 @@ export enum StagingTagsSelectColumn {
 	/** column name */
 	Id = 'id',
 	/** column name */
-	LastModified = 'last_modified',
+	LastModified = 'lastModified',
 	/** column name */
 	Name = 'name',
 	/** column name */
 	Templated = 'templated',
 	/** column name */
-	UpdatedAt = 'updated_at',
+	UpdatedAt = 'updatedAt',
 	/** column name */
 	User = 'user',
 	/** column name */
@@ -2638,14 +2660,14 @@ export enum StagingTagsSelectColumn {
 export interface StagingTagsSetInput {
 	aliases?: Maybe<Scalars['_text']>;
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	hoisted?: Maybe<Scalars['Boolean']>;
 	id?: Maybe<Scalars['uuid']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
 	templated?: Maybe<Scalars['Boolean']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -2697,7 +2719,7 @@ export enum StagingTagsUpdateColumn {
 	/** column name */
 	Content = 'content',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -2705,13 +2727,13 @@ export enum StagingTagsUpdateColumn {
 	/** column name */
 	Id = 'id',
 	/** column name */
-	LastModified = 'last_modified',
+	LastModified = 'lastModified',
 	/** column name */
 	Name = 'name',
 	/** column name */
 	Templated = 'templated',
 	/** column name */
-	UpdatedAt = 'updated_at',
+	UpdatedAt = 'updatedAt',
 	/** column name */
 	User = 'user',
 	/** column name */
@@ -2772,63 +2794,63 @@ export interface SubscriptionRoot {
 	/** fetch data from the table: "cases" */
 	cases: Array<Cases>;
 	/** fetch aggregated fields from the table: "cases" */
-	cases_aggregate: CasesAggregate;
+	casesAggregate: CasesAggregate;
+	/** fetch aggregated fields from the table: "staging.cases" */
+	casesAggregateStaging: StagingCasesAggregate;
 	/** fetch data from the table: "cases" using primary key columns */
-	cases_by_pk?: Maybe<Cases>;
+	casesByPk?: Maybe<Cases>;
+	/** fetch data from the table: "staging.cases" using primary key columns */
+	casesByPkStaging?: Maybe<StagingCases>;
+	/** fetch data from the table: "staging.cases" */
+	casesStaging: Array<StagingCases>;
 	/** fetch data from the table: "lockdowns" */
 	lockdowns: Array<Lockdowns>;
 	/** fetch aggregated fields from the table: "lockdowns" */
-	lockdowns_aggregate: LockdownsAggregate;
+	lockdownsAggregate: LockdownsAggregate;
+	/** fetch aggregated fields from the table: "staging.lockdowns" */
+	lockdownsAggregateStaging: StagingLockdownsAggregate;
 	/** fetch data from the table: "lockdowns" using primary key columns */
-	lockdowns_by_pk?: Maybe<Lockdowns>;
+	lockdownsByPk?: Maybe<Lockdowns>;
+	/** fetch data from the table: "staging.lockdowns" using primary key columns */
+	lockdownsByPkStaging?: Maybe<StagingLockdowns>;
+	/** fetch data from the table: "staging.lockdowns" */
+	lockdownsStaging: Array<StagingLockdowns>;
 	/** fetch data from the table: "role_states" */
-	role_states: Array<RoleStates>;
+	roleStates: Array<RoleStates>;
 	/** fetch aggregated fields from the table: "role_states" */
-	role_states_aggregate: RoleStatesAggregate;
+	roleStatesAggregate: RoleStatesAggregate;
+	/** fetch aggregated fields from the table: "staging.role_states" */
+	roleStatesAggregateStaging: StagingRoleStatesAggregate;
 	/** fetch data from the table: "role_states" using primary key columns */
-	role_states_by_pk?: Maybe<RoleStates>;
+	roleStatesByPk?: Maybe<RoleStates>;
+	/** fetch data from the table: "staging.role_states" using primary key columns */
+	roleStatesByPkStaging?: Maybe<StagingRoleStates>;
+	/** fetch data from the table: "staging.role_states" */
+	roleStatesStaging: Array<StagingRoleStates>;
 	/** fetch data from the table: "settings" */
 	settings: Array<Settings>;
 	/** fetch aggregated fields from the table: "settings" */
-	settings_aggregate: SettingsAggregate;
-	/** fetch data from the table: "settings" using primary key columns */
-	settings_by_pk?: Maybe<Settings>;
-	/** fetch data from the table: "staging.cases" */
-	staging_cases: Array<StagingCases>;
-	/** fetch aggregated fields from the table: "staging.cases" */
-	staging_cases_aggregate: StagingCasesAggregate;
-	/** fetch data from the table: "staging.cases" using primary key columns */
-	staging_cases_by_pk?: Maybe<StagingCases>;
-	/** fetch data from the table: "staging.lockdowns" */
-	staging_lockdowns: Array<StagingLockdowns>;
-	/** fetch aggregated fields from the table: "staging.lockdowns" */
-	staging_lockdowns_aggregate: StagingLockdownsAggregate;
-	/** fetch data from the table: "staging.lockdowns" using primary key columns */
-	staging_lockdowns_by_pk?: Maybe<StagingLockdowns>;
-	/** fetch data from the table: "staging.role_states" */
-	staging_role_states: Array<StagingRoleStates>;
-	/** fetch aggregated fields from the table: "staging.role_states" */
-	staging_role_states_aggregate: StagingRoleStatesAggregate;
-	/** fetch data from the table: "staging.role_states" using primary key columns */
-	staging_role_states_by_pk?: Maybe<StagingRoleStates>;
-	/** fetch data from the table: "staging.settings" */
-	staging_settings: Array<StagingSettings>;
+	settingsAggregate: SettingsAggregate;
 	/** fetch aggregated fields from the table: "staging.settings" */
-	staging_settings_aggregate: StagingSettingsAggregate;
+	settingsAggregateStaging: StagingSettingsAggregate;
+	/** fetch data from the table: "settings" using primary key columns */
+	settingsByPk?: Maybe<Settings>;
 	/** fetch data from the table: "staging.settings" using primary key columns */
-	staging_settings_by_pk?: Maybe<StagingSettings>;
-	/** fetch data from the table: "staging.tags" */
-	staging_tags: Array<StagingTags>;
-	/** fetch aggregated fields from the table: "staging.tags" */
-	staging_tags_aggregate: StagingTagsAggregate;
-	/** fetch data from the table: "staging.tags" using primary key columns */
-	staging_tags_by_pk?: Maybe<StagingTags>;
+	settingsByPkStaging?: Maybe<StagingSettings>;
+	/** fetch data from the table: "staging.settings" */
+	settingsStaging: Array<StagingSettings>;
 	/** fetch data from the table: "tags" */
 	tags: Array<Tags>;
 	/** fetch aggregated fields from the table: "tags" */
-	tags_aggregate: TagsAggregate;
+	tagsAggregate: TagsAggregate;
+	/** fetch aggregated fields from the table: "staging.tags" */
+	tagsAggregateStaging: StagingTagsAggregate;
 	/** fetch data from the table: "tags" using primary key columns */
-	tags_by_pk?: Maybe<Tags>;
+	tagsByPk?: Maybe<Tags>;
+	/** fetch data from the table: "staging.tags" using primary key columns */
+	tagsByPkStaging?: Maybe<StagingTags>;
+	/** fetch data from the table: "staging.tags" */
+	tagsStaging: Array<StagingTags>;
 }
 
 /** subscription root */
@@ -2850,8 +2872,31 @@ export interface SubscriptionRootCasesAggregateArgs {
 }
 
 /** subscription root */
+export interface SubscriptionRootCasesAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingCasesOrderBy>>;
+	where?: Maybe<StagingCasesBoolExp>;
+}
+
+/** subscription root */
 export interface SubscriptionRootCasesByPkArgs {
 	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootCasesByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootCasesStagingArgs {
+	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingCasesOrderBy>>;
+	where?: Maybe<StagingCasesBoolExp>;
 }
 
 /** subscription root */
@@ -2873,8 +2918,31 @@ export interface SubscriptionRootLockdownsAggregateArgs {
 }
 
 /** subscription root */
+export interface SubscriptionRootLockdownsAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
+}
+
+/** subscription root */
 export interface SubscriptionRootLockdownsByPkArgs {
 	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootLockdownsByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootLockdownsStagingArgs {
+	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
+	where?: Maybe<StagingLockdownsBoolExp>;
 }
 
 /** subscription root */
@@ -2896,8 +2964,31 @@ export interface SubscriptionRootRoleStatesAggregateArgs {
 }
 
 /** subscription root */
+export interface SubscriptionRootRoleStatesAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
+	where?: Maybe<StagingRoleStatesBoolExp>;
+}
+
+/** subscription root */
 export interface SubscriptionRootRoleStatesByPkArgs {
 	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootRoleStatesByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootRoleStatesStagingArgs {
+	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
+	where?: Maybe<StagingRoleStatesBoolExp>;
 }
 
 /** subscription root */
@@ -2919,123 +3010,31 @@ export interface SubscriptionRootSettingsAggregateArgs {
 }
 
 /** subscription root */
+export interface SubscriptionRootSettingsAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
+	where?: Maybe<StagingSettingsBoolExp>;
+}
+
+/** subscription root */
 export interface SubscriptionRootSettingsByPkArgs {
 	guild: Scalars['String'];
 }
 
 /** subscription root */
-export interface SubscriptionRootStagingCasesArgs {
-	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingCasesOrderBy>>;
-	where?: Maybe<StagingCasesBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingCasesAggregateArgs {
-	distinct_on?: Maybe<Array<StagingCasesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingCasesOrderBy>>;
-	where?: Maybe<StagingCasesBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingCasesByPkArgs {
-	id: Scalars['uuid'];
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingLockdownsArgs {
-	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
-	where?: Maybe<StagingLockdownsBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingLockdownsAggregateArgs {
-	distinct_on?: Maybe<Array<StagingLockdownsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingLockdownsOrderBy>>;
-	where?: Maybe<StagingLockdownsBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingLockdownsByPkArgs {
-	id: Scalars['uuid'];
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingRoleStatesArgs {
-	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
-	where?: Maybe<StagingRoleStatesBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingRoleStatesAggregateArgs {
-	distinct_on?: Maybe<Array<StagingRoleStatesSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingRoleStatesOrderBy>>;
-	where?: Maybe<StagingRoleStatesBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingRoleStatesByPkArgs {
-	id: Scalars['uuid'];
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingSettingsArgs {
-	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
-	where?: Maybe<StagingSettingsBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingSettingsAggregateArgs {
-	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
-	where?: Maybe<StagingSettingsBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingSettingsByPkArgs {
+export interface SubscriptionRootSettingsByPkStagingArgs {
 	guild: Scalars['String'];
 }
 
 /** subscription root */
-export interface SubscriptionRootStagingTagsArgs {
-	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
+export interface SubscriptionRootSettingsStagingArgs {
+	distinct_on?: Maybe<Array<StagingSettingsSelectColumn>>;
 	limit?: Maybe<Scalars['Int']>;
 	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingTagsOrderBy>>;
-	where?: Maybe<StagingTagsBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingTagsAggregateArgs {
-	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
-	limit?: Maybe<Scalars['Int']>;
-	offset?: Maybe<Scalars['Int']>;
-	order_by?: Maybe<Array<StagingTagsOrderBy>>;
-	where?: Maybe<StagingTagsBoolExp>;
-}
-
-/** subscription root */
-export interface SubscriptionRootStagingTagsByPkArgs {
-	id: Scalars['uuid'];
+	order_by?: Maybe<Array<StagingSettingsOrderBy>>;
+	where?: Maybe<StagingSettingsBoolExp>;
 }
 
 /** subscription root */
@@ -3057,22 +3056,50 @@ export interface SubscriptionRootTagsAggregateArgs {
 }
 
 /** subscription root */
+export interface SubscriptionRootTagsAggregateStagingArgs {
+	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingTagsOrderBy>>;
+	where?: Maybe<StagingTagsBoolExp>;
+}
+
+/** subscription root */
 export interface SubscriptionRootTagsByPkArgs {
 	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootTagsByPkStagingArgs {
+	id: Scalars['uuid'];
+}
+
+/** subscription root */
+export interface SubscriptionRootTagsStagingArgs {
+	distinct_on?: Maybe<Array<StagingTagsSelectColumn>>;
+	limit?: Maybe<Scalars['Int']>;
+	offset?: Maybe<Scalars['Int']>;
+	order_by?: Maybe<Array<StagingTagsOrderBy>>;
+	where?: Maybe<StagingTagsBoolExp>;
 }
 
 /** columns and relationships of "tags" */
 export interface Tags {
 	aliases: Scalars['_text'];
 	content: Scalars['String'];
-	created_at: Scalars['timestamptz'];
+	createdAt: Scalars['timestamptz'];
+	/** The id of the guild this tag belongs to */
 	guild: Scalars['String'];
+	/** Whether the tag is a hoisted guild tag or not */
 	hoisted?: Maybe<Scalars['Boolean']>;
 	id: Scalars['uuid'];
-	last_modified?: Maybe<Scalars['String']>;
+	/** The id of the user who last modified this tag */
+	lastModified?: Maybe<Scalars['String']>;
 	name: Scalars['String'];
+	/** Whether the tag is templated or not */
 	templated: Scalars['Boolean'];
-	updated_at: Scalars['timestamptz'];
+	updatedAt: Scalars['timestamptz'];
+	/** The id of the user this tag belongs to */
 	user: Scalars['String'];
 	uses: Scalars['Int'];
 }
@@ -3142,14 +3169,14 @@ export interface TagsBoolExp {
 	_or?: Maybe<Array<Maybe<TagsBoolExp>>>;
 	aliases?: Maybe<TextComparisonExp>;
 	content?: Maybe<StringComparisonExp>;
-	created_at?: Maybe<TimestamptzComparisonExp>;
+	createdAt?: Maybe<TimestamptzComparisonExp>;
 	guild?: Maybe<StringComparisonExp>;
 	hoisted?: Maybe<BooleanComparisonExp>;
 	id?: Maybe<UuidComparisonExp>;
-	last_modified?: Maybe<StringComparisonExp>;
+	lastModified?: Maybe<StringComparisonExp>;
 	name?: Maybe<StringComparisonExp>;
 	templated?: Maybe<BooleanComparisonExp>;
-	updated_at?: Maybe<TimestamptzComparisonExp>;
+	updatedAt?: Maybe<TimestamptzComparisonExp>;
 	user?: Maybe<StringComparisonExp>;
 	uses?: Maybe<IntComparisonExp>;
 }
@@ -3171,14 +3198,14 @@ export interface TagsIncInput {
 export interface TagsInsertInput {
 	aliases?: Maybe<Scalars['_text']>;
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	hoisted?: Maybe<Scalars['Boolean']>;
 	id?: Maybe<Scalars['uuid']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
 	templated?: Maybe<Scalars['Boolean']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -3186,11 +3213,11 @@ export interface TagsInsertInput {
 /** aggregate max on columns */
 export interface TagsMaxFields {
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -3198,11 +3225,11 @@ export interface TagsMaxFields {
 /** order by max() on columns of table "tags" */
 export interface TagsMaxOrderBy {
 	content?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
-	last_modified?: Maybe<OrderBy>;
+	lastModified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
-	updated_at?: Maybe<OrderBy>;
+	updatedAt?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
 }
@@ -3210,11 +3237,11 @@ export interface TagsMaxOrderBy {
 /** aggregate min on columns */
 export interface TagsMinFields {
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -3222,11 +3249,11 @@ export interface TagsMinFields {
 /** order by min() on columns of table "tags" */
 export interface TagsMinOrderBy {
 	content?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
-	last_modified?: Maybe<OrderBy>;
+	lastModified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
-	updated_at?: Maybe<OrderBy>;
+	updatedAt?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
 }
@@ -3249,20 +3276,21 @@ export interface TagsObjRelInsertInput {
 export interface TagsOnConflict {
 	constraint: TagsConstraint;
 	update_columns: Array<TagsUpdateColumn>;
+	where?: Maybe<TagsBoolExp>;
 }
 
 /** ordering options when selecting data from "tags" */
 export interface TagsOrderBy {
 	aliases?: Maybe<OrderBy>;
 	content?: Maybe<OrderBy>;
-	created_at?: Maybe<OrderBy>;
+	createdAt?: Maybe<OrderBy>;
 	guild?: Maybe<OrderBy>;
 	hoisted?: Maybe<OrderBy>;
 	id?: Maybe<OrderBy>;
-	last_modified?: Maybe<OrderBy>;
+	lastModified?: Maybe<OrderBy>;
 	name?: Maybe<OrderBy>;
 	templated?: Maybe<OrderBy>;
-	updated_at?: Maybe<OrderBy>;
+	updatedAt?: Maybe<OrderBy>;
 	user?: Maybe<OrderBy>;
 	uses?: Maybe<OrderBy>;
 }
@@ -3274,7 +3302,7 @@ export enum TagsSelectColumn {
 	/** column name */
 	Content = 'content',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -3282,13 +3310,13 @@ export enum TagsSelectColumn {
 	/** column name */
 	Id = 'id',
 	/** column name */
-	LastModified = 'last_modified',
+	LastModified = 'lastModified',
 	/** column name */
 	Name = 'name',
 	/** column name */
 	Templated = 'templated',
 	/** column name */
-	UpdatedAt = 'updated_at',
+	UpdatedAt = 'updatedAt',
 	/** column name */
 	User = 'user',
 	/** column name */
@@ -3299,14 +3327,14 @@ export enum TagsSelectColumn {
 export interface TagsSetInput {
 	aliases?: Maybe<Scalars['_text']>;
 	content?: Maybe<Scalars['String']>;
-	created_at?: Maybe<Scalars['timestamptz']>;
+	createdAt?: Maybe<Scalars['timestamptz']>;
 	guild?: Maybe<Scalars['String']>;
 	hoisted?: Maybe<Scalars['Boolean']>;
 	id?: Maybe<Scalars['uuid']>;
-	last_modified?: Maybe<Scalars['String']>;
+	lastModified?: Maybe<Scalars['String']>;
 	name?: Maybe<Scalars['String']>;
 	templated?: Maybe<Scalars['Boolean']>;
-	updated_at?: Maybe<Scalars['timestamptz']>;
+	updatedAt?: Maybe<Scalars['timestamptz']>;
 	user?: Maybe<Scalars['String']>;
 	uses?: Maybe<Scalars['Int']>;
 }
@@ -3358,7 +3386,7 @@ export enum TagsUpdateColumn {
 	/** column name */
 	Content = 'content',
 	/** column name */
-	CreatedAt = 'created_at',
+	CreatedAt = 'createdAt',
 	/** column name */
 	Guild = 'guild',
 	/** column name */
@@ -3366,13 +3394,13 @@ export enum TagsUpdateColumn {
 	/** column name */
 	Id = 'id',
 	/** column name */
-	LastModified = 'last_modified',
+	LastModified = 'lastModified',
 	/** column name */
 	Name = 'name',
 	/** column name */
 	Templated = 'templated',
 	/** column name */
-	UpdatedAt = 'updated_at',
+	UpdatedAt = 'updatedAt',
 	/** column name */
 	User = 'user',
 	/** column name */

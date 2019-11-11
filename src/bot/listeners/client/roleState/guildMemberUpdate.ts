@@ -2,6 +2,7 @@ import { Listener } from 'discord-akairo';
 import { GuildMember } from 'discord.js';
 import { SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
+import { RoleStatesInsertInput } from '../../../util/graphQLTypes';
 
 export default class GuildMemberUpdateRoleStateListener extends Listener {
 	public constructor() {
@@ -28,7 +29,7 @@ export default class GuildMemberUpdateRoleStateListener extends Listener {
 						},
 					});
 				} else {
-					await graphQLClient.mutate({
+					await graphQLClient.mutate<any, RoleStatesInsertInput>({
 						mutation: GRAPHQL.MUTATION.DELETE_MEMBER_ROLE_STATE,
 						variables: {
 							guild: newMember.guild.id,

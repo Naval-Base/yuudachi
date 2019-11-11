@@ -2,19 +2,19 @@ import { Provider } from 'discord-akairo';
 import { Guild } from 'discord.js';
 import { PRODUCTION, Settings } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Settings as GraphQLSettings } from '../util/graphQLTypes';
+import { Settings as GraphQLSettings, SettingsInsertInput } from '../util/graphQLTypes';
 
 export default class HasuraProvider extends Provider {
 	public ['constructor']: typeof HasuraProvider;
 
 	public async init() {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, SettingsInsertInput>({
 			query: GRAPHQL.QUERY.SETTINGS,
 		});
 
 		let settings: GraphQLSettings[];
 		if (PRODUCTION) settings = data.settings;
-		else settings = data.staging_settings;
+		else settings = data.settingsStaging;
 		for (const setting of settings) {
 			this.items.set(setting.guild, setting.settings);
 		}
@@ -40,7 +40,7 @@ export default class HasuraProvider extends Provider {
 		data[key] = value;
 		this.items.set(id, data);
 
-		const { data: res } = await graphQLClient.mutate({
+		const { data: res } = await graphQLClient.mutate<any, SettingsInsertInput>({
 			mutation: GRAPHQL.MUTATION.UPDATE_SETTINGS,
 			variables: {
 				guild: id,
@@ -49,8 +49,8 @@ export default class HasuraProvider extends Provider {
 		});
 
 		let settings: GraphQLSettings;
-		if (PRODUCTION) settings = res.insert_settings.returning[0];
-		else settings = res.insert_staging_settings.returning[0];
+		if (PRODUCTION) settings = res.insertSettings.returning[0];
+		else settings = res.insertSettingsStaging.returning[0];
 		return settings;
 	}
 
@@ -59,7 +59,7 @@ export default class HasuraProvider extends Provider {
 		const data = this.items.get(id) || {};
 		delete data[key];
 
-		const { data: res } = await graphQLClient.mutate({
+		const { data: res } = await graphQLClient.mutate<any, SettingsInsertInput>({
 			mutation: GRAPHQL.MUTATION.UPDATE_SETTINGS,
 			variables: {
 				guild: id,
@@ -68,8 +68,8 @@ export default class HasuraProvider extends Provider {
 		});
 
 		let settings: GraphQLSettings;
-		if (PRODUCTION) settings = res.insert_settings.returning[0];
-		else settings = res.insert_staging_settings.returning[0];
+		if (PRODUCTION) settings = res.insertSettings.returning[0];
+		else settings = res.insertSettingsStaging.returning[0];
 		return settings;
 	}
 
@@ -77,7 +77,7 @@ export default class HasuraProvider extends Provider {
 		const id = this.constructor.getGuildId(guild);
 		this.items.delete(id);
 
-		const { data: res } = await graphQLClient.mutate({
+		const { data: res } = await graphQLClient.mutate<any, SettingsInsertInput>({
 			mutation: GRAPHQL.MUTATION.DELETE_SETTINGS,
 			variables: {
 				guild: id,
@@ -85,8 +85,8 @@ export default class HasuraProvider extends Provider {
 		});
 
 		let settings: GraphQLSettings;
-		if (PRODUCTION) settings = res.insert_settings.returning[0];
-		else settings = res.insert_staging_settings.returning[0];
+		if (PRODUCTION) settings = res.insertSettings.returning[0];
+		else settings = res.insertSettingsStaging.returning[0];
 		return settings;
 	}
 

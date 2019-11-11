@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Tags } from '../../util/graphQLTypes';
+import { Tags, TagsSetInput } from '../../util/graphQLTypes';
 
 export default class TagEditCommand extends Command {
 	public constructor() {
@@ -102,15 +102,15 @@ export default class TagEditCommand extends Command {
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
 					content,
-					last_modified: message.author.id,
+					lastModified: message.author.id,
 			  }
 			: {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
 					templated: staffRole && (template || untemplate) ? template : tag.templated,
-					last_modified: message.author.id,
+					lastModified: message.author.id,
 			  };
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, TagsSetInput>({
 			mutation: content ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
 			variables: vars,
 		});

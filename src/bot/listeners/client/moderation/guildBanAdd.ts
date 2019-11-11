@@ -36,9 +36,9 @@ export default class GuildBanAddModerationListener extends Listener {
 		await this.client.caseHandler.create({
 			guild: guild.id,
 			message: modMessage?.id,
-			case_id: totalCases,
-			target_id: user.id,
-			target_tag: user.tag,
+			caseId: totalCases,
+			targetId: user.id,
+			targetTag: user.tag,
 			action: ACTIONS.BAN,
 		});
 	}

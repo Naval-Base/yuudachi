@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Tags } from '../../util/graphQLTypes';
+import { Tags, TagsInsertInput } from '../../util/graphQLTypes';
 
 export default class TagDeleteCommand extends Command {
 	public constructor() {
@@ -43,7 +43,7 @@ export default class TagDeleteCommand extends Command {
 		if (tag.user !== message.author.id && !staffRole) {
 			return message.util!.reply(MESSAGES.COMMANDS.TAGS.DELETE.OWN_TAG);
 		}
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, TagsInsertInput>({
 			mutation: GRAPHQL.MUTATION.DELETE_TAG,
 			variables: {
 				id: tag.id,

@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions, Util } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Tags } from '../../util/graphQLTypes';
+import { Tags, TagsInsertInput } from '../../util/graphQLTypes';
 
 export default class SearchTagCommand extends Command {
 	public constructor() {
@@ -39,7 +39,7 @@ export default class SearchTagCommand extends Command {
 
 	public async exec(message: Message, { name }: { name: string }) {
 		name = Util.cleanContent(name, message);
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, TagsInsertInput>({
 			query: GRAPHQL.QUERY.TAGS_TYPE,
 			variables: {
 				guild: message.guild!.id,
@@ -47,7 +47,7 @@ export default class SearchTagCommand extends Command {
 		});
 		let tags: Tags[];
 		if (PRODUCTION) tags = data.tags;
-		else tags = data.staging_tags;
+		else tags = data.tagsStaging;
 		tags = tags.filter(t => t.name.includes(name) || t.aliases.some(a => a.includes(name)));
 		if (!tags.length) return message.util!.reply(MESSAGES.COMMANDS.TAGS.SEARCH.NO_RESULT(name));
 		const search = tags

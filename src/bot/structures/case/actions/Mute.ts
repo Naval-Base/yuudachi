@@ -1,7 +1,7 @@
 import { TextChannel, User } from 'discord.js';
 import { ACTIONS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { Cases } from '../../../util/graphQLTypes';
+import { Cases, CasesInsertInput } from '../../../util/graphQLTypes';
 import Action, { ActionData } from './Action';
 
 type MuteData = Omit<ActionData, 'days'>;
@@ -55,30 +55,30 @@ export default class MuteAction extends Action {
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.muteScheduler.add({
 			guild: this.message.guild!.id,
-			case_id: totalCases,
-			target_id: this.member.id,
-			target_tag: memberTag,
-			mod_id: this.message.author.id,
-			mod_tag: this.message.author.tag,
+			caseId: totalCases,
+			targetId: this.member.id,
+			targetTag: memberTag,
+			modId: this.message.author.id,
+			modTag: this.message.author.tag,
 			action: this.action,
 			reason: this.reason,
-			ref_id: this.ref,
-			action_duration: new Date(Date.now() + this.duration!).toISOString(),
-			action_processed: false,
+			refId: this.ref,
+			actionDuration: new Date(Date.now() + this.duration!).toISOString(),
+			actionProcessed: false,
 		});
 
 		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, CasesInsertInput>({
 				query: GRAPHQL.QUERY.LOG_CASE,
 				variables: {
 					guild: this.message.guild!.id,
-					case_id: totalCases,
+					caseId: totalCases,
 				},
 			});
 			let dbCase: Pick<Cases, 'id' | 'message'>;
 			if (PRODUCTION) dbCase = data.cases[0];
-			else dbCase = data.staging_cases[0];
+			else dbCase = data.casesStaging[0];
 			if (dbCase) {
 				const embed = (
 					await this.client.caseHandler.log({

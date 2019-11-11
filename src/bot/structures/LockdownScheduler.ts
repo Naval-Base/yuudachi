@@ -2,7 +2,7 @@ import { TextChannel, User } from 'discord.js';
 import YukikazeClient from '../client/YukikazeClient';
 import { PRODUCTION } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Lockdowns } from '../util/graphQLTypes';
+import { Lockdowns, LockdownsInsertInput } from '../util/graphQLTypes';
 import { EVENTS, TOPICS } from '../util/logger';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
@@ -23,7 +23,7 @@ export default class LockdownScheduler {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.LOCKDOWN,
 		});
-		const { data } = await graphQLClient.mutate({
+		const { data } = await graphQLClient.mutate<any, LockdownsInsertInput>({
 			mutation: GRAPHQL.MUTATION.INSERT_LOCKDOWNS,
 			variables: {
 				guild: lockdown.guild,
@@ -31,8 +31,8 @@ export default class LockdownScheduler {
 				duration: new Date(Date.now() + duration).toISOString(),
 			},
 		});
-		if (PRODUCTION) lockdown = data.insert_lockdowns.returning[0];
-		else lockdown = data.insert_staging_lockdowns.returning[0];
+		if (PRODUCTION) lockdown = data.insertLockdowns.returning[0];
+		else lockdown = data.insertLockdownsStaging.returning[0];
 
 		await chan.updateOverwrite(
 			lockdown.guild,
@@ -49,7 +49,7 @@ export default class LockdownScheduler {
 	}
 
 	public async cancel(lockdown: Pick<Lockdowns, 'channel'>) {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, LockdownsInsertInput>({
 			query: GRAPHQL.QUERY.LOCKDOWNS_CHANNEL,
 			variables: {
 				channel: lockdown.channel,
@@ -57,14 +57,14 @@ export default class LockdownScheduler {
 		});
 		let lock: Lockdowns;
 		if (PRODUCTION) lock = data.lockdowns[0];
-		else lock = data.staging_lockdowns[0];
+		else lock = data.lockdownsStaging[0];
 
 		const chan = this.client.channels.get(lockdown.channel) as TextChannel;
 		this.client.logger.info(`Lockdown removed on ${this.client.guilds.get(lock.guild)} in ${chan}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.LOCKDOWN,
 		});
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, LockdownsInsertInput>({
 			mutation: GRAPHQL.MUTATION.CANCEL_LOCKDOWN,
 			variables: {
 				id: lock.id,
@@ -100,15 +100,15 @@ export default class LockdownScheduler {
 	}
 
 	public async check() {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, LockdownsInsertInput>({
 			query: GRAPHQL.QUERY.LOCKDOWNS_DURATION,
 			variables: {
-				duration: new Date(Date.now() + this.checkRate),
+				duration: new Date(Date.now() + this.checkRate).toISOString(),
 			},
 		});
 		let lockdowns: Lockdowns[];
 		if (PRODUCTION) lockdowns = data.lockdowns;
-		else lockdowns = data.staging_lockdowns;
+		else lockdowns = data.lockdownsStaging;
 		const now = Date.now();
 
 		for (const lockdown of lockdowns) {

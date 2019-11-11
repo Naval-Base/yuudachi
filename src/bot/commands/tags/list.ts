@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { GuildMember, Message, MessageEmbed, Permissions } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Tags } from '../../util/graphQLTypes';
+import { Tags, TagsInsertInput } from '../../util/graphQLTypes';
 
 export default class TagListCommand extends Command {
 	public constructor() {
@@ -35,7 +35,7 @@ export default class TagListCommand extends Command {
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
 		if (member) {
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_MEMBER,
 				variables: {
 					guild: message.guild!.id,
@@ -44,7 +44,7 @@ export default class TagListCommand extends Command {
 			});
 			let tags: Pick<Tags, 'content' | 'name' | 'hoisted' | 'user'>[];
 			if (PRODUCTION) tags = data.tags;
-			else tags = data.staging_tags;
+			else tags = data.tagsStaging;
 			if (!tags.length) {
 				if (member.id === message.author.id) return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS());
 				return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS(member.displayName));
@@ -61,7 +61,7 @@ export default class TagListCommand extends Command {
 
 			return message.util!.send(embed);
 		}
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, TagsInsertInput>({
 			query: GRAPHQL.QUERY.TAGS,
 			variables: {
 				guild: message.guild!.id,
@@ -69,7 +69,7 @@ export default class TagListCommand extends Command {
 		});
 		let tags: Tags[];
 		if (PRODUCTION) tags = data.tags;
-		else tags = data.staging_tags;
+		else tags = data.tagsStaging;
 		if (!tags.length) return message.util!.send(MESSAGES.COMMANDS.TAGS.LIST.GUILD_NO_TAGS(message.guild!.name));
 		const hoistedTags = tags
 			.filter(tag => tag.hoisted)

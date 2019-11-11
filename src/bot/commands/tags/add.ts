@@ -2,6 +2,7 @@ import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
+import { TagsInsertInput } from '../../util/graphQLTypes';
 
 export default class TagAddCommand extends Command {
 	public constructor() {
@@ -70,7 +71,7 @@ export default class TagAddCommand extends Command {
 			content = Util.cleanContent(content, message);
 			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
 		}
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, TagsInsertInput>({
 			mutation: GRAPHQL.MUTATION.INSERT_TAG,
 			variables: {
 				guild: message.guild!.id,

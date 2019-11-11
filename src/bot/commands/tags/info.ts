@@ -44,7 +44,7 @@ export default class TagInfoCommand extends Command {
 		const user = await this.client.users.fetch(tag.user);
 		let lastModifiedBy;
 		try {
-			lastModifiedBy = await this.client.users.fetch(tag.last_modified!);
+			lastModifiedBy = await this.client.users.fetch(tag.lastModified!);
 		} catch (error) {
 			lastModifiedBy = null;
 		}
@@ -64,8 +64,8 @@ export default class TagInfoCommand extends Command {
 					: 'No aliases.',
 			)
 			.addField('❯ Uses', tag.uses)
-			.addField('❯ Created at', moment.utc(tag.created_at).format('YYYY/MM/DD hh:mm:ss'))
-			.addField('❯ Modified at', moment.utc(tag.updated_at).format('YYYY/MM/DD hh:mm:ss'));
+			.addField('❯ Created at', moment.utc(tag.createdAt).format('YYYY/MM/DD hh:mm:ss'))
+			.addField('❯ Modified at', moment.utc(tag.updatedAt).format('YYYY/MM/DD hh:mm:ss'));
 		if (lastModifiedBy) {
 			embed.addField(
 				'❯ Last modified by',

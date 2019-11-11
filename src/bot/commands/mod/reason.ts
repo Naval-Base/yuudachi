@@ -2,7 +2,7 @@ import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Cases } from '../../util/graphQLTypes';
+import { Cases, CasesInsertInput } from '../../util/graphQLTypes';
 
 export default class ReasonCommand extends Command {
 	public constructor() {
@@ -57,22 +57,22 @@ export default class ReasonCommand extends Command {
 		const totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE_NUMBER);
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
 				guild: message.guild!.id,
-				case_id: caseToFind,
+				caseId: caseToFind,
 			},
 		});
 		let dbCase: Cases;
 		if (PRODUCTION) dbCase = data.cases[0];
-		else dbCase = data.staging_cases[0];
+		else dbCase = data.casesStaging[0];
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE);
 		}
 		if (
-			dbCase.mod_id &&
-			dbCase.mod_id !== message.author.id &&
+			dbCase.modId &&
+			dbCase.modId !== message.author.id &&
 			!message.member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)
 		) {
 			return message.reply(MESSAGES.COMMANDS.MOD.REASON.WRONG_MOD);
@@ -88,15 +88,15 @@ export default class ReasonCommand extends Command {
 			if (ref) {
 				let reference;
 				try {
-					const { data: res } = await graphQLClient.query({
+					const { data: res } = await graphQLClient.query<any, CasesInsertInput>({
 						query: GRAPHQL.QUERY.CASES,
 						variables: {
 							guild: message.guild!.id,
-							case_id: ref,
+							caseId: ref,
 						},
 					});
 					if (PRODUCTION) reference = res.cases[0];
-					else reference = res.staging_cases[0];
+					else reference = res.casesStaging[0];
 				} catch (error) {
 					reference = null;
 				}
@@ -112,12 +112,12 @@ export default class ReasonCommand extends Command {
 			}
 			await caseEmbed.edit(embed);
 		}
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, CasesInsertInput>({
 			mutation: GRAPHQL.MUTATION.UPDATE_REASON,
 			variables: {
 				id: dbCase.id,
-				mod_id: message.author.id,
-				mod_tag: message.author.tag,
+				modId: message.author.id,
+				modTag: message.author.tag,
 				reason,
 			},
 		});

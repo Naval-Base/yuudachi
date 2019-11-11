@@ -3,7 +3,7 @@ import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions } from 'discord.js';
 import { ACTIONS, COLORS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { Cases } from '../../../util/graphQLTypes';
+import { Cases, CasesInsertInput } from '../../../util/graphQLTypes';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {
@@ -65,46 +65,46 @@ export default class CaseDeleteCommand extends Command {
 		let totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.NO_CASE_NUMBER);
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
 				guild: message.guild!.id,
-				case_id: caseToFind,
+				caseId: caseToFind,
 			},
 		});
-		let dbCase: Omit<Cases, 'action_processed' | 'message'>;
+		let dbCase: Omit<Cases, 'actionProcessed' | 'message'>;
 		if (PRODUCTION) dbCase = data.cases[0];
-		else dbCase = data.staging_cases[0];
+		else dbCase = data.casesStaging[0];
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.NO_CASE);
 		}
 
 		let moderator;
 		try {
-			moderator = await message.guild!.members.fetch(dbCase.mod_id!);
+			moderator = await message.guild!.members.fetch(dbCase.modId!);
 		} catch {}
 		const color = ACTIONS[dbCase.action] as keyof typeof ACTIONS;
 		const embed = new MessageEmbed()
 			.setAuthor(
-				dbCase.mod_id ? `${dbCase.mod_tag} (${dbCase.mod_id})` : 'No moderator',
-				dbCase.mod_id && moderator ? moderator.user.displayAvatarURL() : '',
+				dbCase.modId ? `${dbCase.modTag} (${dbCase.modId})` : 'No moderator',
+				dbCase.modId && moderator ? moderator.user.displayAvatarURL() : '',
 			)
 			.setColor(COLORS[color])
 			.setDescription(
 				stripIndents`
-				**Member:** ${dbCase.target_tag} (${dbCase.target_id})
+				**Member:** ${dbCase.targetTag} (${dbCase.targetId})
 				**Action:** ${ACTION_KEYS[dbCase.action]}${
-					dbCase.action === 5 && dbCase.action_duration
-						? `\n**Length:** ${ms(new Date(dbCase.action_duration).getTime() - new Date(dbCase.created_at).getTime(), {
+					dbCase.action === 5 && dbCase.actionDuration
+						? `\n**Length:** ${ms(new Date(dbCase.actionDuration).getTime() - new Date(dbCase.createdAt).getTime(), {
 								long: true,
 						  })}`
 						: ''
 				}
-				${dbCase.reason ? `**Reason:** ${dbCase.reason}` : ''}${dbCase.ref_id ? `\n**Ref case:** ${dbCase.ref_id}` : ''}
+				${dbCase.reason ? `**Reason:** ${dbCase.reason}` : ''}${dbCase.refId ? `\n**Ref case:** ${dbCase.refId}` : ''}
 			`,
 			)
-			.setFooter(`Case ${dbCase.case_id}`)
-			.setTimestamp(new Date(dbCase.created_at));
+			.setFooter(`Case ${dbCase.caseId}`)
+			.setTimestamp(new Date(dbCase.createdAt));
 
 		await message.channel.send(MESSAGES.COMMANDS.MOD.CASES.DELETE.DELETE, { embed });
 		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
@@ -117,7 +117,7 @@ export default class CaseDeleteCommand extends Command {
 
 		let sentMessage;
 		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
-			sentMessage = await message.channel.send(MESSAGES.COMMANDS.MOD.CASES.DELETE.DELETING(dbCase.case_id));
+			sentMessage = await message.channel.send(MESSAGES.COMMANDS.MOD.CASES.DELETE.DELETING(dbCase.caseId));
 		} else {
 			return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.CANCEL);
 		}
@@ -127,6 +127,6 @@ export default class CaseDeleteCommand extends Command {
 
 		await this.client.caseHandler.delete(message, caseToFind, removeRole);
 
-		return sentMessage.edit(MESSAGES.COMMANDS.MOD.CASES.DELETE.REPLY(dbCase.case_id));
+		return sentMessage.edit(MESSAGES.COMMANDS.MOD.CASES.DELETE.REPLY(dbCase.caseId));
 	}
 }

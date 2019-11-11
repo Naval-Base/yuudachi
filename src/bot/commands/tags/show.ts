@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Tags } from '../../util/graphQLTypes';
+import { Tags, TagsInsertInput } from '../../util/graphQLTypes';
 import { interpolateString } from '../../util/template';
 
 export default class TagShowCommand extends Command {
@@ -35,7 +35,7 @@ export default class TagShowCommand extends Command {
 			if (message.member!.roles.has(restrictedRoles.TAG)) return;
 		}
 		name = Util.cleanContent(name, message);
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, TagsInsertInput>({
 			query: GRAPHQL.QUERY.TAGS_TYPE,
 			variables: {
 				guild: message.guild!.id,
@@ -43,10 +43,10 @@ export default class TagShowCommand extends Command {
 		});
 		let tags: Tags[];
 		if (PRODUCTION) tags = data.tags;
-		else tags = data.staging_tags;
+		else tags = data.tagsStaging;
 		const [tag] = tags.filter(t => t.name === name || t.aliases.includes(name));
 		if (!tag) return;
-		graphQLClient.mutate({
+		graphQLClient.mutate<any, TagsInsertInput>({
 			mutation: GRAPHQL.MUTATION.UPDATE_TAG_USAGE,
 			variables: {
 				id: tag.id,

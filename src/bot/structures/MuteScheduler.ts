@@ -1,7 +1,7 @@
 import YukikazeClient from '../client/YukikazeClient';
 import { PRODUCTION, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Cases } from '../util/graphQLTypes';
+import { Cases, CasesInsertInput } from '../util/graphQLTypes';
 import { EVENTS, TOPICS } from '../util/logger';
 
 export default class MuteScheduler {
@@ -15,44 +15,44 @@ export default class MuteScheduler {
 		this.checkRate = checkRate;
 	}
 
-	public async add(mute: Omit<Cases, 'id' | 'created_at'>, reschedule = false) {
-		this.client.logger.info(`Muted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
+	public async add(mute: Omit<Cases, 'id' | 'createdAt'>, reschedule = false) {
+		this.client.logger.info(`Muted ${mute.targetTag} on ${this.client.guilds.get(mute.guild)}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.MUTE,
 		});
 		if (reschedule)
-			this.client.logger.info(`Rescheduled mute for ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
+			this.client.logger.info(`Rescheduled mute for ${mute.targetTag} on ${this.client.guilds.get(mute.guild)}`, {
 				topic: TOPICS.DISCORD_AKAIRO,
 				event: EVENTS.MUTE,
 			});
 		if (!reschedule) {
-			const { data } = await graphQLClient.mutate({
+			const { data } = await graphQLClient.mutate<any, CasesInsertInput>({
 				mutation: GRAPHQL.MUTATION.INSERT_CASES,
 				variables: {
 					action: mute.action,
-					action_duration: mute.action_duration,
-					action_processed: mute.action_processed,
-					case_id: mute.case_id,
+					actionDuration: mute.actionDuration,
+					actionProcessed: mute.actionProcessed,
+					caseId: mute.caseId,
 					guild: mute.guild,
 					message: mute.message,
-					mod_id: mute.mod_id,
-					mod_tag: mute.mod_tag,
+					modId: mute.modId,
+					modTag: mute.modTag,
 					reason: mute.reason,
-					ref_id: mute.ref_id,
-					target_id: mute.target_id,
-					target_tag: mute.target_tag,
+					refId: mute.refId,
+					targetId: mute.targetId,
+					targetTag: mute.targetTag,
 				},
 			});
-			if (PRODUCTION) mute = data.insert_cases.returning[0];
-			else mute = data.insert_staging_cases.returning[0];
+			if (PRODUCTION) mute = data.insertCases.returning[0];
+			else mute = data.insertCasesStaging.returning[0];
 		}
-		if (new Date(mute.action_duration!).getTime() < Date.now() + this.checkRate) {
+		if (new Date(mute.actionDuration!).getTime() < Date.now() + this.checkRate) {
 			this.queue(mute as Cases);
 		}
 	}
 
-	public async cancel(mute: Pick<Cases, 'id' | 'guild' | 'target_id' | 'target_tag'>) {
-		this.client.logger.info(`Unmuted ${mute.target_tag} on ${this.client.guilds.get(mute.guild)}`, {
+	public async cancel(mute: Pick<Cases, 'id' | 'guild' | 'targetId' | 'targetTag'>) {
+		this.client.logger.info(`Unmuted ${mute.targetTag} on ${this.client.guilds.get(mute.guild)}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.MUTE,
 		});
@@ -60,13 +60,13 @@ export default class MuteScheduler {
 		const muteRole = this.client.settings.get(guild!, SETTINGS.MUTE_ROLE)!;
 		let member;
 		try {
-			member = await guild!.members.fetch(mute.target_id);
+			member = await guild!.members.fetch(mute.targetId);
 		} catch {}
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, CasesInsertInput>({
 			mutation: GRAPHQL.MUTATION.CANCEL_MUTE,
 			variables: {
 				id: mute.id,
-				action_processed: true,
+				actionProcessed: true,
 			},
 		});
 		if (member) {
@@ -83,7 +83,7 @@ export default class MuteScheduler {
 		const schedule = this.queued.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
 		this.queued.delete(mute.id);
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, CasesInsertInput>({
 			mutation: GRAPHQL.MUTATION.DELETE_CASE,
 			variables: {
 				id: mute.id,
@@ -91,12 +91,12 @@ export default class MuteScheduler {
 		});
 	}
 
-	public queue(mute: Pick<Cases, 'action_duration' | 'id' | 'guild' | 'target_id' | 'target_tag'>) {
+	public queue(mute: Pick<Cases, 'actionDuration' | 'id' | 'guild' | 'targetId' | 'targetTag'>) {
 		this.queued.set(
 			mute.id,
 			this.client.setTimeout(() => {
 				this.cancel(mute);
-			}, new Date(mute.action_duration!).getTime() - Date.now()),
+			}, new Date(mute.actionDuration!).getTime() - Date.now()),
 		);
 	}
 
@@ -113,22 +113,22 @@ export default class MuteScheduler {
 	}
 
 	public async check() {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.MUTES,
 			variables: {
-				action_duration: new Date(Date.now() + this.checkRate),
-				action_processed: false,
+				actionDuration: new Date(Date.now() + this.checkRate).toISOString(),
+				actionProcessed: false,
 			},
 		});
-		let mutes: Pick<Cases, 'action_duration' | 'guild' | 'id' | 'target_id' | 'target_tag'>[];
+		let mutes: Pick<Cases, 'actionDuration' | 'guild' | 'id' | 'targetId' | 'targetTag'>[];
 		if (PRODUCTION) mutes = data.cases;
-		else mutes = data.staging_cases;
+		else mutes = data.casesStaging;
 		const now = Date.now();
 
 		for (const mute of mutes) {
 			if (this.queued.has(mute.id)) continue;
 
-			if (new Date(mute.action_duration!).getTime() < now) {
+			if (new Date(mute.actionDuration!).getTime() < now) {
 				this.cancel(mute);
 			} else {
 				this.queue(mute);
