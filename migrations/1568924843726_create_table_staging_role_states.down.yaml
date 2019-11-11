@@ -1,3 +1,0 @@
-- args:
-    sql: DROP TABLE "staging"."role_states"
-  type: run_sql

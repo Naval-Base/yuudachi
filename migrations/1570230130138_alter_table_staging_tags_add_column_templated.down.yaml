@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "staging"."tags" DROP COLUMN "templated";
-  type: run_sql

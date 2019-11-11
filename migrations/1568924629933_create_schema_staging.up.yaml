@@ -1,3 +1,0 @@
-- args:
-    sql: create schema "staging";
-  type: run_sql

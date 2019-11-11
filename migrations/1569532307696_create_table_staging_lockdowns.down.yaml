@@ -1,3 +1,0 @@
-- args:
-    sql: DROP TABLE "staging"."lockdowns"
-  type: run_sql

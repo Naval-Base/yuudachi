@@ -1,8 +1,0 @@
-- args:
-    sql: CREATE TABLE "staging"."settings"("guild" text NOT NULL, "settings" jsonb
-      NOT NULL DEFAULT jsonb_build_object(), PRIMARY KEY ("guild") );
-  type: run_sql
-- args:
-    name: settings
-    schema: staging
-  type: add_existing_table_or_view
