@@ -166,10 +166,10 @@ export default class CaseHandler {
 	}
 
 	public async history(member: GuildMember | User) {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.HISTORY_CASE,
 			variables: {
-				target_id: member.id,
+				targetId: member.id,
 			},
 		});
 		let cases: Pick<Cases, 'action'>[];
@@ -287,11 +287,11 @@ export default class CaseHandler {
 	}
 
 	private async fix(caseNum: number, guild: string, channel: string) {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.FIX_CASES,
 			variables: {
 				guild,
-				case_id: caseNum,
+				caseId: caseNum,
 			},
 		});
 		let cases: Pick<Cases, 'id' | 'message'>[];
@@ -305,11 +305,11 @@ export default class CaseHandler {
 				const msg = await chan.messages.fetch(c.message!);
 				await msg.edit(new MessageEmbed(msg.embeds[0]).setFooter(`Case ${newCaseNum}`));
 			} catch {}
-			await graphQLClient.mutate({
+			await graphQLClient.mutate<any, CasesInsertInput>({
 				mutation: GRAPHQL.MUTATION.FIX_CASE,
 				variables: {
 					id: c.id,
-					case_id: newCaseNum,
+					caseId: newCaseNum,
 				},
 			});
 			newCaseNum++;

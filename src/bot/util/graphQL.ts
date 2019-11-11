@@ -104,8 +104,8 @@ export const GRAPHQL = {
 					actionDuration
 					guild
 					id
-					target_id
-					target_tag
+					targetId
+					targetTag
 				}
 			}
 		`,
@@ -317,45 +317,45 @@ export const GRAPHQL = {
 				$action: Int!,
 				$actionDuration: timestamptz,
 				$actionProcessed: Boolean,
-				$case_id: Int!,
+				$caseId: Int!,
 				$guild: String!,
 				$message: String,
-				$mod_id: String,
-				$mod_tag: String,
+				$modId: String,
+				$modTag: String,
 				$reason: String,
-				$ref_id: Int,
-				$target_id: String,
-				$target_tag: String
+				$refId: Int,
+				$targetId: String,
+				$targetTag: String
 			) {
 				insertCases${PRODUCTION ? '' : 'Staging'}(objects: {
 					action: $action,
-					actionDuration: $action_duration
-					actionProcessed: $action_processed
-					caseId: $case_id,
+					actionDuration: $actionDuration
+					actionProcessed: $actionProcessed
+					caseId: $caseId,
 					guild: $guild,
 					message: $message
-					modId: $mod_id,
-					modTag: $mod_tag,
+					modId: $modId,
+					modTag: $modTag,
 					reason: $reason
-					refId: $ref_id
-					targetId: $target_id,
-					targetTag: $target_tag
+					refId: $refId
+					targetId: $targetId,
+					targetTag: $targetTag
 				}) {
 					returning {
 						action
-						action_duration
-						action_processed
-						case_id
-						created_at
+						actionDuration
+						actionProcessed
+						caseId
+						createdAt
 						guild
 						id
 						message
-						mod_id
-						mod_tag
+						modId
+						modTag
 						reason
-						ref_id
-						target_id
-						target_tag
+						refId
+						targetId
+						targetTag
 					}
 				}
 			}

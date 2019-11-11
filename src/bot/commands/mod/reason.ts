@@ -105,7 +105,7 @@ export default class ReasonCommand extends Command {
 						embed.setDescription(embed.description.replace(/\*\*Ref case:\*\* [\s\S]+/, `**Ref case:** ${reason}`));
 					} else {
 						embed.setDescription(
-							`${embed.description}\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`,
+							`${embed.description}\n**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`,
 						);
 					}
 				}
