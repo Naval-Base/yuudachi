@@ -45,7 +45,7 @@ export const GRAPHQL = {
 					caseId: { _eq: $caseId }
 				}) {
 					action
-					action_duration
+					actionDuration
 					caseId
 					createdAt
 					guild
