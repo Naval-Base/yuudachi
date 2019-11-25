@@ -39,10 +39,10 @@ export const GRAPHQL = {
 		`,
 
 		CASES: gql`
-			query($guild: String!, $caseId: Int!) {
+			query($guild: String!, $caseId: [Int!]!) {
 				cases${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
-					caseId: { _eq: $caseId }
+					caseId: { _in: $caseId }
 				}) {
 					action
 					actionDuration

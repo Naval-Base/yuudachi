@@ -568,7 +568,10 @@ export const MESSAGES = {
 					"I looked where I could, but I couldn't find a case with that Id, maybe look for something that actually exists next time!",
 				WRONG_MOD: "you'd be wrong in thinking I would let you fiddle with other peoples achievements!",
 				NO_MESSAGE: "looks like the message doesn't exist anymore!",
-				REPLY: (id: number) => `Successfully set reason for case **#${id}**`,
+				REPLY: (ids: number[]) =>
+					`Successfully set reason for ${
+						ids.length === 1 ? `case **#${ids[0]}**` : `cases **#${ids[0]}-#${ids[ids.length - 1]}**`
+					}`,
 			},
 
 			SOFTBAN: {

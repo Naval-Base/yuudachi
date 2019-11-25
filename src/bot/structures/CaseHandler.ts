@@ -89,11 +89,11 @@ export default class CaseHandler {
 	}
 
 	public async delete(message: Message, caseNum: number, removeRole?: boolean) {
-		const { data } = await graphQLClient.query<any, CasesInsertInput>({
+		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
 				guild: message.guild!.id,
-				caseId: caseNum,
+				caseId: [caseNum],
 			},
 		});
 		let cs: Cases;
@@ -133,11 +133,11 @@ export default class CaseHandler {
 		let channel;
 		if (message && ref) {
 			try {
-				const { data } = await graphQLClient.query<any, CasesInsertInput>({
+				const { data } = await graphQLClient.query<any, any>({
 					query: GRAPHQL.QUERY.CASES,
 					variables: {
 						guild: message.guild!.id,
-						caseId: ref,
+						caseId: [ref],
 					},
 				});
 				if (PRODUCTION) reference = data.cases[0];

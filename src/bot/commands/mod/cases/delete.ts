@@ -3,7 +3,7 @@ import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions } from 'discord.js';
 import { ACTIONS, COLORS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { Cases, CasesInsertInput } from '../../../util/graphQLTypes';
+import { Cases } from '../../../util/graphQLTypes';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {
@@ -65,11 +65,11 @@ export default class CaseDeleteCommand extends Command {
 		let totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.NO_CASE_NUMBER);
-		const { data } = await graphQLClient.query<any, CasesInsertInput>({
+		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
 				guild: message.guild!.id,
-				caseId: caseToFind,
+				caseId: [caseToFind],
 			},
 		});
 		let dbCase: Omit<Cases, 'actionProcessed' | 'message'>;
