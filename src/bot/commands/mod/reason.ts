@@ -72,6 +72,28 @@ export default class ReasonCommand extends Command {
 		if (!dbCases.length) {
 			return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE);
 		}
+		let statusMessage;
+		if (dbCases.length >= 10) {
+			await message.util!.send(`${dbCases.length} reasons will be changed; proceed?`);
+
+			const responses = await message.channel.awaitMessages((msg: Message) => msg.author.id === message.author.id, {
+				max: 1,
+				time: 10000,
+			});
+
+			if (responses?.size !== 1) {
+				message.reply('Setting reasons cancelled.');
+				return null;
+			}
+			const response = responses.first();
+			
+			if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
+				statusMessage = await response!.reply('Setting reasons...');
+			} else {
+				message.reply('Setting reasons cancelled.');
+				return null;
+			}
+		}
 
 		for (const dbCase of dbCases) {
 			if (
@@ -130,6 +152,9 @@ export default class ReasonCommand extends Command {
 			});
 		}
 
+		if (statusMessage) {
+			return statusMessage.edit(MESSAGES.COMMANDS.MOD.REASON.REPLY(caseToFind));
+		}
 		return message.util!.send(MESSAGES.COMMANDS.MOD.REASON.REPLY(caseToFind));
 	}
 }
