@@ -86,7 +86,7 @@ export default class ReasonCommand extends Command {
 				return null;
 			}
 			const response = responses.first();
-			
+
 			if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
 				statusMessage = await response!.reply('Setting reasons...');
 			} else {
