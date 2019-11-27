@@ -503,15 +503,13 @@
     import-from "3.0.0"
     tslib "1.10.0"
 
-"@graphql-codegen/typescript@^1.8.3":
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.8.3.tgz#600c2d7931f8a5433919dea5483adb9ba0aba65b"
-  integrity sha512-Hw8b/iu/ZEAK22G3YmU//98jfmYN835ZPAx3w4c/reeMv4syfAoUlXrSKCbvfi/TOzVRzK/FjYKa0h5dKMoyPA==
+"@graphql-codegen/typescript@^1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.9.0.tgz#6be155c2a15308e369394a0920437b3adaaf6eb3"
+  integrity sha512-4Z0cHkEyvv2dcSW8aqGCvSTYd8GWYcPNmA/k6EReucY1dxn2+tc15X750JW5HtyO5cH284tn+zvIfOMEWO9JTg==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.8.3"
     "@graphql-codegen/visitor-plugin-common" "1.8.3"
     auto-bind "3.0.0"
-    tslib "1.10.0"
 
 "@graphql-codegen/visitor-plugin-common@1.8.3":
   version "1.8.3"
