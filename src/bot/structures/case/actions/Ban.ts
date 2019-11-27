@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js';
+import { Message, User, GuildMember } from 'discord.js';
 import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
@@ -10,11 +10,8 @@ export default class BanAction extends Action {
 	}
 
 	public async before() {
-		if (this.member instanceof User) {
-			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
-		}
 		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE)!;
-		if (this.member.roles.has(staff)) {
+		if (this.member instanceof GuildMember && this.member.roles.has(staff)) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
@@ -48,16 +45,16 @@ export default class BanAction extends Action {
 	}
 
 	public async exec() {
-		if (this.member instanceof User) return;
+		const user = this.member instanceof User ? this.member : this.member.user;
 		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
 
-		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.BAN.PRE_REPLY(this.member.user.tag));
+		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.BAN.PRE_REPLY(user.tag));
 
 		try {
 			try {
 				await this.member.send(MESSAGES.ACTIONS.BAN.MESSAGE(this.message.guild!.name, this._reason));
 			} catch {}
-			await this.member.ban({
+			await this.message.guild!.members.ban(user.id, {
 				days: this.days,
 				reason: MESSAGES.ACTIONS.BAN.AUDIT(this.message.author.tag, totalCases),
 			});
@@ -68,6 +65,6 @@ export default class BanAction extends Action {
 
 		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(MESSAGES.ACTIONS.BAN.REPLY(this.member.user.tag));
+		sentMessage.edit(MESSAGES.ACTIONS.BAN.REPLY(user.tag));
 	}
 }

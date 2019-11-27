@@ -1,5 +1,5 @@
 import { Argument, Command } from 'discord-akairo';
-import { GuildMember, Message, Permissions } from 'discord.js';
+import { GuildMember, Message, Permissions, User } from 'discord.js';
 import BanAction from '../../structures/case/actions/Ban';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
@@ -20,9 +20,8 @@ export default class BanCommand extends Command {
 				{
 					id: 'member',
 					type: Argument.union('member', async (_, phrase) => {
-						const m = await this.client.users.fetch(phrase);
-						if (m) return { id: m.id, user: m };
-						return null;
+						const u = await this.client.users.fetch(phrase);
+						return u || null;
 					}),
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.MOD.BAN.PROMPT.START(message.author),
@@ -63,7 +62,7 @@ export default class BanCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
+		{ member, days, ref, reason }: { member: GuildMember | User; days: number; ref: number; reason: string },
 	) {
 		const key = `${message.guild!.id}:${member.id}:BAN`;
 		message.guild!.caseQueue.add(async () =>
