@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions } from 'discord.js';
 import ReactionAction from '../../../structures/case/actions/Reaction';
-import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { MESSAGES } from '../../../util/constants';
 
 export default class RestrictReactionCommand extends Command {
 	public constructor() {

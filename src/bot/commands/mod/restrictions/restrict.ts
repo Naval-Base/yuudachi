@@ -1,6 +1,6 @@
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message, Permissions } from 'discord.js';
-import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { MESSAGES } from '../../../util/constants';
 
 export default class RestrictCommand extends Command {
 	public constructor() {

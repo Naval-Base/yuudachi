@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions } from 'discord.js';
 import TagAction from '../../../structures/case/actions/Tag';
-import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { MESSAGES } from '../../../util/constants';
 
 export default class RestrictTagCommand extends Command {
 	public constructor() {

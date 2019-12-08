@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { Message, Permissions, User } from 'discord.js';
 import UnbanAction from '../../structures/case/actions/Unban';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 
 export default class UnbanCommand extends Command {
 	public constructor() {

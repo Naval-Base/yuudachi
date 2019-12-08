@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions } from 'discord.js';
 import MuteAction from '../../structures/case/actions/Mute';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class MuteCommand extends Command {

@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions } from 'discord.js';
 import SoftbanAction from '../../structures/case/actions/Softban';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 
 export default class SoftbanCommand extends Command {
 	public constructor() {

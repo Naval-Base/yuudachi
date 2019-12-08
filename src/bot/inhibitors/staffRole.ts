@@ -14,7 +14,7 @@ export default class StaffRoleInhibitor extends Inhibitor {
 		if (message.util?.parsed?.command?.categoryID !== 'mod') {
 			return false;
 		}
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
+		const staffRole = this.client.settings.get(message.guild, SETTINGS.MOD_ROLE);
 		if (!staffRole) {
 			return true;
 		}

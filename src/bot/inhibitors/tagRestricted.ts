@@ -14,7 +14,7 @@ export default class TagRestrictedInhibitor extends Inhibitor {
 		if (message.util?.parsed?.command?.categoryID !== 'tag') {
 			return false;
 		}
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
+		const restrictedRoles = this.client.settings.get(message.guild, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) {
 			return true;
 		}

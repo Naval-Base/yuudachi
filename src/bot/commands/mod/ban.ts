@@ -1,7 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions, User } from 'discord.js';
 import BanAction from '../../structures/case/actions/Ban';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 
 export default class BanCommand extends Command {
 	public constructor() {
