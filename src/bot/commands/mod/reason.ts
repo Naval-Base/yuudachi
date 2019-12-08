@@ -50,6 +50,7 @@ export default class ReasonCommand extends Command {
 		} else {
 			const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 			caseToFind = caseNum === 'latest' || caseNum === 'l' ? [totalCases] : [parseInt(caseNum, 10)];
+			if (isNaN(caseToFind[0])) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_CASE_NUMBER);
 		}
 		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
