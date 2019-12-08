@@ -8,7 +8,7 @@ import { interpolateString } from '../../util/template';
 export default class TagShowCommand extends Command {
 	public constructor() {
 		super('tag-show', {
-			category: 'tags',
+			category: 'tag',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.SHOW.DESCRIPTION,
 				usage: '<tag>',

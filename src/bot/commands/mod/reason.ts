@@ -41,15 +41,6 @@ export default class ReasonCommand extends Command {
 		});
 	}
 
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member?.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
-	}
-
 	public async exec(message: Message, { caseNum, ref, reason }: { caseNum: string; ref: number; reason: string }) {
 		const guild = message.guild!;
 		let caseToFind: number[];

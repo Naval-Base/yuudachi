@@ -1,13 +1,13 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags } from '../../util/graphQLTypes';
 
 export default class TagAliasCommand extends Command {
 	public constructor() {
 		super('tag-alias', {
-			category: 'tags',
+			category: 'tag',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.ALIAS.DESCRIPTION,
 				usage: '<--add/--del> <tag> <tagalias>',
@@ -17,15 +17,6 @@ export default class TagAliasCommand extends Command {
 			ratelimit: 2,
 			flags: ['--add', '--del'],
 		});
-	}
-
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
-		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
-		if (hasRestrictedRole) return 'Restricted';
-		return null;
 	}
 
 	public *args() {

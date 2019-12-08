@@ -39,15 +39,6 @@ export default class RestrictTagCommand extends Command {
 		});
 	}
 
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member?.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
-	}
-
 	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
 		if (member.id === message.author.id) return;
 		const guild = message.guild!;

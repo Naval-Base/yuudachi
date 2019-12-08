@@ -28,7 +28,7 @@ export default class TagCommand extends Command {
 					'download @Crawl',
 				],
 			},
-			category: 'tags',
+			category: 'tag',
 			channel: 'guild',
 			ratelimit: 2,
 		});

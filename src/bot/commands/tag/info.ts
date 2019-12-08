@@ -2,13 +2,13 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 import { Tags } from '../../util/graphQLTypes';
 
 export default class TagInfoCommand extends Command {
 	public constructor() {
 		super('tag-info', {
-			category: 'tags',
+			category: 'tag',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.INFO.DESCRIPTION,
 				usage: '<tag>',
@@ -29,15 +29,6 @@ export default class TagInfoCommand extends Command {
 				},
 			],
 		});
-	}
-
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
-		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
-		if (hasRestrictedRole) return 'Restricted';
-		return null;
 	}
 
 	public async exec(message: Message, { tag }: { tag: Tags }) {

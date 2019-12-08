@@ -7,7 +7,7 @@ import { Tags, TagsSetInput } from '../../util/graphQLTypes';
 export default class TagEditCommand extends Command {
 	public constructor() {
 		super('tag-edit', {
-			category: 'tags',
+			category: 'tag',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.EDIT.DESCRIPTION,
 				usage: '<tag> [--hoist/--unhoist/--pin/--unpin/--template/--untemplate] <content>',
@@ -17,15 +17,6 @@ export default class TagEditCommand extends Command {
 			ratelimit: 2,
 			flags: ['--hoist', '--pin', '--unhoist', '--unpin', '--template', '--untemplate'],
 		});
-	}
-
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
-		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
-		if (hasRestrictedRole) return 'Restricted';
-		return null;
 	}
 
 	public *args() {

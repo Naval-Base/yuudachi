@@ -7,7 +7,7 @@ import { TagsInsertInput } from '../../util/graphQLTypes';
 export default class TagAddCommand extends Command {
 	public constructor() {
 		super('tag-add', {
-			category: 'tags',
+			category: 'tag',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.ADD.DESCRIPTION,
 				usage: '[--hoist/--pin/--template] <tag> <content>',
@@ -45,15 +45,6 @@ export default class TagAddCommand extends Command {
 				},
 			],
 		});
-	}
-
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
-		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
-		if (hasRestrictedRole) return 'Restricted';
-		return null;
 	}
 
 	public async exec(

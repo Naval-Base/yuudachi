@@ -1,12 +1,12 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 import { Tags } from '../../util/graphQLTypes';
 
 export default class TagSourceCommand extends Command {
 	public constructor() {
 		super('tag-source', {
-			category: 'tags',
+			category: 'tag',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.SOURCE.DESCRIPTION,
 				usage: '[--file/-f] <tag>',
@@ -31,15 +31,6 @@ export default class TagSourceCommand extends Command {
 				},
 			],
 		});
-	}
-
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
-		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
-		if (hasRestrictedRole) return 'Restricted';
-		return null;
 	}
 
 	public async exec(message: Message, { tag, file }: { tag: Tags; file: boolean }) {

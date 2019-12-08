@@ -1,13 +1,13 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message } from 'discord.js';
-import { MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
+import { MESSAGES, PRODUCTION } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags, TagsInsertInput } from '../../util/graphQLTypes';
 
 export default class TagDownloadCommand extends Command {
 	public constructor() {
 		super('tag-download', {
-			category: 'tags',
+			category: 'tag',
 			description: {
 				content: MESSAGES.COMMANDS.TAGS.DOWNLOAD.DESCRIPTION,
 				usage: '[member]',
@@ -23,15 +23,6 @@ export default class TagDownloadCommand extends Command {
 				},
 			],
 		});
-	}
-
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
-		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
-		if (hasRestrictedRole) return 'Restricted';
-		return null;
 	}
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {

@@ -52,15 +52,6 @@ export default class CaseDeleteCommand extends Command {
 		});
 	}
 
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member?.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
-	}
-
 	public async exec(message: Message, { caseNum, removeRole }: { caseNum: number | string; removeRole: boolean }) {
 		const guild = message.guild!;
 		let totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
