@@ -49,19 +49,20 @@ export default class DurationCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
 	public async exec(message: Message, { caseNum, duration }: { caseNum: number | string; duration: number }) {
-		const totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
+		const guild = message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE_NUMBER);
 		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.MUTE_DURATION,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 				action: ACTIONS.MUTE,
 				actionProcessed: false,
 				caseId: caseToFind,
@@ -76,12 +77,12 @@ export default class DurationCommand extends Command {
 		if (
 			dbCase.modId &&
 			dbCase.modId !== message.author.id &&
-			!message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD)
+			!message.member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)
 		) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.WRONG_MOD);
 		}
 
-		const modLogChannel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
+		const modLogChannel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
 			let caseEmbed;
 			if (dbCase.message)
@@ -116,6 +117,6 @@ export default class DurationCommand extends Command {
 		else dbCase = res.updateCasesStaging.returning[0];
 		this.client.muteScheduler.reschedule(dbCase);
 
-		return message.util!.send(MESSAGES.COMMANDS.MOD.DURATION.REPLY(caseToFind));
+		return message.util?.send(MESSAGES.COMMANDS.MOD.DURATION.REPLY(caseToFind));
 	}
 }

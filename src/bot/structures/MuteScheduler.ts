@@ -46,7 +46,7 @@ export default class MuteScheduler {
 			if (PRODUCTION) mute = data.insertCases.returning[0];
 			else mute = data.insertCasesStaging.returning[0];
 		}
-		if (new Date(mute.actionDuration!).getTime() < Date.now() + this.checkRate) {
+		if (new Date(mute.actionDuration ?? 0).getTime() < Date.now() + this.checkRate) {
 			this.queue(mute as Cases);
 		}
 	}
@@ -56,11 +56,11 @@ export default class MuteScheduler {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.MUTE,
 		});
-		const guild = this.client.guilds.get(mute.guild);
-		const muteRole = this.client.settings.get(guild!, SETTINGS.MUTE_ROLE)!;
+		const guild = this.client.guilds.get(mute.guild)!;
+		const muteRole = this.client.settings.get(guild, SETTINGS.MUTE_ROLE)!;
 		let member;
 		try {
-			member = await guild!.members.fetch(mute.targetId);
+			member = await guild.members.fetch(mute.targetId);
 		} catch {}
 		await graphQLClient.mutate<any, CasesInsertInput>({
 			mutation: GRAPHQL.MUTATION.CANCEL_MUTE,
@@ -96,7 +96,7 @@ export default class MuteScheduler {
 			mute.id,
 			this.client.setTimeout(() => {
 				this.cancel(mute);
-			}, new Date(mute.actionDuration!).getTime() - Date.now()),
+			}, new Date(mute.actionDuration ?? 0).getTime() - Date.now()),
 		);
 	}
 
@@ -128,7 +128,7 @@ export default class MuteScheduler {
 		for (const mute of mutes) {
 			if (this.queued.has(mute.id)) continue;
 
-			if (new Date(mute.actionDuration!).getTime() < now) {
+			if (new Date(mute.actionDuration ?? 0).getTime() < now) {
 				this.cancel(mute);
 			} else {
 				this.queue(mute);

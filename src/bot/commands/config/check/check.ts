@@ -16,34 +16,31 @@ export default class CheckConfigCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const mod = this.client.settings.get(message.guild!, SETTINGS.MODERATION);
-		const mute = this.client.settings.get(message.guild!, SETTINGS.MUTE_ROLE);
-		const modlog = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
-		const guildlog = this.client.settings.get(message.guild!, SETTINGS.GUILD_LOG);
-		const memberlog = this.client.settings.get(message.guild!, SETTINGS.MEMBER_LOG, { ID: '', MENTION: false });
+		const guild = message.guild!;
+		const mod = this.client.settings.get(guild, SETTINGS.MODERATION);
+		const mute = this.client.settings.get(guild, SETTINGS.MUTE_ROLE);
+		const modlog = this.client.settings.get(guild, SETTINGS.MOD_LOG);
+		const guildlog = this.client.settings.get(guild, SETTINGS.GUILD_LOG);
+		const memberlog = this.client.settings.get(guild, SETTINGS.MEMBER_LOG, { ID: '', MENTION: false });
 		let guildlogChannel;
 		if (guildlog) {
-			guildlogChannel = this.client.webhooks.get(guildlog)!.channelID;
+			guildlogChannel = this.client.webhooks.get(guildlog)?.channelID;
 		}
 
-		return message.util!.send(
+		return message.util?.send(
 			new MessageEmbed()
 				.addField('❯ Moderation', mod ? '`✅`' : '`❌`')
-				.addField('❯ Mute Role', mute ? `${message.guild!.roles.get(mute)} \`✅\`` : '`❌`', true)
-				.addField('❯ Mod Log', modlog ? `${message.guild!.channels.get(modlog)} \`✅\`` : '`❌`', true)
-				.addField(
-					'❯ Guild Log',
-					guildlogChannel ? `${message.guild!.channels.get(guildlogChannel)} \`✅\`` : '`❌`',
-					true,
-				)
+				.addField('❯ Mute Role', mute ? `${guild.roles.get(mute)} \`✅\`` : '`❌`', true)
+				.addField('❯ Mod Log', modlog ? `${guild.channels.get(modlog)} \`✅\`` : '`❌`', true)
+				.addField('❯ Guild Log', guildlogChannel ? `${guild.channels.get(guildlogChannel)} \`✅\`` : '`❌`', true)
 				.addField(
 					'❯ Member Log',
 					memberlog.ID
-						? `${message.guild!.channels.get(memberlog.ID)} ${memberlog.MENTION ? '(w/ mention)' : ''} \`✅\``
+						? `${guild.channels.get(memberlog.ID)} ${memberlog.MENTION ? '(w/ mention)' : ''} \`✅\``
 						: '`❌`',
 					true,
 				)
-				.setThumbnail(message.guild!.iconURL()!),
+				.setThumbnail(guild.iconURL() ?? ''),
 		);
 	}
 }

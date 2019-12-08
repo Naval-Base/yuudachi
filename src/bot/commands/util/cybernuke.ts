@@ -39,17 +39,18 @@ export default class LaunchCybernukeCommand extends Command {
 	}
 
 	public async exec(message: Message, { join, age }: { join: number; age: number }) {
-		await message.util!.send('Calculating targeting parameters for cybernuke...');
-		await message.guild!.members.fetch();
+		const guild = message.guild!;
+		await message.util?.send('Calculating targeting parameters for cybernuke...');
+		await guild.members.fetch();
 
 		const memberCutoff = Date.now() - join * 60000;
 		const ageCutoff = Date.now() - age * 60000;
-		const members = message.guild!.members.filter(
-			member => member.joinedTimestamp! > memberCutoff && member.user.createdTimestamp > ageCutoff,
+		const members = guild.members.filter(
+			member => (member.joinedTimestamp ?? 0) > memberCutoff && member.user.createdTimestamp > ageCutoff,
 		);
 
-		await message.util!.send(`Cybernuke will strike ${members.size} members; proceed?`);
-		let statusMessage: Message;
+		await message.util?.send(`Cybernuke will strike ${members.size} members; proceed?`);
+		let statusMessage: Message | undefined;
 
 		const responses = await message.channel.awaitMessages((msg: Message) => msg.author.id === message.author.id, {
 			max: 1,
@@ -62,10 +63,10 @@ export default class LaunchCybernukeCommand extends Command {
 		}
 		const response = responses.first();
 
-		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
-			statusMessage = await response!.reply('Launching cybernuke...');
+		if (/^y(?:e(?:a|s)?)?$/i.test(response?.content ?? '')) {
+			statusMessage = await response?.reply('Launching cybernuke...');
 		} else {
-			await response!.reply('Cybernuke cancelled.');
+			await response?.reply('Cybernuke cancelled.');
 			return null;
 		}
 
@@ -79,7 +80,7 @@ export default class LaunchCybernukeCommand extends Command {
 				member
 					.send(
 						stripIndents`
-					Sorry, but you've been automatically targetted by the cybernuke in the "${message.guild!.name}" server.
+					Sorry, but you've been automatically targetted by the cybernuke in the "${guild.name}" server.
 					This means that you have been banned, likely in the case of a server raid.
 					Please contact them if you believe this ban to be in error.
 				`,
@@ -99,7 +100,7 @@ export default class LaunchCybernukeCommand extends Command {
 					.then(async () => {
 						if (members.size <= 5) return;
 						if (promises.length % 5 === 0) {
-							await statusMessage.edit(
+							await statusMessage?.edit(
 								`Launching cyber nuke (${Math.round((promises.length / members.size) * 100)}%)...`,
 							);
 						}
@@ -109,8 +110,8 @@ export default class LaunchCybernukeCommand extends Command {
 		}
 
 		await Promise.all(promises);
-		await statusMessage.edit('Cybernuke impact confirmed. Casuality report incoming...');
-		await response!.reply(
+		await statusMessage?.edit('Cybernuke impact confirmed. Casuality report incoming...');
+		await response?.reply(
 			stripIndents`
 			__**Fatalities:**__
 

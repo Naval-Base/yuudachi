@@ -35,12 +35,12 @@ export default class BlacklistCommand extends Command {
 			if (blacklist.length === 0) this.client.settings.delete('global', SETTINGS.BLACKLIST);
 			else this.client.settings.set('global', SETTINGS.BLACKLIST, blacklist);
 
-			return message.util!.send(MESSAGES.COMMANDS.UTIL.BLACKLIST.REPLY(user.tag));
+			return message.util?.send(MESSAGES.COMMANDS.UTIL.BLACKLIST.REPLY(user.tag));
 		}
 
 		blacklist.push(user.id);
 		this.client.settings.set('global', SETTINGS.BLACKLIST, blacklist);
 
-		return message.util!.send(MESSAGES.COMMANDS.UTIL.BLACKLIST.REPLY_2(user.tag));
+		return message.util?.send(MESSAGES.COMMANDS.UTIL.BLACKLIST.REPLY_2(user.tag));
 	}
 }

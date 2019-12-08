@@ -32,9 +32,10 @@ export default class GitHubCommitCommand extends Command {
 
 	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_API_KEY);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_API_KEY);
 		}
-		const repository = this.client.settings.get(message.guild!, SETTINGS.GITHUB_REPO);
+		const guild = message.guild!;
+		const repository = this.client.settings.get(guild, SETTINGS.GITHUB_REPO);
 		if (!repository) return message.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_REPO);
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
@@ -46,10 +47,10 @@ export default class GitHubCommitCommand extends Command {
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
 		if (!body?.commit) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
 		const embed = new MessageEmbed()
 			.setColor(3447003)
@@ -85,12 +86,13 @@ export default class GitHubCommitCommand extends Command {
 
 		if (
 			!(message.channel as TextChannel)
-				.permissionsFor(message.guild!.me!)!
-				.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
+				.permissionsFor(guild.me ?? '')
+				?.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 		) {
-			return message.util!.send(embed);
+			return message.util?.send(embed);
 		}
-		const msg = await message.util!.send(embed);
+		const msg = await message.util?.send(embed);
+		if (!msg) return message;
 		msg.react('🗑');
 		let react;
 		try {
@@ -103,7 +105,7 @@ export default class GitHubCommitCommand extends Command {
 
 			return message;
 		}
-		react.first()!.message.delete();
+		react.first()?.message.delete();
 
 		return message;
 	}

@@ -28,11 +28,12 @@ export default class SetConfigGuildLogCommand extends Command {
 	}
 
 	public async exec(message: Message, { webhook }: { webhook: string }) {
-		this.client.settings.set(message.guild!, SETTINGS.GUILD_LOG, webhook);
-		const wh = (await message.guild!.fetchWebhooks()).get(webhook);
+		const guild = message.guild!;
+		this.client.settings.set(guild, SETTINGS.GUILD_LOG, webhook);
+		const wh = (await guild.fetchWebhooks()).get(webhook);
 		if (!wh) return;
 		this.client.webhooks.set(wh.id, wh);
 
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.GUILD_LOG.REPLY);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.SET.GUILD_LOG.REPLY);
 	}
 }

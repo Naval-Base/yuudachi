@@ -23,7 +23,7 @@ export default class TagAliasCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
@@ -77,14 +77,14 @@ export default class TagAliasCommand extends Command {
 	) {
 		if (add) {
 			if (second && second.length >= 1900) {
-				return message.util!.reply(MESSAGES.COMMANDS.TAGS.ALIAS.TOO_LONG);
+				return message.util?.reply(MESSAGES.COMMANDS.TAGS.ALIAS.TOO_LONG);
 			}
 			first.aliases.push(second);
 		} else if (del) {
 			const index = first.aliases.indexOf(second);
 			first.aliases.splice(index, 1);
 		} else {
-			return message.util!.reply('you have to either supply `--add` or `--del.`');
+			return message.util?.reply('you have to either supply `--add` or `--del.`');
 		}
 		await graphQLClient.mutate({
 			mutation: GRAPHQL.MUTATION.UPDATE_TAG_ALIASES,
@@ -95,6 +95,6 @@ export default class TagAliasCommand extends Command {
 			},
 		});
 
-		return message.util!.reply(MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, second.substring(0, 1900), add));
+		return message.util?.reply(MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, second.substring(0, 1900), add));
 	}
 }

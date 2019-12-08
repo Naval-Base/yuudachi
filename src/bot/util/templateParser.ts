@@ -198,7 +198,7 @@ function pIdent(s: State) {
 
 function p_(s: State) {
 	const match = matchRegex(s, /^\s*/);
-	s.position += match![0].length;
+	s.position += match?.[0].length!;
 }
 
 function pString(s: State, x: string) {

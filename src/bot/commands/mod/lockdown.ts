@@ -52,7 +52,7 @@ export default class LockdownCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
@@ -61,7 +61,8 @@ export default class LockdownCommand extends Command {
 		message: Message,
 		{ release, channel, duration }: { release: boolean; channel: TextChannel; duration: number },
 	) {
-		if (!channel.permissionsFor(message.guild!.id)!.has(Permissions.FLAGS.VIEW_CHANNEL)) {
+		const guild = message.guild!;
+		if (!channel.permissionsFor(guild.id)?.has(Permissions.FLAGS.VIEW_CHANNEL)) {
 			return;
 		}
 
@@ -70,18 +71,18 @@ export default class LockdownCommand extends Command {
 				channel: channel.id,
 			});
 
-			return message.util!.send(MESSAGES.COMMANDS.MOD.LOCKDOWN.REMOVED(channel));
+			return message.util?.send(MESSAGES.COMMANDS.MOD.LOCKDOWN.REMOVED(channel));
 		}
 
 		await this.client.lockdownScheduler.add(
 			{
-				guild: message.guild!.id,
+				guild: guild.id,
 				channel: channel.id,
 			},
 			duration,
 			message.author,
 		);
 
-		return message.util!.send(MESSAGES.COMMANDS.MOD.LOCKDOWN.REPLY(channel));
+		return message.util?.send(MESSAGES.COMMANDS.MOD.LOCKDOWN.REPLY(channel));
 	}
 }

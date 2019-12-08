@@ -30,15 +30,16 @@ export default class TagShowCommand extends Command {
 
 	public async exec(message: Message, { name }: { name: string }) {
 		if (!name) return;
-		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
+		const guild = message.guild!;
+		const restrictedRoles = this.client.settings.get(guild, SETTINGS.RESTRICT_ROLES);
 		if (restrictedRoles) {
-			if (message.member!.roles.has(restrictedRoles.TAG)) return;
+			if (message.member?.roles.has(restrictedRoles.TAG)) return;
 		}
 		name = Util.cleanContent(name, message);
 		const { data } = await graphQLClient.query<any, TagsInsertInput>({
 			query: GRAPHQL.QUERY.TAGS_TYPE,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 			},
 		});
 		let tags: Tags[];
@@ -61,9 +62,9 @@ export default class TagShowCommand extends Command {
 				guild: message.guild ? message.guild.toString() : null,
 			});
 
-			return message.util!.send(output || 'The output was empty.');
+			return message.util?.send(output || 'The output was empty.');
 		}
 
-		return message.util!.send(tag.content);
+		return message.util?.send(tag.content);
 	}
 }

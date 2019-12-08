@@ -32,40 +32,37 @@ export default class GuildInfoCommand extends Command {
 	}
 
 	public async exec(message: Message) {
+		const guild = message.guild!;
 		const embed = new MessageEmbed()
 			.setColor(3447003)
-			.setDescription(`Info about **${message.guild!.name}** (ID: ${message.guild!.id})`)
+			.setDescription(`Info about **${guild.name}** (ID: ${guild.id})`)
 			.addField(
 				'❯ Channels',
 				stripIndents`
-				• ${message.guild!.channels.filter(ch => ch.type === 'text').size} Text, ${
-					message.guild!.channels.filter(ch => ch.type === 'voice').size
+				• ${guild.channels.filter(ch => ch.type === 'text').size} Text, ${
+					guild.channels.filter(ch => ch.type === 'voice').size
 				} Voice
-				• AFK: ${
-					message.guild!.afkChannelID
-						? `<#${message.guild!.afkChannelID}> after ${message.guild!.afkTimeout / 60}min`
-						: 'None'
-				}
+				• AFK: ${guild.afkChannelID ? `<#${guild.afkChannelID}> after ${guild.afkTimeout / 60}min` : 'None'}
 			`,
 			)
 			.addField(
 				'❯ Member',
 				stripIndents`
-				• ${message.guild!.memberCount} members
-				• Owner: ${message.guild!.owner!.user.tag} (ID: ${message.guild!.ownerID})
+				• ${guild.memberCount} members
+				• Owner: ${guild.owner!.user.tag} (ID: ${guild.ownerID})
 			`,
 			)
 			.addField(
 				'❯ Other',
 				stripIndents`
-				• Roles: ${message.guild!.roles.size}
-				• Region: ${message.guild!.region}
-				• Created at: ${moment.utc(message.guild!.createdAt).format('YYYY/MM/DD hh:mm:ss')}
-				• Verification Level: ${HUMAN_LEVELS[message.guild!.verificationLevel]}
+				• Roles: ${guild.roles.size}
+				• Region: ${guild.region}
+				• Created at: ${moment.utc(guild.createdAt).format('YYYY/MM/DD hh:mm:ss')}
+				• Verification Level: ${HUMAN_LEVELS[guild.verificationLevel]}
 			`,
 			)
-			.setThumbnail(message.guild!.iconURL()!);
+			.setThumbnail(guild.iconURL() ?? '');
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

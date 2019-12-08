@@ -24,21 +24,19 @@ export default class UnbanAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof GuildMember) return;
-		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const guild = this.message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0) + 1;
 
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.UNBAN.PRE_REPLY(this.member.tag));
 
 		try {
-			await this.message.guild!.members.unban(
-				this.member,
-				MESSAGES.ACTIONS.UNBAN.AUDIT(this.message.author.tag, totalCases),
-			);
+			await guild.members.unban(this.member, MESSAGES.ACTIONS.UNBAN.AUDIT(this.message.author.tag, totalCases));
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(MESSAGES.ACTIONS.UNBAN.ERROR(error.message));
 		}
 
-		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
+		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
 		sentMessage.edit(MESSAGES.ACTIONS.UNBAN.REPLY(this.member.tag));
 	}

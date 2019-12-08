@@ -111,10 +111,11 @@ export default abstract class Action {
 	public abstract async exec(): Promise<void>;
 
 	public async after() {
-		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0);
+		const guild = this.message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.caseHandler.create({
-			guild: this.message.guild!.id,
+			guild: guild.id,
 			caseId: totalCases,
 			targetId: this.member.id,
 			targetTag: memberTag,
@@ -125,12 +126,12 @@ export default abstract class Action {
 			refId: this.ref,
 		});
 
-		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
+		const modLogChannel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
 			const { data } = await graphQLClient.query<any, CasesInsertInput>({
 				query: GRAPHQL.QUERY.LOG_CASE,
 				variables: {
-					guild: this.message.guild!.id,
+					guild: guild.id,
 					caseId: totalCases,
 				},
 			});

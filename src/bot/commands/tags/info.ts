@@ -35,7 +35,7 @@ export default class TagInfoCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
@@ -44,7 +44,7 @@ export default class TagInfoCommand extends Command {
 		const user = await this.client.users.fetch(tag.user);
 		let lastModifiedBy;
 		try {
-			lastModifiedBy = await this.client.users.fetch(tag.lastModified!);
+			lastModifiedBy = await this.client.users.fetch(tag.lastModified ?? '');
 		} catch (error) {
 			lastModifiedBy = null;
 		}
@@ -73,6 +73,6 @@ export default class TagInfoCommand extends Command {
 			);
 		}
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

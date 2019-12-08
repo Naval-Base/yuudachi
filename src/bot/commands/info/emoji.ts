@@ -27,8 +27,9 @@ export default class EmojiInfoCommand extends Command {
 					match: 'content',
 					type: async (message, content) => {
 						if (EMOJI_REGEX.test(content)) [, content] = EMOJI_REGEX.exec(content)!;
-						if (!isNaN((content as unknown) as number)) return message.guild!.emojis.get(content);
-						return message.guild!.emojis.find(e => e.name === content) || emojis.find(content);
+						const guild = message.guild!;
+						if (!isNaN((content as unknown) as number)) return guild.emojis.get(content);
+						return guild.emojis.find(e => e.name === content) || emojis.find(content);
 					},
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.INFO.EMOJI.PROMPT.START(message.author),
@@ -74,6 +75,6 @@ export default class EmojiInfoCommand extends Command {
 			);
 		}
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

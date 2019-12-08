@@ -48,10 +48,10 @@ export default class GitHubSearchCommand extends Command {
 				});
 				body = await res.json();
 			} catch (error) {
-				return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
+				return message.util?.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 			}
 			if (!body) {
-				return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
+				return message.util?.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 			}
 			const embed = new MessageEmbed()
 				.setColor(3447003)
@@ -87,12 +87,13 @@ export default class GitHubSearchCommand extends Command {
 
 			if (
 				!(message.channel as TextChannel)
-					.permissionsFor(this.client.user!)!
-					.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
+					.permissionsFor(this.client.user ?? '')
+					?.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 			) {
-				return message.util!.send(embed);
+				return message.util?.send(embed);
 			}
-			const msg = await message.util!.send(embed);
+			const msg = await message.util?.send(embed);
+			if (!msg) return message;
 			const ownReaction = await msg.react('🗑');
 			let react;
 			try {
@@ -106,7 +107,7 @@ export default class GitHubSearchCommand extends Command {
 
 				return message;
 			}
-			react.first()!.message.delete();
+			react.first()?.message.delete();
 
 			return message;
 		}
@@ -183,10 +184,10 @@ export default class GitHubSearchCommand extends Command {
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 		}
 		if (!body?.data?.repository) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.SEARCH.FAILURE);
 		}
 		const d = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
@@ -215,12 +216,13 @@ export default class GitHubSearchCommand extends Command {
 
 		if (
 			!(message.channel as TextChannel)
-				.permissionsFor(this.client.user!)!
-				.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
+				.permissionsFor(this.client.user ?? '')
+				?.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 		) {
-			return message.util!.send(embed);
+			return message.util?.send(embed);
 		}
-		const msg = await message.util!.send(embed);
+		const msg = await message.util?.send(embed);
+		if (!msg) return message;
 		const ownReaction = await msg.react('🗑');
 		let react;
 		try {
@@ -234,7 +236,7 @@ export default class GitHubSearchCommand extends Command {
 
 			return message;
 		}
-		react.first()!.message.delete();
+		react.first()?.message.delete();
 
 		return message;
 	}

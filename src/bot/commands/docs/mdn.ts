@@ -36,7 +36,7 @@ export default class MDNCommand extends Command {
 		const res = await fetch(`https://mdn.pleb.xyz/search?${queryString}`);
 		const body = await res.json();
 		if (!body.URL || !body.Title || !body.Summary) {
-			return message.util!.reply(MESSAGES.COMMANDS.DOCS.MDN.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.DOCS.MDN.FAILURE);
 		}
 		const turndown = new Turndown();
 		turndown.addRule('hyperlink', {
@@ -51,6 +51,6 @@ export default class MDNCommand extends Command {
 			.setTitle(body.Title)
 			.setDescription(turndown.turndown(summary));
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

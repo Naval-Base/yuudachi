@@ -17,6 +17,6 @@ export default class ClearConfigCommand extends Command {
 
 	public async exec(message: Message) {
 		this.client.settings.clear(message.guild!);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.CLEAR.REPLY);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.CLEAR.REPLY);
 	}
 }

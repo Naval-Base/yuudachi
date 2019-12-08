@@ -10,9 +10,9 @@ const NL_PATTERN = new RegExp(NL, 'g');
 export default class EvalCommand extends Command {
 	public hrStart: [number, number] | undefined;
 
-	public lastResult: any = null;
+	public lastResult = null;
 
-	private readonly _sensitivePattern!: any;
+	private readonly _sensitivePattern = null;
 
 	public constructor() {
 		super('eval', {
@@ -43,10 +43,10 @@ export default class EvalCommand extends Command {
 		const { client, lastResult } = this;
 		const doReply = (val: string | Error) => {
 			if (val instanceof Error) {
-				message.util!.send(`Callback error: \`${val}\``);
+				message.util?.send(`Callback error: \`${val}\``);
 			} else {
 				const result = this._result(val, process.hrtime(this.hrStart));
-				for (const res of result) message.util!.send(res);
+				for (const res of result) message.util?.send(res);
 			}
 		};
 		/* eslint-enable */
@@ -57,21 +57,21 @@ export default class EvalCommand extends Command {
 			this.lastResult = eval(code); // eslint-disable-line
 			hrDiff = process.hrtime(hrStart);
 		} catch (error) {
-			return message.util!.send(`Error while evaluating: \`${error}\``);
+			return message.util?.send(`Error while evaluating: \`${error}\``);
 		}
 
 		this.hrStart = process.hrtime();
-		const result = this._result(this.lastResult, hrDiff, code);
+		const result = this._result(this.lastResult ?? '', hrDiff, code);
 		// @ts-ignore
-		if (Array.isArray(result)) return result.map(async res => message.util!.send(res));
-		return message.util!.send(result);
+		if (Array.isArray(result)) return result.map(async res => message.util?.send(res));
+		return message.util?.send(result);
 	}
 
 	private _result(result: string, hrDiff: [number, number], input: string | null = null) {
 		const inspected = util
 			.inspect(result, { depth: 0 })
 			.replace(NL_PATTERN, '\n')
-			.replace(this.sensitivePattern, '--snip--');
+			.replace(this.sensitivePattern ?? '', '--snip--');
 		const split = inspected.split('\n');
 		const last = inspected.length - 1;
 		const prependPart = inspected[0] !== '{' && inspected[0] !== '[' && inspected[0] !== "'" ? split[0] : inspected[0];
@@ -106,9 +106,9 @@ export default class EvalCommand extends Command {
 
 	private get sensitivePattern() {
 		if (!this._sensitivePattern) {
-			const token = this.client.token!.split('').join('[^]{0,2}');
-			const revToken = this.client
-				.token!.split('')
+			const token = this.client.token?.split('').join('[^]{0,2}');
+			const revToken = this.client.token
+				?.split('')
 				.reverse()
 				.join('[^]{0,2}');
 			Object.defineProperty(this, '_sensitivePattern', { value: new RegExp(`${token}|${revToken}`, 'g') });

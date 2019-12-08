@@ -39,7 +39,7 @@ export default class HelpCommand extends Command {
 				);
 			}
 
-			return message.util!.send(embed);
+			return message.util?.send(embed);
 		}
 
 		const embed = new MessageEmbed()
@@ -55,6 +55,6 @@ export default class HelpCommand extends Command {
 				true,
 			);
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

@@ -45,24 +45,25 @@ export default class ReasonCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
 	public async exec(message: Message, { caseNum, ref, reason }: { caseNum: string; ref: number; reason: string }) {
+		const guild = message.guild!;
 		let caseToFind: number[];
 		if (/\d+-\d+/.test(caseNum)) {
 			const [, from, to] = /(\d+)-(\d+)/.exec(caseNum)!;
 			caseToFind = Array.from({ length: parseInt(to, 10) + 1 - parseInt(from, 10) }, (_, i) => i + parseInt(from, 10));
 		} else {
-			const totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
+			const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 			caseToFind = caseNum === 'latest' || caseNum === 'l' ? [totalCases] : [parseInt(caseNum, 10)];
 		}
 		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 				caseId: caseToFind,
 			},
 		});
@@ -74,7 +75,7 @@ export default class ReasonCommand extends Command {
 		}
 		let statusMessage;
 		if (dbCases.length >= 10) {
-			await message.util!.send(`${dbCases.length} reasons will be changed; proceed?`);
+			await message.util?.send(`${dbCases.length} reasons will be changed; proceed?`);
 
 			const responses = await message.channel.awaitMessages((msg: Message) => msg.author.id === message.author.id, {
 				max: 1,
@@ -87,8 +88,8 @@ export default class ReasonCommand extends Command {
 			}
 			const response = responses.first();
 
-			if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
-				statusMessage = await response!.reply('Setting reasons...');
+			if (/^y(?:e(?:a|s)?)?$/i.test(response?.content ?? '')) {
+				statusMessage = await response?.reply('Setting reasons...');
 			} else {
 				message.reply('Setting reasons cancelled.');
 				return null;
@@ -104,10 +105,10 @@ export default class ReasonCommand extends Command {
 				return message.reply(MESSAGES.COMMANDS.MOD.REASON.WRONG_MOD);
 			}
 
-			const modLogChannel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
+			const modLogChannel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 			if (modLogChannel) {
 				const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(
-					dbCase.message!,
+					dbCase.message ?? '',
 				);
 				if (!caseEmbed) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_MESSAGE);
 				const embed = new MessageEmbed(caseEmbed.embeds[0])
@@ -119,7 +120,7 @@ export default class ReasonCommand extends Command {
 						const { data: res } = await graphQLClient.query<any, CasesInsertInput>({
 							query: GRAPHQL.QUERY.CASES,
 							variables: {
-								guild: message.guild!.id,
+								guild: guild.id,
 								caseId: ref,
 							},
 						});
@@ -155,6 +156,6 @@ export default class ReasonCommand extends Command {
 		if (statusMessage) {
 			return statusMessage.edit(MESSAGES.COMMANDS.MOD.REASON.REPLY(caseToFind));
 		}
-		return message.util!.send(MESSAGES.COMMANDS.MOD.REASON.REPLY(caseToFind));
+		return message.util?.send(MESSAGES.COMMANDS.MOD.REASON.REPLY(caseToFind));
 	}
 }

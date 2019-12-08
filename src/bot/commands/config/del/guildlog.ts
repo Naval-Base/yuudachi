@@ -16,11 +16,12 @@ export default class DeleteConfigGuildLogCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const guildLogs = this.client.settings.get(message.guild!, SETTINGS.GUILD_LOG);
+		const guild = message.guild!;
+		const guildLogs = this.client.settings.get(guild, SETTINGS.GUILD_LOG);
 		if (guildLogs) {
-			this.client.settings.delete(message.guild!, SETTINGS.GUILD_LOG);
+			this.client.settings.delete(guild, SETTINGS.GUILD_LOG);
 			this.client.webhooks.delete(guildLogs);
-			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.DELETE.GUILD_LOG.REPLY);
+			return message.util?.reply(MESSAGES.COMMANDS.CONFIG.DELETE.GUILD_LOG.REPLY);
 		}
 	}
 }

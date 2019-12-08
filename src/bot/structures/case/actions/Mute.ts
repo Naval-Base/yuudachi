@@ -15,12 +15,13 @@ export default class MuteAction extends Action {
 		if (this.member instanceof User) {
 			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
-		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE)!;
-		if (this.member.roles.has(staff)) {
+		const guild = this.message.guild!;
+		const staff = this.client.settings.get(guild, SETTINGS.MOD_ROLE);
+		if (this.member.roles.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
-		const muteRole = this.client.settings.get(this.message.guild!, SETTINGS.MUTE_ROLE);
+		const muteRole = this.client.settings.get(guild, SETTINGS.MUTE_ROLE);
 		if (!muteRole) throw new Error(MESSAGES.ACTIONS.NO_MUTE);
 
 		if (this.client.caseHandler.cachedCases.has(this.keys as string)) {
@@ -33,8 +34,9 @@ export default class MuteAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
-		const muteRole = this.client.settings.get(this.message.guild!, SETTINGS.MUTE_ROLE)!;
+		const guild = this.message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0) + 1;
+		const muteRole = this.client.settings.get(guild, SETTINGS.MUTE_ROLE)!;
 
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.MUTE.PRE_REPLY(this.member.user.tag));
 
@@ -45,16 +47,17 @@ export default class MuteAction extends Action {
 			throw new Error(MESSAGES.ACTIONS.MUTE.ERROR(error.message));
 		}
 
-		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
+		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
 		sentMessage.edit(MESSAGES.ACTIONS.MUTE.REPLY(this.member.user.tag));
 	}
 
 	public async after() {
-		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0);
+		const guild = this.message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.muteScheduler.add({
-			guild: this.message.guild!.id,
+			guild: guild.id,
 			caseId: totalCases,
 			targetId: this.member.id,
 			targetTag: memberTag,
@@ -63,16 +66,16 @@ export default class MuteAction extends Action {
 			action: this.action,
 			reason: this.reason,
 			refId: this.ref,
-			actionDuration: new Date(Date.now() + this.duration!).toISOString(),
+			actionDuration: new Date(Date.now() + (this.duration ?? 0)).toISOString(),
 			actionProcessed: false,
 		});
 
-		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
+		const modLogChannel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
 			const { data } = await graphQLClient.query<any, CasesInsertInput>({
 				query: GRAPHQL.QUERY.LOG_CASE,
 				variables: {
-					guild: this.message.guild!.id,
+					guild: guild.id,
 					caseId: totalCases,
 				},
 			});

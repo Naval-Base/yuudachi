@@ -43,15 +43,16 @@ export default class RestrictEmbedCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
 	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
 		if (member.id === message.author.id) return;
-		const key = `${message.guild!.id}:${member.id}:EMBED`;
-		message.guild!.caseQueue.add(async () =>
+		const guild = message.guild!;
+		const key = `${guild.id}:${member.id}:EMBED`;
+		guild.caseQueue.add(async () =>
 			new EmbedAction({
 				message,
 				member,

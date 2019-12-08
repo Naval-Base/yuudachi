@@ -59,7 +59,7 @@ export default class MuteCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
@@ -69,8 +69,9 @@ export default class MuteCommand extends Command {
 		{ member, duration, ref, reason }: { member: GuildMember; duration: number; ref: number; reason: string },
 	) {
 		if (member.id === message.author.id) return;
-		const key = `${message.guild!.id}:${member.id}:MUTE`;
-		message.guild!.caseQueue.add(async () =>
+		const guild = message.guild!;
+		const key = `${guild.id}:${member.id}:MUTE`;
+		guild.caseQueue.add(async () =>
 			new MuteAction({
 				message,
 				member,

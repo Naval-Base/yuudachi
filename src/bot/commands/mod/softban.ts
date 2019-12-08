@@ -52,7 +52,7 @@ export default class SoftbanCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
@@ -61,8 +61,9 @@ export default class SoftbanCommand extends Command {
 		message: Message,
 		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
 	) {
-		const keys = [`${message.guild!.id}:${member.id}:BAN`, `${message.guild!.id}:${member.id}:UNBAN`];
-		message.guild!.caseQueue.add(async () =>
+		const guild = message.guild!;
+		const keys = [`${guild.id}:${member.id}:BAN`, `${guild.id}:${member.id}:UNBAN`];
+		guild.caseQueue.add(async () =>
 			new SoftbanAction({
 				message,
 				member,

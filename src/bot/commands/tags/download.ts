@@ -29,13 +29,14 @@ export default class TagDownloadCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
-		const where = member ? { user: member.id, guild: message.guild!.id } : { guild: message.guild!.id };
+		const guild = message.guild!;
+		const where = member ? { user: member.id, guild: guild.id } : { guild: guild.id };
 		const { data } = await graphQLClient.query<any, TagsInsertInput>({
 			query: member ? GRAPHQL.QUERY.TAGS_MEMBER : GRAPHQL.QUERY.TAGS,
 			variables: where,
@@ -52,7 +53,7 @@ export default class TagDownloadCommand extends Command {
 			return out;
 		}, '');
 
-		return message.util!.send(MESSAGES.COMMANDS.TAGS.DOWNLOAD.REPLY, {
+		return message.util?.send(MESSAGES.COMMANDS.TAGS.DOWNLOAD.REPLY, {
 			files: [
 				{ attachment: Buffer.from(output, 'utf8'), name: `${member ? `${member.displayName}s_tags` : 'all_tags'}.txt` },
 			],

@@ -51,7 +51,7 @@ export default class TagAddCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
@@ -61,12 +61,12 @@ export default class TagAddCommand extends Command {
 		{ name, content, hoist, template }: { name: string; content: string; hoist: boolean; template: boolean },
 	) {
 		if (name?.length >= 1900) {
-			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
+			return message.util?.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
 		if (content?.length >= 1950) {
-			return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
+			return message.util?.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
-		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
+		const staffRole = message.member?.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
 		if (!staffRole || !template) {
 			content = Util.cleanContent(content, message);
 			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
@@ -83,6 +83,6 @@ export default class TagAddCommand extends Command {
 			},
 		});
 
-		return message.util!.reply(MESSAGES.COMMANDS.TAGS.ADD.REPLY(name.substring(0, 1900)));
+		return message.util?.reply(MESSAGES.COMMANDS.TAGS.ADD.REPLY(name.substring(0, 1900)));
 	}
 }

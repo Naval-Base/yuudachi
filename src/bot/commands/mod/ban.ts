@@ -55,7 +55,7 @@ export default class BanCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
@@ -64,8 +64,9 @@ export default class BanCommand extends Command {
 		message: Message,
 		{ member, days, ref, reason }: { member: GuildMember | User; days: number; ref: number; reason: string },
 	) {
-		const key = `${message.guild!.id}:${member.id}:BAN`;
-		message.guild!.caseQueue.add(async () =>
+		const guild = message.guild!;
+		const key = `${guild.id}:${member.id}:BAN`;
+		guild.caseQueue.add(async () =>
 			new BanAction({
 				message,
 				member,

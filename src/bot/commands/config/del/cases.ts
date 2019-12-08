@@ -17,6 +17,6 @@ export default class DeleteConfigCasesCommand extends Command {
 
 	public async exec(message: Message) {
 		this.client.settings.delete(message.guild!, SETTINGS.CASES);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.DELETE.CASES.REPLY);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.DELETE.CASES.REPLY);
 	}
 }

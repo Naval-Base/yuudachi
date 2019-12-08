@@ -25,6 +25,6 @@ export default class SetConfigGitHubRepositoryCommand extends Command {
 
 	public async exec(message: Message, { repository }: { repository: string }) {
 		this.client.settings.set(message.guild!, SETTINGS.GITHUB_REPO, repository);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.REPO.REPLY(repository));
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.SET.REPO.REPLY(repository));
 	}
 }

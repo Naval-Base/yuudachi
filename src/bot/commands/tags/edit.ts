@@ -23,7 +23,7 @@ export default class TagEditCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
@@ -85,16 +85,16 @@ export default class TagEditCommand extends Command {
 			content,
 		}: { tag: Tags; hoist: boolean; unhoist: boolean; template: boolean; untemplate: boolean; content: string },
 	) {
-		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
+		const staffRole = message.member?.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE)) ?? false;
 		if (tag.user !== message.author.id && !staffRole) {
-			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.OWN_TAG);
+			return message.util?.reply(MESSAGES.COMMANDS.TAGS.EDIT.OWN_TAG);
 		}
 		if (content?.length >= 1950) {
-			return message.util!.reply(MESSAGES.COMMANDS.TAGS.EDIT.TOO_LONG);
+			return message.util?.reply(MESSAGES.COMMANDS.TAGS.EDIT.TOO_LONG);
 		}
 		if (content && (!staffRole || !template || untemplate)) {
 			content = Util.cleanContent(content, message);
-			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
+			if (message.attachments.first()) content += `\n${message.attachments.first()?.url ?? ''}`;
 		}
 		const vars = content
 			? {
@@ -115,7 +115,7 @@ export default class TagEditCommand extends Command {
 			variables: vars,
 		});
 
-		return message.util!.reply(
+		return message.util?.reply(
 			MESSAGES.COMMANDS.TAGS.EDIT.REPLY(
 				tag.name,
 				staffRole && (hoist || unhoist),

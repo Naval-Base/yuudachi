@@ -28,17 +28,18 @@ export default class TagListCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
+		const guild = message.guild!;
 		if (member) {
 			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_MEMBER,
 				variables: {
-					guild: message.guild!.id,
+					guild: guild.id,
 					user: member.id,
 				},
 			});
@@ -46,8 +47,8 @@ export default class TagListCommand extends Command {
 			if (PRODUCTION) tags = data.tags;
 			else tags = data.tagsStaging;
 			if (!tags.length) {
-				if (member.id === message.author.id) return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS());
-				return message.util!.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS(member.displayName));
+				if (member.id === message.author.id) return message.util?.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS());
+				return message.util?.reply(MESSAGES.COMMANDS.TAGS.LIST.NO_TAGS(member.displayName));
 			}
 			const embed = new MessageEmbed()
 				.setColor(0x30a9ed)
@@ -59,18 +60,18 @@ export default class TagListCommand extends Command {
 						.join(', '),
 				);
 
-			return message.util!.send(embed);
+			return message.util?.send(embed);
 		}
 		const { data } = await graphQLClient.query<any, TagsInsertInput>({
 			query: GRAPHQL.QUERY.TAGS,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 			},
 		});
 		let tags: Tags[];
 		if (PRODUCTION) tags = data.tags;
 		else tags = data.tagsStaging;
-		if (!tags.length) return message.util!.send(MESSAGES.COMMANDS.TAGS.LIST.GUILD_NO_TAGS(message.guild!.name));
+		if (!tags.length) return message.util?.send(MESSAGES.COMMANDS.TAGS.LIST.GUILD_NO_TAGS(guild.name));
 		const hoistedTags = tags
 			.filter(tag => tag.hoisted)
 			.map(tag => `\`${tag.name}\``)
@@ -86,8 +87,8 @@ export default class TagListCommand extends Command {
 			.setColor(0x30a9ed)
 			.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
 		if (hoistedTags) embed.addField('❯ Tags', hoistedTags);
-		if (userTags) embed.addField(`❯ ${message.member!.displayName}'s tags`, userTags);
+		if (userTags) embed.addField(`❯ ${message.member?.displayName ?? 'Unknown'}'s tags`, userTags);
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

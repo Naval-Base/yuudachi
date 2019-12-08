@@ -32,7 +32,7 @@ export default class SearchTagCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
@@ -49,19 +49,19 @@ export default class SearchTagCommand extends Command {
 		if (PRODUCTION) tags = data.tags;
 		else tags = data.tagsStaging;
 		tags = tags.filter(t => t.name.includes(name) || t.aliases.some(a => a.includes(name)));
-		if (!tags.length) return message.util!.reply(MESSAGES.COMMANDS.TAGS.SEARCH.NO_RESULT(name));
+		if (!tags.length) return message.util?.reply(MESSAGES.COMMANDS.TAGS.SEARCH.NO_RESULT(name));
 		const search = tags
 			.map(tag => `\`${tag.name}\``)
 			.sort()
 			.join(', ');
 		if (search.length >= 1950) {
-			return message.util!.reply(MESSAGES.COMMANDS.TAGS.SEARCH.TOO_BIG);
+			return message.util?.reply(MESSAGES.COMMANDS.TAGS.SEARCH.TOO_BIG);
 		}
 		const embed = new MessageEmbed()
 			.setColor(0x30a9ed)
 			.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 			.setDescription(search);
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

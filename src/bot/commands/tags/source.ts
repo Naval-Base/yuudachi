@@ -37,13 +37,13 @@ export default class TagSourceCommand extends Command {
 	public userPermissions(message: Message) {
 		const restrictedRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) return null;
-		const hasRestrictedRole = message.member!.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) return 'Restricted';
 		return null;
 	}
 
 	public async exec(message: Message, { tag, file }: { tag: Tags; file: boolean }) {
-		return message.util!.send(tag.content, {
+		return message.util?.send(tag.content, {
 			code: 'md',
 			files: file
 				? [

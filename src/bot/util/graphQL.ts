@@ -9,9 +9,9 @@ export const graphQLClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	// @ts-ignore
 	link: new HttpLink({
-		uri: process.env.GRAPHQL_ENDPOINT!,
+		uri: process.env.GRAPHQL_ENDPOINT,
 		headers: {
-			'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET!,
+			'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET,
 		},
 		fetch,
 	}),
@@ -26,7 +26,7 @@ export const graphQLClient = new ApolloClient({
 });
 
 export const GRAPHQL = {
-	ENDPOINT: process.env.GRAPHQL_ENDPOINT!,
+	ENDPOINT: process.env.GRAPHQL_ENDPOINT,
 
 	QUERY: {
 		SETTINGS: gql`

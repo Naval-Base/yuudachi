@@ -52,19 +52,20 @@ export default class CaseCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
 	public async exec(message: Message, { caseNum }: { caseNum: number | string }) {
-		const totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
+		const guild = message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.CASES.SHOW.NO_CASE_NUMBER);
 		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 				caseId: [caseToFind],
 			},
 		});
@@ -77,7 +78,7 @@ export default class CaseCommand extends Command {
 
 		let moderator;
 		try {
-			moderator = await message.guild!.members.fetch(dbCase.modId!);
+			moderator = await guild.members.fetch(dbCase.modId ?? '');
 		} catch {}
 		const color = ACTIONS[dbCase.action] as keyof typeof ACTIONS;
 		const embed = new MessageEmbed()
@@ -91,9 +92,12 @@ export default class CaseCommand extends Command {
 				**Member:** ${dbCase.targetTag} (${dbCase.targetId})
 				**Action:** ${ACTION_KEYS[dbCase.action]}${
 					dbCase.action === 5
-						? `\n**Length:** ${ms(new Date(dbCase.actionDuration!).getTime() - new Date(dbCase.createdAt).getTime(), {
-								long: true,
-						  })}`
+						? `\n**Length:** ${ms(
+								new Date(dbCase.actionDuration ?? 0).getTime() - new Date(dbCase.createdAt).getTime(),
+								{
+									long: true,
+								},
+						  )}`
 						: ''
 				}
 				${dbCase.reason ? `**Reason:** ${dbCase.reason}` : ''}${dbCase.refId ? `\n**Ref case:** ${dbCase.refId}` : ''}
@@ -102,6 +106,6 @@ export default class CaseCommand extends Command {
 			.setFooter(`Case ${dbCase.caseId}`)
 			.setTimestamp(new Date(dbCase.createdAt));
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

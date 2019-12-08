@@ -89,27 +89,28 @@ export default class CaseHandler {
 	}
 
 	public async delete(message: Message, caseNum: number, removeRole?: boolean) {
+		const guild = message.guild!;
 		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 				caseId: [caseNum],
 			},
 		});
 		let cs: Cases;
 		if (PRODUCTION) cs = data.cases[0];
 		else cs = data.casesStaging[0];
-		const channel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
-		const restrictRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES)!;
-		const muteRole = this.client.settings.get(message.guild!, SETTINGS.MUTE_ROLE)!;
+		const channel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
+		const restrictRoles = this.client.settings.get(guild, SETTINGS.RESTRICT_ROLES)!;
+		const muteRole = this.client.settings.get(guild, SETTINGS.MUTE_ROLE)!;
 
 		if (channel) {
 			const chan = this.client.channels.get(channel) as TextChannel;
 			try {
-				const msgToDelete = await chan.messages.fetch(cs.message!);
+				const msgToDelete = await chan.messages.fetch(cs.message ?? '');
 				await msgToDelete.delete();
 			} catch {}
-			this.fix(cs.caseId, message.guild!.id, channel);
+			this.fix(cs.caseId, guild.id, channel);
 
 			if ((restrictRoles || muteRole) && !removeRole) {
 				this.removeRoles(cs, message, restrictRoles, muteRole);
@@ -132,17 +133,18 @@ export default class CaseHandler {
 		let reference: Cases | undefined;
 		let channel;
 		if (message && ref) {
+			const guild = message.guild!;
 			try {
 				const { data } = await graphQLClient.query<any, any>({
 					query: GRAPHQL.QUERY.CASES,
 					variables: {
-						guild: message.guild!.id,
+						guild: guild.id,
 						caseId: [ref],
 					},
 				});
 				if (PRODUCTION) reference = data.cases[0];
 				else reference = data.casesStaging[0];
-				channel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
+				channel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 			} catch {}
 		}
 
@@ -210,18 +212,19 @@ export default class CaseHandler {
 		roles: { EMBED: string; EMOJI: string; REACTION: string },
 		mute: string,
 	) {
+		const guild = message.guild!;
 		switch (cs.action) {
 			case 5:
 				// eslint-disable-next-line no-case-declarations
 				let member;
 				try {
-					member = await message.guild!.members.fetch(cs.targetId);
+					member = await guild.members.fetch(cs.targetId);
 				} catch {
 					break;
 				}
 				if (!member) break;
 				// eslint-disable-next-line no-case-declarations
-				const key = `${message.guild!.id}:${member.id}:MUTE`;
+				const key = `${guild.id}:${member.id}:MUTE`;
 				try {
 					this.cachedCases.add(key);
 					await member.roles.remove(mute, `Mute removed by ${message.author.tag} | Removed Case #${cs.caseId}`);
@@ -234,7 +237,7 @@ export default class CaseHandler {
 				try {
 					let member;
 					try {
-						member = await message.guild!.members.fetch(cs.targetId);
+						member = await guild.members.fetch(cs.targetId);
 					} catch {
 						break;
 					}
@@ -251,7 +254,7 @@ export default class CaseHandler {
 				try {
 					let member;
 					try {
-						member = await message.guild!.members.fetch(cs.targetId);
+						member = await guild.members.fetch(cs.targetId);
 					} catch {
 						break;
 					}
@@ -268,7 +271,7 @@ export default class CaseHandler {
 				try {
 					let member;
 					try {
-						member = await message.guild!.members.fetch(cs.targetId);
+						member = await guild.members.fetch(cs.targetId);
 					} catch {
 						break;
 					}
@@ -302,7 +305,7 @@ export default class CaseHandler {
 		for (const c of cases) {
 			const chan = this.client.channels.get(channel) as TextChannel;
 			try {
-				const msg = await chan.messages.fetch(c.message!);
+				const msg = await chan.messages.fetch(c.message ?? '');
 				await msg.edit(new MessageEmbed(msg.embeds[0]).setFooter(`Case ${newCaseNum}`));
 			} catch {}
 			await graphQLClient.mutate<any, CasesInsertInput>({

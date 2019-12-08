@@ -104,7 +104,7 @@ export default class YukikazeClient extends AkairoClient {
 	};
 
 	public promServer = createServer((req, res) => {
-		if (parse(req.url!).pathname === '/metrics') {
+		if (parse(req.url ?? '').pathname === '/metrics') {
 			res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
 			res.write(this.prometheus.register.metrics());
 		}
@@ -128,12 +128,13 @@ export default class YukikazeClient extends AkairoClient {
 		});
 
 		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
+			if (!message.guild) return Flag.fail(phrase);
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
-					guild: message.guild!.id,
+					guild: message.guild.id,
 				},
 			});
 			let tags: Tags[];
@@ -144,12 +145,13 @@ export default class YukikazeClient extends AkairoClient {
 			return tag || Flag.fail(phrase);
 		});
 		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
+			if (!message.guild) return Flag.fail(phrase);
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
 			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
-					guild: message.guild!.id,
+					guild: message.guild.id,
 				},
 			});
 			let tags: Tags[];
@@ -166,7 +168,7 @@ export default class YukikazeClient extends AkairoClient {
 			init({
 				dsn: process.env.SENTRY,
 				environment: process.env.NODE_ENV,
-				release: process.env.VERSION!,
+				release: process.env.VERSION,
 				serverName: 'yukikaze_bot',
 				integrations: [
 					new RewriteFrames({

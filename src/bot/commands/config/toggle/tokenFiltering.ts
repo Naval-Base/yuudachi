@@ -16,13 +16,14 @@ export default class ToggletokenFilteringCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const tokenFiltering = this.client.settings.get(message.guild!, SETTINGS.TOKEN_FILTER);
+		const guild = message.guild!;
+		const tokenFiltering = this.client.settings.get(guild, SETTINGS.TOKEN_FILTER);
 		if (tokenFiltering) {
-			this.client.settings.set(message.guild!, SETTINGS.TOKEN_FILTER, false);
-			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.REPLY_DEACTIVATED);
+			this.client.settings.set(guild, SETTINGS.TOKEN_FILTER, false);
+			return message.util?.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.REPLY_DEACTIVATED);
 		}
-		this.client.settings.set(message.guild!, SETTINGS.TOKEN_FILTER, true);
+		this.client.settings.set(guild, SETTINGS.TOKEN_FILTER, true);
 
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.REPLY_ACTIVATED);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.TOKEN_FILTER.REPLY_ACTIVATED);
 	}
 }

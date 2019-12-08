@@ -13,8 +13,8 @@ export default class KickAction extends Action {
 		if (this.member instanceof User) {
 			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
-		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE)!;
-		if (this.member.roles.has(staff)) {
+		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE);
+		if (this.member.roles.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 		this.client.caseHandler.cachedCases.add(this.keys as string);
@@ -24,20 +24,21 @@ export default class KickAction extends Action {
 
 	public async exec() {
 		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const guild = this.message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0) + 1;
 
 		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.KICK.PRE_REPLY(this.member.user.tag));
 
 		try {
 			try {
-				await this.member.send(MESSAGES.ACTIONS.KICK.MESSAGE(this.message.guild!.name, this._reason));
+				await this.member.send(MESSAGES.ACTIONS.KICK.MESSAGE(guild.name, this._reason));
 			} catch {}
 			await this.member.kick(MESSAGES.ACTIONS.KICK.AUDIT(this.message.author.tag, totalCases));
 		} catch (error) {
 			throw new Error(MESSAGES.ACTIONS.KICK.ERROR(error.message));
 		}
 
-		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
+		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
 		this.client.caseHandler.cachedCases.delete(this.keys as string);
 

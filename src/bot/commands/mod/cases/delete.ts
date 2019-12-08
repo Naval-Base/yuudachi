@@ -56,19 +56,20 @@ export default class CaseDeleteCommand extends Command {
 	public userPermissions(message: Message) {
 		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
 		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.has(staffRole);
 		if (!hasStaffRole) return 'Moderator';
 		return null;
 	}
 
 	public async exec(message: Message, { caseNum, removeRole }: { caseNum: number | string; removeRole: boolean }) {
-		let totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
+		const guild = message.guild!;
+		let totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.NO_CASE_NUMBER);
 		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 				caseId: [caseToFind],
 			},
 		});
@@ -81,7 +82,7 @@ export default class CaseDeleteCommand extends Command {
 
 		let moderator;
 		try {
-			moderator = await message.guild!.members.fetch(dbCase.modId!);
+			moderator = await guild.members.fetch(dbCase.modId ?? '');
 		} catch {}
 		const color = ACTIONS[dbCase.action] as keyof typeof ACTIONS;
 		const embed = new MessageEmbed()
@@ -116,14 +117,14 @@ export default class CaseDeleteCommand extends Command {
 		const response = responses.first();
 
 		let sentMessage;
-		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
+		if (/^y(?:e(?:a|s)?)?$/i.test(response?.content ?? '')) {
 			sentMessage = await message.channel.send(MESSAGES.COMMANDS.MOD.CASES.DELETE.DELETING(dbCase.caseId));
 		} else {
 			return message.reply(MESSAGES.COMMANDS.MOD.CASES.DELETE.CANCEL);
 		}
 
-		totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0) - 1;
-		this.client.settings.set(message.guild!, SETTINGS.CASES, totalCases);
+		totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0) - 1;
+		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
 		await this.client.caseHandler.delete(message, caseToFind, removeRole);
 

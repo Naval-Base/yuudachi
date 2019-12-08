@@ -31,13 +31,14 @@ export default class GitHubPROrIssueCommand extends Command {
 
 	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_API_KEY);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_API_KEY);
 		}
+		const guild = message.guild!;
 		let owner;
 		let repo;
 		if (args.match?.[1] === 'g' || !args.match) {
-			const repository = this.client.settings.get(message.guild!, SETTINGS.GITHUB_REPO);
-			if (!repository) return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_REPO);
+			const repository = this.client.settings.get(guild, SETTINGS.GITHUB_REPO);
+			if (!repository) return message.util?.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.NO_GITHUB_REPO);
 			owner = repository.split('/')[0];
 			repo = repository.split('/')[1];
 		}
@@ -64,7 +65,7 @@ export default class GitHubPROrIssueCommand extends Command {
 					repo = 'collection';
 					break;
 				default:
-					return message.util!.reply('No u.');
+					return message.util?.reply('No u.');
 			}
 		}
 		const num = args.match?.[2] || args.pr_issue;
@@ -136,10 +137,10 @@ export default class GitHubPROrIssueCommand extends Command {
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
 		}
 		if (!body?.data?.repository?.issueOrPullRequest) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.ISSUE_PR.FAILURE);
 		}
 		const d = body.data.repository.issueOrPullRequest;
 		const embed = new MessageEmbed()
@@ -165,12 +166,13 @@ export default class GitHubPROrIssueCommand extends Command {
 
 		if (
 			!(message.channel as TextChannel)
-				.permissionsFor(message.guild!.me!)!
-				.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
+				.permissionsFor(guild.me ?? '')
+				?.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 		) {
-			return message.util!.send(embed);
+			return message.util?.send(embed);
 		}
-		const msg = await message.util!.send(embed);
+		const msg = await message.util?.send(embed);
+		if (!msg) return message;
 		msg.react('🗑');
 		let react;
 		try {
@@ -183,7 +185,7 @@ export default class GitHubPROrIssueCommand extends Command {
 
 			return message;
 		}
-		react.first()!.message.delete();
+		react.first()?.message.delete();
 
 		return message;
 	}

@@ -32,13 +32,13 @@ export default class NPMCommand extends Command {
 	public async exec(message: Message, { pkg }: { pkg: string }) {
 		const res = await fetch(`https://registry.npmjs.com/${pkg}`);
 		if (res.status === 404) {
-			return message.util!.reply(MESSAGES.COMMANDS.DOCS.NPM.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.DOCS.NPM.FAILURE);
 		}
 		const body = await res.json();
 		if (body.time?.unpublished) {
-			return message.util!.reply(MESSAGES.COMMANDS.DOCS.NPM.UNPUBLISH);
+			return message.util?.reply(MESSAGES.COMMANDS.DOCS.NPM.UNPUBLISH);
 		}
-		const version = body.versions[body['dist-tags'].latest];
+		const version = body['dist-tags'] ? body.versions[body['dist-tags']?.latest] : {};
 		const maintainers = this._trimArray(body.maintainers.map((user: { name: string }) => user.name));
 		const dependencies = version.dependencies ? this._trimArray(Object.keys(version.dependencies)) : null;
 		const embed = new MessageEmbed()
@@ -47,16 +47,16 @@ export default class NPMCommand extends Command {
 			.setTitle(body.name)
 			.setURL(`https://www.npmjs.com/package/${pkg}`)
 			.setDescription(body.description || 'No description.')
-			.addField('❯ Version', body['dist-tags'].latest, true)
+			.addField('❯ Version', body['dist-tags']?.latest ?? 'Unknown', true)
 			.addField('❯ License', body.license || 'None', true)
-			.addField('❯ Author', body.author ? body.author.name : '???', true)
+			.addField('❯ Author', body.author ? body.author.name : 'Unknown', true)
 			.addField('❯ Creation Date', moment.utc(body.time.created).format('YYYY/MM/DD hh:mm:ss'), true)
 			.addField('❯ Modification Date', moment.utc(body.time.modified).format('YYYY/MM/DD hh:mm:ss'), true)
 			.addField('❯ Main File', version.main || 'index.js', true)
 			.addField('❯ Dependencies', dependencies?.length ? dependencies.join(', ') : 'None')
 			.addField('❯ Maintainers', maintainers.join(', '));
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 
 	private _trimArray(arr: string[]) {

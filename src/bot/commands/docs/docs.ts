@@ -59,17 +59,18 @@ export default class DocsCommand extends Command {
 	}
 
 	public async exec(message: Message, { defaultDocs, force, includePrivate, query }: DocsCommandArguments) {
+		const guild = message.guild!;
 		if (defaultDocs) {
-			const staff = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
+			const staff = this.client.settings.get(guild, SETTINGS.MOD_ROLE);
 			if (!staff) return;
-			const staffRole = message.member!.roles.has(staff);
-			if (!staffRole) return message.util!.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.FAILURE);
-			this.client.settings.set(message.guild!, SETTINGS.DEFAULT_DOCS, defaultDocs);
-			return message.util!.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.SUCCESS(defaultDocs));
+			const staffRole = message.member?.roles.has(staff);
+			if (!staffRole) return message.util?.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.FAILURE);
+			this.client.settings.set(guild, SETTINGS.DEFAULT_DOCS, defaultDocs);
+			return message.util?.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.SUCCESS(defaultDocs));
 		}
 
 		const q = query.split(' ');
-		const docs = this.client.settings.get(message.guild!, SETTINGS.DEFAULT_DOCS, 'stable');
+		const docs = this.client.settings.get(guild, SETTINGS.DEFAULT_DOCS, 'stable');
 		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : docs;
 		if (source === '11.5-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
@@ -78,17 +79,16 @@ export default class DocsCommand extends Command {
 		const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?${queryString}`);
 		const embed = await res.json();
 		if (!embed) {
-			return message.util!.reply(MESSAGES.COMMANDS.DOCS.DOCS.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.DOCS.DOCS.FAILURE);
 		}
 		if (
 			message.channel.type === 'dm' ||
-			!(message.channel as TextChannel)
-				.permissionsFor(message.guild!.me!)!
-				.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
+			!(message.channel as TextChannel).permissionsFor(guild.me ?? '')?.has(['ADD_REACTIONS', 'MANAGE_MESSAGES'], false)
 		) {
-			return message.util!.send({ embed });
+			return message.util?.send({ embed });
 		}
-		const msg = await message.util!.send({ embed });
+		const msg = await message.util?.send({ embed });
+		if (!msg) return message;
 		msg.react('🗑');
 		let react;
 		try {
@@ -101,7 +101,7 @@ export default class DocsCommand extends Command {
 
 			return message;
 		}
-		react.first()!.message.delete();
+		react.first()?.message.delete();
 
 		return message;
 	}

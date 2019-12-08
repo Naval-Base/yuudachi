@@ -14,8 +14,8 @@ export default class MessageDeleteBulkGuildLogListener extends Listener {
 	}
 
 	public async exec(messages: Collection<string, Message>) {
-		if (messages.first()!.author.bot) return;
-		const guildLogs = this.client.settings.get(messages.first()!.guild!, SETTINGS.GUILD_LOG);
+		if (messages.first()?.author.bot) return;
+		const guildLogs = this.client.settings.get(messages.first()?.guild!, SETTINGS.GUILD_LOG);
 		if (guildLogs) {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
@@ -31,10 +31,10 @@ export default class MessageDeleteBulkGuildLogListener extends Listener {
 			const embed = new MessageEmbed()
 				.setColor(0x824aee)
 				.setAuthor(
-					`${messages.first()!.author.tag} (${messages.first()!.author.id})`,
-					messages.first()!.author.displayAvatarURL(),
+					`${messages.first()?.author.tag} (${messages.first()?.author.id})`,
+					messages.first()?.author.displayAvatarURL(),
 				)
-				.addField('❯ Channel', messages.first()!.channel)
+				.addField('❯ Channel', messages.first()?.channel)
 				.addField('❯ Logs', 'See attachment file for full logs (possibly above this embed)')
 				.setTimestamp(new Date())
 				.setFooter('Bulk Deleted');
