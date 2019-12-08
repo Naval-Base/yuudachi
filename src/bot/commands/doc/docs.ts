@@ -22,7 +22,7 @@ export default class DocsCommand extends Command {
 				usage: '<query>',
 				examples: ['TextChannel', 'Client', 'ClientUser#setActivity master'],
 			},
-			category: 'docs',
+			category: 'doc',
 			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			flags: ['--force', '-f', '--private', '-p'],

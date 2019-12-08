@@ -9,7 +9,7 @@ export default class MDNCommand extends Command {
 	public constructor() {
 		super('mdn', {
 			aliases: ['mdn', 'mozilla-developer-network'],
-			category: 'docs',
+			category: 'doc',
 			description: {
 				content: MESSAGES.COMMANDS.DOCS.MDN.DESCRIPTION,
 				usage: '<query>',

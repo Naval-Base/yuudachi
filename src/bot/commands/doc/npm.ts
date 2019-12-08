@@ -9,7 +9,7 @@ export default class NPMCommand extends Command {
 	public constructor() {
 		super('npm', {
 			aliases: ['npm', 'npm-package'],
-			category: 'docs',
+			category: 'doc',
 			description: {
 				content: MESSAGES.COMMANDS.DOCS.NPM.DESCRIPTION,
 				usage: '<query>',
