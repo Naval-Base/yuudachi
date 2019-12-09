@@ -10,7 +10,7 @@ export default class SoftbanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.SOFTBAN.DESCRIPTION,
-				usage: '<member> [--ref=number] [...reason]',
+				usage: '<member> [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no'],
 			},
 			channel: 'guild',
@@ -39,6 +39,11 @@ export default class SoftbanCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
@@ -50,7 +55,13 @@ export default class SoftbanCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
+		{
+			member,
+			days,
+			ref,
+			nsfw,
+			reason,
+		}: { member: GuildMember; days: number; ref: number; nsfw: boolean; reason: string },
 	) {
 		const guild = message.guild!;
 		const keys = [`${guild.id}:${member.id}:BAN`, `${guild.id}:${member.id}:UNBAN`];
@@ -62,6 +73,7 @@ export default class SoftbanCommand extends Command {
 				reason,
 				ref,
 				days,
+				nsfw,
 			}).commit(),
 		);
 	}

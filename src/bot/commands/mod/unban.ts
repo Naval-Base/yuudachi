@@ -10,7 +10,7 @@ export default class UnbanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.UNBAN.DESCRIPTION,
-				usage: '<member> [--ref=number] [...reason]',
+				usage: '<member> [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl', '@Crawl appealed', '@Souji --ref=1234 appealed', '@Souji --ref=1234'],
 			},
 			channel: 'guild',
@@ -44,7 +44,10 @@ export default class UnbanCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { user, ref, reason }: { user: User; ref: number; reason: string }) {
+	public async exec(
+		message: Message,
+		{ user, ref, nsfw, reason }: { user: User; ref: number; nsfw: boolean; reason: string },
+	) {
 		if (user.id === message.author.id) return;
 		const guild = message.guild!;
 		const key = `${guild.id}:${user.id}:UNBAN`;
@@ -55,6 +58,7 @@ export default class UnbanCommand extends Command {
 				keys: key,
 				reason,
 				ref,
+				nsfw,
 			}).commit(),
 		);
 	}

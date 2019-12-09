@@ -10,7 +10,7 @@ export default class WarnCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.WARN.DESCRIPTION,
-				usage: '<member> [--ref=number] [...reason]',
+				usage: '<member> [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --ref=1234 no u', '@Souji --ref=1234'],
 			},
 			channel: 'guild',
@@ -32,6 +32,11 @@ export default class WarnCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
@@ -41,7 +46,10 @@ export default class WarnCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
+	public async exec(
+		message: Message,
+		{ member, ref, nsfw, reason }: { member: GuildMember; ref: number; nsfw: boolean; reason: string },
+	) {
 		if (member.id === message.author.id) return;
 		const guild = message.guild!;
 		const key = `${guild.id}:${member.id}:WARN`;
@@ -52,6 +60,7 @@ export default class WarnCommand extends Command {
 				keys: key,
 				reason,
 				ref,
+				nsfw,
 			}).commit(),
 		);
 	}

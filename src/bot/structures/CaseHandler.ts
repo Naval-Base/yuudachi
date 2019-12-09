@@ -43,6 +43,7 @@ interface Log {
 		| Message;
 	duration?: number;
 	ref?: number;
+	nsfw?: boolean;
 }
 
 export default class CaseHandler {
@@ -125,7 +126,7 @@ export default class CaseHandler {
 		});
 	}
 
-	public async log({ member, action, caseNum, reason, message, duration, ref }: Log) {
+	public async log({ member, action, caseNum, reason, message, duration, ref, nsfw }: Log) {
 		const embed = new MessageEmbed();
 		if (message?.author) {
 			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
@@ -160,9 +161,12 @@ export default class CaseHandler {
 				}
 			`,
 			)
-			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
 			.setFooter(`Case ${caseNum}`)
 			.setTimestamp(new Date());
+
+		if (!nsfw) {
+			embed.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL());
+		}
 
 		return embed;
 	}
@@ -196,9 +200,7 @@ export default class CaseHandler {
 				`${member instanceof User ? member.tag : member.user.tag} (${member.id})`,
 				member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL(),
 			)
-			.setColor(colors[colorIndex])
-			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
-			.setFooter(oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
+			.setColor(colors[colorIndex]).setFooter(oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
 				${restriction} restriction${restriction > 1 || restriction === 0 ? 's' : ''},
 				${mute} mute${mute > 1 || mute === 0 ? 's' : ''},
 				${kick} kick${kick > 1 || kick === 0 ? 's' : ''},

@@ -10,7 +10,7 @@ export default class BanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.BAN.DESCRIPTION,
-				usage: '<member> [--days=number] [--ref=number] [...reason]',
+				usage: '<member> [--days=number] [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no'],
 			},
 			channel: 'guild',
@@ -42,9 +42,14 @@ export default class BanCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
-					match: 'rest',
 					type: 'string',
+					match: 'rest',
 					default: '',
 				},
 			],
@@ -53,7 +58,13 @@ export default class BanCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ member, days, ref, reason }: { member: GuildMember | User; days: number; ref: number; reason: string },
+		{
+			member,
+			days,
+			ref,
+			nsfw,
+			reason,
+		}: { member: GuildMember | User; days: number; ref: number; nsfw: boolean; reason: string },
 	) {
 		const guild = message.guild!;
 		const key = `${guild.id}:${member.id}:BAN`;
@@ -65,6 +76,7 @@ export default class BanCommand extends Command {
 				reason,
 				ref,
 				days,
+				nsfw,
 			}).commit(),
 		);
 	}

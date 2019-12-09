@@ -13,6 +13,7 @@ export interface ActionData {
 	ref?: number;
 	days?: number;
 	duration?: number;
+	nsfw?: boolean;
 }
 
 export default abstract class Action {
@@ -31,6 +32,8 @@ export default abstract class Action {
 	protected days?: number;
 
 	protected duration?: number;
+
+	protected nsfw?: boolean;
 
 	public constructor(protected action: ACTIONS, data: ActionData) {
 		this.client = data.message.client as YukikazeClient;
@@ -147,6 +150,7 @@ export default abstract class Action {
 						reason: this.reason,
 						message: this.message,
 						ref: this.ref,
+						nsfw: this.nsfw,
 					})
 				).setColor(this.color);
 				try {

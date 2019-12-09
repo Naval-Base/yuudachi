@@ -11,7 +11,7 @@ export default class MuteCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.MUTE.DESCRIPTION,
-				usage: '<member> <duration> [--ref=number] [...reason]',
+				usage: '<member> <duration> [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl 20m', '@Crawl 20m no u', '@Souji 14d --ref=1234 just stop'],
 			},
 			channel: 'guild',
@@ -46,6 +46,11 @@ export default class MuteCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
@@ -57,7 +62,13 @@ export default class MuteCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ member, duration, ref, reason }: { member: GuildMember; duration: number; ref: number; reason: string },
+		{
+			member,
+			duration,
+			ref,
+			nsfw,
+			reason,
+		}: { member: GuildMember; duration: number; ref: number; nsfw: boolean; reason: string },
 	) {
 		if (member.id === message.author.id) return;
 		const guild = message.guild!;
@@ -70,6 +81,7 @@ export default class MuteCommand extends Command {
 				reason,
 				duration,
 				ref,
+				nsfw,
 			}).commit(),
 		);
 	}

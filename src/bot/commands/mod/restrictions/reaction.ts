@@ -9,7 +9,7 @@ export default class RestrictReactionCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.RESTRICTIONS.REACTION.DESCRIPTION,
-				usage: '<member> [--ref=number] [...reason]',
+				usage: '<member> [--ref=number] [--nsfw] [...reason]',
 			},
 			channel: 'guild',
 			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
@@ -30,6 +30,11 @@ export default class RestrictReactionCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
@@ -39,7 +44,10 @@ export default class RestrictReactionCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
+	public async exec(
+		message: Message,
+		{ member, ref, nsfw, reason }: { member: GuildMember; ref: number; nsfw: boolean; reason: string },
+	) {
 		if (member.id === message.author.id) return;
 		const guild = message.guild!;
 		const key = `${guild.id}:${member.id}:REACTION`;
@@ -50,6 +58,7 @@ export default class RestrictReactionCommand extends Command {
 				keys: key,
 				reason,
 				ref,
+				nsfw,
 			}).commit(),
 		);
 	}

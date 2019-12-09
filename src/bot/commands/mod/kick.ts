@@ -10,7 +10,7 @@ export default class KickCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.KICK.DESCRIPTION,
-				usage: '<member> [--ref=number] [...reason]',
+				usage: '<member> [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --ref=1234 no u'],
 			},
 			channel: 'guild',
@@ -32,6 +32,11 @@ export default class KickCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
@@ -41,7 +46,10 @@ export default class KickCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { member, ref, reason }: { member: GuildMember; ref: number; reason: string }) {
+	public async exec(
+		message: Message,
+		{ member, ref, nsfw, reason }: { member: GuildMember; ref: number; nsfw: boolean; reason: string },
+	) {
 		const guild = message.guild!;
 		const key = `${guild.id}:${member.id}:KICK`;
 		guild.caseQueue.add(async () =>
@@ -51,6 +59,7 @@ export default class KickCommand extends Command {
 				keys: key,
 				reason,
 				ref,
+				nsfw,
 			}).commit(),
 		);
 	}
