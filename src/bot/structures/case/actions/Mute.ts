@@ -92,6 +92,7 @@ export default class MuteAction extends Action {
 						message: this.message,
 						duration: this.duration,
 						ref: this.ref,
+						nsfw: this.nsfw,
 					})
 				).setColor(this.color);
 				try {

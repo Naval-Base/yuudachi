@@ -109,6 +109,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 						caseNum: totalCases,
 						reason,
 						message: { author: null, guild: newMember.guild },
+						nsfw: true,
 					})
 				).setColor(COLORS[color]);
 				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);

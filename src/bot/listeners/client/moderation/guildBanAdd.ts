@@ -28,6 +28,7 @@ export default class GuildBanAddModerationListener extends Listener {
 					caseNum: totalCases,
 					reason,
 					message: { author: null, guild },
+					nsfw: true,
 				})
 			).setColor(COLORS.BAN);
 			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);

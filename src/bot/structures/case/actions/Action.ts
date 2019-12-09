@@ -44,6 +44,7 @@ export default abstract class Action {
 		this.ref = data.ref;
 		this.days = data.days;
 		this.duration = data.duration;
+		this.nsfw = data.nsfw;
 	}
 
 	protected get reason() {
