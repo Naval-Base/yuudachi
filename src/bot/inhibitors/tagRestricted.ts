@@ -16,10 +16,10 @@ export default class TagRestrictedInhibitor extends Inhibitor {
 		}
 		const restrictedRoles = this.client.settings.get(message.guild, SETTINGS.RESTRICT_ROLES);
 		if (!restrictedRoles) {
-			return true;
+			return false;
 		}
 		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
-		if (!hasRestrictedRole) {
+		if (hasRestrictedRole) {
 			return true;
 		}
 		return false;
