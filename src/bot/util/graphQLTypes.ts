@@ -58,6 +58,8 @@ export interface Cases {
 	modId?: Maybe<Scalars['String']>;
 	/** The tag of the moderator this case belongs to */
 	modTag?: Maybe<Scalars['String']>;
+	/** The id of the message around this mute */
+	muteMessage?: Maybe<Scalars['String']>;
 	/** The reason of this case */
 	reason?: Maybe<Scalars['String']>;
 	/** The id of the case this case references */
@@ -145,6 +147,7 @@ export interface CasesBoolExp {
 	message?: Maybe<StringComparisonExp>;
 	modId?: Maybe<StringComparisonExp>;
 	modTag?: Maybe<StringComparisonExp>;
+	muteMessage?: Maybe<StringComparisonExp>;
 	reason?: Maybe<StringComparisonExp>;
 	refId?: Maybe<IntComparisonExp>;
 	targetId?: Maybe<StringComparisonExp>;
@@ -176,6 +179,7 @@ export interface CasesInsertInput {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	muteMessage?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -192,6 +196,7 @@ export interface CasesMaxFields {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	muteMessage?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -208,6 +213,7 @@ export interface CasesMaxOrderBy {
 	message?: Maybe<OrderBy>;
 	modId?: Maybe<OrderBy>;
 	modTag?: Maybe<OrderBy>;
+	muteMessage?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
 	refId?: Maybe<OrderBy>;
 	targetId?: Maybe<OrderBy>;
@@ -224,6 +230,7 @@ export interface CasesMinFields {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	muteMessage?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -240,6 +247,7 @@ export interface CasesMinOrderBy {
 	message?: Maybe<OrderBy>;
 	modId?: Maybe<OrderBy>;
 	modTag?: Maybe<OrderBy>;
+	muteMessage?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
 	refId?: Maybe<OrderBy>;
 	targetId?: Maybe<OrderBy>;
@@ -279,6 +287,7 @@ export interface CasesOrderBy {
 	message?: Maybe<OrderBy>;
 	modId?: Maybe<OrderBy>;
 	modTag?: Maybe<OrderBy>;
+	muteMessage?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
 	refId?: Maybe<OrderBy>;
 	targetId?: Maybe<OrderBy>;
@@ -308,6 +317,8 @@ export enum CasesSelectColumn {
 	/** column name */
 	ModTag = 'modTag',
 	/** column name */
+	MuteMessage = 'muteMessage',
+	/** column name */
 	Reason = 'reason',
 	/** column name */
 	RefId = 'refId',
@@ -329,6 +340,7 @@ export interface CasesSetInput {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	muteMessage?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -413,6 +425,8 @@ export enum CasesUpdateColumn {
 	ModId = 'modId',
 	/** column name */
 	ModTag = 'modTag',
+	/** column name */
+	MuteMessage = 'muteMessage',
 	/** column name */
 	Reason = 'reason',
 	/** column name */
@@ -1447,7 +1461,7 @@ export interface SettingsDeleteAtPathInput {
 /**
  * delete the array element with specified index (negative integers count from the
  * end). throws an error if top level container is not an array
- **/
+ */
 export interface SettingsDeleteElemInput {
 	settings?: Maybe<Scalars['Int']>;
 }
@@ -1549,6 +1563,8 @@ export interface StagingCases {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	/** The id of the message around this mute */
+	mute_message?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId: Scalars['String'];
@@ -1632,6 +1648,7 @@ export interface StagingCasesBoolExp {
 	message?: Maybe<StringComparisonExp>;
 	modId?: Maybe<StringComparisonExp>;
 	modTag?: Maybe<StringComparisonExp>;
+	mute_message?: Maybe<StringComparisonExp>;
 	reason?: Maybe<StringComparisonExp>;
 	refId?: Maybe<IntComparisonExp>;
 	targetId?: Maybe<StringComparisonExp>;
@@ -1663,6 +1680,7 @@ export interface StagingCasesInsertInput {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	mute_message?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -1679,6 +1697,7 @@ export interface StagingCasesMaxFields {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	mute_message?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -1695,6 +1714,7 @@ export interface StagingCasesMaxOrderBy {
 	message?: Maybe<OrderBy>;
 	modId?: Maybe<OrderBy>;
 	modTag?: Maybe<OrderBy>;
+	mute_message?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
 	refId?: Maybe<OrderBy>;
 	targetId?: Maybe<OrderBy>;
@@ -1711,6 +1731,7 @@ export interface StagingCasesMinFields {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	mute_message?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -1727,6 +1748,7 @@ export interface StagingCasesMinOrderBy {
 	message?: Maybe<OrderBy>;
 	modId?: Maybe<OrderBy>;
 	modTag?: Maybe<OrderBy>;
+	mute_message?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
 	refId?: Maybe<OrderBy>;
 	targetId?: Maybe<OrderBy>;
@@ -1766,6 +1788,7 @@ export interface StagingCasesOrderBy {
 	message?: Maybe<OrderBy>;
 	modId?: Maybe<OrderBy>;
 	modTag?: Maybe<OrderBy>;
+	mute_message?: Maybe<OrderBy>;
 	reason?: Maybe<OrderBy>;
 	refId?: Maybe<OrderBy>;
 	targetId?: Maybe<OrderBy>;
@@ -1795,6 +1818,8 @@ export enum StagingCasesSelectColumn {
 	/** column name */
 	ModTag = 'modTag',
 	/** column name */
+	MuteMessage = 'mute_message',
+	/** column name */
 	Reason = 'reason',
 	/** column name */
 	RefId = 'refId',
@@ -1816,6 +1841,7 @@ export interface StagingCasesSetInput {
 	message?: Maybe<Scalars['String']>;
 	modId?: Maybe<Scalars['String']>;
 	modTag?: Maybe<Scalars['String']>;
+	mute_message?: Maybe<Scalars['String']>;
 	reason?: Maybe<Scalars['String']>;
 	refId?: Maybe<Scalars['Int']>;
 	targetId?: Maybe<Scalars['String']>;
@@ -1900,6 +1926,8 @@ export enum StagingCasesUpdateColumn {
 	ModId = 'modId',
 	/** column name */
 	ModTag = 'modTag',
+	/** column name */
+	MuteMessage = 'mute_message',
 	/** column name */
 	Reason = 'reason',
 	/** column name */
@@ -2331,7 +2359,7 @@ export interface StagingSettingsDeleteAtPathInput {
 /**
  * delete the array element with specified index (negative integers count from the
  * end). throws an error if top level container is not an array
- **/
+ */
 export interface StagingSettingsDeleteElemInput {
 	settings?: Maybe<Scalars['Int']>;
 }

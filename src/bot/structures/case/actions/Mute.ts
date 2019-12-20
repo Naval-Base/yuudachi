@@ -61,6 +61,7 @@ export default class MuteAction extends Action {
 			caseId: totalCases,
 			targetId: this.member.id,
 			targetTag: memberTag,
+			muteMessage: this.message.id,
 			modId: this.message.author.id,
 			modTag: this.message.author.tag,
 			action: this.action,

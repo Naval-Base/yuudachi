@@ -35,6 +35,7 @@ export default class MuteScheduler {
 					caseId: mute.caseId,
 					guild: mute.guild,
 					message: mute.message,
+					muteMessage: mute.muteMessage,
 					modId: mute.modId,
 					modTag: mute.modTag,
 					reason: mute.reason,

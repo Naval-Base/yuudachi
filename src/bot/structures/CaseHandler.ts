@@ -33,7 +33,7 @@ export const ACTION_KEYS = [
 interface Log {
 	member: GuildMember | User;
 	action: string;
-	caseNum: number;
+	caseNum?: number;
 	reason: string;
 	message?:
 		| {
@@ -44,6 +44,8 @@ interface Log {
 	duration?: number;
 	ref?: number;
 	nsfw?: boolean;
+	channel?: string;
+	reference?: Cases;
 }
 
 export default class CaseHandler {
@@ -150,17 +152,7 @@ export default class CaseHandler {
 		}
 
 		embed
-			.setDescription(
-				stripIndents`
-				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
-				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { long: true })}` : ''}
-				**Reason:** ${reason}${
-					reference
-						? `\n**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})`
-						: ''
-				}
-			`,
-			)
+			.setDescription(this.logMessage({ member, action, duration, message, reason, channel, reference }))
 			.setFooter(`Case ${caseNum}`)
 			.setTimestamp(new Date());
 
@@ -206,6 +198,24 @@ export default class CaseHandler {
 				${kick} kick${kick > 1 || kick === 0 ? 's' : ''},
 				and ${ban} ban${ban > 1 || ban === 0 ? 's' : ''}.
 			`);
+	}
+
+	private logMessage({ member, action, duration, message, reason, channel, reference }: Log) {
+		let msg = stripIndents`
+			**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
+			**Action:** ${action}
+		`;
+		if (action === 'Mute' && duration) {
+			msg += `\n**Length:** ${ms(duration, { long: true })}`;
+			if (message instanceof Message) {
+				msg += `\n**Context:** ${message.url}`;
+			}
+		}
+		msg += `**Reason:** ${reason}`;
+		if (reference && channel) {
+			msg += `\n**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})`;
+		}
+		return msg;
 	}
 
 	private async removeRoles(

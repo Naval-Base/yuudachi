@@ -51,6 +51,7 @@ export const GRAPHQL = {
 					guild
 					id
 					message
+					muteMessage
 					modId
 					modTag
 					targetId
@@ -126,6 +127,7 @@ export const GRAPHQL = {
 					guild
 					id
 					message
+					muteMessage
 					modId
 					modTag
 					reason
@@ -140,7 +142,7 @@ export const GRAPHQL = {
 			query($guild: String!, $targetId: String!, $actionProcessed: Boolean!) {
 				cases${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
-					targetId: { _eq: $targetId }
+					targetId: { _eq: $targetId },
 					actionProcessed: { _eq: $actionProcessed },
 				}) {
 					action
@@ -151,6 +153,7 @@ export const GRAPHQL = {
 					guild
 					id
 					message
+					muteMessage
 					modId
 					modTag
 					reason
@@ -263,7 +266,9 @@ export const GRAPHQL = {
 
 		DELETE_SETTINGS: gql`
 			mutation($guild: String!) {
-				deleteSettings${PRODUCTION ? '' : 'Staging'}(where: { guild: { _eq: $guild } }) {
+				deleteSettings${PRODUCTION ? '' : 'Staging'}(where: {
+					guild: { _eq: $guild } }
+				) {
 					returning {
 						guild
 						settings
@@ -305,8 +310,8 @@ export const GRAPHQL = {
 			mutation($guild: String!, $member: String!, $roles: _text!) {
 				insertRoleStates${PRODUCTION ? '' : 'Staging'}(
 					objects: { guild: $guild, member: $member, roles: $roles },
-					on_conflict: { constraint: role_states_guild_member_key, update_columns: roles }
-				) {
+					on_conflict: { constraint: role_states_guild_member_key, update_columns: roles
+				}) {
 					affected_rows
 				}
 			}
@@ -320,6 +325,7 @@ export const GRAPHQL = {
 				$caseId: Int!,
 				$guild: String!,
 				$message: String,
+				$muteMessage: String,
 				$modId: String,
 				$modTag: String,
 				$reason: String,
@@ -329,15 +335,16 @@ export const GRAPHQL = {
 			) {
 				insertCases${PRODUCTION ? '' : 'Staging'}(objects: {
 					action: $action,
-					actionDuration: $actionDuration
-					actionProcessed: $actionProcessed
+					actionDuration: $actionDuration,
+					actionProcessed: $actionProcessed,
 					caseId: $caseId,
 					guild: $guild,
-					message: $message
+					message: $message,
+					muteMessage: $muteMessage,
 					modId: $modId,
 					modTag: $modTag,
-					reason: $reason
-					refId: $refId
+					reason: $reason,
+					refId: $refId,
 					targetId: $targetId,
 					targetTag: $targetTag
 				}) {
@@ -350,6 +357,7 @@ export const GRAPHQL = {
 						guild
 						id
 						message
+						muteMessage
 						modId
 						modTag
 						reason
