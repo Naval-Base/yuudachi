@@ -211,7 +211,7 @@ export default class CaseHandler {
 				msg += `\n**Context:** ${message.url}`;
 			}
 		}
-		msg += `**Reason:** ${reason}`;
+		msg += `\n**Reason:** ${reason}`;
 		if (reference && channel) {
 			msg += `\n**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})`;
 		}
