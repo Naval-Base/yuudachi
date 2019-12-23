@@ -310,8 +310,8 @@ export const GRAPHQL = {
 			mutation($guild: String!, $member: String!, $roles: _text!) {
 				insertRoleStates${PRODUCTION ? '' : 'Staging'}(
 					objects: { guild: $guild, member: $member, roles: $roles },
-					on_conflict: { constraint: role_states_guild_member_key, update_columns: roles
-				}) {
+					on_conflict: { constraint: role_states_guild_member_key, update_columns: roles }
+				) {
 					affected_rows
 				}
 			}
