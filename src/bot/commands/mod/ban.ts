@@ -19,7 +19,7 @@ export default class BanCommand extends Command {
 			args: [
 				{
 					id: 'member',
-					type: Argument.union('member', async (_, phrase) => {
+					type: Argument.union('member', 'user', async (_, phrase) => {
 						const u = await this.client.users.fetch(phrase);
 						return u || null;
 					}),
