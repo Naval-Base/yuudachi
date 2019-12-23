@@ -31,7 +31,9 @@ export default class GuildMemberAddRoleStateListener extends Listener {
 					await this.client.muteScheduler.check();
 					await member.roles.add(user.roles, MESSAGES.EVENTS.GUILD_MEMBER_ADD.ROLE_STATE);
 				}
-			} catch {}
+			} catch (error) {
+				this.client.logger.error(error);
+			}
 		}
 	}
 }
