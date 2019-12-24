@@ -105,9 +105,13 @@ export default abstract class Action {
 	}
 
 	public async commit() {
-		await this.before();
-		await this.exec();
-		await this.after();
+		try {
+			await this.before();
+			await this.exec();
+			await this.after();
+		} catch (error) {
+			this.message.channel.send(error.message);
+		}
 	}
 
 	public abstract async before(): Promise<boolean>;
