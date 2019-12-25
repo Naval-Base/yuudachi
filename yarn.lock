@@ -2213,8 +2213,8 @@ discord-akairo@discord-akairo/discord-akairo:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  uid "45b89710008d207da22000dcb633c0c0236db17e"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/45b89710008d207da22000dcb633c0c0236db17e"
+  uid "50ed3293a57aeb0f9c094f00d49ed9874dc5d87a"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/50ed3293a57aeb0f9c094f00d49ed9874dc5d87a"
   dependencies:
     "@discordjs/collection" "^0.1.1"
     abort-controller "^3.0.0"
