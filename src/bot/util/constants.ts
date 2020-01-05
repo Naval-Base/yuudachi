@@ -1,5 +1,5 @@
 import { stripIndents } from 'common-tags';
-import { TextChannel, User } from 'discord.js';
+import { GuildMember, TextChannel, User } from 'discord.js';
 
 export const PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -856,7 +856,7 @@ export const MESSAGES = {
 		EMBED: {
 			AUDIT: (tag: string, cases: number) => `Embed restricted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error embed restricting this member \`${error}\``,
-			REPLY: (tag: string) => `Successfully embed restricted **${tag}**`,
+			REPLY: (member: GuildMember) => `Successfully embed restricted **${member}**`,
 			WOOSH: 'https://i.imgur.com/nDnv5YK.png',
 		},
 

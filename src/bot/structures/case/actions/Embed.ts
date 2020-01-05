@@ -48,7 +48,7 @@ export default class EmbedAction extends Action {
 
 		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
-		this.message.channel.send(MESSAGES.ACTIONS.EMBED.REPLY(this.member.user.tag), {
+		this.message.channel.send(MESSAGES.ACTIONS.EMBED.REPLY(this.member), {
 			files: [MESSAGES.ACTIONS.EMBED.WOOSH],
 		});
 	}
