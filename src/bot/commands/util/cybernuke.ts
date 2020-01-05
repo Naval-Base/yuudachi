@@ -86,7 +86,7 @@ export default class LaunchCybernukeCommand extends Command {
 				`,
 					)
 					.catch(error => this.client.logger.error(error, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR }))
-					.then(async () => member.ban())
+					.then(async () => member.ban({ days: 7, reason: 'Cybernuke!' }))
 					.then(() => {
 						fatalities.push(member);
 					})
