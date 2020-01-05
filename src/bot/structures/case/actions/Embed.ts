@@ -36,8 +36,6 @@ export default class EmbedAction extends Action {
 		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0) + 1;
 		const restrictRoles = this.client.settings.get(guild, SETTINGS.RESTRICT_ROLES)!;
 
-		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.EMBED.PRE_REPLY(this.member.user.tag));
-
 		try {
 			await this.member.roles.add(
 				restrictRoles.EMBED,
@@ -50,6 +48,8 @@ export default class EmbedAction extends Action {
 
 		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(MESSAGES.ACTIONS.EMBED.REPLY(this.member.user.tag));
+		this.message.channel.send(MESSAGES.ACTIONS.EMBED.REPLY(this.member.user.tag), {
+			files: [MESSAGES.ACTIONS.EMBED.WOOSH],
+		});
 	}
 }

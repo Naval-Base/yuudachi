@@ -856,8 +856,8 @@ export const MESSAGES = {
 		EMBED: {
 			AUDIT: (tag: string, cases: number) => `Embed restricted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error embed restricting this member \`${error}\``,
-			PRE_REPLY: (tag: string) => `Embed restricting **${tag}**...`,
 			REPLY: (tag: string) => `Successfully embed restricted **${tag}**`,
+			WOOSH: 'https://i.imgur.com/nDnv5YK.png',
 		},
 
 		EMOJI: {

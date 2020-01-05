@@ -1,8 +1,8 @@
 import { Listener, PrefixSupplier } from 'discord-akairo';
 import { GuildMember, Message, TextChannel } from 'discord.js';
-import { ACTIONS, COLORS, PRODUCTION, SETTINGS } from '../../../util/constants';
+import { ACTIONS, COLORS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { Cases, RoleStates, RoleStatesInsertInput, CasesInsertInput } from '../../../util/graphQLTypes';
+import { Cases, CasesInsertInput, RoleStates, RoleStatesInsertInput } from '../../../util/graphQLTypes';
 
 export default class GuildMemberUpdateModerationListener extends Listener {
 	public constructor() {
@@ -77,6 +77,11 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				case restrictRoles.EMBED:
 					actionName = 'Embed restriction';
 					action = ACTIONS.EMBED;
+					try {
+						(this.client.channels.get('222197033908436994') as TextChannel)?.send(newMember.toString(), {
+							files: [MESSAGES.ACTIONS.EMBED.WOOSH],
+						});
+					} catch {}
 					break;
 				case restrictRoles.EMOJI:
 					actionName = 'Emoji restriction';
