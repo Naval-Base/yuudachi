@@ -91,7 +91,7 @@ export default class TagAliasCommand extends Command {
 		});
 
 		return message.util?.reply(
-			MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, secondArr.join(', ').substring(0, 1900), add),
+			MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, secondArr.join(',').substring(0, 1900), add),
 		);
 	}
 }
