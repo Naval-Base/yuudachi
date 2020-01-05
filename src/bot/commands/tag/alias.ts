@@ -64,18 +64,18 @@ export default class TagAliasCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ first, second, add, del }: { first: Tags; second: string; add: boolean; del: boolean },
+		{ first, second, add, del }: { first: Tags; second: string[]; add: boolean; del: boolean },
 	) {
 		if (add) {
-			const secondArr = second.split(',');
-			secondArr.forEach(s => s.trim());
-			if (secondArr.length && secondArr.some(s => s.length >= 1900)) {
+			if (second.length && second.some(s => s.length >= 1900)) {
 				return message.util?.reply(MESSAGES.COMMANDS.TAGS.ALIAS.TOO_LONG);
 			}
-			first.aliases.push(...secondArr);
+			first.aliases.push(...second);
 		} else if (del) {
-			const index = first.aliases.indexOf(second);
-			first.aliases.splice(index, 1);
+			second.forEach(s => {
+				const index = first.aliases.indexOf(s);
+				first.aliases.splice(index, 1);
+			});
 		} else {
 			return message.util?.reply('you have to either supply `--add` or `--del.`');
 		}
@@ -88,6 +88,8 @@ export default class TagAliasCommand extends Command {
 			},
 		});
 
-		return message.util?.reply(MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, second.substring(0, 1900), add));
+		return message.util?.reply(
+			MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, second.join(', ').substring(0, 1900), add),
+		);
 	}
 }

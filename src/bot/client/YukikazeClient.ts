@@ -147,7 +147,8 @@ export default class YukikazeClient extends AkairoClient {
 		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
 			if (!message.guild) return Flag.fail(phrase);
 			if (!phrase) return Flag.fail(phrase);
-			phrase = Util.cleanContent(phrase.toLowerCase(), message);
+			const phraseArr = phrase.split(',');
+			phraseArr.forEach(s => Util.cleanContent(s.trim().toLowerCase(), message));
 			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
@@ -157,9 +158,9 @@ export default class YukikazeClient extends AkairoClient {
 			let tags: Tags[];
 			if (PRODUCTION) tags = data.tags;
 			else tags = data.tagsStaging;
-			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
+			const [tag] = tags.filter(t => phraseArr.some(p => p === t.name || t.aliases.includes(p)));
 
-			return tag ? Flag.fail(phrase) : phrase;
+			return tag ? Flag.fail(tag.name) : phraseArr;
 		});
 
 		this.config = config;
