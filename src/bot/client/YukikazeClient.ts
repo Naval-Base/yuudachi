@@ -160,7 +160,7 @@ export default class YukikazeClient extends AkairoClient {
 			else tags = data.tagsStaging;
 			const [tag] = tags.filter(t => phraseArr.some(p => p === t.name || t.aliases.includes(p)));
 
-			return tag ? Flag.fail(tag.name) : phraseArr;
+			return tag ? Flag.fail(tag.name) : phrase;
 		});
 
 		this.config = config;

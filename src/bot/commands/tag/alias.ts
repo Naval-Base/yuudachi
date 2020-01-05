@@ -64,15 +64,17 @@ export default class TagAliasCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ first, second, add, del }: { first: Tags; second: string[]; add: boolean; del: boolean },
+		{ first, second, add, del }: { first: Tags; second: string; add: boolean; del: boolean },
 	) {
+		const secondArr = second.split(',');
+		secondArr.forEach(s => s.trim());
 		if (add) {
-			if (second.length && second.some(s => s.length >= 1900)) {
+			if (secondArr.length && secondArr.some(s => s.length >= 1900)) {
 				return message.util?.reply(MESSAGES.COMMANDS.TAGS.ALIAS.TOO_LONG);
 			}
-			first.aliases.push(...second);
+			first.aliases.push(...secondArr);
 		} else if (del) {
-			second.forEach(s => {
+			secondArr.forEach(s => {
 				const index = first.aliases.indexOf(s);
 				first.aliases.splice(index, 1);
 			});
@@ -89,7 +91,7 @@ export default class TagAliasCommand extends Command {
 		});
 
 		return message.util?.reply(
-			MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, second.join(', ').substring(0, 1900), add),
+			MESSAGES.COMMANDS.TAGS.ALIAS.REPLY(first.name, secondArr.join(', ').substring(0, 1900), add),
 		);
 	}
 }
