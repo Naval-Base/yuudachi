@@ -68,6 +68,7 @@ export default class TagAliasCommand extends Command {
 	) {
 		if (add) {
 			const secondArr = second.split(',');
+			secondArr.forEach(s => s.trim());
 			if (secondArr.length && secondArr.some(s => s.length >= 1900)) {
 				return message.util?.reply(MESSAGES.COMMANDS.TAGS.ALIAS.TOO_LONG);
 			}
