@@ -579,12 +579,12 @@
     ts-node "^8"
     tslib "^1"
 
-"@graphql-codegen/add@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.10.0.tgz#0cd42953839b293d37409b3bd649c222c606e268"
-  integrity sha512-WdtoFhoPSJLPc+TYD2pDgyiIXgfHMDATTS9ZxBdo4f8jIxOjJLf5CpqvMVmfYkhJt78kvrfWIgGymwSkaOfv+g==
+"@graphql-codegen/add@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.11.0.tgz#3104e84bf6ef7e6d514427c1457fcd56e3f14d95"
+  integrity sha512-P0Eby36gjBghpbVvbpdB+SLHdF5rTVMzTHnf0hLe/NbmFSxTfUuMRC95fWDp+FxO+ZNZzMRME+WxvFO0KtLBDw==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.10.0"
+    "@graphql-codegen/plugin-helpers" "1.11.0"
     tslib "1.10.0"
 
 "@graphql-codegen/cli@^1.10.0":
@@ -666,6 +666,22 @@
     tslib "1.10.0"
     upper-case "2.0.1"
 
+"@graphql-codegen/plugin-helpers@1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.11.0.tgz#86475de8d17481da32b83043d046141216e419a4"
+  integrity sha512-phmX7qhzzpsRMgXiugvz2nD1EqMhVHCRdr5+A/gd4muBhUGL++W9vq2eV1/Lp7gH2C0Jkwa8tD85RYzyWkh4eQ==
+  dependencies:
+    "@graphql-toolkit/common" "0.9.0"
+    camel-case "4.1.1"
+    common-tags "1.8.0"
+    constant-case "3.0.3"
+    import-from "3.0.0"
+    lower-case "2.0.1"
+    param-case "3.0.3"
+    pascal-case "3.1.1"
+    tslib "1.10.0"
+    upper-case "2.0.1"
+
 "@graphql-codegen/typescript@^1.10.0":
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.10.0.tgz#a4b826b53cbb29af7a2062678ebbf2fba3347c03"
@@ -719,6 +735,15 @@
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@graphql-toolkit/common/-/common-0.8.1.tgz#b0417af357e7d4edc70fff2ba66435a0a4e8033b"
   integrity sha512-07ZMQnvsBkzR0XBHghPq9RUkpPSs6vifocV6vyhyW423QtjpJASNn1bTj5yxJy05p71hHr/iWtYHS1ClLuigvQ==
+  dependencies:
+    "@kamilkisiela/graphql-tools" "4.0.6"
+    aggregate-error "3.0.1"
+    lodash "4.17.15"
+
+"@graphql-toolkit/common@0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@graphql-toolkit/common/-/common-0.9.0.tgz#24d1744fa0d6b9331e8032097fcebb74390bad92"
+  integrity sha512-bLuyt4yV/XIHUS+gP4aF5xjnb5M2K+uuB35Hojw0er+tkNhWiOuWQzRMWPovds/4WN2C9PuknQby/+ntgBOm/g==
   dependencies:
     "@kamilkisiela/graphql-tools" "4.0.6"
     aggregate-error "3.0.1"
@@ -2442,6 +2467,14 @@ domexception@^1.0.1:
   integrity sha512-raigMkn7CJNNo6Ihro1fzG7wr3fHuYVytzquZKX5n0yizGsTcYgzdIUwj1X9pK0VvjeihV+XiclP+DjwbsSKug==
   dependencies:
     webidl-conversions "^4.0.2"
+
+dot-case@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/dot-case/-/dot-case-3.0.3.tgz#21d3b52efaaba2ea5fda875bb1aa8124521cf4aa"
+  integrity sha512-7hwEmg6RiSQfm/GwPL4AAWXKy3YNNZA3oFv2Pdiey0mwkRCPZ9x6SZbkLcn8Ma5PYeVokzoD4Twv2n7LKp5WeA==
+  dependencies:
+    no-case "^3.0.3"
+    tslib "^1.10.0"
 
 dotenv@^4.0.0:
   version "4.0.0"
@@ -4567,6 +4600,14 @@ p-try@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
+
+param-case@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/param-case/-/param-case-3.0.3.tgz#4be41f8399eff621c56eebb829a5e451d9801238"
+  integrity sha512-VWBVyimc1+QrzappRs7waeN2YmoZFCGXWASRYX1/rGHtXqEcrGEIDm+jqIwFa2fRXNgQEwrxaYuIrX0WcAguTA==
+  dependencies:
+    dot-case "^3.0.3"
+    tslib "^1.10.0"
 
 parent-module@^1.0.0:
   version "1.0.1"
