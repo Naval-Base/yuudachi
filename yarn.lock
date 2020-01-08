@@ -579,12 +579,12 @@
     ts-node "^8"
     tslib "^1"
 
-"@graphql-codegen/add@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.11.0.tgz#3104e84bf6ef7e6d514427c1457fcd56e3f14d95"
-  integrity sha512-P0Eby36gjBghpbVvbpdB+SLHdF5rTVMzTHnf0hLe/NbmFSxTfUuMRC95fWDp+FxO+ZNZzMRME+WxvFO0KtLBDw==
+"@graphql-codegen/add@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.11.1.tgz#e0172ead952617c0230bc07ff2d97a141d31c31e"
+  integrity sha512-PWmWS2+DqBDPV24v6dVgWOUfKANTSpr3fd0X05UkR4Swt17G6AOBfmjERKiP3kO5fnJlovbwqMeg/RXASrRovg==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.11.0"
+    "@graphql-codegen/plugin-helpers" "1.11.1"
     tslib "1.10.0"
 
 "@graphql-codegen/cli@^1.11.1":
@@ -650,22 +650,6 @@
     "@graphql-toolkit/common" "0.9.0"
     "@graphql-toolkit/schema-merging" "0.9.0"
     tslib "1.10.0"
-
-"@graphql-codegen/plugin-helpers@1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.11.0.tgz#86475de8d17481da32b83043d046141216e419a4"
-  integrity sha512-phmX7qhzzpsRMgXiugvz2nD1EqMhVHCRdr5+A/gd4muBhUGL++W9vq2eV1/Lp7gH2C0Jkwa8tD85RYzyWkh4eQ==
-  dependencies:
-    "@graphql-toolkit/common" "0.9.0"
-    camel-case "4.1.1"
-    common-tags "1.8.0"
-    constant-case "3.0.3"
-    import-from "3.0.0"
-    lower-case "2.0.1"
-    param-case "3.0.3"
-    pascal-case "3.1.1"
-    tslib "1.10.0"
-    upper-case "2.0.1"
 
 "@graphql-codegen/plugin-helpers@1.11.1":
   version "1.11.1"
