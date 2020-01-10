@@ -171,11 +171,15 @@ export default class YukikazeClient extends AkairoClient {
 				environment: process.env.NODE_ENV,
 				release: process.env.VERSION,
 				serverName: 'yukikaze_bot',
-				integrations: [
-					new RewriteFrames({
-						root: this.root,
-					}),
-				],
+				integrations: integrations => {
+					integrations.filter(integration => integration.name !== 'Breadcrumbs');
+					integrations.push(
+						new RewriteFrames({
+							root: this.root,
+						}),
+					);
+					return integrations;
+				},
 			});
 		} else {
 			process.on('unhandledRejection', (err: any) => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
