@@ -172,14 +172,13 @@ export default class YukikazeClient extends AkairoClient {
 				release: process.env.VERSION,
 				serverName: 'yukikaze_bot',
 				integrations: integrations => {
-					integrations
-						.filter(integration => integration.name !== 'Breadcrumbs')
-						.push(
-							new RewriteFrames({
-								root: this.root,
-							}),
-						);
-					return integrations;
+					const integration = integrations.filter(integration => integration.name !== 'Breadcrumbs');
+					integration.push(
+						new RewriteFrames({
+							root: this.root,
+						}),
+					);
+					return integration;
 				},
 			});
 		} else {
