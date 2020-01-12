@@ -78,9 +78,11 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 					actionName = 'Embed restriction';
 					action = ACTIONS.EMBED;
 					try {
-						(this.client.channels.get('222197033908436994') as TextChannel)?.send(newMember.toString(), {
-							files: [MESSAGES.ACTIONS.EMBED.WOOSH],
-						});
+						if (newMember.guild.id === '222078108977594368') {
+							(newMember.guild.channels.get('222197033908436994') as TextChannel)?.send(newMember.toString(), {
+								files: [MESSAGES.ACTIONS.EMBED.WOOSH],
+							});
+						}
 					} catch {}
 					break;
 				case restrictRoles.EMOJI:
