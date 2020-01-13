@@ -25,7 +25,7 @@
 		"apollo-client": "^2.6.8",
 		"apollo-link-http": "^1.5.16",
 		"common-tags": "^1.8.0",
-		"diff": "^4.0.1",
+		"diff": "^4.0.2",
 		"discord-akairo": "discord-akairo/discord-akairo",
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^8.2.0",
