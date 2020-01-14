@@ -2376,7 +2376,6 @@ discord-akairo@discord-akairo/discord-akairo:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  uid "75fe1faf2f95775ae29883bfcf6f27651a1b53b2"
   resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/75fe1faf2f95775ae29883bfcf6f27651a1b53b2"
   dependencies:
     "@discordjs/collection" "^0.1.1"
