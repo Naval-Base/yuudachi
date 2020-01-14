@@ -16,6 +16,8 @@
 		"inlineSources": true,
 		"sourceRoot": "./",
 		"outDir": "dist",
-		"incremental": true
+		"incremental": true,
+		"noEmitHelpers": true,
+		"importHelpers": true
 	}
 }
