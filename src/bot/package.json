@@ -19,7 +19,7 @@
 	},
 	"dependencies": {
 		"@naval-base/ms": "^2.2.1",
-		"@sentry/integrations": "^5.11.0",
+		"@sentry/integrations": "^5.11.1",
 		"@sentry/node": "^5.11.0",
 		"apollo-cache-inmemory": "^1.6.5",
 		"apollo-client": "^2.6.8",
