@@ -42,7 +42,7 @@
 		"turndown": "^5.0.3",
 		"winston": "^3.2.1",
 		"winston-daily-rotate-file": "^4.4.1",
-		"winston-loki": "^5.0.0"
+		"winston-loki": "^5.1.0"
 	},
 	"devDependencies": {
 		"@graphql-codegen/add": "^1.11.2",
