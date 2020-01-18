@@ -1,7 +1,7 @@
 import YukikazeClient from '../client/YukikazeClient';
 import { PRODUCTION, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Cases, CasesInsertInput } from '../util/graphQLTypes';
+import { Cases, CasesInsertInput, RoleStates, RoleStatesInsertInput } from '../util/graphQLTypes';
 import { EVENTS, TOPICS } from '../util/logger';
 
 export default class MuteScheduler {
@@ -74,6 +74,38 @@ export default class MuteScheduler {
 			try {
 				await member.roles.remove(muteRole, 'Unmuted automatically based on duration.');
 			} catch {}
+		} else {
+			const { data } = await graphQLClient.query<any, RoleStatesInsertInput>({
+				query: GRAPHQL.QUERY.ROLE_STATES,
+				variables: {
+					guild: mute.guild,
+					member: mute.targetId,
+				},
+			});
+			let automaticRoleState: RoleStates;
+			if (PRODUCTION) automaticRoleState = data.roleStates[0];
+			else automaticRoleState = data.roleStatesStaging[0];
+
+			const muteRole = this.client.settings.get<SETTINGS.MUTE_ROLE, string>(guild, SETTINGS.MUTE_ROLE);
+			const roles = automaticRoleState.roles.filter(role => role !== muteRole);
+			if (roles.length) {
+				await graphQLClient.mutate({
+					mutation: GRAPHQL.MUTATION.UPDATE_ROLE_STATE,
+					variables: {
+						guild: mute.guild,
+						member: mute.targetId,
+						roles: `{${roles.join(',')}}`,
+					},
+				});
+			} else {
+				await graphQLClient.mutate<any, RoleStatesInsertInput>({
+					mutation: GRAPHQL.MUTATION.DELETE_MEMBER_ROLE_STATE,
+					variables: {
+						guild: mute.guild,
+						member: mute.targetId,
+					},
+				});
+			}
 		}
 		const schedule = this.queued.get(mute.id);
 		if (schedule) this.client.clearTimeout(schedule);
