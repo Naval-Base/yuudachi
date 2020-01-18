@@ -27,7 +27,7 @@ export default class GuildMemberAddRoleStateListener extends Listener {
 			if (PRODUCTION) user = data.roleStates[0];
 			else user = data.roleStatesStaging[0];
 			try {
-				if (user && member.roles) {
+				if (user) {
 					await this.client.muteScheduler.check();
 					await member.roles.add(user.roles, MESSAGES.EVENTS.GUILD_MEMBER_ADD.ROLE_STATE);
 				}
