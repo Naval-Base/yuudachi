@@ -3,6 +3,7 @@ import { Message, Util } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { TagsInsertInput } from '../../util/graphQLTypes';
+import { interpolateString } from '../../util/template';
 
 export default class TagAddCommand extends Command {
 	public constructor() {
@@ -51,6 +52,7 @@ export default class TagAddCommand extends Command {
 		message: Message,
 		{ name, content, hoist, template }: { name: string; content: string; hoist: boolean; template: boolean },
 	) {
+		name = Util.cleanContent(name.toLowerCase(), message);
 		if (name?.length >= 1900) {
 			return message.util?.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
@@ -62,6 +64,17 @@ export default class TagAddCommand extends Command {
 			content = Util.cleanContent(content, message);
 			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
 		}
+
+		try {
+			interpolateString(content, {
+				author: message.author.toString(),
+				channel: message.channel.toString(),
+				guild: message.guild ? message.guild.toString() : null,
+			});
+		} catch (error) {
+			return message.channel.send(error);
+		}
+
 		await graphQLClient.mutate<any, TagsInsertInput>({
 			mutation: GRAPHQL.MUTATION.INSERT_TAG,
 			variables: {

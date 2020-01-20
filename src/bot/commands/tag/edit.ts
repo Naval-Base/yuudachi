@@ -3,6 +3,7 @@ import { Message, Util } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Tags, TagsSetInput } from '../../util/graphQLTypes';
+import { interpolateString } from '../../util/template';
 
 export default class TagEditCommand extends Command {
 	public constructor() {
@@ -87,20 +88,35 @@ export default class TagEditCommand extends Command {
 			content = Util.cleanContent(content, message);
 			if (message.attachments.first()) content += `\n${message.attachments.first()?.url ?? ''}`;
 		}
+
+		const templated = staffRole && (template || untemplate) ? template : tag.templated;
 		const vars = content
 			? {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
-					templated: staffRole && (template || untemplate) ? template : tag.templated,
+					templated,
 					content,
 					lastModified: message.author.id,
 			  }
 			: {
 					id: tag.id,
 					hoisted: staffRole && (hoist || unhoist) ? hoist : tag.hoisted,
-					templated: staffRole && (template || untemplate) ? template : tag.templated,
+					templated,
 					lastModified: message.author.id,
 			  };
+
+		if (templated) {
+			try {
+				interpolateString(content, {
+					author: message.author.toString(),
+					channel: message.channel.toString(),
+					guild: message.guild ? message.guild.toString() : null,
+				});
+			} catch (error) {
+				return message.channel.send(error);
+			}
+		}
+
 		await graphQLClient.mutate<any, TagsSetInput>({
 			mutation: content ? GRAPHQL.MUTATION.UPDATE_TAG_CONTENT : GRAPHQL.MUTATION.UPDATE_TAG_HOIST,
 			variables: vars,
