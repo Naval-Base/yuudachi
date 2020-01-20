@@ -40,9 +40,11 @@ export default class TagInfoCommand extends Command {
 			lastModifiedBy = null;
 		}
 		const guild = this.client.guilds.get(tag.guild);
-		const embed = new MessageEmbed()
-			.setColor(3447003)
-			.addField('❯ Name', tag.name)
+		const embed = new MessageEmbed().setColor(3447003).addField('❯ Name', tag.name);
+		if (tag.templated) {
+			embed.addField('❯ Templated', '❗This tag is templated and resolves mentions and templates.');
+		}
+		embed
 			.addField('❯ User', user ? `${user.tag} (ID: ${user.id})` : "Couldn't fetch user.")
 			.addField('❯ Guild', guild ? `${guild.name}` : "Couldn't fetch guild.")
 			.addField(
