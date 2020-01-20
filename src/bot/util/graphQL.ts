@@ -13,6 +13,7 @@ export const graphQLClient = new ApolloClient({
 		headers: {
 			'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET,
 		},
+		// @ts-ignore
 		fetch,
 	}),
 	defaultOptions: {
@@ -209,6 +210,7 @@ export const GRAPHQL = {
 					content
 					hoisted
 					name
+					templated
 					user
 				}
 			}
@@ -223,6 +225,7 @@ export const GRAPHQL = {
 					content
 					hoisted
 					name
+					templated
 					user
 				}
 			}
