@@ -32,12 +32,12 @@ export default class TagDownloadCommand extends Command {
 			query: member ? GRAPHQL.QUERY.TAGS_MEMBER : GRAPHQL.QUERY.TAGS,
 			variables: where,
 		});
-		let tags: Pick<Tags, 'content' | 'name' | 'hoisted' | 'user'>[];
+		let tags: Pick<Tags, 'content' | 'name' | 'hoisted' | 'user' | 'templated'>[];
 		if (PRODUCTION) tags = data.tags;
 		else tags = data.tagsStaging;
 		if (!tags.length) return;
 		const output = tags.reduce((out, t) => {
-			out += `Name: ${t.name}\r\nContent:\r\n${t.content.replace(
+			out += `Name: ${t.name}${t.templated ? ' [TEMPLATED]' : ''}\r\nUser: ${t.user}\r\nContent:\r\n${t.content.replace(
 				/\n/g,
 				'\r\n',
 			)}\r\n\r\n========================================\r\n\r\n`;

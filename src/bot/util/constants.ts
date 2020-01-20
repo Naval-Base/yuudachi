@@ -602,10 +602,10 @@ export const MESSAGES = {
 		TAGS: {
 			DESCRIPTION: stripIndents`Available methods:
 				 • show \`<tag>\`
-				 • add \`[--hoist/--pin] <tag> <content>\`
+				 • add \`[--hoist/--pin] [--template] <tag> <content>\`
 				 • alias \`<--add/--del> <tag> <tagalias>\`
 				 • del \`<tag>\`
-				 • edit \`[--hoist/--unhoist] <tag> <content>\`
+				 • edit \`[--hoist/--unhoist] [--template] <tag> <content>\`
 				 • source \`[--file] <tag>\`
 				 • info \`<tag>\`
 				 • search \`<tag>\`

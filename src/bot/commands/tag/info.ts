@@ -43,7 +43,10 @@ export default class TagInfoCommand extends Command {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
 			.addField('❯ Name', tag.name)
-			.addField('❯ User', user ? `${user.tag} (ID: ${user.id})` : "Couldn't fetch user.")
+			if(tag.templated) {
+				embed.addField('❯ Templated', '❗This tag is templated and resolves mentions and templates.')
+			}
+			embed.addField('❯ User', user ? `${user.tag} (ID: ${user.id})` : "Couldn't fetch user.")
 			.addField('❯ Guild', guild ? `${guild.name}` : "Couldn't fetch guild.")
 			.addField(
 				'❯ Aliases',
