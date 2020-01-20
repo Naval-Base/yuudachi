@@ -65,14 +65,16 @@ export default class TagAddCommand extends Command {
 			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
 		}
 
-		try {
-			interpolateString(content, {
-				author: message.author.toString(),
-				channel: message.channel.toString(),
-				guild: message.guild ? message.guild.toString() : null,
-			});
-		} catch (error) {
-			return message.channel.send(error);
+		if (template && staffRole) {
+			try {
+				interpolateString(content, {
+					author: message.author.toString(),
+					channel: message.channel.toString(),
+					guild: message.guild ? message.guild.toString() : null,
+				});
+			} catch (error) {
+				return message.channel.send(error);
+			}
 		}
 
 		await graphQLClient.mutate<any, TagsInsertInput>({
