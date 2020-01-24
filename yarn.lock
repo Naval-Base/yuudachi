@@ -2836,10 +2836,10 @@ file-entry-cache@^5.0.1:
   dependencies:
     flat-cache "^2.0.1"
 
-file-stream-rotator@^0.5.5:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/file-stream-rotator/-/file-stream-rotator-0.5.6.tgz#ab19b42fe0d27683d559a63da7b34167e8fcb0f8"
-  integrity sha512-2pMYsyz/l03+OUHGvZ2GxaaRMzZFTqV2TbeHM7/xdZG9t9OWbZVFN2VgkI2loZaUc12uIDL77WCbxv1FuR2PYA==
+file-stream-rotator@^0.5.7:
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/file-stream-rotator/-/file-stream-rotator-0.5.7.tgz#868a2e5966f7640a17dd86eda0e4467c089f6286"
+  integrity sha512-VYb3HZ/GiAGUCrfeakO8Mp54YGswNUHvL7P09WQcXAJNSj3iQ5QraYSp3cIn1MUyw6uzfgN/EFOarCNa4JvUHQ==
   dependencies:
     moment "^2.11.2"
 
@@ -5874,12 +5874,12 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
-winston-daily-rotate-file@^4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-4.4.1.tgz#425044418d0d7c1dc2add94aafa65e1e8b98f40a"
-  integrity sha512-516bL4IDjgX5mPEsTPXNVNzZtJkrUFY2IvPhj8n5xSKyy804xadp4TUlhxEZLL/Jbs8CF+rESfq95QXFLFTzKA==
+winston-daily-rotate-file@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-4.4.2.tgz#7a4dd34fc26ab3873bdee8c4f9d5bf1d8fd6d562"
+  integrity sha512-pVOUJKxN+Kn6LnOJZ4tTwdV5+N+fCkiRAb3bVnzcPtOj1ScxGNC3DyUhHuAHssBtMl5s45/aUcSUtApH+69V5A==
   dependencies:
-    file-stream-rotator "^0.5.5"
+    file-stream-rotator "^0.5.7"
     object-hash "^2.0.1"
     triple-beam "^1.3.0"
     winston-transport "^4.2.0"
