@@ -1,6 +1,8 @@
 {
-	"private": true,
-	"workspaces": [
-		"src/*"
-	]
+	"name": "yukikaze",
+	"version": "0.1.0",
+	"description": "",
+	"author": "iCrawl <icrawltogo@gmail.com>",
+	"license": "UNLICENSED",
+	"private": true
 }

@@ -1,11 +1,8 @@
 FROM node:12-alpine
-
 LABEL name "Yukikaze Bot"
 LABEL version "0.1.0"
 LABEL maintainer "iCrawl <icrawltogo@gmail.com>"
-
 ARG VERSION
-
 ENV NODE_ENV= \
 	COMMAND_PREFIX= \
 	OWNERS= \
@@ -21,22 +18,15 @@ ENV NODE_ENV= \
 	SENTRY_ORG= \
 	SENTRY_PROJECT= \
 	VERSION=$VERSION
-
 WORKDIR /usr/yukikaze
-
-COPY src/bot/package.json .yarnclean /usr/yukikaze/src/bot/
-COPY tsconfig.json package.json yarn.lock .yarnclean /usr/yukikaze/
-
+COPY src/bot/package.json /usr/yukikaze/src/bot/
+COPY package.json pnpm-lock.yaml /usr/yukikaze/
 RUN apk add --update \
 && apk add --no-cache ca-certificates \
 && apk add --no-cache --virtual .build-deps git curl build-base python g++ make \
-&& yarn install --ignore-engines \
+&& curl -L https://unpkg.com/@pnpm/self-installer | node \
+&& pnpm i \
 && apk del .build-deps
-
-COPY src/bot /usr/yukikaze/src/bot/
-
-WORKDIR /usr/yukikaze/src/bot
-
-RUN yarn build
-
-CMD ["node", "dist/bot.js"]
+COPY . .
+RUN pnpm recursive run build --filter bot
+CMD ["node", "src/bot/dist/bot.js"]

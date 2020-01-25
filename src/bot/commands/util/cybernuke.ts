@@ -75,7 +75,6 @@ export default class LaunchCybernukeCommand extends Command {
 		const promises: Promise<Message | void>[] = [];
 
 		for (const member of members.values()) {
-			/* eslint-disable promise/prefer-await-to-then, promise/always-return, promise/prefer-await-to-callbacks */
 			promises.push(
 				member
 					.send(
@@ -106,7 +105,6 @@ export default class LaunchCybernukeCommand extends Command {
 						}
 					}),
 			);
-			/* eslint-enable promise/prefer-await-to-then, promise/always-return, promise/prefer-await-to-callbacks */
 		}
 
 		await Promise.all(promises);
