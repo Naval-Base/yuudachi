@@ -20,7 +20,7 @@ ENV NODE_ENV= \
 	VERSION=$VERSION
 WORKDIR /usr/yukikaze
 COPY src/bot/package.json /usr/yukikaze/src/bot/
-COPY package.json pnpm-lock.yaml /usr/yukikaze/
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /usr/yukikaze/
 RUN apk add --update \
 && apk add --no-cache ca-certificates \
 && apk add --no-cache --virtual .build-deps git curl build-base python g++ make \
