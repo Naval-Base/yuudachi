@@ -1,11 +1,10 @@
+import ms from '@naval-base/ms';
 import { oneLine, stripIndents } from 'common-tags';
 import { Guild, GuildMember, Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../client/YukikazeClient';
 import { PRODUCTION, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
 import { Cases, CasesInsertInput } from '../util/graphQLTypes';
-
-const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface Footer {
 	warn?: number;
@@ -206,7 +205,7 @@ export default class CaseHandler {
 			**Action:** ${action}
 		`;
 		if (action === 'Mute' && duration) {
-			msg += `\n**Length:** ${ms(duration, { long: true })}`;
+			msg += `\n**Length:** ${ms(duration, true)}`;
 			if (message instanceof Message) {
 				msg += `\n**Context:** ${message.url}`;
 			}

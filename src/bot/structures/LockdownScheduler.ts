@@ -1,10 +1,10 @@
+import ms from '@naval-base/ms';
 import { TextChannel, User } from 'discord.js';
 import YukikazeClient from '../client/YukikazeClient';
 import { PRODUCTION } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
 import { Lockdowns, LockdownsInsertInput } from '../util/graphQLTypes';
 import { EVENTS, TOPICS } from '../util/logger';
-const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class LockdownScheduler {
 	private readonly checkRate: number;

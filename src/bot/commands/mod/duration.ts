@@ -1,10 +1,9 @@
+import ms from '@naval-base/ms';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import { ACTIONS, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
 import { Cases, CasesInsertInput } from '../../util/graphQLTypes';
-
-const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class DurationCommand extends Command {
 	public constructor() {
@@ -82,17 +81,11 @@ export default class DurationCommand extends Command {
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (dbCase.actionDuration) {
 				embed.setDescription(
-					caseEmbed.embeds[0].description.replace(
-						/\*\*Length:\*\* (.+)*/,
-						`**Length:** ${ms(duration, { long: true })}`,
-					),
+					caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, true)}`),
 				);
 			} else {
 				embed.setDescription(
-					caseEmbed.embeds[0].description.replace(
-						/(\*\*Action:\*\* Mute)/,
-						`$1\n**Length:** ${ms(duration, { long: true })}`,
-					),
+					caseEmbed.embeds[0].description.replace(/(\*\*Action:\*\* Mute)/, `$1\n**Length:** ${ms(duration, true)}`),
 				);
 			}
 			await caseEmbed.edit(embed);

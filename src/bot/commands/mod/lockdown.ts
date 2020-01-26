@@ -1,7 +1,7 @@
+import ms from '@naval-base/ms';
 import { Command } from 'discord-akairo';
 import { Message, Permissions, TextChannel } from 'discord.js';
 import { MESSAGES } from '../../util/constants';
-const ms = require('@naval-base/ms'); // eslint-disable-line
 
 export default class LockdownCommand extends Command {
 	public constructor() {

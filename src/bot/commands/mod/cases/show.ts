@@ -1,11 +1,10 @@
+import ms from '@naval-base/ms';
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions } from 'discord.js';
 import { ACTIONS, COLORS, MESSAGES, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
 import { Cases } from '../../../util/graphQLTypes';
-
-const ms = require('@naval-base/ms'); // eslint-disable-line
 
 interface ActionKeys {
 	[key: number]: string;
@@ -85,9 +84,7 @@ export default class CaseCommand extends Command {
 					dbCase.action === 5
 						? `\n**Length:** ${ms(
 								new Date(dbCase.actionDuration ?? 0).getTime() - new Date(dbCase.createdAt).getTime(),
-								{
-									long: true,
-								},
+								true,
 						  )}`
 						: ''
 				}
