@@ -33,6 +33,11 @@ export default class ReasonCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
@@ -41,7 +46,10 @@ export default class ReasonCommand extends Command {
 		});
 	}
 
-	public async exec(message: Message, { caseNum, ref, reason }: { caseNum: string; ref: number; reason: string }) {
+	public async exec(
+		message: Message,
+		{ caseNum, ref, nsfw, reason }: { caseNum: string; ref: number; nsfw: boolean; reason: string },
+	) {
 		const guild = message.guild!;
 		let caseToFind: number[];
 		if (/\d+-\d+/.test(caseNum)) {
@@ -106,6 +114,9 @@ export default class ReasonCommand extends Command {
 				const embed = new MessageEmbed(caseEmbed.embeds[0])
 					.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 					.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+				if (nsfw) {
+					embed.setImage('');
+				}
 				if (ref) {
 					let reference;
 					try {
