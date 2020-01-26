@@ -75,7 +75,7 @@ export default class ReasonCommand extends Command {
 		}
 		let statusMessage;
 		if (dbCases.length >= 10) {
-			await message.util?.send(`${dbCases.length} reasons will be changed; proceed?`);
+			await message.util?.send(`${dbCases.length} cases will be changed; proceed?`);
 
 			const responses = await message.channel.awaitMessages((msg: Message) => msg.author.id === message.author.id, {
 				max: 1,
@@ -113,7 +113,9 @@ export default class ReasonCommand extends Command {
 				if (!caseEmbed) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_MESSAGE);
 				const embed = new MessageEmbed(caseEmbed.embeds[0])
 					.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-					.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+				if (reason) {
+					embed.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
+				}
 				if (nsfw) {
 					embed.setThumbnail('');
 				}
@@ -134,7 +136,7 @@ export default class ReasonCommand extends Command {
 					}
 					if (reference) {
 						if (/\*\*Ref case:\*\* [\s\S]+/.test(embed.description)) {
-							embed.setDescription(embed.description.replace(/\*\*Ref case:\*\* [\s\S]+/, `**Ref case:** ${reason}`));
+							embed.setDescription(embed.description.replace(/\*\*Ref case:\*\* [\s\S]+/, `**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`));
 						} else {
 							embed.setDescription(
 								`${embed.description}\n**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`,
