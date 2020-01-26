@@ -115,7 +115,7 @@ export default class ReasonCommand extends Command {
 					.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 					.setDescription(caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`));
 				if (nsfw) {
-					embed.setImage('');
+					embed.setThumbnail('');
 				}
 				if (ref) {
 					let reference;
