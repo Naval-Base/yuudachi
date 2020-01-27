@@ -162,7 +162,7 @@ export default class ReasonCommand extends Command {
 					id: dbCase.id,
 					modId: message.author.id,
 					modTag: message.author.tag,
-					reason,
+					reason: reason || dbCase.reason,
 				},
 			});
 		}
