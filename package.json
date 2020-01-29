@@ -4,5 +4,8 @@
 	"description": "",
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "UNLICENSED",
-	"private": true
+	"private": true,
+	"renovate": {
+		"extends": ["teal"]
+	}
 }
