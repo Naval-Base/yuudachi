@@ -31,7 +31,7 @@ export default class GuildBanRemoveModerationListener extends Listener {
 					nsfw: true,
 				})
 			).setColor(COLORS.UNBAN);
-			modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
+			modMessage = await (this.client.channels.cache.get(modLogChannel) as TextChannel).send(embed);
 		}
 
 		await this.client.caseHandler.create({

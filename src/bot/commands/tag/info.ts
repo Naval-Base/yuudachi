@@ -39,7 +39,7 @@ export default class TagInfoCommand extends Command {
 		} catch (error) {
 			lastModifiedBy = null;
 		}
-		const guild = this.client.guilds.get(tag.guild);
+		const guild = this.client.guilds.cache.get(tag.guild);
 		const embed = new MessageEmbed().setColor(3447003).addField('❯ Name', tag.name);
 		if (tag.templated) {
 			embed.addField('❯ Templated', '❗This tag is templated and resolves mentions and templates.');

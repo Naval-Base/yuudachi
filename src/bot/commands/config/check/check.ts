@@ -30,13 +30,13 @@ export default class CheckConfigCommand extends Command {
 		return message.util?.send(
 			new MessageEmbed()
 				.addField('❯ Moderation', mod ? '`✅`' : '`❌`')
-				.addField('❯ Mute Role', mute ? `${guild.roles.get(mute)} \`✅\`` : '`❌`', true)
-				.addField('❯ Mod Log', modlog ? `${guild.channels.get(modlog)} \`✅\`` : '`❌`', true)
-				.addField('❯ Guild Log', guildlogChannel ? `${guild.channels.get(guildlogChannel)} \`✅\`` : '`❌`', true)
+				.addField('❯ Mute Role', mute ? `${guild.roles.cache.get(mute)} \`✅\`` : '`❌`', true)
+				.addField('❯ Mod Log', modlog ? `${guild.channels.cache.get(modlog)} \`✅\`` : '`❌`', true)
+				.addField('❯ Guild Log', guildlogChannel ? `${guild.channels.cache.get(guildlogChannel)} \`✅\`` : '`❌`', true)
 				.addField(
 					'❯ Member Log',
 					memberlog.ID
-						? `${guild.channels.get(memberlog.ID)} ${memberlog.MENTION ? '(w/ mention)' : ''} \`✅\``
+						? `${guild.channels.cache.get(memberlog.ID)} ${memberlog.MENTION ? '(w/ mention)' : ''} \`✅\``
 						: '`❌`',
 					true,
 				)

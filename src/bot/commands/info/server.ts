@@ -39,8 +39,8 @@ export default class GuildInfoCommand extends Command {
 			.addField(
 				'❯ Channels',
 				stripIndents`
-				• ${guild.channels.filter(ch => ch.type === 'text').size} Text, ${
-					guild.channels.filter(ch => ch.type === 'voice').size
+				• ${guild.channels.cache.filter(ch => ch.type === 'text').size} Text, ${
+					guild.channels.cache.filter(ch => ch.type === 'voice').size
 				} Voice
 				• AFK: ${guild.afkChannelID ? `<#${guild.afkChannelID}> after ${guild.afkTimeout / 60}min` : 'None'}
 			`,
@@ -55,7 +55,7 @@ export default class GuildInfoCommand extends Command {
 			.addField(
 				'❯ Other',
 				stripIndents`
-				• Roles: ${guild.roles.size}
+				• Roles: ${guild.roles.cache.size}
 				• Region: ${guild.region}
 				• Created at: ${moment.utc(guild.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 				• Verification Level: ${HUMAN_LEVELS[guild.verificationLevel]}

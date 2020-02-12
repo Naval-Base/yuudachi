@@ -27,8 +27,8 @@ export default class StatsCommand extends Command {
 			.addField(
 				'❯ General Stats',
 				stripIndents`
-				• Guilds: ${this.client.guilds.size}
-				• Channels: ${this.client.channels.size}
+				• Guilds: ${this.client.guilds.cache.size}
+				• Channels: ${this.client.channels.cache.size}
 			`,
 				true,
 			)
@@ -44,7 +44,7 @@ export default class StatsCommand extends Command {
 				true,
 			)
 			.setThumbnail(this.client.user?.displayAvatarURL() ?? '')
-			.setFooter(`© 2018-2019 ${this.client.users.get(this.client.config.owner ?? '')?.tag}`);
+			.setFooter(`© 2018-2019 ${this.client.users.cache.get(this.client.config.owner ?? '')?.tag}`);
 
 		return message.util?.send(embed);
 	}

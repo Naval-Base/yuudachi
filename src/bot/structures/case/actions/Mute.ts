@@ -17,7 +17,7 @@ export default class MuteAction extends Action {
 		}
 		const guild = this.message.guild!;
 		const staff = this.client.settings.get(guild, SETTINGS.MOD_ROLE);
-		if (this.member.roles.has(staff ?? '')) {
+		if (this.member.roles.cache.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
@@ -97,7 +97,7 @@ export default class MuteAction extends Action {
 					})
 				).setColor(this.color);
 				try {
-					const modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
+					const modMessage = await (this.client.channels.cache.get(modLogChannel) as TextChannel).send(embed);
 					await graphQLClient.mutate({
 						mutation: GRAPHQL.MUTATION.LOG_CASE,
 						variables: {

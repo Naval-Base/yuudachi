@@ -45,7 +45,7 @@ export default class LaunchCybernukeCommand extends Command {
 
 		const memberCutoff = Date.now() - join * 60000;
 		const ageCutoff = Date.now() - age * 60000;
-		const members = guild.members.filter(
+		const members = guild.members.cache.filter(
 			member => (member.joinedTimestamp ?? 0) > memberCutoff && member.user.createdTimestamp > ageCutoff,
 		);
 
@@ -84,12 +84,14 @@ export default class LaunchCybernukeCommand extends Command {
 					Please contact them if you believe this ban to be in error.
 				`,
 					)
-					.catch(error => this.client.logger.error(error, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR }))
+					.catch((error: any) =>
+						this.client.logger.error(error, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR }),
+					)
 					.then(async () => member.ban({ days: 7, reason: 'Cybernuke!' }))
 					.then(() => {
 						fatalities.push(member);
 					})
-					.catch(err => {
+					.catch((err: any) => {
 						this.client.logger.error(err, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR });
 						survivors.push({
 							member,

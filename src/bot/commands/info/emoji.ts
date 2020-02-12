@@ -28,8 +28,8 @@ export default class EmojiInfoCommand extends Command {
 					type: async (message, content) => {
 						if (EMOJI_REGEX.test(content)) [, content] = EMOJI_REGEX.exec(content)!;
 						const guild = message.guild!;
-						if (!isNaN((content as unknown) as number)) return guild.emojis.get(content);
-						return guild.emojis.find(e => e.name === content) || emojis.find(content);
+						if (!isNaN((content as unknown) as number)) return guild.emojis.cache.get(content);
+						return guild.emojis.cache.find(e => e.name === content) || emojis.find(content);
 					},
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.INFO.EMOJI.PROMPT.START(message.author),

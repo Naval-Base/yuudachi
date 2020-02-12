@@ -11,7 +11,7 @@ export default class BanAction extends Action {
 
 	public async before() {
 		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE);
-		if (this.member instanceof GuildMember && this.member.roles.has(staff ?? '')) {
+		if (this.member instanceof GuildMember && this.member.roles.cache.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 

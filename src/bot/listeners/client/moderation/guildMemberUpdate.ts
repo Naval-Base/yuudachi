@@ -23,7 +23,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			if (this.client.caseHandler.cachedCases.delete(`${newMember.guild.id}:${newMember.id}:TAG`)) return;
 
 			const modRole = this.client.settings.get(newMember.guild, SETTINGS.MOD_ROLE);
-			if (modRole && newMember.roles.has(modRole)) return;
+			if (modRole && newMember.roles.cache.has(modRole)) return;
 			const muteRole = this.client.settings.get(newMember.guild, SETTINGS.MUTE_ROLE);
 			const restrictRoles = this.client.settings.get(newMember.guild, SETTINGS.RESTRICT_ROLES);
 			if (!muteRole || !restrictRoles) return;
@@ -46,9 +46,11 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 			)
 				return;
 			const modLogChannel = this.client.settings.get(newMember.guild, SETTINGS.MOD_LOG);
-			const role = newMember.roles.filter(r => r.id !== newMember.guild.id && !oldMember.roles.has(r.id)).first();
+			const role = newMember.roles.cache
+				.filter(r => r.id !== newMember.guild.id && !oldMember.roles.cache.has(r.id))
+				.first();
 			if (!role) {
-				if (oldMember.roles.has(muteRole) && !newMember.roles.has(muteRole)) {
+				if (oldMember.roles.cache.has(muteRole) && !newMember.roles.cache.has(muteRole)) {
 					const { data } = await graphQLClient.query<any, CasesInsertInput>({
 						query: GRAPHQL.QUERY.MUTE_MEMBER,
 						variables: {
@@ -79,7 +81,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 					action = ACTIONS.EMBED;
 					try {
 						if (newMember.guild.id === '222078108977594368') {
-							(newMember.guild.channels.get('222197033908436994') as TextChannel)?.send(newMember.toString(), {
+							(newMember.guild.channels.cache.get('222197033908436994') as TextChannel)?.send(newMember.toString(), {
 								files: [MESSAGES.ACTIONS.EMBED.WOOSH],
 							});
 						}
@@ -119,7 +121,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 						nsfw: true,
 					})
 				).setColor(COLORS[color]);
-				modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
+				modMessage = await (this.client.channels.cache.get(modLogChannel) as TextChannel).send(embed);
 			}
 
 			await this.client.caseHandler.create({

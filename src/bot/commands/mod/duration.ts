@@ -76,7 +76,7 @@ export default class DurationCommand extends Command {
 		if (modLogChannel) {
 			let caseEmbed;
 			if (dbCase.message)
-				caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
+				caseEmbed = await (this.client.channels.cache.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_MESSAGE);
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (dbCase.actionDuration) {

@@ -77,7 +77,8 @@ export default class TagEditCommand extends Command {
 			content,
 		}: { tag: Tags; hoist: boolean; unhoist: boolean; template: boolean; untemplate: boolean; content: string },
 	) {
-		const staffRole = message.member?.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE)) ?? false;
+		const staffRole =
+			message.member?.roles.cache.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE)) ?? false;
 		if (tag.user !== message.author.id && !staffRole) {
 			return message.util?.reply(MESSAGES.COMMANDS.TAGS.EDIT.OWN_TAG);
 		}

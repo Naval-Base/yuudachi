@@ -63,7 +63,7 @@ export default class DocsCommand extends Command {
 		if (defaultDocs) {
 			const staff = this.client.settings.get(guild, SETTINGS.MOD_ROLE);
 			if (!staff) return;
-			const staffRole = message.member?.roles.has(staff);
+			const staffRole = message.member?.roles.cache.has(staff);
 			if (!staffRole) return message.util?.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.FAILURE);
 			this.client.settings.set(guild, SETTINGS.DEFAULT_DOCS, defaultDocs);
 			return message.util?.reply(MESSAGES.COMMANDS.DOCS.DOCS.DEFAULT_DOCS.SUCCESS(defaultDocs));

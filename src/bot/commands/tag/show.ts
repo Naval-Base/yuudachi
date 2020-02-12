@@ -33,7 +33,7 @@ export default class TagShowCommand extends Command {
 		const guild = message.guild!;
 		const restrictedRoles = this.client.settings.get(guild, SETTINGS.RESTRICT_ROLES);
 		if (restrictedRoles) {
-			if (message.member?.roles.has(restrictedRoles.TAG)) return;
+			if (message.member?.roles.cache.has(restrictedRoles.TAG)) return;
 		}
 		name = Util.cleanContent(name, message);
 		const { data } = await graphQLClient.query<any, TagsInsertInput>({

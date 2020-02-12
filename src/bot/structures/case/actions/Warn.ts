@@ -14,7 +14,7 @@ export default class WarnAction extends Action {
 			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
 		}
 		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE);
-		if (this.member.roles.has(staff ?? '')) {
+		if (this.member.roles.cache.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 		this.client.caseHandler.cachedCases.add(this.keys as string);

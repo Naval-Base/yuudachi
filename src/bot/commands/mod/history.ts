@@ -32,7 +32,7 @@ export default class HistoryCommand extends Command {
 	}
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
-		const staffRole = message.member?.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
+		const staffRole = message.member?.roles.cache.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
 		if (!staffRole && message.author.id !== member.id) {
 			return message.reply(MESSAGES.COMMANDS.MOD.HISTORY.NO_PERMISSION);
 		}

@@ -18,8 +18,8 @@ export default class LockdownScheduler {
 	}
 
 	public async add(lockdown: Omit<Lockdowns, 'id' | 'duration'>, duration: number, author: User) {
-		const chan = this.client.channels.get(lockdown.channel) as TextChannel;
-		this.client.logger.info(`Lockdown on ${this.client.guilds.get(lockdown.guild)} in ${chan}`, {
+		const chan = this.client.channels.cache.get(lockdown.channel) as TextChannel;
+		this.client.logger.info(`Lockdown on ${this.client.guilds.cache.get(lockdown.guild)} in ${chan}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.LOCKDOWN,
 		});
@@ -59,8 +59,8 @@ export default class LockdownScheduler {
 		if (PRODUCTION) lock = data.lockdowns[0];
 		else lock = data.lockdownsStaging[0];
 
-		const chan = this.client.channels.get(lockdown.channel) as TextChannel;
-		this.client.logger.info(`Lockdown removed on ${this.client.guilds.get(lock.guild)} in ${chan}`, {
+		const chan = this.client.channels.cache.get(lockdown.channel) as TextChannel;
+		this.client.logger.info(`Lockdown removed on ${this.client.guilds.cache.get(lock.guild)} in ${chan}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.LOCKDOWN,
 		});

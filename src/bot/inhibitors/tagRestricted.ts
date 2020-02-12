@@ -18,7 +18,7 @@ export default class TagRestrictedInhibitor extends Inhibitor {
 		if (!restrictedRoles) {
 			return false;
 		}
-		const hasRestrictedRole = message.member?.roles.has(restrictedRoles.TAG);
+		const hasRestrictedRole = message.member?.roles.cache.has(restrictedRoles.TAG);
 		if (hasRestrictedRole) {
 			return true;
 		}

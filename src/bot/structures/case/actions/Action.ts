@@ -159,7 +159,7 @@ export default abstract class Action {
 					})
 				).setColor(this.color);
 				try {
-					const modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
+					const modMessage = await (this.client.channels.cache.get(modLogChannel) as TextChannel).send(embed);
 					await graphQLClient.mutate<any, CasesInsertInput>({
 						mutation: GRAPHQL.MUTATION.LOG_CASE,
 						variables: {

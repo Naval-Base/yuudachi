@@ -18,7 +18,7 @@ export default class StaffRoleInhibitor extends Inhibitor {
 		if (!staffRole) {
 			return true;
 		}
-		const hasStaffRole = message.member?.roles.has(staffRole);
+		const hasStaffRole = message.member?.roles.cache.has(staffRole);
 		if (!hasStaffRole) {
 			return true;
 		}

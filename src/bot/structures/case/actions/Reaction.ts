@@ -15,7 +15,7 @@ export default class ReactionAction extends Action {
 		}
 		const guild = this.message.guild!;
 		const staff = this.client.settings.get(guild, SETTINGS.MOD_ROLE);
-		if (this.member.roles.has(staff ?? '')) {
+		if (this.member.roles.cache.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 

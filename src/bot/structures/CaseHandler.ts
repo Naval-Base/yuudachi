@@ -107,7 +107,7 @@ export default class CaseHandler {
 		const muteRole = this.client.settings.get(guild, SETTINGS.MUTE_ROLE)!;
 
 		if (channel) {
-			const chan = this.client.channels.get(channel) as TextChannel;
+			const chan = this.client.channels.cache.get(channel) as TextChannel;
 			try {
 				const msgToDelete = await chan.messages.fetch(cs.message ?? '');
 				await msgToDelete.delete();
@@ -314,7 +314,7 @@ export default class CaseHandler {
 		let newCaseNum = caseNum;
 
 		for (const c of cases) {
-			const chan = this.client.channels.get(channel) as TextChannel;
+			const chan = this.client.channels.cache.get(channel) as TextChannel;
 			try {
 				const msg = await chan.messages.fetch(c.message ?? '');
 				await msg.edit(new MessageEmbed(msg.embeds[0]).setFooter(`Case ${newCaseNum}`));

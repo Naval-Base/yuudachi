@@ -16,12 +16,12 @@ export default class MuteScheduler {
 	}
 
 	public async add(mute: Omit<Cases, 'id' | 'createdAt'>, reschedule = false) {
-		this.client.logger.info(`Muted ${mute.targetTag} on ${this.client.guilds.get(mute.guild)}`, {
+		this.client.logger.info(`Muted ${mute.targetTag} on ${this.client.guilds.cache.get(mute.guild)}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.MUTE,
 		});
 		if (reschedule)
-			this.client.logger.info(`Rescheduled mute for ${mute.targetTag} on ${this.client.guilds.get(mute.guild)}`, {
+			this.client.logger.info(`Rescheduled mute for ${mute.targetTag} on ${this.client.guilds.cache.get(mute.guild)}`, {
 				topic: TOPICS.DISCORD_AKAIRO,
 				event: EVENTS.MUTE,
 			});
@@ -53,11 +53,11 @@ export default class MuteScheduler {
 	}
 
 	public async cancel(mute: Pick<Cases, 'id' | 'guild' | 'targetId' | 'targetTag'>) {
-		this.client.logger.info(`Unmuted ${mute.targetTag} on ${this.client.guilds.get(mute.guild)}`, {
+		this.client.logger.info(`Unmuted ${mute.targetTag} on ${this.client.guilds.cache.get(mute.guild)}`, {
 			topic: TOPICS.DISCORD_AKAIRO,
 			event: EVENTS.MUTE,
 		});
-		const guild = this.client.guilds.get(mute.guild)!;
+		const guild = this.client.guilds.cache.get(mute.guild)!;
 		const muteRole = this.client.settings.get(guild, SETTINGS.MUTE_ROLE)!;
 		let member;
 		try {

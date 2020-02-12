@@ -107,7 +107,7 @@ export default class ReasonCommand extends Command {
 
 			const modLogChannel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 			if (modLogChannel) {
-				const caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(
+				const caseEmbed = await (this.client.channels.cache.get(modLogChannel) as TextChannel).messages.fetch(
 					dbCase.message ?? '',
 				);
 				if (!caseEmbed) return message.reply(MESSAGES.COMMANDS.MOD.REASON.NO_MESSAGE);

@@ -23,7 +23,7 @@ export default class GuildMemberAddMemberLogListener extends Listener {
 			if (memberlog.MENTION) {
 				embed.setDescription(member);
 			}
-			return (this.client.channels.get(memberlog.ID) as TextChannel).send(embed);
+			return (this.client.channels.cache.get(memberlog.ID) as TextChannel).send(embed);
 		}
 	}
 }

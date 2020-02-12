@@ -59,7 +59,7 @@ export default class TagAddCommand extends Command {
 		if (content?.length >= 1950) {
 			return message.util?.reply(MESSAGES.COMMANDS.TAGS.ADD.TOO_LONG);
 		}
-		const staffRole = message.member?.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
+		const staffRole = message.member?.roles.cache.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
 		if (!staffRole || !template) {
 			content = Util.cleanContent(content, message);
 			if (message.attachments.first()) content += `\n${message.attachments.first()!.url}`;
