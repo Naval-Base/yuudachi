@@ -72,6 +72,9 @@ export default class DocsCommand extends Command {
 		const q = query.split(' ');
 		const docs = this.client.settings.get(guild, SETTINGS.DEFAULT_DOCS, 'stable');
 		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop()! : docs;
+		if (!q.length) {
+			return message.util?.reply(MESSAGES.COMMANDS.DOCS.DOCS.FAILURE);
+		}
 		if (source === '11.5-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
 		}
