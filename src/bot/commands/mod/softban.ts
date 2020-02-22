@@ -1,7 +1,7 @@
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions } from 'discord.js';
 import SoftbanAction from '../../structures/case/actions/Softban';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 
 export default class SoftbanCommand extends Command {
 	public constructor() {
@@ -10,7 +10,7 @@ export default class SoftbanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.SOFTBAN.DESCRIPTION,
-				usage: '<member> [--ref=number] [...reason]',
+				usage: '<member> [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no'],
 			},
 			channel: 'guild',
@@ -39,6 +39,11 @@ export default class SoftbanCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
 					match: 'rest',
 					type: 'string',
@@ -48,21 +53,19 @@ export default class SoftbanCommand extends Command {
 		});
 	}
 
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
-	}
-
 	public async exec(
 		message: Message,
-		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
+		{
+			member,
+			days,
+			ref,
+			nsfw,
+			reason,
+		}: { member: GuildMember; days: number; ref: number; nsfw: boolean; reason: string },
 	) {
-		const keys = [`${message.guild!.id}:${member.id}:BAN`, `${message.guild!.id}:${member.id}:UNBAN`];
-		message.guild!.caseQueue.add(async () =>
+		const guild = message.guild!;
+		const keys = [`${guild.id}:${member.id}:BAN`, `${guild.id}:${member.id}:UNBAN`];
+		guild.caseQueue.add(async () =>
 			new SoftbanAction({
 				message,
 				member,
@@ -70,6 +73,7 @@ export default class SoftbanCommand extends Command {
 				reason,
 				ref,
 				days,
+				nsfw,
 			}).commit(),
 		);
 	}

@@ -23,7 +23,7 @@ export default class UserInfoCommand extends Command {
 					id: 'member',
 					match: 'content',
 					type: 'member',
-					default: (message: Message) => message.member!,
+					default: (message: Message) => message.member,
 				},
 			],
 		});
@@ -38,8 +38,8 @@ export default class UserInfoCommand extends Command {
 				'❯ Member Details',
 				stripIndents`
 				${member.nickname == undefined /* eslint-disable-line */ ? '• No nickname' : ` • Nickname: ${member.nickname}`}
-				• Roles: ${member.roles.map(roles => `\`${roles.name}\``).join(' ')}
-				• Joined at: ${moment.utc(member.joinedAt!).format('YYYY/MM/DD hh:mm:ss')}
+				• Roles: ${member.roles.cache.map(roles => `\`${roles.name}\``).join(' ')}
+				• Joined at: ${moment.utc(member.joinedAt ?? 0).format('YYYY/MM/DD hh:mm:ss')}
 			`,
 			)
 			.addField(
@@ -49,11 +49,11 @@ export default class UserInfoCommand extends Command {
 				• Username: ${member.user.tag}
 				• Created at: ${moment.utc(user.createdAt).format('YYYY/MM/DD hh:mm:ss')}${user.bot ? '\n• Is a bot account' : ''}
 				• Status: ${user.presence.status.toUpperCase()}
-				• Activity: ${user.presence.activity ? user.presence.activity.name : 'None'}
+				• Activity: ${user.presence.activities?.[0]?.name ?? 'None'}
 			`,
 			)
 			.setThumbnail(user.displayAvatarURL());
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

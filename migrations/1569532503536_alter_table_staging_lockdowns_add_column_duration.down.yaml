@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "staging"."lockdowns" DROP COLUMN "duration";
-  type: run_sql

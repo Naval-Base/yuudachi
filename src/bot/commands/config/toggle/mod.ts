@@ -16,13 +16,14 @@ export default class ToggleModerationCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const moderation = this.client.settings.get(message.guild!, SETTINGS.MODERATION);
+		const guild = message.guild!;
+		const moderation = this.client.settings.get(guild, SETTINGS.MODERATION);
 		if (moderation) {
-			this.client.settings.set(message.guild!, SETTINGS.MODERATION, false);
-			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.MOD.REPLY_DEACTIVATED);
+			this.client.settings.set(guild, SETTINGS.MODERATION, false);
+			return message.util?.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.MOD.REPLY_DEACTIVATED);
 		}
-		this.client.settings.set(message.guild!, SETTINGS.MODERATION, true);
+		this.client.settings.set(guild, SETTINGS.MODERATION, true);
 
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.MOD.REPLY_ACTIVATED);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.MOD.REPLY_ACTIVATED);
 	}
 }

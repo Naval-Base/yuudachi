@@ -26,6 +26,6 @@ export default class SetConfigCasesCommand extends Command {
 
 	public async exec(message: Message, { cases }: { cases: number }) {
 		this.client.settings.set(message.guild!, SETTINGS.CASES, cases);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.CASES.REPLY(cases));
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.SET.CASES.REPLY(cases));
 	}
 }

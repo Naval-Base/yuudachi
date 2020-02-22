@@ -9,10 +9,11 @@ export const graphQLClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	// @ts-ignore
 	link: new HttpLink({
-		uri: process.env.GRAPHQL_ENDPOINT!,
+		uri: process.env.GRAPHQL_ENDPOINT,
 		headers: {
-			'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET!,
+			'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET,
 		},
+		// @ts-ignore
 		fetch,
 	}),
 	defaultOptions: {
@@ -26,12 +27,12 @@ export const graphQLClient = new ApolloClient({
 });
 
 export const GRAPHQL = {
-	ENDPOINT: process.env.GRAPHQL_ENDPOINT!,
+	ENDPOINT: process.env.GRAPHQL_ENDPOINT,
 
 	QUERY: {
 		SETTINGS: gql`
 			query {
-				${PRODUCTION ? '' : 'staging_'}settings {
+				settings${PRODUCTION ? '' : 'Staging'} {
 					guild
 					settings
 				}
@@ -39,33 +40,35 @@ export const GRAPHQL = {
 		`,
 
 		CASES: gql`
-			query($guild: String!, $case_id: Int!) {
-				${PRODUCTION ? '' : 'staging_'}cases(where: {
+			query($guild: String!, $caseId: [Int!]!) {
+				cases${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
-					case_id: { _eq: $case_id }
+					caseId: { _in: $caseId }
 				}) {
 					action
-					action_duration
-					case_id
-					created_at
+					actionDuration
+					caseId
+					createdAt
+					guild
 					id
 					message
-					mod_id
-					mod_tag
-					target_id
-					target_tag
+					muteMessage
+					modId
+					modTag
+					targetId
+					targetTag
 					reason
-					ref_id
+					refId
 				}
 			}
 		`,
 
 		LOG_CASE: gql`
-			query($guild: String!, $case_id: Int!) {
-				${PRODUCTION ? '' : 'staging_'}cases(where: {
+			query($guild: String!, $caseId: Int!) {
+				cases${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
-					case_id: { _eq: $case_id }
-				}, order_by: { case_id: asc }) {
+					caseId: { _eq: $caseId }
+				}, order_by: { caseId: asc }) {
 					id
 					message
 				}
@@ -73,9 +76,9 @@ export const GRAPHQL = {
 		`,
 
 		HISTORY_CASE: gql`
-			query($target_id: String!) {
-				${PRODUCTION ? '' : 'staging_'}cases(where: {
-					target_id: { _eq: $target_id }
+			query($targetId: String!) {
+				cases${PRODUCTION ? '' : 'Staging'}(where: {
+					targetId: { _eq: $targetId }
 				}) {
 					action
 				}
@@ -83,11 +86,11 @@ export const GRAPHQL = {
 		`,
 
 		FIX_CASES: gql`
-			query($guild: String!, $case_id: Int!) {
-				${PRODUCTION ? '' : 'staging_'}cases(where: {
+			query($guild: String!, $caseId: Int!) {
+				cases${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
-					case_id: { _gt: $case_id }
-				}, order_by: { case_id: asc }) {
+					caseId: { _gt: $caseId }
+				}, order_by: { caseId: asc }) {
 					id
 					message
 				}
@@ -95,74 +98,76 @@ export const GRAPHQL = {
 		`,
 
 		MUTES: gql`
-			query($action_duration: timestamptz!, $action_processed: Boolean!) {
-				${PRODUCTION ? '' : 'staging_'}cases(where: {
-					action_duration: { _gt: $action_duration },
-					action_processed: { _eq: $action_processed }
+			query($actionDuration: timestamptz!, $actionProcessed: Boolean!) {
+				cases${PRODUCTION ? '' : 'Staging'}(where: {
+					actionDuration: { _gt: $actionDuration },
+					actionProcessed: { _eq: $actionProcessed }
 				}) {
-					action_duration
+					actionDuration
 					guild
 					id
-					target_id
-					target_tag
+					targetId
+					targetTag
 				}
 			}
 		`,
 
 		MUTE_DURATION: gql`
-			query($guild: String!, $case_id: Int!, $action: Int!, $action_processed: Boolean!) {
-				${PRODUCTION ? '' : 'staging_'}cases(where: {
+			query($guild: String!, $caseId: Int!, $action: Int!, $actionProcessed: Boolean!) {
+				cases${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
-					case_id: { _eq: $case_id },
+					caseId: { _eq: $caseId },
 					action: { _eq: $action },
-					action_processed: { _eq: $action_processed }
+					actionProcessed: { _eq: $actionProcessed }
 				}) {
 					action
-					action_duration
-					action_processed
-					case_id
-					created_at
+					actionDuration
+					actionProcessed
+					caseId
+					createdAt
 					guild
 					id
 					message
-					mod_id
-					mod_tag
+					muteMessage
+					modId
+					modTag
 					reason
-					ref_id
-					target_id
-					target_tag
+					refId
+					targetId
+					targetTag
 				}
 			}
 		`,
 
 		MUTE_MEMBER: gql`
-			query($guild: String!, $target_id: String!, $action_processed: Boolean!) {
-				${PRODUCTION ? '' : 'staging_'}cases(where: {
+			query($guild: String!, $targetId: String!, $actionProcessed: Boolean!) {
+				cases${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
-					target_id: { _eq: $target_id }
-					action_processed: { _eq: $action_processed },
+					targetId: { _eq: $targetId },
+					actionProcessed: { _eq: $actionProcessed },
 				}) {
 					action
-					action_duration
-					action_processed
-					case_id
-					created_at
+					actionDuration
+					actionProcessed
+					caseId
+					createdAt
 					guild
 					id
 					message
-					mod_id
-					mod_tag
+					muteMessage
+					modId
+					modTag
 					reason
-					ref_id
-					target_id
-					target_tag
+					refId
+					targetId
+					targetTag
 				}
 			}
 		`,
 
 		LOCKDOWNS_DURATION: gql`
 			query($duration: timestamptz!) {
-				${PRODUCTION ? '' : 'staging_'}lockdowns(where: {
+				lockdowns${PRODUCTION ? '' : 'Staging'}(where: {
 					duration: { _gt: $duration }
 				}) {
 					channel
@@ -175,7 +180,7 @@ export const GRAPHQL = {
 
 		LOCKDOWNS_CHANNEL: gql`
 			query($channel: String!) {
-				${PRODUCTION ? '' : 'staging_'}lockdowns(where: {
+				lockdowns${PRODUCTION ? '' : 'Staging'}(where: {
 					channel: { _eq: $channel }
 				}) {
 					channel
@@ -188,7 +193,7 @@ export const GRAPHQL = {
 
 		ROLE_STATES: gql`
 			query($guild: String!, $member: String!) {
-				${PRODUCTION ? '' : 'staging_'}role_states(where: {
+				roleStates${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
 					member: { _eq: $member }
 				}) {
@@ -199,12 +204,13 @@ export const GRAPHQL = {
 
 		TAGS: gql`
 			query($guild: String!) {
-				${PRODUCTION ? '' : 'staging_'}tags(where: {
+				tags${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild }
 				}) {
 					content
 					hoisted
 					name
+					templated
 					user
 				}
 			}
@@ -212,13 +218,14 @@ export const GRAPHQL = {
 
 		TAGS_MEMBER: gql`
 			query($guild: String!, $user: String!) {
-				${PRODUCTION ? '' : 'staging_'}tags(where: {
+				tags${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
 					user: { _eq: $user }
 				}) {
 					content
 					hoisted
 					name
+					templated
 					user
 				}
 			}
@@ -226,17 +233,18 @@ export const GRAPHQL = {
 
 		TAGS_TYPE: gql`
 			query($guild: String!) {
-				${PRODUCTION ? '' : 'staging_'}tags(where: {
+				tags${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild }
 				}) {
 					aliases
 					content
-					created_at
+					createdAt
 					guild
 					id
-					last_modified
+					lastModified
 					name
-					updated_at
+					templated
+					updatedAt
 					user
 					uses
 				}
@@ -247,7 +255,7 @@ export const GRAPHQL = {
 	MUTATION: {
 		UPDATE_SETTINGS: gql`
 			mutation($guild: String!, $settings: jsonb!) {
-				insert${PRODUCTION ? '' : '_staging'}_settings(
+				insertSettings${PRODUCTION ? '' : 'Staging'}(
 					objects: { guild: $guild, settings: $settings },
 					on_conflict: { constraint: settings_pkey, update_columns: settings }
 				) {
@@ -261,7 +269,9 @@ export const GRAPHQL = {
 
 		DELETE_SETTINGS: gql`
 			mutation($guild: String!) {
-				delete${PRODUCTION ? '' : '_staging'}_settings(where: { guild: { _eq: $guild } }) {
+				deleteSettings${PRODUCTION ? '' : 'Staging'}(where: {
+					guild: { _eq: $guild } }
+				) {
 					returning {
 						guild
 						settings
@@ -272,7 +282,7 @@ export const GRAPHQL = {
 
 		INSERT_ROLE_STATE: gql`
 			mutation($objects: [${PRODUCTION ? '' : 'staging_'}role_states_insert_input!]!) {
-				insert${PRODUCTION ? '' : '_staging'}_role_states(objects: $objects) {
+				insertRoleStates${PRODUCTION ? '' : 'Staging'}(objects: $objects) {
 					affected_rows
 				}
 			}
@@ -280,7 +290,7 @@ export const GRAPHQL = {
 
 		DELETE_ROLE_STATE: gql`
 			mutation($guild: String!) {
-				delete${PRODUCTION ? '' : '_staging'}_role_states(where: {
+				deleteRoleStates${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild }
 				}) {
 					affected_rows
@@ -290,7 +300,7 @@ export const GRAPHQL = {
 
 		DELETE_MEMBER_ROLE_STATE: gql`
 			mutation($guild: String!, $member: String!) {
-				delete${PRODUCTION ? '' : '_staging'}_role_states(where: {
+				deleteRoleStates${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild },
 					member: { _eq: $member }
 				}) {
@@ -301,7 +311,7 @@ export const GRAPHQL = {
 
 		UPDATE_ROLE_STATE: gql`
 			mutation($guild: String!, $member: String!, $roles: _text!) {
-				insert${PRODUCTION ? '' : '_staging'}_role_states(
+				insertRoleStates${PRODUCTION ? '' : 'Staging'}(
 					objects: { guild: $guild, member: $member, roles: $roles },
 					on_conflict: { constraint: role_states_guild_member_key, update_columns: roles }
 				) {
@@ -313,47 +323,50 @@ export const GRAPHQL = {
 		INSERT_CASES: gql`
 			mutation(
 				$action: Int!,
-				$action_duration: timestamptz,
-				$action_processed: Boolean,
-				$case_id: Int!,
+				$actionDuration: timestamptz,
+				$actionProcessed: Boolean,
+				$caseId: Int!,
 				$guild: String!,
 				$message: String,
-				$mod_id: String,
-				$mod_tag: String,
+				$muteMessage: String,
+				$modId: String,
+				$modTag: String,
 				$reason: String,
-				$ref_id: Int,
-				$target_id: String,
-				$target_tag: String
+				$refId: Int,
+				$targetId: String,
+				$targetTag: String
 			) {
-				insert${PRODUCTION ? '' : '_staging'}_cases(objects: {
+				insertCases${PRODUCTION ? '' : 'Staging'}(objects: {
 					action: $action,
-					action_duration: $action_duration
-					action_processed: $action_processed
-					case_id: $case_id,
+					actionDuration: $actionDuration,
+					actionProcessed: $actionProcessed,
+					caseId: $caseId,
 					guild: $guild,
-					message: $message
-					mod_id: $mod_id,
-					mod_tag: $mod_tag,
-					reason: $reason
-					ref_id: $ref_id
-					target_id: $target_id,
-					target_tag: $target_tag
+					message: $message,
+					muteMessage: $muteMessage,
+					modId: $modId,
+					modTag: $modTag,
+					reason: $reason,
+					refId: $refId,
+					targetId: $targetId,
+					targetTag: $targetTag
 				}) {
 					returning {
 						action
-						action_duration
-						action_processed
-						case_id
-						created_at
+						actionDuration
+						actionProcessed
+						caseId
+						createdAt
 						guild
 						id
 						message
-						mod_id
-						mod_tag
+						muteMessage
+						modId
+						modTag
 						reason
-						ref_id
-						target_id
-						target_tag
+						refId
+						targetId
+						targetTag
 					}
 				}
 			}
@@ -361,7 +374,7 @@ export const GRAPHQL = {
 
 		LOG_CASE: gql`
 			mutation($id: uuid!, $message: String!) {
-				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+				updateCases${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
 				}, _set: { message: $message }) {
 					affected_rows
@@ -370,10 +383,10 @@ export const GRAPHQL = {
 		`,
 
 		FIX_CASE: gql`
-			mutation($id: uuid!, $case_id: Int!) {
-				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+			mutation($id: uuid!, $caseId: Int!) {
+				updateCases${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
-				}, _set: { case_id: $case_id }) {
+				}, _set: { caseId: $caseId }) {
 					affected_rows
 				}
 			}
@@ -381,7 +394,7 @@ export const GRAPHQL = {
 
 		DELETE_CASE: gql`
 			mutation($id: uuid!) {
-				delete${PRODUCTION ? '' : '_staging'}_cases(where: {
+				deleteCases${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
 				}) {
 					affected_rows
@@ -390,45 +403,45 @@ export const GRAPHQL = {
 		`,
 
 		CANCEL_MUTE: gql`
-			mutation($id: uuid!, $action_processed: Boolean!) {
-				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+			mutation($id: uuid!, $actionProcessed: Boolean!) {
+				updateCases${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
-				}, _set: { action_processed: $action_processed }) {
+				}, _set: { actionProcessed: $actionProcessed }) {
 					affected_rows
 				}
 			}
 		`,
 
 		UPDATE_DURATION_MUTE: gql`
-			mutation($id: uuid!, $action_duration: timestamptz!) {
-				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+			mutation($id: uuid!, $actionDuration: timestamptz!) {
+				updateCases${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
-				}, _set: { action_duration: $action_duration }) {
+				}, _set: { actionDuration: $actionDuration }) {
 					returning {
 						action
-						action_duration
-						action_processed
-						case_id
-						created_at
+						actionDuration
+						actionProcessed
+						caseId
+						createdAt
 						guild
 						id
 						message
-						mod_id
-						mod_tag
+						modId
+						modTag
 						reason
-						ref_id
-						target_id
-						target_tag
+						refId
+						targetId
+						targetTag
 					}
 				}
 			}
 		`,
 
 		UPDATE_REASON: gql`
-			mutation($id: uuid!, $mod_id: String!, $mod_tag: String!, $reason: String!) {
-				update${PRODUCTION ? '' : '_staging'}_cases(where: {
+			mutation($id: uuid!, $modId: String!, $modTag: String!, $reason: String!) {
+				updateCases${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
-				}, _set: { mod_id: $mod_id, mod_tag: $mod_tag, reason: $reason }) {
+				}, _set: { modId: $modId, modTag: $modTag, reason: $reason }) {
 					affected_rows
 				}
 			}
@@ -436,7 +449,7 @@ export const GRAPHQL = {
 
 		INSERT_LOCKDOWNS: gql`
 			mutation($guild: String!, $channel: String!, $duration: timestamptz!) {
-				insert${PRODUCTION ? '' : '_staging'}_lockdowns(objects: {
+				insertLockdowns${PRODUCTION ? '' : 'Staging'}(objects: {
 					guild: $guild,
 					channel: $channel,
 					duration: $duration
@@ -453,7 +466,7 @@ export const GRAPHQL = {
 
 		CANCEL_LOCKDOWN: gql`
 			mutation($id: uuid!) {
-				delete${PRODUCTION ? '' : '_staging'}_lockdowns(where: {
+				deleteLockdowns${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
 				}) {
 					affected_rows
@@ -462,12 +475,13 @@ export const GRAPHQL = {
 		`,
 
 		INSERT_TAG: gql`
-			mutation($guild: String!, $user: String!, $name: String!, $hoisted: Boolean, $content: String!) {
-				insert${PRODUCTION ? '' : '_staging'}_tags(objects: {
+			mutation($guild: String!, $user: String!, $name: String!, $hoisted: Boolean, $templated: Boolean, $content: String!) {
+				insertTags${PRODUCTION ? '' : 'Staging'}(objects: {
 					guild: $guild,
 					user: $user,
 					name: $name,
 					hoisted: $hoisted,
+					templated: $templated,
 					content: $content
 				}) {
 					affected_rows
@@ -476,30 +490,30 @@ export const GRAPHQL = {
 		`,
 
 		UPDATE_TAG_ALIASES: gql`
-			mutation($id: uuid!, $aliases: _text!, $last_modified: String!) {
-				update${PRODUCTION ? '' : '_staging'}_tags(where: {
+			mutation($id: uuid!, $aliases: _text!, $lastModified: String!) {
+				updateTags${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
-				}, _set: { aliases: $aliases, last_modified: $last_modified }) {
-					affected_rows
-				}
-			}
-		`,
-
-		UPDATE_TAG_HOIST: gql`
-			mutation($id: uuid!, $hoisted: Boolean, $last_modified: String!) {
-				update${PRODUCTION ? '' : '_staging'}_tags(where: {
-					id: { _eq: $id }
-				}, _set: { hoisted: $hoisted, last_modified: $last_modified }) {
+				}, _set: { aliases: $aliases, lastModified: $lastModified }) {
 					affected_rows
 				}
 			}
 		`,
 
 		UPDATE_TAG_CONTENT: gql`
-			mutation($id: uuid!, $hoisted: Boolean, $content: String!, $last_modified: String!) {
-				update${PRODUCTION ? '' : '_staging'}_tags(where: {
+			mutation($id: uuid!, $hoisted: Boolean, $templated: Boolean, $content: String!, $lastModified: String!) {
+				updateTags${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
-				}, _set: { hoisted: $hoisted, content: $content, last_modified: $last_modified }) {
+				}, _set: { hoisted: $hoisted, templated: $templated, content: $content, lastModified: $lastModified }) {
+					affected_rows
+				}
+			}
+		`,
+
+		UPDATE_TAG_HOIST: gql`
+			mutation($id: uuid!, $hoisted: Boolean, $templated: Boolean, $lastModified: String!) {
+				updateTags${PRODUCTION ? '' : 'Staging'}(where: {
+					id: { _eq: $id }
+				}, _set: { hoisted: $hoisted, templated: $templated, lastModified: $lastModified }) {
 					affected_rows
 				}
 			}
@@ -507,7 +521,7 @@ export const GRAPHQL = {
 
 		UPDATE_TAG_USAGE: gql`
 			mutation($id: uuid!, $uses: Int!) {
-				update${PRODUCTION ? '' : '_staging'}_tags(where: {
+				updateTags${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
 				}, _set: { uses: $uses }) {
 					affected_rows
@@ -517,7 +531,7 @@ export const GRAPHQL = {
 
 		DELETE_TAG: gql`
 			mutation($id: uuid!) {
-				delete${PRODUCTION ? '' : '_staging'}_tags(where: {
+				deleteTags${PRODUCTION ? '' : 'Staging'}(where: {
 					id: { _eq: $id }
 				}) {
 					affected_rows

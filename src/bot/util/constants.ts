@@ -1,5 +1,5 @@
 import { stripIndents } from 'common-tags';
-import { TextChannel, User } from 'discord.js';
+import { GuildMember, TextChannel, User } from 'discord.js';
 
 export const PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -568,7 +568,10 @@ export const MESSAGES = {
 					"I looked where I could, but I couldn't find a case with that Id, maybe look for something that actually exists next time!",
 				WRONG_MOD: "you'd be wrong in thinking I would let you fiddle with other peoples achievements!",
 				NO_MESSAGE: "looks like the message doesn't exist anymore!",
-				REPLY: (id: number) => `Successfully set reason for case **#${id}**`,
+				REPLY: (ids: number[]) =>
+					`Successfully set reason for ${
+						ids.length === 1 ? `case **#${ids[0]}**` : `cases **#${ids[0]}-#${ids[ids.length - 1]}**`
+					}`,
 			},
 
 			SOFTBAN: {
@@ -599,10 +602,10 @@ export const MESSAGES = {
 		TAGS: {
 			DESCRIPTION: stripIndents`Available methods:
 				 • show \`<tag>\`
-				 • add \`[--hoist/--pin] <tag> <content>\`
+				 • add \`[--hoist/--pin] [--template] <tag> <content>\`
 				 • alias \`<--add/--del> <tag> <tagalias>\`
 				 • del \`<tag>\`
-				 • edit \`[--hoist/--unhoist] <tag> <content>\`
+				 • edit \`[--hoist/--unhoist] [--template] <tag> <content>\`
 				 • source \`[--file] <tag>\`
 				 • info \`<tag>\`
 				 • search \`<tag>\`
@@ -679,8 +682,21 @@ export const MESSAGES = {
 				OWN_TAG: 'losers are only allowed to edit their own tags! Hah hah hah!',
 				TOO_LONG:
 					'you must still have water behind your ears to not realize that messages have a limit of 2000 characters!',
-				REPLY: (tag: string, hoist: boolean, staff: boolean) =>
-					`successfully edited **${tag}**${hoist && staff ? ' to be hoisted.' : '.'}`,
+				REPLY: (tag: string, hoist: boolean, template: boolean) => {
+					if (hoist && template) {
+						return `successfully edited **${tag}** to be hoisted and templated.`;
+					}
+
+					if (hoist) {
+						return `successfully edited **${tag}** to be hoisted.`;
+					}
+
+					if (template) {
+						return `successfully edited **${tag}** to be templated.`;
+					}
+
+					return `successfully edited **${tag}**.`;
+				},
 			},
 
 			INFO: {
@@ -840,8 +856,8 @@ export const MESSAGES = {
 		EMBED: {
 			AUDIT: (tag: string, cases: number) => `Embed restricted by ${tag} | Case #${cases}`,
 			ERROR: (error: string) => `there was an error embed restricting this member \`${error}\``,
-			PRE_REPLY: (tag: string) => `Embed restricting **${tag}**...`,
-			REPLY: (tag: string) => `Successfully embed restricted **${tag}**`,
+			REPLY: (member: GuildMember) => `Successfully embed restricted **${member}**`,
+			WOOSH: 'https://i.imgur.com/nDnv5YK.png',
 		},
 
 		EMOJI: {

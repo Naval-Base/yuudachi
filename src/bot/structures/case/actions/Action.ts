@@ -3,7 +3,7 @@ import { GuildMember, Message, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../../../client/YukikazeClient';
 import { ACTIONS, COLORS, PRODUCTION, SETTINGS } from '../../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../../util/graphQL';
-import { Cases } from '../../../util/graphQLTypes';
+import { Cases, CasesInsertInput } from '../../../util/graphQLTypes';
 
 export interface ActionData {
 	message: Message;
@@ -13,6 +13,7 @@ export interface ActionData {
 	ref?: number;
 	days?: number;
 	duration?: number;
+	nsfw?: boolean;
 }
 
 export default abstract class Action {
@@ -32,6 +33,8 @@ export default abstract class Action {
 
 	protected duration?: number;
 
+	protected nsfw?: boolean;
+
 	public constructor(protected action: ACTIONS, data: ActionData) {
 		this.client = data.message.client as YukikazeClient;
 		this.message = data.message;
@@ -41,6 +44,7 @@ export default abstract class Action {
 		this.ref = data.ref;
 		this.days = data.days;
 		this.duration = data.duration;
+		this.nsfw = data.nsfw;
 	}
 
 	protected get reason() {
@@ -101,9 +105,13 @@ export default abstract class Action {
 	}
 
 	public async commit() {
-		await this.before();
-		await this.exec();
-		await this.after();
+		try {
+			await this.before();
+			await this.exec();
+			await this.after();
+		} catch (error) {
+			this.message.channel.send(error.message);
+		}
 	}
 
 	public abstract async before(): Promise<boolean>;
@@ -111,43 +119,48 @@ export default abstract class Action {
 	public abstract async exec(): Promise<void>;
 
 	public async after() {
-		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0);
+		const guild = this.message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 		const memberTag = this.member instanceof User ? this.member.tag : this.member.user.tag;
 		await this.client.caseHandler.create({
-			guild: this.message.guild!.id,
-			case_id: totalCases,
-			target_id: this.member.id,
-			target_tag: memberTag,
-			mod_id: this.message.author!.id,
-			mod_tag: this.message.author!.tag,
+			guild: guild.id,
+			caseId: totalCases,
+			targetId: this.member.id,
+			targetTag: memberTag,
+			modId: this.message.author.id,
+			modTag: this.message.author.tag,
 			action: this.action,
 			reason: this.reason,
+			refId: this.ref,
 		});
 
-		const modLogChannel = this.client.settings.get(this.message.guild!, SETTINGS.MOD_LOG);
+		const modLogChannel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, CasesInsertInput>({
 				query: GRAPHQL.QUERY.LOG_CASE,
 				variables: {
-					guild: this.message.guild!.id,
-					case_id: totalCases,
+					guild: guild.id,
+					caseId: totalCases,
 				},
 			});
 			let dbCase: Pick<Cases, 'id' | 'message'>;
 			if (PRODUCTION) dbCase = data.cases[0];
-			else dbCase = data.staging_cases[0];
+			else dbCase = data.casesStaging[0];
 			if (dbCase) {
-				const embed = (await this.client.caseHandler.log({
-					member: this.member,
-					action: this.actionName,
-					caseNum: totalCases,
-					reason: this.reason,
-					message: this.message,
-					ref: this.ref,
-				})).setColor(this.color);
+				const embed = (
+					await this.client.caseHandler.log({
+						member: this.member,
+						action: this.actionName,
+						caseNum: totalCases,
+						reason: this.reason,
+						message: this.message,
+						ref: this.ref,
+						nsfw: this.nsfw,
+					})
+				).setColor(this.color);
 				try {
-					const modMessage = await (this.client.channels.get(modLogChannel) as TextChannel).send(embed);
-					await graphQLClient.mutate({
+					const modMessage = await (this.client.channels.cache.get(modLogChannel) as TextChannel).send(embed);
+					await graphQLClient.mutate<any, CasesInsertInput>({
 						mutation: GRAPHQL.MUTATION.LOG_CASE,
 						variables: {
 							id: dbCase.id,

@@ -30,10 +30,11 @@ export default class SetConfigMemberLogCommand extends Command {
 	}
 
 	public async exec(message: Message, { mention, channel }: { mention: boolean; channel: TextChannel }) {
-		const memberlog = this.client.settings.get(message.guild!, SETTINGS.MEMBER_LOG, { ID: '', MENTION: false });
+		const guild = message.guild!;
+		const memberlog = this.client.settings.get(guild, SETTINGS.MEMBER_LOG, { ID: '', MENTION: false });
 		memberlog.ID = channel.id;
 		if (mention) memberlog.MENTION = mention;
-		this.client.settings.set(message.guild!, SETTINGS.MEMBER_LOG, memberlog);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.MEMBER_LOG.REPLY(channel.name));
+		this.client.settings.set(guild, SETTINGS.MEMBER_LOG, memberlog);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.SET.MEMBER_LOG.REPLY(channel.name));
 	}
 }

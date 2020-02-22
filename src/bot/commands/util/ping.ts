@@ -15,9 +15,10 @@ export default class PingCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const msg = await message.util!.send('Pinging...');
+		const msg = await message.util?.send('Pinging...');
+		if (!msg) return null;
 
-		return message.util!.send(
+		return message.util?.send(
 			MESSAGES.COMMANDS.UTIL.PING.RESPONSES[Math.floor(Math.random() * MESSAGES.COMMANDS.UTIL.PING.RESPONSES.length)]
 				.replace(
 					'$(ping)',
@@ -29,5 +30,3 @@ export default class PingCommand extends Command {
 		);
 	}
 }
-
-module.exports = PingCommand;

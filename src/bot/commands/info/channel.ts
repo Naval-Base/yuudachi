@@ -37,13 +37,13 @@ export default class ChannelInfoCommand extends Command {
 				'❯ Info',
 				stripIndents`
 				• Type: ${channel.type}
-				• Topic ${channel.topic ? channel.topic : 'None'}
+				• Topic ${channel.topic || 'None'}
 				• NSFW: ${Boolean(channel.nsfw)}
 				• Creation Date: ${moment.utc(channel.createdAt).format('YYYY/MM/DD hh:mm:ss')}
 			`,
 			)
-			.setThumbnail(message.guild!.iconURL()!);
+			.setThumbnail(message.guild!.iconURL() ?? '');
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

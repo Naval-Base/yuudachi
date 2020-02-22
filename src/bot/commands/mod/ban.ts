@@ -1,7 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
-import { GuildMember, Message, Permissions } from 'discord.js';
+import { GuildMember, Message, Permissions, User } from 'discord.js';
 import BanAction from '../../structures/case/actions/Ban';
-import { MESSAGES, SETTINGS } from '../../util/constants';
+import { MESSAGES } from '../../util/constants';
 
 export default class BanCommand extends Command {
 	public constructor() {
@@ -10,7 +10,7 @@ export default class BanCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.BAN.DESCRIPTION,
-				usage: '<member> [--days=number] [--ref=number] [...reason]',
+				usage: '<member> [--days=number] [--ref=number] [--nsfw] [...reason]',
 				examples: ['@Crawl', '@Crawl dumb', '@Souji --days=1 no u', '@Souji --ref=1234 just no'],
 			},
 			channel: 'guild',
@@ -19,10 +19,9 @@ export default class BanCommand extends Command {
 			args: [
 				{
 					id: 'member',
-					type: Argument.union('member', async (_, phrase) => {
-						const m = await this.client.users.fetch(phrase);
-						if (m) return { id: m.id, user: m };
-						return null;
+					type: Argument.union('member', 'user', async (_, phrase) => {
+						const u = await this.client.users.fetch(phrase);
+						return u || null;
 					}),
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.MOD.BAN.PROMPT.START(message.author),
@@ -43,30 +42,33 @@ export default class BanCommand extends Command {
 					flag: ['--ref=', '-r='],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'reason',
-					match: 'rest',
 					type: 'string',
+					match: 'rest',
 					default: '',
 				},
 			],
 		});
 	}
 
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
-	}
-
 	public async exec(
 		message: Message,
-		{ member, days, ref, reason }: { member: GuildMember; days: number; ref: number; reason: string },
+		{
+			member,
+			days,
+			ref,
+			nsfw,
+			reason,
+		}: { member: GuildMember | User; days: number; ref: number; nsfw: boolean; reason: string },
 	) {
-		const key = `${message.guild!.id}:${member.id}:BAN`;
-		message.guild!.caseQueue.add(async () =>
+		const guild = message.guild!;
+		const key = `${guild.id}:${member.id}:BAN`;
+		guild.caseQueue.add(async () =>
 			new BanAction({
 				message,
 				member,
@@ -74,6 +76,7 @@ export default class BanCommand extends Command {
 				reason,
 				ref,
 				days,
+				nsfw,
 			}).commit(),
 		);
 	}

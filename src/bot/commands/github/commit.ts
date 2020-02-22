@@ -32,9 +32,10 @@ export default class GitHubCommitCommand extends Command {
 
 	public async exec(message: Message, args: any) {
 		if (!GITHUB_API_KEY) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_API_KEY);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_API_KEY);
 		}
-		const repository = this.client.settings.get(message.guild!, SETTINGS.GITHUB_REPO);
+		const guild = message.guild!;
+		const repository = this.client.settings.get(guild, SETTINGS.GITHUB_REPO);
 		if (!repository) return message.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.NO_GITHUB_REPO);
 		const owner = repository.split('/')[0];
 		const repo = repository.split('/')[1];
@@ -46,18 +47,14 @@ export default class GitHubCommitCommand extends Command {
 			});
 			body = await res.json();
 		} catch (error) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
-		if (!body || !body.commit) {
-			return message.util!.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
+		if (!body?.commit) {
+			return message.util?.reply(MESSAGES.COMMANDS.GITHUB.COMMIT.FAILURE);
 		}
 		const embed = new MessageEmbed()
 			.setColor(3447003)
-			.setAuthor(
-				body.author ? (body.author.login ? body.author.login : 'Unknown') : 'Unknown',
-				body.author ? (body.author.avatar_url ? body.author.avatar_url : '') : '',
-				body.author ? (body.author.html_url ? body.author.html_url : '') : '',
-			)
+			.setAuthor(body.author?.login ?? 'Unknown', body.author?.avatar_url ?? '', body.author?.html_url ?? '')
 			.setTitle(body.commit.message.split('\n')[0])
 			.setURL(body.html_url)
 			.setDescription(
@@ -84,22 +81,23 @@ export default class GitHubCommitCommand extends Command {
 				body.committer ? `• [**${body.committer.login}**](${body.committer.html_url})` : 'Unknown',
 				true,
 			)
-			.setThumbnail(body.author ? body.author.avatar_url : '')
+			.setThumbnail(body.author?.avatar_url ?? '')
 			.setTimestamp(new Date(body.commit.author.date));
 
 		if (
 			!(message.channel as TextChannel)
-				.permissionsFor(message.guild!.me!)!
-				.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
+				.permissionsFor(guild.me ?? '')
+				?.has([Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.MANAGE_MESSAGES], false)
 		) {
-			return message.util!.send(embed);
+			return message.util?.send(embed);
 		}
-		const msg = await message.util!.send(embed);
+		const msg = await message.util?.send(embed);
+		if (!msg) return message;
 		msg.react('🗑');
 		let react;
 		try {
 			react = await msg.awaitReactions(
-				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author!.id,
+				(reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
 				{ max: 1, time: 10000, errors: ['time'] },
 			);
 		} catch (error) {
@@ -107,7 +105,7 @@ export default class GitHubCommitCommand extends Command {
 
 			return message;
 		}
-		react.first()!.message.delete();
+		react.first()?.message.delete();
 
 		return message;
 	}

@@ -17,6 +17,6 @@ export default class DeleteConfigGitHubRepositoryCommand extends Command {
 
 	public async exec(message: Message) {
 		this.client.settings.delete(message.guild!, SETTINGS.GITHUB_REPO);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.DELETE.REPO.REPLY);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.DELETE.REPO.REPLY);
 	}
 }

@@ -25,19 +25,19 @@ export default class HistoryCommand extends Command {
 						if (m) return { id: m.id, user: m };
 						return null;
 					}),
-					default: (message: Message) => message.member!,
+					default: (message: Message) => message.member,
 				},
 			],
 		});
 	}
 
 	public async exec(message: Message, { member }: { member: GuildMember }) {
-		const staffRole = message.member!.roles.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
-		if (!staffRole && message.author!.id !== member.id) {
+		const staffRole = message.member?.roles.cache.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
+		if (!staffRole && message.author.id !== member.id) {
 			return message.reply(MESSAGES.COMMANDS.MOD.HISTORY.NO_PERMISSION);
 		}
 
 		const embed = await this.client.caseHandler.history(member);
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

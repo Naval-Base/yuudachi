@@ -14,7 +14,7 @@ import Queue from '../structures/Queue';
 import HasuraProvider from '../structures/SettingsProvider';
 import { MESSAGES, PRODUCTION, PROMETHEUS, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Tags } from '../util/graphQLTypes';
+import { Tags, TagsInsertInput } from '../util/graphQLTypes';
 import { EVENTS, logger, TOPICS } from '../util/logger';
 
 declare module 'discord-akairo' {
@@ -104,7 +104,7 @@ export default class YukikazeClient extends AkairoClient {
 	};
 
 	public promServer = createServer((req, res) => {
-		if (parse(req.url!).pathname === '/metrics') {
+		if (parse(req.url ?? '').pathname === '/metrics') {
 			res.writeHead(200, { 'Content-Type': this.prometheus.register.contentType });
 			res.write(this.prometheus.register.metrics());
 		}
@@ -128,43 +128,39 @@ export default class YukikazeClient extends AkairoClient {
 		});
 
 		this.commandHandler.resolver.addType('tag', async (message, phrase) => {
+			if (!message.guild) return Flag.fail(phrase);
 			if (!phrase) return Flag.fail(phrase);
 			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const { data } = await graphQLClient.query({
+			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
-					guild: message.guild!.id,
+					guild: message.guild.id,
 				},
 			});
 			let tags: Tags[];
 			if (PRODUCTION) tags = data.tags;
-			else tags = data.staging_tags;
+			else tags = data.tagsStaging;
 			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
 
 			return tag || Flag.fail(phrase);
 		});
 		this.commandHandler.resolver.addType('existingTag', async (message, phrase) => {
+			if (!message.guild) return Flag.fail(phrase);
 			if (!phrase) return Flag.fail(phrase);
-			phrase = Util.cleanContent(phrase.toLowerCase(), message);
-			const { data } = await graphQLClient.query({
+			const phraseArr = phrase.split(',');
+			phraseArr.forEach(s => Util.cleanContent(s.trim().toLowerCase(), message));
+			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
-					guild: message.guild!.id,
+					guild: message.guild.id,
 				},
 			});
 			let tags: Tags[];
 			if (PRODUCTION) tags = data.tags;
-			else tags = data.staging_tags;
-			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
+			else tags = data.tagsStaging;
+			const [tag] = tags.filter(t => phraseArr.some(p => p === t.name || t.aliases.includes(p)));
 
-			return tag ? Flag.fail(phrase) : phrase;
-		});
-		this.commandHandler.resolver.addType('tagContent', async (message, phrase) => {
-			if (!phrase) phrase = '';
-			phrase = Util.cleanContent(phrase, message);
-			if (message.attachments.first()) phrase += `\n${message.attachments.first()!.url}`;
-
-			return phrase;
+			return tag ? Flag.fail(tag.name) : phrase;
 		});
 
 		this.config = config;
@@ -173,13 +169,17 @@ export default class YukikazeClient extends AkairoClient {
 			init({
 				dsn: process.env.SENTRY,
 				environment: process.env.NODE_ENV,
-				release: process.env.VERSION!,
+				release: process.env.VERSION,
 				serverName: 'yukikaze_bot',
-				integrations: [
-					new RewriteFrames({
-						root: this.root,
-					}),
-				],
+				integrations: integrations => {
+					const integration = integrations.filter(integration => integration.name !== 'Breadcrumbs');
+					integration.push(
+						new RewriteFrames({
+							root: this.root,
+						}),
+					);
+					return integration;
+				},
 			});
 		} else {
 			process.on('unhandledRejection', (err: any) => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));

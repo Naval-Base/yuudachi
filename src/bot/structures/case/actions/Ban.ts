@@ -1,4 +1,4 @@
-import { User } from 'discord.js';
+import { Message, User, GuildMember } from 'discord.js';
 import { ACTIONS, MESSAGES, SETTINGS } from '../../../util/constants';
 import Action, { ActionData } from './Action';
 
@@ -10,11 +10,8 @@ export default class BanAction extends Action {
 	}
 
 	public async before() {
-		if (this.member instanceof User) {
-			throw new Error(MESSAGES.ACTIONS.INVALID_MEMBER);
-		}
-		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE)!;
-		if (this.member.roles && this.member.roles.has(staff)) {
+		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE);
+		if (this.member instanceof GuildMember && this.member.roles.cache.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
 		}
 
@@ -25,18 +22,21 @@ export default class BanAction extends Action {
 
 		const embed = await this.client.caseHandler.history(this.member);
 		await this.message.channel.send(MESSAGES.ACTIONS.BAN.AWAIT_MESSAGE, { embed });
-		const responses = await this.message.channel.awaitMessages(msg => msg.author.id === this.message.author!.id, {
-			max: 1,
-			time: 10000,
-		});
+		const responses = await this.message.channel.awaitMessages(
+			(msg: Message) => msg.author.id === this.message.author.id,
+			{
+				max: 1,
+				time: 10000,
+			},
+		);
 
-		if (!responses || responses.size !== 1) {
+		if (responses?.size !== 1) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(MESSAGES.ACTIONS.BAN.TIMEOUT);
 		}
 		const response = responses.first();
 
-		if (/^y(?:e(?:a|s)?)?$/i.test(response!.content)) {
+		if (/^y(?:e(?:a|s)?)?$/i.test(response?.content ?? '')) {
 			return true;
 		}
 
@@ -45,26 +45,27 @@ export default class BanAction extends Action {
 	}
 
 	public async exec() {
-		if (this.member instanceof User) return;
-		const totalCases = this.client.settings.get(this.message.guild!, SETTINGS.CASES, 0) + 1;
+		const user = this.member instanceof User ? this.member : this.member.user;
+		const guild = this.message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0) + 1;
 
-		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.BAN.PRE_REPLY(this.member.user.tag));
+		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.BAN.PRE_REPLY(user.tag));
 
 		try {
 			try {
-				await this.member.send(MESSAGES.ACTIONS.BAN.MESSAGE(this.message.guild!.name, this._reason));
+				await this.member.send(MESSAGES.ACTIONS.BAN.MESSAGE(guild.name, this._reason));
 			} catch {}
-			await this.member.ban({
+			await guild.members.ban(user.id, {
 				days: this.days,
-				reason: MESSAGES.ACTIONS.BAN.AUDIT(this.message.author!.tag, totalCases),
+				reason: MESSAGES.ACTIONS.BAN.AUDIT(this.message.author.tag, totalCases),
 			});
 		} catch (error) {
 			this.client.caseHandler.cachedCases.delete(this.keys as string);
 			throw new Error(MESSAGES.ACTIONS.BAN.ERROR(error.message));
 		}
 
-		this.client.settings.set(this.message.guild!, SETTINGS.CASES, totalCases);
+		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(MESSAGES.ACTIONS.BAN.REPLY(this.member.user.tag));
+		sentMessage.edit(MESSAGES.ACTIONS.BAN.REPLY(user.tag));
 	}
 }

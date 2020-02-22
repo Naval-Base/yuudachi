@@ -25,12 +25,13 @@ export default class PrefixCommand extends Command {
 	}
 
 	public async exec(message: Message, { prefix }: { prefix: string }) {
-		if (!prefix)
-			return message.util!.send(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY((this.handler.prefix as PrefixSupplier)(message)));
+		if (!prefix) {
+			return message.util?.send(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY((this.handler.prefix as PrefixSupplier)(message)));
+		}
 		this.client.settings.set(message.guild!, 'prefix', prefix);
 		if (prefix === process.env.COMMAND_PREFIX) {
-			return message.util!.reply(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY_2(prefix));
+			return message.util?.reply(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY_2(prefix));
 		}
-		return message.util!.reply(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY_3(prefix));
+		return message.util?.reply(MESSAGES.COMMANDS.UTIL.PREFIX.REPLY_3(prefix));
 	}
 }

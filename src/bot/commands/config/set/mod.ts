@@ -26,6 +26,6 @@ export default class SetConfigModRoleCommand extends Command {
 
 	public async exec(message: Message, { role }: { role: Role }) {
 		this.client.settings.set(message.guild!, SETTINGS.MOD_ROLE, role.id);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.MOD.REPLY(role.name));
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.SET.MOD.REPLY(role.name));
 	}
 }

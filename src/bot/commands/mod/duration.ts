@@ -1,9 +1,9 @@
+import ms from '@naval-base/ms';
 import { Argument, Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import { ACTIONS, MESSAGES, PRODUCTION, SETTINGS } from '../../util/constants';
 import { GRAPHQL, graphQLClient } from '../../util/graphQL';
-import { Cases } from '../../util/graphQLTypes';
-const ms = require('@naval-base/ms'); // eslint-disable-line
+import { Cases, CasesInsertInput } from '../../util/graphQLTypes';
 
 export default class DurationCommand extends Command {
 	public constructor() {
@@ -44,73 +44,63 @@ export default class DurationCommand extends Command {
 		});
 	}
 
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
-	}
-
 	public async exec(message: Message, { caseNum, duration }: { caseNum: number | string; duration: number }) {
-		const totalCases = this.client.settings.get(message.guild!, SETTINGS.CASES, 0);
+		const guild = message.guild!;
+		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0);
 		const caseToFind = caseNum === 'latest' || caseNum === 'l' ? totalCases : (caseNum as number);
 		if (isNaN(caseToFind)) return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE_NUMBER);
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.MUTE_DURATION,
 			variables: {
-				guild: message.guild!.id,
+				guild: guild.id,
 				action: ACTIONS.MUTE,
-				action_processed: false,
-				case_id: caseToFind,
+				actionProcessed: false,
+				caseId: caseToFind,
 			},
 		});
 		let dbCase: Cases;
 		if (PRODUCTION) dbCase = data.cases[0];
-		else dbCase = data.staging_cases[0];
+		else dbCase = data.casesStaging[0];
 		if (!dbCase) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_CASE);
 		}
-		if (dbCase.mod_id !== message.author!.id && !message.member!.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+		if (
+			dbCase.modId &&
+			dbCase.modId !== message.author.id &&
+			!message.member?.permissions.has(Permissions.FLAGS.MANAGE_GUILD)
+		) {
 			return message.reply(MESSAGES.COMMANDS.MOD.DURATION.WRONG_MOD);
 		}
 
-		const modLogChannel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
+		const modLogChannel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 		if (modLogChannel) {
 			let caseEmbed;
 			if (dbCase.message)
-				caseEmbed = await (this.client.channels.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
+				caseEmbed = await (this.client.channels.cache.get(modLogChannel) as TextChannel).messages.fetch(dbCase.message);
 			if (!caseEmbed) return message.reply(MESSAGES.COMMANDS.MOD.DURATION.NO_MESSAGE);
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
-			if (dbCase.action_duration) {
+			if (dbCase.actionDuration) {
 				embed.setDescription(
-					caseEmbed.embeds[0].description.replace(
-						/\*\*Length:\*\* (.+)*/,
-						`**Length:** ${ms(duration, { long: true })}`,
-					),
+					caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, true)}`),
 				);
 			} else {
 				embed.setDescription(
-					caseEmbed.embeds[0].description.replace(
-						/(\*\*Action:\*\* Mute)/,
-						`$1\n**Length:** ${ms(duration, { long: true })}`,
-					),
+					caseEmbed.embeds[0].description.replace(/(\*\*Action:\*\* Mute)/, `$1\n**Length:** ${ms(duration, true)}`),
 				);
 			}
 			await caseEmbed.edit(embed);
 		}
-		const { data: res } = await graphQLClient.mutate({
+		const { data: res } = await graphQLClient.mutate<any, CasesInsertInput>({
 			mutation: GRAPHQL.MUTATION.UPDATE_DURATION_MUTE,
 			variables: {
 				id: dbCase.id,
-				action_duration: new Date(Date.now() + duration).toISOString(),
+				actionDuration: new Date(Date.now() + duration).toISOString(),
 			},
 		});
-		if (PRODUCTION) dbCase = res.update_cases.returning[0];
-		else dbCase = res.update_staging_cases.returning[0];
+		if (PRODUCTION) dbCase = res.updateCases.returning[0];
+		else dbCase = res.updateCasesStaging.returning[0];
 		this.client.muteScheduler.reschedule(dbCase);
 
-		return message.util!.send(MESSAGES.COMMANDS.MOD.DURATION.REPLY(caseToFind));
+		return message.util?.send(MESSAGES.COMMANDS.MOD.DURATION.REPLY(caseToFind));
 	}
 }

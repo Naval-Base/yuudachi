@@ -58,7 +58,7 @@ export default class RoleInfoCommand extends Command {
 					id: 'role',
 					match: 'content',
 					type: 'role',
-					default: (message: Message) => message.member!.roles.highest,
+					default: (message: Message) => message.member?.roles.highest,
 				},
 			],
 		});
@@ -87,8 +87,8 @@ export default class RoleInfoCommand extends Command {
 				${permissions.map(permission => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
 			`,
 			)
-			.setThumbnail(message.guild!.iconURL()!);
+			.setThumbnail(message.guild!.iconURL() ?? '');
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

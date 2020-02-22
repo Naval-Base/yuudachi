@@ -39,22 +39,22 @@ export default class HelpCommand extends Command {
 				);
 			}
 
-			return message.util!.send(embed);
+			return message.util?.send(embed);
 		}
 
 		const embed = new MessageEmbed()
 			.setColor(3447003)
-			.setTitle(`\`${command.aliases[0]} ${command.description.usage ? command.description.usage : ''}\``)
+			.setTitle(`\`${command.aliases[0]} ${command.description.usage || ''}\``)
 			.addField('❯ Description', command.description.content || '\u200b');
 
 		if (command.aliases.length > 1) embed.addField('❯ Aliases', `\`${command.aliases.join('` `')}\``, true);
-		if (command.description.examples && command.description.examples.length)
+		if (command.description.examples?.length)
 			embed.addField(
 				'❯ Examples',
 				`\`${command.aliases[0]} ${command.description.examples.join(`\`\n\`${command.aliases[0]} `)}\``,
 				true,
 			);
 
-		return message.util!.send(embed);
+		return message.util?.send(embed);
 	}
 }

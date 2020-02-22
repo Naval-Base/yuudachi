@@ -1,11 +1,10 @@
+import ms from '@naval-base/ms';
 import { oneLine, stripIndents } from 'common-tags';
-import { GuildMember, Message, MessageEmbed, TextChannel, User } from 'discord.js';
+import { Guild, GuildMember, Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../client/YukikazeClient';
 import { PRODUCTION, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
-import { Cases } from '../util/graphQLTypes';
-
-const ms = require('@naval-base/ms'); // eslint-disable-line
+import { Cases, CasesInsertInput } from '../util/graphQLTypes';
 
 interface Footer {
 	warn?: number;
@@ -33,11 +32,19 @@ export const ACTION_KEYS = [
 interface Log {
 	member: GuildMember | User;
 	action: string;
-	caseNum: number;
+	caseNum?: number;
 	reason: string;
-	message?: Pick<Message, 'author' | 'guild'>;
+	message?:
+		| {
+				author: User | null;
+				guild: Guild;
+		  }
+		| Message;
 	duration?: number;
 	ref?: number;
+	nsfw?: boolean;
+	channel?: string;
+	reference?: Cases;
 }
 
 export default class CaseHandler {
@@ -48,70 +55,71 @@ export default class CaseHandler {
 
 	public async create({
 		action,
-		action_processed = true,
-		case_id,
+		actionProcessed = true,
+		caseId,
 		guild,
 		message,
-		mod_id,
-		mod_tag,
+		modId,
+		modTag,
 		reason,
-		ref_id,
-		target_id,
-		target_tag,
-	}: Omit<Cases, 'id' | 'created_at'>) {
+		refId,
+		targetId,
+		targetTag,
+	}: Omit<Cases, 'id' | 'createdAt'>) {
 		try {
-			const { data } = await graphQLClient.mutate({
+			const { data } = await graphQLClient.mutate<any, CasesInsertInput>({
 				mutation: GRAPHQL.MUTATION.INSERT_CASES,
 				variables: {
 					action,
-					action_processed,
-					case_id,
+					actionProcessed,
+					caseId,
 					guild,
 					message,
-					mod_id,
-					mod_tag,
+					modId,
+					modTag,
 					reason,
-					ref_id,
-					target_id,
-					target_tag,
+					refId,
+					targetId,
+					targetTag,
 				},
 			});
-			if (PRODUCTION) return data.insert_cases.returning[0] as Cases;
-			return data.insert_staging_cases.returning[0] as Cases;
+			if (PRODUCTION) return data.insertCases.returning[0] as Cases;
+			return data.insertCasesStaging.returning[0] as Cases;
 		} catch (error) {
 			this.client.logger.error(error);
 		}
 	}
 
 	public async delete(message: Message, caseNum: number, removeRole?: boolean) {
-		const { data } = await graphQLClient.query({
+		const guild = message.guild!;
+		const { data } = await graphQLClient.query<any, any>({
 			query: GRAPHQL.QUERY.CASES,
 			variables: {
-				guild: message.guild!.id,
-				case_id: caseNum,
+				guild: guild.id,
+				caseId: [caseNum],
 			},
 		});
 		let cs: Cases;
 		if (PRODUCTION) cs = data.cases[0];
-		else cs = data.staging_cases[0];
-		const channel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
-		const restrictRoles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES)!;
-		const muteRole = this.client.settings.get(message.guild!, SETTINGS.MUTE_ROLE)!;
+		else cs = data.casesStaging[0];
+		const channel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
+		const restrictRoles = this.client.settings.get(guild, SETTINGS.RESTRICT_ROLES)!;
+		const muteRole = this.client.settings.get(guild, SETTINGS.MUTE_ROLE)!;
 
 		if (channel) {
-			const chan = this.client.channels.get(channel) as TextChannel;
+			const chan = this.client.channels.cache.get(channel) as TextChannel;
 			try {
-				const msgToDelete = await chan.messages.fetch(cs.message!);
+				const msgToDelete = await chan.messages.fetch(cs.message ?? '');
 				await msgToDelete.delete();
 			} catch {}
-			this.fix(cs.case_id, message.guild!.id, channel);
+			this.fix(cs.caseId, guild.id, channel);
 
 			if ((restrictRoles || muteRole) && !removeRole) {
 				this.removeRoles(cs, message, restrictRoles, muteRole);
 			}
 		}
 
-		await graphQLClient.mutate({
+		await graphQLClient.mutate<any, CasesInsertInput>({
 			mutation: GRAPHQL.MUTATION.DELETE_CASE,
 			variables: {
 				id: cs.id,
@@ -119,57 +127,51 @@ export default class CaseHandler {
 		});
 	}
 
-	public async log({ member, action, caseNum, reason, message, duration, ref }: Log) {
+	public async log({ member, action, caseNum, reason, message, duration, ref, nsfw }: Log) {
 		const embed = new MessageEmbed();
-		if (message && message.author) {
+		if (message?.author) {
 			embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
 		}
 		let reference: Cases | undefined;
 		let channel;
 		if (message && ref) {
+			const guild = message.guild!;
 			try {
-				const { data } = await graphQLClient.query({
+				const { data } = await graphQLClient.query<any, any>({
 					query: GRAPHQL.QUERY.CASES,
 					variables: {
-						guild: message.guild!.id,
-						case_id: ref,
+						guild: guild.id,
+						caseId: [ref],
 					},
 				});
 				if (PRODUCTION) reference = data.cases[0];
-				else reference = data.staging_cases[0];
-				channel = this.client.settings.get(message.guild!, SETTINGS.MOD_LOG);
+				else reference = data.casesStaging[0];
+				channel = this.client.settings.get(guild, SETTINGS.MOD_LOG);
 			} catch {}
 		}
 
 		embed
-			.setDescription(
-				stripIndents`
-				**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
-				**Action:** ${action}${action === 'Mute' && duration ? `\n**Length:** ${ms(duration, { long: true })}` : ''}
-				**Reason:** ${reason}${
-					reference
-						? `\n**Ref case:** [${reference.case_id}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})`
-						: ''
-				}
-			`,
-			)
-			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
+			.setDescription(this.logMessage({ member, action, duration, message, reason, channel, reference }))
 			.setFooter(`Case ${caseNum}`)
 			.setTimestamp(new Date());
+
+		if (!nsfw) {
+			embed.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL());
+		}
 
 		return embed;
 	}
 
 	public async history(member: GuildMember | User) {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.HISTORY_CASE,
 			variables: {
-				target_id: member.id,
+				targetId: member.id,
 			},
 		});
 		let cases: Pick<Cases, 'action'>[];
 		if (PRODUCTION) cases = data.cases;
-		else cases = data.staging_cases;
+		else cases = data.casesStaging;
 		const footer = cases.reduce((count: Footer, c) => {
 			const action = ACTION_KEYS[c.action];
 			count[action] = (count[action] || 0) + 1;
@@ -179,16 +181,17 @@ export default class CaseHandler {
 		const colors = [8450847, 10870283, 13091073, 14917123, 16152591, 16667430, 16462404];
 		const values = [footer.warn || 0, footer.restriction || 0, footer.mute || 0, footer.kick || 0, footer.ban || 0];
 		const [warn, restriction, mute, kick, ban] = values;
-		const colorIndex = Math.min(values.reduce((a: number, b: number) => a + b), colors.length - 1);
+		const colorIndex = Math.min(
+			values.reduce((a, b) => a + b),
+			colors.length - 1,
+		);
 
 		return new MessageEmbed()
 			.setAuthor(
 				`${member instanceof User ? member.tag : member.user.tag} (${member.id})`,
 				member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL(),
 			)
-			.setColor(colors[colorIndex])
-			.setThumbnail(member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL())
-			.setFooter(oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
+			.setColor(colors[colorIndex]).setFooter(oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
 				${restriction} restriction${restriction > 1 || restriction === 0 ? 's' : ''},
 				${mute} mute${mute > 1 || mute === 0 ? 's' : ''},
 				${kick} kick${kick > 1 || kick === 0 ? 's' : ''},
@@ -196,27 +199,46 @@ export default class CaseHandler {
 			`);
 	}
 
+	private logMessage({ member, action, duration, message, reason, channel, reference }: Log) {
+		let msg = stripIndents`
+			**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
+			**Action:** ${action}
+		`;
+		if (action === 'Mute' && duration) {
+			msg += `\n**Length:** ${ms(duration, true)}`;
+			if (message instanceof Message) {
+				msg += `\n**Context:** ${message.url}`;
+			}
+		}
+		msg += `\n**Reason:** ${reason}`;
+		if (reference && channel) {
+			msg += `\n**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${channel}/${reference.message})`;
+		}
+		return msg;
+	}
+
 	private async removeRoles(
-		cs: Pick<Cases, 'action' | 'case_id' | 'message' | 'target_id'>,
+		cs: Pick<Cases, 'action' | 'caseId' | 'message' | 'targetId'>,
 		message: Message,
 		roles: { EMBED: string; EMOJI: string; REACTION: string },
 		mute: string,
 	) {
+		const guild = message.guild!;
 		switch (cs.action) {
 			case 5:
 				// eslint-disable-next-line no-case-declarations
 				let member;
 				try {
-					member = await message.guild!.members.fetch(cs.target_id);
+					member = await guild.members.fetch(cs.targetId);
 				} catch {
 					break;
 				}
 				if (!member) break;
 				// eslint-disable-next-line no-case-declarations
-				const key = `${message.guild!.id}:${member.id}:MUTE`;
+				const key = `${guild.id}:${member.id}:MUTE`;
 				try {
 					this.cachedCases.add(key);
-					await member.roles.remove(mute, `Mute removed by ${message.author!.tag} | Removed Case #${cs.case_id}`);
+					await member.roles.remove(mute, `Mute removed by ${message.author.tag} | Removed Case #${cs.caseId}`);
 				} catch (error) {
 					this.cachedCases.delete(key);
 					message.reply(`there was an error removing the mute on this member: \`${error}\``);
@@ -226,14 +248,14 @@ export default class CaseHandler {
 				try {
 					let member;
 					try {
-						member = await message.guild!.members.fetch(cs.target_id);
+						member = await guild.members.fetch(cs.targetId);
 					} catch {
 						break;
 					}
 					if (!member) break;
 					await member.roles.remove(
 						roles.EMBED,
-						`Embed restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+						`Embed restriction removed by ${message.author.tag} | Removed Case #${cs.caseId}`,
 					);
 				} catch (error) {
 					message.reply(`there was an error removing the embed restriction on this member: \`${error}\``);
@@ -243,14 +265,14 @@ export default class CaseHandler {
 				try {
 					let member;
 					try {
-						member = await message.guild!.members.fetch(cs.target_id);
+						member = await guild.members.fetch(cs.targetId);
 					} catch {
 						break;
 					}
 					if (!member) break;
 					await member.roles.remove(
 						roles.EMOJI,
-						`Emoji restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+						`Emoji restriction removed by ${message.author.tag} | Removed Case #${cs.caseId}`,
 					);
 				} catch (error) {
 					message.reply(`there was an error removing the emoji restriction on this member: \`${error}\``);
@@ -260,14 +282,14 @@ export default class CaseHandler {
 				try {
 					let member;
 					try {
-						member = await message.guild!.members.fetch(cs.target_id);
+						member = await guild.members.fetch(cs.targetId);
 					} catch {
 						break;
 					}
 					if (!member) break;
 					await member.roles.remove(
 						roles.REACTION,
-						`Reaction restriction removed by ${message.author!.tag} | Removed Case #${cs.case_id}`,
+						`Reaction restriction removed by ${message.author.tag} | Removed Case #${cs.caseId}`,
 					);
 				} catch (error) {
 					message.reply(`there was an error removing the reaction restriction on this member: \`${error}\``);
@@ -279,33 +301,32 @@ export default class CaseHandler {
 	}
 
 	private async fix(caseNum: number, guild: string, channel: string) {
-		const { data } = await graphQLClient.query({
+		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.FIX_CASES,
 			variables: {
 				guild,
-				case_id: caseNum,
+				caseId: caseNum,
 			},
 		});
 		let cases: Pick<Cases, 'id' | 'message'>[];
 		if (PRODUCTION) cases = data.cases;
-		else cases = data.staging_cases;
+		else cases = data.casesStaging;
 		let newCaseNum = caseNum;
 
 		for (const c of cases) {
-			const chan = this.client.channels.get(channel) as TextChannel;
+			const chan = this.client.channels.cache.get(channel) as TextChannel;
 			try {
-				const msg = await chan.messages.fetch(c.message!);
+				const msg = await chan.messages.fetch(c.message ?? '');
 				await msg.edit(new MessageEmbed(msg.embeds[0]).setFooter(`Case ${newCaseNum}`));
-			} catch {
-				await graphQLClient.mutate({
-					mutation: GRAPHQL.MUTATION.FIX_CASE,
-					variables: {
-						id: c.id,
-						case_id: newCaseNum,
-					},
-				});
-				newCaseNum++;
-			}
+			} catch {}
+			await graphQLClient.mutate<any, CasesInsertInput>({
+				mutation: GRAPHQL.MUTATION.FIX_CASE,
+				variables: {
+					id: c.id,
+					caseId: newCaseNum,
+				},
+			});
+			newCaseNum++;
 		}
 	}
 }

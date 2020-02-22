@@ -12,7 +12,7 @@ export default class MessageDeleteGuildLogListener extends Listener {
 	}
 
 	public async exec(message: Message) {
-		if (message.author!.bot) return;
+		if (message.author.bot) return;
 		if (!message.guild) return;
 		if (!message.content) return;
 		const guildLogs = this.client.settings.get(message.guild, SETTINGS.GUILD_LOG);
@@ -22,9 +22,10 @@ export default class MessageDeleteGuildLogListener extends Listener {
 			const attachment = message.attachments.first();
 			const embed = new MessageEmbed()
 				.setColor(0x824aee)
-				.setAuthor(`${message.author!.tag} (${message.author!.id})`, message.author!.displayAvatarURL())
+				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 				.addField('❯ Channel', message.channel)
-				.addField('❯ Message', `${message.content.substring(0, 1020)}`);
+				.addField('❯ Message', `${message.content.substring(0, 1020)}`)
+				.addField('❯ Message', `[Jump To](${message.url})`, true);
 			if (attachment) embed.addField('❯ Attachment(s)', attachment.url);
 			embed.setTimestamp(new Date());
 			embed.setFooter('Deleted');

@@ -26,6 +26,6 @@ export default class SetConfigModChannelCommand extends Command {
 
 	public async exec(message: Message, { channel }: { channel: TextChannel }) {
 		this.client.settings.set(message.guild!, SETTINGS.MOD_LOG, channel.id);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.MOD_LOG.REPLY(channel.name));
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.SET.MOD_LOG.REPLY(channel.name));
 	}
 }

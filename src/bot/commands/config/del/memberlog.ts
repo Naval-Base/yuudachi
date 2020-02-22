@@ -17,6 +17,6 @@ export default class DeleteConfigMemberLogCommand extends Command {
 
 	public async exec(message: Message) {
 		this.client.settings.delete(message.guild!, SETTINGS.MEMBER_LOG);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.DELETE.MEMBER_LOG.REPLY);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.DELETE.MEMBER_LOG.REPLY);
 	}
 }

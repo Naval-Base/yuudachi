@@ -17,26 +17,27 @@ export default class ToggleRoleStateCommand extends Command {
 	}
 
 	public async exec(message: Message) {
-		const roleState = this.client.settings.get(message.guild!, SETTINGS.ROLE_STATE);
+		const guild = message.guild!;
+		const roleState = this.client.settings.get(guild, SETTINGS.ROLE_STATE);
 		if (roleState) {
-			this.client.settings.set(message.guild!, SETTINGS.ROLE_STATE, false);
+			this.client.settings.set(guild, SETTINGS.ROLE_STATE, false);
 			await graphQLClient.mutate({
 				mutation: GRAPHQL.MUTATION.DELETE_ROLE_STATE,
 				variables: {
-					guild: message.guild!.id,
+					guild: guild.id,
 				},
 			});
 
-			return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.ROLE_STATE.REPLY_DEACTIVATED);
+			return message.util?.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.ROLE_STATE.REPLY_DEACTIVATED);
 		}
-		this.client.settings.set(message.guild!, SETTINGS.ROLE_STATE, true);
-		const members = await message.guild!.members.fetch();
+		this.client.settings.set(guild, SETTINGS.ROLE_STATE, true);
+		const members = await guild.members.fetch();
 		const records = [];
 		for (const member of members.values()) {
-			const roles = member.roles.filter(role => role.id !== message.guild!.id).map(role => role.id);
+			const roles = member.roles.cache.filter(role => role.id !== guild.id).map(role => role.id);
 			if (!roles.length) continue;
 			records.push({
-				guild: message.guild!.id,
+				guild: guild.id,
 				member: member.id,
 				roles: `{${roles.join(',')}}`,
 			});
@@ -48,6 +49,6 @@ export default class ToggleRoleStateCommand extends Command {
 			},
 		});
 
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.ROLE_STATE.REPLY_ACTIVATED);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.TOGGLE.ROLE_STATE.REPLY_ACTIVATED);
 	}
 }

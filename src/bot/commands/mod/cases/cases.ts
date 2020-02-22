@@ -1,6 +1,6 @@
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message, Permissions } from 'discord.js';
-import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { MESSAGES } from '../../../util/constants';
 
 export default class CasesCommand extends Command {
 	public constructor() {
@@ -17,18 +17,12 @@ export default class CasesCommand extends Command {
 		});
 	}
 
-	// @ts-ignore
-	public userPermissions(message: Message): string | null {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
-	}
-
 	public *args() {
 		const method = yield {
-			type: [['case-show', 'case', 'show', 'view'], ['case-delete', 'delete', 'del', 'remove', 'rm']],
+			type: [
+				['case-show', 'case', 'show', 'view'],
+				['case-delete', 'delete', 'del', 'remove', 'rm'],
+			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);
 				return MESSAGES.COMMANDS.MOD.CASES.REPLY(prefix);

@@ -26,8 +26,8 @@ export default class CommandStartedListener extends Listener {
 			level: Severity.Info,
 			data: {
 				user: {
-					id: message.author!.id,
-					username: message.author!.tag,
+					id: message.author.id,
+					username: message.author.tag,
 				},
 				guild: message.guild
 					? {
@@ -49,8 +49,8 @@ export default class CommandStartedListener extends Listener {
 		});
 		setContext('command_started', {
 			user: {
-				id: message.author!.id,
-				username: message.author!.tag,
+				id: message.author.id,
+				username: message.author.tag,
 			},
 			extra: {
 				guild: message.guild

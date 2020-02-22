@@ -1,6 +1,6 @@
 import { Command, Flag, PrefixSupplier } from 'discord-akairo';
 import { Message, Permissions } from 'discord.js';
-import { MESSAGES, SETTINGS } from '../../../util/constants';
+import { MESSAGES } from '../../../util/constants';
 
 export default class RestrictCommand extends Command {
 	public constructor() {
@@ -25,15 +25,6 @@ export default class RestrictCommand extends Command {
 			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			ratelimit: 2,
 		});
-	}
-
-	// @ts-ignore
-	public userPermissions(message: Message) {
-		const staffRole = this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE);
-		if (!staffRole) return 'No mod role';
-		const hasStaffRole = message.member!.roles.has(staffRole);
-		if (!hasStaffRole) return 'Moderator';
-		return null;
 	}
 
 	public *args() {

@@ -27,9 +27,10 @@ export default class SetConfigRestrictRolesEmbedCommand extends Command {
 	}
 
 	public async exec(message: Message, { embed }: { embed: Role }) {
-		const roles = this.client.settings.get(message.guild!, SETTINGS.RESTRICT_ROLES, { EMBED: '' });
+		const guild = message.guild!;
+		const roles = this.client.settings.get(guild, SETTINGS.RESTRICT_ROLES, { EMBED: '' });
 		roles.EMBED = embed.id;
-		this.client.settings.set(message.guild!, SETTINGS.RESTRICT_ROLES, roles);
-		return message.util!.reply(MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.REPLY(embed.name));
+		this.client.settings.set(guild, SETTINGS.RESTRICT_ROLES, roles);
+		return message.util?.reply(MESSAGES.COMMANDS.CONFIG.SET.RESTRICT.EMBED.REPLY(embed.name));
 	}
 }
