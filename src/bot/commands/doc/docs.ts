@@ -4,10 +4,11 @@ import fetch from 'node-fetch';
 import * as qs from 'querystring';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
-const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev'];
+const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev', 'collection'];
 
 interface DocsCommandArguments {
 	defaultDocs: string;
+	source: string;
 	force: boolean;
 	includePrivate: boolean;
 	query: string;
@@ -26,7 +27,7 @@ export default class DocsCommand extends Command {
 			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
 			ratelimit: 2,
 			flags: ['--force', '-f', '--private', '-p'],
-			optionFlags: ['--default='],
+			optionFlags: ['--default=', '--src='],
 		});
 	}
 
@@ -34,6 +35,11 @@ export default class DocsCommand extends Command {
 		const defaultDocs = yield {
 			match: 'option',
 			flag: '--default=',
+		};
+
+		const source = yield {
+			match: 'option',
+			flag: '--src=',
 		};
 
 		const force = yield {
@@ -55,10 +61,10 @@ export default class DocsCommand extends Command {
 			},
 		};
 
-		return { defaultDocs, force, includePrivate, query };
+		return { defaultDocs, source, force, includePrivate, query };
 	}
 
-	public async exec(message: Message, { defaultDocs, force, includePrivate, query }: DocsCommandArguments) {
+	public async exec(message: Message, { defaultDocs, source, force, includePrivate, query }: DocsCommandArguments) {
 		const guild = message.guild!;
 		if (defaultDocs) {
 			const staff = this.client.settings.get(guild, SETTINGS.MOD_ROLE);
@@ -70,8 +76,9 @@ export default class DocsCommand extends Command {
 		}
 
 		const q = query.split(' ');
-		const docs = this.client.settings.get(guild, SETTINGS.DEFAULT_DOCS, 'stable');
-		let source = SOURCES.includes(q.slice(-1)[0]) ? q.pop()! : docs;
+		if (!SOURCES.includes(source)) {
+			source = this.client.settings.get(guild, SETTINGS.DEFAULT_DOCS, 'stable');
+		}
 		if (source === '11.5-dev') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
 		}
