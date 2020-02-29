@@ -16,6 +16,7 @@ importers:
       dotenv: 8.2.0
       graphql: 14.6.0
       graphql-tag: 2.10.3_graphql@14.6.0
+      js-yaml: 3.13.1
       moment: 2.24.0
       moment-duration-format: 2.3.2
       node-emoji: 1.10.0
@@ -34,6 +35,7 @@ importers:
       '@graphql-codegen/typescript': 1.12.2_graphql@14.6.0
       '@sentry/cli': 1.50.0
       '@types/common-tags': 1.8.0
+      '@types/js-yaml': 3.12.2
       '@types/moment-duration-format': 2.2.2
       '@types/node': 13.7.1
       '@types/node-emoji': 1.8.1
@@ -64,6 +66,7 @@ importers:
       '@sentry/integrations': ^5.12.0
       '@sentry/node': ^5.12.3
       '@types/common-tags': ^1.8.0
+      '@types/js-yaml': ^3.12.2
       '@types/moment-duration-format': ^2.2.2
       '@types/node': ^13.7.1
       '@types/node-emoji': ^1.8.1
@@ -88,6 +91,7 @@ importers:
       eslint-plugin-prettier: ^3.1.2
       graphql: ^14.6.0
       graphql-tag: ^2.10.3
+      js-yaml: ^3.13.1
       moment: ^2.24.0
       moment-duration-format: ^2.3.2
       node-emoji: ^1.10.0
@@ -1308,6 +1312,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-k3RS5HyBPu4h+5hTmIEfPB2rl5P3LnGdQEZrV2b9OWTJVtsUQ2VBcedqYKGqxvZqle5UALUXdSfVA8nf3HfyWQ==
+  /@types/js-yaml/3.12.2:
+    dev: true
+    resolution:
+      integrity: sha512-0CFu/g4mDSNkodVwWijdlr8jH7RoplRWNgovjFLEZeT+QEbbZXjBmCe3HwaWheAlCbHwomTwzZoSedeOycABug==
   /@types/json-schema/7.0.4:
     dev: true
     resolution:
@@ -1844,7 +1852,6 @@ packages:
   /argparse/1.0.10:
     dependencies:
       sprintf-js: 1.0.3
-    dev: true
     resolution:
       integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
   /arr-diff/4.0.0:
@@ -4067,7 +4074,6 @@ packages:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
-    dev: true
     hasBin: true
     resolution:
       integrity: sha512-YfbcO7jXDdyj0DGxYVSlSeQNHbD7XPWvrVWeVUujrQEoZzWJIRrCPoyk6kL6IAjAG2IolMK4T0hNUe0HOUs5Jw==
@@ -5704,7 +5710,6 @@ packages:
     resolution:
       integrity: sha512-NzNVhJDYpwceVVii8/Hu6DKfD2G+NrQHlS/V/qgv763EYudVwEcMQNxd2lh+0VrUByXN/oJkl5grOhYWvQUYiw==
   /sprintf-js/1.0.3:
-    dev: true
     resolution:
       integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
   /sshpk/1.16.1:
@@ -6503,6 +6508,7 @@ packages:
       sequelize: ^5.2.12
       sqlite: ^3.0.3
     resolution:
+      registry: 'https://registry.npmjs.org/'
       tarball: 'https://codeload.github.com/discord-akairo/discord-akairo/tar.gz/b64a8de54061daa264cea113f205952761a197c9'
     version: 8.0.0-beta.8
   github.com/discordjs/discord.js/149f72b50be3b8ffb134d20911b513cfea1aaaf5_cf2ed6007ca0a0cd3da37c757a7bf7b9:
@@ -6544,5 +6550,6 @@ packages:
       zlib-sync:
         optional: true
     resolution:
+      registry: 'https://registry.npmjs.org/'
       tarball: 'https://codeload.github.com/discordjs/discord.js/tar.gz/149f72b50be3b8ffb134d20911b513cfea1aaaf5'
     version: 12.0.0-dev

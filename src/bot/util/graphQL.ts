@@ -207,10 +207,13 @@ export const GRAPHQL = {
 				tags${PRODUCTION ? '' : 'Staging'}(where: {
 					guild: { _eq: $guild }
 				}) {
+					aliases
 					content
+					createdAt
 					hoisted
 					name
 					templated
+					updatedAt
 					user
 				}
 			}
@@ -222,10 +225,13 @@ export const GRAPHQL = {
 					guild: { _eq: $guild },
 					user: { _eq: $user }
 				}) {
+					aliases
 					content
+					createdAt
 					hoisted
 					name
 					templated
+					updatedAt
 					user
 				}
 			}
