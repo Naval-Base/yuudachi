@@ -40,7 +40,7 @@
 		"punycode": "^2.1.1",
 		"reflect-metadata": "^0.1.13",
 		"tslib": "^1.10.0",
-		"turndown": "^5.0.3",
+		"turndown": "^6.0.0",
 		"winston": "^3.2.1",
 		"winston-daily-rotate-file": "^4.4.2",
 		"winston-loki": "^5.1.0"
