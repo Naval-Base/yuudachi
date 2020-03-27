@@ -206,8 +206,10 @@ export default class CaseHandler {
 		`;
 		if (action === 'Mute' && duration) {
 			msg += `\n**Length:** ${ms(duration, true)}`;
+		}
+		if (['Mute', 'Warn'].includes(action)) {
 			if (message instanceof Message) {
-				msg += `\n**Context:** ${message.url}`;
+				msg += `\n**Context:** [Beam me up, Yuki](${message.url})`;
 			}
 		}
 		msg += `\n**Reason:** ${reason}`;
