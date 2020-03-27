@@ -1,4 +1,4 @@
-# Yukikaze <img src="https://i.imgur.com/TP7rBLB.png" align="right">
+# Yukikaze
 > .
 
 I'll get into filling this out later, gotta stay tuned for now.
