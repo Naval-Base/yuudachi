@@ -57,6 +57,21 @@ services:
       - "9187"
     restart: unless-stopped
 
+  hasura:
+    image: hasura/graphql-engine:v1.1.1
+    labels:
+      com.naval-base.description: "Hasura GraphQL Engine"
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: "postgresql://yukikaze:admin@postgres:5432/yukikaze"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
+      HASURA_GRAPHQL_ADMIN_SECRET: "admin"
+    expose:
+      - "8080"
+    ports:
+      - "127.0.0.1:8080:8080"
+    restart: unless-stopped
+
   redis:
     image: redis:5-alpine
     labels:
@@ -149,8 +164,6 @@ services:
       PROMETHEUS_ENDPOINT: "/metrics"
     expose:
       - "8080"
-    # ports:
-    #   - "127.0.0.1:8080:8080"
     restart: unless-stopped
 
 volumes:
