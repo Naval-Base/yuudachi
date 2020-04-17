@@ -7,11 +7,9 @@ importers:
       '@hapi/joi': 17.1.1
       '@spectacles/rest': 0.8.3
       '@spectacles/util': 0.3.2
-      accesscontrol: 2.2.1
       common-tags: 1.8.0
       ioredis: 4.16.1
       jsonwebtoken: 8.5.1
-      lodash: 4.17.15
       polka: 0.5.2
       postgres: 1.0.2
       readdirp: 3.4.0
@@ -42,12 +40,10 @@ importers:
       '@types/lodash': ^4.14.149
       '@types/node': ^13.9.8
       '@types/trouter': ^3.1.0
-      accesscontrol: ^2.2.1
       common-tags: ^1.8.0
       env-cmd: ^10.1.0
       ioredis: ^4.16.1
       jsonwebtoken: ^8.5.1
-      lodash: ^4.17.15
       polka: ^0.5.2
       postgres: ^1.0.2
       readdirp: ^3.4.0
@@ -156,12 +152,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-4LPNrqSJknLzILMVXn2P/mh0djNgFvom4T9Y1hmhaB8OBm1cY71bMMSrGRu1q5qF4JZzY6iaGT11BHmCMY/NZg==
-  /accesscontrol/2.2.1:
-    dependencies:
-      notation: 1.3.6
-    dev: false
-    resolution:
-      integrity: sha512-52EvFk/J9EF+w4mYQoKnOTkEMj01R1U5n2fc1dai6x1xkgOks3DGkx01qQL2cKFxGmE4Tn1krAU3jJA9L1NMkg==
   /asynckit/0.4.0:
     dev: false
     resolution:
@@ -380,10 +370,6 @@ packages:
     dev: false
     resolution:
       integrity: sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
-  /lodash/4.17.15:
-    dev: false
-    resolution:
-      integrity: sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
   /matchit/1.0.8:
     dependencies:
       '@arr/every': 1.0.1
@@ -422,10 +408,6 @@ packages:
       node: 4.x || >=6.0.0
     resolution:
       integrity: sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
-  /notation/1.3.6:
-    dev: false
-    resolution:
-      integrity: sha512-DIuJmrP/Gg1DcXKaApsqcjsJD6jEccqKSfmU3BUx/f1GHsMiTJh70cERwYc64tOmTRTARCeMwkqNNzjh3AHhiw==
   /once/1.4.0:
     dependencies:
       wrappy: 1.0.2
