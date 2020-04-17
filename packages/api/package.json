@@ -1,0 +1,44 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && tsc",
+    "start": "node dist/bin/index.js",
+    "dev": "npm run build && env-cmd npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@hapi/boom": "^9.1.0",
+    "@hapi/joi": "^17.1.1",
+    "@spectacles/rest": "^0.8.3",
+    "@spectacles/util": "^0.3.2",
+    "accesscontrol": "^2.2.1",
+    "common-tags": "^1.8.0",
+    "ioredis": "^4.16.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "polka": "^0.5.2",
+    "postgres": "^1.0.2",
+    "readdirp": "^3.4.0",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.1.0"
+  },
+  "devDependencies": {
+    "@spectacles/types": "^0.2.1",
+    "@types/common-tags": "^1.8.0",
+    "@types/hapi__joi": "^16.0.12",
+    "@types/ioredis": "^4.14.9",
+    "@types/jsonwebtoken": "^8.3.8",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^13.9.8",
+    "@types/trouter": "^3.1.0",
+    "env-cmd": "^10.1.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
+  }
+}

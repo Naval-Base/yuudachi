@@ -23,7 +23,8 @@ CREATE TABLE public.cases (
     reason text,
     action_duration timestamp with time zone,
     action_processed boolean DEFAULT true,
-    created_at timestamp with time zone DEFAULT now() NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    mute_message text
 );
 COMMENT ON COLUMN public.cases.guild IS 'The id of the guild this case belongs to';
 COMMENT ON COLUMN public.cases.message IS 'The id of the message this case belongs to';
@@ -37,6 +38,7 @@ COMMENT ON COLUMN public.cases.action IS 'The action of this case';
 COMMENT ON COLUMN public.cases.reason IS 'The reason of this case';
 COMMENT ON COLUMN public.cases.action_duration IS 'The duration of this case';
 COMMENT ON COLUMN public.cases.action_processed IS 'Whether this case has been processed or not';
+COMMENT ON COLUMN public.cases.mute_message IS 'The id of the message around this mute';
 CREATE TABLE public.lockdowns (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     guild text NOT NULL,
@@ -97,5 +99,5 @@ ALTER TABLE ONLY public.tags
     ADD CONSTRAINT tags_guild_name_key UNIQUE (guild, name);
 ALTER TABLE ONLY public.tags
     ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
-CREATE TRIGGER set_public_tags_updated_at BEFORE UPDATE ON public.tags FOR EACH ROW EXECUTE PROCEDURE public.set_current_timestamp_updated_at();
+CREATE TRIGGER set_public_tags_updated_at BEFORE UPDATE ON public.tags FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
 COMMENT ON TRIGGER set_public_tags_updated_at ON public.tags IS 'trigger to set value of column "updated_at" to current timestamp on row update';
