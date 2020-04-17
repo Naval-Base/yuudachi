@@ -1,6 +1,6 @@
 import Joi = require('@hapi/joi');
 import { Request, Response } from 'polka';
-import { injectable, singleton } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import validate from '../../../middleware/validate';
 import { NextHandler } from 'polka';
 import CaseLogManager from '../../../managers/CaseLogManager';
