@@ -117,7 +117,7 @@ export default class ReasonCommand extends Command {
 				);
 				if (reason) {
 					embed.setDescription(
-						caseEmbed.embeds[0].description.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`),
+						caseEmbed.embeds[0].description?.replace(/\*\*Reason:\*\* [\s\S]+/, `**Reason:** ${reason}`),
 					);
 				}
 				if (nsfw) {
@@ -139,9 +139,9 @@ export default class ReasonCommand extends Command {
 						reference = null;
 					}
 					if (reference) {
-						if (/\*\*Ref case:\*\* [\s\S]+/.test(embed.description)) {
+						if (/\*\*Ref case:\*\* [\s\S]+/.test(embed.description ?? '')) {
 							embed.setDescription(
-								embed.description.replace(
+								embed.description?.replace(
 									/\*\*Ref case:\*\* [\s\S]+/,
 									`**Ref case:** [${reference.caseId}](https://discordapp.com/channels/${reference.guild}/${modLogChannel}/${reference.message})`,
 								),

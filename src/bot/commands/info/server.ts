@@ -6,15 +6,15 @@ import 'moment-duration-format';
 import { MESSAGES } from '../../util/constants';
 
 interface HumanLevels {
-	[key: number]: string;
+	[key: string]: string;
 }
 
 const HUMAN_LEVELS: HumanLevels = {
-	0: 'None',
-	1: 'Low',
-	2: 'Medium',
-	3: '(╯°□°）╯︵ ┻━┻',
-	4: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻',
+	NONE: 'None',
+	LOW: 'Low',
+	MEDIUM: 'Medium',
+	HIGH: '(╯°□°）╯︵ ┻━┻',
+	VERY_HIGH: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻',
 };
 
 export default class GuildInfoCommand extends Command {

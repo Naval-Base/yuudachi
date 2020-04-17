@@ -81,11 +81,11 @@ export default class DurationCommand extends Command {
 			const embed = new MessageEmbed(caseEmbed.embeds[0]);
 			if (dbCase.actionDuration) {
 				embed.setDescription(
-					caseEmbed.embeds[0].description.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, true)}`),
+					caseEmbed.embeds[0].description?.replace(/\*\*Length:\*\* (.+)*/, `**Length:** ${ms(duration, true)}`),
 				);
 			} else {
 				embed.setDescription(
-					caseEmbed.embeds[0].description.replace(/(\*\*Action:\*\* Mute)/, `$1\n**Length:** ${ms(duration, true)}`),
+					caseEmbed.embeds[0].description?.replace(/(\*\*Action:\*\* Mute)/, `$1\n**Length:** ${ms(duration, true)}`),
 				);
 			}
 			await caseEmbed.edit(embed);
