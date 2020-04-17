@@ -34,7 +34,7 @@ export default class ToggleRoleStateCommand extends Command {
 		const members = await guild.members.fetch();
 		const records = [];
 		for (const member of members.values()) {
-			const roles = member.roles.cache.filter(role => role.id !== guild.id).map(role => role.id);
+			const roles = member.roles.cache.filter((role) => role.id !== guild.id).map((role) => role.id);
 			if (!roles.length) continue;
 			records.push({
 				guild: guild.id,

@@ -47,7 +47,7 @@ export default class GuildMemberUpdateModerationListener extends Listener {
 				return;
 			const modLogChannel = this.client.settings.get(newMember.guild, SETTINGS.MOD_LOG);
 			const role = newMember.roles.cache
-				.filter(r => r.id !== newMember.guild.id && !oldMember.roles.cache.has(r.id))
+				.filter((r) => r.id !== newMember.guild.id && !oldMember.roles.cache.has(r.id))
 				.first();
 			if (!role) {
 				if (oldMember.roles.cache.has(muteRole) && !newMember.roles.cache.has(muteRole)) {

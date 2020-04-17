@@ -46,7 +46,7 @@ export default class TagListCommand extends Command {
 				.setAuthor(`${member.user.tag} (${member.id})`, member.user.displayAvatarURL())
 				.setDescription(
 					tags
-						.map(tag => `\`${tag.name}\``)
+						.map((tag) => `\`${tag.name}\``)
 						.sort()
 						.join(', '),
 				);
@@ -64,14 +64,14 @@ export default class TagListCommand extends Command {
 		else tags = data.tagsStaging;
 		if (!tags.length) return message.util?.send(MESSAGES.COMMANDS.TAGS.LIST.GUILD_NO_TAGS(guild.name));
 		const hoistedTags = tags
-			.filter(tag => tag.hoisted)
-			.map(tag => `\`${tag.name}\``)
+			.filter((tag) => tag.hoisted)
+			.map((tag) => `\`${tag.name}\``)
 			.sort()
 			.join(', ');
 		const userTags = tags
-			.filter(tag => !tag.hoisted)
-			.filter(tag => tag.user === message.author.id)
-			.map(tag => `\`${tag.name}\``)
+			.filter((tag) => !tag.hoisted)
+			.filter((tag) => tag.user === message.author.id)
+			.map((tag) => `\`${tag.name}\``)
 			.sort()
 			.join(', ');
 		const embed = new MessageEmbed()

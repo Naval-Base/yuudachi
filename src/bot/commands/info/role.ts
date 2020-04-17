@@ -67,7 +67,7 @@ export default class RoleInfoCommand extends Command {
 	public async exec(message: Message, { role }: { role: Role }) {
 		const permissions = Object.keys(PERMISSIONS).filter(
 			// @ts-ignore
-			permission => role.permissions.serialize()[permission],
+			(permission) => role.permissions.serialize()[permission],
 		);
 		const embed = new MessageEmbed()
 			.setColor(3447003)
@@ -84,7 +84,7 @@ export default class RoleInfoCommand extends Command {
 			.addField(
 				'❯ Permissions',
 				stripIndents`
-				${permissions.map(permission => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
+				${permissions.map((permission) => `• ${PERMISSIONS[permission]}`).join('\n') || 'None'}
 			`,
 			)
 			.setThumbnail(message.guild!.iconURL() ?? '');

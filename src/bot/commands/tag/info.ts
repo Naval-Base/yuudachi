@@ -51,7 +51,7 @@ export default class TagInfoCommand extends Command {
 				'❯ Aliases',
 				tag.aliases.length
 					? tag.aliases
-							.map(t => `\`${t}\``)
+							.map((t) => `\`${t}\``)
 							.sort()
 							.join(', ')
 					: 'No aliases.',

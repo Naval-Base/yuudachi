@@ -29,7 +29,7 @@ export default class EmojiInfoCommand extends Command {
 						if (EMOJI_REGEX.test(content)) [, content] = EMOJI_REGEX.exec(content)!;
 						const guild = message.guild!;
 						if (!isNaN((content as unknown) as number)) return guild.emojis.cache.get(content);
-						return guild.emojis.cache.find(e => e.name === content) || emojis.find(content);
+						return guild.emojis.cache.find((e) => e.name === content) || emojis.find(content);
 					},
 					prompt: {
 						start: (message: Message) => MESSAGES.COMMANDS.INFO.EMOJI.PROMPT.START(message.author),
@@ -63,13 +63,7 @@ export default class EmojiInfoCommand extends Command {
 				• Raw: \`${emoji.emoji}\`
 				• Unicode: \`${punycode.ucs2
 					.decode(emoji.emoji)
-					.map(
-						(e: any) =>
-							`\\u${e
-								.toString(16)
-								.toUpperCase()
-								.padStart(4, '0')}`,
-					)
+					.map((e: any) => `\\u${e.toString(16).toUpperCase().padStart(4, '0')}`)
 					.join('')}\`
 				`,
 			);

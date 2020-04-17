@@ -45,7 +45,7 @@ export default class TagShowCommand extends Command {
 		let tags: Tags[];
 		if (PRODUCTION) tags = data.tags;
 		else tags = data.tagsStaging;
-		const [tag] = tags.filter(t => t.name === name || t.aliases.includes(name));
+		const [tag] = tags.filter((t) => t.name === name || t.aliases.includes(name));
 		if (!tag) return;
 		graphQLClient.mutate<any, TagsInsertInput>({
 			mutation: GRAPHQL.MUTATION.UPDATE_TAG_USAGE,

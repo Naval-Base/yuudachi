@@ -46,7 +46,7 @@ export default class LaunchCybernukeCommand extends Command {
 		const memberCutoff = Date.now() - join * 60000;
 		const ageCutoff = Date.now() - age * 60000;
 		const members = guild.members.cache.filter(
-			member => (member.joinedTimestamp ?? 0) > memberCutoff && member.user.createdTimestamp > ageCutoff,
+			(member) => (member.joinedTimestamp ?? 0) > memberCutoff && member.user.createdTimestamp > ageCutoff,
 		);
 
 		await message.util?.send(`Cybernuke will strike ${members.size} members; proceed?`);
@@ -119,7 +119,7 @@ export default class LaunchCybernukeCommand extends Command {
 				fatalities.length > 0
 					? stripIndents`
 					${fatalities.length} confirmed KIA.
-					${fatalities.map(fat => `**-** ${fat.displayName} (${fat.id})`).join('\n')}
+					${fatalities.map((fat) => `**-** ${fat.displayName} (${fat.id})`).join('\n')}
 				`
 					: 'None'
 			}
@@ -128,7 +128,7 @@ export default class LaunchCybernukeCommand extends Command {
 					? stripIndents`
 					__**Survivors**__
 					${survivors.length} left standing.
-					${survivors.map(srv => `**-** ${srv.member.displayName} (${srv.member.id}): \`${srv.error}\``).join('\n')}
+					${survivors.map((srv) => `**-** ${srv.member.displayName} (${srv.member.id}): \`${srv.error}\``).join('\n')}
 				`
 					: ''
 			}

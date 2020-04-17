@@ -1,5 +1,3 @@
-import { RewriteFrames } from '@sentry/integrations';
-import { init } from '@sentry/node';
 import { AkairoClient, CommandHandler, Flag, InhibitorHandler, ListenerHandler } from 'discord-akairo';
 import { Collection, Message, Util, Webhook } from 'discord.js';
 import { createServer, Server } from 'http';
@@ -28,9 +26,9 @@ declare module 'discord-akairo' {
 		muteScheduler: MuteScheduler;
 		lockdownScheduler: LockdownScheduler;
 		prometheus: {
-			messagesCounter: Counter;
-			commandCounter: Counter;
-			lewdcarioAvatarCounter: Counter;
+			messagesCounter: Counter<string>;
+			commandCounter: Counter<string>;
+			lewdcarioAvatarCounter: Counter<string>;
 			register: Registry;
 		};
 
@@ -116,8 +114,7 @@ export default class YukikazeClient extends AkairoClient {
 			{ ownerID: config.owner },
 			{
 				messageCacheMaxSize: 1000,
-				disableEveryone: true,
-				disabledEvents: ['TYPING_START'],
+				disableMentions: 'everyone',
 			},
 		);
 
@@ -140,7 +137,7 @@ export default class YukikazeClient extends AkairoClient {
 			let tags: Tags[];
 			if (PRODUCTION) tags = data.tags;
 			else tags = data.tagsStaging;
-			const [tag] = tags.filter(t => t.name === phrase || t.aliases.includes(phrase));
+			const [tag] = tags.filter((t) => t.name === phrase || t.aliases.includes(phrase));
 
 			return tag || Flag.fail(phrase);
 		});
@@ -148,7 +145,7 @@ export default class YukikazeClient extends AkairoClient {
 			if (!message.guild) return Flag.fail(phrase);
 			if (!phrase) return Flag.fail(phrase);
 			const phraseArr = phrase.split(',');
-			phraseArr.forEach(s => Util.cleanContent(s.trim().toLowerCase(), message));
+			phraseArr.forEach((s) => Util.cleanContent(s.trim().toLowerCase(), message));
 			const { data } = await graphQLClient.query<any, TagsInsertInput>({
 				query: GRAPHQL.QUERY.TAGS_TYPE,
 				variables: {
@@ -158,32 +155,14 @@ export default class YukikazeClient extends AkairoClient {
 			let tags: Tags[];
 			if (PRODUCTION) tags = data.tags;
 			else tags = data.tagsStaging;
-			const [tag] = tags.filter(t => phraseArr.some(p => p === t.name || t.aliases.includes(p)));
+			const [tag] = tags.filter((t) => phraseArr.some((p) => p === t.name || t.aliases.includes(p)));
 
 			return tag ? Flag.fail(tag.name) : phrase;
 		});
 
 		this.config = config;
 
-		if (process.env.SENTRY) {
-			init({
-				dsn: process.env.SENTRY,
-				environment: process.env.NODE_ENV,
-				release: process.env.VERSION,
-				serverName: 'yukikaze_bot',
-				integrations: integrations => {
-					const integration = integrations.filter(integration => integration.name !== 'Breadcrumbs');
-					integration.push(
-						new RewriteFrames({
-							root: this.root,
-						}),
-					);
-					return integration;
-				},
-			});
-		} else {
-			process.on('unhandledRejection', (err: any) => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
-		}
+		process.on('unhandledRejection', (err: any) => this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION }));
 
 		if (process.env.LOGS) {
 			this.webhooks = new Collection();

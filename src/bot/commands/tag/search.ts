@@ -39,10 +39,10 @@ export default class SearchTagCommand extends Command {
 		let tags: Tags[];
 		if (PRODUCTION) tags = data.tags;
 		else tags = data.tagsStaging;
-		tags = tags.filter(t => t.name.includes(name) || t.aliases.some(a => a.includes(name)));
+		tags = tags.filter((t) => t.name.includes(name) || t.aliases.some((a) => a.includes(name)));
 		if (!tags.length) return message.util?.reply(MESSAGES.COMMANDS.TAGS.SEARCH.NO_RESULT(name));
 		const search = tags
-			.map(tag => `\`${tag.name}\``)
+			.map((tag) => `\`${tag.name}\``)
 			.sort()
 			.join(', ');
 		if (search.length >= 1950) {

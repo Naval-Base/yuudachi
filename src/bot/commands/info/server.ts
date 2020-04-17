@@ -39,8 +39,8 @@ export default class GuildInfoCommand extends Command {
 			.addField(
 				'❯ Channels',
 				stripIndents`
-				• ${guild.channels.cache.filter(ch => ch.type === 'text').size} Text, ${
-					guild.channels.cache.filter(ch => ch.type === 'voice').size
+				• ${guild.channels.cache.filter((ch) => ch.type === 'text').size} Text, ${
+					guild.channels.cache.filter((ch) => ch.type === 'voice').size
 				} Voice
 				• AFK: ${guild.afkChannelID ? `<#${guild.afkChannelID}> after ${guild.afkTimeout / 60}min` : 'None'}
 			`,

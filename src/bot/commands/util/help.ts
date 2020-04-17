@@ -31,10 +31,10 @@ export default class HelpCommand extends Command {
 
 			for (const category of this.handler.categories.values()) {
 				embed.addField(
-					`❯ ${category.id.replace(/(\b\w)/gi, lc => lc.toUpperCase())}`,
+					`❯ ${category.id.replace(/(\b\w)/gi, (lc) => lc.toUpperCase())}`,
 					`${category
-						.filter(cmd => cmd.aliases.length > 0)
-						.map(cmd => `\`${cmd.aliases[0]}\``)
+						.filter((cmd) => cmd.aliases.length > 0)
+						.map((cmd) => `\`${cmd.aliases[0]}\``)
 						.join(' ')}`,
 				);
 			}

@@ -25,14 +25,14 @@ jobs:
       - name: Build
         run: pnpm recursive run build --filter bot
 
-      - name: Create sentry release and upload sourcemaps
-        run: |
-          pnpm run sentry:release --filter bot
-          pnpm run sentry:commits --filter bot
-          pnpm run sentry:sourcemaps --filter bot
-        env:
-          SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          VERSION: ${{ github.sha }}
+      # - name: Create sentry release and upload sourcemaps
+      #   run: |
+      #     pnpm run sentry:release --filter bot
+      #     pnpm run sentry:commits --filter bot
+      #     pnpm run sentry:sourcemaps --filter bot
+      #   env:
+      #     SENTRY_URL: ${{ secrets.SENTRY_URL }}
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      #     SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+      #     SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      #     VERSION: ${{ github.sha }}

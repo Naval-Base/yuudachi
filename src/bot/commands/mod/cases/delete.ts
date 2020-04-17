@@ -100,7 +100,7 @@ export default class CaseDeleteCommand extends Command {
 			.setTimestamp(new Date(dbCase.createdAt));
 
 		await message.channel.send(MESSAGES.COMMANDS.MOD.CASES.DELETE.DELETE, { embed });
-		const responses = await message.channel.awaitMessages(msg => msg.author.id === message.author.id, {
+		const responses = await message.channel.awaitMessages((msg) => msg.author.id === message.author.id, {
 			max: 1,
 			time: 10000,
 		});

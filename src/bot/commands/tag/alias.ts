@@ -67,14 +67,14 @@ export default class TagAliasCommand extends Command {
 		{ first, second, add, del }: { first: Tags; second: string; add: boolean; del: boolean },
 	) {
 		const secondArr = second.split(',');
-		secondArr.forEach(s => s.trim());
+		secondArr.forEach((s) => s.trim());
 		if (add) {
-			if (secondArr.length && secondArr.some(s => s.length >= 1900)) {
+			if (secondArr.length && secondArr.some((s) => s.length >= 1900)) {
 				return message.util?.reply(MESSAGES.COMMANDS.TAGS.ALIAS.TOO_LONG);
 			}
 			first.aliases.push(...secondArr);
 		} else if (del) {
-			secondArr.forEach(s => {
+			secondArr.forEach((s) => {
 				const index = first.aliases.indexOf(s);
 				first.aliases.splice(index, 1);
 			});

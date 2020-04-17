@@ -87,7 +87,7 @@ export default class MuteScheduler {
 			else automaticRoleState = data.roleStatesStaging[0];
 
 			const muteRole = this.client.settings.get<SETTINGS.MUTE_ROLE, string>(guild, SETTINGS.MUTE_ROLE);
-			const roles = automaticRoleState.roles.filter(role => role !== muteRole);
+			const roles = automaticRoleState.roles.filter((role) => role !== muteRole);
 			if (roles.length) {
 				await graphQLClient.mutate({
 					mutation: GRAPHQL.MUTATION.UPDATE_ROLE_STATE,

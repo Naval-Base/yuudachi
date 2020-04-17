@@ -63,7 +63,7 @@ export default class EvalCommand extends Command {
 		this.hrStart = process.hrtime();
 		const result = this._result(this.lastResult ?? '', hrDiff, code);
 		// @ts-ignore
-		if (Array.isArray(result)) return result.map(async res => message.util?.send(res));
+		if (Array.isArray(result)) return result.map(async (res) => message.util?.send(res));
 		return message.util?.send(result);
 	}
 
@@ -107,10 +107,7 @@ export default class EvalCommand extends Command {
 	private get sensitivePattern() {
 		if (!this._sensitivePattern) {
 			const token = this.client.token?.split('').join('[^]{0,2}');
-			const revToken = this.client.token
-				?.split('')
-				.reverse()
-				.join('[^]{0,2}');
+			const revToken = this.client.token?.split('').reverse().join('[^]{0,2}');
 			Object.defineProperty(this, '_sensitivePattern', { value: new RegExp(`${token}|${revToken}`, 'g') });
 		}
 		return this._sensitivePattern;
