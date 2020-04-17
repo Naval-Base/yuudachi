@@ -21,7 +21,7 @@ export default class DocsCommand extends Command {
 			description: {
 				content: MESSAGES.COMMANDS.DOCS.DOCS.DESCRIPTION,
 				usage: '<query>',
-				examples: ['TextChannel', 'Client', 'ClientUser#setActivity master'],
+				examples: ['TextChannel', 'Client', 'ClientUser#setActivity --src=master'],
 			},
 			category: 'doc',
 			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
