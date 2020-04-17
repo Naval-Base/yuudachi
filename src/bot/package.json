@@ -40,8 +40,7 @@
 		"tslib": "^1.11.1",
 		"turndown": "^6.0.0",
 		"winston": "^3.2.1",
-		"winston-daily-rotate-file": "^4.4.2",
-		"winston-loki": "^5.1.2"
+		"winston-daily-rotate-file": "^4.4.2"
 	},
 	"devDependencies": {
 		"@graphql-codegen/add": "^1.13.2",

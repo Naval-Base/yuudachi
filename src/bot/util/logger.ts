@@ -1,8 +1,6 @@
 import { createLogger, format, transports } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
-const LokiTransport = require('winston-loki'); // eslint-disable-line
-
 export enum TOPICS {
 	UNHANDLED_REJECTION = 'UNHANDLED_REJECTION',
 	DISCORD = 'DISCORD',
@@ -47,10 +45,6 @@ export const logger = createLogger({
 		new transports.Console({
 			format: format.colorize({ level: true }),
 			level: 'info',
-		}),
-		new LokiTransport({
-			level: 'debug',
-			host: process.env.LOKI!,
 		}),
 		new DailyRotateFile({
 			format: format.combine(format.timestamp(), format.json()),
