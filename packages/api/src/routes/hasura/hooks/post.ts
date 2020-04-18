@@ -1,4 +1,4 @@
-import Joi = require('@hapi/joi');
+import * as Joi from '@hapi/joi';
 import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import validate from '../../../middleware/validate';
