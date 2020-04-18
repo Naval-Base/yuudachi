@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:alpine
 
 WORKDIR /usr/yukikaze
 RUN npx pnpm add -g pnpm
