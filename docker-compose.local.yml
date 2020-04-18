@@ -1,0 +1,114 @@
+version: "3.7"
+
+services:
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+
+  postgres:
+    environment:
+      POSTGRES_USER: "yukikaze"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "yukikaze"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  postgres-exporter:
+    environment:
+      DATA_SOURCE_NAME: "postgresql://yukikaze:admin@postgres:5432/yukikaze?sslmode=disable"
+
+  hasura:
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: "postgresql://yukikaze:admin@postgres:5432/yukikaze"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
+      HASURA_GRAPHQL_ADMIN_SECRET: "admin"
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  redis:
+    volumes:
+      - redis-data:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  redis-exporter:
+    environment:
+      REDIS_ADDR: "redis://redis:6379"
+
+  prometheus:
+    volumes:
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+
+  grafana:
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: "yukikaze"
+      # GF_SERVER_DOMAIN: ""
+      # GF_SERVER_ROOT_URL: ""
+      GF_SECURITY_ADMIN_USER: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      # GF_AUTH_ANONYMOUS_ORG_NAME: ""
+      # GF_AUTH_GITHUB_ENABLED: ""
+      # GF_AUTH_GITHUB_ALLOW_SIGN_UP: ""
+      # GF_AUTH_GITHUB_CLIENT_ID: ""
+      # GF_AUTH_GITHUB_CLIENT_SECRET: ""
+      # GF_AUTH_GITHUB_SCOPES: user:email,read:org
+      # GF_AUTH_GITHUB_AUTH_URL: https://github.com/login/oauth/authorize
+      # GF_AUTH_GITHUB_TOKEN_URL: https://github.com/login/oauth/access_token
+      # GF_AUTH_GITHUB_API_URL: https://api.github.com/user
+      # GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS: ""
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3000:3000"
+
+  gateway:
+    image: spectacles/gateway:latest
+    environment:
+      DISCORD_TOKEN: ""
+      DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
+      BROKER_TYPE: "amqp"
+      BROKER_URL: "amqp://admin:admin@rabbitmq"
+      BROKER_GROUP: "gateway"
+      BROKER_MESSAGE_TIMEOUT: "10m"
+      PROMETHEUS_ADDRESS: ":8080"
+      PROMETHEUS_ENDPOINT: "/metrics"
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/packages/api/Dockerfile
+    environment:
+      PGHOST: "postgres"
+      PGPORT: "5432"
+      PGDATABASE: "yukikaze"
+      PGUSERNAME: "yukikaze"
+      PGPASSWORD: "admin"
+      DISCORD_TOKEN: ""
+    ports:
+      - "127.0.0.1:3001:3000"
+
+volumes:
+  rabbitmq-data:
+    name: "rabbitmq-data"
+  postgres-data:
+    name: "postgres-data"
+  redis-data:
+    name: "redis-data"
+  prometheus-data:
+    name: "prometheus-data"
+  grafana-data:
+    name: "grafana-data"

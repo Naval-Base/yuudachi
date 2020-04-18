@@ -7,8 +7,8 @@ services:
     labels:
       com.naval-base.description: "RabbitMQ Broker"
     environment:
-      RABBITMQ_DEFAULT_USER: "admin"
-      RABBITMQ_DEFAULT_PASS: "admin"
+      RABBITMQ_DEFAULT_USER: ""
+      RABBITMQ_DEFAULT_PASS: ""
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     expose:
@@ -18,9 +18,6 @@ services:
       - "25672"
       - "15671"
       - "15672"
-    ports:
-    #   - "127.0.0.1:5672:5672"
-      - "127.0.0.1:15672:15672"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "rabbitmqctl", "node_health_check"]
@@ -32,15 +29,13 @@ services:
     labels:
       com.naval-base.description: "PostgreSQL"
     environment:
-      POSTGRES_USER: "yukikaze"
-      POSTGRES_PASSWORD: "admin"
-      POSTGRES_DB: "yukikaze"
+      POSTGRES_USER: ""
+      POSTGRES_PASSWORD: ""
+      POSTGRES_DB: ""
     volumes:
       - postgres-data:/var/lib/postgresql/data
     expose:
       - "5432"
-    ports:
-      - "127.0.0.1:5432:5432"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U yukikaze"]
@@ -52,7 +47,7 @@ services:
     labels:
       com.naval-base.description: "PostgreSQL Exporter"
     environment:
-      DATA_SOURCE_NAME: "postgresql://yukikaze:admin@postgres:5432/yukikaze?sslmode=disable"
+      DATA_SOURCE_NAME: ""
     expose:
       - "9187"
     restart: unless-stopped
@@ -62,10 +57,10 @@ services:
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: "postgresql://yukikaze:admin@postgres:5432/yukikaze"
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DATABASE_URL: ""
+      HASURA_GRAPHQL_ENABLE_CONSOLE: ""
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
-      HASURA_GRAPHQL_ADMIN_SECRET: "admin"
+      HASURA_GRAPHQL_ADMIN_SECRET: ""
     expose:
       - "8080"
     ports:
@@ -80,8 +75,6 @@ services:
       - redis-data:/data
     expose:
       - "6379"
-    # ports:
-    #   - "127.0.0.1:6379:6379"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping"]
@@ -106,8 +99,6 @@ services:
       - prometheus-data:/prometheus
     expose:
       - "9090"
-    ports:
-      - "127.0.0.1:9090:9090"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- localhost:9090/-/healthy"]
@@ -119,12 +110,12 @@ services:
     labels:
       com.naval-base.description: "Grafana"
     environment:
-      GF_DEFAULT_INSTANCE_NAME: "yukikaze"
+      GF_DEFAULT_INSTANCE_NAME: ""
       # GF_SERVER_DOMAIN: ""
       # GF_SERVER_ROOT_URL: ""
-      GF_SECURITY_ADMIN_USER: "admin"
-      GF_SECURITY_ADMIN_PASSWORD: "admin"
-      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_SECURITY_ADMIN_USER: ""
+      GF_SECURITY_ADMIN_PASSWORD: ""
+      GF_AUTH_ANONYMOUS_ENABLED: ""
       # GF_AUTH_ANONYMOUS_ORG_NAME: ""
       # GF_AUTH_GITHUB_ENABLED: ""
       # GF_AUTH_GITHUB_ALLOW_SIGN_UP: ""
@@ -154,12 +145,12 @@ services:
     labels:
       com.naval-base.description: "Gateway Ingress"
     environment:
-      DISCORD_TOKEN: "NjE4OTg3OTAzMjg0MDE5MjQx.Xo5WWA.YjeFV1yy0K5PNbus8Cu5MMaPLzg"
-      DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
-      BROKER_TYPE: "amqp"
-      BROKER_URL: "amqp://admin:admin@rabbitmq"
-      BROKER_GROUP: "gateway"
-      BROKER_MESSAGE_TIMEOUT: "10m"
+      DISCORD_TOKEN: ""
+      DISCORD_EVENTS: ""
+      BROKER_TYPE: ""
+      BROKER_URL: ""
+      BROKER_GROUP: ""
+      BROKER_MESSAGE_TIMEOUT: ""
       PROMETHEUS_ADDRESS: ":8080"
       PROMETHEUS_ENDPOINT: "/metrics"
     expose:
@@ -171,16 +162,14 @@ services:
     labels:
       com.naval-base.description: "Internal REST API"
     environment:
-      PGHOST: "postgres"
-      PGPORT: "5432"
-      PGDATABASE: "yukikaze"
-      PGUSERNAME: "yukikaze"
-      PGPASSWORD: "admin"
-      DISCORD_TOKEN: "NjE4OTg3OTAzMjg0MDE5MjQx.Xo5WWA.YjeFV1yy0K5PNbus8Cu5MMaPLzg"
+      PGHOST: ""
+      PGPORT: ""
+      PGDATABASE: ""
+      PGUSERNAME: ""
+      PGPASSWORD: ""
+      DISCORD_TOKEN: ""
     expose:
       - "3000"
-    ports:
-      - "127.0.0.1:3001:3000"
     restart: unless-stopped
 
 volumes:
