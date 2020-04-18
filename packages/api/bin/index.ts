@@ -3,10 +3,10 @@ import 'reflect-metadata';
 import Rest from '@spectacles/rest';
 import { Boom, isBoom, notFound } from '@hapi/boom';
 import { resolve } from 'path';
-import polka = require('polka');
+import * as polka from 'polka';
 import { Request } from 'polka';
-import postgres = require('postgres');
-import readdirp = require('readdirp');
+import * as postgres from 'postgres';
+import * as readdirp from 'readdirp';
 import { container } from 'tsyringe';
 
 import Route, { pathToRouteInfo } from '../src/Route';

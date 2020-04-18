@@ -1,4 +1,4 @@
-import Boom = require('@hapi/boom');
+import * as Boom from '@hapi/boom';
 import { AnySchema } from '@hapi/joi';
 import { Request, Response, NextHandler } from 'polka';
 
