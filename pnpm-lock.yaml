@@ -325,6 +325,8 @@ packages:
       ecdsa-sig-formatter: 1.0.11
       safe-buffer: 5.2.0
     dev: false
+    engines:
+      node: '>=10.4'
     resolution:
       integrity: sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==
   /jws/3.2.2:
@@ -352,6 +354,8 @@ packages:
       integrity: sha1-bC4XHbKiV82WgC/UOwGyDV9YcPY=
   /lodash.isinteger/4.0.4:
     dev: false
+    engines:
+      node: '>=10'
     resolution:
       integrity: sha1-YZwK89A/iwTDH1iChAt3sRzWg0M=
   /lodash.isnumber/3.0.3:
