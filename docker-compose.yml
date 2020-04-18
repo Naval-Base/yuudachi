@@ -39,8 +39,8 @@ services:
       - postgres-data:/var/lib/postgresql/data
     expose:
       - "5432"
-    # ports:
-    #   - "127.0.0.1:5432:5432"
+    ports:
+      - "127.0.0.1:5432:5432"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U yukikaze"]
@@ -58,7 +58,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v1.1.1
+    image: hasura/graphql-engine:v1.2.0-beta.3
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:
@@ -154,7 +154,7 @@ services:
     labels:
       com.naval-base.description: "Gateway Ingress"
     environment:
-      DISCORD_TOKEN: "NDgzNDQ5NDI3MDE3ODU5MDgz.Xn_h-A.EziVlV48KvuiTUPcVrx2fm768W8"
+      DISCORD_TOKEN: "NjE4OTg3OTAzMjg0MDE5MjQx.Xo5WWA.YjeFV1yy0K5PNbus8Cu5MMaPLzg"
       DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
       BROKER_TYPE: "amqp"
       BROKER_URL: "amqp://admin:admin@rabbitmq"
@@ -164,6 +164,23 @@ services:
       PROMETHEUS_ENDPOINT: "/metrics"
     expose:
       - "8080"
+    restart: unless-stopped
+
+  api:
+    build: packages/api
+    labels:
+      com.naval-base.description: "Internal REST API"
+    environment:
+      PGHOST: "postgres"
+      PGPORT: "5432"
+      PGDATABASE: "yukikaze"
+      PGUSERNAME: "yukikaze"
+      PGPASSWORD: "admin"
+      DISCORD_TOKEN: "NjE4OTg3OTAzMjg0MDE5MjQx.Xo5WWA.YjeFV1yy0K5PNbus8Cu5MMaPLzg"
+    expose:
+      - "3000"
+    ports:
+      - "127.0.0.1:3001:3000"
     restart: unless-stopped
 
 volumes:
