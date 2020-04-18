@@ -6,6 +6,8 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"renovate": {
-		"extends": ["teal"]
+		"extends": [
+			"teal"
+		]
 	}
 }
