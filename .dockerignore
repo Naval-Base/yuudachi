@@ -1,8 +1,9 @@
 # Packages
-node_modules/
+node_modules
+**/node_modules
 
 # Log files
-logs/
+logs
 *.log
 npm-debug.log*
 
@@ -12,11 +13,10 @@ pids
 *.seed
 
 # IDE
-.vscode/
+.vscode
 
 # Docker (experimental)
-docker/
-deploy/
+docker
 Dockerfile
 .dockerignore
 
@@ -24,19 +24,9 @@ Dockerfile
 .env
 .env.example
 
-# Test files
-
-# Command files (unfinished)
-*.bak
-
 # Miscellaneous
-.tmp/
-.github/
-.travis.yml
-LICENSE
-
-# Git
+.tmp
 .github
 .git
-.gitattributes
-.gitignore
+migrations
+docker-compose.yml
