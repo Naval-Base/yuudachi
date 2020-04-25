@@ -12,6 +12,7 @@ export enum RouteMethod {
 	POST = 'post',
 	PUT = 'put',
 	DELETE = 'delete',
+	PATCH = 'patch',
 }
 
 export interface RouteInfo {
@@ -21,8 +22,9 @@ export interface RouteInfo {
 
 export function pathToRouteInfo(path: string): RouteInfo | null {
 	const method = basename(path, '.js');
-	if (!([RouteMethod.GET, RouteMethod.POST, RouteMethod.PUT, RouteMethod.DELETE] as string[]).includes(method)) return null;
+	if (!([RouteMethod.GET, RouteMethod.POST, RouteMethod.PUT, RouteMethod.DELETE, RouteMethod.PATCH] as string[]).includes(method)) return null;
 
+	if (!path.startsWith('/')) path = '/' + path;
 	return {
 		path: dirname(path
 			.replace(/\[(.+)\]/g, ':$1')
