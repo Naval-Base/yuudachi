@@ -36,5 +36,5 @@ declare module 'postgres' {
 		notify(name: string, data: string): void;
 	}
 
-	export = function (options?: Options): SQL {}
+	export default function (options?: Options): SQL {}
 }

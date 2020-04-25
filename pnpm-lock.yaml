@@ -18,6 +18,7 @@ importers:
       tsyringe: 4.1.0
     devDependencies:
       '@babel/core': 7.9.0
+      '@babel/plugin-proposal-decorators': 7.8.3_@babel+core@7.9.0
       '@babel/preset-env': 7.9.5_@babel+core@7.9.0
       '@babel/preset-typescript': 7.9.0_@babel+core@7.9.0
       '@spectacles/types': 0.2.1
@@ -30,12 +31,14 @@ importers:
       '@types/node': 13.13.0
       '@types/trouter': 3.1.0
       babel-jest: 25.4.0_@babel+core@7.9.0
+      babel-plugin-transform-typescript-metadata: 0.3.0
       env-cmd: 10.1.0
       jest: 25.4.0
       rimraf: 3.0.2
       typescript: 3.8.3
     specifiers:
       '@babel/core': ^7.9.0
+      '@babel/plugin-proposal-decorators': ^7.8.3
       '@babel/preset-env': ^7.9.5
       '@babel/preset-typescript': ^7.9.0
       '@hapi/boom': ^9.1.0
@@ -52,6 +55,7 @@ importers:
       '@types/node': ^13.13.0
       '@types/trouter': ^3.1.0
       babel-jest: ^25.4.0
+      babel-plugin-transform-typescript-metadata: ^0.3.0
       common-tags: ^1.8.0
       env-cmd: ^10.1.0
       ioredis: ^4.16.2
@@ -324,6 +328,17 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-NZ9zLv848JsV3hs8ryEh7Uaz/0KsmPLqv0+PdkDJL1cJy0K4kOCFa8zc1E3mp+RHPQcpdfb/6GovEsW4VDrOMw==
+  /@babel/plugin-proposal-decorators/7.8.3_@babel+core@7.9.0:
+    dependencies:
+      '@babel/core': 7.9.0
+      '@babel/helper-create-class-features-plugin': 7.9.5_@babel+core@7.9.0
+      '@babel/helper-plugin-utils': 7.8.3
+      '@babel/plugin-syntax-decorators': 7.8.3_@babel+core@7.9.0
+    dev: true
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    resolution:
+      integrity: sha512-e3RvdvS4qPJVTe288DlXjwKflpfy1hr0j5dz5WpIYYeP7vQZg2WfAEIp8k5/Lwis/m5REXEteIz6rrcDtXXG7w==
   /@babel/plugin-proposal-dynamic-import/7.8.3_@babel+core@7.9.0:
     dependencies:
       '@babel/core': 7.9.0
@@ -434,6 +449,15 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-UcAyQWg2bAN647Q+O811tG9MrJ38Z10jjhQdKNAL8fsyPzE3cCN/uT+f55cFVY4aGO4jqJAvmqsuY3GQDwAoXg==
+  /@babel/plugin-syntax-decorators/7.8.3_@babel+core@7.9.0:
+    dependencies:
+      '@babel/core': 7.9.0
+      '@babel/helper-plugin-utils': 7.8.3
+    dev: true
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    resolution:
+      integrity: sha512-8Hg4dNNT9/LcA1zQlfwuKR8BUc/if7Q7NkTam9sGTcJphLwpf2g4S42uhspQrIrR+dpzE0dtTqBVFoHl8GtnnQ==
   /@babel/plugin-syntax-dynamic-import/7.8.3_@babel+core@7.9.0:
     dependencies:
       '@babel/core': 7.9.0
@@ -1556,6 +1580,12 @@ packages:
       node: '>= 8.3'
     resolution:
       integrity: sha512-M3a10JCtTyKevb0MjuH6tU+cP/NVQZ82QPADqI1RQYY1OphztsCeIeQmTsHmF/NS6m0E51Zl4QNsI3odXSQF5w==
+  /babel-plugin-transform-typescript-metadata/0.3.0:
+    dependencies:
+      '@babel/helper-plugin-utils': 7.8.3
+    dev: true
+    resolution:
+      integrity: sha512-ASYrM+bxtpfgZKsAOqQfjmLlekIDigRnNCfQBDOOdaqL18hLhZIsbdiHsuaNDTkljlqnbV/DlufaWY55jC2PBg==
   /babel-preset-current-node-syntax/0.1.2_@babel+core@7.9.0:
     dependencies:
       '@babel/core': 7.9.0

@@ -4,7 +4,7 @@ import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { SQL } from 'postgres';
-import { RawCase } from './CaseManager';
+import { RawCase, CaseAction } from './CaseManager';
 import { SettingsKeys } from './SettingsManager';
 import { kSQL } from '../tokens';
 
@@ -29,6 +29,7 @@ export default class CaseLogManager {
 			`/channels/${logChannelId}/messages`,
 			{
 				embed: {
+					title: `${item.mod_tag} (${item.mod_id})`,
 					description: await this.generateLogMessage(item, logChannelId),
 					footer: `Case ${item.case_id}`,
 					timestamp: Date.now(),
@@ -51,11 +52,9 @@ export default class CaseLogManager {
 	}
 
 	protected async generateLogMessage(case_: RawCase, logChannelId: string): Promise<string> {
-		const user: User = await this.rest.get(`/users/${case_.target_id}`);
-
 		let msg = stripIndents`
-			**Member:** ${user.username}#${user.discriminator} (${case_.target_id})
-			**Action:** ${case_.action}
+			**Member:** ${case_.target_tag} (${case_.target_id})
+			**Action:** ${CaseAction[case_.action]}
 		`;
 
 		if (case_.action_expiration) {

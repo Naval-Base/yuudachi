@@ -5,7 +5,7 @@ import { Boom, isBoom, notFound } from '@hapi/boom';
 import { resolve } from 'path';
 import * as polka from 'polka';
 import { Request } from 'polka';
-import * as postgres from 'postgres';
+import postgres from 'postgres';
 import * as readdirp from 'readdirp';
 import { container } from 'tsyringe';
 
