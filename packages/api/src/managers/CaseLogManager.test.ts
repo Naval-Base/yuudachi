@@ -143,6 +143,9 @@ test('creates reference role case', async () => {
 				where id = `,`
 					and guild_id = `, ''], refCaseId, guildId);
 
+	expect(mockedRest.get).toHaveBeenCalledTimes(1);
+	expect(mockedRest.get).toHaveBeenCalledWith(`/guilds/${guildId}/roles`);
+
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
 		embed: {
