@@ -49,6 +49,7 @@
     "typescript": "^3.8.3"
   },
   "jest": {
+    "resetMocks": true,
     "rootDir": "src/",
     "testEnvironment": "node"
   }

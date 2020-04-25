@@ -1,5 +1,5 @@
 import Rest from '@spectacles/rest';
-import { User } from '@spectacles/types';
+import { Role } from '@spectacles/types';
 import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
@@ -52,9 +52,17 @@ export default class CaseLogManager {
 	}
 
 	protected async generateLogMessage(case_: RawCase, logChannelId: string): Promise<string> {
+		let action = CaseAction[case_.action];
+		if (case_.action === CaseAction.ROLE && case_.role_id) {
+			const roles: Role[] = await this.rest.get(`/guilds/${case_.guild_id}/roles`);
+			const role = roles.find(role => role.id === case_.role_id);
+
+			if (role) action += ` "${role.name}" (${case_.role_id})`;
+		}
+
 		let msg = stripIndents`
 			**Member:** ${case_.target_tag} (${case_.target_id})
-			**Action:** ${CaseAction[case_.action]}
+			**Action:** ${action}
 		`;
 
 		if (case_.action_expiration) {
