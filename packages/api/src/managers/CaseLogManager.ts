@@ -5,7 +5,7 @@ import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { SQL } from 'postgres';
 import { RawCase, CaseAction } from './CaseManager';
-import { SettingsKeys } from './SettingsManager';
+import SettingsManager, { SettingsKeys } from './SettingsManager';
 import { kSQL } from '../tokens';
 
 @injectable()
@@ -14,17 +14,13 @@ export default class CaseLogManager {
 		@inject(kSQL)
 		public readonly sql: SQL,
 		public readonly rest: Rest,
+		public readonly settings: SettingsManager,
 	) {}
 
 	public async create(item: RawCase): Promise<void> {
-		const [setting] = await this.sql`
-			select value
-			from guild_settings
-			where guild_id = ${item.guild_id}
-				and key = ${SettingsKeys.MOD_LOG_CHANNEL_ID}`;
-		if (!has(setting, 'value')) throw new Error('no mod log channel configured');
+		const logChannelId = await this.settings.get(item.guild_id, SettingsKeys.MOD_LOG_CHANNEL_ID);
+		if (!logChannelId) throw new Error('no mod log channel configured');
 
-		const logChannelId = (setting as { value: string }).value;
 		const logMessage = await this.rest.post(
 			`/channels/${logChannelId}/messages`,
 			{
