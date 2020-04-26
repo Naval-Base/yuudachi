@@ -16,7 +16,7 @@ test('[post] root', () => {
 });
 
 test('[get] subfolder', () => {
-	const route = pathToRouteInfo('foo/bar/get.js');
+	const route = pathToRouteInfo('/foo/bar/get.js');
 	expect(route).not.toBeNull();
 	expect(route!.path).toBe('/foo/bar');
 	expect(route!.method).toBe('get');

@@ -40,13 +40,6 @@ export default class CaseLogManager {
 				and guild_id = ${item.guild_id}`;
 	}
 
-	public update(item: Partial<RawCase>): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public delete(item: Partial<RawCase>): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-
 	protected async generateLogMessage(case_: RawCase, logChannelId: string): Promise<string> {
 		let action = CaseAction[case_.action];
 		if (case_.action === CaseAction.ROLE && case_.role_id) {

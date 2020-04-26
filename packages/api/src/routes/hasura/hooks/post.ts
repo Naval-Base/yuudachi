@@ -70,13 +70,13 @@ export default class HasuraEventHookRoute implements Route {
 				switch (body.event.op) {
 					case 'UPDATE':
 					case 'MANUAL':
-						this.caseLogManager.update(body.event.data.new);
+						// this.caseLogManager.update(body.event.data.new);
 						break;
 					case 'INSERT':
 						this.caseLogManager.create(body.event.data.new);
 						break;
 					case 'DELETE':
-						this.caseLogManager.delete(body.event.data.old);
+						// this.caseLogManager.delete(body.event.data.old);
 						break;
 				}
 			}

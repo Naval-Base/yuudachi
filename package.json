@@ -18,12 +18,14 @@
 		"@babel/plugin-proposal-decorators": "^7.8.3",
 		"@babel/preset-env": "^7.9.5",
 		"@babel/preset-typescript": "^7.9.0",
+		"@types/jest": "^25.2.1",
+		"@types/node": "^13.13.4",
 		"babel-jest": "^25.4.0",
 		"babel-plugin-transform-typescript-metadata": "^0.3.0",
 		"jest": "^25.4.0"
 	},
-  "jest": {
-    "resetMocks": true,
+	"jest": {
+		"resetMocks": true,
 		"testEnvironment": "node",
 		"collectCoverage": true,
 		"coverageDirectory": "coverage",
@@ -43,5 +45,5 @@
 		"roots": [
 			"<rootDir>packages/"
 		]
-  }
+	}
 }

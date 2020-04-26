@@ -64,6 +64,27 @@ afterEach(() => {
 	postgresResults.splice(0, postgresResults.length);
 });
 
+test('fails when no log channel is available', async () => {
+	const logManager = container.resolve(CaseLogManager);
+	await expect(() => logManager.create({
+		action: CaseAction.KICK,
+		action_expiration: null,
+		action_processed: true,
+		case_id: caseId,
+		context_message_id: null,
+		created_at: new Date().toString(),
+		guild_id: guildId,
+		log_message_id: null,
+		mod_id: modId,
+		mod_tag: modTag,
+		reason: 'foo',
+		ref_id: null,
+		role_id: null,
+		target_id: targetId,
+		target_tag: targetTag,
+	})).rejects.toStrictEqual(new Error('no mod log channel configured'));
+});
+
 test('creates basic kick case', async () => {
 	postgresResults.push({ value: logChannelId });
 

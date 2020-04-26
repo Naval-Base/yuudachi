@@ -5,6 +5,8 @@ importers:
       '@babel/plugin-proposal-decorators': 7.8.3_@babel+core@7.9.0
       '@babel/preset-env': 7.9.5_@babel+core@7.9.0
       '@babel/preset-typescript': 7.9.0_@babel+core@7.9.0
+      '@types/jest': 25.2.1
+      '@types/node': 13.13.4
       babel-jest: 25.4.0_@babel+core@7.9.0
       babel-plugin-transform-typescript-metadata: 0.3.0
       jest: 25.4.0
@@ -13,6 +15,8 @@ importers:
       '@babel/plugin-proposal-decorators': ^7.8.3
       '@babel/preset-env': ^7.9.5
       '@babel/preset-typescript': ^7.9.0
+      '@types/jest': ^25.2.1
+      '@types/node': ^13.13.4
       babel-jest: ^25.4.0
       babel-plugin-transform-typescript-metadata: ^0.3.0
       jest: ^25.4.0
@@ -36,7 +40,6 @@ importers:
       '@types/common-tags': 1.8.0
       '@types/hapi__joi': 16.0.12
       '@types/ioredis': 4.14.9
-      '@types/jest': 25.2.1
       '@types/jsonwebtoken': 8.3.9
       '@types/lodash': 4.14.150
       '@types/node': 13.13.0
@@ -53,7 +56,6 @@ importers:
       '@types/common-tags': ^1.8.0
       '@types/hapi__joi': ^16.0.12
       '@types/ioredis': ^4.14.9
-      '@types/jest': ^25.2.1
       '@types/jsonwebtoken': ^8.3.9
       '@types/lodash': ^4.14.150
       '@types/node': ^13.13.0
@@ -1343,6 +1345,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-WE4IOAC6r/yBZss1oQGM5zs2D7RuKR6Q+w+X2SouPofnWn+LbCqClRyhO3ZE7Ix8nmFgo/oVuuE01cJT2XB13A==
+  /@types/node/13.13.4:
+    dev: true
+    resolution:
+      integrity: sha512-x26ur3dSXgv5AwKS0lNfbjpCakGIduWU1DU91Zz58ONRWrIKGunmZBNv4P7N+e27sJkiGDsw/3fT4AtsqQBrBA==
   /@types/normalize-package-data/2.4.0:
     dev: true
     resolution:

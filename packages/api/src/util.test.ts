@@ -26,4 +26,15 @@ describe('send boom', () => {
 		expect(res.setHeader).toHaveBeenCalledTimes(0);
 		expect(res.end).toHaveBeenCalledWith(`{"statusCode":500,"error":"Internal Server Error","message":"An internal server error occurred"}`);
 	});
+
+	test('with headers', () => {
+		const err = boom.unauthorized('foo', ['abc', 'def']);
+		const res = new MockedResponse();
+		sendBoom(err, res);
+
+		expect(res.statusCode).toBe(401);
+		expect(res.setHeader).toHaveBeenCalledTimes(1);
+		expect(res.setHeader).toHaveBeenCalledWith('WWW-Authenticate', 'abc, def');
+		expect(res.end).toHaveBeenCalledWith(`{"statusCode":401,"error":"Unauthorized","message":"foo"}`);
+	});
 });

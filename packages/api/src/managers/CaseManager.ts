@@ -55,18 +55,6 @@ export default class CaseManager {
 		public readonly rest: Rest,
 	) {}
 
-	insert(item: Case): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-
-	update(item: Partial<Case>): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-
-	delete(item: Partial<Case>): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-
 	public async create(case_: Case): Promise<Case> {
 		const requestOptions = { reason: case_.reason };
 		switch (case_.action) {
