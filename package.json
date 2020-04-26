@@ -5,9 +5,43 @@
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "UNLICENSED",
 	"private": true,
+	"scripts": {
+		"test": "jest"
+	},
 	"renovate": {
 		"extends": [
 			"teal"
 		]
-	}
+	},
+	"devDependencies": {
+		"@babel/core": "^7.9.0",
+		"@babel/plugin-proposal-decorators": "^7.8.3",
+		"@babel/preset-env": "^7.9.5",
+		"@babel/preset-typescript": "^7.9.0",
+		"babel-jest": "^25.4.0",
+		"babel-plugin-transform-typescript-metadata": "^0.3.0",
+		"jest": "^25.4.0"
+	},
+  "jest": {
+    "resetMocks": true,
+		"testEnvironment": "node",
+		"collectCoverage": true,
+		"coverageDirectory": "coverage",
+		"coverageReporters": [
+			"text",
+			"lcov",
+			"clover"
+		],
+		"coverageThreshold": {
+			"global": {
+				"branches": 80,
+				"functions": 80,
+				"lines": 80,
+				"statements": 80
+			}
+		},
+		"roots": [
+			"<rootDir>packages/"
+		]
+  }
 }

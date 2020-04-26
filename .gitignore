@@ -5,6 +5,7 @@ node_modules/
 logs/
 *.log
 npm-debug.log*
+coverage/
 
 # Runtime data
 pids
