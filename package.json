@@ -6,7 +6,8 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+		"test:ci": "jest --ci --no-stack-trace --verbose"
 	},
 	"renovate": {
 		"extends": [
