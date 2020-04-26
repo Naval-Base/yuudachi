@@ -218,7 +218,7 @@ test('creates ban with expiration & default delete message days', async () => {
 
 test('creates unban case', async () => {
 	const case_: Case = {
-		action: CaseAction.UN_BAN,
+		action: CaseAction.UNBAN,
 		caseId: 0,
 		guildId: '1234',
 		moderatorId: '2345',
