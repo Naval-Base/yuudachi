@@ -1,27 +1,6 @@
 name: Node
 on: [push, pull_request]
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Install Node v12
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
-
-      - name: Install pnpm
-        run: curl -L https://unpkg.com/@pnpm/self-installer | node
-
-      - name: Install dependencies
-        run: pnpm i
-
-      - name: Run Lint
-        run: pnpm recursive run build
-
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -39,6 +18,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm i
+
+      - name: Run Build
+        run: pnpm recursive run build
 
       - name: Run Tests
         run: pnpm recursive test
