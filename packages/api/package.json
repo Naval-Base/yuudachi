@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest",
     "build": "rimraf dist && tsc",
     "start": "node dist/bin/index.js",
     "dev": "npm run build && env-cmd npm start"
