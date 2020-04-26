@@ -12,7 +12,7 @@ export enum CaseAction {
 	KICK,
 	SOFTBAN,
 	BAN,
-	UN_BAN,
+	UNBAN,
 }
 
 export interface RawCase {
@@ -100,7 +100,7 @@ export default class CaseManager {
 				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params}`, requestOptions);
 				break;
 			}
-			case CaseAction.UN_BAN:
+			case CaseAction.UNBAN:
 				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, requestOptions);
 				break;
 		}

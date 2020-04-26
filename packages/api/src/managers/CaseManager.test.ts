@@ -215,3 +215,26 @@ test('creates ban with expiration & default delete message days', async () => {
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
+
+test('creates unban case', async () => {
+	const case_: Case = {
+		action: CaseAction.UN_BAN,
+		caseId: 0,
+		guildId: '1234',
+		moderatorId: '2345',
+		reason: 'foo',
+		targetId: '3456',
+		contextMessageId: '4567',
+		actionExpiration: new Date(),
+	};
+
+	const manager = container.resolve(CaseManager);
+	const saved = await manager.create(case_);
+
+	expect(saved).toBe(case_);
+	expect(saved.caseId).toBe(1);
+	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'foo' });
+	expect(mockedPostgres).toHaveBeenCalledTimes(1);
+	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
+});
