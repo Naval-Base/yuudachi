@@ -75,8 +75,8 @@ export default class LockdownScheduler {
 		await chan.updateOverwrite(
 			lock.guild,
 			{
-				SEND_MESSAGES: true,
-				ADD_REACTIONS: true,
+				SEND_MESSAGES: null,
+				ADD_REACTIONS: null,
 			},
 			`Lockdown removed based on duration.`,
 		);
