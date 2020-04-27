@@ -38,6 +38,7 @@ export default class LockdownScheduler {
 			lockdown.guild,
 			{
 				SEND_MESSAGES: false,
+				ADD_REACTIONS: false,
 			},
 			`Lockdown for ${ms(duration)} by ${author.tag}`,
 		);
@@ -75,6 +76,7 @@ export default class LockdownScheduler {
 			lock.guild,
 			{
 				SEND_MESSAGES: true,
+				ADD_REACTIONS: true,
 			},
 			`Lockdown removed based on duration.`,
 		);
