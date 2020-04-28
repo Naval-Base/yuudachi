@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import * as qs from 'querystring';
 import { MESSAGES, SETTINGS } from '../../util/constants';
 
-const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev', 'collection'];
+const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', 'v11', 'collection'];
 
 interface DocsCommandArguments {
 	defaultDocs: string;
@@ -79,7 +79,7 @@ export default class DocsCommand extends Command {
 		if (!SOURCES.includes(source)) {
 			source = this.client.settings.get(guild, SETTINGS.DEFAULT_DOCS, 'stable');
 		}
-		if (source === '11.5-dev') {
+		if (source === 'v11') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
 		}
 		const queryString = qs.stringify({ src: source, q: q.join(' '), force, includePrivate });
