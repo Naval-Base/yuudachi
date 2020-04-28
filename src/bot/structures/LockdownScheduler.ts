@@ -38,6 +38,7 @@ export default class LockdownScheduler {
 			lockdown.guild,
 			{
 				SEND_MESSAGES: false,
+				ADD_REACTIONS: false,
 			},
 			`Lockdown for ${ms(duration)} by ${author.tag}`,
 		);
@@ -74,7 +75,8 @@ export default class LockdownScheduler {
 		await chan.updateOverwrite(
 			lock.guild,
 			{
-				SEND_MESSAGES: true,
+				SEND_MESSAGES: null,
+				ADD_REACTIONS: null,
 			},
 			`Lockdown removed based on duration.`,
 		);
