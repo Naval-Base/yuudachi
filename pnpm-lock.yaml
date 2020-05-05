@@ -42,7 +42,7 @@ importers:
       '@types/ioredis': 4.14.9
       '@types/jsonwebtoken': 8.3.9
       '@types/lodash': 4.14.150
-      '@types/node': 13.13.0
+      '@types/node': 13.13.4
       '@types/trouter': 3.1.0
       env-cmd: 10.1.0
       rimraf: 3.0.2
@@ -58,7 +58,7 @@ importers:
       '@types/ioredis': ^4.14.9
       '@types/jsonwebtoken': ^8.3.9
       '@types/lodash': ^4.14.150
-      '@types/node': ^13.13.0
+      '@types/node': ^13.13.4
       '@types/trouter': ^3.1.0
       common-tags: ^1.8.0
       env-cmd: ^10.1.0
