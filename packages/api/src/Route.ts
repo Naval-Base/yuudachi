@@ -1,5 +1,5 @@
 import { basename, dirname } from 'path';
-import { Request, RequestHandler, Response, NextHandler } from 'polka';
+import { Request, RequestHandler, Response, NextHandler, Polka } from 'polka';
 
 declare module 'polka' {
 	export interface Request {
@@ -33,7 +33,17 @@ export function pathToRouteInfo(path: string): RouteInfo | null {
 	};
 }
 
-export default interface Route {
-	middleware: RequestHandler<Request>[];
-	handle(req: Request, res: Response, next: NextHandler): void | Promise<void>;
+export default abstract class Route {
+	public readonly middleware: RequestHandler<Request>[] = [];
+	public abstract handle(req: Request, res: Response, next: NextHandler): void | Promise<void>;
+
+	public register(info: RouteInfo, server: Polka) {
+		server[info.method](info.path, ...this.middleware, async (req, res, next) => {
+			try {
+				await this.handle(req, res, next!);
+			} catch (e) {
+				next!(e);
+			}
+		});
+	}
 }

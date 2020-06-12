@@ -38,30 +38,32 @@ const contextMessageId = '34567';
 const actionExpiration = new Date(NOW + 1e5).toString();
 
 // Array holding results for SQL queries during the test
-const postgresResults: any[] = [];
+let postgresResults: any[] = [];
 
-beforeEach(() => {
-	Date.now = jest.fn(() => NOW);
+Date.now = jest.fn(() => NOW);
 
-	let sqlCalls = 0;
-	mockedPostgres.mockImplementation((): any => {
-		return Promise.resolve([postgresResults[sqlCalls++]]);
-	});
+let sqlCalls = 0;
+mockedPostgres.mockImplementation((): any => {
+	return Promise.resolve([postgresResults[sqlCalls++]]);
+});
 
-	// there is only one rest call that happens during case creation
-	let restCalls = 0;
-	mockedRest.post.mockImplementation(() => {
-		switch (restCalls++) {
-			case 0:
-				return Promise.resolve({ id: logMessageId });
-			default:
-				return Promise.resolve({});
-		}
-	});
+// there is only one rest call that happens during case creation
+let restCalls = 0;
+mockedRest.post.mockImplementation(() => {
+	switch (restCalls++) {
+		case 0:
+			return Promise.resolve({ id: logMessageId });
+		default:
+			return Promise.resolve({});
+	}
 });
 
 afterEach(() => {
-	postgresResults.splice(0, postgresResults.length);
+	postgresResults = [];
+	sqlCalls = 0;
+	restCalls = 0;
+
+	jest.clearAllMocks();
 });
 
 test('fails when no log channel is available', async () => {
@@ -135,7 +137,7 @@ test('creates basic kick case', async () => {
 });
 
 test('creates reference role case', async () => {
-	postgresResults.push({ value: logChannelId }, { log_message_id: refLogMessageId });
+	postgresResults = [{ value: logChannelId }, { log_message_id: refLogMessageId }];
 	mockedRest.get.mockResolvedValue([{ id: roleId, name: roleName }]);
 
 	const logManager = container.resolve(CaseLogManager);
@@ -183,7 +185,7 @@ test('creates reference role case', async () => {
 });
 
 test('creates contextual softban case', async () => {
-	postgresResults.push({ value: logChannelId }, { channel_id: contextChannelId });
+	postgresResults = [{ value: logChannelId }, { channel_id: contextChannelId }];
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -226,11 +228,11 @@ test('creates contextual softban case', async () => {
 });
 
 test('creates temporary ban case with context and reference', async () => {
-	postgresResults.push(
+	postgresResults = [
 		{ value: logChannelId },
 		{ channel_id: contextChannelId },
 		{ log_message_id: refLogMessageId },
-	);
+	];
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({

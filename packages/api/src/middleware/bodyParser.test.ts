@@ -1,42 +1,43 @@
-import { badRequest } from '@hapi/boom';
-import { Http2ServerRequest, Http2ServerResponse } from 'http2';
-import { PassThrough } from 'stream';
+import supertest from 'supertest';
 import bodyParser from './bodyParser';
+import createApp from '../app';
 
-let stream: PassThrough;
-let headers: Record<string, string | string[]>;
-let req: Http2ServerRequest;
-let res: Http2ServerResponse;
-let next: jest.Mock;
+const mockHandler = jest.fn((req, res) => res.end());
 
-beforeEach(() => {
-	stream = new PassThrough();
-	headers = {};
-	// @ts-ignore because ServerHttp2Stream is not constructable
-	req = new Http2ServerRequest(stream, headers, {}, []);
-	// @ts-ignore because ServerHttp2Stream is not constructable
-	res = new Http2ServerResponse(stream);
-	next = jest.fn();
+afterEach(() => {
+	mockHandler.mockClear();
 });
 
+const app = createApp();
+app.use(bodyParser);
+app.post('/test1', mockHandler);
+app.listen(0);
+
 test('missing content type', async () => {
-	await bodyParser(req, res, next);
-	expect(next).toHaveBeenCalledWith(badRequest('unexpected content type'));
-	expect(stream.writableEnded).toBe(false);
+	await supertest(app.server)
+		.post('/test1')
+		.expect(400);
+
+	expect(mockHandler).not.toHaveBeenCalled();
 });
 
 test('invalid data', async () => {
-	headers['content-type'] = 'application/json';
-	stream.end('foo');
-	await bodyParser(req, res, next);
-	expect(next).toHaveBeenCalledWith(new SyntaxError('Unexpected token o in JSON at position 1'));
-	expect(req).not.toHaveProperty('body');
+	await supertest(app.server)
+		.post('/test1')
+		.type('json')
+		.send('foo')
+		.expect(422);
+
+	expect(mockHandler).not.toHaveBeenCalled();
 });
 
 test('valid data', async () => {
-	headers['content-type'] = 'application/json';
-	stream.end('{"foo": "bar"}');
-	await bodyParser(req, res, next);
-	expect(next).toHaveBeenCalledWith();
-	expect(req).toHaveProperty('body', { foo: 'bar' });
+	await supertest(app.server)
+		.post('/test1')
+		.type('json')
+		.send({ foo: 'bar' })
+		.expect(200);
+
+	expect(mockHandler).toHaveBeenCalledTimes(1);
+	expect(mockHandler.mock.calls[0][0]).toHaveProperty('body');
 });

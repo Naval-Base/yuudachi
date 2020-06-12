@@ -34,7 +34,7 @@ interface HasuraEventPayload {
 }
 
 @injectable()
-export default class HasuraEventHookRoute implements Route {
+export default class HasuraEventHookRoute extends Route {
 	public middleware = [
 		validate(Joi.object({
 			event: Joi.object({
@@ -59,7 +59,9 @@ export default class HasuraEventHookRoute implements Route {
 
 	constructor(
 		public caseLogManager: CaseLogManager,
-	) {}
+	) {
+		super();
+	}
 
 	public handle(req: Request, res: Response, next: NextHandler) {
 		if (!req.body) return next(new Error('uh oh, something broke'));

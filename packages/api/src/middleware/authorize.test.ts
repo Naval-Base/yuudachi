@@ -1,52 +1,34 @@
-import { badData } from '@hapi/boom';
-import { Http2ServerRequest, Http2ServerResponse } from 'http2';
-import { PassThrough } from 'stream';
+import supertest from 'supertest';
 import authorize from './authorize';
 import { USER_ID_HEADER } from '../Constants';
+import createApp from '../app';
 
-let stream: PassThrough;
-let headers: Record<string, string | string[]>;
-let req: Http2ServerRequest;
-let res: Http2ServerResponse;
-let next: jest.Mock;
+const mockHandler = jest.fn((req, res) => res.end());
 
-beforeEach(() => {
-	stream = new PassThrough();
-	headers = {};
-	// @ts-ignore because ServerHttp2Stream is not constructable
-	req = new Http2ServerRequest(stream, headers, {}, []);
-	// @ts-ignore because ServerHttp2Stream is not constructable
-	res = new Http2ServerResponse(stream);
-	next = jest.fn();
+afterEach(() => {
+	mockHandler.mockClear();
 });
 
-test('missing user ID header', () => {
-	authorize(req, res, next);
-	expect(req).not.toHaveProperty('userId');
-	expect(next).toHaveBeenCalledWith(badData(`missing "${USER_ID_HEADER}" header`));
+const app = createApp();
+app.use(authorize);
+app.get('/test', mockHandler);
+app.listen(0);
+
+
+test('missing user ID header', async () => {
+	await supertest(app.server)
+		.get('/test')
+		.expect(400);
+
+	expect(mockHandler).not.toHaveBeenCalled();
 });
 
-test('has user ID header', () => {
-	headers[USER_ID_HEADER] = 'foo';
-	authorize(req, res, next);
-	expect(req).toHaveProperty('userId', 'foo');
-	expect(next).toHaveBeenCalledWith();
-});
+test('has user ID header', async () => {
+	await supertest(app.server)
+		.get('/test')
+		.set(USER_ID_HEADER, 'foo')
+		.expect(200);
 
-test('has multiple user ID headers', () => {
-	headers[USER_ID_HEADER] = ['foo', 'bar'];
-	authorize(req, res, next);
-	expect(req).toHaveProperty('userId', 'foo');
-	expect(next).toHaveBeenCalledWith();
-});
-
-test('missing next function & user ID header', () => {
-	authorize(req, res);
-	expect(req).not.toHaveProperty('userId');
-});
-
-test('missing next function', () => {
-	headers[USER_ID_HEADER] = 'foo';
-	authorize(req, res);
-	expect(req).toHaveProperty('userId', 'foo');
+	expect(mockHandler).toHaveBeenCalled();
+	expect(mockHandler.mock.calls[0][0]).toHaveProperty('userId', 'foo');
 });

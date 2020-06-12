@@ -67,20 +67,23 @@ function generateSQLResult(case_: Case) {
 	];
 }
 
-beforeEach(() => {
-	let getCalls = 0;
-	mockedRest.get.mockImplementation(() => {
-		switch (getCalls++) {
-			case 0:
-				return Promise.resolve({ username: targetUsername, discriminator: targetDiscriminator });
-			case 1:
-				return Promise.resolve({ username: modUsername, discriminator: modDiscriminator });
-			default:
-				return Promise.resolve(null);
-		}
-	});
+let getCalls = 0;
+mockedRest.get.mockImplementation(() => {
+	switch (getCalls++) {
+		case 0:
+			return Promise.resolve({ username: targetUsername, discriminator: targetDiscriminator });
+		case 1:
+			return Promise.resolve({ username: modUsername, discriminator: modDiscriminator });
+		default:
+			return Promise.resolve(null);
+	}
+});
 
-	mockedPostgres.mockResolvedValue([{ case_id: 1 }]);
+mockedPostgres.mockResolvedValue([{ case_id: 1 }]);
+
+afterEach(() => {
+	getCalls = 0;
+	jest.clearAllMocks();
 });
 
 test('creates role case', async () => {

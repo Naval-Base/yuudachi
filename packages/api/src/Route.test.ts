@@ -1,4 +1,4 @@
-import { pathToRouteInfo } from './Route';
+import Route, { pathToRouteInfo, RouteMethod } from './Route';
 
 test('invalid file name', () => {
 	expect(pathToRouteInfo('foo')).toBeNull();
@@ -6,6 +6,26 @@ test('invalid file name', () => {
 
 test('non-js file', () => {
 	expect(pathToRouteInfo('post.rs')).toBeNull();
+});
+
+test('register', () => {
+	class TestRoute extends Route {
+		public handle() {
+			// empty
+		}
+	}
+
+	const mockServer = {
+		get: jest.fn(),
+	};
+
+	const route = new TestRoute();
+	route.register({
+		method: RouteMethod.GET,
+		path: '/test'
+	}, mockServer);
+
+	expect(mockServer.get).toHaveBeenCalledWith('/test', expect.any(Function));
 });
 
 test('[post] root', () => {

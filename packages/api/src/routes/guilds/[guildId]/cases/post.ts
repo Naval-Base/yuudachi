@@ -11,7 +11,7 @@ interface CasesPostBody {
 }
 
 @injectable()
-export default class CreateCaseRoute implements Route {
+export default class CreateCaseRoute extends Route {
 	public middleware = [
 		bodyParser,
 		validate(Joi.object({
@@ -36,14 +36,16 @@ export default class CreateCaseRoute implements Route {
 				}),
 				contextMessageId: Joi.string().pattern(/[0-9]+/),
 				referenceId: Joi.number(),
-			})),
+			})).min(1),
 		}).required()),
 		authorize,
 	];
 
 	constructor(
 		public readonly caseManager: CaseManager,
-	) {}
+	) {
+		super();
+	}
 
 	public async handle(req: Request, res: Response, next: NextHandler) {
 		if (!req.body || !req.userId) return next(new Error('uh oh, something broke'));

@@ -11,6 +11,10 @@ const mockedPostgres: jest.MockedFunction<SQL> = postgres() as any;
 
 container.register(kSQL, { useValue: mockedPostgres });
 
+afterEach(() => {
+	jest.clearAllMocks();
+});
+
 test('gets settings', async () => {
 	mockedPostgres.mockResolvedValue([{ value: 'bar' }]);
 
