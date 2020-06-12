@@ -14,6 +14,10 @@ app.use(authorize);
 app.get('/test', mockHandler);
 app.listen(0);
 
+afterAll(() => {
+	app.server.close();
+});
+
 
 test('missing user ID header', async () => {
 	await supertest(app.server)

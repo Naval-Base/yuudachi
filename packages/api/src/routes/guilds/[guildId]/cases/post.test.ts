@@ -22,6 +22,10 @@ const route = container.resolve(CreateCaseRoute);
 route.register({ path: '/test/:guildId', method: RouteMethod.POST }, app);
 app.listen(0);
 
+afterAll(() => {
+	app.server.close();
+});
+
 describe('invalid data', () => {
 	test('junk properties', async () => {
 		const res = await supertest(app.server)

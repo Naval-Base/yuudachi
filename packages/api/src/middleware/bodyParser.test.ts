@@ -13,6 +13,10 @@ app.use(bodyParser);
 app.post('/test1', mockHandler);
 app.listen(0);
 
+afterAll(() => {
+	app.server.close();
+});
+
 test('missing content type', async () => {
 	await supertest(app.server)
 		.post('/test1')
