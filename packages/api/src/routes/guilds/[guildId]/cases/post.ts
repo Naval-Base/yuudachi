@@ -3,7 +3,7 @@ import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 import Route from '../../../../Route';
 import { authorize, validate } from '../../../../middleware';
-import CaseManager, { Case } from '../../../../managers/CaseManager';
+import CaseManager, { Case, CaseAction } from '../../../../managers/CaseManager';
 import bodyParser from '../../../../middleware/bodyParser';
 
 interface CasesPostBody {
@@ -16,21 +16,21 @@ export default class CreateCaseRoute extends Route {
 		bodyParser,
 		validate(Joi.object({
 			cases: Joi.array().items(Joi.object({
-				action: Joi.number().positive().integer().max(6),
-				roleId: Joi.when('type', {
-					is: 'role',
+				action: Joi.number().integer().min(0).max(6),
+				roleId: Joi.when('action', {
+					is: CaseAction.ROLE,
 					then: Joi.string().required().pattern(/[0-9]+/),
 					otherwise: Joi.forbidden(),
 				}),
-				actionExpiration: Joi.when('type', {
-					is: Joi.valid('role', 'ban'),
+				actionExpiration: Joi.when('action', {
+					is: Joi.valid(CaseAction.ROLE, CaseAction.BAN),
 					then: Joi.date(),
 					otherwise: Joi.forbidden(),
 				}),
 				reason: Joi.string().required(),
 				targetId: Joi.string().pattern(/[0-9]+/).required(),
-				deleteMessageDays: Joi.when('type', {
-					is: Joi.valid('ban', 'softban'),
+				deleteMessageDays: Joi.when('action', {
+					is: Joi.valid(CaseAction.BAN, CaseAction.SOFTBAN),
 					then: Joi.number().positive().max(7).default(1),
 					otherwise: Joi.forbidden(),
 				}),
@@ -48,7 +48,7 @@ export default class CreateCaseRoute extends Route {
 	}
 
 	public async handle(req: Request, res: Response, next: NextHandler) {
-		if (!req.body || !req.userId) return next(new Error('uh oh, something broke'));
+		if (!req.body || !req.userId || !req.params.guildId) return next(new Error('uh oh, something broke'));
 
 		const created: Promise<Case>[] = [];
 		const body: CasesPostBody = req.body as any;

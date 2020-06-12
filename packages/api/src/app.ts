@@ -13,10 +13,12 @@ export default function createApp() {
 	return _polka<polka.Request>({
 		onError(err, req, res, next) {
 			console.error(err); // TODO: better error logging
+			res.setHeader('content-type', 'application/json');
 			if (isBoom(err as any)) sendBoom(err as any, res);
 			else sendBoom(new Boom(err), res);
 		},
 		onNoMatch(req, res) {
+			res.setHeader('content-type', 'application/json');
 			sendBoom(notFound(), res);
 		},
 		server: createServer(),
