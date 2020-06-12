@@ -1,18 +1,17 @@
 import { Request, Response, NextHandler } from 'polka';
-import { badRequest } from '@hapi/boom';
+import { badRequest, badData } from '@hapi/boom';
 
 export default async function bodyParser(req: Request, res: Response, next?: NextHandler) {
-	if (!req.headers['content-type']?.startsWith('application/json')) next?.(badRequest('unexpected content type'));
+	if (!req.headers['content-type']?.startsWith('application/json')) return next?.(badRequest('unexpected content type'));
 
+	req.setEncoding('utf8');
 	try {
-		const chunks: Buffer[] = [];
-		for await (const chunk of req) chunks.push(chunk);
-
-		const data = Buffer.concat(chunks).toString('utf8');
+		let data = '';
+		for await (const chunk of req) data += chunk;
 		req.body = JSON.parse(data);
 
 		next?.();
 	} catch (e) {
-		next?.(e);
+		next?.(badData(e?.toString()));
 	}
 }
