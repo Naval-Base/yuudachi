@@ -6,5 +6,8 @@
 		"removeComments": false,
 		"alwaysStrict": true,
 		"pretty": true
-	}
+	},
+	"exclude": [
+		"**/*.test.ts"
+	]
 }
