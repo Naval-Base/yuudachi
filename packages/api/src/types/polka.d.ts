@@ -1,6 +1,6 @@
 declare module 'polka' {
 	import { Server } from 'net';
-	import { Http2ServerRequest, Http2ServerResponse } from 'http2';
+	import { IncomingMessage, ServerResponse } from 'http';
 	import * as Trouter from 'trouter';
 
 	export interface IError extends Error {
@@ -31,10 +31,10 @@ declare module 'polka' {
 		query: null | Record<string, any>;
 	}
 
-	export type Response = Http2ServerResponse;
+	export type Response = ServerResponse;
 
-	export interface Request extends Http2ServerRequest, ParsedURL {
-		originalUrl: Http2ServerRequest['url'];
+	export interface Request extends IncomingMessage, ParsedURL {
+		originalUrl: IncomingMessage['url'];
 		params: Record<string, string>;
 		body?: Record<string, any>;
 		_parsedUrl: ParsedURL;
@@ -48,7 +48,7 @@ declare module 'polka' {
 		readonly onError: ErrorHandler<T>;
 		readonly onNoMatch: RequestHandler<T>;
 
-		parse: (req: Http2ServerRequest) => ParsedURL | void;
+		parse: (req: IncomingMessage) => ParsedURL | void;
 
 		use(...handlers: Middleware<T>[]): this;
 		use(pattern: string, ...handlers: Middleware<T>[]): this;
@@ -58,5 +58,5 @@ declare module 'polka' {
 		listen: Server['listen'];
 	}
 
-	export = function <T = Http2ServerRequest>(options?: IOptions<T>): Polka<T> {};
+	export = function <T = IncomingMessage>(options?: IOptions<T>): Polka<T> {};
 }
