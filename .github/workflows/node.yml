@@ -1,8 +1,8 @@
-name: Lint
+name: Node
 on: [push, pull_request]
 jobs:
-  lint:
-    name: Lint
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,5 +19,11 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Run Lint
+      - name: Run Build
         run: pnpm recursive run build
+
+      - name: Run Tests
+        run: pnpm run test:ci
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v1

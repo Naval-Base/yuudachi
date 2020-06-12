@@ -24,10 +24,12 @@ interface ModActionPayload extends ActionPayload {
 type Action = ModActionPayload; // | other types
 
 @injectable()
-export default class HasuraActionHandler implements Route {
+export default class HasuraActionHandler extends Route {
 	constructor(
 		public readonly caseManager: CaseManager,
-	) {}
+	) {
+		super();
+	}
 
 	public middleware = [
 		validate(Joi.object({
