@@ -81,11 +81,13 @@ services:
       DISCORD_TOKEN: ""
       DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
       BROKER_TYPE: "amqp"
-      BROKER_URL: "amqp://admin:admin@rabbitmq"
       BROKER_GROUP: "gateway"
       BROKER_MESSAGE_TIMEOUT: "10m"
       PROMETHEUS_ADDRESS: ":8080"
       PROMETHEUS_ENDPOINT: "/metrics"
+      AMQP_URL: "amqp://rabbitmq"
+      SHARD_STORE_TYPE: "redis"
+      REDIS_URL: "redis://redis:6379"
 
   api:
     build:
