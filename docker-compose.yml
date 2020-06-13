@@ -53,7 +53,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v1.2.0-beta.3
+    image: hasura/graphql-engine:v1.2.2
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:
@@ -148,17 +148,23 @@ services:
       DISCORD_TOKEN: ""
       DISCORD_EVENTS: ""
       BROKER_TYPE: ""
-      BROKER_URL: ""
       BROKER_GROUP: ""
       BROKER_MESSAGE_TIMEOUT: ""
       PROMETHEUS_ADDRESS: ":8080"
       PROMETHEUS_ENDPOINT: "/metrics"
+      AMQP_URL: ""
+      SHARD_STORE_TYPE: ""
+      SHARD_STORE_PREFIX: "gateway"
+      REDIS_URL: ""
+      REDIS_POOL_SIZE: 5
     expose:
       - "8080"
     restart: unless-stopped
 
   api:
-    build: packages/api
+    build:
+      context: ./
+      dockerfile: ./docker/packages/api/Dockerfile
     labels:
       com.naval-base.description: "Internal REST API"
     environment:
