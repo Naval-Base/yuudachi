@@ -5,8 +5,9 @@
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"target": "es2019",
+		"target": "es2017",
 		"lib": [
+			"ES2019",
 			"ESNext"
 		],
 		"sourceMap": true,
