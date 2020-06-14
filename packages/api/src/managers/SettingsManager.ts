@@ -8,7 +8,7 @@ export enum SettingsKeys {
 
 @injectable()
 export default class SettingsManager {
-	constructor(
+	public constructor(
 		@inject(kSQL)
 		public sql: SQL,
 	) {}

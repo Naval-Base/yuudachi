@@ -1,1 +1,1 @@
-export const kSQL = Symbol("SQL");
+export const kSQL = Symbol('SQL');

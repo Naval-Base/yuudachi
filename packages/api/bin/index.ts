@@ -24,13 +24,13 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'routes'), {
 	fileFilter: '*.js',
 });
 
-(async () => {
+void (async () => {
 	for await (const dir of files) {
 		const routeInfo = pathToRouteInfo(dir.path);
 		if (!routeInfo) continue;
 
 		console.log(routeInfo);
-		const route = container.resolve<Route>(require(dir.fullPath).default);
+		const route = container.resolve<Route>((await import(dir.fullPath)).default);
 		route.register(routeInfo, app);
 	}
 })();
