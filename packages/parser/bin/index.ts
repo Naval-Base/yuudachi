@@ -26,6 +26,6 @@ const sql = postgres();
 		if (!command) continue;
 		const parser = new Parser(tokens).setUnorderedStrategy(Unordered.longShortStrategy());
 		const res = parser.parse();
-		broker.publish('COMMAND', { command, arguments: res, message });
+		broker.publish('COMMAND', { command, arguments: { ordered: [...res.ordered], flags: [...res.flags], options: [...res.options] }, tokens, message });
 	}
 })();
