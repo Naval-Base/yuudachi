@@ -6,11 +6,6 @@ services:
     hostname: "rabbitmq"
     labels:
       com.naval-base.description: "RabbitMQ Broker"
-    environment:
-      RABBITMQ_DEFAULT_USER: ""
-      RABBITMQ_DEFAULT_PASS: ""
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
     expose:
       - "4369"
       - "5671"
@@ -25,15 +20,13 @@ services:
       timeout: 5s
 
   postgres:
-    image: postgres:12-alpine
+    build: ./docker/postgresql
     labels:
       com.naval-base.description: "PostgreSQL"
     environment:
       POSTGRES_USER: ""
       POSTGRES_PASSWORD: ""
       POSTGRES_DB: ""
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
     expose:
       - "5432"
     restart: unless-stopped
@@ -53,7 +46,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v1.2.2
+    image: hasura/graphql-engine:v1.2.2.cli-migrations-v2
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:
@@ -61,6 +54,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: ""
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
       HASURA_GRAPHQL_ADMIN_SECRET: ""
+      HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
     expose:
       - "8080"
     ports:
@@ -71,8 +65,6 @@ services:
     image: redis:5-alpine
     labels:
       com.naval-base.description: "Redis"
-    volumes:
-      - redis-data:/data
     expose:
       - "6379"
     restart: unless-stopped
@@ -95,8 +87,6 @@ services:
     build: ./docker/prometheus
     labels:
       com.naval-base.description: "Prometheus"
-    volumes:
-      - prometheus-data:/prometheus
     expose:
       - "9090"
     restart: unless-stopped
@@ -128,8 +118,6 @@ services:
       # GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS: ""
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
-    volumes:
-      - grafana-data:/var/lib/grafana
     expose:
       - "3000"
     ports:
@@ -161,6 +149,20 @@ services:
       - "8080"
     restart: unless-stopped
 
+  parser:
+    build:
+      context: ./
+      dockerfile: ./docker/packages/parser/Dockerfile
+    labels:
+      com.naval-base.description: "Internal parser"
+    environment:
+      PGHOST: ""
+      PGPORT: ""
+      PGDATABASE: ""
+      PGUSERNAME: ""
+      PGPASSWORD: ""
+    restart: unless-stopped
+
   api:
     build:
       context: ./
@@ -177,15 +179,3 @@ services:
     expose:
       - "3000"
     restart: unless-stopped
-
-volumes:
-  rabbitmq-data:
-    name: "rabbitmq-data"
-  postgres-data:
-    name: "postgres-data"
-  redis-data:
-    name: "redis-data"
-  prometheus-data:
-    name: "prometheus-data"
-  grafana-data:
-    name: "grafana-data"
