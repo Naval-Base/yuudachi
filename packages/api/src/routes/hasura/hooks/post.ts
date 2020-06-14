@@ -1,8 +1,7 @@
 import * as Joi from '@hapi/joi';
-import { Request, Response } from 'polka';
+import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 import validate from '../../../middleware/validate';
-import { NextHandler } from 'polka';
 import CaseLogManager from '../../../managers/CaseLogManager';
 import Route from '../../../Route';
 
@@ -36,30 +35,30 @@ interface HasuraEventPayload {
 @injectable()
 export default class HasuraEventHookRoute extends Route {
 	public middleware = [
-		validate(Joi.object({
-			event: Joi.object({
-				session_variables: Joi.object(),
-				op: Joi.valid('INSERT', 'UPDATE', 'DELETE', 'MANUAL').required(),
-				data: Joi.object({
-					old: Joi.object(),
-					new: Joi.object(),
+		validate(
+			Joi.object({
+				event: Joi.object({
+					session_variables: Joi.object(),
+					op: Joi.valid('INSERT', 'UPDATE', 'DELETE', 'MANUAL').required(),
+					data: Joi.object({
+						old: Joi.object(),
+						new: Joi.object(),
+					}).required(),
+				}).required(),
+				created_at: Joi.date().required(),
+				id: Joi.string().required(),
+				trigger: Joi.object({
+					name: Joi.string().required(),
+				}).required(),
+				table: Joi.object({
+					schema: Joi.string().required(),
+					name: Joi.string().required(),
 				}).required(),
 			}).required(),
-			created_at: Joi.date().required(),
-			id: Joi.string().required(),
-			trigger: Joi.object({
-				name: Joi.string().required(),
-			}).required(),
-			table: Joi.object({
-				schema: Joi.string().required(),
-				name: Joi.string().required(),
-			}).required(),
-		}).required()),
+		),
 	];
 
-	constructor(
-		public caseLogManager: CaseLogManager,
-	) {
+	public constructor(public caseLogManager: CaseLogManager) {
 		super();
 	}
 
@@ -75,7 +74,7 @@ export default class HasuraEventHookRoute extends Route {
 						// this.caseLogManager.update(body.event.data.new);
 						break;
 					case 'INSERT':
-						this.caseLogManager.create(body.event.data.new);
+						void this.caseLogManager.create(body.event.data.new);
 						break;
 					case 'DELETE':
 						// this.caseLogManager.delete(body.event.data.old);

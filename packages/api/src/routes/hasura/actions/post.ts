@@ -25,18 +25,18 @@ type Action = ModActionPayload; // | other types
 
 @injectable()
 export default class HasuraActionHandler extends Route {
-	constructor(
-		public readonly caseManager: CaseManager,
-	) {
+	public constructor(public readonly caseManager: CaseManager) {
 		super();
 	}
 
 	public middleware = [
-		validate(Joi.object({
-			action: Joi.string().required(),
-			input: Joi.object().required(),
-			session_variables: Joi.object().required(),
-		})),
+		validate(
+			Joi.object({
+				action: Joi.string().required(),
+				input: Joi.object().required(),
+				session_variables: Joi.object().required(),
+			}),
+		),
 	];
 
 	public async handle(req: Request, res: Response, next: NextHandler) {
