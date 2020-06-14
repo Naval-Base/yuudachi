@@ -32,6 +32,16 @@ alter table messages
 	add constraint messages_pkey primary key (id)
 ;
 
+comment on column public.messages.id IS 'The message id';
+comment on column public.messages.channel_id IS 'The id of the channel this message belongs to';
+comment on column public.messages.guild_id IS 'The id of the guild this message belongs to';
+comment on column public.messages.author_id IS 'The id of the author this message belongs to';
+comment on column public.messages.content IS 'The content of this message';
+comment on column public.messages.type IS 'The type of this message';
+comment on column public.messages.flags IS 'The flags of this message';
+comment on column public.messages.embeds IS 'The embeds of this message';
+comment on column public.messages.attachments IS 'The attachments of this message';
+
 -- CASES
 
 alter table cases rename "message" to log_message_id;
