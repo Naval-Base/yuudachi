@@ -3,7 +3,7 @@ version: "3.7"
 services:
   rabbitmq:
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq-data:/var/lib/rabbitmq
     ports:
       - "127.0.0.1:5672:5672"
       - "127.0.0.1:15672:15672"
@@ -14,7 +14,7 @@ services:
       POSTGRES_PASSWORD: "admin"
       POSTGRES_DB: "yukikaze"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5432:5432"
 
@@ -36,7 +36,7 @@ services:
 
   redis:
     volumes:
-      - redis-data:/data
+      - ./redis-data:/data
     ports:
       - "127.0.0.1:6379:6379"
 
@@ -46,7 +46,7 @@ services:
 
   prometheus:
     volumes:
-      - prometheus-data:/prometheus
+      - ./prometheus-data:/prometheus
     ports:
       - "127.0.0.1:9090:9090"
 
@@ -71,7 +71,7 @@ services:
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
     volumes:
-      - grafana-data:/var/lib/grafana
+      - ./grafana-data:/var/lib/grafana
     ports:
       - "127.0.0.1:3000:3000"
 
@@ -107,15 +107,3 @@ services:
       DISCORD_TOKEN: ""
     ports:
       - "127.0.0.1:3001:3000"
-
-volumes:
-  rabbitmq-data:
-    name: "rabbitmq-data"
-  postgres-data:
-    name: "postgres-data"
-  redis-data:
-    name: "redis-data"
-  prometheus-data:
-    name: "prometheus-data"
-  grafana-data:
-    name: "grafana-data"
