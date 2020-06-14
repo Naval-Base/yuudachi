@@ -1,0 +1,18 @@
+- table:
+    schema: public
+    name: cases
+- table:
+    schema: public
+    name: lockdowns
+- table:
+    schema: public
+    name: messages
+- table:
+    schema: public
+    name: role_states
+- table:
+    schema: public
+    name: settings
+- table:
+    schema: public
+    name: tags
