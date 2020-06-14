@@ -23,11 +23,19 @@ test('gets settings', async () => {
 
 	expect(result).toBe('bar');
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith([`
+	expect(mockedPostgres).toHaveBeenCalledWith(
+		[
+			`
 			select value
 			from guild_settings
-			where guild_id = `,`
-				and key = `,''], '1234', 'foo');
+			where guild_id = `,
+			`
+				and key = `,
+			'',
+		],
+		'1234',
+		'foo',
+	);
 });
 
 test('gets missing setting', async () => {
@@ -38,9 +46,17 @@ test('gets missing setting', async () => {
 
 	expect(result).toBe(null);
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith([`
+	expect(mockedPostgres).toHaveBeenCalledWith(
+		[
+			`
 			select value
 			from guild_settings
-			where guild_id = `,`
-				and key = `,''], '1234', 'foo');
+			where guild_id = `,
+			`
+				and key = `,
+			'',
+		],
+		'1234',
+		'foo',
+	);
 });

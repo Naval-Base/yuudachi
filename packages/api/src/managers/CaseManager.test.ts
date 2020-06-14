@@ -22,7 +22,8 @@ const targetDiscriminator = '0002';
 
 function generateSQLResult(case_: Case) {
 	return [
-		[`
+		[
+			`
 			insert into cases (
 				case_id,
 				guild_id,
@@ -37,20 +38,32 @@ function generateSQLResult(case_: Case) {
 				context_message_id,
 				ref_id
 			) values (
-				next_case(`,`),
-				`,`,
-				`,`,
-				`,`,
-				`,`,
-				`,`,
-				`,`,
-				`,`,
-				`,`,
-				`,`,
-				`,`,
-				`,`
+				next_case(`,
+			`),
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`,
+				`,
+			`
 			)
-			returning case_id`
+			returning case_id`,
 		],
 		case_.guildId,
 		case_.guildId,
@@ -189,7 +202,9 @@ test('creates softban with delete message days', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=3&reason=foo', { reason: 'foo' });
+	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=3&reason=foo', {
+		reason: 'foo',
+	});
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
 	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Softban: foo' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
@@ -214,7 +229,9 @@ test('creates ban with expiration & default delete message days', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=1&reason=foo', { reason: 'foo' });
+	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=1&reason=foo', {
+		reason: 'foo',
+	});
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });

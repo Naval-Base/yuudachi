@@ -68,23 +68,25 @@ afterEach(() => {
 
 test('fails when no log channel is available', async () => {
 	const logManager = container.resolve(CaseLogManager);
-	await expect(() => logManager.create({
-		action: CaseAction.KICK,
-		action_expiration: null,
-		action_processed: true,
-		case_id: caseId,
-		context_message_id: null,
-		created_at: new Date().toString(),
-		guild_id: guildId,
-		log_message_id: null,
-		mod_id: modId,
-		mod_tag: modTag,
-		reason: 'foo',
-		ref_id: null,
-		role_id: null,
-		target_id: targetId,
-		target_tag: targetTag,
-	})).rejects.toStrictEqual(new Error('no mod log channel configured'));
+	await expect(() =>
+		logManager.create({
+			action: CaseAction.KICK,
+			action_expiration: null,
+			action_processed: true,
+			case_id: caseId,
+			context_message_id: null,
+			created_at: new Date().toString(),
+			guild_id: guildId,
+			log_message_id: null,
+			mod_id: modId,
+			mod_tag: modTag,
+			reason: 'foo',
+			ref_id: null,
+			role_id: null,
+			target_id: targetId,
+			target_tag: targetTag,
+		}),
+	).rejects.toStrictEqual(new Error('no mod log channel configured'));
 });
 
 test('creates basic kick case', async () => {
@@ -110,17 +112,36 @@ test('creates basic kick case', async () => {
 	});
 
 	expect(mockedPostgres).toHaveBeenCalledTimes(2);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(1, [`
+	expect(mockedPostgres).toHaveBeenNthCalledWith(
+		1,
+		[
+			`
 			select value
 			from guild_settings
-			where guild_id = `,`
-				and key = `,''], guildId, SettingsKeys.MOD_LOG_CHANNEL_ID);
+			where guild_id = `,
+			`
+				and key = `,
+			'',
+		],
+		guildId,
+		SettingsKeys.MOD_LOG_CHANNEL_ID,
+	);
 
-	expect(mockedPostgres).toHaveBeenLastCalledWith([`
+	expect(mockedPostgres).toHaveBeenLastCalledWith(
+		[
+			`
 			update cases
-			set log_message_id = `,`
-			where id = `,`
-				and guild_id = `,''], logMessageId, 1, guildId);
+			set log_message_id = `,
+			`
+			where id = `,
+			`
+				and guild_id = `,
+			'',
+		],
+		logMessageId,
+		1,
+		guildId,
+	);
 
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
@@ -160,11 +181,20 @@ test('creates reference role case', async () => {
 	});
 
 	expect(mockedPostgres).toHaveBeenCalledTimes(3);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(2, [`
+	expect(mockedPostgres).toHaveBeenNthCalledWith(
+		2,
+		[
+			`
 				select log_message_id
 				from cases
-				where id = `,`
-					and guild_id = `, ''], refCaseId, guildId);
+				where id = `,
+			`
+					and guild_id = `,
+			'',
+		],
+		refCaseId,
+		guildId,
+	);
 
 	expect(mockedRest.get).toHaveBeenCalledTimes(1);
 	expect(mockedRest.get).toHaveBeenCalledWith(`/guilds/${guildId}/roles`);
@@ -207,10 +237,17 @@ test('creates contextual softban case', async () => {
 	});
 
 	expect(mockedPostgres).toHaveBeenCalledTimes(3);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(2, [`
+	expect(mockedPostgres).toHaveBeenNthCalledWith(
+		2,
+		[
+			`
 				select channel_id
 				from messages
-				where id = `,''], contextMessageId);
+				where id = `,
+			'',
+		],
+		contextMessageId,
+	);
 
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
@@ -228,11 +265,7 @@ test('creates contextual softban case', async () => {
 });
 
 test('creates temporary ban case with context and reference', async () => {
-	postgresResults = [
-		{ value: logChannelId },
-		{ channel_id: contextChannelId },
-		{ log_message_id: refLogMessageId },
-	];
+	postgresResults = [{ value: logChannelId }, { channel_id: contextChannelId }, { log_message_id: refLogMessageId }];
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -254,15 +287,31 @@ test('creates temporary ban case with context and reference', async () => {
 	});
 
 	expect(mockedPostgres).toHaveBeenCalledTimes(4);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(2, [`
+	expect(mockedPostgres).toHaveBeenNthCalledWith(
+		2,
+		[
+			`
 				select channel_id
 				from messages
-				where id = `,''], contextMessageId);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(3, [`
+				where id = `,
+			'',
+		],
+		contextMessageId,
+	);
+	expect(mockedPostgres).toHaveBeenNthCalledWith(
+		3,
+		[
+			`
 				select log_message_id
 				from cases
-				where id = `,`
-					and guild_id = `, ''], refCaseId, guildId);
+				where id = `,
+			`
+					and guild_id = `,
+			'',
+		],
+		refCaseId,
+		guildId,
+	);
 
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
