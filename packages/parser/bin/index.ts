@@ -3,7 +3,7 @@ import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import { Message } from '@spectacles/types';
 import * as postgres from 'postgres';
-import { Lexer, Parser, Tokens, Unordered } from 'lexure';
+import { Lexer, Parser, extractCommand, longShortStrategy, outputToJSON } from 'lexure';
 
 const broker = new Amqp('gateway');
 const sql = postgres();
@@ -27,13 +27,13 @@ void (async () => {
 			['“', '”'],
 		]);
 		const tokens = lexer.lex();
-		const command = Tokens.extractCommand((s) => (s.startsWith(prefix) ? prefix.length : null), tokens);
+		const command = extractCommand((s) => (s.startsWith(prefix) ? prefix.length : null), tokens);
 		if (!command) continue;
-		const parser = new Parser(tokens).setUnorderedStrategy(Unordered.longShortStrategy());
+		const parser = new Parser(tokens).setUnorderedStrategy(longShortStrategy());
 		const res = parser.parse();
 		broker.publish('COMMAND', {
 			command,
-			arguments: { ordered: [...res.ordered], flags: [...res.flags], options: [...res.options] },
+			arguments: outputToJSON(res),
 			tokens,
 			message,
 		});

@@ -13,7 +13,7 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@spectacles/brokers": "^0.8.0",
-		"lexure": "^0.5.0",
+		"lexure": "^0.6.0",
 		"postgres": "^1.0.2",
 		"tslib": "^2.0.0"
 	},
