@@ -23,7 +23,7 @@ declare module 'postgres' {
 		};
 	}
 
-	export interface QueryResponse extends Promise<object[]> {
+	export interface QueryResponse extends Promise<Record<string, unknown>[]> {
 		stream(fn: (row: unknown) => void): Promise<unknown>;
 		cursor(fn: (row: unknown) => void): Promise<unknown>;
 		cursor(rows: number, fn: (row: unknown) => void): Promise<unknown>;
@@ -34,6 +34,7 @@ declare module 'postgres' {
 	export interface SQL extends Query {
 		listen(name: string, fn: (payload: unknown) => void): void;
 		notify(name: string, data: string): void;
+		json(value: any): void;
 	}
 
 	export = function (options?: Options): SQL {}

@@ -3,23 +3,21 @@
 	"compilerOptions": {
 		"module": "CommonJS",
 		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"target": "es2019",
+		"target": "ES2019",
 		"lib": [
-			"ESNext"
+			"ESNext",
 		],
 		"sourceMap": true,
 		"inlineSources": true,
 		"sourceRoot": "./",
+		"rootDir": ".",
 		"outDir": "dist",
 		"incremental": true,
 		"noEmitHelpers": true,
 		"skipLibCheck": true
 	},
 	"include": [
-		"./src",
 		"./bin",
 		"../types"
-	],
+	]
 }
