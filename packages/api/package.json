@@ -17,27 +17,27 @@
     "@spectacles/rest": "^0.8.3",
     "@spectacles/util": "^0.3.2",
     "common-tags": "^1.8.0",
-    "ioredis": "^4.16.2",
+    "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "polka": "^0.5.2",
     "postgres": "^1.0.2",
     "readdirp": "^3.4.0",
     "reflect-metadata": "^0.1.13",
-    "tsyringe": "^4.1.0"
+    "tsyringe": "^4.3.0"
   },
   "devDependencies": {
     "@spectacles/types": "^0.2.1",
     "@types/common-tags": "^1.8.0",
-    "@types/hapi__joi": "^16.0.12",
-    "@types/ioredis": "^4.14.9",
-    "@types/jsonwebtoken": "^8.3.9",
-    "@types/lodash": "^4.14.150",
-    "@types/node": "^13.13.4",
+    "@types/hapi__joi": "^17.1.2",
+    "@types/ioredis": "^4.16.5",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/lodash": "^4.14.155",
+    "@types/node": "^14.0.13",
     "@types/trouter": "^3.1.0",
     "env-cmd": "^10.1.0",
     "rimraf": "^3.0.2",
     "supertest": "^4.0.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   }
 }
