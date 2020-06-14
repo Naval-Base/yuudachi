@@ -2,7 +2,9 @@ import { Request, Response, NextHandler } from 'polka';
 import { badRequest, badData } from '@hapi/boom';
 
 export default async function bodyParser(req: Request, res: Response, next?: NextHandler) {
-	if (!req.headers['content-type']?.startsWith('application/json')) return next?.(badRequest('unexpected content type'));
+	if (!req.headers['content-type']?.startsWith('application/json')) {
+		return next?.(badRequest('unexpected content type'));
+	}
 
 	req.setEncoding('utf8');
 	try {
