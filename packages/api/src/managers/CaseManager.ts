@@ -49,7 +49,7 @@ export interface Case {
 
 @injectable()
 export default class CaseManager {
-	constructor(
+	public constructor(
 		@inject(kSQL)
 		public readonly sql: SQL,
 		public readonly rest: Rest,
@@ -59,10 +59,17 @@ export default class CaseManager {
 		const requestOptions = { reason: case_.reason };
 		switch (case_.action) {
 			case CaseAction.ROLE:
-				await this.rest.put(`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId}`, {}, requestOptions);
+				await this.rest.put(
+					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId}`,
+					{},
+					requestOptions,
+				);
 				break;
 			case CaseAction.UN_ROLE:
-				await this.rest.delete(`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId}`, requestOptions);
+				await this.rest.delete(
+					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId}`,
+					requestOptions,
+				);
 				break;
 			case CaseAction.WARN:
 				break;
@@ -76,7 +83,9 @@ export default class CaseManager {
 				});
 
 				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params}`, requestOptions);
-				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, { reason: `Softban: ${case_.reason}` });
+				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, {
+					reason: `Softban: ${case_.reason}`,
+				});
 				break;
 			}
 			case CaseAction.BAN: {

@@ -14,36 +14,44 @@ interface CasesPostBody {
 export default class CreateCaseRoute extends Route {
 	public middleware = [
 		bodyParser,
-		validate(Joi.object({
-			cases: Joi.array().items(Joi.object({
-				action: Joi.number().integer().min(0).max(6),
-				roleId: Joi.when('action', {
-					is: CaseAction.ROLE,
-					then: Joi.string().required().pattern(/[0-9]+/),
-					otherwise: Joi.forbidden(),
-				}),
-				actionExpiration: Joi.when('action', {
-					is: Joi.valid(CaseAction.ROLE, CaseAction.BAN),
-					then: Joi.date(),
-					otherwise: Joi.forbidden(),
-				}),
-				reason: Joi.string().required(),
-				targetId: Joi.string().pattern(/[0-9]+/).required(),
-				deleteMessageDays: Joi.when('action', {
-					is: Joi.valid(CaseAction.BAN, CaseAction.SOFTBAN),
-					then: Joi.number().positive().max(7).default(1),
-					otherwise: Joi.forbidden(),
-				}),
-				contextMessageId: Joi.string().pattern(/[0-9]+/),
-				referenceId: Joi.number(),
-			})).min(1),
-		}).required()),
+		validate(
+			Joi.object({
+				cases: Joi.array()
+					.items(
+						Joi.object({
+							action: Joi.number().integer().min(0).max(6),
+							roleId: Joi.when('action', {
+								is: CaseAction.ROLE,
+								then: Joi.string()
+									.required()
+									.pattern(/[0-9]+/),
+								otherwise: Joi.forbidden(),
+							}),
+							actionExpiration: Joi.when('action', {
+								is: Joi.valid(CaseAction.ROLE, CaseAction.BAN),
+								then: Joi.date(),
+								otherwise: Joi.forbidden(),
+							}),
+							reason: Joi.string().required(),
+							targetId: Joi.string()
+								.pattern(/[0-9]+/)
+								.required(),
+							deleteMessageDays: Joi.when('action', {
+								is: Joi.valid(CaseAction.BAN, CaseAction.SOFTBAN),
+								then: Joi.number().positive().max(7).default(1),
+								otherwise: Joi.forbidden(),
+							}),
+							contextMessageId: Joi.string().pattern(/[0-9]+/),
+							referenceId: Joi.number(),
+						}),
+					)
+					.min(1),
+			}).required(),
+		),
 		authorize,
 	];
 
-	constructor(
-		public readonly caseManager: CaseManager,
-	) {
+	public constructor(public readonly caseManager: CaseManager) {
 		super();
 	}
 

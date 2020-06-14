@@ -18,20 +18,14 @@ afterAll(() => {
 	app.server.close();
 });
 
-
 test('missing user ID header', async () => {
-	await supertest(app.server)
-		.get('/test')
-		.expect(400);
+	await supertest(app.server).get('/test').expect(400);
 
 	expect(mockHandler).not.toHaveBeenCalled();
 });
 
 test('has user ID header', async () => {
-	await supertest(app.server)
-		.get('/test')
-		.set(USER_ID_HEADER, 'foo')
-		.expect(200);
+	await supertest(app.server).get('/test').set(USER_ID_HEADER, 'foo').expect(200);
 
 	expect(mockHandler).toHaveBeenCalled();
 	expect(mockHandler.mock.calls[0][0]).toHaveProperty('userId', 'foo');

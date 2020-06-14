@@ -20,10 +20,13 @@ test('register', () => {
 	};
 
 	const route = new TestRoute();
-	route.register({
-		method: RouteMethod.GET,
-		path: '/test'
-	}, mockServer);
+	route.register(
+		{
+			method: RouteMethod.GET,
+			path: '/test',
+		},
+		mockServer,
+	);
 
 	expect(mockServer.get).toHaveBeenCalledWith('/test', expect.any(Function));
 });

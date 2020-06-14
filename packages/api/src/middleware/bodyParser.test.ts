@@ -18,29 +18,19 @@ afterAll(() => {
 });
 
 test('missing content type', async () => {
-	await supertest(app.server)
-		.post('/test1')
-		.expect(400);
+	await supertest(app.server).post('/test1').expect(400);
 
 	expect(mockHandler).not.toHaveBeenCalled();
 });
 
 test('invalid data', async () => {
-	await supertest(app.server)
-		.post('/test1')
-		.type('json')
-		.send('foo')
-		.expect(422);
+	await supertest(app.server).post('/test1').type('json').send('foo').expect(422);
 
 	expect(mockHandler).not.toHaveBeenCalled();
 });
 
 test('valid data', async () => {
-	await supertest(app.server)
-		.post('/test1')
-		.type('json')
-		.send({ foo: 'bar' })
-		.expect(200);
+	await supertest(app.server).post('/test1').type('json').send({ foo: 'bar' }).expect(200);
 
 	expect(mockHandler).toHaveBeenCalledTimes(1);
 	expect(mockHandler.mock.calls[0][0]).toHaveProperty('body');
