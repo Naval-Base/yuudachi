@@ -1,4 +1,4 @@
-import * as boom from '@hapi/boom';
+import { badRequest, internal, unauthorized } from '@hapi/boom';
 import { Http2ServerResponse } from 'http2';
 import { sendBoom } from './util';
 
@@ -8,7 +8,7 @@ const MockedResponse = (Http2ServerResponse as unknown) as jest.Mock<Http2Server
 
 describe('send boom', () => {
 	test('with bad request', () => {
-		const err = boom.badRequest();
+		const err = badRequest();
 		const res = new MockedResponse();
 		sendBoom(err, res);
 
@@ -18,7 +18,7 @@ describe('send boom', () => {
 	});
 
 	test('with internal server error', () => {
-		const err = boom.internal();
+		const err = internal();
 		const res = new MockedResponse();
 		sendBoom(err, res);
 
@@ -30,7 +30,7 @@ describe('send boom', () => {
 	});
 
 	test('with headers', () => {
-		const err = boom.unauthorized('foo', ['abc', 'def']);
+		const err = unauthorized('foo', ['abc', 'def']);
 		const res = new MockedResponse();
 		sendBoom(err, res);
 
