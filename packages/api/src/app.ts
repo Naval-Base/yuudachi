@@ -8,8 +8,11 @@ export default function createApp() {
 		onError(err, _, res) {
 			console.error(err); // TODO: better error logging
 			res.setHeader('content-type', 'application/json');
-			if (isBoom(err as any)) sendBoom(err as any, res);
-			else sendBoom(new Boom(err), res);
+			if (isBoom(err as any)) {
+				sendBoom(err as any, res);
+			} else {
+				sendBoom(new Boom(err), res);
+			}
 		},
 		onNoMatch(_, res) {
 			res.setHeader('content-type', 'application/json');
