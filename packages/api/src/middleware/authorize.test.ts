@@ -3,7 +3,7 @@ import authorize from './authorize';
 import { USER_ID_HEADER } from '../Constants';
 import createApp from '../app';
 
-const mockHandler = jest.fn((req, res) => res.end());
+const mockHandler = jest.fn((_, res) => res.end());
 
 afterEach(() => {
 	mockHandler.mockClear();

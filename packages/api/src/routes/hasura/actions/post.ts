@@ -1,4 +1,4 @@
-import * as Joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 
@@ -31,7 +31,7 @@ export default class HasuraActionHandler extends Route {
 
 	public middleware = [
 		validate(
-			Joi.object({
+			Joi.object().keys({
 				action: Joi.string().required(),
 				input: Joi.object().required(),
 				session_variables: Joi.object().required(),

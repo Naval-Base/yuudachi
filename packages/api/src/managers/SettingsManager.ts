@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 import { kSQL } from '../tokens';
-import { SQL } from 'postgres';
+import { Sql } from 'postgres';
 
 export enum SettingsKeys {
 	MOD_LOG_CHANNEL_ID = 'mod_log_channel_id',
@@ -10,7 +10,7 @@ export enum SettingsKeys {
 export default class SettingsManager {
 	public constructor(
 		@inject(kSQL)
-		public sql: SQL,
+		public sql: Sql<any>,
 	) {}
 
 	public async get(guildId: string, prop: string): Promise<string | null> {

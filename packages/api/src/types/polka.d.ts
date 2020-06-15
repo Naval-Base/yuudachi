@@ -1,7 +1,7 @@
 declare module 'polka' {
 	import { Server } from 'net';
 	import { IncomingMessage, ServerResponse } from 'http';
-	import * as Trouter from 'trouter';
+	import Trouter from 'trouter';
 
 	export interface IError extends Error {
 		message: string;
