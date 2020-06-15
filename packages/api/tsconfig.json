@@ -6,11 +6,10 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"sourceRoot": "./",
-		"outDir": "dist",
+		"outDir": "dist"
 	},
 	"include": [
 		"./src",
-		"./bin",
-		"../types"
-	],
+		"./bin"
+	]
 }
