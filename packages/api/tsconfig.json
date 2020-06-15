@@ -5,17 +5,8 @@
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"target": "es2019",
-		"lib": [
-			"ESNext"
-		],
-		"sourceMap": true,
-		"inlineSources": true,
 		"sourceRoot": "./",
 		"outDir": "dist",
-		"incremental": true,
-		"noEmitHelpers": true,
-		"skipLibCheck": true
 	},
 	"include": [
 		"./src",

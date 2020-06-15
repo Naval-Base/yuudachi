@@ -2,8 +2,8 @@ import 'reflect-metadata';
 
 import Rest from '@spectacles/rest';
 import { resolve } from 'path';
-import * as postgres from 'postgres';
-import * as readdirp from 'readdirp';
+import postgres from 'postgres';
+import readdirp from 'readdirp';
 import { container } from 'tsyringe';
 
 import Route, { pathToRouteInfo } from '../src/Route';
