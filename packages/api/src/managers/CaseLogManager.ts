@@ -17,7 +17,7 @@ export default class CaseLogManager {
 		public readonly settings: SettingsManager,
 	) {}
 
-	public async create(item: RawCase): Promise<void> {
+	public async create(item: RawCase) {
 		const logChannelId = await this.settings.get(item.guild_id, SettingsKeys.MOD_LOG_CHANNEL_ID);
 		if (!logChannelId) throw new Error('no mod log channel configured');
 
@@ -37,7 +37,7 @@ export default class CaseLogManager {
 				and guild_id = ${item.guild_id}`;
 	}
 
-	protected async generateLogMessage(case_: RawCase, logChannelId: string): Promise<string> {
+	protected async generateLogMessage(case_: RawCase, logChannelId: string) {
 		let action = CaseAction[case_.action];
 		if (case_.action === CaseAction.ROLE && case_.role_id) {
 			const roles: Role[] = await this.rest.get(`/guilds/${case_.guild_id}/roles`);

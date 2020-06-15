@@ -55,7 +55,7 @@ export default class CaseManager {
 		public readonly rest: Rest,
 	) {}
 
-	public async create(case_: Case): Promise<Case> {
+	public async create(case_: Case) {
 		const requestOptions = { reason: case_.reason };
 		switch (case_.action) {
 			case CaseAction.ROLE:
