@@ -9,11 +9,6 @@
 		"test": "jest",
 		"test:ci": "jest --ci --no-stack-trace --verbose"
 	},
-	"renovate": {
-		"extends": [
-			"teal"
-		]
-	},
 	"devDependencies": {
 		"@babel/core": "^7.10.2",
 		"@babel/plugin-proposal-decorators": "^7.10.1",
@@ -46,6 +41,7 @@
 		}
 	},
 	"jest": {
+		"testMatch": ["**/+(*.)+(spec|test).+(ts|js)?(x)"],
 		"testEnvironment": "node",
 		"collectCoverage": true,
 		"coverageDirectory": "coverage",
@@ -64,6 +60,11 @@
 		},
 		"roots": [
 			"<rootDir>packages/"
+		]
+	},
+	"renovate": {
+		"extends": [
+			"teal"
 		]
 	}
 }
