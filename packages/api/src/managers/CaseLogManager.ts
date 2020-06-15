@@ -3,7 +3,7 @@ import { Role } from '@spectacles/types';
 import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
-import { SQL } from 'postgres';
+import { Sql } from 'postgres';
 import { RawCase, CaseAction } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
 import { kSQL } from '../tokens';
@@ -12,7 +12,7 @@ import { kSQL } from '../tokens';
 export default class CaseLogManager {
 	public constructor(
 		@inject(kSQL)
-		public readonly sql: SQL,
+		public readonly sql: Sql<any>,
 		public readonly rest: Rest,
 		public readonly settings: SettingsManager,
 	) {}

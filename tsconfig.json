@@ -5,7 +5,17 @@
 		"declaration": false,
 		"removeComments": false,
 		"alwaysStrict": true,
-		"pretty": true
+		"pretty": true,
+		"target": "es2019",
+		"lib": [
+			"ESNext"
+		],
+		"sourceMap": true,
+		"inlineSources": true,
+		"incremental": true,
+		"noEmitHelpers": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true
 	},
 	"exclude": [
 		"**/*.test.ts"

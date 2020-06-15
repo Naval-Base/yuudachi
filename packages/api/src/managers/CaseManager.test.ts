@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 import Rest from '@spectacles/rest';
-import postgres, { SQL } from 'postgres';
+import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import CaseManager, { CaseAction, Case } from './CaseManager';
 import { kSQL } from '../tokens';
@@ -10,7 +10,7 @@ jest.mock('@spectacles/rest');
 jest.mock('postgres', () => jest.fn(() => jest.fn()));
 
 const mockedRest: jest.Mocked<Rest> = new Rest() as any;
-const mockedPostgres: jest.MockedFunction<SQL> = postgres() as any;
+const mockedPostgres: jest.MockedFunction<Sql<any>> = postgres() as any;
 
 container.register(kSQL, { useValue: mockedPostgres });
 container.register(Rest, { useValue: mockedRest });
@@ -92,7 +92,7 @@ mockedRest.get.mockImplementation(() => {
 	}
 });
 
-mockedPostgres.mockResolvedValue([{ case_id: 1 }]);
+mockedPostgres.mockImplementation((): any => Promise.resolve([{ case_id: 1 }]));
 
 afterEach(() => {
 	getCalls = 0;
