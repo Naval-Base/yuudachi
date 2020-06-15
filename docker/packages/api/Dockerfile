@@ -5,7 +5,6 @@ RUN npx pnpm add -g pnpm && pnpm add -g pnpm
 WORKDIR /usr/yukikaze
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json ./
 COPY packages/api ./packages/api
-COPY packages/types ./packages/types
 
 RUN pnpm install --frozen-lockfile --filter api
 RUN pnpm run build --filter api
