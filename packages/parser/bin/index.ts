@@ -2,7 +2,7 @@ import { Amqp } from '@spectacles/brokers';
 import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import { Message } from '@spectacles/types';
-import * as postgres from 'postgres';
+import postgres from 'postgres';
 import { Lexer, Parser, extractCommand, longShortStrategy, outputToJSON } from 'lexure';
 
 const broker = new Amqp('gateway');
@@ -19,7 +19,7 @@ void (async () => {
 		ack();
 		const [data] = (await sql`select settings ->> 'PREFIX' as prefix
 			from settings
-			where guild_id = ${message.guild_id}
+			where guild_id = ${message.guild_id ?? null}
 				is not null;`) as [{ prefix: string | null }];
 		const prefix = data.prefix ?? '?';
 		const lexer = new Lexer(message.content).setQuotes([

@@ -47,7 +47,7 @@ importers:
       jsonwebtoken: 8.5.1
       lodash: 4.17.15
       polka: 0.5.2
-      postgres: 1.0.2
+      postgres: 2.0.0-beta.0
       readdirp: 3.4.0
       reflect-metadata: 0.1.13
       tsyringe: 4.3.0
@@ -83,18 +83,18 @@ importers:
       jsonwebtoken: ^8.5.1
       lodash: ^4.17.15
       polka: ^0.5.2
-      postgres: ^1.0.2
+      postgres: ^2.0.0-beta.0
       readdirp: ^3.4.0
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
       supertest: ^4.0.2
       tsyringe: ^4.3.0
       typescript: ^3.9.5
-  packages/parser:
+  packages/handler:
     dependencies:
       '@spectacles/brokers': 0.8.0
       lexure: 0.6.0
-      postgres: 1.0.2
+      postgres: 2.0.0-beta.0
       tslib: 2.0.0
     devDependencies:
       '@spectacles/types': 0.2.1
@@ -108,7 +108,29 @@ importers:
       '@types/node': ^14.0.13
       env-cmd: ^10.1.0
       lexure: ^0.6.0
-      postgres: ^1.0.2
+      postgres: ^2.0.0-beta.0
+      rimraf: ^3.0.2
+      tslib: ^2.0.0
+      typescript: ^3.9.5
+  packages/parser:
+    dependencies:
+      '@spectacles/brokers': 0.8.0
+      lexure: 0.6.0
+      postgres: 2.0.0-beta.0
+      tslib: 2.0.0
+    devDependencies:
+      '@spectacles/types': 0.2.1
+      '@types/node': 14.0.13
+      env-cmd: 10.1.0
+      rimraf: 3.0.2
+      typescript: 3.9.5
+    specifiers:
+      '@spectacles/brokers': ^0.8.0
+      '@spectacles/types': ^0.2.1
+      '@types/node': ^14.0.13
+      env-cmd: ^10.1.0
+      lexure: ^0.6.0
+      postgres: ^2.0.0-beta.0
       rimraf: ^3.0.2
       tslib: ^2.0.0
       typescript: ^3.9.5
@@ -4582,10 +4604,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
-  /postgres/1.0.2:
+  /postgres/2.0.0-beta.0:
     dev: false
     resolution:
-      integrity: sha512-zeLgt42KSUNgX/uvo+gbVxTAYwgSY6MIKuU/a8YWuObX4rtGuKrVWopvEAqIAPSO0FeHS1TsSKnqPjoufPy8NA==
+      integrity: sha512-1VzJ2ClvMJ8NaSdrDPp5K3g4VABNCiZCcdfqSfEPFC4WSWq8SR4mXSb3p3R2FijRA7gtCnPn1h7iQsplLS+u/A==
   /prelude-ls/1.1.2:
     dev: true
     engines:

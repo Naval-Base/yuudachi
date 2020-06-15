@@ -1,4 +1,4 @@
-import * as Joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 import validate from '../../../middleware/validate';
@@ -36,25 +36,33 @@ interface HasuraEventPayload {
 export default class HasuraEventHookRoute extends Route {
 	public middleware = [
 		validate(
-			Joi.object({
-				event: Joi.object({
-					session_variables: Joi.object(),
-					op: Joi.valid('INSERT', 'UPDATE', 'DELETE', 'MANUAL').required(),
-					data: Joi.object({
-						old: Joi.object(),
-						new: Joi.object(),
-					}).required(),
-				}).required(),
-				created_at: Joi.date().required(),
-				id: Joi.string().required(),
-				trigger: Joi.object({
-					name: Joi.string().required(),
-				}).required(),
-				table: Joi.object({
-					schema: Joi.string().required(),
-					name: Joi.string().required(),
-				}).required(),
-			}).required(),
+			Joi.object()
+				.keys({
+					event: Joi.object()
+						.keys({
+							session_variables: Joi.object(),
+							op: Joi.valid('INSERT', 'UPDATE', 'DELETE', 'MANUAL').required(),
+							data: Joi.object({
+								old: Joi.object(),
+								new: Joi.object(),
+							}).required(),
+						})
+						.required(),
+					created_at: Joi.date().required(),
+					id: Joi.string().required(),
+					trigger: Joi.object()
+						.keys({
+							name: Joi.string().required(),
+						})
+						.required(),
+					table: Joi.object()
+						.keys({
+							schema: Joi.string().required(),
+							name: Joi.string().required(),
+						})
+						.required(),
+				})
+				.required(),
 		),
 	];
 
