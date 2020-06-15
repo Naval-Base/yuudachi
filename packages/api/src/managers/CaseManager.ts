@@ -1,6 +1,6 @@
 import Rest from '@spectacles/rest';
 import { User } from '@spectacles/types';
-import { SQL } from 'postgres';
+import { Sql } from 'postgres';
 import { inject, injectable } from 'tsyringe';
 import { URLSearchParams } from 'url';
 import { kSQL } from '../tokens';
@@ -51,7 +51,7 @@ export interface Case {
 export default class CaseManager {
 	public constructor(
 		@inject(kSQL)
-		public readonly sql: SQL,
+		public readonly sql: Sql<any>,
 		public readonly rest: Rest,
 	) {}
 
@@ -60,14 +60,14 @@ export default class CaseManager {
 		switch (case_.action) {
 			case CaseAction.ROLE:
 				await this.rest.put(
-					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId}`,
+					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId!}`,
 					{},
 					requestOptions,
 				);
 				break;
 			case CaseAction.UN_ROLE:
 				await this.rest.delete(
-					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId}`,
+					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId!}`,
 					requestOptions,
 				);
 				break;
@@ -82,7 +82,7 @@ export default class CaseManager {
 					reason: case_.reason,
 				});
 
-				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params}`, requestOptions);
+				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params.toString()}`, requestOptions);
 				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, {
 					reason: `Softban: ${case_.reason}`,
 				});
@@ -94,7 +94,7 @@ export default class CaseManager {
 					reason: case_.reason,
 				});
 
-				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params}`, requestOptions);
+				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params.toString()}`, requestOptions);
 				break;
 			}
 			case CaseAction.UNBAN:
@@ -137,7 +137,7 @@ export default class CaseManager {
 			)
 			returning case_id`;
 
-		case_.caseId = (newCase as any).case_id;
+		case_.caseId = newCase.case_id;
 		return case_;
 	}
 }

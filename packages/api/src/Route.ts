@@ -26,8 +26,9 @@ export function pathToRouteInfo(path: string): RouteInfo | null {
 		!([RouteMethod.GET, RouteMethod.POST, RouteMethod.PUT, RouteMethod.DELETE, RouteMethod.PATCH] as string[]).includes(
 			method,
 		)
-	)
+	) {
 		return null;
+	}
 
 	if (!path.startsWith('/')) path = `/${path}`;
 	return {
