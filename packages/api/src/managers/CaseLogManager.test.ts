@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import Rest from '@spectacles/rest';
 import { stripIndents } from 'common-tags';
-import postgres, { SQL } from 'postgres';
+import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import CaseLogManager from './CaseLogManager';
 import { CaseAction } from './CaseManager';
@@ -13,7 +13,7 @@ jest.mock('@spectacles/rest');
 jest.mock('postgres', () => jest.fn(() => jest.fn()));
 
 const mockedRest: jest.Mocked<Rest> = new Rest() as any;
-const mockedPostgres: jest.MockedFunction<SQL> = postgres() as any;
+const mockedPostgres: jest.MockedFunction<Sql<any>> = postgres() as any;
 
 container.register(kSQL, { useValue: mockedPostgres });
 container.register(Rest, { useValue: mockedRest });
@@ -43,9 +43,7 @@ let postgresResults: any[] = [];
 Date.now = jest.fn(() => NOW);
 
 let sqlCalls = 0;
-mockedPostgres.mockImplementation((): any => {
-	return Promise.resolve([postgresResults[sqlCalls++]]);
-});
+mockedPostgres.mockImplementation((): any => Promise.resolve([postgresResults[sqlCalls++]]));
 
 // there is only one rest call that happens during case creation
 let restCalls = 0;

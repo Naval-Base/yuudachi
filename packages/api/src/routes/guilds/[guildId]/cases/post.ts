@@ -1,4 +1,4 @@
-import * as Joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 import Route from '../../../../Route';
@@ -15,38 +15,42 @@ export default class CreateCaseRoute extends Route {
 	public middleware = [
 		bodyParser,
 		validate(
-			Joi.object({
-				cases: Joi.array()
-					.items(
-						Joi.object({
-							action: Joi.number().integer().min(0).max(6),
-							roleId: Joi.when('action', {
-								is: CaseAction.ROLE,
-								then: Joi.string()
-									.required()
-									.pattern(/[0-9]+/),
-								otherwise: Joi.forbidden(),
-							}),
-							actionExpiration: Joi.when('action', {
-								is: Joi.valid(CaseAction.ROLE, CaseAction.BAN),
-								then: Joi.date(),
-								otherwise: Joi.forbidden(),
-							}),
-							reason: Joi.string().required(),
-							targetId: Joi.string()
-								.pattern(/[0-9]+/)
+			Joi.object()
+				.keys({
+					cases: Joi.array()
+						.items(
+							Joi.object()
+								.keys({
+									action: Joi.number().integer().min(0).max(6).required(),
+									roleId: Joi.when('action', {
+										is: CaseAction.ROLE,
+										then: Joi.string()
+											.pattern(/[0-9]+/)
+											.required(),
+										otherwise: Joi.forbidden(),
+									}),
+									actionExpiration: Joi.when('action', {
+										is: Joi.valid(CaseAction.ROLE, CaseAction.BAN),
+										then: Joi.date(),
+										otherwise: Joi.forbidden(),
+									}),
+									reason: Joi.string().required(),
+									targetId: Joi.string()
+										.pattern(/[0-9]+/)
+										.required(),
+									deleteMessageDays: Joi.when('action', {
+										is: Joi.valid(CaseAction.BAN, CaseAction.SOFTBAN),
+										then: Joi.number().positive().max(7).default(1),
+										otherwise: Joi.forbidden(),
+									}),
+									contextMessageId: Joi.string().pattern(/[0-9]+/),
+									referenceId: Joi.number(),
+								})
 								.required(),
-							deleteMessageDays: Joi.when('action', {
-								is: Joi.valid(CaseAction.BAN, CaseAction.SOFTBAN),
-								then: Joi.number().positive().max(7).default(1),
-								otherwise: Joi.forbidden(),
-							}),
-							contextMessageId: Joi.string().pattern(/[0-9]+/),
-							referenceId: Joi.number(),
-						}),
-					)
-					.min(1),
-			}).required(),
+						)
+						.min(1),
+				})
+				.required(),
 		),
 		authorize,
 	];
