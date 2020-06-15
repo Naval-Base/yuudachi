@@ -3,21 +3,11 @@
 	"compilerOptions": {
 		"module": "CommonJS",
 		"moduleResolution": "node",
-		"target": "ES2019",
-		"lib": [
-			"ESNext",
-		],
-		"sourceMap": true,
-		"inlineSources": true,
 		"sourceRoot": "./",
 		"rootDir": ".",
-		"outDir": "dist",
-		"incremental": true,
-		"noEmitHelpers": true,
-		"skipLibCheck": true
+		"outDir": "dist"
 	},
 	"include": [
-		"./bin",
-		"../types"
+		"./bin"
 	]
 }
