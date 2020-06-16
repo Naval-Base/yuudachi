@@ -30,9 +30,10 @@ export function pathToRouteInfo(path: string): RouteInfo | null {
 		return null;
 	}
 
+	path = path.replace(/\[(.+)\]/g, ':$1').replace(/\\/g, '/');
 	if (!path.startsWith('/')) path = `/${path}`;
 	return {
-		path: dirname(path.replace(/\[(.+)\]/g, ':$1').replace(/\\/g, '/')),
+		path: dirname(path),
 		method: method as RouteMethod,
 	};
 }

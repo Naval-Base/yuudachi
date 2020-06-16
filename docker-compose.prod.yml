@@ -97,6 +97,15 @@ services:
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
 
+  handler:
+    environment:
+      PGHOST: "postgres"
+      PGPORT: "5432"
+      PGDATABASE: "yukikaze"
+      PGUSERNAME: "yukikaze"
+      PGPASSWORD: "admin"
+      DISCORD_TOKEN: ""
+
   api:
     environment:
       PGHOST: "postgres"

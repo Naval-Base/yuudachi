@@ -19,7 +19,9 @@ export default class CaseLogManager {
 
 	public async create(item: RawCase) {
 		const logChannelId = await this.settings.get(item.guild_id, SettingsKeys.MOD_LOG_CHANNEL_ID);
-		if (!logChannelId) throw new Error('no mod log channel configured');
+		if (!logChannelId) {
+			throw new Error('no mod log channel configured');
+		}
 
 		const logMessage = await this.rest.post(`/channels/${logChannelId}/messages`, {
 			embed: {

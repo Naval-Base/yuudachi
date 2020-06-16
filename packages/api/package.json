@@ -20,7 +20,7 @@
     "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
-    "polka": "^0.5.2",
+    "polka": "^1.0.0-next.11",
     "postgres": "^2.0.0-beta.0",
     "readdirp": "^3.4.0",
     "reflect-metadata": "^0.1.13",
