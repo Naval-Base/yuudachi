@@ -163,6 +163,21 @@ services:
       PGPASSWORD: ""
     restart: unless-stopped
 
+  handler:
+    build:
+      context: ./
+      dockerfile: ./docker/packages/handler/Dockerfile
+    labels:
+      com.naval-base.description: "Internal handler"
+    environment:
+      PGHOST: ""
+      PGPORT: ""
+      PGDATABASE: ""
+      PGUSERNAME: ""
+      PGPASSWORD: ""
+      DISCORD_TOKEN: ""
+    restart: unless-stopped
+
   api:
     build:
       context: ./

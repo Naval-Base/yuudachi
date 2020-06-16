@@ -40,7 +40,9 @@ export default class HasuraActionHandler extends Route {
 	];
 
 	public async handle(req: Request, res: Response, next: NextHandler) {
-		if (!req.body) return next('uh oh, something broke');
+		if (!req.body) {
+			return next('uh oh, something broke');
+		}
 
 		const body: Action = req.body as any;
 
