@@ -71,7 +71,9 @@ export default class HasuraEventHookRoute extends Route {
 	}
 
 	public handle(req: Request, res: Response, next: NextHandler) {
-		if (!req.body) return next(new Error('uh oh, something broke'));
+		if (!req.body) {
+			return next(new Error('uh oh, something broke'));
+		}
 
 		const body: HasuraEventPayload = req.body as any;
 		switch (body.table.name) {
