@@ -1,5 +1,5 @@
 import Joi from '@hapi/joi';
-import { Request, Response, NextHandler } from 'polka';
+import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import Route from '../../../../Route';
 import { authorize, validate } from '../../../../middleware';
@@ -59,15 +59,13 @@ export default class CreateCaseRoute extends Route {
 		super();
 	}
 
-	public async handle(req: Request, res: Response, next: NextHandler) {
-		if (!req.body || !req.userId || !req.params.guildId) return next(new Error('uh oh, something broke'));
-
+	public async handle(req: Request, res: Response) {
 		const created: Promise<Case>[] = [];
 		const body: CasesPostBody = req.body as any;
 
 		for (const case_ of body.cases) {
 			case_.guildId = req.params.guildId;
-			case_.moderatorId = req.userId;
+			case_.moderatorId = req.userId!;
 			created.push(this.caseManager.create(case_));
 		}
 
