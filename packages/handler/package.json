@@ -14,7 +14,7 @@
 	"dependencies": {
 		"@spectacles/brokers": "^0.8.0",
 		"@spectacles/rest": "^0.8.3",
-		"lexure": "^0.6.0",
+		"lexure": "^0.8.0",
 		"postgres": "^2.0.0-beta.0",
 		"readdirp": "^3.4.0",
 		"reflect-metadata": "^0.1.13",
