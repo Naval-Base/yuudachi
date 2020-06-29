@@ -15,7 +15,7 @@
     "@hapi/boom": "^9.1.0",
     "@hapi/joi": "^17.1.1",
     "@spectacles/rest": "^0.8.3",
-    "@spectacles/util": "^0.3.2",
+    "@spectacles/util": "^0.4.0",
     "common-tags": "^1.8.0",
     "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
