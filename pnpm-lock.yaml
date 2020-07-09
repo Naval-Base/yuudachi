@@ -1137,6 +1137,7 @@ packages:
     resolution:
       integrity: sha512-4nZmpp4tXbm162LaZT45P7F7sgiem8dwAh2vHWT6XX24dozNjGMg6BvKCRvtCUcmcXqeMIUqWN8Rc5X8yKuROQ==
   /@hapi/formula/2.0.0:
+    deprecated: This version has been deprecated and is no longer supported or maintained
     dev: false
     resolution:
       integrity: sha512-V87P8fv7PI0LH7LiVi8Lkf3x+KCO7pQozXRssAHNXXL9L1K+uyu4XypLXwxqVDKgyQai6qj3/KteNlrqDx4W5A==
