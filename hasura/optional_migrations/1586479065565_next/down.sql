@@ -1,15 +1,26 @@
 -- TAGS
 
+alter table tags
+	alter guild_id set data type text,
+	alter user_id set data type text
+;
+
 alter table tags rename user_id to "user";
 alter table tags rename guild_id to guild;
 
 -- SETTINGS
+
+alter table settings
+	alter guild_id set data type text
+;
 
 alter table settings rename guild_id to guild;
 
 -- ROLE STATES
 
 alter table role_states
+	alter guild_id set data type text,
+	alter member_id set data type text,
 	drop constraint role_states_pkey,
 	add id uuid default gen_random_uuid() not null,
 	add constraint role_states_pkey primary key (id),
@@ -36,6 +47,11 @@ alter table lockdowns rename expiration to duration;
 -- CASES
 
 alter table cases
+	alter log_message_id set data type text,
+	alter guild_id set data type text,
+	alter target_id set data type text,
+	alter mod_id set data type text,
+	alter context_message_id set data type text,
 	drop role_id,
 	drop constraint cases_pkey,
 	add id uuid default gen_random_uuid() not null,

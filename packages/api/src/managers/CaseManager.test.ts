@@ -123,7 +123,7 @@ test('creates role case', async () => {
 
 test('creates un-role case', async () => {
 	const case_ = {
-		action: CaseAction.UN_ROLE,
+		action: CaseAction.UNROLE,
 		caseId: 0,
 		guildId: '1234',
 		moderatorId: '2345',

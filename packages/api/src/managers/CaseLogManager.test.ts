@@ -18,7 +18,7 @@ const mockedPostgres: jest.MockedFunction<Sql<any>> = postgres() as any;
 container.register(kSQL, { useValue: mockedPostgres });
 container.register(Rest, { useValue: mockedRest });
 
-const NOW = Date.now();
+const NOW = new Date().toISOString();
 
 // Mock data used in testing
 const caseId = 1;
@@ -35,12 +35,12 @@ const roleId = '12345';
 const roleName = 'bar';
 const contextChannelId = '23456';
 const contextMessageId = '34567';
-const actionExpiration = new Date(NOW + 1e5).toString();
+const actionExpiration = new Date(Date.parse(NOW) + 1e5).toString();
 
 // Array holding results for SQL queries during the test
 let postgresResults: any[] = [];
 
-Date.now = jest.fn(() => NOW);
+Date.prototype.toISOString = jest.fn(() => NOW);
 
 let sqlCalls = 0;
 mockedPostgres.mockImplementation((): any => Promise.resolve([postgresResults[sqlCalls++]]));
@@ -114,15 +114,14 @@ test('creates basic kick case', async () => {
 		1,
 		[
 			`
-			select value
-			from guild_settings
+			select settings ->> `,
+			` as value
+			from settings
 			where guild_id = `,
-			`
-				and key = `,
-			'',
+			`;`,
 		],
-		guildId,
 		SettingsKeys.MOD_LOG_CHANNEL_ID,
+		guildId,
 	);
 
 	expect(mockedPostgres).toHaveBeenLastCalledWith(
@@ -131,7 +130,7 @@ test('creates basic kick case', async () => {
 			update cases
 			set log_message_id = `,
 			`
-			where id = `,
+			where case_id = `,
 			`
 				and guild_id = `,
 			'',
@@ -149,7 +148,9 @@ test('creates basic kick case', async () => {
 				**Member:** ${targetTag} (${targetId})
 				**Action:** KICK
 				**Reason:** foo`,
-			footer: `Case ${caseId}`,
+			footer: {
+				text: `Case ${caseId}`,
+			},
 			timestamp: NOW,
 		},
 	});
@@ -185,7 +186,7 @@ test('creates reference role case', async () => {
 			`
 				select log_message_id
 				from cases
-				where id = `,
+				where case_id = `,
 			`
 					and guild_id = `,
 			'',
@@ -206,7 +207,9 @@ test('creates reference role case', async () => {
 				**Action:** ROLE "${roleName}" (${roleId})
 				**Reason:** foo
 				**Ref case:** [${refCaseId}](https://discordapp.com/channels/${guildId}/${logChannelId}/${refLogMessageId})`,
-			footer: `Case ${caseId}`,
+			footer: {
+				text: `Case ${caseId}`,
+			},
 			timestamp: NOW,
 		},
 	});
@@ -256,7 +259,9 @@ test('creates contextual softban case', async () => {
 				**Action:** SOFTBAN
 				**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
 				**Reason:** foo`,
-			footer: `Case ${caseId}`,
+			footer: {
+				text: `Case ${caseId}`,
+			},
 			timestamp: NOW,
 		},
 	});
@@ -302,7 +307,7 @@ test('creates temporary ban case with context and reference', async () => {
 			`
 				select log_message_id
 				from cases
-				where id = `,
+				where case_id = `,
 			`
 					and guild_id = `,
 			'',
@@ -322,7 +327,78 @@ test('creates temporary ban case with context and reference', async () => {
 				**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
 				**Reason:** foo
 				**Ref case:** [${refCaseId}](https://discordapp.com/channels/${guildId}/${logChannelId}/${refLogMessageId})`,
-			footer: `Case ${caseId}`,
+			footer: {
+				text: `Case ${caseId}`,
+			},
+			timestamp: NOW,
+		},
+	});
+});
+
+test('creates ban without a reason', async () => {
+	postgresResults = [{ value: logChannelId }, { value: '?' }];
+
+	const logManager = container.resolve(CaseLogManager);
+	await logManager.create({
+		action: CaseAction.BAN,
+		action_expiration: null,
+		action_processed: true,
+		case_id: caseId,
+		context_message_id: null,
+		created_at: new Date().toString(),
+		guild_id: guildId,
+		log_message_id: null,
+		mod_id: modId,
+		mod_tag: modTag,
+		reason: null,
+		ref_id: null,
+		role_id: null,
+		target_id: targetId,
+		target_tag: targetTag,
+	});
+
+	expect(mockedPostgres).toHaveBeenCalledTimes(3);
+	expect(mockedPostgres).toHaveBeenNthCalledWith(
+		2,
+		[
+			`
+			select settings ->> `,
+			` as value
+			from settings
+			where guild_id = `,
+			`;`,
+		],
+		SettingsKeys.PREFIX,
+		guildId,
+	);
+
+	expect(mockedPostgres).toHaveBeenLastCalledWith(
+		[
+			`
+			update cases
+			set log_message_id = `,
+			`
+			where case_id = `,
+			`
+				and guild_id = `,
+			'',
+		],
+		logMessageId,
+		1,
+		guildId,
+	);
+
+	expect(mockedRest.post).toHaveBeenCalledTimes(1);
+	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
+		embed: {
+			title: `${modTag} (${modId})`,
+			description: stripIndents`
+				**Member:** ${targetTag} (${targetId})
+				**Action:** BAN
+				**Reason:** Use \`?reason 1 <...reason>\` to set a reason for this case`,
+			footer: {
+				text: `Case ${caseId}`,
+			},
 			timestamp: NOW,
 		},
 	});
