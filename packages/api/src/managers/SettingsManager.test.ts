@@ -26,15 +26,14 @@ test('gets settings', async () => {
 	expect(mockedPostgres).toHaveBeenCalledWith(
 		[
 			`
-			select value
-			from guild_settings
+			select settings ->> `,
+			` as value
+			from settings
 			where guild_id = `,
-			`
-				and key = `,
-			'',
+			`;`,
 		],
-		'1234',
 		'foo',
+		'1234',
 	);
 });
 
@@ -49,14 +48,13 @@ test('gets missing setting', async () => {
 	expect(mockedPostgres).toHaveBeenCalledWith(
 		[
 			`
-			select value
-			from guild_settings
+			select settings ->> `,
+			` as value
+			from settings
 			where guild_id = `,
-			`
-				and key = `,
-			'',
+			`;`,
 		],
-		'1234',
 		'foo',
+		'1234',
 	);
 });
