@@ -7,7 +7,7 @@ import { kSQL } from '../tokens';
 
 export enum CaseAction {
 	ROLE,
-	UN_ROLE,
+	UNROLE,
 	WARN,
 	KICK,
 	SOFTBAN,
@@ -65,7 +65,7 @@ export default class CaseManager {
 					requestOptions,
 				);
 				break;
-			case CaseAction.UN_ROLE:
+			case CaseAction.UNROLE:
 				await this.rest.delete(
 					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId!}`,
 					requestOptions,

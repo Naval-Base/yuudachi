@@ -1,6 +1,36 @@
 - table:
     schema: public
     name: cases
+  event_triggers:
+  - name: mod_log
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      delete:
+        columns: '*'
+      update:
+        columns:
+        - role_id
+        - created_at
+        - action
+        - case_id
+        - action_expiration
+        - ref_id
+        - guild_id
+        - context_message_id
+        - log_message_id
+        - mod_id
+        - target_id
+        - reason
+        - mod_tag
+        - target_tag
+        - action_processed
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: http://api:3000/hasura/hooks/mod_log
 - table:
     schema: public
     name: lockdowns

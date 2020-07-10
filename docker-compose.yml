@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v1.2.2.cli-migrations-v2
+    image: hasura/graphql-engine:v1.3.0-beta.4.cli-migrations-v2
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:

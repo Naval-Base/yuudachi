@@ -13,7 +13,7 @@ import { kSQL } from '../src/tokens';
 const token = process.env.DISCORD_TOKEN;
 
 const rest = new Rest({ token });
-const pg = postgres();
+const pg = postgres({ debug: console.log });
 
 container.register(Rest, { useValue: rest });
 container.register(kSQL, { useValue: pg });

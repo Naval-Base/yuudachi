@@ -27,15 +27,17 @@ export default class CaseLogManager {
 			embed: {
 				title: `${item.mod_tag} (${item.mod_id})`,
 				description: await this.generateLogMessage(item, logChannelId),
-				footer: `Case ${item.case_id}`,
-				timestamp: Date.now(),
+				footer: {
+					text: `Case ${item.case_id}`,
+				},
+				timestamp: new Date().toISOString(),
 			},
 		});
 
 		await this.sql`
 			update cases
 			set log_message_id = ${logMessage.id}
-			where id = ${item.case_id}
+			where case_id = ${item.case_id}
 				and guild_id = ${item.guild_id}`;
 	}
 
@@ -70,12 +72,18 @@ export default class CaseLogManager {
 			}
 		}
 
-		msg += `\n**Reason:** ${case_.reason}`;
+		if (case_.reason) {
+			msg += `\n**Reason:** ${case_.reason}`;
+		} else {
+			const prefix = await this.settings.get(case_.guild_id, SettingsKeys.PREFIX);
+			msg += `\n**Reason:** Use \`${prefix ?? '?'}reason ${case_.case_id} <...reason>\` to set a reason for this case`;
+		}
+
 		if (case_.ref_id) {
 			const [reference] = await this.sql`
 				select log_message_id
 				from cases
-				where id = ${case_.ref_id}
+				where case_id = ${case_.ref_id}
 					and guild_id = ${case_.guild_id}`;
 
 			if (has(reference, 'log_message_id')) {
