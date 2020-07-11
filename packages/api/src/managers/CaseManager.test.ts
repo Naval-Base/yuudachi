@@ -116,7 +116,7 @@ test('creates role case', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', {}, { reason: 'foo' });
+	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', {}, { reason: 'Case #0' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -138,7 +138,7 @@ test('creates un-role case', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', { reason: 'foo' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', { reason: 'Case #0' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -180,7 +180,7 @@ test('creates kick case with context', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456', { reason: 'foo' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456', { reason: 'Case #0' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -202,11 +202,11 @@ test('creates softban with delete message days', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=3&reason=foo', {
-		reason: 'foo',
+	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=3&reason=Case+%230', {
+		reason: 'Case #0',
 	});
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Softban: foo' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Case #0' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -229,8 +229,8 @@ test('creates ban with expiration & default delete message days', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=1&reason=foo', {
-		reason: 'foo',
+	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=1&reason=Case+%230', {
+		reason: 'Case #0',
 	});
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
@@ -254,7 +254,7 @@ test('creates unban case', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'foo' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Case #0' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });

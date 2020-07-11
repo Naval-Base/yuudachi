@@ -56,7 +56,7 @@ export default class CaseManager {
 	) {}
 
 	public async create(case_: Case) {
-		const requestOptions = { reason: case_.reason };
+		const requestOptions = { reason: `Case #${case_.caseId}` };
 		switch (case_.action) {
 			case CaseAction.ROLE:
 				await this.rest.put(
@@ -79,19 +79,17 @@ export default class CaseManager {
 			case CaseAction.SOFTBAN: {
 				const params = new URLSearchParams({
 					'delete-message-days': case_.deleteMessageDays?.toString() ?? '1',
-					reason: case_.reason,
+					reason: requestOptions.reason,
 				});
 
 				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params.toString()}`, requestOptions);
-				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, {
-					reason: `Softban: ${case_.reason}`,
-				});
+				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, requestOptions);
 				break;
 			}
 			case CaseAction.BAN: {
 				const params = new URLSearchParams({
 					'delete-message-days': case_.deleteMessageDays?.toString() ?? '1',
-					reason: case_.reason,
+					reason: requestOptions.reason,
 				});
 
 				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params.toString()}`, requestOptions);
