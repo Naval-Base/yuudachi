@@ -39,10 +39,5 @@
 		"rules": {
 			"@typescript-eslint/naming-convention": 0
 		}
-	},
-	"renovate": {
-		"extends": [
-			"teal"
-		]
 	}
 }
