@@ -114,8 +114,7 @@ services:
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
-    ports:
-      - "127.0.0.1:3001:3000"
+
 
 volumes:
   rabbitmq-data:
