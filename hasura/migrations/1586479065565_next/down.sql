@@ -5,7 +5,41 @@ alter table tags rename guild_id to guild;
 
 -- SETTINGS
 
-alter table settings rename guild_id to guild;
+create table settings (
+	guild text,
+	settings jsonb default '{}'::json
+);
+
+alter table settings
+	add constraint settings_pkey primary key (guild)
+;
+
+insert into settings (
+	select guild_id as guild,
+		to_jsonb(
+			(
+				select d
+				from (
+					select prefix as "PREFIX",
+						mod_log_channel_id as "MOD_LOG",
+						mod_role_id as "MOD_ROLE",
+						guild_log_id as "GUILD_LOG",
+						member_log_id as "MEMBER_LOG",
+						mute_role_id as "MUTE_ROLE",
+						role_state as "ROLE_STATE",
+						moderation as "MODERATION",
+						json_build_object(
+							'TAG', tag_role_id,
+							'EMBED', embed_role_id,
+							'EMOJI', emoji_role_id,
+							'REACTION', reaction_role_id
+						) as "RESTRICT_ROLES"
+				) d)
+		) as settings
+	from guild_settings;
+);
+
+drop table guild_settings;
 
 -- ROLE STATES
 

@@ -61,6 +61,20 @@ alter table cases
 	add constraint cases_pkey primary key (guild_id, case_id)
 ;
 
+update cases set
+	action = case
+		when action = 1 then 5
+		when action = 2 then 6
+		when action = 3 then 4
+		when action = 4 then 3
+		when action = 5 then 0
+		when action = 6 then 0
+		when action = 7 then 0
+		when action = 8 then 0
+		when action = 9 then 2
+		when action = 10 then 0
+	end;
+
 -- LOCKDOWNS
 
 alter table lockdowns rename channel to channel_id;
@@ -89,13 +103,46 @@ alter table role_states
 	add constraint role_states_pkey primary key (guild_id, member_id)
 ;
 
--- SETTINGS
+-- GUILD_SETTINGS
 
-alter table settings rename guild to guild_id;
+create table guild_settings (
+	guild_id bigint,
+	prefix text,
+	mod_log_channel_id bigint,
+	mod_role_id bigint,
+	guild_log_id bigint,
+	member_log_id bigint,
+	mute_role_id bigint,
+	tag_role_id bigint,
+	embed_role_id bigint,
+	emoji_role_id bigint,
+	reaction_role_id bigint,
+	role_state boolean,
+	moderation boolean
+);
 
-alter table settings
-	alter guild_id type bigint using guild_id::bigint
+alter table guild_settings
+	add constraint guild_settings_pkey primary key (guild_id)
 ;
+
+insert into guild_settings (
+	select guild as guild_id,
+		coalesce((settings ->> 'PREFIX')::text, '?') as prefix,
+		(settings ->> 'MOD_LOG')::bigint as mod_log_channel_id,
+		(settings ->> 'MOD_ROLE')::bigint as mod_role_id,
+		(settings ->> 'GUILD_LOG')::bigint as guild_log_id,
+		(settings -> 'MEMBER_LOG' ->> 'ID')::bigint as member_log_id,
+		(settings ->> 'MUTE_ROLE')::bigint as mute_role_id,
+		(settings -> 'RESTRICT_ROLES' ->> 'TAG')::bigint as tag_role_id,
+		(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::bigint as embed_role_id,
+		(settings -> 'RESTRICT_ROLES' ->> 'EMOJI')::bigint as emoji_role_id,
+		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::bigint as reaction_role_id,
+		coalesce((settings ->> 'ROLE_STATE')::boolean, false) as role_state,
+		coalesce((settings ->> 'MODERATION')::boolean, false) as moderation
+	from settings
+);
+
+drop table settings;
 
 -- TAGS
 
