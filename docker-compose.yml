@@ -119,12 +119,12 @@ services:
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
     expose:
-      - "3000"
+      - "3030"
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3030:3000"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- localhost:3000/api/health"]
+      test: ["CMD-SHELL", "wget -qO- localhost:3030/api/health"]
       interval: 30s
       timeout: 5s
 
@@ -193,4 +193,6 @@ services:
       DISCORD_TOKEN: ""
     expose:
       - "3000"
+    ports:
+      - "127.0.0.1:3000:3000"
     restart: unless-stopped
