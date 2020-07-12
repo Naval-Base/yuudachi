@@ -26,11 +26,11 @@ test('gets settings', async () => {
 	expect(mockedPostgres).toHaveBeenCalledWith(
 		[
 			`
-			select settings ->> `,
+			select `,
 			` as value
-			from settings
+			from guild_settings
 			where guild_id = `,
-			`;`,
+			'',
 		],
 		'foo',
 		'1234',
@@ -48,11 +48,11 @@ test('gets missing setting', async () => {
 	expect(mockedPostgres).toHaveBeenCalledWith(
 		[
 			`
-			select settings ->> `,
+			select `,
 			` as value
-			from settings
+			from guild_settings
 			where guild_id = `,
-			`;`,
+			'',
 		],
 		'foo',
 		'1234',
