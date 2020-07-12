@@ -114,11 +114,11 @@ test('creates basic kick case', async () => {
 		1,
 		[
 			`
-			select settings ->> `,
+			select `,
 			` as value
-			from settings
+			from guild_settings
 			where guild_id = `,
-			`;`,
+			'',
 		],
 		SettingsKeys.MOD_LOG_CHANNEL_ID,
 		guildId,
@@ -362,11 +362,11 @@ test('creates ban without a reason', async () => {
 		2,
 		[
 			`
-			select settings ->> `,
+			select `,
 			` as value
-			from settings
+			from guild_settings
 			where guild_id = `,
-			`;`,
+			'',
 		],
 		SettingsKeys.PREFIX,
 		guildId,
