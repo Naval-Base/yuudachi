@@ -17,10 +17,9 @@ void (async () => {
 		[Message, AmqpResponseOptions]
 	>) {
 		ack();
-		const [data] = (await sql`select settings ->> 'PREFIX' as prefix
-			from settings
-			where guild_id = ${message.guild_id ?? null}
-				is not null;`) as [{ prefix: string | null }];
+		const [data] = (await sql`select prefix
+			from guild_settings
+			where guild_id = ${message.guild_id ?? null};`) as [{ prefix: string | null }];
 		const prefix = data.prefix ?? '?';
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
