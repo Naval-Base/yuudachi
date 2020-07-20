@@ -1,5 +1,6 @@
 import { badRequest } from '@hapi/boom';
 import { Request, Response, NextHandler } from 'polka';
+
 import { USER_ID_HEADER } from '../Constants';
 
 export default function authorize(req: Request, res: Response, next?: NextHandler) {

@@ -1,6 +1,7 @@
 import { injectable, inject } from 'tsyringe';
-import { kSQL } from '../tokens';
 import { Sql } from 'postgres';
+
+import { kSQL } from '../tokens';
 
 export enum SettingsKeys {
 	PREFIX = 'prefix',

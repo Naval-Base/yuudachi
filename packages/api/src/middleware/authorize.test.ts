@@ -1,4 +1,5 @@
 import supertest from 'supertest';
+
 import authorize from './authorize';
 import { USER_ID_HEADER } from '../Constants';
 import createApp from '../app';

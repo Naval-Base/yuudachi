@@ -1,5 +1,6 @@
 import supertest from 'supertest';
 import bodyParser from './bodyParser';
+
 import createApp from '../app';
 
 const mockHandler = jest.fn((_, res) => res.end());
