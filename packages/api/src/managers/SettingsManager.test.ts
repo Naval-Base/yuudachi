@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 import { container } from 'tsyringe';
 import postgres, { Sql } from 'postgres';
+
 import { kSQL } from '../tokens';
 import SettingsManager from './SettingsManager';
 

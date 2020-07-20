@@ -1,5 +1,6 @@
 import { badRequest, internal, unauthorized } from '@hapi/boom';
 import { Http2ServerResponse } from 'http2';
+
 import { sendBoom } from './util';
 
 jest.mock('http2');

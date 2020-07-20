@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import Rest from '@spectacles/rest';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
+
 import CaseManager, { CaseAction, Case } from './CaseManager';
 import { kSQL } from '../tokens';
 

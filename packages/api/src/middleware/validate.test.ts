@@ -1,5 +1,6 @@
 import { boomify } from '@hapi/boom';
 import Joi from '@hapi/joi';
+
 import validate from './validate';
 
 let next: jest.Mock;
