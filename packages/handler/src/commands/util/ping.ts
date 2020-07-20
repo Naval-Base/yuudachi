@@ -1,7 +1,8 @@
-import Command from '../../Command';
 import { injectable } from 'tsyringe';
 import Rest from '@spectacles/rest';
 import { Message } from '@spectacles/types';
+
+import Command from '../../Command';
 
 @injectable()
 export default class implements Command {

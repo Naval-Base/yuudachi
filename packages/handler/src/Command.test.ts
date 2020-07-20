@@ -1,5 +1,6 @@
-import Command, { commandInfo } from './Command';
 import { sep } from 'path';
+
+import Command, { commandInfo } from './Command';
 
 test('invalid file name', () => {
 	expect(commandInfo('foo')).toBeNull();
