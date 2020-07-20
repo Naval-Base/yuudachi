@@ -4,6 +4,7 @@ import Rest from '@spectacles/rest';
 import { stripIndents } from 'common-tags';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
+
 import CaseLogManager from './CaseLogManager';
 import { CaseAction } from './CaseManager';
 import { SettingsKeys } from './SettingsManager';

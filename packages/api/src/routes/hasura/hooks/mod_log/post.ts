@@ -1,6 +1,7 @@
 import Joi from '@hapi/joi';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
+
 import { validate, bodyParser } from '../../../../middleware';
 import CaseLogManager from '../../../../managers/CaseLogManager';
 import Route from '../../../../Route';

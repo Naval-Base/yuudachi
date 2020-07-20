@@ -4,6 +4,7 @@ import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
+
 import { RawCase, CaseAction } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
 import { kSQL } from '../tokens';

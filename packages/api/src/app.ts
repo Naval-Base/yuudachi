@@ -1,6 +1,7 @@
 import { isBoom, Boom, notFound } from '@hapi/boom';
 import { createServer } from 'http';
 import polka from 'polka';
+
 import { sendBoom } from './util';
 
 export default function createApp() {
