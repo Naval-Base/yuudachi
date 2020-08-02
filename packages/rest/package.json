@@ -6,8 +6,7 @@
   "typings": "typings/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist typings && tsc",
-    "prepare": "pnpm run build"
+    "prepare": "rimraf dist typings && tsc"
   },
   "repository": {
     "type": "git",
