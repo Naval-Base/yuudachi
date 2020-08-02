@@ -1,9 +1,10 @@
 import 'reflect-metadata';
 
-import Rest from '@spectacles/rest';
+import { Amqp } from '@spectacles/brokers';
 import { resolve } from 'path';
 import postgres from 'postgres';
 import readdirp from 'readdirp';
+import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 
 import Route, { pathToRouteInfo } from '../src/Route';
@@ -11,8 +12,13 @@ import createApp from '../src/app';
 import { kSQL } from '../src/tokens';
 
 const token = process.env.DISCORD_TOKEN;
+if (!token) throw new Error('no discord token');
 
-const rest = new Rest({ token });
+const amqpUrl = process.env.AMQP_URL;
+if (!amqpUrl) throw new Error('no AMQP url');
+
+const amqp = new Amqp('rest');
+const rest = new Rest(token, amqp);
 const pg = postgres({ debug: console.log });
 
 container.register(Rest, { useValue: rest });
@@ -25,6 +31,8 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'routes'), {
 });
 
 void (async () => {
+	await amqp.connect(amqpUrl);
+
 	for await (const dir of files) {
 		const routeInfo = pathToRouteInfo(dir.path);
 		if (!routeInfo) continue;

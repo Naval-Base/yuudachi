@@ -42,7 +42,7 @@
     name: role_states
 - table:
     schema: public
-    name: settings
+    name: guild_settings
 - table:
     schema: public
     name: tags

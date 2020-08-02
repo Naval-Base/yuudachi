@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 
-import Rest from '@spectacles/rest';
 import { stripIndents } from 'common-tags';
 import postgres, { Sql } from 'postgres';
+import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 
 import CaseLogManager from './CaseLogManager';
@@ -10,10 +10,10 @@ import { CaseAction } from './CaseManager';
 import { SettingsKeys } from './SettingsManager';
 import { kSQL } from '../tokens';
 
-jest.mock('@spectacles/rest');
+jest.mock('@yuudachi/rest');
 jest.mock('postgres', () => jest.fn(() => jest.fn()));
 
-const mockedRest: jest.Mocked<Rest> = new Rest() as any;
+const mockedRest: jest.Mocked<Rest> = new (Rest as any)();
 const mockedPostgres: jest.MockedFunction<Sql<any>> = postgres() as any;
 
 container.register(kSQL, { useValue: mockedPostgres });

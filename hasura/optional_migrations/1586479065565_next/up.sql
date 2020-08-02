@@ -126,7 +126,7 @@ alter table guild_settings
 ;
 
 insert into guild_settings (
-	select guild as guild_id,
+	select guild::bigint as guild_id,
 		coalesce((settings ->> 'PREFIX')::text, '?') as prefix,
 		(settings ->> 'MOD_LOG')::bigint as mod_log_channel_id,
 		(settings ->> 'MOD_ROLE')::bigint as mod_role_id,
