@@ -14,7 +14,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "@hapi/joi": "^17.1.1",
-    "@spectacles/rest": "^0.8.3",
+    "@spectacles/brokers": "^0.8.0",
     "@spectacles/util": "^0.4.0",
     "common-tags": "^1.8.0",
     "ioredis": "^4.17.3",
@@ -24,6 +24,7 @@
     "postgres": "^2.0.0-beta.0",
     "readdirp": "^3.4.0",
     "reflect-metadata": "^0.1.13",
+    "rest": "link:..\\rest",
     "tslib": "^2.0.0",
     "tsyringe": "^4.3.0"
   },

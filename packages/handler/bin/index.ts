@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 
-import Rest from '@spectacles/rest';
 import { Amqp } from '@spectacles/brokers';
 import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
@@ -8,6 +7,7 @@ import postgres from 'postgres';
 import { outputFromJSON, ParserOutput } from 'lexure';
 import { resolve } from 'path';
 import readdirp from 'readdirp';
+import Rest from 'rest';
 import { container } from 'tsyringe';
 
 import Command, { commandInfo } from '../src/Command';
@@ -15,8 +15,10 @@ import { BrokerParserOutput } from '../src/types/broker';
 import { kSQL } from '../src/tokens';
 
 const token = process.env.DISCORD_TOKEN;
+if (!token) throw new Error('missing discord token');
 
-const rest = new Rest({ token });
+const restBroker = new Amqp('rest');
+const rest = new Rest(token, restBroker);
 const broker = new Amqp('gateway');
 const pg = postgres();
 
@@ -30,8 +32,10 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'commands'), {
 });
 
 void (async () => {
-	await broker.connect('rabbitmq');
+	const conn = await broker.connect('rabbitmq');
 	await broker.subscribe(['COMMAND']);
+
+	await restBroker.connect(conn);
 
 	for await (const dir of files) {
 		const cmdInfo = commandInfo(dir.path);

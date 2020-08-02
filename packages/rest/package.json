@@ -1,0 +1,30 @@
+{
+  "name": "rest",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "typings/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist typings && tsc",
+    "prepare": "pnpm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Naval-Base/yuudachi.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Naval-Base/yuudachi/issues"
+  },
+  "homepage": "https://github.com/Naval-Base/yuudachi#readme",
+  "devDependencies": {
+    "@spectacles/brokers": "^0.8.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}

@@ -13,11 +13,11 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@spectacles/brokers": "^0.8.0",
-		"@spectacles/rest": "^0.8.3",
 		"lexure": "^0.8.0",
 		"postgres": "^2.0.0-beta.0",
 		"readdirp": "^3.4.0",
 		"reflect-metadata": "^0.1.13",
+		"rest": "link:..\\rest",
 		"tslib": "^2.0.0",
 		"tsyringe": "^4.3.0"
 	},

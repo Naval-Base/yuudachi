@@ -1,9 +1,9 @@
-import Rest from '@spectacles/rest';
-import { Role } from '@spectacles/types';
+import { Role, Message } from '@spectacles/types';
 import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
+import Rest from 'rest';
 
 import { RawCase, CaseAction } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
@@ -24,7 +24,7 @@ export default class CaseLogManager {
 			throw new Error('no mod log channel configured');
 		}
 
-		const logMessage = await this.rest.post(`/channels/${logChannelId}/messages`, {
+		const logMessage: Message = await this.rest.post(`/channels/${logChannelId}/messages`, {
 			embed: {
 				title: `${item.mod_tag} (${item.mod_id})`,
 				description: await this.generateLogMessage(item, logChannelId),
