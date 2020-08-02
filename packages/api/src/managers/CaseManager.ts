@@ -1,6 +1,6 @@
 import { User } from '@spectacles/types';
 import { Sql } from 'postgres';
-import Rest from 'rest';
+import Rest from '@yuudachi/rest';
 import { inject, injectable } from 'tsyringe';
 import { URLSearchParams } from 'url';
 

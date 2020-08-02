@@ -3,7 +3,7 @@ import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
-import Rest from 'rest';
+import Rest from '@yuudachi/rest';
 
 import { RawCase, CaseAction } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';

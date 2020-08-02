@@ -7,7 +7,7 @@ import postgres from 'postgres';
 import { outputFromJSON, ParserOutput } from 'lexure';
 import { resolve } from 'path';
 import readdirp from 'readdirp';
-import Rest from 'rest';
+import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 
 import Command, { commandInfo } from '../src/Command';

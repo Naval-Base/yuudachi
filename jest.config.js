@@ -13,4 +13,7 @@ module.exports = {
 		},
 	},
 	roots: ['<rootDir>packages/'],
+	moduleNameMapper: {
+		'@yuudachi/rest': '<rootDir>packages/rest/src/index.ts',
+	},
 };
