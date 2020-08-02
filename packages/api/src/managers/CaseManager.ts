@@ -1,6 +1,6 @@
-import Rest from '@spectacles/rest';
 import { User } from '@spectacles/types';
 import { Sql } from 'postgres';
+import Rest from '@yuudachi/rest';
 import { inject, injectable } from 'tsyringe';
 import { URLSearchParams } from 'url';
 
@@ -102,8 +102,8 @@ export default class CaseManager {
 		}
 
 		const [target, mod]: [User, User] = await Promise.all([
-			this.rest.get(`/users/${case_.targetId}`),
-			this.rest.get(`/users/${case_.moderatorId}`),
+			this.rest.get<User>(`/users/${case_.targetId}`),
+			this.rest.get<User>(`/users/${case_.moderatorId}`),
 		]);
 
 		const [newCase] = await this.sql`
