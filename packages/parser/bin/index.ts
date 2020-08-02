@@ -20,7 +20,7 @@ void (async () => {
 		const [data] = (await sql`select prefix
 			from guild_settings
 			where guild_id = ${message.guild_id ?? null};`) as [{ prefix: string | null }];
-		const prefix = data.prefix ?? '?';
+		const prefix = data?.prefix ?? '?';
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
 			['“', '”'],

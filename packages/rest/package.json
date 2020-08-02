@@ -1,0 +1,20 @@
+{
+	"name": "@yuudachi/rest",
+	"version": "2.0.0",
+	"description": "",
+	"main": "dist/index.js",
+	"typings": "typings/index.d.ts",
+	"scripts": {
+		"prepare": "rimraf dist typings && tsc"
+	},
+	"author": "",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"tslib": "^2.0.0"
+	},
+	"devDependencies": {
+		"@spectacles/brokers": "^0.8.0",
+		"rimraf": "^3.0.2",
+		"typescript": "^3.9.7"
+	}
+}
