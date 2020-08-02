@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
-import Rest from '@spectacles/rest';
 import { Message } from '@spectacles/types';
+import Rest from '@yuudachi/rest';
 
 import Command from '../../Command';
 

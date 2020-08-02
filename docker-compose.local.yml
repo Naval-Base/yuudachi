@@ -89,6 +89,14 @@ services:
       SHARD_STORE_TYPE: "redis"
       REDIS_URL: "redis://redis:6379"
 
+  proxy:
+    environment:
+      REDIS_URL: "redis://redis:6379/"
+      AMQP_URL: "amqp://rabbitmq/%2f"
+      AMQP_GROUP: "rest"
+      # AMQP_SUBGROUP: ""
+      AMQP_EVENT: "REQUEST"
+
   parser:
     environment:
       PGHOST: "postgres"
@@ -114,6 +122,7 @@ services:
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
+      AMQP_URL: "rabbitmq"
 
 
 volumes:
