@@ -1,8 +1,8 @@
 {
-	"name": "parser",
-	"version": "1.0.0",
+	"name": "@yuudachi/parser",
+	"version": "2.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "dist/index.js",
 	"scripts": {
 		"build": "rimraf dist && tsc",
 		"start": "node dist/bin/index.js",

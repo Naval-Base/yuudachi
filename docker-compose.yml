@@ -149,6 +149,18 @@ services:
       - "8080"
     restart: unless-stopped
 
+  proxy:
+    image: spectacles/proxy:latest
+    labels:
+      com.naval-base.description: "Discord proxy"
+    environment:
+      REDIS_URL: ""
+      AMQP_URL: ""
+      AMQP_GROUP: ""
+      AMQP_SUBGROUP: ""
+      AMQP_EVENT: ""
+    restart: unless-stopped
+
   parser:
     build:
       context: ./
@@ -192,7 +204,7 @@ services:
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
     expose:
-      - "3000"
+      - "4000"
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:4000:3000"
     restart: unless-stopped
