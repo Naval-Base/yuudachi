@@ -5,7 +5,8 @@
 		"declarationDir": "typings",
 		"module": "CommonJS",
 		"sourceRoot": "./",
-		"outDir": "dist/src"
+		"rootDir": "./src",
+		"outDir": "dist"
 	},
 	"include": [
 		"./src"
