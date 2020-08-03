@@ -1,14 +1,12 @@
 FROM node:alpine
 
-RUN npm i -g pnpm
-
 WORKDIR /usr/yukikaze
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json ./
+COPY package.json yarn.lock tsconfig.base.json .yarnrc.yml ./
+COPY .yarn ./.yarn
 COPY packages/api ./packages/api
 COPY packages/rest ./packages/rest
 
-RUN pnpm install --frozen-lockfile --filter @yuudachi/api --filter @yuudachi/rest
-RUN pnpm run build --filter @yuudachi/api
-RUN pnpm prune --prod
+RUN yarn workspaces focus @yuudachi/rest @yuudachi/api
+RUN yarn workspaces foreach --parallel --topological-dev run build
 
-CMD pnpm run start --filter @yuudachi/api
+CMD yarn workspace @yuudachi/api run start
