@@ -203,6 +203,7 @@ services:
       PGUSERNAME: ""
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
+      AMQP_URL: ""
     expose:
       - "4000"
     ports:
