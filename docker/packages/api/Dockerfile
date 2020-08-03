@@ -7,8 +7,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json ./
 COPY packages/api ./packages/api
 COPY packages/rest ./packages/rest
 
-RUN pnpm install --frozen-lockfile --filter api --filter rest
-RUN pnpm run build --filter api
+RUN pnpm install --frozen-lockfile --filter @yuudachi/api --filter @yuudachi/rest
+RUN pnpm run build --filter @yuudachi/api
 RUN pnpm prune --prod
 
-CMD pnpm run start --filter api
+CMD pnpm run start --filter @yuudachi/api
