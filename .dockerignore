@@ -1,6 +1,12 @@
 # Packages
 node_modules
 **/node_modules
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
 
 # Build artifacts
 dist/
@@ -34,3 +40,5 @@ Dockerfile
 .git
 migrations
 docker-compose.yml
+docker-compose.local.yml
+docker-compose.prod.yml
