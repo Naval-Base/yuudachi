@@ -105,6 +105,7 @@ services:
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
+      AMQP_URL: "rabbitmq"
 
   api:
     environment:
