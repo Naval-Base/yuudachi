@@ -25,14 +25,15 @@ void (async () => {
 			['"', '"'],
 			['“', '”'],
 		]);
-		const tokens = lexer.lex();
-		const command = extractCommand((s) => (s.startsWith(prefix) ? prefix.length : null), tokens);
-		if (!command) continue;
+		const res = lexer.lexCommand((s) => (s.startsWith(prefix) ? prefix.length : null));
+		if (!res) continue;
+		const command = res[0];
+		const tokens = res[1]();
 		const parser = new Parser(tokens).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
-		const res = parser.parse();
+		const out = parser.parse();
 		broker.publish('COMMAND', {
 			command,
-			arguments: outputToJSON(res),
+			arguments: outputToJSON(out),
 			tokens,
 			message,
 		});
