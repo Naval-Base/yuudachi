@@ -85,6 +85,18 @@ alter table cases rename action_expiration to action_duration;
 
 drop table messages;
 
+-- CONNECTIONS
+
+drop table connections;
+
+-- PROVIDERS
+
+drop type providers;
+
+-- USERS
+
+drop table users;
+
 -- UTIL
 
 drop function next_case;

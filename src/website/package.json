@@ -1,0 +1,61 @@
+{
+	"name": "@yuudachi/website",
+	"version": "2.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "next build",
+		"start": "npm run build && next start -p 4000",
+		"dev": "next -p 4000",
+		"debug": "NODE_OPTIONS='--inspect' next dev -p 4000"
+	},
+	"keywords": [],
+	"author": "iCrawl <icrawltogo@outlook.com>",
+	"license": "UNLICENSED",
+	"private": true,
+	"dependencies": {
+		"@chakra-ui/core": "^0.8.0",
+		"@emotion/core": "^10.0.28",
+		"@emotion/styled": "^10.0.27",
+		"clsx": "^1.1.1",
+		"emotion-theming": "^10.0.27",
+		"framer-motion": "^2.3.0",
+		"next": "9.4.4",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"react-hook-form": "^6.3.0",
+		"sass": "^1.26.10",
+		"tslib": "^2.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^14.0.27",
+		"@types/react": "^16.9.44",
+		"eslint": "^7.6.0",
+		"eslint-plugin-react": "^7.20.5",
+		"eslint-plugin-react-hooks": "^4.0.8",
+		"typescript": "^3.9.7"
+	},
+	"eslintConfig": {
+		"extends": "marine/prettier/react",
+		"parserOptions": {
+			"project": "./tsconfig.eslint.json"
+		},
+		"env": {
+			"jest": true
+		},
+		"rules": {
+			"spaced-comment": 0,
+			"@typescript-eslint/naming-convention": 0,
+			"react/display-name": 0,
+			"react/react-in-jsx-scope": 0,
+			"react/jsx-filename-extension": [
+				1,
+				{
+					"extensions": [
+						".tsx"
+					]
+				}
+			]
+		}
+	}
+}

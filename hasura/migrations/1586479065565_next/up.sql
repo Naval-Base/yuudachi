@@ -12,6 +12,48 @@ begin
 end;
 $$;
 
+-- USERS
+
+create table users (
+  id uuid default gen_random_uuid() not null,
+  email text not null,
+  username text not null
+);
+
+alter table users add constraint users_pkey primary key (id);
+
+comment on column users.id is 'The id of this user';
+comment on column users.email is 'The email of this user';
+comment on column users.username is 'The username of this user';
+
+-- PROVIDERS
+
+create type providers as enum('Discord', 'Twitch');
+
+-- CONNECTIONS
+
+create table connections (
+  id text not null,
+  user_id uuid not null,
+  provider providers not null,
+  main boolean default false,
+  avatar text,
+  access_token text not null,
+  refresh_token text,
+  expires_at timestamp with time zone
+);
+
+alter table connections add constraint connections_pkey primary key (id);
+alter table connections add constraint connections_user_id_fkey foreign key (user_id) references users (id) on delete cascade;
+
+comment on column connections.id is 'The user id of this connection';
+comment on column connections.user_id is 'The id of the user this connection belongs to';
+comment on column connections.provider is 'The provider this connection belongs to';
+comment on column connections.avatar is 'The access token of this connection';
+comment on column connections.access_token is 'The access token of this connection';
+comment on column connections.refresh_token is 'The refresh token of this connection';
+comment on column connections.expires_at is 'The expiration of this connections access token';
+
 -- MESSAGES
 
 create table messages (
