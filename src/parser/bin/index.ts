@@ -3,7 +3,7 @@ import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import { Message } from '@spectacles/types';
 import postgres from 'postgres';
-import { Lexer, Parser, extractCommand, outputToJSON, prefixedStrategy } from 'lexure';
+import { Lexer, Parser, outputToJSON, prefixedStrategy } from 'lexure';
 
 const broker = new Amqp('gateway');
 const sql = postgres();
@@ -20,6 +20,7 @@ void (async () => {
 		const [data] = (await sql`select prefix
 			from guild_settings
 			where guild_id = ${message.guild_id ?? null};`) as [{ prefix: string | null }];
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const prefix = data?.prefix ?? '?';
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
