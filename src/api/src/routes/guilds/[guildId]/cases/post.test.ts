@@ -2,8 +2,8 @@ import 'reflect-metadata';
 
 import supertest from 'supertest';
 import { container } from 'tsyringe';
-import CreateCaseRoute from './post';
 
+import CreateCaseRoute from './post';
 import CaseManager, { CaseAction } from '../../../../managers/CaseManager';
 import createApp from '../../../../app';
 import { RouteMethod } from '../../../../Route';

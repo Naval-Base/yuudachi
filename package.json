@@ -2,14 +2,15 @@
 	"name": "yukikaze",
 	"version": "2.0.0",
 	"description": "",
-	"author": "iCrawl <icrawltogo@gmail.com>",
-	"license": "UNLICENSED",
-	"private": true,
 	"scripts": {
 		"test": "jest",
 		"test:ci": "jest --ci --no-stack-trace --verbose",
 		"tsc": "tsc"
 	},
+	"keywords": [],
+	"author": "iCrawl <icrawltogo@outlook.com>",
+	"license": "UNLICENSED",
+	"private": true,
 	"devDependencies": {
 		"@babel/core": "^7.11.0",
 		"@babel/plugin-proposal-decorators": "^7.10.5",
@@ -17,8 +18,8 @@
 		"@babel/preset-typescript": "^7.10.4",
 		"@types/jest": "^26.0.8",
 		"@types/supertest": "^2.0.10",
-		"@typescript-eslint/eslint-plugin": "^3.7.1",
-		"@typescript-eslint/parser": "^3.7.1",
+		"@typescript-eslint/eslint-plugin": "^3.8.0",
+		"@typescript-eslint/parser": "^3.8.0",
 		"babel-jest": "^26.2.2",
 		"babel-plugin-transform-typescript-metadata": "^0.3.0",
 		"eslint": "^7.6.0",
@@ -44,6 +45,7 @@
 	},
 	"workspaces": [
 		"packages/**",
-		"!packages/types"
+		"!packages/types",
+		"src/**"
 	]
 }

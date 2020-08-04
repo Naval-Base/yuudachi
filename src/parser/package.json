@@ -1,5 +1,5 @@
 {
-	"name": "@yuudachi/handler",
+	"name": "@yuudachi/parser",
 	"version": "2.0.0",
 	"description": "",
 	"main": "dist/index.js",
@@ -9,17 +9,14 @@
 		"dev": "yarn run build && env-cmd yarn run start"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "iCrawl <icrawltogo@outlook.com>",
 	"license": "UNLICENSED",
+	"private": true,
 	"dependencies": {
 		"@spectacles/brokers": "^0.8.0",
-		"@yuudachi/rest": "workspace:^2.0.0",
-		"lexure": "^0.8.0",
+		"lexure": "^0.14.1",
 		"postgres": "^2.0.0-beta.0",
-		"readdirp": "^3.4.0",
-		"reflect-metadata": "^0.1.13",
-		"tslib": "^2.0.0",
-		"tsyringe": "^4.3.0"
+		"tslib": "^2.0.0"
 	},
 	"devDependencies": {
 		"@spectacles/types": "^0.2.1",

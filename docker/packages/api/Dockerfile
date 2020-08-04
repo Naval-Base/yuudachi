@@ -3,7 +3,8 @@ FROM node:alpine
 WORKDIR /usr/yukikaze
 COPY package.json yarn.lock tsconfig.base.json .yarnrc.yml ./
 COPY .yarn ./.yarn
-COPY packages/api ./packages/api
+
+COPY src/api ./src/api
 COPY packages/rest ./packages/rest
 
 RUN yarn workspaces focus @yuudachi/rest @yuudachi/api
