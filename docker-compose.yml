@@ -204,7 +204,6 @@ services:
       PGUSERNAME: ""
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
-      AMQP_URL: ""
       CORS: ""
       COOKIE_DOMAIN: ""
       SESSION_REDIRECT: ""
@@ -217,9 +216,9 @@ services:
       DISCORD_SCOPES: ""
       DISCORD_REDIRECT: ""
     expose:
-      - "4000"
+      - "3500"
     ports:
-      - "127.0.0.1:4000:3000"
+      - "127.0.0.1:3500:3000"
     restart: unless-stopped
 
   website:
