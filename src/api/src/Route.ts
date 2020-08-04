@@ -3,6 +3,12 @@ import { Request, RequestHandler, Response, NextHandler, Polka } from 'polka';
 
 declare module 'polka' {
 	export interface Request {
+		cookies?: Record<string, any>;
+		oauth?: {
+			provider: 'Discord' | 'Twitch';
+			token: string;
+			access_token: string;
+		};
 		userId?: string;
 	}
 }

@@ -30,7 +30,17 @@
       num_retries: 0
       interval_sec: 10
       timeout_sec: 60
-    webhook: http://api:3000/hasura/hooks/mod_log
+    webhook: http://api:3001/hasura/hooks/mod_log
+- table:
+    schema: public
+    name: connections
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+- table:
+    schema: public
+    name: guild_settings
 - table:
     schema: public
     name: lockdowns
@@ -42,7 +52,15 @@
     name: role_states
 - table:
     schema: public
-    name: guild_settings
+    name: tags
 - table:
     schema: public
-    name: tags
+    name: users
+  array_relationships:
+  - name: connections
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: connections

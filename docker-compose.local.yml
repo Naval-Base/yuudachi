@@ -28,11 +28,10 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
       HASURA_GRAPHQL_ADMIN_SECRET: "admin"
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256","key":""}'
     volumes:
      - ./hasura/migrations:/hasura-migrations
      - ./hasura/metadata:/hasura-metadata
-    ports:
-      - "127.0.0.1:8080:8080"
 
   redis:
     volumes:
@@ -72,8 +71,6 @@ services:
       GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
     volumes:
       - grafana-data:/var/lib/grafana
-    ports:
-      - "127.0.0.1:3000:3000"
 
   gateway:
     image: spectacles/gateway:latest
@@ -83,8 +80,6 @@ services:
       BROKER_TYPE: "amqp"
       BROKER_GROUP: "gateway"
       BROKER_MESSAGE_TIMEOUT: "10m"
-      PROMETHEUS_ADDRESS: ":8080"
-      PROMETHEUS_ENDPOINT: "/metrics"
       AMQP_URL: "amqp://rabbitmq"
       SHARD_STORE_TYPE: "redis"
       REDIS_URL: "redis://redis:6379"
@@ -123,7 +118,20 @@ services:
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
       AMQP_URL: "rabbitmq"
+      CORS: ""
+      COOKIE_DOMAIN: ""
+      SESSION_REDIRECT: ""
+      JWT_SECRET: ""
+      DISCORD_CLIENT_ID: ""
+      DISCORD_CLIENT_SECRET: ""
+      DISCORD_CALLBACK_DOMAIN: "http://localhost"
+      DISCORD_CALLBACK_PORT: ":3001"
+      DISCORD_CALLBACK_ROUTE: "/auth/discord/callback"
+      DISCORD_SCOPES: "identify,email"
+      DISCORD_REDIRECT: ""
 
+  website:
+    environment: []
 
 volumes:
   rabbitmq-data:
