@@ -1,3 +1,5 @@
+/* eslint-disable func-names, @typescript-eslint/no-empty-function */
+
 declare module 'polka' {
 	import { Server } from 'net';
 	import { IncomingMessage, ServerResponse } from 'http';
@@ -58,5 +60,5 @@ declare module 'polka' {
 		listen: Server['listen'];
 	}
 
-	export = function <T = IncomingMessage>(options?: IOptions<T>): Polka<T> {};
+	export = <T = IncomingMessage>(options?: IOptions<T>): Polka<T> => {};
 }

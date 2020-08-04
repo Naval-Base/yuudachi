@@ -7,7 +7,8 @@
 	"scripts": {
 		"build": "rimraf dist typings && tsc"
 	},
-	"author": "",
+	"keywords": [],
+	"author": "iCrawl <icrawltogo@outlook.com>",
 	"license": "UNLICENSED",
 	"dependencies": {
 		"tslib": "^2.0.0"

@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v1.3.0-beta.4.cli-migrations-v2
+    image: hasura/graphql-engine:v1.3.0.cli-migrations-v2
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:
@@ -55,6 +55,7 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
       HASURA_GRAPHQL_ADMIN_SECRET: ""
       HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
+      HASURA_GRAPHQL_JWT_SECRET: ""
     expose:
       - "8080"
     ports:
@@ -204,8 +205,32 @@ services:
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
       AMQP_URL: ""
+      CORS: ""
+      COOKIE_DOMAIN: ""
+      SESSION_REDIRECT: ""
+      JWT_SECRET: ""
+      DISCORD_CLIENT_ID: ""
+      DISCORD_CLIENT_SECRET: ""
+      DISCORD_CALLBACK_DOMAIN: ""
+      DISCORD_CALLBACK_PORT: ""
+      DISCORD_CALLBACK_ROUTE: ""
+      DISCORD_SCOPES: ""
+      DISCORD_REDIRECT: ""
     expose:
       - "4000"
     ports:
       - "127.0.0.1:4000:3000"
+    restart: unless-stopped
+
+  website:
+    build:
+      context: ./
+      dockerfile: ./docker/packages/website/Dockerfile
+    labels:
+      com.naval-base.description: "Website"
+    environment: []
+    expose:
+      - "4000"
+    ports:
+      - "127.0.0.1:4000:4000"
     restart: unless-stopped
