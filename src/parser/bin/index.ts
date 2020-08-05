@@ -3,7 +3,7 @@ import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import { Message } from '@spectacles/types';
 import postgres from 'postgres';
-import { Lexer, Parser, extractCommand, outputToJSON, prefixedStrategy } from 'lexure';
+import { Lexer, Parser, outputToJSON, prefixedStrategy } from 'lexure';
 
 const broker = new Amqp('gateway');
 const sql = postgres();
@@ -20,19 +20,21 @@ void (async () => {
 		const [data] = (await sql`select prefix
 			from guild_settings
 			where guild_id = ${message.guild_id ?? null};`) as [{ prefix: string | null }];
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const prefix = data?.prefix ?? '?';
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
 			['“', '”'],
 		]);
-		const tokens = lexer.lex();
-		const command = extractCommand((s) => (s.startsWith(prefix) ? prefix.length : null), tokens);
-		if (!command) continue;
+		const res = lexer.lexCommand((s) => (s.startsWith(prefix) ? prefix.length : null));
+		if (!res) continue;
+		const command = res[0];
+		const tokens = res[1]();
 		const parser = new Parser(tokens).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
-		const res = parser.parse();
+		const out = parser.parse();
 		broker.publish('COMMAND', {
 			command,
-			arguments: outputToJSON(res),
+			arguments: outputToJSON(out),
 			tokens,
 			message,
 		});
