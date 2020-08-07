@@ -49,7 +49,7 @@ export default abstract class Route {
 	public abstract handle(req: Request, res: Response, next: NextHandler): void | Promise<void>;
 
 	public register(info: RouteInfo, server: Polka) {
-		server[info.method](info.path, ...this.middleware, async (req, res, next) => {
+		server[info.method](`/api${info.path}`, ...this.middleware, async (req, res, next) => {
 			try {
 				await this.handle(req, res, next!);
 			} catch (e) {
