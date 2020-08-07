@@ -28,7 +28,10 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
       HASURA_GRAPHQL_ADMIN_SECRET: "admin"
-      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256","key":""}'
+    expose:
+      - "8080"
+    ports:
+      - "127.0.0.1:8080:8080"
     volumes:
      - ./hasura/migrations:/hasura-migrations
      - ./hasura/metadata:/hasura-metadata
@@ -116,18 +119,14 @@ services:
       PGDATABASE: "yukikaze"
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
-      DISCORD_TOKEN: ""
-      CORS: ""
+      CORS: "http://localhost:4000"
       COOKIE_DOMAIN: ""
-      SESSION_REDIRECT: ""
-      JWT_SECRET: ""
-      DISCORD_CLIENT_ID: ""
-      DISCORD_CLIENT_SECRET: ""
+      SESSION_REDIRECT: "http://localhost:4000"
       DISCORD_CALLBACK_DOMAIN: "http://localhost"
-      DISCORD_CALLBACK_PORT: ":3001"
+      DISCORD_CALLBACK_PORT: ":3500"
       DISCORD_CALLBACK_ROUTE: "/auth/discord/callback"
       DISCORD_SCOPES: "identify,email"
-      DISCORD_REDIRECT: ""
+      DISCORD_REDIRECT: "http://localhost:4000"
 
   website:
     environment: []
