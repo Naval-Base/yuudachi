@@ -12,7 +12,7 @@ module.exports = {
 			statements: 80,
 		},
 	},
-	roots: ['<rootDir>packages/'],
+	roots: ['<rootDir>packages/', '<rootDir>src/'],
 	moduleNameMapper: {
 		'@yuudachi/rest': '<rootDir>packages/rest/src/index.ts',
 	},

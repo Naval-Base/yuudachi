@@ -30,7 +30,7 @@ test('register', () => {
 		mockServer,
 	);
 
-	expect(mockServer.get).toHaveBeenCalledWith('/test', expect.any(Function));
+	expect(mockServer.get).toHaveBeenCalledWith('/api/test', expect.any(Function));
 });
 
 test('[post] root', () => {
