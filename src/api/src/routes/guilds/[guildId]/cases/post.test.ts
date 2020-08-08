@@ -29,7 +29,7 @@ afterAll(() => {
 
 describe('invalid data', () => {
 	test('junk properties', async () => {
-		const res = await supertest(app.server).post('/test/7890').type('json').send({ foo: 'bar' }).expect(422);
+		const res = await supertest(app.server).post('/api/test/7890').type('json').send({ foo: 'bar' }).expect(422);
 
 		expect(res.body).toStrictEqual({
 			error: 'Unprocessable Entity',
@@ -40,7 +40,7 @@ describe('invalid data', () => {
 
 	test('invalid types', async () => {
 		const res = await supertest(app.server)
-			.post('/test/7890')
+			.post('/api/test/7890')
 			.type('json')
 			.send({
 				cases: [{ action: 7 }],
@@ -56,15 +56,15 @@ describe('invalid data', () => {
 
 	test('wrong properties', async () => {
 		const res = await supertest(app.server)
-			.post('/test/7890')
+			.post('/api/test/7890')
 			.type('json')
 			.send({
 				cases: [
 					{
 						action: CaseAction.ROLE,
-						roleId: '1234',
+						roleId: '12345678912345678912',
 						reason: 'foo',
-						targetId: '4567',
+						targetId: '34567891234567891234',
 						deleteMessageDays: 5,
 					},
 				],
@@ -86,16 +86,16 @@ test('role action', async () => {
 	});
 
 	const res = await supertest(app.server)
-		.post('/test/7890')
+		.post('/api/test/7890')
 		.type('json')
-		.set(USER_ID_HEADER, '0987')
+		.set(USER_ID_HEADER, '09876543210987654321')
 		.send({
 			cases: [
 				{
 					action: CaseAction.ROLE,
-					roleId: '1234',
+					roleId: '12345678912345678912',
 					reason: 'foo',
-					targetId: '4567',
+					targetId: '34567891234567891234',
 				},
 			],
 		});
@@ -105,11 +105,11 @@ test('role action', async () => {
 			{
 				caseId: 1,
 				action: CaseAction.ROLE,
-				roleId: '1234',
-				moderatorId: '0987',
+				roleId: '12345678912345678912',
+				moderatorId: '09876543210987654321',
 				guildId: '7890',
 				reason: 'foo',
-				targetId: '4567',
+				targetId: '34567891234567891234',
 			},
 		],
 	});

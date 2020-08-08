@@ -15,6 +15,7 @@
 	"dependencies": {
 		"@spectacles/brokers": "^0.8.0",
 		"@yuudachi/rest": "workspace:^2.0.0",
+		"joi": "^17.2.0",
 		"lexure": "^0.14.1",
 		"postgres": "^2.0.0-beta.0",
 		"readdirp": "^3.4.0",
