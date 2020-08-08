@@ -1,5 +1,5 @@
 import { boomify } from '@hapi/boom';
-import { AnySchema } from '@hapi/joi';
+import { AnySchema } from 'joi';
 import { Request, Response, NextHandler } from 'polka';
 
 export default (schema: AnySchema, prop: keyof Request = 'body') => (req: Request, _: Response, next?: NextHandler) => {

@@ -1820,7 +1820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hapi/address@npm:^4.0.1":
+"@hapi/address@npm:^4.1.0":
   version: 4.1.0
   resolution: "@hapi/address@npm:4.1.0"
   dependencies:
@@ -1849,19 +1849,6 @@ __metadata:
   version: 9.0.4
   resolution: "@hapi/hoek@npm:9.0.4"
   checksum: d000f60d5e30db7ed2b838a7ec4a757542f04036c8eb431328fd1139f3f7dbd400a2c7d86acbbaf8b8da11dee6f8ae706f6d88bd71c02b3c5f16fd3f6223aa09
-  languageName: node
-  linkType: hard
-
-"@hapi/joi@npm:^17.1.1":
-  version: 17.1.1
-  resolution: "@hapi/joi@npm:17.1.1"
-  dependencies:
-    "@hapi/address": ^4.0.1
-    "@hapi/formula": ^2.0.0
-    "@hapi/hoek": ^9.0.0
-    "@hapi/pinpoint": ^2.0.0
-    "@hapi/topo": ^5.0.0
-  checksum: 7547ccf2a8168e4f68f630069ab069f94d0689bd18a034a6dea40cc9c7e88776665670316f65bdd29068dccde111f3d7164504cfaf6db183110b64f36c5643dd
   languageName: node
   linkType: hard
 
@@ -2544,13 +2531,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hapi__joi@npm:^17.1.4":
-  version: 17.1.4
-  resolution: "@types/hapi__joi@npm:17.1.4"
-  checksum: ffd3c81bdbdf6dfa0f3f4905f62340bd4dd23479d2eea1eafbdaf19440fb67641690047090a2f6472c654c0b7db9c16f0ef813764bf25808abbcad06530751e3
-  languageName: node
-  linkType: hard
-
 "@types/helmet@npm:^0.0.47":
   version: 0.0.47
   resolution: "@types/helmet@npm:0.0.47"
@@ -3096,14 +3076,12 @@ __metadata:
   resolution: "@yuudachi/api@workspace:src/api"
   dependencies:
     "@hapi/boom": ^9.1.0
-    "@hapi/joi": ^17.1.1
     "@spectacles/brokers": ^0.8.0
     "@spectacles/types": ^0.2.1
     "@spectacles/util": ^0.4.0
     "@types/common-tags": ^1.8.0
     "@types/cookie": ^0.4.0
     "@types/cors": ^2.8.7
-    "@types/hapi__joi": ^17.1.4
     "@types/helmet": ^0.0.47
     "@types/ioredis": ^4.17.3
     "@types/jsonwebtoken": ^8.5.0
@@ -3119,6 +3097,7 @@ __metadata:
     form-data: ^3.0.0
     helmet: ^4.0.0
     ioredis: ^4.17.3
+    joi: ^17.2.0
     jsonwebtoken: ^8.5.1
     lodash: ^4.17.19
     node-fetch: ^2.6.0
@@ -3143,6 +3122,7 @@ __metadata:
     "@types/node": ^14.0.27
     "@yuudachi/rest": "workspace:^2.0.0"
     env-cmd: ^10.1.0
+    joi: ^17.2.0
     lexure: ^0.14.1
     postgres: ^2.0.0-beta.0
     readdirp: ^3.4.0
@@ -7922,6 +7902,19 @@ fsevents@^1.2.7:
   bin:
     jest: bin/jest.js
   checksum: e4d79bfeffdffffe899eb45b3d7736d1c65acd632edddd3923a5395fabb67da4170c8dfa79f82e763c10d14cbd6ceea909203fe83b407ccf4eb9989f26ddc839
+  languageName: node
+  linkType: hard
+
+"joi@npm:^17.2.0":
+  version: 17.2.0
+  resolution: "joi@npm:17.2.0"
+  dependencies:
+    "@hapi/address": ^4.1.0
+    "@hapi/formula": ^2.0.0
+    "@hapi/hoek": ^9.0.0
+    "@hapi/pinpoint": ^2.0.0
+    "@hapi/topo": ^5.0.0
+  checksum: 3812ecc8f2adc24c3f2b617d0d04bfa9136ac68d4b1731632a7acb0c536bd795c6630c1e191b353b418eed0c9146514a44daed2589feb9eaa1f63bb669c176cc
   languageName: node
   linkType: hard
 

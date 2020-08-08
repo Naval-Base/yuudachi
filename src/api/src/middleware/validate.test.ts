@@ -1,5 +1,5 @@
 import { boomify } from '@hapi/boom';
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 
 import validate from './validate';
 

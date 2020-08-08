@@ -31,7 +31,7 @@ afterAll(() => {
 });
 
 test('error un-boomified', async () => {
-	const res = await supertest(app.server).get('/test').expect(500);
+	const res = await supertest(app.server).get('/api/test').expect(500);
 
 	expect(res.body).toStrictEqual({
 		error: 'Internal Server Error',
@@ -41,7 +41,7 @@ test('error un-boomified', async () => {
 });
 
 test('no match', async () => {
-	const res = await supertest(app.server).get('/test/7890').expect(404);
+	const res = await supertest(app.server).get('/api/test/7890').expect(404);
 
 	expect(res.body).toStrictEqual({
 		error: 'Not Found',
@@ -51,7 +51,7 @@ test('no match', async () => {
 });
 
 test('throw error', async () => {
-	const res = await supertest(app.server).get('/test2').expect(500);
+	const res = await supertest(app.server).get('/api/test2').expect(500);
 
 	expect(res.body).toStrictEqual({
 		error: 'Internal Server Error',

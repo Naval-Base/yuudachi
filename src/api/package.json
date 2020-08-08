@@ -14,7 +14,6 @@
 	"private": true,
 	"dependencies": {
 		"@hapi/boom": "^9.1.0",
-		"@hapi/joi": "^17.1.1",
 		"@spectacles/brokers": "^0.8.0",
 		"@spectacles/util": "^0.4.0",
 		"@yuudachi/rest": "workspace:^2.0.0",
@@ -24,6 +23,7 @@
 		"form-data": "^3.0.0",
 		"helmet": "^4.0.0",
 		"ioredis": "^4.17.3",
+		"joi": "^17.2.0",
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.19",
 		"node-fetch": "^2.6.0",
@@ -39,7 +39,6 @@
 		"@types/common-tags": "^1.8.0",
 		"@types/cookie": "^0.4.0",
 		"@types/cors": "^2.8.7",
-		"@types/hapi__joi": "^17.1.4",
 		"@types/helmet": "^0.0.47",
 		"@types/ioredis": "^4.17.3",
 		"@types/jsonwebtoken": "^8.5.0",
