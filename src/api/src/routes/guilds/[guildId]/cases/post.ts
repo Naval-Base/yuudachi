@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 
@@ -25,7 +25,7 @@ export default class CreateCaseRoute extends Route {
 									roleId: Joi.when('action', {
 										is: CaseAction.ROLE,
 										then: Joi.string()
-											.pattern(/[0-9]+/)
+											.pattern(/\d{17,20}/)
 											.required(),
 										otherwise: Joi.forbidden(),
 									}),
@@ -36,14 +36,14 @@ export default class CreateCaseRoute extends Route {
 									}),
 									reason: Joi.string().required(),
 									targetId: Joi.string()
-										.pattern(/[0-9]+/)
+										.pattern(/\d{17,20}/)
 										.required(),
 									deleteMessageDays: Joi.when('action', {
 										is: Joi.valid(CaseAction.BAN, CaseAction.SOFTBAN),
 										then: Joi.number().positive().max(7).default(1),
 										otherwise: Joi.forbidden(),
 									}),
-									contextMessageId: Joi.string().pattern(/[0-9]+/),
+									contextMessageId: Joi.string().pattern(/\d{17,20}/),
 									referenceId: Joi.number(),
 								})
 								.required(),
