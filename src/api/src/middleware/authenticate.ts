@@ -8,31 +8,34 @@ import jwt from 'jsonwebtoken';
 import { kSQL } from '../tokens';
 import { discordOAuth2 } from '../util';
 
+interface TokenData {
+	sub: string;
+}
+
+export interface OAuthInfo {
+	token: string;
+	userId: string;
+}
+
 export default async (req: Request, _: Response, next?: NextHandler) => {
 	if (req.headers.cookie) {
 		const sql = container.resolve<postgres.Sql<any>>(kSQL);
 		const cookies = cookie.parse(req.headers.cookie) as { token: string };
 
-		let decoded: { provider: 'Discord' | 'Twitch'; access_token: string };
+		let decoded: TokenData;
 		try {
-			decoded = jwt.verify(cookies.token, process.env.JWT_SECRET!) as {
-				provider: 'Discord' | 'Twitch';
-				access_token: string;
-			};
+			decoded = jwt.verify(cookies.token, process.env.JWT_SECRET!) as TokenData;
 
-			req.oauth = { provider: decoded.provider, token: cookies.token, access_token: decoded.access_token };
+			req.oauth = { token: cookies.token, userId: decoded.sub };
 			return next?.();
 		} catch (error) {
 			if (error.name === 'TokenExpiredError') {
-				const { provider, access_token } = jwt.decode(cookies.token) as {
-					provider: 'Discord' | 'Twitch';
-					access_token: string;
-				};
-				const [connection] = await sql<{ user_id: string; refresh_token: string }>`
-					select user_id, refresh_token
+				const { sub } = jwt.decode(cookies.token) as TokenData;
+				const [connection] = await sql<{ refresh_token: string }>`
+					select refresh_token
 					from connections
-					where access_token = ${access_token}
-						and provider = ${provider};`;
+					where user_id = ${sub}
+						and provider = "Discord";`;
 
 				const response = await discordOAuth2({ refreshToken: connection.refresh_token });
 				await sql`
@@ -40,8 +43,8 @@ export default async (req: Request, _: Response, next?: NextHandler) => {
 					set access_token = ${response.access_token},
 						refresh_token = ${response.refresh_token},
 						expires_at = ${new Date(Date.now() + response.expires_in * 1000)}
-					where access_token = ${access_token}
-						and provider = ${provider};`;
+					where user_id = ${sub}
+						and provider = "Discord";`;
 
 				const token = jwt.sign(
 					{
@@ -50,7 +53,7 @@ export default async (req: Request, _: Response, next?: NextHandler) => {
 						'https://hasura.io/jwt/claims': {
 							'x-hasura-allowed-roles': ['user', 'mod', 'admin'],
 							'x-hasura-default-role': 'user',
-							'x-hasura-user-id': connection.user_id,
+							'x-hasura-user-id': sub,
 						},
 					},
 					process.env.JWT_SECRET!,
@@ -58,7 +61,7 @@ export default async (req: Request, _: Response, next?: NextHandler) => {
 						expiresIn: response.expires_in,
 					},
 				);
-				req.oauth = { provider, token, access_token: response.access_token };
+				req.oauth = { token, userId: sub };
 				return next?.();
 			}
 

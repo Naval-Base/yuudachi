@@ -34,8 +34,8 @@ const mockHandler = jest.fn((_, res) => res.end());
 
 container.register(kSQL, { useValue: mockedPostgres });
 
-const token = originalJWT.sign({ provider: 'Discord', access_token: 'Test Token' }, 'SuperSecret') as string;
-const expiredToken = originalJWT.sign({ provider: 'Discord', access_token: 'Test Token' }, 'SuperSecret', {
+const token = originalJWT.sign({ sub: '12345' }, 'SuperSecret') as string;
+const expiredToken = originalJWT.sign({ sub: '12345' }, 'SuperSecret', {
 	expiresIn: '-10s',
 }) as string;
 
@@ -73,29 +73,26 @@ test('has expired user jwt cookie', async () => {
 	((jwt.verify as unknown) as jest.Mock).mockImplementation(() => {
 		throw new originalJWT.TokenExpiredError('jwt expired', new Date());
 	});
-	((jwt.decode as unknown) as jest.Mock).mockReturnValue({ provider: 'Discord', access_token: 'Test Token' });
+	((jwt.decode as unknown) as jest.Mock).mockReturnValue({ sub: '12345' });
 	mockedPostgres.mockImplementation((): any => Promise.resolve([{ refresh_token: 'test_refresh_token' }]));
 
 	await supertest(app.server).get('/test').set('Cookie', `token=${expiredToken}`);
 
 	expect(jwt.verify).toHaveBeenCalledWith(expiredToken, 'SuperSecret');
 	expect(jwt.decode).toHaveBeenCalledWith(expiredToken);
-	expect(jwt.decode).toReturnWith({ access_token: 'Test Token', provider: 'Discord' });
 
 	expect(mockedPostgres).toHaveBeenCalledTimes(2);
 	expect(mockedPostgres).toHaveBeenNthCalledWith(
 		1,
 		[
 			`
-					select user_id, refresh_token
+					select refresh_token
 					from connections
-					where access_token = `,
+					where user_id = `,
 			`
-						and provider = `,
-			';',
+						and provider = "Discord";`,
 		],
-		'Test Token',
-		'Discord',
+		'12345',
 	);
 
 	expect(mockedPostgres).toHaveBeenLastCalledWith(
@@ -108,15 +105,13 @@ test('has expired user jwt cookie', async () => {
 			`,
 						expires_at = `,
 			`
-					where access_token = `,
+					where user_id = `,
 			`
-						and provider = `,
-			';',
+						and provider = "Discord";`,
 		],
 		'Test Token 2',
 		'test_refresh_token_2',
 		NOW,
-		'Test Token',
-		'Discord',
+		'12345',
 	);
 });

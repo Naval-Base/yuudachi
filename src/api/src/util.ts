@@ -62,7 +62,7 @@ export async function discordOAuth2({ code, refreshToken }: { code?: string; ref
 	return oauth2({
 		clientId: process.env.DISCORD_CLIENT_ID!,
 		clientSecret: process.env.DISCORD_CLIENT_SECRET!,
-		redirectUri: `${process.env.DISCORD_CALLBACK_DOMAIN!}${process.env.DISCORD_CALLBACK_PORT!}${process.env
+		redirectUri: `${process.env.DISCORD_CALLBACK_DOMAIN!}${process.env.DISCORD_CALLBACK_PORT!}/api${process.env
 			.DISCORD_CALLBACK_ROUTE!}`,
 		scope: process.env.DISCORD_SCOPES!.split(',').join(' '),
 		code,

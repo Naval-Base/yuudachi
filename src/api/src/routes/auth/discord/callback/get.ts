@@ -34,11 +34,11 @@ export default class DiscordLoginCallbackRoute extends Route {
 		}
 
 		const response = await discordOAuth2({ code: req.query.code });
-		const me = (await fetch('https://discordapp.com/api/users/@me', {
+		const me: DiscordUser = await fetch('https://discordapp.com/api/users/@me', {
 			headers: {
 				authorization: `Bearer ${response.access_token}`,
 			},
-		}).then((r) => r.json())) as DiscordUser;
+		}).then((r) => r.json());
 
 		const [existingUser] = await this.sql<{
 			id: string;
@@ -59,8 +59,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 		if (existingUser) {
 			const token = jwt.sign(
 				{
-					provider: 'Discord',
-					access_token: response.access_token,
+					sub: existingUser.user_id,
 					'https://hasura.io/jwt/claims': {
 						'x-hasura-allowed-roles': ['user', 'mod', 'admin'],
 						'x-hasura-default-role': 'user',
@@ -121,8 +120,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 
 		const token = jwt.sign(
 			{
-				provider: 'Discord',
-				access_token: response.access_token,
+				sub: user.id,
 				'https://hasura.io/jwt/claims': {
 					'x-hasura-allowed-roles': ['user', 'mod', 'admin'],
 					'x-hasura-default-role': 'user',
