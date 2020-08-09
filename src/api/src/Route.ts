@@ -1,14 +1,11 @@
 import { basename, dirname } from 'path';
 import { Request, RequestHandler, Response, NextHandler, Polka } from 'polka';
+import { OAuthInfo } from './middleware/authenticate';
 
 declare module 'polka' {
 	export interface Request {
 		cookies?: Record<string, string>;
-		oauth?: {
-			provider: 'Discord' | 'Twitch';
-			token: string;
-			access_token: string;
-		};
+		oauth?: OAuthInfo;
 		userId?: string;
 	}
 }
