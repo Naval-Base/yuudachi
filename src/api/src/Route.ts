@@ -1,11 +1,11 @@
 import { basename, dirname } from 'path';
 import { Request, RequestHandler, Response, NextHandler, Polka } from 'polka';
-import { OAuthInfo } from './middleware/authenticate';
+import { AuthInfo } from './middleware/authenticate';
 
 declare module 'polka' {
 	export interface Request {
 		cookies?: Record<string, string>;
-		oauth?: OAuthInfo;
+		auth?: AuthInfo;
 		userId?: string;
 	}
 }

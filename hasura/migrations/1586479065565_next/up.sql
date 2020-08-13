@@ -17,7 +17,8 @@ $$;
 create table users (
   id uuid default gen_random_uuid() not null,
   email text not null,
-  username text not null
+  username text not null,
+	token_reset_at timestamp
 );
 
 alter table users add constraint users_pkey primary key (id);
@@ -25,6 +26,7 @@ alter table users add constraint users_pkey primary key (id);
 comment on column users.id is 'The id of this user';
 comment on column users.email is 'The email of this user';
 comment on column users.username is 'The username of this user';
+comment on column users.token_reset_at is 'When this user''s token was reset';
 
 -- PROVIDERS
 
