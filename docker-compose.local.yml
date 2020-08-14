@@ -95,14 +95,6 @@ services:
       # AMQP_SUBGROUP: ""
       AMQP_EVENT: "REQUEST"
 
-  parser:
-    environment:
-      PGHOST: "postgres"
-      PGPORT: "5432"
-      PGDATABASE: "yukikaze"
-      PGUSERNAME: "yukikaze"
-      PGPASSWORD: "admin"
-
   handler:
     environment:
       PGHOST: "postgres"
