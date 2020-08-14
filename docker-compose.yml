@@ -154,20 +154,6 @@ services:
       AMQP_EVENT: ""
     restart: unless-stopped
 
-  parser:
-    build:
-      context: ./
-      dockerfile: ./docker/packages/parser/Dockerfile
-    labels:
-      com.naval-base.description: "Internal parser"
-    environment:
-      PGHOST: ""
-      PGPORT: ""
-      PGDATABASE: ""
-      PGUSERNAME: ""
-      PGPASSWORD: ""
-    restart: unless-stopped
-
   handler:
     build:
       context: ./

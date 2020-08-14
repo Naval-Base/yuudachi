@@ -3134,22 +3134,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@yuudachi/parser@workspace:src/parser":
-  version: 0.0.0-use.local
-  resolution: "@yuudachi/parser@workspace:src/parser"
-  dependencies:
-    "@spectacles/brokers": ^0.8.0
-    "@spectacles/types": ^0.2.1
-    "@types/node": ^14.0.27
-    env-cmd: ^10.1.0
-    lexure: ^0.14.1
-    postgres: ^2.0.0-beta.0
-    rimraf: ^3.0.2
-    tslib: ^2.0.0
-    typescript: ^3.9.7
-  languageName: unknown
-  linkType: soft
-
 "@yuudachi/rest@workspace:^2.0.0, @yuudachi/rest@workspace:packages/rest":
   version: 0.0.0-use.local
   resolution: "@yuudachi/rest@workspace:packages/rest"
