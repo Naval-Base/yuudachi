@@ -4,14 +4,14 @@ import { Amqp } from '@spectacles/brokers';
 import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import postgres from 'postgres';
-import { outputFromJSON, ParserOutput } from 'lexure';
+import { Lexer, Parser, prefixedStrategy } from 'lexure';
 import { resolve } from 'path';
 import readdirp from 'readdirp';
 import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
+import { Message } from '@spectacles/types';
 
 import Command, { commandInfo } from '../src/Command';
-import { BrokerParserOutput } from '../src/types/broker';
 import { kSQL } from '../src/tokens';
 
 const token = process.env.DISCORD_TOKEN;
@@ -20,10 +20,10 @@ if (!token) throw new Error('missing discord token');
 const restBroker = new Amqp('rest');
 const rest = new Rest(token, restBroker);
 const broker = new Amqp('gateway');
-const pg = postgres();
+const sql = postgres();
 
 container.register(Rest, { useValue: rest });
-container.register(kSQL, { useValue: pg });
+container.register(kSQL, { useValue: sql });
 
 const commands = new Map<string, Command>();
 
@@ -33,7 +33,7 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'commands'), {
 
 void (async () => {
 	const conn = await broker.connect('rabbitmq');
-	await broker.subscribe(['COMMAND']);
+	await broker.subscribe(['MESSAGE_CREATE']);
 
 	await restBroker.connect(conn);
 
@@ -47,14 +47,29 @@ void (async () => {
 		command.aliases?.forEach((alias) => commands.set(alias, command));
 	}
 
-	for await (const [message, { ack }] of on(broker, 'COMMAND') as AsyncIterableIterator<
-		[BrokerParserOutput, AmqpResponseOptions]
+	for await (const [message, { ack }] of on(broker, 'MESSAGE_CREATE') as AsyncIterableIterator<
+		[Message, AmqpResponseOptions]
 	>) {
 		ack();
-		const command = commands.get(message.command.value);
-		if (!command) continue;
 
-		const res: ParserOutput = outputFromJSON(message.arguments);
-		command.execute(message.message, res);
+		const [data] = (await sql`select prefix
+			from guild_settings
+			where guild_id = ${message.guild_id ?? null};`) as [{ prefix: string | null }];
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		const prefix = data?.prefix ?? '?';
+		const lexer = new Lexer(message.content).setQuotes([
+			['"', '"'],
+			['“', '”'],
+		]);
+		const res = lexer.lexCommand((s) => (s.startsWith(prefix) ? prefix.length : null));
+		if (!res) continue;
+		const cmd = res[0];
+		const tokens = res[1]();
+		const parser = new Parser(tokens).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
+		const out = parser.parse();
+
+		const command = commands.get(cmd.value);
+		if (!command) continue;
+		command.execute(message, out);
 	}
 })();
