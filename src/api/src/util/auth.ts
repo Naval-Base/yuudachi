@@ -1,7 +1,9 @@
-import { Boom } from '@hapi/boom';
-import { Response } from 'polka';
+import { randomBytes } from 'crypto';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
+import { Config } from '../Config';
+import { container } from 'tsyringe';
+import { kConfig } from '../tokens';
 
 export interface OAuth2Response {
 	access_token: string;
@@ -9,15 +11,6 @@ export interface OAuth2Response {
 	expires_in: number;
 	refresh_token: string;
 	scope: string[];
-}
-
-export function sendBoom(err: Boom, res: Response) {
-	res.statusCode = err.output.statusCode;
-	for (const [header, value] of Object.entries(err.output.headers)) {
-		res.setHeader(header, value);
-	}
-
-	res.end(JSON.stringify(err.output.payload));
 }
 
 export async function oauth2({
@@ -69,4 +62,41 @@ export async function discordOAuth2({ code, refreshToken }: { code?: string; ref
 		refreshToken,
 		url: 'https://discord.com/api/oauth2/token',
 	});
+}
+
+export class State {
+	public static from(data: string): State {
+		const bytes = Buffer.from(data, 'base64');
+		const nonce = bytes.slice(0, 16);
+		const createdAt = new Date(bytes.readUInt32LE(16));
+		const redirectURL = bytes.slice(20).toString();
+
+		const state = new this(redirectURL);
+		state.nonce = nonce;
+		state.createdAt = createdAt;
+
+		return state;
+	}
+
+	public redirectUri: string;
+	private nonce: Buffer = randomBytes(16);
+	private createdAt: Date = new Date();
+
+	private get config(): Config {
+		return container.resolve(kConfig);
+	}
+
+	public constructor(redirectURL?: string) {
+		this.redirectUri = redirectURL ?? this.config.defaultRedirectUri;
+	}
+
+	public toString(): string {
+		return this.toBytes().toString('base64');
+	}
+
+	public toBytes(): Buffer {
+		const time = Buffer.allocUnsafe(4);
+		time.writeUInt32LE(Math.floor(this.createdAt.getTime() / 1000));
+		return Buffer.concat([this.nonce, time, Buffer.from(this.redirectUri)]);
+	}
 }

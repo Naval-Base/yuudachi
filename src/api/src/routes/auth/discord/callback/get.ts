@@ -1,3 +1,4 @@
+import cookie from 'cookie';
 import { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import fetch from 'node-fetch';
@@ -5,9 +6,10 @@ import { Sql } from 'postgres';
 
 import Route from '../../../../Route';
 import { kSQL } from '../../../../tokens';
-import { discordOAuth2 } from '../../../../util';
+import { discordOAuth2 } from '../../../../util/auth';
 import session from '../../../../middleware/session';
 import AuthManager from '../../../../managers/AuthManager';
+import { badRequest } from '@hapi/boom';
 
 interface DiscordUser {
 	id: string;
@@ -33,6 +35,9 @@ export default class DiscordLoginCallbackRoute extends Route {
 		if (!req.query) {
 			return next('uh oh, something broke');
 		}
+
+		const cookies = cookie.parse(req.headers.cookie ?? '');
+		if (req.query.state !== cookies.state) return next(badRequest('invalid state'));
 
 		const response = await discordOAuth2({ code: req.query.code });
 		const me: DiscordUser = await fetch('https://discordapp.com/api/users/@me', {
