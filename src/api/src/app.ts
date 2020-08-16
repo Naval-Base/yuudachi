@@ -11,7 +11,7 @@ declare module 'http' {
 	export interface ServerResponse {
 		redirect: (redirect: string) => void;
 		append: (header: string, value: any) => void;
-		cookie: (name: string, data: string, options: cookie.CookieSerializeOptions) => void;
+		cookie: (name: string, data: string, options?: cookie.CookieSerializeOptions) => void;
 	}
 }
 
