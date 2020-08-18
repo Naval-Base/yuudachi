@@ -8,6 +8,15 @@ export interface AuthInfo {
 	token: string;
 }
 
+interface TokenData {
+	sub: string;
+}
+
+export interface OAuthInfo {
+	token: string;
+	userId: string;
+}
+
 export default async (req: Request, _: Response, next?: NextHandler) => {
 	const authManager = container.resolve(AuthManager);
 	const auth = req.headers.authorization;
