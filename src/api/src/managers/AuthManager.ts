@@ -1,13 +1,20 @@
 import jwt from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
+import ms from 'ms';
 import { Sql } from 'postgres';
 import { kConfig, kSQL } from '../tokens';
 import { Response } from 'polka';
 import { Config } from '../Config';
 
 export interface AuthCredentials {
-	accessToken: string;
-	refreshToken: string;
+	access: {
+		token: string;
+		expiration: Date;
+	};
+	refresh: {
+		token: string;
+		expiration: Date;
+	};
 }
 
 interface AccessTokenData {
@@ -37,8 +44,19 @@ export default class AuthManager {
 	) {}
 
 	public static respondWith(credentials: AuthCredentials, res: Response) {
-		res.cookie('access_token', credentials.accessToken, { path: '/', sameSite: 'strict' });
-		res.cookie('refresh_token', credentials.refreshToken, { httpOnly: true, path: '/', sameSite: 'strict' });
+		res.cookie('access_token', credentials.access.token, {
+			httpOnly: true,
+			expires: credentials.access.expiration,
+			path: '/',
+			sameSite: 'strict',
+		});
+
+		res.cookie('refresh_token', credentials.refresh.token, {
+			httpOnly: true,
+			expires: credentials.refresh.expiration,
+			path: '/',
+			sameSite: 'strict',
+		});
 	}
 
 	public refresh(accessToken: string, refreshToken: string): Promise<AuthCredentials> {
@@ -85,9 +103,20 @@ export default class AuthManager {
 			refresh: false,
 		};
 
-		const accessToken = jwt.sign(tokenData, this.config.secretKey, { expiresIn: '15m' });
-		const refreshToken = jwt.sign({ sub: userId, iat, refresh: true }, this.config.secretKey, { expiresIn: '7d' });
+		const accessExpiresIn = ms('15m');
+		const refreshExpiresIn = ms('7d');
 
-		return { accessToken, refreshToken };
+		return {
+			access: {
+				token: jwt.sign(tokenData, this.config.secretKey, { expiresIn: accessExpiresIn / 1000 }),
+				expiration: new Date(Date.now() + accessExpiresIn),
+			},
+			refresh: {
+				token: jwt.sign({ sub: userId, iat, refresh: true }, this.config.secretKey, {
+					expiresIn: refreshExpiresIn / 1000,
+				}),
+				expiration: new Date(Date.now() + refreshExpiresIn),
+			},
+		};
 	}
 }
