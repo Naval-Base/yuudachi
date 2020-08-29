@@ -2615,6 +2615,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ms@npm:^0.7.31":
+  version: 0.7.31
+  resolution: "@types/ms@npm:0.7.31"
+  checksum: 7ff9798a408aaa371f3d0059f013d09b6eb471cd62019f35924301608f57279943b5d322f497f2ea9ae65477e2a47c26dfd8dd833a4352f883a8a86c051f7125
+  languageName: node
+  linkType: hard
+
 "@types/node-fetch@npm:^2.5.7":
   version: 2.5.7
   resolution: "@types/node-fetch@npm:2.5.7"
@@ -3086,6 +3093,7 @@ __metadata:
     "@types/ioredis": ^4.17.3
     "@types/jsonwebtoken": ^8.5.0
     "@types/lodash": ^4.14.158
+    "@types/ms": ^0.7.31
     "@types/node": ^14.0.27
     "@types/node-fetch": ^2.5.7
     "@types/trouter": ^3.1.0
@@ -3100,6 +3108,7 @@ __metadata:
     joi: ^17.2.0
     jsonwebtoken: ^8.5.1
     lodash: ^4.17.19
+    ms: ^2.1.2
     node-fetch: ^2.6.0
     polka: ^1.0.0-next.11
     postgres: ^2.0.0-beta.0
@@ -8734,7 +8743,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"ms@npm:2.1.2, ms@npm:^2.1.1":
+"ms@npm:2.1.2, ms@npm:^2.1.1, ms@npm:^2.1.2":
   version: 2.1.2
   resolution: "ms@npm:2.1.2"
   checksum: 9b65fb709bc30c0c07289dcbdb61ca032acbb9ea5698b55fa62e2cebb04c5953f1876a1f3f7f4bc2e91d4bf4d86003f3e207c3bc6ee2f716f99827e62389cd0e
