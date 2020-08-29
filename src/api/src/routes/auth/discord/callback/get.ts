@@ -6,7 +6,7 @@ import { Sql } from 'postgres';
 
 import Route from '../../../../Route';
 import { kSQL } from '../../../../tokens';
-import { discordOAuth2 } from '../../../../util/auth';
+import { discordOAuth2, State } from '../../../../util/auth';
 import session from '../../../../middleware/session';
 import AuthManager from '../../../../managers/AuthManager';
 import { badRequest } from '@hapi/boom';
@@ -33,11 +33,14 @@ export default class DiscordLoginCallbackRoute extends Route {
 
 	public async handle(req: Request, res: Response, next: NextHandler) {
 		if (!req.query) {
-			return next('uh oh, something broke');
+			return next(badRequest('missing oauth response data'));
 		}
 
 		const cookies = cookie.parse(req.headers.cookie ?? '');
 		if (req.query.state !== cookies.state) return next(badRequest('invalid state'));
+
+		const state = State.from(req.query.state);
+		// maybe expire the state here
 
 		const response = await discordOAuth2({ code: req.query.code });
 		const me: DiscordUser = await fetch('https://discordapp.com/api/users/@me', {
@@ -98,7 +101,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 
 		const credentials = await this.authManager.create(user.id);
 		AuthManager.respondWith(credentials, res);
-		res.redirect(process.env.DISCORD_REDIRECT!);
+		res.redirect(state.redirectUri);
 		res.end();
 	}
 }

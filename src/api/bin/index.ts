@@ -24,7 +24,11 @@ container.register(kSQL, { useValue: pg });
 container.register<Config>(kConfig, {
 	useValue: {
 		secretKey: process.env.JWT_SECRET!,
-		defaultRedirectUri: process.env.DEFAULT_REDIRECT_URI!,
+		discordClientId: process.env.DISCORD_CLIENT_ID!,
+		publicApiDomain: process.env.PUBLIC_API_DOMAIN!,
+		publicFrontendDomain: process.env.PUBLIC_FRONTEND_DOMAIN!,
+		discordScopes: process.env.DISCORD_SCOPES!.split(','),
+		discordClientSecret: process.env.DISCORD_CLIENT_SECRET!,
 	},
 });
 
