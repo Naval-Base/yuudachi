@@ -37,8 +37,8 @@ export default class AuthManager {
 	) {}
 
 	public static respondWith(credentials: AuthCredentials, res: Response) {
-		res.cookie('access_token', credentials.accessToken, { path: '/' });
-		res.cookie('refresh_token', credentials.refreshToken, { httpOnly: true, path: '/' });
+		res.cookie('access_token', credentials.accessToken, { path: '/', sameSite: 'strict' });
+		res.cookie('refresh_token', credentials.refreshToken, { httpOnly: true, path: '/', sameSite: 'strict' });
 	}
 
 	public refresh(accessToken: string, refreshToken: string): Promise<AuthCredentials> {

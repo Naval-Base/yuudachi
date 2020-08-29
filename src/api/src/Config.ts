@@ -1,4 +1,8 @@
 export interface Config {
 	secretKey: string;
-	defaultRedirectUri: string;
+	discordClientId: string;
+	publicApiDomain: string;
+	publicFrontendDomain: string;
+	discordScopes: string[];
+	discordClientSecret: string;
 }

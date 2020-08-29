@@ -52,12 +52,12 @@ export async function oauth2({
 }
 
 export async function discordOAuth2({ code, refreshToken }: { code?: string; refreshToken?: string }) {
+	const config = container.resolve<Config>(kConfig);
 	return oauth2({
-		clientId: process.env.DISCORD_CLIENT_ID!,
-		clientSecret: process.env.DISCORD_CLIENT_SECRET!,
-		redirectUri: `${process.env.DISCORD_CALLBACK_DOMAIN!}${process.env.DISCORD_CALLBACK_PORT!}/api${process.env
-			.DISCORD_CALLBACK_ROUTE!}`,
-		scope: process.env.DISCORD_SCOPES!.split(',').join(' '),
+		clientId: config.discordClientId,
+		clientSecret: config.discordClientSecret,
+		redirectUri: `${config.publicApiDomain}/api/auth/discord/callback`,
+		scope: config.discordScopes.join(' '),
 		code,
 		refreshToken,
 		url: 'https://discord.com/api/oauth2/token',
@@ -87,7 +87,7 @@ export class State {
 	}
 
 	public constructor(redirectURL?: string) {
-		this.redirectUri = redirectURL ?? this.config.defaultRedirectUri;
+		this.redirectUri = redirectURL ?? this.config.publicFrontendDomain;
 	}
 
 	public toString(): string {
