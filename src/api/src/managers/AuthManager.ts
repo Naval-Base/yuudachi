@@ -45,7 +45,6 @@ export default class AuthManager {
 
 	public static respondWith(credentials: AuthCredentials, res: Response) {
 		res.cookie('access_token', credentials.access.token, {
-			httpOnly: true,
 			expires: credentials.access.expiration,
 			path: '/',
 			sameSite: 'strict',
