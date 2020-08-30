@@ -18,7 +18,7 @@ create table users (
   id uuid default gen_random_uuid() not null,
   email text not null,
   username text not null,
-	token_reset_at timestamp
+  token_reset_at timestamp
 );
 
 alter table users add constraint users_pkey primary key (id);
