@@ -1,5 +1,6 @@
 import { discordOAuth2 } from './auth';
 import fetch from 'node-fetch';
+
 const { Response } = jest.requireActual('node-fetch');
 
 describe('oauth2', () => {

@@ -1,6 +1,7 @@
 import { badRequest, unauthorized } from '@hapi/boom';
 import { Request, Response, NextHandler } from 'polka';
 import { container } from 'tsyringe';
+
 import AuthManager from '../managers/AuthManager';
 
 export interface AuthInfo {

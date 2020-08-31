@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
-import ms from 'ms';
+import ms from '@naval-base/ms';
 import { Sql } from 'postgres';
-import { kConfig, kSQL } from '../tokens';
 import { Response } from 'polka';
+
+import { kConfig, kSQL } from '../tokens';
 import { Config } from '../Config';
 
 export interface AuthCredentials {
