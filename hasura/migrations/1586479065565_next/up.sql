@@ -152,7 +152,8 @@ create table guild_settings (
 	emoji_role_id text,
 	reaction_role_id text,
 	role_state boolean default false,
-	moderation boolean default false
+	moderation boolean default false,
+	locale text default 'en'
 );
 
 alter table guild_settings

@@ -82,7 +82,6 @@ services:
       REDIS_URL: "redis://redis:6379"
       AMQP_URL: "amqp://rabbitmq"
       AMQP_GROUP: "rest"
-      # AMQP_SUBGROUP: ""
       AMQP_EVENT: "REQUEST"
 
   handler:
@@ -93,7 +92,7 @@ services:
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
-      AMQP_URL: "rabbitmq"
+      TRANSLATIONS_API: ""
 
   api:
     environment:
