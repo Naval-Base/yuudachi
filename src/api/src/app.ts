@@ -4,6 +4,8 @@ import polka from 'polka';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookie from 'cookie';
+import sirv from 'sirv';
+import { join } from 'path';
 
 import { sendBoom } from './util';
 
@@ -37,8 +39,15 @@ export default function createApp() {
 				origin: process.env.CORS?.split(',') ?? '*',
 				credentials: true,
 			}) as any,
+			helmet() as any,
+			sirv(join(__dirname, '..', 'public'), {
+				/* istanbul ignore next */
+				onNoMatch(_, res) {
+					res.setHeader('content-type', 'application/json');
+					sendBoom(notFound(), res);
+				},
+			}),
 		)
-		.use(helmet() as any)
 		.use((_, res, next) => {
 			/* istanbul ignore next */
 			res.append = (header, value) => {
@@ -48,23 +57,20 @@ export default function createApp() {
 				}
 				res.setHeader(header, value);
 			};
-			next?.();
-		})
-		.use((_, res, next) => {
+
 			/* istanbul ignore next */
 			res.cookie = (name, data, options) => {
 				const value = cookie.serialize(name, data, options);
 				res.append('Set-Cookie', value);
 			};
-			next?.();
-		})
-		.use((_, res, next) => {
+
 			/* istanbul ignore next */
 			res.redirect = (redirect) => {
 				res.statusCode = 302;
 				res.append('Location', redirect);
 				res.append('Content-Length', 0);
 			};
+
 			next?.();
 		});
 }

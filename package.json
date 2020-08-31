@@ -40,7 +40,8 @@
 			"jest": true
 		},
 		"rules": {
-			"@typescript-eslint/naming-convention": 0
+			"@typescript-eslint/naming-convention": 0,
+			"no-case-declarations": 0
 		}
 	},
 	"workspaces": [
