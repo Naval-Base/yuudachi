@@ -167,6 +167,7 @@ services:
       PGUSERNAME: ""
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
+      TRANSLATIONS_API: ""
     restart: unless-stopped
 
   api:

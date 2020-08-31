@@ -1,5 +1,5 @@
 import { Message } from '@spectacles/types';
-import { ParserOutput } from 'lexure';
+import { Args } from 'lexure';
 import { basename, parse, sep, extname } from 'path';
 
 export default interface Command {
@@ -9,7 +9,7 @@ export default interface Command {
 	description?: string;
 	clientPermissions?: string[];
 	userPermissions?: string[];
-	execute(message: Message, args: ParserOutput): unknown | Promise<unknown>;
+	execute(message: Message, args: Args, locale: string): unknown | Promise<unknown>;
 }
 
 export interface CommandInfo {
