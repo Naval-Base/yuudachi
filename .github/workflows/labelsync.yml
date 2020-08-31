@@ -1,5 +1,6 @@
 name: Label Sync
 on:
+  workflow_dispatch:
   issues:
   label:
   push:
