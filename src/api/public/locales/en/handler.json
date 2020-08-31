@@ -1,0 +1,44 @@
+{
+	"command": {
+		"ping": {
+			"execute": {
+				"pre_ping": "Pinging...",
+				"post_ping": "Don't think this means anything special! {{ping}}ms"
+			}
+		},
+		"tag": {
+			"common": {
+				"execute": {
+					"no_guild": "tags can only be used inside a guild / server",
+					"name_missing": "no tag name provided",
+					"content_missing": "no content provided",
+					"not_found": "no tag found"
+				}
+			},
+			"add": {
+				"execute": {
+					"added": "**{{name}}** has been added"
+				}
+			},
+			"update": {
+				"execute": {
+					"updated": "**{{name}}** updated"
+				}
+			},
+			"delete": {
+				"execute": {
+					"deleted": "**{{name}}** deleted"
+				}
+			},
+			"alias": {
+				"execute": {
+					"alias_missing": "no alias provided",
+					"exists": "**{{name}}** already exists",
+					"aliased": "**{{name}}** successfully aliased with **{{aliases}}**",
+					"unaliased": "**{{name}}** successfully unaliased **{{aliases}}**",
+					"invalid_subcommand": "no valid subcommand provided"
+				}
+			}
+		}
+	}
+}

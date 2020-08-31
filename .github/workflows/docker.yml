@@ -9,5 +9,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build containers
-        run: |
-          docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache --pull
+        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache --pull
