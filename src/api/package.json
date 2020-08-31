@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
-		"build": "rimraf dist && tsc",
+		"build": "rimraf dist && tsc && cpy 'public/**/*.*' 'dist/' --parents",
 		"start": "yarn node dist/bin/index.js",
 		"dev": "yarn run build && env-cmd yarn run start"
 	},
@@ -31,6 +31,7 @@
 		"postgres": "^2.0.0-beta.0",
 		"readdirp": "^3.4.0",
 		"reflect-metadata": "^0.1.13",
+		"sirv": "^1.0.6",
 		"tslib": "^2.0.0",
 		"tsyringe": "^4.3.0"
 	},
@@ -46,6 +47,7 @@
 		"@types/node": "^14.0.27",
 		"@types/node-fetch": "^2.5.7",
 		"@types/trouter": "^3.1.0",
+		"cpy-cli": "^3.1.1",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
 		"supertest": "^4.0.2",
