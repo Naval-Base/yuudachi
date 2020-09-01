@@ -82,12 +82,8 @@ export class State {
 	private nonce: Buffer = randomBytes(16);
 	private createdAt: Date = new Date();
 
-	private get config(): Config {
-		return container.resolve(kConfig);
-	}
-
 	public constructor(redirectURL?: string) {
-		this.redirectUri = redirectURL ?? this.config.publicFrontendDomain;
+		this.redirectUri = redirectURL ?? container.resolve<Config>(kConfig).publicFrontendDomain;
 	}
 
 	public toString(): string {

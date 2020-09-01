@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 import { container } from 'tsyringe';
-import { discordOAuth2 } from './auth';
+import { discordOAuth2, State } from './auth';
 import fetch from 'node-fetch';
 import { Config } from '../Config';
 import { kConfig } from '../tokens';
@@ -16,10 +16,26 @@ container.register<Config>(kConfig, {
 		discordClientSecret: '',
 		discordScopes: [],
 		publicApiDomain: '',
-		publicFrontendDomain: '',
+		publicFrontendDomain: 'https://foo.bar',
 		secretKey: '',
 	},
 });
+
+const NOW = new Date();
+
+const nonce = Buffer.from(Array(16).fill(1));
+const time = Buffer.alloc(4);
+time.writeUInt32LE(Math.floor(NOW.getTime() / 1000));
+
+jest.mock('crypto', () => {
+	const original = jest.requireActual('crypto');
+	return {
+		...original,
+		randomBytes: (len: number) => Buffer.from(Array(len).fill(1)),
+	};
+});
+
+global.Date = jest.fn().mockReturnValue(NOW) as any;
 
 afterEach(() => {
 	mockFetch.mockRestore();
@@ -50,5 +66,32 @@ describe('oauth2', () => {
 
 		expect(fetch).toHaveBeenCalledTimes(1);
 		expect(res).toStrictEqual(mockResponse);
+	});
+});
+
+describe('state', () => {
+	test('default redirect URI', () => {
+		const state = new State();
+		expect(state.redirectUri).toBe('https://foo.bar');
+	});
+
+	test('specific redirect URL', () => {
+		const state = new State('https://foo.bar/baz');
+		expect(state.redirectUri).toBe('https://foo.bar/baz');
+	});
+
+	test('creates buffer', () => {
+		const state = new State();
+		expect(state.toBytes()).toStrictEqual(Buffer.concat([nonce, time, Buffer.from('https://foo.bar')]));
+	});
+
+	test('creates from base 64', () => {
+		const state = State.from('AQEBAQEBAQEBAQEBAQEBAdmhTV9odHRwczovL2Zvby5iYXIvYmF6');
+		expect(state.redirectUri).toBe('https://foo.bar/baz');
+	});
+
+	test('converts to base 64', () => {
+		const state = new State('https://foo.bar/baz');
+		expect(state.toString()).toBe(Buffer.concat([nonce, time, Buffer.from('https://foo.bar/baz')]).toString('base64'));
 	});
 });
