@@ -1,4 +1,5 @@
-import { badRequest, unauthorized } from '@hapi/boom';
+import { unauthorized } from '@hapi/boom';
+import cookie from 'cookie';
 import { Request, Response, NextHandler } from 'polka';
 import { container } from 'tsyringe';
 import AuthManager from '../managers/AuthManager';
@@ -8,10 +9,6 @@ export interface AuthInfo {
 	token: string;
 }
 
-interface TokenData {
-	sub: string;
-}
-
 export interface OAuthInfo {
 	token: string;
 	userId: string;
@@ -19,10 +16,16 @@ export interface OAuthInfo {
 
 export default async (req: Request, _: Response, next?: NextHandler) => {
 	const authManager = container.resolve(AuthManager);
-	const auth = req.headers.authorization;
-	if (!auth || !auth.startsWith('Bearer ')) return next?.(badRequest('Malformed or missing JWT'));
 
-	const token = auth.substr('Bearer '.length);
+	let token: string;
+
+	if (req.headers.authorization?.startsWith('Bearer ')) {
+		token = req.headers.authorization.substr('Bearer '.length);
+	} else if (req.headers.cookie) {
+		token = cookie.parse(req.headers.cookie).token;
+	} else {
+		return next?.(unauthorized('Malformed or missing JWT'));
+	}
 
 	try {
 		const userId = await authManager.verify(token);

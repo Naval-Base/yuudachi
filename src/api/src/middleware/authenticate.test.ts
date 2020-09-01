@@ -5,9 +5,10 @@ import { container } from 'tsyringe';
 import postgres, { Sql } from 'postgres';
 import jwt from 'jsonwebtoken';
 
-import { kSQL } from '../tokens';
+import { kSQL, kConfig } from '../tokens';
 import authenticate from './authenticate';
 import createApp from '../app';
+import { Config } from '../Config';
 
 const NOW = new Date();
 jest.spyOn(global, 'Date').mockImplementation((): any => NOW);
@@ -17,8 +18,8 @@ const originalJWT = jest.requireActual('jsonwebtoken');
 
 jest.mock('postgres', () => jest.fn(() => jest.fn()));
 jest.mock('jsonwebtoken');
-jest.mock('../util', () => {
-	const original = jest.requireActual('../util');
+jest.mock('../util/auth', () => {
+	const original = jest.requireActual('../util/auth');
 	return {
 		...original,
 		discordOAuth2: jest
@@ -33,6 +34,16 @@ const mockedPostgres: jest.MockedFunction<Sql<any>> = postgres() as any;
 const mockHandler = jest.fn((_, res) => res.end());
 
 container.register(kSQL, { useValue: mockedPostgres });
+container.register<Config>(kConfig, {
+	useValue: {
+		discordClientId: '',
+		discordClientSecret: '',
+		discordScopes: [],
+		publicApiDomain: '',
+		publicFrontendDomain: '',
+		secretKey: 'SuperSecret',
+	},
+});
 
 const token = originalJWT.sign({ sub: '12345' }, 'SuperSecret') as string;
 const expiredToken = originalJWT.sign({ sub: '12345' }, 'SuperSecret', {
@@ -58,7 +69,7 @@ afterAll(() => {
 });
 
 test('missing jwt cookie', async () => {
-	await supertest(app.server).get('/test').expect(400);
+	await supertest(app.server).get('/test').expect(401);
 
 	expect(mockHandler).not.toHaveBeenCalled();
 });
@@ -73,45 +84,9 @@ test('has expired user jwt cookie', async () => {
 	((jwt.verify as unknown) as jest.Mock).mockImplementation(() => {
 		throw new originalJWT.TokenExpiredError('jwt expired', new Date());
 	});
-	((jwt.decode as unknown) as jest.Mock).mockReturnValue({ sub: '12345' });
 	mockedPostgres.mockImplementation((): any => Promise.resolve([{ refresh_token: 'test_refresh_token' }]));
 
 	await supertest(app.server).get('/test').set('Cookie', `token=${expiredToken}`);
 
 	expect(jwt.verify).toHaveBeenCalledWith(expiredToken, 'SuperSecret');
-	expect(jwt.decode).toHaveBeenCalledWith(expiredToken);
-
-	expect(mockedPostgres).toHaveBeenCalledTimes(2);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(
-		1,
-		[
-			`
-					select refresh_token
-					from connections
-					where user_id = `,
-			`
-						and provider = "Discord";`,
-		],
-		'12345',
-	);
-
-	expect(mockedPostgres).toHaveBeenLastCalledWith(
-		[
-			`
-					update connections
-					set access_token = `,
-			`,
-						refresh_token = `,
-			`,
-						expires_at = `,
-			`
-					where user_id = `,
-			`
-						and provider = "Discord";`,
-		],
-		'Test Token 2',
-		'test_refresh_token_2',
-		NOW,
-		'12345',
-	);
 });

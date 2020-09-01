@@ -1,6 +1,29 @@
+import 'reflect-metadata';
+
+import { container } from 'tsyringe';
 import { discordOAuth2 } from './auth';
 import fetch from 'node-fetch';
+import { Config } from '../Config';
+import { kConfig } from '../tokens';
+
+jest.mock('node-fetch');
 const { Response } = jest.requireActual('node-fetch');
+const mockFetch = (fetch as unknown) as jest.Mock;
+
+container.register<Config>(kConfig, {
+	useValue: {
+		discordClientId: '',
+		discordClientSecret: '',
+		discordScopes: [],
+		publicApiDomain: '',
+		publicFrontendDomain: '',
+		secretKey: '',
+	},
+});
+
+afterEach(() => {
+	mockFetch.mockRestore();
+});
 
 describe('oauth2', () => {
 	const mockResponse = {
@@ -12,9 +35,7 @@ describe('oauth2', () => {
 	};
 
 	test('proper form with code', async () => {
-		((fetch as unknown) as jest.Mock).mockImplementation(() =>
-			Promise.resolve(new Response(JSON.stringify(mockResponse))),
-		);
+		mockFetch.mockImplementation(() => Promise.resolve(new Response(JSON.stringify(mockResponse))));
 
 		const res = await discordOAuth2({ code: 'test' });
 
@@ -23,9 +44,7 @@ describe('oauth2', () => {
 	});
 
 	test('proper form with refresh token', async () => {
-		((fetch as unknown) as jest.Mock).mockImplementation(() =>
-			Promise.resolve(new Response(JSON.stringify(mockResponse))),
-		);
+		mockFetch.mockImplementation(() => Promise.resolve(new Response(JSON.stringify(mockResponse))));
 
 		const res = await discordOAuth2({ refreshToken: 'refresh_test' });
 
