@@ -94,6 +94,7 @@ services:
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
       TRANSLATIONS_API: ""
+      GITHUB_TOKEN: ""
 
   api:
     environment:

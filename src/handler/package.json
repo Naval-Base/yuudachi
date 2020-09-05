@@ -20,6 +20,7 @@
 		"i18next-http-backend": "^1.0.18",
 		"joi": "^17.2.1",
 		"lexure": "^0.17.0",
+		"node-fetch": "^2.6.0",
 		"postgres": "^2.0.0-beta.0",
 		"readdirp": "^3.4.0",
 		"reflect-metadata": "^0.1.13",
@@ -29,6 +30,7 @@
 	"devDependencies": {
 		"@spectacles/types": "^0.2.1",
 		"@types/node": "^14.6.4",
+		"@types/node-fetch": "^2.5.7",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.0.2"
