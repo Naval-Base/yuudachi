@@ -8,7 +8,7 @@ import Rest from '@yuudachi/rest';
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
-import { GitHubApiData, isPR, GithubReview, GithubReviewDecision, GithubReviewState } from '../../GitHub.types';
+import { GitHubApiData, isPR, GithubReview, GithubReviewDecision, GithubReviewState } from '../../interfaces/GitHub';
 
 const BASE_URL = 'https://api.github.com/graphql';
 
