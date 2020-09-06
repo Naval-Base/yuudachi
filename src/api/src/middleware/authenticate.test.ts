@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 import { kSQL, kConfig } from '../tokens';
 import authenticate from './authenticate';
 import createApp from '../app';
-import { Config } from '../Config';
+import Config from '../Config';
 
 const NOW = new Date();
 jest.spyOn(global, 'Date').mockImplementation((): any => NOW);

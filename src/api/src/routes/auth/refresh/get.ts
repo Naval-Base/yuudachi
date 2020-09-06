@@ -2,6 +2,7 @@ import cookie from 'cookie';
 import { badRequest, unauthorized } from '@hapi/boom';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
+
 import AuthManager, { AuthCredentials } from '../../../managers/AuthManager';
 import Route from '../../../Route';
 import { authenticate } from '../../../middleware';

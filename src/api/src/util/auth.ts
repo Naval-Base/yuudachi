@@ -1,8 +1,9 @@
 import { randomBytes } from 'crypto';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
-import { Config } from '../Config';
 import { container } from 'tsyringe';
+
+import Config from '../Config';
 import { kConfig } from '../tokens';
 
 export interface OAuth2Response {

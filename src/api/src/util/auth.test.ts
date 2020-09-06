@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import { container } from 'tsyringe';
 import { discordOAuth2, State } from './auth';
 import fetch from 'node-fetch';
-import { Config } from '../Config';
+import Config from '../Config';
 import { kConfig } from '../tokens';
 
 jest.mock('node-fetch');

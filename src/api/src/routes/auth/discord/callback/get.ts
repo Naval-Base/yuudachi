@@ -3,13 +3,13 @@ import { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import fetch from 'node-fetch';
 import { Sql } from 'postgres';
+import { badRequest } from '@hapi/boom';
 
 import Route from '../../../../Route';
 import { kSQL } from '../../../../tokens';
 import { discordOAuth2, State } from '../../../../util/auth';
 import session from '../../../../middleware/session';
 import AuthManager from '../../../../managers/AuthManager';
-import { badRequest } from '@hapi/boom';
 
 interface DiscordUser {
 	id: string;

@@ -4,12 +4,14 @@ import { Amqp } from '@spectacles/brokers';
 import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import postgres from 'postgres';
-import { Lexer, Parser, prefixedStrategy } from 'lexure';
+import { Lexer, Parser, prefixedStrategy, Args } from 'lexure';
 import { resolve } from 'path';
 import readdirp from 'readdirp';
 import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 import { Message } from '@spectacles/types';
+import i18next from 'i18next';
+import HttApi, { BackendOptions } from 'i18next-http-backend';
 
 import Command, { commandInfo } from '../src/Command';
 import { kSQL } from '../src/tokens';
@@ -37,6 +39,19 @@ void (async () => {
 
 	await restBroker.connect(conn);
 
+	await i18next.use(HttApi).init({
+		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+		backend: {
+			loadPath: `${process.env.TRANSLATIONS_API!}/locales/{{lng}}/{{ns}}.json`,
+		} as BackendOptions,
+		cleanCode: true,
+		fallbackLng: ['en'],
+		defaultNS: 'handler',
+		lng: 'en',
+		lowerCaseLng: true,
+		ns: ['handler'],
+	});
+
 	for await (const dir of files) {
 		const cmdInfo = commandInfo(dir.path);
 		if (!cmdInfo) continue;
@@ -52,24 +67,28 @@ void (async () => {
 	>) {
 		ack();
 
-		const [data] = (await sql`select prefix
+		const [data] = await sql<{ prefix: string | null; locale: string }>`select prefix
 			from guild_settings
-			where guild_id = ${message.guild_id ?? null};`) as [{ prefix: string | null }];
+			where guild_id = ${message.guild_id ?? null};`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const prefix = data?.prefix ?? '?';
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
 			['“', '”'],
+			['「', '」'],
 		]);
 		const res = lexer.lexCommand((s) => (s.startsWith(prefix) ? prefix.length : null));
 		if (!res) continue;
-		const cmd = res[0];
-		const tokens = res[1]();
-		const parser = new Parser(tokens).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
+		const [cmd, tokens] = res;
+		const parser = new Parser(tokens()).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
 		const out = parser.parse();
 
 		const command = commands.get(cmd.value);
 		if (!command) continue;
-		command.execute(message, out);
+		try {
+			await command.execute(message, new Args(out), data.locale);
+		} catch (error) {
+			void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+		}
 	}
 })();
