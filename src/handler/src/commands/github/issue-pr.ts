@@ -25,7 +25,7 @@ const RepositoryAliases: StringStringMapping = {
 	c: 'collection',
 	dapi: 'discord-api-docs',
 	next: 'discord.js-next',
-};
+} as const;
 
 const LabelColors: StringStringMapping = {
 	'0075ca': '<:0075ca:751210299394359316>',
@@ -53,7 +53,7 @@ const LabelColors: StringStringMapping = {
 	fcf95a: '<:fcf95a:751210515203620928>',
 	ffccd7: '<:ffccd7:751210528021544991>',
 	ffffff: '<:ffffff:751210537597272076>',
-};
+} as const;
 
 enum ResultStatePR {
 	OPEN = 'OPEN',
