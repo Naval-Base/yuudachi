@@ -5,7 +5,7 @@ import { URLSearchParams } from 'url';
 import Route from '../../../Route';
 import { State } from '../../../util/auth';
 import session from '../../../middleware/session';
-import { Config } from '../../../Config';
+import Config from '../../../Config';
 import { kConfig } from '../../../tokens';
 
 @injectable()

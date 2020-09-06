@@ -5,7 +5,7 @@ import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 
 import { kSQL, kConfig } from '../tokens';
-import { Config } from '../Config';
+import Config from '../Config';
 
 export default async (req: Request, res: Response, next?: NextHandler) => {
 	if (req.headers.cookie) {

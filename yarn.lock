@@ -2301,16 +2301,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@spectacles/brokers@npm:^0.8.0":
-  version: 0.8.1
-  resolution: "@spectacles/brokers@npm:0.8.1"
+"@spectacles/brokers@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "@spectacles/brokers@npm:0.8.2"
   dependencies:
     "@spectacles/util": ^0.4.0
     amqplib: ^0.5.5
     ioredis: ^4.14.1
     lodash: ^4.17.15
     ulid: ^2.3.0
-  checksum: 0e8123320001856836a8470fc1fc4022816d962eb1282d75532e1e8aa23df9466810c46f73b369ee9fc9b114d38bdc2cf3b98a89540d675ea20fe4a32880bbfd
+  checksum: 413548b648aaa4945a84f89f34b6e345686f2c49f2a2c8897e74190bb6bf7ab72032c8283f226f02b8a325d0d3f8dc78f3befab5302d8fb768d71bdcfdc81322
   languageName: node
   linkType: hard
 
@@ -3168,7 +3168,7 @@ __metadata:
   dependencies:
     "@hapi/boom": ^9.1.0
     "@naval-base/ms": ^3.1.0
-    "@spectacles/brokers": ^0.8.0
+    "@spectacles/brokers": ^0.8.2
     "@spectacles/types": ^0.2.1
     "@spectacles/util": ^0.4.0
     "@types/common-tags": ^1.8.0
@@ -3212,7 +3212,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yuudachi/handler@workspace:src/handler"
   dependencies:
-    "@spectacles/brokers": ^0.8.0
+    "@spectacles/brokers": ^0.8.2
     "@spectacles/types": ^0.2.1
     "@types/node": ^14.6.2
     "@yuudachi/rest": "workspace:^2.0.0"
@@ -3235,7 +3235,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yuudachi/rest@workspace:packages/rest"
   dependencies:
-    "@spectacles/brokers": ^0.8.0
+    "@spectacles/brokers": ^0.8.2
     rimraf: ^3.0.2
     tslib: ^2.0.1
     typescript: ^4.0.2

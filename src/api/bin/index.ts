@@ -10,7 +10,7 @@ import { container } from 'tsyringe';
 import Route, { pathToRouteInfo } from '../src/Route';
 import createApp from '../src/app';
 import { kSQL, kConfig } from '../src/tokens';
-import { Config } from '../src/Config';
+import Config from '../src/Config';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('no discord token');
