@@ -132,7 +132,7 @@ enum Badges {
 }
 
 @injectable()
-export default class implements Command {
+export class IssuePRLookup implements Command {
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: Message, args: Args, locale: string) {
@@ -161,7 +161,7 @@ export default class implements Command {
 		}
 
 		try {
-			const query = this.buildQuery(owner, repository, matchIssue);
+			const query = IssuePRLookup.buildQuery(owner, repository, matchIssue);
 			const res = await fetch(BASE_URL, {
 				method: 'POST',
 				headers: {
@@ -198,7 +198,9 @@ export default class implements Command {
 				: IssueIcons[resultState as ResultStateIssue];
 
 			// footer text
-			const comments = issue.comments.totalCount ? `(${this.formatCommentString(issue.comments.totalCount)})` : '';
+			const comments = issue.comments.totalCount
+				? `(${IssuePRLookup.formatCommentString(issue.comments.totalCount)})`
+				: '';
 			const action =
 				resultState === 'MERGED'
 					? ' merged'
@@ -228,7 +230,7 @@ export default class implements Command {
 				title: `#${issue.number} ${issue.title}`,
 				url: issue.url,
 				footer: { text, icon_url },
-				description: verbose ? this.formatBody(issue.body) : undefined,
+				description: verbose ? IssuePRLookup.formatBody(issue.body) : undefined,
 				color: StateColors[resultState],
 				image: verbose && groups ? { url: groups.url } : undefined,
 				timestamp: isPR(issue) ? issue[timestampProperty]! : issue[timestampProperty as TimestampsWithoutMergedKey]!,
@@ -238,37 +240,40 @@ export default class implements Command {
 			const installable = resultState in InstallableState;
 			const e2: Embed =
 				isPR(issue) && installable
-					? this.addField(e1, {
+					? IssuePRLookup.addField(e1, {
 							name: 'Install with',
 							value: `\`npm i ${issue.headRepository.nameWithOwner}#${issue.headRef?.name ?? 'unknown'}\``,
 					  })
 					: e1;
 
 			// reviews
-			const reviews = isPR(issue) ? this.relevantReviews(issue.author.login, issue.reviews.nodes) : [];
+			const reviews = isPR(issue) ? IssuePRLookup.relevantReviews(issue.author.login, issue.reviews.nodes) : [];
 			const reviewBody = reviews
 				.map((r) => {
 					const isDjsMember =
 						owner === 'discordjs' && ['MEMBER', 'OWNER', 'COLLABORATOR'].includes(r.authorAssociation);
 					const reviewBadge = isDjsMember ? Badges.DJS : '';
 					const reviewLink = `[${r.author.login}](${r.url})`;
-					const reviewState = `${this.cleanDecision(r.state)}`;
+					const reviewState = `${IssuePRLookup.cleanDecision(r.state)}`;
 					return `${reviewBadge} ${reviewLink} ${reviewState}`;
 				})
 				.join('\n');
 
 			const reviewTitle = `Reviews${
-				isPR(issue) && issue.reviewDecision ? ` (state: ${this.cleanDecision(issue.reviewDecision)})` : ''
+				isPR(issue) && issue.reviewDecision ? ` (state: ${IssuePRLookup.cleanDecision(issue.reviewDecision)})` : ''
 			}`;
 
-			const e3: Embed = reviews.length ? this.addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
+			const e3: Embed = reviews.length ? IssuePRLookup.addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
 
 			// labels
 			const e4: Embed = issue.labels.nodes.length
-				? this.addField(e3, {
+				? IssuePRLookup.addField(e3, {
 						name: 'Labels',
 						value: issue.labels.nodes
-							.map((l: { name: string; color: string; url: string }) => `${this.label(l.color)}[${l.name}](${l.url})`)
+							.map(
+								(l: { name: string; color: string; url: string }) =>
+									`${IssuePRLookup.label(l.color)}[${l.name}](${l.url})`,
+							)
 							.join(' '),
 				  })
 				: e3;
@@ -279,7 +284,7 @@ export default class implements Command {
 		} catch {}
 	}
 
-	private buildQuery(owner: string, repository: string, issueID: string) {
+	private static buildQuery(owner: string, repository: string, issueID: string) {
 		return `
 		{
 			repository(owner: "${owner}", name: "${repository}") {
@@ -371,7 +376,7 @@ export default class implements Command {
 		}`;
 	}
 
-	private relevantReviews(author: string, reviews?: GitHubReview[]): GitHubReview[] {
+	private static relevantReviews(author: string, reviews?: GitHubReview[]): GitHubReview[] {
 		if (!reviews) {
 			return [];
 		}
@@ -400,7 +405,7 @@ export default class implements Command {
 		});
 	}
 
-	private formatBody(body: string): string {
+	private static formatBody(body: string): string {
 		const commentRegex = /<!--[\s\S]*?-->/gi;
 		const boxRegex = /- \[x\]/gi;
 		const emptyBoxRegex = /- \[ \]/gi;
@@ -413,19 +418,19 @@ export default class implements Command {
 			.replace(emptyBoxRegex, TickStates.NO_TICK);
 	}
 
-	private label(color: string): string {
+	private static label(color: string): string {
 		return LabelColors[color] ?? LabelColors.default!;
 	}
 
-	private cleanDecision(decision: GitHubReviewDecision | GitHubReviewState): string {
+	private static cleanDecision(decision: GitHubReviewDecision | GitHubReviewState): string {
 		return decision.toLowerCase().replace(/_/g, ' ');
 	}
 
-	private formatCommentString(num: number): string {
+	private static formatCommentString(num: number): string {
 		return `${num} comment${num > 1 ? 's' : ''}`;
 	}
 
-	private addField(embed: Embed, data: EmbedField): Embed {
+	private static addField(embed: Embed, data: EmbedField): Embed {
 		return {
 			...embed,
 			fields: [...(embed.fields ?? []), data],
