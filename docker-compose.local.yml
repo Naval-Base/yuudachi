@@ -79,12 +79,8 @@ services:
     image: spectacles/gateway:latest
     environment:
       DISCORD_TOKEN: ""
-<<<<<<< HEAD
       # DISCORD_EVENTS: ""
-=======
       GITHUB_TOKEN: ""
-      DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
->>>>>>> feat(github): issue and pr lookup
       BROKER_TYPE: "amqp"
       BROKER_GROUP: "gateway"
       BROKER_MESSAGE_TIMEOUT: "10m"
