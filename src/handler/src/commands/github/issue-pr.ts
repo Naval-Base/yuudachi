@@ -136,6 +136,9 @@ export default class implements Command {
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: Message, args: Args, locale: string) {
+		const githubToken = process.env.GITHUB_TOKEN;
+		if (!githubToken) throw new Error('no github token'); // TODO: user friendly output (only if not regex cmd, when regex cmd implementation is considered)
+
 		const rest = joinTokens(args.many());
 		const regex = /(?<repo>\S+)#(?<num>\d+) ?(?<verbose>(--verbose|-verbose|--v|-v))?/i;
 
