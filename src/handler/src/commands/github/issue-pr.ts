@@ -55,7 +55,7 @@ const LabelColors: StringStringMapping = {
 	ffffff: '<:ffffff:751210537597272076>',
 };
 
-enum ResultStatePr {
+enum ResultStatePR {
 	OPEN = 'OPEN',
 	CLOSED = 'CLOSED',
 	MERGED = 'MERGED',
@@ -115,7 +115,7 @@ enum AllowedRepositories {
 	'website',
 }
 
-enum PrIcons {
+enum PRIcons {
 	OPEN = 'https://cdn.discordapp.com/emojis/751210109333405727.png',
 	CLOSED = 'https://cdn.discordapp.com/emojis/751210080459817092.png',
 	MERGED = 'https://cdn.discordapp.com/emojis/751210169609748481.png',
@@ -178,12 +178,12 @@ export default class implements Command {
 			const issue = data.repository.issueOrPullRequest;
 			const resultState = isPR(issue)
 				? issue.merged
-					? ResultStatePr.MERGED
+					? ResultStatePR.MERGED
 					: issue.isDraft
-					? ResultStatePr.DRAFT
+					? ResultStatePR.DRAFT
 					: issue.closed
-					? ResultStatePr.CLOSED
-					: ResultStatePr.OPEN
+					? ResultStatePR.CLOSED
+					: ResultStatePR.OPEN
 				: issue.closed
 				? ResultStateIssue.CLOSED
 				: ResultStateIssue.OPEN;
@@ -194,7 +194,7 @@ export default class implements Command {
 
 			// footer icon
 			const icon_url = isPR(issue)
-				? PrIcons[resultState as ResultStatePr]
+				? PRIcons[resultState as ResultStatePR]
 				: IssueIcons[resultState as ResultStateIssue];
 
 			// footer text
