@@ -1,70 +1,38 @@
-import { badRequest } from '@hapi/boom';
-import { Request, Response, NextHandler } from 'polka';
-import postgres from 'postgres';
-import { container } from 'tsyringe';
+import { unauthorized } from '@hapi/boom';
 import cookie from 'cookie';
-import jwt from 'jsonwebtoken';
+import { Request, Response, NextHandler } from 'polka';
+import { container } from 'tsyringe';
+import AuthManager from '../managers/AuthManager';
 
-import { kSQL } from '../tokens';
-import { discordOAuth2 } from '../util';
+export interface AuthInfo {
+	userId: string;
+	token: string;
+}
+
+export interface OAuthInfo {
+	token: string;
+	userId: string;
+}
 
 export default async (req: Request, _: Response, next?: NextHandler) => {
-	if (req.headers.cookie) {
-		const sql = container.resolve<postgres.Sql<any>>(kSQL);
-		const cookies = cookie.parse(req.headers.cookie) as { token: string };
+	const authManager = container.resolve(AuthManager);
 
-		let decoded: { provider: 'Discord' | 'Twitch'; access_token: string };
-		try {
-			decoded = jwt.verify(cookies.token, process.env.JWT_SECRET!) as {
-				provider: 'Discord' | 'Twitch';
-				access_token: string;
-			};
+	let token: string;
 
-			req.oauth = { provider: decoded.provider, token: cookies.token, access_token: decoded.access_token };
-			return next?.();
-		} catch (error) {
-			if (error.name === 'TokenExpiredError') {
-				const { provider, access_token } = jwt.decode(cookies.token) as {
-					provider: 'Discord' | 'Twitch';
-					access_token: string;
-				};
-				const [connection] = await sql<{ user_id: string; refresh_token: string }>`
-					select user_id, refresh_token
-					from connections
-					where access_token = ${access_token}
-						and provider = ${provider};`;
-
-				const response = await discordOAuth2({ refreshToken: connection.refresh_token });
-				await sql`
-					update connections
-					set access_token = ${response.access_token},
-						refresh_token = ${response.refresh_token},
-						expires_at = ${new Date(Date.now() + response.expires_in * 1000)}
-					where access_token = ${access_token}
-						and provider = ${provider};`;
-
-				const token = jwt.sign(
-					{
-						provider: 'Discord',
-						access_token: response.access_token,
-						'https://hasura.io/jwt/claims': {
-							'x-hasura-allowed-roles': ['user', 'mod', 'admin'],
-							'x-hasura-default-role': 'user',
-							'x-hasura-user-id': connection.user_id,
-						},
-					},
-					process.env.JWT_SECRET!,
-					{
-						expiresIn: response.expires_in,
-					},
-				);
-				req.oauth = { provider, token, access_token: response.access_token };
-				return next?.();
-			}
-
-			return next?.(badRequest('Malformed or missing JWT'));
-		}
+	if (req.headers.authorization?.startsWith('Bearer ')) {
+		token = req.headers.authorization.substr('Bearer '.length);
+	} else if (req.headers.cookie) {
+		token = cookie.parse(req.headers.cookie).token;
+	} else {
+		return next?.(unauthorized('Malformed or missing JWT'));
 	}
 
-	return next?.(badRequest('Malformed or missing JWT'));
+	try {
+		const userId = await authManager.verify(token);
+
+		req.auth = { userId, token };
+		return next?.();
+	} catch {
+		return next?.(unauthorized());
+	}
 };

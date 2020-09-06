@@ -16,4 +16,5 @@ module.exports = {
 	moduleNameMapper: {
 		'@yuudachi/rest': '<rootDir>packages/rest/src/index.ts',
 	},
+	setupFiles: ['jest-date-mock'],
 };
