@@ -3105,6 +3105,7 @@ __metadata:
     form-data: ^3.0.0
     helmet: ^4.0.0
     ioredis: ^4.17.3
+    jest-date-mock: ^1.0.8
     joi: ^17.2.0
     jsonwebtoken: ^8.5.1
     lodash: ^4.17.19
@@ -7487,6 +7488,13 @@ fsevents@^1.2.7:
     micromatch: ^4.0.2
     pretty-format: ^26.2.0
   checksum: 8b0920927ad71c23b0aaeed4b46f56f85b3b36a31259dc6888c6800df8cca65322464e7701821b402ef4664d3c72487679f308a547e47be2edbad856301f487d
+  languageName: node
+  linkType: hard
+
+"jest-date-mock@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "jest-date-mock@npm:1.0.8"
+  checksum: 7472b6fd2153d8782426334797b880b1abeb47ee23aeaa8a262683d8d7d88460697adafff4c1379bbca6756a66f0e7c40a00d8f91807ca309fef88be0af9c38a
   languageName: node
   linkType: hard
 
@@ -13052,6 +13060,7 @@ typescript@^3.9.7:
     eslint-config-prettier: ^6.11.0
     eslint-plugin-prettier: ^3.1.4
     jest: ^26.2.2
+    jest-date-mock: ^1.0.8
     prettier: ^2.0.5
     supertest: ^4.0.2
     typescript: ^3.9.7

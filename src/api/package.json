@@ -49,6 +49,7 @@
 		"@types/node-fetch": "^2.5.7",
 		"@types/trouter": "^3.1.0",
 		"env-cmd": "^10.1.0",
+		"jest-date-mock": "^1.0.8",
 		"rimraf": "^3.0.2",
 		"supertest": "^4.0.2",
 		"typescript": "^3.9.7"

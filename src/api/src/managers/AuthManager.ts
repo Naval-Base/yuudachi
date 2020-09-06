@@ -4,7 +4,7 @@ import ms from 'ms';
 import { Sql } from 'postgres';
 import { kConfig, kSQL } from '../tokens';
 import { Response } from 'polka';
-import { Config } from '../Config';
+import Config from '../Config';
 
 export interface AuthCredentials {
 	access: {
