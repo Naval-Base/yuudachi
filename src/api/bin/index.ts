@@ -9,7 +9,8 @@ import { container } from 'tsyringe';
 
 import Route, { pathToRouteInfo } from '../src/Route';
 import createApp from '../src/app';
-import { kSQL } from '../src/tokens';
+import { kSQL, kConfig } from '../src/tokens';
+import Config from '../src/Config';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('no discord token');
@@ -20,6 +21,16 @@ const pg = postgres({ debug: console.log });
 
 container.register(Rest, { useValue: rest });
 container.register(kSQL, { useValue: pg });
+container.register<Config>(kConfig, {
+	useValue: {
+		secretKey: process.env.JWT_SECRET!,
+		discordClientId: process.env.DISCORD_CLIENT_ID!,
+		publicApiDomain: process.env.PUBLIC_API_DOMAIN!,
+		publicFrontendDomain: process.env.PUBLIC_FRONTEND_DOMAIN!,
+		discordScopes: process.env.DISCORD_SCOPES!.split(','),
+		discordClientSecret: process.env.DISCORD_CLIENT_SECRET!,
+	},
+});
 
 const app = createApp();
 

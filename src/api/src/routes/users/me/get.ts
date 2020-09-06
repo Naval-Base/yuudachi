@@ -22,16 +22,17 @@ export default class DiscordLoginRoute extends Route {
 			return next('uh oh, something broke');
 		}
 
-		const [user] = await this.sql<{ id: string; user_id: string; avatar: string; email: string; username: string }>`
-			select connections.id, user_id, avatar, email, username
-			from connections
-			join users
-			on connections.user_id = users.id
-			where access_token = ${req.oauth!.access_token}
-			and provider = ${req.oauth!.provider};
+		const [user] = await this.sql<{ id: string; email: string; username: string }>`
+			select id, email, username
+			from users
+			where id = ${req.auth!.userId};
+		`;
+
+		const connections = await this.sql<{ id: string; provider: string; main: boolean; avatar: string }>`
+			select id, provider, main, avatar from connections where user_id = ${req.auth!.userId};
 		`;
 
 		req.statusCode = 200;
-		res.end(JSON.stringify({ token: req.oauth!.token, provider: req.oauth!.provider, user }));
+		res.end(JSON.stringify({ user, connections }));
 	}
 }

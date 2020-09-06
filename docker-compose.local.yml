@@ -102,7 +102,7 @@ services:
       PGDATABASE: "yukikaze"
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
-      TRANSLATIONS_API: "http://api:3500"
+      DISCORD_TOKEN: ""
 
   api:
     environment:
