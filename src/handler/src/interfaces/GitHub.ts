@@ -1,32 +1,32 @@
-export interface GithubAuthor {
+export interface GitHubAuthor {
 	avatarUrl: string;
 	login: string;
 	url: string;
 }
 
-export interface GithubUser {
+export interface GitHubUser {
 	login: string;
 }
 
-export interface GithubLabel {
+export interface GitHubLabel {
 	name: string;
 	color: string;
 	url: string;
 }
 
-export interface GithubCommit {
+export interface GitHubCommit {
 	abbreviatedOid: string;
 }
 
-export interface GithubReview {
-	author: GithubUser;
-	state: GithubReviewState;
+export interface GitHubReview {
+	author: GitHubUser;
+	state: GitHubReviewState;
 	url: string;
-	authorAssociation: GithubAuthorAssociation;
+	authorAssociation: GitHubAuthorAssociation;
 	createdAt: string;
 }
 
-export enum GithubReviewState {
+export enum GitHubReviewState {
 	PENDING = 'PENDING',
 	COMMENTED = 'COMMENTED',
 	APPROVED = 'APPROVED',
@@ -34,7 +34,7 @@ export enum GithubReviewState {
 	DISMISSED = 'DISMISSED',
 }
 
-export enum GithubAuthorAssociation {
+export enum GitHubAuthorAssociation {
 	MEMBER = 'MEMBER',
 	OWNER = 'OWNER',
 	COLLABORATOR = 'COLLABORATOR',
@@ -44,8 +44,8 @@ export enum GithubAuthorAssociation {
 	NONE = 'NONE',
 }
 
-export interface GithubIssue {
-	author: GithubAuthor;
+export interface GitHubIssue {
+	author: GitHubAuthor;
 	body: string;
 	number: number;
 	publishedAt: string;
@@ -53,38 +53,38 @@ export interface GithubIssue {
 	url: string;
 	closed: boolean;
 	closedAt: string | null;
-	labels: { nodes: GithubLabel[] };
+	labels: { nodes: GitHubLabel[] };
 	comments: { totalCount: number };
 }
 
-export enum GithubReviewDecision {
+export enum GitHubReviewDecision {
 	CHANGES_REQUESTED = 'CHANGES_REQUESTED',
 	APPROVED = 'APPROVED',
 	REVIEW_REQUIRED = 'REVIEW_REQUIRED',
 }
 
-export interface GithubPrData {
-	commits: { nodes: GithubCommit[] };
+export interface GitHubPRData {
+	commits: { nodes: GitHubCommit[] };
 	merged: boolean;
-	mergeCommit: GithubCommit | null;
+	mergeCommit: GitHubCommit | null;
 	headRef: { name: string } | null;
 	headRepository: { nameWithOwner: string };
 	mergedAt: string | null;
-	mergedBy: GithubUser | null;
+	mergedBy: GitHubUser | null;
 	isDraft: boolean;
-	reviewDecision: GithubReviewDecision | null;
-	reviews: { nodes: GithubReview[] };
+	reviewDecision: GitHubReviewDecision | null;
+	reviews: { nodes: GitHubReview[] };
 }
 
-export type GithubPr = GithubIssue & GithubPrData;
+export type GitHubPR = GitHubIssue & GitHubPRData;
 
-export interface GitHubApiData {
+export interface GitHubAPIData {
 	repository: {
 		name: string;
-		issueOrPullRequest: GithubIssue | GithubPr;
+		issueOrPullRequest: GitHubIssue | GitHubPR;
 	};
 }
 
-export function isPR(issue: GithubIssue | GithubPr): issue is GithubPr {
+export function isPR(issue: GitHubIssue | GitHubPR): issue is GitHubPR {
 	return Reflect.has(issue, 'commits');
 }

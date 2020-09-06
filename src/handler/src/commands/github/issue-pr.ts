@@ -8,7 +8,7 @@ import Rest from '@yuudachi/rest';
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
-import { GitHubApiData, isPR, GithubReview, GithubReviewDecision, GithubReviewState } from '../../interfaces/GitHub';
+import { GitHubAPIData, isPR, GitHubReview, GitHubReviewDecision, GitHubReviewState } from '../../interfaces/GitHub';
 
 const BASE_URL = 'https://api.github.com/graphql';
 
@@ -17,7 +17,7 @@ interface StringStringMapping {
 }
 
 interface StringReviewMapping {
-	[index: string]: GithubReview | undefined;
+	[index: string]: GitHubReview | undefined;
 }
 
 const RepositoryAliases: StringStringMapping = {
@@ -171,7 +171,7 @@ export default class implements Command {
 				return;
 			}
 
-			const data = res.data as GitHubApiData;
+			const data = res.data as GitHubAPIData;
 			const issue = data.repository.issueOrPullRequest;
 			const resultState = isPR(issue)
 				? issue.merged
@@ -368,7 +368,7 @@ export default class implements Command {
 		}`;
 	}
 
-	private relevantReviews(author: string, reviews?: GithubReview[]): GithubReview[] {
+	private relevantReviews(author: string, reviews?: GitHubReview[]): GitHubReview[] {
 		if (!reviews) {
 			return [];
 		}
@@ -389,7 +389,7 @@ export default class implements Command {
 			acc[login] = current;
 			return acc;
 		}, {} as StringReviewMapping);
-		const values = Object.values(reviewMap).filter((r) => r) as GithubReview[];
+		const values = Object.values(reviewMap).filter((r) => r) as GitHubReview[];
 		return values.sort((a, b) => {
 			const aDate = new Date(a.createdAt);
 			const bDate = new Date(b.createdAt);
@@ -414,7 +414,7 @@ export default class implements Command {
 		return LabelColors[color] ?? LabelColors.default!;
 	}
 
-	private cleanDecision(decision: GithubReviewDecision | GithubReviewState): string {
+	private cleanDecision(decision: GitHubReviewDecision | GitHubReviewState): string {
 		return decision.toLowerCase().replace(/_/g, ' ');
 	}
 
