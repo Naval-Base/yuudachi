@@ -41,6 +41,7 @@ const actionExpiration = new Date(Date.parse(NOW) + 1e5).toString();
 // Array holding results for SQL queries during the test
 let postgresResults: any[] = [];
 
+// eslint-disable-next-line no-extend-native
 Date.prototype.toISOString = jest.fn(() => NOW);
 
 let sqlCalls = 0;
