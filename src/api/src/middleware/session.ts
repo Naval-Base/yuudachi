@@ -4,7 +4,8 @@ import { container } from 'tsyringe';
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
 
-import { kSQL } from '../tokens';
+import { kSQL, kConfig } from '../tokens';
+import Config from '../Config';
 
 export default async (req: Request, res: Response, next?: NextHandler) => {
 	if (req.headers.cookie) {
@@ -13,7 +14,8 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 
 		let decoded: { provider: 'Discord' | 'Twitch'; access_token: string };
 		try {
-			decoded = jwt.verify(cookies.token, process.env.JWT_SECRET!) as {
+			const config = container.resolve<Config>(kConfig);
+			decoded = jwt.verify(cookies.token, config.secretKey) as {
 				provider: 'Discord' | 'Twitch';
 				access_token: string;
 			};
@@ -35,7 +37,7 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 			`;
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (existingUser) {
-				res.redirect(process.env.SESSION_REDIRECT!);
+				res.redirect(config.publicFrontendDomain);
 				return res.end(
 					JSON.stringify({
 						token: cookies.token,
