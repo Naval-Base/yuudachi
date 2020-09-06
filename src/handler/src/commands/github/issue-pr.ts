@@ -156,7 +156,7 @@ export default class implements Command {
 		const repository = RepositoryAliases[matchRepo] ?? matchRepo;
 		const owner = repository === 'discord-api-docs' ? 'discord' : 'discordjs';
 
-		if (!(repository.toLowerCase() in AllowedRepositories)) {
+		if (!Reflect.has(AllowedRepositories, repository.toLowerCase())) {
 			return;
 		}
 
