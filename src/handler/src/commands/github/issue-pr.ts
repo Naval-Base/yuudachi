@@ -1,14 +1,16 @@
-import { Args, joinTokens } from 'lexure';
+import { Args, joinTokens, result } from 'lexure';
 import { injectable, inject } from 'tsyringe';
 import { Message, Embed, EmbedField } from '@spectacles/types';
 import { Sql } from 'postgres';
 import fetch from 'node-fetch';
-// import i18next from 'i18next'; TODO: i18n
+import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
 import { GitHubAPIData, isPR, GitHubReview, GitHubReviewDecision, GitHubReviewState } from '../../interfaces/GitHub';
+
+// #region typings // TODO: remove section (indev)
 
 const BASE_URL = 'https://api.github.com/graphql';
 
@@ -131,13 +133,19 @@ enum Badges {
 	DJS = '<:DiscordJS:751202824804630539>',
 }
 
+// #endregion typings
+
 @injectable()
 export class IssuePRLookup implements Command {
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: Message, args: Args, locale: string) {
 		const githubToken = process.env.GITHUB_TOKEN;
-		if (!githubToken) throw new Error('no github token'); // TODO: user friendly output (only if not regex cmd, when regex cmd implementation is considered)
+		if (!githubToken) {
+			this.rest.post(`/channels/${message.channel_id}/messages`, {
+				content: i18next.t('command.issue-pr.execute.no_token', { lng: locale }),
+			});
+		}
 
 		const rest = joinTokens(args.many());
 		const regex = /(?<repo>\S+)#(?<num>\d+) ?(?<verbose>(--verbose|-verbose|--v|-v))?/i;
@@ -199,24 +207,28 @@ export class IssuePRLookup implements Command {
 
 			// footer text
 			const comments = issue.comments.totalCount
-				? `(${IssuePRLookup.formatCommentString(issue.comments.totalCount)})`
+				? `(${IssuePRLookup.formatCommentString(issue.comments.totalCount, locale)})`
 				: '';
-			const action =
-				resultState === 'MERGED'
-					? ' merged'
-					: resultState === 'CLOSED'
-					? ' closed'
-					: resultState === 'DRAFT'
-					? ' draft opened'
-					: ' opened';
-			const mergedBy =
-				isPR(issue) && resultState === 'MERGED' && issue.mergedBy?.login ? ` by ${issue.mergedBy.login}` : '';
-			const mergedIn =
-				isPR(issue) && resultState === 'MERGED' && issue.mergeCommit?.abbreviatedOid
-					? ` in ${issue.mergeCommit.abbreviatedOid}`
-					: '';
 
-			const text = `${comments}${action}${mergedBy}${mergedIn}`;
+			const isMerge = isPR(issue) && resultState === 'MERGED';
+			const user = isPR(issue) && resultState === 'MERGED' ? issue.mergedBy?.login : undefined;
+			const commit = isPR(issue) && resultState === 'MERGED' ? issue.mergeCommit?.abbreviatedOid : undefined;
+
+			const action = isMerge
+				? user && commit
+					? i18next.t('command.issue-pr.execute.action.merge_by_in', { lng: locale, user, commit })
+					: user
+					? i18next.t('command.issue-pr.execute.action.merge_by', { lng: locale, user })
+					: commit
+					? i18next.t('command.issue-pr.execute.action.merge_in', { lng: locale, commit })
+					: i18next.t('command.issue-pr.execute.action.merge', { lng: locale })
+				: resultState === 'CLOSED'
+				? i18next.t('command.issue-pr.execute.action.close', { lng: locale })
+				: resultState === 'DRAFT'
+				? i18next.t('command.issue-pr.execute.action.draft', { lng: locale })
+				: i18next.t('command.issue-pr.execute.action.open', { lng: locale });
+
+			const text = `${comments}${action}`;
 
 			// timestamp
 			const timestampProperty = Timestamps[resultState];
@@ -241,8 +253,10 @@ export class IssuePRLookup implements Command {
 			const e2: Embed =
 				isPR(issue) && installable
 					? IssuePRLookup.addField(e1, {
-							name: 'Install with',
-							value: `\`npm i ${issue.headRepository.nameWithOwner}#${issue.headRef?.name ?? 'unknown'}\``,
+							name: i18next.t('command.issue-pr.execute.headings.install', { lng: locale }),
+							value: `\`npm i ${issue.headRepository.nameWithOwner}#${
+								issue.headRef?.name ?? i18next.t('command.issue-pr.execute.unknown', { lng: locale }) ?? ''
+							}\``,
 					  })
 					: e1;
 
@@ -259,7 +273,7 @@ export class IssuePRLookup implements Command {
 				})
 				.join('\n');
 
-			const reviewTitle = `Reviews${
+			const reviewTitle = `${i18next.t('command.issue-pr.execute.headings.reviews', { lng: locale })}${
 				isPR(issue) && issue.reviewDecision ? ` (state: ${IssuePRLookup.cleanDecision(issue.reviewDecision)})` : ''
 			}`;
 
@@ -268,7 +282,7 @@ export class IssuePRLookup implements Command {
 			// labels
 			const e4: Embed = issue.labels.nodes.length
 				? IssuePRLookup.addField(e3, {
-						name: 'Labels',
+						name: i18next.t('command.issue-pr.execute.headings.labels', { lng: locale }),
 						value: issue.labels.nodes
 							.map(
 								(l: { name: string; color: string; url: string }) =>
@@ -426,8 +440,10 @@ export class IssuePRLookup implements Command {
 		return decision.toLowerCase().replace(/_/g, ' ');
 	}
 
-	private static formatCommentString(num: number): string {
-		return `${num} comment${num > 1 ? 's' : ''}`;
+	private static formatCommentString(number: number, locale: string): string {
+		return number === 1
+			? i18next.t('command.issue-pr.formatCommentString.headings.comments_single', { lng: locale })
+			: i18next.t('command.issue-pr.formatCommentString.headings.comments_multiple', { lng: locale, number });
 	}
 
 	private static addField(embed: Embed, data: EmbedField): Embed {

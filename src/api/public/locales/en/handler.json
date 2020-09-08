@@ -1,5 +1,29 @@
 {
 	"command": {
+		"issue-pr": {
+			"execute": {
+				"action": {
+					"close": "closed",
+					"draft": "draft opened",
+					"merge_by_in": "merged by {{user}} in {{commit}}",
+					"merge_by": "merged by {{user}}",
+					"merge_in": "merged in {{commit}}",
+					"merge": "merged",
+					"open": "opened"
+				},
+				"headings": {
+					"install": "Install with",
+					"labels": "Labels",
+					"reviews": "Reviews"
+				},
+				"no_token": "Could not access GitHub token to use.",
+				"unknown": "unknown"
+			},
+			"formatCommentString": {
+				"comments_multiple": "{{number}} comments",
+				"comments_single": "1 comment"
+			}
+		},
 		"ping": {
 			"execute": {
 				"pre_ping": "Pinging...",
