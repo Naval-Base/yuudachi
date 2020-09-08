@@ -24,7 +24,7 @@ describe('ellipsis', () => {
 	});
 
 	test('text longer than total', () => {
-		expect(ellipsis(text, 7)).toBe('lorem i');
+		expect(ellipsis(text, 7)).toBe('lore...');
 	});
 });
 
@@ -43,7 +43,7 @@ describe('addField', () => {
 			fields: [
 				{
 					name: 'foo',
-					value: 'foobar',
+					value: 'bar',
 				},
 			],
 		};
