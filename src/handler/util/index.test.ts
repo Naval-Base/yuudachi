@@ -11,15 +11,18 @@ import {
 
 describe('ellipsis', () => {
 	const text = 'lorem ipsum';
+
 	test('text shorter than total', () => {
 		expect(ellipsis(text, 20)).toBe(text);
 	});
+
 	test('text longer than total and total < 4', () => {
 		expect(ellipsis(text, 0)).toBe('');
 		expect(ellipsis(text, 1)).toBe('l');
 		expect(ellipsis(text, 2)).toBe('lo');
 		expect(ellipsis(text, 3)).toBe('lor');
 	});
+
 	test('text longer than total', () => {
 		expect(ellipsis(text, 7)).toBe('lorem i');
 	});
