@@ -25,7 +25,7 @@ test('sends get', async () => {
 	mockedAmqp.call.mockResolvedValue({
 		status: 0,
 		body: {
-			body: { abc: 'def' },
+			body: Buffer.from(JSON.stringify({ abc: 'def' })),
 		},
 	});
 
@@ -59,7 +59,7 @@ test('sends post', async () => {
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
 		method: 'POST',
 		path: '/foo/bar',
-		body: { foo: 'bar' },
+		body: Buffer.from(JSON.stringify({ foo: 'bar' })),
 		headers: {
 			Authorization: 'Bot token',
 			'X-RateLimit-Precision': 'millisecond',
@@ -86,7 +86,7 @@ test('sends put', async () => {
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
 		method: 'PUT',
 		path: '/foo/bar',
-		body: { foo: 'bar' },
+		body: Buffer.from(JSON.stringify({ foo: 'bar' })),
 		headers: {
 			Authorization: 'Bot token',
 			'X-RateLimit-Precision': 'millisecond',
@@ -113,7 +113,7 @@ test('sends patch', async () => {
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
 		method: 'PATCH',
 		path: '/foo/bar',
-		body: { foo: 'bar' },
+		body: Buffer.from(JSON.stringify({ foo: 'bar' })),
 		headers: {
 			Authorization: 'Bot token',
 			'X-RateLimit-Precision': 'millisecond',
@@ -188,7 +188,6 @@ test('sends audit log reason', async () => {
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
 		method: 'PUT',
 		path: '/foo/bar',
-		body: null,
 		headers: {
 			Authorization: 'Bot token',
 			'X-RateLimit-Precision': 'millisecond',
