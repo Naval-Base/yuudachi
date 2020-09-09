@@ -12,7 +12,7 @@ interface ResponseBody {
 	status: number;
 	headers: Record<string, string>;
 	url: string;
-	body: unknown;
+	body: Buffer | Uint8Array;
 }
 
 interface Response {
@@ -51,10 +51,12 @@ export default class Rest {
 		const options = req.options;
 		delete req.options;
 
+		const body = req.body ? Buffer.from(JSON.stringify(req.body)) : undefined;
 		const headers = options?.reason ? { 'X-Audit-Log-Reason': options.reason } : {};
 
 		const res: Response = await this.broker.call('REQUEST', {
 			...req,
+			body,
 			headers: {
 				...headers,
 				Authorization: `Bot ${this.token}`,
@@ -64,7 +66,14 @@ export default class Rest {
 		});
 
 		// TODO: handle non-2xx status codes
-		if (res.status === 0) return (res.body as ResponseBody).body as T;
+		if (res.status === 0) {
+			const body = (res.body as ResponseBody).body;
+			try {
+				return JSON.parse(body.toString()) as T;
+			} catch {
+				return (body as unknown) as T;
+			}
+		}
 		throw new Error(res.body as string);
 	}
 }
