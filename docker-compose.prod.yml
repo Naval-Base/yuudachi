@@ -67,27 +67,28 @@ services:
     image: spectacles/gateway:latest
     environment:
       DISCORD_TOKEN: ""
-      DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
+      # DISCORD_EVENTS: ""
       BROKER_TYPE: "amqp"
       BROKER_GROUP: "gateway"
       BROKER_MESSAGE_TIMEOUT: "10m"
       PROMETHEUS_ADDRESS: ":8080"
       PROMETHEUS_ENDPOINT: "/metrics"
-      AMQP_URL: "amqp://rabbitmq"
       SHARD_STORE_TYPE: "redis"
-      REDIS_URL: "redis://redis:6379"
+      REDIS_URL: ""
+      REDIS_POOL_SIZE: 5
 
   proxy:
     environment:
-      REDIS_URL: "redis://redis:6379"
-      AMQP_URL: "amqp://rabbitmq"
+      # REDIS_URL: ""
+      # AMQP_URL: ""
       AMQP_GROUP: "rest"
+      # AMQP_SUBGROUP: ""
       AMQP_EVENT: "REQUEST"
 
   handler:
     environment:
-      PGHOST: "postgres"
-      PGPORT: "5432"
+      # PGHOST: ""
+      # PGPORT: ""
       PGDATABASE: "yukikaze"
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
@@ -96,23 +97,18 @@ services:
 
   api:
     environment:
-      PGHOST: "postgres"
-      PGPORT: "5432"
+      # PGHOST: ""
+      # PGPORT: ""
       PGDATABASE: "yukikaze"
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
-      CORS: ""
-      COOKIE_DOMAIN: ""
-      SESSION_REDIRECT: "http://localhost:4000"
       JWT_SECRET: ""
       DISCORD_CLIENT_ID: ""
+      PUBLIC_API_DOMAIN: "http://localhost:3500"
+      PUBLIC_FRONTEND_DOMAIN: "http://localhost:4000"
+      # DISCORD_SCOPES: ""
       DISCORD_CLIENT_SECRET: ""
-      DISCORD_CALLBACK_DOMAIN: "http://localhost"
-      DISCORD_CALLBACK_PORT: ":3500"
-      DISCORD_CALLBACK_ROUTE: "/auth/discord/callback"
-      DISCORD_SCOPES: "identify,email"
-      DISCORD_REDIRECT: "http://localhost:4000"
 
   website:
     environment: []
