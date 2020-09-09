@@ -12,6 +12,7 @@ import { container } from 'tsyringe';
 import { Message } from '@spectacles/types';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
+import { decode, encode } from '@msgpack/msgpack';
 
 import Command, { commandInfo } from '../src/Command';
 import { kSQL } from '../src/tokens';
@@ -19,7 +20,15 @@ import { kSQL } from '../src/tokens';
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('missing discord token');
 
-const restBroker = new Amqp('rest');
+const restBroker = new Amqp('rest', {
+	serialize: (data: any) => {
+		const encoded = encode(data);
+		return Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength);
+	},
+	deserialize: (data: Buffer | Uint8Array) => {
+		return decode(data);
+	},
+});
 const rest = new Rest(token, restBroker);
 const broker = new Amqp('gateway');
 const sql = postgres();
@@ -72,6 +81,8 @@ void (async () => {
 			where guild_id = ${message.guild_id ?? null};`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const prefix = data?.prefix ?? '?';
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		const locale = data?.locale ?? 'en';
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
 			['“', '”'],
@@ -86,7 +97,7 @@ void (async () => {
 		const command = commands.get(cmd.value);
 		if (!command) continue;
 		try {
-			await command.execute(message, new Args(out), data.locale);
+			await command.execute(message, new Args(out), locale);
 		} catch (error) {
 			void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
 		}
