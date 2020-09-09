@@ -127,22 +127,41 @@ export default class implements Command {
 
 	private async delete(message: Message, args: Args, locale: string) {
 		const name = args.many();
-		if (!name.length) {
-			throw new Error(i18next.t('command.tag.common.execute.name_missing', { lng: locale }));
+		const user = args.option('user');
+
+		if (name.length) {
+			const [deletedTag] = await this.sql<{ name: string }>`
+				delete from tags
+				where name = ${joinTokens(name)}
+					and guild_id = ${message.guild_id!}
+				returning name`;
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (!deletedTag) {
+				throw new Error(i18next.t('command.tag.common.execute.not_found', { lng: locale }));
+			}
+			return this.rest.post(`/channels/${message.channel_id}/messages`, {
+				content: i18next.t('command.tag.delete.execute.deleted', { name: deletedTag.name, lng: locale }),
+			});
+		} else if (user) {
+			const deletedTags = await this.sql<{ name: string }>`
+				delete from tags
+				where user_id = ${user}
+					and guild_id = ${message.guild_id!}
+				returning name`;
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (!deletedTags.length) {
+				throw new Error(i18next.t('command.tag.common.execute.not_found', { lng: locale }));
+			}
+			return this.rest.post(`/channels/${message.channel_id}/messages`, {
+				content: i18next.t('command.tag.delete.execute.deleted_user', {
+					name: user,
+					count: deletedTags.length,
+					lng: locale,
+				}),
+			});
 		}
 
-		const [deletedTag] = await this.sql<{ name: string }>`
-			delete from tags
-			where name = ${joinTokens(name)}
-				and guild_id = ${message.guild_id!}
-			returning name`;
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		if (!deletedTag) {
-			throw new Error(i18next.t('command.tag.common.execute.not_found', { lng: locale }));
-		}
-		void this.rest.post(`/channels/${message.channel_id}/messages`, {
-			content: i18next.t('command.tag.delete.execute.deleted', { name: deletedTag.name, lng: locale }),
-		});
+		throw new Error(i18next.t('command.tag.delete.execute.missing_arguments', { lng: locale }));
 	}
 
 	private async alias(message: Message, args: Args, locale: string) {
