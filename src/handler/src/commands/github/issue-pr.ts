@@ -142,9 +142,7 @@ export class IssuePRLookup implements Command {
 	public async execute(message: Message, args: Args, locale: string) {
 		const githubToken = process.env.GITHUB_TOKEN;
 		if (!githubToken) {
-			this.rest.post(`/channels/${message.channel_id}/messages`, {
-				content: i18next.t('command.issue-pr.execute.no_token', { lng: locale }),
-			});
+			throw new Error(i18next.t('command.issue-pr.execute.no_token', { lng: locale }));
 		}
 
 		const rest = joinTokens(args.many());
