@@ -12,7 +12,7 @@
 					"no_guild": "tags can only be used inside a guild / server",
 					"name_missing": "no tag name provided",
 					"content_missing": "no content provided",
-					"not_found": "no tag found"
+					"not_found": "no tag(s) found"
 				}
 			},
 			"add": {
@@ -27,7 +27,10 @@
 			},
 			"delete": {
 				"execute": {
-					"deleted": "**{{name}}** deleted"
+					"deleted": "**{{name}}** deleted",
+					"deleted_user": "deleted {{ count }} tag from **{{user}}**",
+					"deleted_user_plural": "deleted {{ count }} tags from **{{user}}**",
+					"missing_arguments": "no tag name or user provided"
 				}
 			},
 			"alias": {

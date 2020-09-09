@@ -4,8 +4,7 @@
 	"description": "",
 	"scripts": {
 		"test": "jest",
-		"test:ci": "jest --ci --no-stack-trace --verbose",
-		"tsc": "tsc"
+		"test:ci": "jest --ci --no-stack-trace --verbose"
 	},
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@outlook.com>",
