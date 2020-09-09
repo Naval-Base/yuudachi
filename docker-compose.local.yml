@@ -28,6 +28,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
       HASURA_GRAPHQL_ADMIN_SECRET: "admin"
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256","key":""}'
     expose:
       - "8080"
     ports:
@@ -92,7 +93,6 @@ services:
       REDIS_URL: "redis://redis:6379"
       AMQP_URL: "amqp://rabbitmq"
       AMQP_GROUP: "rest"
-      # AMQP_SUBGROUP: ""
       AMQP_EVENT: "REQUEST"
 
   handler:
@@ -103,6 +103,7 @@ services:
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
+      TRANSLATIONS_API: "http://api:3500"
 
   api:
     environment:
@@ -111,9 +112,13 @@ services:
       PGDATABASE: "yukikaze"
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
+      DISCORD_TOKEN: ""
       CORS: "http://localhost:4000"
       COOKIE_DOMAIN: ""
       SESSION_REDIRECT: "http://localhost:4000"
+      JWT_SECRET: ""
+      DISCORD_CLIENT_ID: ""
+      DISCORD_CLIENT_SECRET: ""
       DISCORD_CALLBACK_DOMAIN: "http://localhost"
       DISCORD_CALLBACK_PORT: ":3500"
       DISCORD_CALLBACK_ROUTE: "/auth/discord/callback"

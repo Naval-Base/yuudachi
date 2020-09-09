@@ -147,10 +147,11 @@ services:
     labels:
       com.naval-base.description: "Discord proxy"
     environment:
+      RUST_LOG: info
+      TIMEOUT: ""
       REDIS_URL: ""
       AMQP_URL: ""
       AMQP_GROUP: ""
-      AMQP_SUBGROUP: ""
       AMQP_EVENT: ""
     restart: unless-stopped
 
