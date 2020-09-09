@@ -5,7 +5,7 @@ import { Sql } from 'postgres';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
-import { addField } from '../../../util'
+import { addField, truncateEmbed } from '../../../util'
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
@@ -292,7 +292,7 @@ export class IssuePRLookup implements Command {
 				: e3;
 
 			this.rest.post(`/channels/${message.channel_id}/messages`, {
-				embed: e4,
+				embed: truncateEmbed(e4),
 			});
 		} catch {}
 	}
