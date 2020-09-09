@@ -5,6 +5,7 @@ import { Sql } from 'postgres';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
+import { addField } from '../../../util'
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
@@ -250,7 +251,7 @@ export class IssuePRLookup implements Command {
 			const installable = resultState in InstallableState;
 			const e2: Embed =
 				isPR(issue) && installable
-					? IssuePRLookup.addField(e1, {
+					? addField(e1, {
 							name: i18next.t('command.issue-pr.execute.headings.install', { lng: locale }),
 							value: `\`npm i ${issue.headRepository.nameWithOwner}#${
 								issue.headRef?.name ?? i18next.t('command.issue-pr.execute.unknown', { lng: locale }) ?? ''
@@ -275,11 +276,11 @@ export class IssuePRLookup implements Command {
 				isPR(issue) && issue.reviewDecision ? ` (state: ${IssuePRLookup.cleanDecision(issue.reviewDecision)})` : ''
 			}`;
 
-			const e3: Embed = reviews.length ? IssuePRLookup.addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
+			const e3: Embed = reviews.length ? addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
 
 			// labels
 			const e4: Embed = issue.labels.nodes.length
-				? IssuePRLookup.addField(e3, {
+				? addField(e3, {
 						name: i18next.t('command.issue-pr.execute.headings.labels', { lng: locale }),
 						value: issue.labels.nodes
 							.map(
@@ -442,12 +443,5 @@ export class IssuePRLookup implements Command {
 		return number === 1
 			? i18next.t('command.issue-pr.formatCommentString.headings.comments_single', { lng: locale })
 			: i18next.t('command.issue-pr.formatCommentString.headings.comments_multiple', { lng: locale, number });
-	}
-
-	private static addField(embed: Embed, data: EmbedField): Embed {
-		return {
-			...embed,
-			fields: [...(embed.fields ?? []), data],
-		};
 	}
 }
