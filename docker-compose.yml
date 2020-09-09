@@ -127,16 +127,16 @@ services:
       com.naval-base.description: "Gateway Ingress"
     environment:
       DISCORD_TOKEN: ""
-      DISCORD_EVENTS: ""
+      DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
       BROKER_TYPE: ""
       BROKER_GROUP: ""
       BROKER_MESSAGE_TIMEOUT: ""
       PROMETHEUS_ADDRESS: ":8080"
       PROMETHEUS_ENDPOINT: "/metrics"
-      AMQP_URL: ""
+      AMQP_URL: "amqp://rabbitmq"
       SHARD_STORE_TYPE: ""
       SHARD_STORE_PREFIX: "gateway"
-      REDIS_URL: ""
+      REDIS_URL: "redis://redis:6379"
       REDIS_POOL_SIZE: 5
     expose:
       - "8080"
@@ -149,8 +149,8 @@ services:
     environment:
       RUST_LOG: info
       TIMEOUT: ""
-      REDIS_URL: ""
-      AMQP_URL: ""
+      REDIS_URL: "redis://redis:6379"
+      AMQP_URL: "amqp://rabbitmq"
       AMQP_GROUP: ""
       AMQP_EVENT: ""
     restart: unless-stopped
@@ -162,13 +162,13 @@ services:
     labels:
       com.naval-base.description: "Internal handler"
     environment:
-      PGHOST: ""
-      PGPORT: ""
+      PGHOST: "postgres"
+      PGPORT: "5432"
       PGDATABASE: ""
       PGUSERNAME: ""
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
-      TRANSLATIONS_API: ""
+      TRANSLATIONS_API: "http://api:3500"
     restart: unless-stopped
 
   api:
@@ -178,23 +178,18 @@ services:
     labels:
       com.naval-base.description: "Internal REST API"
     environment:
-      PGHOST: ""
-      PGPORT: ""
+      PGHOST: "postgres"
+      PGPORT: "5432"
       PGDATABASE: ""
       PGUSERNAME: ""
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
-      CORS: ""
-      COOKIE_DOMAIN: ""
-      SESSION_REDIRECT: ""
       JWT_SECRET: ""
       DISCORD_CLIENT_ID: ""
+      PUBLIC_API_DOMAIN: ""
+      PUBLIC_FRONTEND_DOMAIN: ""
+      DISCORD_SCOPES: "identify,email"
       DISCORD_CLIENT_SECRET: ""
-      DISCORD_CALLBACK_DOMAIN: ""
-      DISCORD_CALLBACK_PORT: ""
-      DISCORD_CALLBACK_ROUTE: ""
-      DISCORD_SCOPES: ""
-      DISCORD_REDIRECT: ""
     expose:
       - "3500"
     ports:
