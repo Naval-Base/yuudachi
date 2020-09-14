@@ -267,7 +267,7 @@ export class IssuePRLookup implements Command {
 						owner === 'discordjs' && ['MEMBER', 'OWNER', 'COLLABORATOR'].includes(r.authorAssociation);
 					const reviewBadge = isDjsMember ? Badges.DJS : '';
 					const reviewLink = `[${r.author.login}](${r.url})`;
-					const reviewState = `${IssuePRLookup.cleanDecision(r.state)}`;
+					const reviewState = IssuePRLookup.cleanDecision(r.state);
 					return `${reviewBadge} ${reviewLink} ${reviewState}`;
 				})
 				.join('\n');
