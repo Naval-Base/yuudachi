@@ -5,7 +5,7 @@ import { Sql } from 'postgres';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
-import { addField, truncateEmbed } from '../../../util'
+import { addField, truncateEmbed } from '../../../util';
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
