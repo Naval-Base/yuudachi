@@ -1,6 +1,6 @@
-import { Args, joinTokens, result } from 'lexure';
+import { Args, joinTokens } from 'lexure';
 import { injectable, inject } from 'tsyringe';
-import { Message, Embed, EmbedField } from '@spectacles/types';
+import { Message, Embed } from '@spectacles/types';
 import { Sql } from 'postgres';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
