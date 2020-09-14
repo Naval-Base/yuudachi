@@ -7,19 +7,19 @@ services:
 
   postgres:
     environment:
-      POSTGRES_USER: "yukikaze"
+      POSTGRES_USER: "yuudachi"
       POSTGRES_PASSWORD: "admin"
-      POSTGRES_DB: "yukikaze"
+      POSTGRES_DB: "yuudachi"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
 
   postgres-exporter:
     environment:
-      DATA_SOURCE_NAME: "postgresql://yukikaze:admin@postgres:5432/yukikaze?sslmode=disable"
+      DATA_SOURCE_NAME: "postgresql://yuudachi:admin@postgres:5432/yuudachi?sslmode=disable"
 
   hasura:
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: "postgresql://yukikaze:admin@postgres:5432/yukikaze"
+      HASURA_GRAPHQL_DATABASE_URL: "postgresql://yuudachi:admin@postgres:5432/yuudachi"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
       HASURA_GRAPHQL_ADMIN_SECRET: "admin"
@@ -42,7 +42,7 @@ services:
 
   grafana:
     environment:
-      GF_DEFAULT_INSTANCE_NAME: "yukikaze"
+      GF_DEFAULT_INSTANCE_NAME: "yuudachi"
       # GF_SERVER_DOMAIN: ""
       # GF_SERVER_ROOT_URL: ""
       GF_SECURITY_ADMIN_USER: "admin"
@@ -89,8 +89,8 @@ services:
     environment:
       # PGHOST: ""
       # PGPORT: ""
-      PGDATABASE: "yukikaze"
-      PGUSERNAME: "yukikaze"
+      PGDATABASE: "yuudachi"
+      PGUSERNAME: "yuudachi"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
       TRANSLATIONS_API: ""
@@ -99,8 +99,8 @@ services:
     environment:
       # PGHOST: ""
       # PGPORT: ""
-      PGDATABASE: "yukikaze"
-      PGUSERNAME: "yukikaze"
+      PGDATABASE: "yuudachi"
+      PGUSERNAME: "yuudachi"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
       JWT_SECRET: ""
