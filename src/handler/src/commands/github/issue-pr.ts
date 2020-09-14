@@ -206,7 +206,7 @@ export class IssuePRLookup implements Command {
 
 			// footer text
 			const comments = issue.comments.totalCount
-				? `(${IssuePRLookup.formatCommentString(issue.comments.totalCount, locale)})`
+				? `(${i18next.t('command.issue-pr.comment_count', { lng: locale, count: issue.comments.totalCount })})`
 				: '';
 
 			const isMerge = isPR(issue) && resultState === 'MERGED';
@@ -437,11 +437,5 @@ export class IssuePRLookup implements Command {
 
 	private static cleanDecision(decision: GitHubReviewDecision | GitHubReviewState): string {
 		return decision.toLowerCase().replace(/_/g, ' ');
-	}
-
-	private static formatCommentString(number: number, locale: string): string {
-		return number === 1
-			? i18next.t('command.issue-pr.formatCommentString.headings.comments_single', { lng: locale })
-			: i18next.t('command.issue-pr.formatCommentString.headings.comments_multiple', { lng: locale, number });
 	}
 }

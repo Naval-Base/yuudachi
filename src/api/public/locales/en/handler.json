@@ -11,6 +11,8 @@
 					"merge": "merged",
 					"open": "opened"
 				},
+				"comment_count": "{{count}} comment",
+				"comment_count_plural": "{{count}} comments",
 				"headings": {
 					"install": "Install with",
 					"labels": "Labels",
@@ -18,10 +20,6 @@
 				},
 				"no_token": "Could not access GitHub token to use.",
 				"unknown": "unknown"
-			},
-			"formatCommentString": {
-				"comments_multiple": "{{number}} comments",
-				"comments_single": "1 comment"
 			}
 		},
 		"ping": {
