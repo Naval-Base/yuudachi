@@ -130,9 +130,7 @@ enum IssueIcons {
 	CLOSED = 'https://cdn.discordapp.com/emojis/751210129977901100.png',
 }
 
-enum Badges {
-	DJS = '<:DiscordJS:751202824804630539>',
-}
+const MEMBER_BADGE = '<:DiscordJS:751202824804630539>';
 
 // #endregion typings
 
@@ -269,9 +267,8 @@ export class IssuePRLookup implements Command {
 			const reviews = isPR(issue) ? IssuePRLookup.relevantReviews(issue.author.login, issue.reviews.nodes) : [];
 			const reviewBody = reviews
 				.map((r) => {
-					const isDjsMember =
-						owner === 'discordjs' && ['MEMBER', 'OWNER', 'COLLABORATOR'].includes(r.authorAssociation);
-					const reviewBadge = isDjsMember ? Badges.DJS : '';
+					const isMember = ['MEMBER', 'OWNER', 'COLLABORATOR'].includes(r.authorAssociation);
+					const reviewBadge = isMember ? MEMBER_BADGE : '';
 					const reviewLink = `[${r.author.login}](${r.url})`;
 					const reviewState = IssuePRLookup.cleanDecision(r.state);
 					return `${reviewBadge} ${reviewLink} ${reviewState}`;
