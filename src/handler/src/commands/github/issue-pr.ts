@@ -161,6 +161,12 @@ export class IssuePRLookup implements Command {
 		const matchIssue = groups.num;
 
 		const repository = RepositoryAliases[matchRepo] ?? matchRepo;
+		const repositoryValid = IssuePRLookup.isValidRepositoryName(repository);
+
+		if (!repositoryValid) {
+			return;
+		}
+
 		const owner = repository === 'discord-api-docs' ? 'discord' : 'discordjs';
 
 		if (!Reflect.has(AllowedRepositories, repository.toLowerCase())) {
@@ -295,6 +301,12 @@ export class IssuePRLookup implements Command {
 				embed: truncateEmbed(e4),
 			});
 		} catch {}
+	}
+
+	private static isValidRepositoryName(name: string): boolean {
+		const reg = /[A-Za-z0-9_.-]/;
+		const match = reg.exec(name);
+		return name.length === match?.[0].length;
 	}
 
 	private static buildQuery(owner: string, repository: string, issueID: string) {
