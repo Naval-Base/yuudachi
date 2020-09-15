@@ -304,7 +304,7 @@ export class IssuePRLookup implements Command {
 	}
 
 	private static isValidRepositoryName(name: string): boolean {
-		const reg = /[A-Za-z0-9_.-]/;
+		const reg = /[A-Za-z0-9_.-]+/;
 		const match = reg.exec(name);
 		return name.length === match?.[0].length;
 	}
