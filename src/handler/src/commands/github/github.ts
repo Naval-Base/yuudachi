@@ -12,7 +12,7 @@ const VALID_SUB_COMMANDS = ['repository'] as const;
 const VALID_SUB_COMMANDS_REPOSITORY = ['add', 'remove', 'list'] as const;
 
 @injectable()
-export class GitHubSettingsCommand implements Command {
+export default class GitHubSettingsCommand implements Command {
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: Message, args: Args, locale: string) {

@@ -135,7 +135,7 @@ const MEMBER_BADGE = '<:DiscordJS:751202824804630539>';
 // #endregion typings
 
 @injectable()
-export class IssuePRLookup implements Command {
+export default class IssuePRLookup implements Command {
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: Message, args: Args, locale: string) {
