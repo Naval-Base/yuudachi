@@ -53,7 +53,7 @@ export default class GitHubSettingsCommand implements Command {
 
 		if (!sub) {
 			throw new Error(
-				i18next.t('command.github.repository.no_sub', {
+				i18next.t('command.github.common.no_sub', {
 					lng: locale,
 					valid_commands: VALID_SUB_COMMANDS.join(', '),
 				}),
@@ -62,7 +62,7 @@ export default class GitHubSettingsCommand implements Command {
 
 		if (['add', 'remove', 'delete'].includes(sub) && !candidates.length) {
 			throw new Error(
-				i18next.t('command.github.repository.no_sub', {
+				i18next.t('command.github.common.no_sub', {
 					lng: locale,
 					valid_commands: VALID_SUB_COMMANDS.join(', '),
 				}),
