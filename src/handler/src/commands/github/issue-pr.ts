@@ -139,6 +139,10 @@ export class IssuePRLookup implements Command {
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: Message, args: Args, locale: string) {
+		if (!message.guild_id) {
+			return;
+		}
+
 		const githubToken = process.env.GITHUB_TOKEN;
 		if (!githubToken) {
 			throw new Error(i18next.t('command.issue-pr.execute.no_token', { lng: locale }));

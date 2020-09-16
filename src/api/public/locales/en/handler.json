@@ -1,5 +1,30 @@
 {
 	"command": {
+		"github": {
+			"common": {
+				"execute": {
+					"no_guild": "Please use this command in the server you want to edit settings for"
+				},
+				"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
+				"invalid_sub": "Invalid sub-command {{command}}. Valid commands are {{valid_commands}}"
+			},
+			"repository": {
+				"list": {
+					"title": "Enabled repositories:",
+					"none": "This guild does not have any repositories enabled."
+				},
+				"add": {
+					"no_args": "Please provide valid repositories to add.",
+					"no_new": "No new repositories added.",
+					"title": "The following repositories have been enabled on this guild / server:"
+				},
+				"remove": {
+					"no_args": "Please provide valid repositories to remove.",
+					"removed_none": "No repositories removed.",
+					"title": "The following repositories have been disabled on this guild / server:"
+				}
+			}
+		},
 		"issue-pr": {
 			"execute": {
 				"action": {
