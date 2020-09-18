@@ -156,7 +156,9 @@ create table guild_settings (
 	role_state boolean default false,
 	moderation boolean default false,
 	locale text default 'en',
-	repositories text,
+	repositories text[],
+	repository_aliases text[],
+	repository_labels text[]
 );
 
 alter table guild_settings

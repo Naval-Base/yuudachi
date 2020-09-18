@@ -6,23 +6,32 @@
 					"no_guild": "Please use this command in the server you want to edit settings for"
 				},
 				"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
-				"invalid_sub": "Invalid sub-command {{command}}. Valid commands are: {{valid_commands}}"
-			},
-			"repository": {
-				"list": {
-					"title": "Enabled repositories:",
-					"none": "This guild does not have any repositories enabled."
+				"invalid_sub": "Invalid sub-command `{{command}}`. Valid arguments are: {{valid_commands}}",
+				"target": {
+					"repositories": "repositories",
+					"aliases": "repository aliases",
+					"labels": "labels"
 				},
-				"add": {
-					"no_args": "Please provide valid repositories to add.",
-					"no_new": "No new repositories added.",
-					"title": "The following repositories have been enabled on this guild / server:"
-				},
-				"remove": {
-					"no_args": "Please provide valid repositories to remove.",
-					"removed_none": "No repositories removed.",
-					"title": "The following repositories have been disabled on this guild / server:"
+				"target_format": {
+					"repository": "`owner/repository`, a GitHub HTTPS link, a GitHub SSH link",
+					"alias": "`alias:owner/repository`",
+					"label": "`<hexColor emoji>` *(to work properly the bot needs to be on the server the emoji is from and the emoji names have to match the color codes of the github labels without leading `#`)*"
 				}
+			},
+			"add": {
+				"no_args": "Please provide valid {{target}} to add. Valid format: {{- format}}.",
+				"no_add": "No new {{target}} were added.",
+				"title": "The following {{target}} have been enabled on this guild / server:"
+			},
+			"remove": {
+				"no_args": "Please provide valid {{target}} to remove. Valid format: {{- format}}.",
+				"no_current": "This guild / server does not have any {{target}} enabled at this time.",
+				"no_remove": "No {{target}} have been removed.",
+				"title": "The following {{target}} have been disabled on this guild / server:"
+			},
+			"list": {
+				"no_current": "This guild / server does not have any {{target}} enabled at this time.",
+				"title": "The following {{target}} are enabled on this guild / server:"
 			}
 		},
 		"issue-pr": {
