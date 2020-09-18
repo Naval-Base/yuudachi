@@ -89,6 +89,18 @@ describe('truncateEmbed', () => {
 		expect(truncated.description).toBe(embed.description);
 	});
 
+	test('truncate description, author no name', () => {
+		const embed = {
+			author: {
+				icon_url: 'foo.bar.jpg',
+				url: 'foo.bar',
+			},
+			description: 'a'.repeat(EMBED_DESCRIPTION_LIMIT + 1),
+		};
+		expect(truncateEmbed(embed).description.length).toBeLessThanOrEqual(EMBED_DESCRIPTION_LIMIT);
+		expect(truncateEmbed(embed).author.name).toBe(undefined);
+	});
+
 	test('truncate footer text', () => {
 		const embed = {
 			footer: {
