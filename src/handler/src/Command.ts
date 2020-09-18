@@ -9,7 +9,12 @@ export default interface Command {
 	description?: string;
 	clientPermissions?: string[];
 	userPermissions?: string[];
-	execute(message: Message, args: Args, locale: string): unknown | Promise<unknown>;
+	regExp?: RegExp;
+	execute(message: Message, args: Args, locale: string, information?: CommandAdditions): unknown | Promise<unknown>;
+}
+
+export interface CommandAdditions {
+	regexMatches?: RegExpExecArray;
 }
 
 export interface CommandInfo {

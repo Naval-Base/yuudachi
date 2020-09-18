@@ -42,6 +42,14 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'commands'), {
 	fileFilter: '*.js',
 });
 
+const quotes: [string, string][] = [
+	['"', '"'],
+	['“', '”'],
+	['「', '」'],
+];
+const flagPrefixes = ['--', '-'];
+const optionSeparators = ['=', ':'];
+
 void (async () => {
 	const conn = await broker.connect('rabbitmq');
 	await broker.subscribe(['MESSAGE_CREATE']);
@@ -83,23 +91,47 @@ void (async () => {
 		const prefix = data?.prefix ?? '?';
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const locale = data?.locale ?? 'en';
-		const lexer = new Lexer(message.content).setQuotes([
-			['"', '"'],
-			['“', '”'],
-			['「', '」'],
-		]);
+		const lexer = new Lexer(message.content).setQuotes(quotes);
 		const res = lexer.lexCommand((s) => (s.startsWith(prefix) ? prefix.length : null));
-		if (!res) continue;
-		const [cmd, tokens] = res;
-		const parser = new Parser(tokens()).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
-		const out = parser.parse();
 
-		const command = commands.get(cmd.value);
-		if (!command) continue;
-		try {
-			await command.execute(message, new Args(out), locale);
-		} catch (error) {
-			void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+		if (res) {
+			const [cmd, tokens] = res;
+			const parser = new Parser(tokens()).setUnorderedStrategy(prefixedStrategy(flagPrefixes, optionSeparators));
+			const out = parser.parse();
+
+			const command = commands.get(cmd.value);
+			if (command) {
+				try {
+					await command.execute(message, new Args(out), locale);
+				} catch (error) {
+					void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+				}
+
+				continue;
+			}
 		}
+
+		{
+			const lexer = new Lexer(message.content).setQuotes(quotes);
+			const tokens = lexer.lex();
+			const parser = new Parser(tokens).setUnorderedStrategy(prefixedStrategy(flagPrefixes, optionSeparators));
+			const out = parser.parse();
+
+			for (const command of commands.values()) {
+				if (!command.regExp) continue;
+				const match = command.regExp.exec(message.content);
+				if (!match) continue;
+
+				try {
+					await command.execute(message, new Args(out), locale, { regexMatch: match });
+				} catch (error) {
+					void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+				}
+
+				break;
+			}
+		}
+
+		continue;
 	}
 })();
