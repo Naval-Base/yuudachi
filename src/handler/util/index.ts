@@ -29,6 +29,7 @@ export function ellipsis(text: string, total: number): string {
 
 export function truncateEmbed(embed: Embed): Embed {
 	return {
+		...embed,
 		description: embed.description ? ellipsis(embed.description, EMBED_DESCRIPTION_LIMIT) : undefined,
 		title: embed.title ? ellipsis(embed.title, EMBED_TITLE_LIMIT) : undefined,
 		author: embed.author

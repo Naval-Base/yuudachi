@@ -144,4 +144,37 @@ describe('truncateEmbed', () => {
 		expect(truncated.fields.length).toBeLessThanOrEqual(EMBED_FIELD_LIMIT);
 		expect(truncated.description).toBe(embed.description);
 	});
+
+	test('no properties missing', () => {
+		const embed = {
+			author: {
+				icon_url: 'icon_url',
+				name: 'name',
+				url: 'url',
+			},
+			color: 1,
+			description: 'description',
+			fields: [
+				{
+					name: 'name',
+					value: 'value',
+				},
+			],
+			footer: {
+				text: 'name',
+				icon_url: 'icon_url',
+			},
+			image: {
+				url: 'url',
+			},
+			thumbnail: {
+				url: 'url',
+			},
+			timestamp: 'timestamp',
+			url: 'url',
+			title: 'title',
+		};
+
+		expect(truncateEmbed(embed)).toMatchObject(embed);
+	});
 });
