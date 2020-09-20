@@ -10,10 +10,21 @@ import { addField, truncateEmbed } from '../../../util';
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
 import { GitHubAPIData, isPR, GitHubReviewDecision, GitHubReviewState } from '../../interfaces/GitHub';
+import {
+	GITHUB_BASE_URL,
+	GITHUB_COLOR_CLOSED,
+	GITHUB_COLOR_DRAFT,
+	GITHUB_COLOR_MERGED,
+	GITHUB_COLOR_OPEN,
+	GITHUB_ICON_ISSUE_CLOSED,
+	GITHUB_ICON_ISSUE_OPEN,
+	GITHUB_ICON_PR_CLOSED,
+	GITHUB_ICON_PR_DRAFT,
+	GITHUB_ICON_PR_MERGED,
+	GITHUB_ICON_PR_OPEN,
+} from '../../../Constants';
 
 // #region typings // TODO: remove section (indev)
-
-const BASE_URL = 'https://api.github.com/graphql';
 
 enum ResultStatePR {
 	OPEN = 'OPEN',
@@ -32,13 +43,6 @@ enum InstallableState {
 	DRAFT = 'DRAFT',
 }
 
-enum StateColors {
-	OPEN = 4827469,
-	CLOSED = 12267569,
-	MERGED = 6441376,
-	DRAFT = 12961221,
-}
-
 const Timestamps = {
 	OPEN: 'publishedAt',
 	CLOSED: 'closedAt',
@@ -54,18 +58,6 @@ interface RepositoryEntry {
 type TimestampsWithoutMerged = Omit<typeof Timestamps, 'MERGED'>;
 
 type TimestampsWithoutMergedKey = TimestampsWithoutMerged[keyof TimestampsWithoutMerged];
-
-enum PRIcons {
-	OPEN = 'https://cdn.discordapp.com/emojis/751210109333405727.png',
-	CLOSED = 'https://cdn.discordapp.com/emojis/751210080459817092.png',
-	MERGED = 'https://cdn.discordapp.com/emojis/751210169609748481.png',
-	DRAFT = 'https://cdn.discordapp.com/emojis/751210097463525377.png',
-}
-
-enum IssueIcons {
-	OPEN = 'https://cdn.discordapp.com/emojis/751210140086042686.png?v=1',
-	CLOSED = 'https://cdn.discordapp.com/emojis/751210129977901100.png',
-}
 
 // #endregion typings
 
@@ -116,7 +108,7 @@ export default class IssuePRLookup implements Command {
 
 		try {
 			const query = IssuePRLookup.buildQuery(owner, repository, num);
-			const res = await fetch(BASE_URL, {
+			const res = await fetch(GITHUB_BASE_URL, {
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${githubToken}`,
@@ -144,8 +136,16 @@ export default class IssuePRLookup implements Command {
 
 			// footer icon
 			const icon_url = isPR(issue)
-				? PRIcons[resultState as ResultStatePR]
-				: IssueIcons[resultState as ResultStateIssue];
+				? resultState === ResultStatePR['OPEN']
+					? GITHUB_ICON_PR_OPEN
+					: resultState === ResultStatePR['CLOSED']
+					? GITHUB_ICON_PR_CLOSED
+					: resultState === ResultStatePR['MERGED']
+					? GITHUB_ICON_PR_MERGED
+					: GITHUB_ICON_PR_DRAFT
+				: resultState === ResultStateIssue['OPEN']
+				? GITHUB_ICON_ISSUE_OPEN
+				: GITHUB_ICON_ISSUE_CLOSED;
 
 			// footer text
 			const comments = issue.comments.totalCount
@@ -175,6 +175,19 @@ export default class IssuePRLookup implements Command {
 			// timestamp
 			const timestampProperty = Timestamps[resultState];
 
+			// color
+			const color = isPR(issue)
+				? resultState === ResultStatePR['OPEN']
+					? GITHUB_COLOR_OPEN
+					: resultState === ResultStatePR['CLOSED']
+					? GITHUB_COLOR_CLOSED
+					: resultState === ResultStatePR['MERGED']
+					? GITHUB_COLOR_MERGED
+					: GITHUB_COLOR_DRAFT
+				: resultState === ResultStateIssue['OPEN']
+				? GITHUB_COLOR_OPEN
+				: GITHUB_COLOR_CLOSED;
+
 			const e1: Embed = {
 				author: {
 					icon_url: `${issue.author.avatarUrl}?anticache=${Date.now()}`,
@@ -184,7 +197,7 @@ export default class IssuePRLookup implements Command {
 				title: `#${issue.number} ${issue.title}`,
 				url: issue.url,
 				footer: { text: footerText, icon_url },
-				color: StateColors[resultState],
+				color,
 				timestamp: isPR(issue) ? issue[timestampProperty]! : issue[timestampProperty as TimestampsWithoutMergedKey]!,
 			};
 

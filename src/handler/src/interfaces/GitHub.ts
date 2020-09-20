@@ -8,12 +8,6 @@ export interface GitHubUser {
 	login: string;
 }
 
-export interface GitHubLabel {
-	name: string;
-	color: string;
-	url: string;
-}
-
 export interface GitHubCommit {
 	abbreviatedOid: string;
 }
