@@ -54,7 +54,11 @@
 						"changes_requested": "Reviews (status: changes requested)"
 					}
 				},
+				"args_missing": "Missing arguments, correct usage: `issue-pr <owner> <repository> <issue>` or `issue-pr <alias> <issue>`",
 				"no_token": "Could not access GitHub token to use.",
+				"invalid_owner": "Please provide a valid GitHub owner.",
+				"invalid_repository": "Please provide a valid GitHub repository.",
+				"invalid_issue": "Please provide a valid issue number.",
 				"unknown": "unknown"
 			}
 		},

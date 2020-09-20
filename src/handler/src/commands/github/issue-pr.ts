@@ -88,7 +88,7 @@ export default class IssuePRLookup implements Command {
 		const third = args.single();
 
 		if (!first) {
-			throw new Error(i18next.t('TODO', { lng: locale }));
+			throw new Error(i18next.t('command.issue-pr.execute.args_missing', { lng: locale }));
 		}
 
 		const repositoryAliases = await this.fetchAliases(message.guild_id);
@@ -99,19 +99,19 @@ export default class IssuePRLookup implements Command {
 		const num = third ? third : second;
 
 		if (!owner || !repository || !num) {
-			throw new Error(i18next.t('TODO', { lng: locale }));
+			throw new Error(i18next.t('command.issue-pr.execute.args_missing', { lng: locale }));
 		}
 
 		if (!IssuePRLookup.validateGitHubName(owner)) {
-			throw new Error(i18next.t('TODO', { lng: locale }));
+			throw new Error(i18next.t('command.issue-pr.execute.invalid_owner', { lng: locale }));
 		}
 
 		if (!IssuePRLookup.validateGitHubName(repository)) {
-			throw new Error(i18next.t('TODO', { lng: locale }));
+			throw new Error(i18next.t('command.issue-pr.execute.invalid_repository', { lng: locale }));
 		}
 
 		if (isNaN(parseInt(num, 10))) {
-			throw new Error(i18next.t('TODO', { lng: locale }));
+			throw new Error(i18next.t('command.issue-pr.execute.invalid_issue', { lng: locale }));
 		}
 
 		try {
