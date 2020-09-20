@@ -42,14 +42,6 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'commands'), {
 	fileFilter: '*.js',
 });
 
-const quotes: [string, string][] = [
-	['"', '"'],
-	['“', '”'],
-	['「', '」'],
-];
-const flagPrefixes = ['--', '-'];
-const optionSeparators = ['=', ':'];
-
 void (async () => {
 	const conn = await broker.connect('rabbitmq');
 	await broker.subscribe(['MESSAGE_CREATE']);
@@ -91,12 +83,16 @@ void (async () => {
 		const prefix = data?.prefix ?? '?';
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const locale = data?.locale ?? 'en';
-		const lexer = new Lexer(message.content).setQuotes(quotes);
+		const lexer = new Lexer(message.content).setQuotes([
+			['"', '"'],
+			['“', '”'],
+			['「', '」'],
+		]);
 		const res = lexer.lexCommand((s) => (s.startsWith(prefix) ? prefix.length : null));
 
 		if (res) {
 			const [cmd, tokens] = res;
-			const parser = new Parser(tokens()).setUnorderedStrategy(prefixedStrategy(flagPrefixes, optionSeparators));
+			const parser = new Parser(tokens()).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
 			const out = parser.parse();
 
 			const command = commands.get(cmd.value);
