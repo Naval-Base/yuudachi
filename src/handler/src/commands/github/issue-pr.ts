@@ -245,8 +245,8 @@ export default class IssuePRLookup implements Command {
 			this.rest.post(`/channels/${message.channel_id}/messages`, {
 				embed: truncateEmbed(e3),
 			});
-		} catch (e) {
-			console.error(e); // TODO: REMOVE
+		} catch (_) {
+			throw new Error(i18next.t('command.issue-pr.execute.error', { lng: locale }));
 		}
 	}
 

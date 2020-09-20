@@ -36,6 +36,7 @@
 					"merge": "merged",
 					"open": "opened"
 				},
+				"error": "Error while trying to fetch GitHub API information.",
 				"review_state": {
 					"approved": "approved",
 					"review_required": "review required",
