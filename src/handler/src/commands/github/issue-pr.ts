@@ -1,4 +1,4 @@
-import { Args, joinTokens } from 'lexure';
+import { Args } from 'lexure';
 import { injectable, inject } from 'tsyringe';
 import { Message, Embed } from '@spectacles/types';
 import { Sql } from 'postgres';
@@ -9,54 +9,11 @@ import { addField, truncateEmbed } from '../../../util';
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
-import { GitHubAPIData, isPR, GitHubReview, GitHubReviewDecision, GitHubReviewState } from '../../interfaces/GitHub';
+import { GitHubAPIData, isPR, GitHubReviewDecision, GitHubReviewState } from '../../interfaces/GitHub';
 
 // #region typings // TODO: remove section (indev)
 
 const BASE_URL = 'https://api.github.com/graphql';
-
-interface StringStringMapping {
-	[index: string]: string | undefined;
-}
-
-interface StringReviewMapping {
-	[index: string]: GitHubReview | undefined;
-}
-
-const RepositoryAliases: StringStringMapping = {
-	g: 'discord.js',
-	c: 'collection',
-	dapi: 'discord-api-docs',
-	next: 'discord.js-next',
-} as const;
-
-const LabelColors: StringStringMapping = {
-	'0075ca': '<:0075ca:751210299394359316>',
-	'027b69': '<:027b69:751210290846367825>',
-	'1d637f': '<:1d637f:751210249721217155>',
-	'276bd1': '<:276bd1:751210308500062310>',
-	'4b1f8e': '<:4b1f8e:751210257811767297>',
-	'7057ff': '<:7057ff:751210318385905724>',
-	'7ef7ef': '<:7ef7ef:751210266217414768>',
-	aed5fc: '<:aed5fc:751210330020905003>',
-	b6b1f9: '<:b6b1f9:751210340577968199>',
-	c10f47: '<:c10f47:751210349918683249>',
-	c66037: '<:c66037:751210359477764126>',
-	cfd3d7: '<:cfd3d7:751210367430033489>',
-	d73a4a: '<:d73a4a:751210378981015565>',
-	d876e3: '<:d876e3:751210389143814274>',
-	default: '<:default:751211609430425611>',
-	e4e669: '<:e4e669:751210418999001128>',
-	e4f486: '<:e4f486:751210427777679362>',
-	e8be8b: '<:e8be8b:751210441707094036>',
-	ea8785: '<:ea8785:751210466033795274>',
-	f06dff: '<:f06dff:751210476523749487>',
-	fbca04: '<:fbca04:751210487508762675>',
-	fc1423: '<:fc1423:751210498950955048>',
-	fcf95a: '<:fcf95a:751210515203620928>',
-	ffccd7: '<:ffccd7:751210528021544991>',
-	ffffff: '<:ffffff:751210537597272076>',
-} as const;
 
 enum ResultStatePR {
 	OPEN = 'OPEN',
@@ -72,7 +29,7 @@ enum ResultStateIssue {
 
 enum InstallableState {
 	OPEN = 'OPEN',
-	DRAFT = 'Draft',
+	DRAFT = 'DRAFT',
 }
 
 enum StateColors {
@@ -89,34 +46,14 @@ const Timestamps = {
 	DRAFT: 'publishedAt',
 } as const;
 
+interface RepositoryEntry {
+	owner: string;
+	repository: string;
+}
+
 type TimestampsWithoutMerged = Omit<typeof Timestamps, 'MERGED'>;
 
 type TimestampsWithoutMergedKey = TimestampsWithoutMerged[keyof TimestampsWithoutMerged];
-
-enum TickStates {
-	TICK = '<:tick:747502128003809332>',
-	NO_TICK = '<:notick:751200038323093521>',
-}
-
-enum AllowedRepositories {
-	'action-docs',
-	'action-eslint',
-	'action-webpack',
-	'collection',
-	'commando',
-	'discord-api-docs',
-	'discord-api-types',
-	'discord.js-next',
-	'discord.js',
-	'erlpack',
-	'form-data',
-	'guide',
-	'node-pre-gyp',
-	'opus',
-	'rpc',
-	'webhook-filter',
-	'website',
-}
 
 enum PRIcons {
 	OPEN = 'https://cdn.discordapp.com/emojis/751210109333405727.png',
@@ -129,8 +66,6 @@ enum IssueIcons {
 	OPEN = 'https://cdn.discordapp.com/emojis/751210140086042686.png?v=1',
 	CLOSED = 'https://cdn.discordapp.com/emojis/751210129977901100.png',
 }
-
-const MEMBER_BADGE = '<:DiscordJS:751202824804630539>';
 
 // #endregion typings
 
@@ -148,39 +83,43 @@ export default class IssuePRLookup implements Command {
 			throw new Error(i18next.t('command.issue-pr.execute.no_token', { lng: locale }));
 		}
 
-		const rest = joinTokens(args.many());
-		const regex = /(?<repo>\S+)#(?<num>\d+) ?(?<verbose>(--verbose|-verbose|--v|-v))?/i;
+		const first = args.single();
+		const second = args.single();
+		const third = args.single();
 
-		const groups = regex.exec(rest)?.groups;
-
-		if (!groups) {
-			return;
+		if (!first) {
+			throw new Error(i18next.t('TODO', { lng: locale }));
 		}
 
-		const verbose = args.flag('v', 'verbose');
+		const repositoryAliases = await this.fetchAliases(message.guild_id);
+		const aliasEntry = repositoryAliases.get(first);
 
-		const matchRepo = groups.repo.toLowerCase();
-		const matchIssue = groups.num;
+		const owner = third ? first : aliasEntry?.owner;
+		const repository = third ? second : aliasEntry?.repository;
+		const num = third ? third : second;
 
-		const repository = RepositoryAliases[matchRepo] ?? matchRepo;
-		const repositoryValid = IssuePRLookup.isValidRepositoryName(repository);
-
-		if (!repositoryValid) {
-			return;
+		if (!owner || !repository || !num) {
+			throw new Error(i18next.t('TODO', { lng: locale }));
 		}
 
-		const owner = repository === 'discord-api-docs' ? 'discord' : 'discordjs';
+		if (!IssuePRLookup.validateGitHubName(owner)) {
+			throw new Error(i18next.t('TODO', { lng: locale }));
+		}
 
-		if (!Reflect.has(AllowedRepositories, repository.toLowerCase())) {
-			return;
+		if (!IssuePRLookup.validateGitHubName(repository)) {
+			throw new Error(i18next.t('TODO', { lng: locale }));
+		}
+
+		if (isNaN(parseInt(num, 10))) {
+			throw new Error(i18next.t('TODO', { lng: locale }));
 		}
 
 		try {
-			const query = IssuePRLookup.buildQuery(owner, repository, matchIssue);
+			const query = IssuePRLookup.buildQuery(owner, repository, num);
 			const res = await fetch(BASE_URL, {
 				method: 'POST',
 				headers: {
-					Authorization: `Bearer ${process.env.GITHUB_TOKEN!}`,
+					Authorization: `Bearer ${githubToken}`,
 				},
 				body: JSON.stringify({ query }),
 			}).then((res) => res.json());
@@ -203,10 +142,6 @@ export default class IssuePRLookup implements Command {
 				? ResultStateIssue.CLOSED
 				: ResultStateIssue.OPEN;
 
-			// resolve image
-			const imageRegex = /!\[(?<alt>.*)\]\((?<url>.*?(\.png|\.gif|\.jpg))\)/i;
-			const groups = imageRegex.exec(issue.body)?.groups;
-
 			// footer icon
 			const icon_url = isPR(issue)
 				? PRIcons[resultState as ResultStatePR]
@@ -214,7 +149,7 @@ export default class IssuePRLookup implements Command {
 
 			// footer text
 			const comments = issue.comments.totalCount
-				? `(${i18next.t('command.issue-pr.comment_count', { lng: locale, count: issue.comments.totalCount })})`
+				? `(${i18next.t('command.issue-pr.execute.comment_count', { lng: locale, count: issue.comments.totalCount })})`
 				: '';
 
 			const isMerge = isPR(issue) && resultState === 'MERGED';
@@ -235,7 +170,7 @@ export default class IssuePRLookup implements Command {
 				? i18next.t('command.issue-pr.execute.action.draft', { lng: locale })
 				: i18next.t('command.issue-pr.execute.action.open', { lng: locale });
 
-			const text = `${comments}${action}`;
+			const footerText = `${comments} ${action}`;
 
 			// timestamp
 			const timestampProperty = Timestamps[resultState];
@@ -248,19 +183,17 @@ export default class IssuePRLookup implements Command {
 				},
 				title: `#${issue.number} ${issue.title}`,
 				url: issue.url,
-				footer: { text, icon_url },
-				description: verbose ? IssuePRLookup.formatBody(issue.body) : undefined,
+				footer: { text: footerText, icon_url },
 				color: StateColors[resultState],
-				image: verbose && groups ? { url: groups.url } : undefined,
 				timestamp: isPR(issue) ? issue[timestampProperty]! : issue[timestampProperty as TimestampsWithoutMergedKey]!,
 			};
 
 			// install with
-			const installable = resultState in InstallableState;
+			const installable = Reflect.has(InstallableState, resultState);
 			const e2: Embed =
 				isPR(issue) && installable
 					? addField(e1, {
-							name: i18next.t('command.issue-pr.execute.headings.install', { lng: locale }),
+							name: i18next.t('command.issue-pr.execute.heading.install', { lng: locale }),
 							value: `\`npm i ${issue.headRepository.nameWithOwner}#${
 								issue.headRef?.name ?? i18next.t('command.issue-pr.execute.unknown', { lng: locale }) ?? ''
 							}\``,
@@ -268,43 +201,43 @@ export default class IssuePRLookup implements Command {
 					: e1;
 
 			// reviews
-			const reviews = isPR(issue) ? IssuePRLookup.relevantReviews(issue.author.login, issue.reviews.nodes) : [];
+			const reviews = isPR(issue) ? issue.latestOpinionatedReviews?.nodes ?? [] : [];
 			const reviewBody = reviews
 				.map((r) => {
-					const isMember = ['MEMBER', 'OWNER', 'COLLABORATOR'].includes(r.authorAssociation);
-					const reviewBadge = isMember ? MEMBER_BADGE : '';
-					const reviewLink = `[${r.author.login}](${r.url})`;
-					const reviewState = IssuePRLookup.cleanDecision(r.state);
-					return `${reviewBadge} ${reviewLink} ${reviewState}`;
+					const decision = isPR(issue)
+						? r.state === GitHubReviewState['CHANGES_REQUESTED']
+							? i18next.t('command.issue-pr.execute.review_state.changes_requested', { lng: locale })
+							: r.state === GitHubReviewState['APPROVED']
+							? i18next.t('command.issue-pr.execute.review_state.approved', { lng: locale })
+							: r.state === GitHubReviewState['COMMENTED']
+							? i18next.t('command.issue-pr.execute.review_state.commented', { lng: locale })
+							: r.state === GitHubReviewState['DISMISSED']
+							? i18next.t('command.issue-pr.execute.review_state.dismissed', { lng: locale })
+							: i18next.t('command.issue-pr.execute.review_state.pending', { lng: locale })
+						: '';
+					return `${r.author.login} [${decision}](${r.url})`;
 				})
-				.join('\n');
+				.join(', ');
 
-			const reviewTitle = `${i18next.t('command.issue-pr.execute.headings.reviews', { lng: locale })}${
-				isPR(issue) && issue.reviewDecision ? ` (state: ${IssuePRLookup.cleanDecision(issue.reviewDecision)})` : ''
-			}`;
+			const reviewTitle = isPR(issue)
+				? issue.reviewDecision === GitHubReviewDecision['CHANGES_REQUESTED']
+					? i18next.t('command.issue-pr.execute.heading.reviews.changes_requested', { lng: locale })
+					: issue.reviewDecision === GitHubReviewDecision['APPROVED']
+					? i18next.t('command.issue-pr.execute.heading.reviews.approved', { lng: locale })
+					: i18next.t('command.issue-pr.execute.heading.reviews.review_required', { lng: locale })
+				: '';
 
 			const e3: Embed = reviews.length ? addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
 
-			// labels
-			const e4: Embed = issue.labels.nodes.length
-				? addField(e3, {
-						name: i18next.t('command.issue-pr.execute.headings.labels', { lng: locale }),
-						value: issue.labels.nodes
-							.map(
-								(l: { name: string; color: string; url: string }) =>
-									`${IssuePRLookup.label(l.color)}[${l.name}](${l.url})`,
-							)
-							.join(' '),
-				  })
-				: e3;
-
 			this.rest.post(`/channels/${message.channel_id}/messages`, {
-				embed: truncateEmbed(e4),
+				embed: truncateEmbed(e3),
 			});
-		} catch {}
+		} catch (e) {
+			console.error(e); // TODO: REMOVE
+		}
 	}
 
-	private static isValidRepositoryName(name: string): boolean {
+	private static validateGitHubName(name: string): boolean {
 		const reg = /[A-Za-z0-9_.-]+/;
 		const match = reg.exec(name);
 		return name.length === match?.[0].length;
@@ -350,26 +283,17 @@ export default class IssuePRLookup implements Command {
 						title
 						url
 						closed
-						labels(first: 10) {
-							nodes {
-								name
-								color
-								url
-							}
-						}
 						comments {
 							totalCount
 						}
 						reviewDecision
-						reviews(first: 99) {
+						latestOpinionatedReviews(last: 99) {
 							nodes {
 								author {
 									login
-								},
+								}
 								state
 								url
-								authorAssociation
-								createdAt
 							}
 						}
 					}
@@ -386,13 +310,6 @@ export default class IssuePRLookup implements Command {
 						url
 						closed
 						closedAt
-						labels(first: 10) {
-							nodes {
-								name
-								color
-								url
-							}
-						}
 						comments {
 							totalCount
 						}
@@ -402,53 +319,26 @@ export default class IssuePRLookup implements Command {
 		}`;
 	}
 
-	private static relevantReviews(author: string, reviews?: GitHubReview[]): GitHubReview[] {
-		if (!reviews) {
-			return [];
+	private async fetchAliases(guild: string): Promise<Map<string, RepositoryEntry>> {
+		const [result] = await this.sql<{ repository_aliases: string[] }>`
+			select repository_aliases
+			from guild_settings
+			where guild_id = ${guild}
+		`;
+
+		const mapping: Map<string, RepositoryEntry> = new Map();
+
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		if (!result?.repository_aliases?.length) {
+			return mapping;
 		}
 
-		const reviewMap = reviews.reduce((acc, current) => {
-			const login = current.author.login;
-			if (login === author) {
-				return acc;
-			}
-			const prev = acc[login];
-			if (prev) {
-				const currDate = new Date(current.createdAt);
-				const prevDate = new Date(prev.createdAt);
-				if (currDate.getTime() > prevDate.getTime()) {
-					acc[login] = current;
-				}
-			}
-			acc[login] = current;
-			return acc;
-		}, {} as StringReviewMapping);
-		const values = Object.values(reviewMap).filter((r) => r) as GitHubReview[];
-		return values.sort((a, b) => {
-			const aDate = new Date(a.createdAt);
-			const bDate = new Date(b.createdAt);
-			return aDate.getTime() - bDate.getTime();
-		});
-	}
+		for (const r of result.repository_aliases) {
+			const [alias, rest] = r.split(':');
+			const [owner, repository] = rest.split('/');
+			mapping.set(alias, { owner, repository });
+		}
 
-	private static formatBody(body: string): string {
-		const commentRegex = /<!--[\s\S]*?-->/gi;
-		const boxRegex = /- \[x\]/gi;
-		const emptyBoxRegex = /- \[ \]/gi;
-		const multiLinebreakRegex = /\n(?:\s*\n)+/gim;
-
-		return body
-			.replace(commentRegex, '')
-			.replace(multiLinebreakRegex, '\n\n')
-			.replace(boxRegex, TickStates.TICK)
-			.replace(emptyBoxRegex, TickStates.NO_TICK);
-	}
-
-	private static label(color: string): string {
-		return LabelColors[color] ?? LabelColors.default!;
-	}
-
-	private static cleanDecision(decision: GitHubReviewDecision | GitHubReviewState): string {
-		return decision.toLowerCase().replace(/_/g, ' ');
+		return mapping;
 	}
 }

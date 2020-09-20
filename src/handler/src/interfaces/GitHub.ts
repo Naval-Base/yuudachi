@@ -22,8 +22,6 @@ export interface GitHubReview {
 	author: GitHubUser;
 	state: GitHubReviewState;
 	url: string;
-	authorAssociation: GitHubAuthorAssociation;
-	createdAt: string;
 }
 
 export enum GitHubReviewState {
@@ -32,16 +30,6 @@ export enum GitHubReviewState {
 	APPROVED = 'APPROVED',
 	CHANGES_REQUESTED = 'CHANGES_REQUESTED',
 	DISMISSED = 'DISMISSED',
-}
-
-export enum GitHubAuthorAssociation {
-	MEMBER = 'MEMBER',
-	OWNER = 'OWNER',
-	COLLABORATOR = 'COLLABORATOR',
-	CONTRIBUTOR = 'CONTRIBUTOR',
-	FIRST_TIME_CONTRIBUTOR = 'FIRST_TIME_CONTRIBUTOR',
-	FIRST_TIMER = 'FIRST_TIMER',
-	NONE = 'NONE',
 }
 
 export interface GitHubIssue {
@@ -53,7 +41,6 @@ export interface GitHubIssue {
 	url: string;
 	closed: boolean;
 	closedAt: string | null;
-	labels: { nodes: GitHubLabel[] };
 	comments: { totalCount: number };
 }
 
@@ -73,7 +60,7 @@ export interface GitHubPRData {
 	mergedBy: GitHubUser | null;
 	isDraft: boolean;
 	reviewDecision: GitHubReviewDecision | null;
-	reviews: { nodes: GitHubReview[] };
+	latestOpinionatedReviews: { nodes: GitHubReview[] } | null;
 }
 
 export type GitHubPR = GitHubIssue & GitHubPRData;

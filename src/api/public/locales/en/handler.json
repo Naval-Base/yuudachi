@@ -1,37 +1,28 @@
 {
 	"command": {
-		"github": {
+		"githubalias": {
 			"common": {
 				"execute": {
 					"no_guild": "Please use this command in the server you want to edit settings for"
 				},
 				"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
 				"invalid_sub": "Invalid sub-command `{{command}}`. Valid arguments are: {{valid_commands}}",
-				"target": {
-					"repositories": "repositories",
-					"aliases": "repository aliases",
-					"labels": "labels"
-				},
-				"target_format": {
-					"repository": "`owner/repository`, a GitHub HTTPS link, a GitHub SSH link",
-					"alias": "`alias:owner/repository`",
-					"label": "`<hexColor emoji>` *(to work properly the bot needs to be on the server the emoji is from and the emoji names have to match the color codes of the github labels without leading `#`)*"
-				}
+				"alias_format": "`alias:owner/repository`"
 			},
 			"add": {
-				"no_args": "Please provide valid {{target}} to add. Valid format: {{- format}}.",
-				"no_add": "No new {{target}} were added.",
-				"title": "The following {{target}} have been enabled on this guild / server:"
+				"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}.",
+				"no_add": "No new repository aliases were added.",
+				"title": "The following repository aliases have been enabled on this guild / server:"
 			},
 			"remove": {
-				"no_args": "Please provide valid {{target}} to remove. Valid format: {{- format}}.",
-				"no_current": "This guild / server does not have any {{target}} enabled at this time.",
-				"no_remove": "No {{target}} have been removed.",
-				"title": "The following {{target}} have been disabled on this guild / server:"
+				"no_args": "Please provide valid repository aliases to remove. Valid format: {{- format}}.",
+				"no_current": "This guild / server does not have any repository aliases enabled at this time.",
+				"no_remove": "No repository aliases have been removed.",
+				"title": "The following repository aliases have been disabled on this guild / server:"
 			},
 			"list": {
-				"no_current": "This guild / server does not have any {{target}} enabled at this time.",
-				"title": "The following {{target}} are enabled on this guild / server:"
+				"no_current": "This guild / server does not have any repository aliases at this time.",
+				"title": "The following repository aliases are enabled on this guild / server:"
 			}
 		},
 		"issue-pr": {
@@ -45,12 +36,23 @@
 					"merge": "merged",
 					"open": "opened"
 				},
+				"review_state": {
+					"approved": "approved",
+					"review_required": "review required",
+					"changes_requested": "changes requested",
+					"commented": "commented",
+					"dismissed": "dismissed",
+					"pending": "pending"
+				},
 				"comment_count": "{{count}} comment",
 				"comment_count_plural": "{{count}} comments",
-				"headings": {
+				"heading": {
 					"install": "Install with",
-					"labels": "Labels",
-					"reviews": "Reviews"
+					"reviews": {
+						"approved": "Reviews (status: approved)",
+						"review_required": "Reviews (status: review required)",
+						"changes_requested": "Reviews (status: changes requested)"
+					}
 				},
 				"no_token": "Could not access GitHub token to use.",
 				"unknown": "unknown"
