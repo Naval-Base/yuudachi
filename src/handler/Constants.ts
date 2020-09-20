@@ -5,6 +5,7 @@ export const EMBED_AUTHOR_NAME_LIMIT = 256;
 export const EMBED_FIELD_LIMIT = 25;
 export const EMBED_FIELD_NAME_LIMIT = 256;
 export const EMBED_FIELD_VALUE_LIMIT = 1024;
+export const MESSAGE_CONTENT_LIMIT = 2000;
 export const GITHUB_BASE_URL = 'https://api.github.com/graphql';
 export const GITHUB_ICON_PR_OPEN = 'https://cdn.discordapp.com/emojis/751210109333405727.png';
 export const GITHUB_ICON_PR_CLOSED = 'https://cdn.discordapp.com/emojis/751210080459817092.png';

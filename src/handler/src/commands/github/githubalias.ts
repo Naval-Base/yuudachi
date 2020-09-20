@@ -7,7 +7,8 @@ import i18next from 'i18next';
 
 import Command from '../../Command';
 import { kSQL } from '../../tokens';
-import { uniqueValidatedValues } from '../../../util';
+import { ellipsis, uniqueValidatedValues } from '../../../util';
+import { MESSAGE_CONTENT_LIMIT } from '../../../Constants';
 
 @injectable()
 export default class GitHubAliasCommand implements Command {
@@ -102,7 +103,7 @@ export default class GitHubAliasCommand implements Command {
 			.join('\n')}`;
 
 		void this.rest.post(`/channels/${message.channel_id}/messages`, {
-			content,
+			content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
 		});
 	}
 
@@ -146,7 +147,7 @@ export default class GitHubAliasCommand implements Command {
 			.join(', ')}`;
 
 		void this.rest.post(`/channels/${message.channel_id}/messages`, {
-			content,
+			content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
 		});
 	}
 
@@ -164,7 +165,7 @@ export default class GitHubAliasCommand implements Command {
 			.join('\n')}`;
 
 		void this.rest.post(`/channels/${message.channel_id}/messages`, {
-			content,
+			content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
 		});
 	}
 
