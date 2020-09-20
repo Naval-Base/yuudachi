@@ -34,8 +34,6 @@ export default class GitHubAliasCommand implements Command {
 		const candidates = args.many().map((token) => token.value);
 		const cleaned = GitHubAliasCommand.cleanAliasCandidates(candidates);
 
-		console.log(cleaned);
-
 		if (!sub) {
 			throw new Error(
 				i18next.t('command.githubalias.common.no_sub', {
