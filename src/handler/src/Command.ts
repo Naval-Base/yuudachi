@@ -10,11 +10,12 @@ export default interface Command {
 	clientPermissions?: string[];
 	userPermissions?: string[];
 	regExp?: RegExp;
-	execute(message: Message, args: Args, locale: string, information?: CommandAdditions): unknown | Promise<unknown>;
+	execute(message: Message, args: Args, locale: string, executionContext: ExecutionContext): unknown | Promise<unknown>;
 }
 
-export interface CommandAdditions {
-	regexMatches?: RegExpExecArray;
+export enum ExecutionContext {
+	PREFIXED = 0,
+	REGEXP,
 }
 
 export interface CommandInfo {
