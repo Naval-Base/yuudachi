@@ -14,7 +14,7 @@ export default interface Command {
 }
 
 export enum ExecutionContext {
-	PREFIXED = 0,
+	PREFIXED,
 	REGEXP,
 }
 
