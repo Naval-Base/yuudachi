@@ -89,6 +89,18 @@ describe('truncateEmbed', () => {
 		expect(truncated.description).toBe(embed.description);
 	});
 
+	test('truncate description, author no name', () => {
+		const embed = {
+			author: {
+				icon_url: 'foo.bar.jpg',
+				url: 'foo.bar',
+			},
+			description: 'a'.repeat(EMBED_DESCRIPTION_LIMIT + 1),
+		};
+		expect(truncateEmbed(embed).description.length).toBeLessThanOrEqual(EMBED_DESCRIPTION_LIMIT);
+		expect(truncateEmbed(embed).author.name).toBe(undefined);
+	});
+
 	test('truncate footer text', () => {
 		const embed = {
 			footer: {
@@ -131,5 +143,38 @@ describe('truncateEmbed', () => {
 		const truncated = truncateEmbed(embed);
 		expect(truncated.fields.length).toBeLessThanOrEqual(EMBED_FIELD_LIMIT);
 		expect(truncated.description).toBe(embed.description);
+	});
+
+	test('no properties missing', () => {
+		const embed = {
+			author: {
+				icon_url: 'icon_url',
+				name: 'name',
+				url: 'url',
+			},
+			color: 1,
+			description: 'description',
+			fields: [
+				{
+					name: 'name',
+					value: 'value',
+				},
+			],
+			footer: {
+				text: 'name',
+				icon_url: 'icon_url',
+			},
+			image: {
+				url: 'url',
+			},
+			thumbnail: {
+				url: 'url',
+			},
+			timestamp: 'timestamp',
+			url: 'url',
+			title: 'title',
+		};
+
+		expect(truncateEmbed(embed)).toMatchObject(embed);
 	});
 });
