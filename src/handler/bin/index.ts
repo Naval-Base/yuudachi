@@ -4,7 +4,7 @@ import { Amqp } from '@spectacles/brokers';
 import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import postgres from 'postgres';
-import { Lexer, Parser, prefixedStrategy, Args } from 'lexure';
+import { Lexer, Parser, prefixedStrategy, Args, Token, ParserOutput } from 'lexure';
 import { resolve } from 'path';
 import readdirp from 'readdirp';
 import Rest from '@yuudachi/rest';
@@ -14,7 +14,7 @@ import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
 import { decode, encode } from '@msgpack/msgpack';
 
-import Command, { commandInfo } from '../src/Command';
+import Command, { commandInfo, ExecutionContext } from '../src/Command';
 import { kSQL } from '../src/tokens';
 
 const token = process.env.DISCORD_TOKEN;
@@ -89,17 +89,46 @@ void (async () => {
 			['「', '」'],
 		]);
 		const res = lexer.lexCommand((s) => (s.startsWith(prefix) ? prefix.length : null));
-		if (!res) continue;
-		const [cmd, tokens] = res;
-		const parser = new Parser(tokens()).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
-		const out = parser.parse();
 
-		const command = commands.get(cmd.value);
-		if (!command) continue;
-		try {
-			await command.execute(message, new Args(out), locale);
-		} catch (error) {
-			void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+		if (res) {
+			const [cmd, tokens] = res;
+			const parser = new Parser(tokens()).setUnorderedStrategy(prefixedStrategy(['--', '-'], ['=', ':']));
+			const out = parser.parse();
+
+			const command = commands.get(cmd.value);
+			if (command) {
+				try {
+					await command.execute(message, new Args(out), locale, ExecutionContext['PREFIXED']);
+				} catch (error) {
+					void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+				}
+
+				continue;
+			}
 		}
+
+		for (const command of commands.values()) {
+			if (!command.regExp) continue;
+			const match = command.regExp.exec(message.content);
+			if (!match) continue;
+
+			const [, ...args] = match;
+			const tokens: Token[] = args.map((s) => ({ raw: s, trailing: '', value: s }));
+			const out: ParserOutput = {
+				ordered: tokens,
+				flags: new Set(),
+				options: new Map(),
+			};
+
+			try {
+				await command.execute(message, new Args(out), locale, ExecutionContext['REGEXP']);
+			} catch (error) {
+				void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+			}
+
+			break;
+		}
+
+		continue;
 	}
 })();
