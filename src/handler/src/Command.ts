@@ -9,7 +9,13 @@ export default interface Command {
 	description?: string;
 	clientPermissions?: string[];
 	userPermissions?: string[];
-	execute(message: Message, args: Args, locale: string): unknown | Promise<unknown>;
+	regExp?: RegExp;
+	execute(message: Message, args: Args, locale: string, executionContext: ExecutionContext): unknown | Promise<unknown>;
+}
+
+export enum ExecutionContext {
+	PREFIXED,
+	REGEXP,
 }
 
 export interface CommandInfo {
