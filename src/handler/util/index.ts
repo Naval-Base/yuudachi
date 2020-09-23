@@ -29,20 +29,21 @@ export function ellipsis(text: string, total: number): string {
 
 export function truncateEmbed(embed: Embed): Embed {
 	return {
-		description: embed.description ? ellipsis(embed.description, EMBED_DESCRIPTION_LIMIT) : null,
-		title: embed.title ? ellipsis(embed.title, EMBED_TITLE_LIMIT) : null,
+		...embed,
+		description: embed.description ? ellipsis(embed.description, EMBED_DESCRIPTION_LIMIT) : undefined,
+		title: embed.title ? ellipsis(embed.title, EMBED_TITLE_LIMIT) : undefined,
 		author: embed.author
 			? {
 					...embed.author,
-					name: ellipsis(embed.author.name, EMBED_AUTHOR_NAME_LIMIT),
+					name: embed.author.name ? ellipsis(embed.author.name, EMBED_AUTHOR_NAME_LIMIT) : undefined,
 			  }
-			: null,
+			: undefined,
 		footer: embed.footer
 			? {
 					...embed.footer,
 					text: ellipsis(embed.footer.text, EMBED_FOOTER_TEXT_LIMIT),
 			  }
-			: null,
+			: undefined,
 		fields: embed.fields
 			? embed.fields
 					.map((field) => {
