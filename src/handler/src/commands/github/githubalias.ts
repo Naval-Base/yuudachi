@@ -193,14 +193,14 @@ export default class GitHubAliasCommand implements Command {
 	}
 
 	private static resolveAlias(input: string): string | undefined {
-		const regex = /(.+):(?:https:\/\/github\.com\/|git@github\.com:)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+?)(?:\.git)?$/;
+		const regex = /([A-Za-z0-9_.-]+):(?:https:\/\/github\.com\/|git@github\.com:)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+?)(?:\.git)?$/;
 		const match = regex.exec(input.trim());
 
 		if (!match) {
 			return undefined;
 		}
 
-		const [_, alias, repository] = match;
+		const [, alias, repository] = match;
 		return `${alias.toLowerCase()}:${repository.toLowerCase()}`;
 	}
 }
