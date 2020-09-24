@@ -63,6 +63,8 @@ type TimestampsWithoutMergedKey = TimestampsWithoutMerged[keyof TimestampsWithou
 
 @injectable()
 export default class IssuePRLookup implements Command {
+	public readonly regExp = /(?:([A-Za-z0-9_.-]+)\/)?([A-Za-z0-9_.-]+)#(\d+)/;
+
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: Message, args: Args, locale: string) {
