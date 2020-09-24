@@ -113,7 +113,7 @@ void (async () => {
 			if (!match) continue;
 
 			const [, ...args] = match;
-			const tokens: Token[] = args.map((s) => ({ raw: s, trailing: '', value: s }));
+			const tokens: Token[] = args.filter((v) => v).map((s) => ({ raw: s, trailing: '', value: s }));
 			const out: ParserOutput = {
 				ordered: tokens,
 				flags: new Set(),
