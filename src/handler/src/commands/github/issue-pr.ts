@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 import { addField, truncateEmbed } from '../../../util';
 
-import Command from '../../Command';
+import Command, { ExecutionContext } from '../../Command';
 import { kSQL } from '../../tokens';
 import { GitHubAPIData, isPR, GitHubReviewDecision, GitHubReviewState } from '../../interfaces/GitHub';
 import {
@@ -67,13 +67,15 @@ export default class IssuePRLookup implements Command {
 
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(message: Message, args: Args, locale: string) {
+	public async execute(message: Message, args: Args, locale: string, executionContext: ExecutionContext) {
+		const isPrefixed = executionContext === ExecutionContext['PREFIXED'];
 		if (!message.guild_id) {
 			return;
 		}
 
 		const githubToken = process.env.GITHUB_TOKEN;
 		if (!githubToken) {
+			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.issue-pr.execute.no_token', { lng: locale }));
 		}
 
@@ -82,6 +84,7 @@ export default class IssuePRLookup implements Command {
 		const third = args.single();
 
 		if (!first) {
+			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.issue-pr.execute.args_missing', { lng: locale }));
 		}
 
@@ -93,18 +96,22 @@ export default class IssuePRLookup implements Command {
 		const num = third ? third : second;
 
 		if (!owner || !repository || !num) {
+			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.issue-pr.execute.args_missing', { lng: locale }));
 		}
 
 		if (!IssuePRLookup.validateGitHubName(owner)) {
+			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.issue-pr.execute.invalid_owner', { lng: locale }));
 		}
 
 		if (!IssuePRLookup.validateGitHubName(repository)) {
+			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.issue-pr.execute.invalid_repository', { lng: locale }));
 		}
 
 		if (isNaN(parseInt(num, 10))) {
+			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.issue-pr.execute.invalid_issue', { lng: locale }));
 		}
 
@@ -248,6 +255,7 @@ export default class IssuePRLookup implements Command {
 				embed: truncateEmbed(e3),
 			});
 		} catch (_) {
+			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.issue-pr.execute.error', { lng: locale }));
 		}
 	}
