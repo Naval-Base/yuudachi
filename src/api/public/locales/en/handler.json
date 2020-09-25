@@ -41,7 +41,7 @@
 				"unknown": "unknown"
 			},
 			"execute": {
-				"args_missing": "Missing arguments, correct usage: `github <owner> <repository> <issue>`, `github <alias> <issue>`, `github alias <add|remove> <...alias>`, `github alias list`",
+				"args_missing": "Missing arguments, correct usage: \n• `github <owner> <repository> <issue>` \n• `github <alias> <issue>`\n• `github alias <add|remove> <...alias>`\n• `github alias list`",
 				"no_token": "Could not access GitHub token to use.",
 				"invalid_owner": "Please provide a valid GitHub owner.",
 				"invalid_repository": "Please provide a valid GitHub repository.",
