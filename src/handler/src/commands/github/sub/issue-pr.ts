@@ -259,6 +259,7 @@ function buildQuery(owner: string, repository: string, issueID: number) {
 						title
 						url
 						closed
+						closedAt
 						comments {
 							totalCount
 						}
