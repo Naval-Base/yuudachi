@@ -14,14 +14,6 @@ export async function alias(message: Message, args: Args, locale: string, sql: S
 		throw new Error(i18next.t('command.github.alias.common.execute.no_guild', { lng: locale }));
 	}
 
-	// TODO: remove DEBUG:
-	if (args.flag('drop', 'd')) {
-		await sql`
-				delete from guild_settings
-				where guild_id = ${message.guild_id}
-			`;
-	}
-
 	const current = await fetchAliases(message.guild_id, sql);
 
 	const sub = args.single();
