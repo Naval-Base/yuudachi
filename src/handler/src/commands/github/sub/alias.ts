@@ -196,7 +196,7 @@ async function fetchAliases(guild: string, sql: Sql<any>): Promise<string[]> {
 }
 
 function cleanAliasCandidates(inputs: string[], predicate: (current: string) => boolean | undefined): string[] {
-	return inputs.map((i) => resolveAlias(i)).filter((e) => e && predicate(e)) as string[];
+	return inputs.map((i) => resolveAlias(i)).filter((e) => e && !predicate(e)) as string[];
 }
 
 function resolveAlias(input: string): string | undefined {
