@@ -7,6 +7,7 @@ import { ellipsis, uniqueValidatedValues } from '../../../../util';
 import { MESSAGE_CONTENT_LIMIT } from '../../../../Constants';
 
 const validSubCommands = ['`add`', '`remove`', '`list`'];
+const regExp = /([A-Za-z0-9_.-]+):(?:https:\/\/github\.com\/|git@github\.com:)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+?)(?:\.git)?$/;
 
 export async function alias(message: Message, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
 	if (!message.guild_id) {
@@ -25,7 +26,6 @@ export async function alias(message: Message, args: Args, locale: string, sql: S
 
 	const sub = args.single();
 	const candidates = args.many().map((token) => token.value);
-	const cleaned = cleanAliasCandidates(candidates);
 
 	if (!sub) {
 		throw new Error(
@@ -38,11 +38,19 @@ export async function alias(message: Message, args: Args, locale: string, sql: S
 
 	switch (sub) {
 		case 'add': {
+			const predicate = (s: string) => {
+				return current.some((c) => {
+					const [alias] = c.split(':');
+					return alias === s;
+				});
+			};
+			const cleaned = cleanAliasCandidates(candidates, predicate);
 			return add(message, locale, current, cleaned, sql, rest);
 		}
 
 		case 'remove':
 		case 'delete': {
+			const cleaned = cleanAliasCandidates(candidates, () => true);
 			return remove(message, locale, current, cleaned, sql, rest);
 		}
 
@@ -187,12 +195,12 @@ async function fetchAliases(guild: string, sql: Sql<any>): Promise<string[]> {
 	return result.repository_aliases;
 }
 
-function cleanAliasCandidates(inputs: string[]): string[] {
-	return inputs.map((i) => resolveAlias(i)).filter((e) => e) as string[];
+function cleanAliasCandidates(inputs: string[], predicate: (current: string) => boolean | undefined): string[] {
+	return inputs.map((i) => resolveAlias(i)).filter((e) => e && predicate(e)) as string[];
 }
 
 function resolveAlias(input: string): string | undefined {
-	const regex = /([A-Za-z0-9_.-]+):(?:https:\/\/github\.com\/|git@github\.com:)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+?)(?:\.git)?$/;
+	const regex = new RegExp(regExp);
 	const match = regex.exec(input.trim());
 
 	if (!match) {

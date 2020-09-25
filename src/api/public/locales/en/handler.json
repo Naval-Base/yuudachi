@@ -11,7 +11,7 @@
 					"alias_format": "`alias:owner/repository`"
 				},
 				"add": {
-					"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}.",
+					"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}. Also make sure the desired alias does not already exist.",
 					"no_add": "No new repository aliases were added.",
 					"title": "The following repository aliases have been enabled on this guild / server:"
 				},
