@@ -205,7 +205,7 @@ export async function issuePR(
 
 		const e3: Embed = reviews.length ? addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
 
-		rest.post(`/channels/${message.channel_id}/messages`, {
+		await rest.post(`/channels/${message.channel_id}/messages`, {
 			embed: truncateEmbed(e3),
 		});
 	} catch (error) {

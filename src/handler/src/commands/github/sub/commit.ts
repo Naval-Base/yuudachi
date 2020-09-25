@@ -66,7 +66,7 @@ export async function commit(
 			timestamp: commit.pushedDate,
 		};
 
-		rest.post(`/channels/${message.channel_id}/messages`, {
+		await rest.post(`/channels/${message.channel_id}/messages`, {
 			embed: truncateEmbed(embed),
 		});
 	} catch (error) {
