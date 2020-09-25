@@ -74,7 +74,7 @@ export default class GitHub implements Command {
 			throw new Error(i18next.t('command.github.execute.invalid_repository', { lng: locale }));
 		}
 
-		const parsed = parseInt(issueOrExpression, 10);
+		const parsed = Number(issueOrExpression);
 		if (isNaN(parsed)) {
 			return commit(owner, repository, issueOrExpression, locale, isPrefixed, this.rest, message);
 		}
