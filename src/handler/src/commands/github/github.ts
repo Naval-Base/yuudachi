@@ -45,7 +45,7 @@ export default class GitHub implements Command {
 
 		if (!first) {
 			if (!isPrefixed) return;
-			throw new Error(i18next.t('command.github.execute.args_missing', { lng: locale })); // TODO: adapt
+			throw new Error(i18next.t('command.github.execute.args_missing', { lng: locale }));
 		}
 
 		const repositoryAliases = await this.fetchAliases(message.guild_id);

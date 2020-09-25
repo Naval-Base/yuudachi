@@ -30,7 +30,7 @@
 				"error": "Error while trying to fetch GitHub API information."
 			},
 			"execute": {
-				"args_missing": "Missing arguments, correct usage: `issue-pr <owner> <repository> <issue>` or `issue-pr <alias> <issue>`",
+				"args_missing": "Missing arguments, correct usage: `github <owner> <repository> <issue>`, `github <alias> <issue>`, `github alias <add|remove> <...alias>`, `github alias list`",
 				"no_token": "Could not access GitHub token to use.",
 				"invalid_owner": "Please provide a valid GitHub owner.",
 				"invalid_repository": "Please provide a valid GitHub repository.",
