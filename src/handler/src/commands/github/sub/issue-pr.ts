@@ -3,7 +3,8 @@ import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 import { addField, truncateEmbed } from '../../../../util';
-import { GitHubAPIData, isPR, GitHubReviewDecision, GitHubReviewState } from '../../../interfaces/GitHub';
+import { isPR, GitHubReviewDecision, GitHubReviewState, GitHubAPIResult } from '../../../interfaces/GitHub';
+
 import {
 	GITHUB_BASE_URL,
 	GITHUB_COLOR_CLOSED,
@@ -17,6 +18,7 @@ import {
 	GITHUB_ICON_PR_MERGED,
 	GITHUB_ICON_PR_OPEN,
 } from '../../../../Constants';
+import { GitHubAPIError } from '../github';
 
 enum ResultStatePR {
 	OPEN = 'OPEN',
@@ -57,22 +59,34 @@ export async function issuePR(
 ) {
 	try {
 		const query = buildQuery(owner, repository, num);
-		const res = await fetch(GITHUB_BASE_URL, {
+		const res = (await fetch(GITHUB_BASE_URL, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${process.env.GITHUB_TOKEN!}`,
 			},
 			body: JSON.stringify({ query }),
-		}).then((res) => res.json());
+		}).then((res) => res.json())) as GitHubAPIResult;
 
 		console.log(res);
 
-		if (!res?.data?.repository?.issueOrPullRequest) {
-			return;
+		if (!res.data) {
+			throw new Error(i18next.t('command.github.common.errors.fetch'));
 		}
 
-		const data = res.data as GitHubAPIData;
-		const issue = data.repository.issueOrPullRequest;
+		if (res.errors?.some((e) => e.type === 'NOT_FOUND')) {
+			if (!isPrefixed) return;
+			throw new GitHubAPIError(
+				i18next.t('command.github.issue-pr.errors.not_found', { lng: locale, issue: num, owner, repository }),
+			);
+		}
+
+		const issue = res.data.repository?.issueOrPullRequest;
+
+		if (!issue) {
+			if (!isPrefixed) return;
+			throw new GitHubAPIError(i18next.t('command.github.issue-pr.errors.no_result', { lng: locale }));
+		}
+
 		const resultState = isPR(issue)
 			? issue.merged
 				? ResultStatePR.MERGED
@@ -196,9 +210,14 @@ export async function issuePR(
 		rest.post(`/channels/${message.channel_id}/messages`, {
 			embed: truncateEmbed(e3),
 		});
-	} catch (_) {
+	} catch (error) {
 		if (!isPrefixed) return;
-		throw new Error(i18next.t('command.github.common.error', { lng: locale }));
+
+		if (error instanceof GitHubAPIError) {
+			throw error;
+		}
+
+		throw new Error(i18next.t('command.github.common.errors.fetch', { lng: locale }));
 	}
 }
 

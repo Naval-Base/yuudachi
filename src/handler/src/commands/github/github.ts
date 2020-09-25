@@ -16,6 +16,8 @@ interface RepositoryEntry {
 	repository: string;
 }
 
+export class GitHubAPIError extends Error {}
+
 @injectable()
 export default class GitHub implements Command {
 	public readonly regExp = /(?:([A-Za-z0-9_.-]+)\/)?([A-Za-z0-9_.-]+)#(\d+)/;

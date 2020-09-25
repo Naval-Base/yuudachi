@@ -59,11 +59,23 @@ export interface GitHubPRData {
 
 export type GitHubPR = GitHubIssue & GitHubPRData;
 
+export interface GitHubAPIErrorData {
+	type: string;
+	path: string[];
+	locations: string[];
+	message: string;
+}
+
 export interface GitHubAPIData {
-	repository: {
+	repository?: {
 		name: string;
-		issueOrPullRequest: GitHubIssue | GitHubPR;
+		issueOrPullRequest: GitHubIssue | GitHubPR | null;
 	};
+}
+
+export interface GitHubAPIResult {
+	errors?: GitHubAPIErrorData[];
+	data?: GitHubAPIData;
 }
 
 export function isPR(issue: GitHubIssue | GitHubPR): issue is GitHubPR {

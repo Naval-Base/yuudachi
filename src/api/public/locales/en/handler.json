@@ -27,7 +27,9 @@
 				}
 			},
 			"common": {
-				"error": "Error while trying to fetch GitHub API information."
+				"errors": {
+					"fetch": "Error while trying to fetch GitHub API information."
+				}
 			},
 			"execute": {
 				"args_missing": "Missing arguments, correct usage: `github <owner> <repository> <issue>`, `github <alias> <issue>`, `github alias <add|remove> <...alias>`, `github alias list`",
@@ -48,6 +50,10 @@
 				},
 				"comment_count": "{{count}} comment",
 				"comment_count_plural": "{{count}} comments",
+				"errors": {
+					"not_found": "Could not find issue {{issue}} on the repository {{owner}}/{{repository}}.",
+					"no_result": "Could not find any results."
+				},
 				"heading": {
 					"install": "Install with",
 					"reviews": {
