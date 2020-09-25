@@ -20,13 +20,13 @@ export async function commit(
 ) {
 	try {
 		const query = buildQuery(owner, repository, expressions);
-		const res = (await fetch(GITHUB_BASE_URL, {
+		const res: GitHubAPIResult = await fetch(GITHUB_BASE_URL, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${process.env.GITHUB_TOKEN!}`,
 			},
 			body: JSON.stringify({ query }),
-		}).then((res) => res.json())) as GitHubAPIResult;
+		}).then((res) => res.json());
 
 		if (!res.data) {
 			throw new Error(i18next.t('command.github.common.errors.fetch'));

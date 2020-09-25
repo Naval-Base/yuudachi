@@ -86,8 +86,7 @@ async function add(message: Message, locale: string, current: string[], cleaned:
 		insert into guild_settings(guild_id, repository_aliases)
 		values(${message.guild_id!}, ${sql.array(updated)})
 		on conflict (guild_id)
-		do update set repository_aliases = ${sql.array(updated)}
-		`;
+		do update set repository_aliases = ${sql.array(updated)};`;
 
 	const added = cleaned.filter((elem) => !current.includes(elem));
 	const content = `${i18next.t('command.github.alias.add.title', { lng: locale })}\n${added
@@ -135,10 +134,9 @@ async function remove(
 	}
 
 	await sql`
-			update guild_settings
-			set repository_aliases = ${sql.array(updated)}
-			where guild_id = ${message.guild_id!}
-		`;
+		update guild_settings
+		set repository_aliases = ${sql.array(updated)}
+		where guild_id = ${message.guild_id!};`;
 
 	const removed = current.filter((elem) => !updated.includes(elem));
 	const content = `${i18next.t('command.github.alias.remove.title', { lng: locale })}\n${removed
@@ -174,10 +172,9 @@ function argsFormat(locale: string) {
 
 async function fetchAliases(guild: string, sql: Sql<any>): Promise<string[]> {
 	const [result] = await sql<{ repository_aliases: string[] }>`
-			select repository_aliases
-			from guild_settings
-			where guild_id = ${guild}
-		`;
+		select repository_aliases
+		from guild_settings
+		where guild_id = ${guild};`;
 
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (!result?.repository_aliases?.length) {
