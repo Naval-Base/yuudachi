@@ -10,6 +10,7 @@ import { kSQL } from '../../tokens';
 
 import { alias } from './sub/alias';
 import { issuePR } from './sub/issue-pr';
+import { commit } from './sub/commit';
 
 interface RepositoryEntry {
 	owner: string;
@@ -20,7 +21,7 @@ export class GitHubAPIError extends Error {}
 
 @injectable()
 export default class GitHub implements Command {
-	public readonly regExp = /(?:([A-Za-z0-9_.-]+)\/)?([A-Za-z0-9_.-]+)#(\d+)/;
+	public readonly regExp = /(?:([A-Za-z0-9_.-]+)\/)?([A-Za-z0-9_.-]+)#([A-Za-z0-9_.-]+)/;
 
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
@@ -38,7 +39,7 @@ export default class GitHub implements Command {
 
 		const first = args.single();
 
-		if (first === 'alias') {
+		if (first === 'alias' && isPrefixed) {
 			return alias(message, args, locale, this.sql, this.rest);
 		}
 
@@ -55,9 +56,9 @@ export default class GitHub implements Command {
 
 		const owner = third ? first : aliasEntry?.owner;
 		const repository = third ? second : aliasEntry?.repository;
-		const num = third ? third : second;
+		const issueOrExpression = third ? third : second;
 
-		if (!owner || !repository || !num) {
+		if (!owner || !repository || !issueOrExpression) {
 			if (!isPrefixed) return;
 			throw new Error(i18next.t('command.github.execute.args_missing', { lng: locale }));
 		}
@@ -72,13 +73,10 @@ export default class GitHub implements Command {
 			throw new Error(i18next.t('command.github.execute.invalid_repository', { lng: locale }));
 		}
 
-		const parsed = parseInt(num, 10);
+		const parsed = parseInt(issueOrExpression, 10);
 		if (isNaN(parsed)) {
-			if (!isPrefixed) return;
-			throw new Error(i18next.t('command.github.execute.invalid_issue', { lng: locale }));
+			return commit(owner, repository, issueOrExpression, locale, isPrefixed, this.rest, message);
 		}
-
-		console.log(owner, repository, parsed);
 
 		return issuePR(owner, repository, parsed, locale, isPrefixed, this.rest, message);
 	}

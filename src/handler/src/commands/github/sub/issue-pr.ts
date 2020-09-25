@@ -67,8 +67,6 @@ export async function issuePR(
 			body: JSON.stringify({ query }),
 		}).then((res) => res.json())) as GitHubAPIResult;
 
-		console.log(res);
-
 		if (!res.data) {
 			throw new Error(i18next.t('command.github.common.errors.fetch'));
 		}
@@ -84,7 +82,7 @@ export async function issuePR(
 
 		if (!issue) {
 			if (!isPrefixed) return;
-			throw new GitHubAPIError(i18next.t('command.github.issue-pr.errors.no_result', { lng: locale }));
+			throw new GitHubAPIError(i18next.t('command.github.common.errors.no_result', { lng: locale }));
 		}
 
 		const resultState = isPR(issue)
@@ -173,7 +171,7 @@ export async function issuePR(
 				? addField(e1, {
 						name: i18next.t('command.github.issue-pr.heading.install', { lng: locale }),
 						value: `\`npm i ${issue.headRepository.nameWithOwner}#${
-							issue.headRef?.name ?? i18next.t('command.github.issue-pr.unknown', { lng: locale }) ?? ''
+							issue.headRef?.name ?? i18next.t('command.github.common.unknown', { lng: locale }) ?? ''
 						}\``,
 				  })
 				: e1;

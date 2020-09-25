@@ -1,4 +1,4 @@
-export interface GitHubAuthor {
+export interface GitHubUser {
 	avatarUrl: string;
 	login: string;
 	url: string;
@@ -8,8 +8,19 @@ export interface GitHubUser {
 	login: string;
 }
 
+export interface GitActor {
+	avatarUrl?: string;
+	user?: GitHubUser;
+	name?: string;
+}
+
 export interface GitHubCommit {
 	abbreviatedOid: string;
+	messageHeadline?: string;
+	author: GitActor;
+	changedFiles: number;
+	commitUrl?: string;
+	pushedDate?: string;
 }
 
 export interface GitHubReview {
@@ -27,7 +38,7 @@ export enum GitHubReviewState {
 }
 
 export interface GitHubIssue {
-	author: GitHubAuthor;
+	author: GitHubUser;
 	body: string;
 	number: number;
 	publishedAt: string;
@@ -69,7 +80,8 @@ export interface GitHubAPIErrorData {
 export interface GitHubAPIData {
 	repository?: {
 		name: string;
-		issueOrPullRequest: GitHubIssue | GitHubPR | null;
+		issueOrPullRequest?: GitHubIssue | GitHubPR | null;
+		object: GitHubCommit;
 	};
 }
 

@@ -26,10 +26,19 @@
 					"title": "The following repository aliases are enabled on this guild / server:"
 				}
 			},
+			"commit": {
+				"errors": {
+					"not_found": "Could not find a commit based on {{expression}} on the repository {{owner}}/{{repository}}."
+				},
+				"files_count": "{{count}} file changed",
+				"filed_count_plural": "{{count}} files changed"
+			},
 			"common": {
 				"errors": {
-					"fetch": "Error while trying to fetch GitHub API information."
-				}
+					"fetch": "Error while trying to fetch GitHub API information.",
+					"no_result": "Could not find any results."
+				},
+				"unknown": "unknown"
 			},
 			"execute": {
 				"args_missing": "Missing arguments, correct usage: `github <owner> <repository> <issue>`, `github <alias> <issue>`, `github alias <add|remove> <...alias>`, `github alias list`",
@@ -51,8 +60,7 @@
 				"comment_count": "{{count}} comment",
 				"comment_count_plural": "{{count}} comments",
 				"errors": {
-					"not_found": "Could not find issue {{issue}} on the repository {{owner}}/{{repository}}.",
-					"no_result": "Could not find any results."
+					"not_found": "Could not find issue {{issue}} on the repository {{owner}}/{{repository}}."
 				},
 				"heading": {
 					"install": "Install with",
@@ -69,8 +77,7 @@
 					"commented": "commented",
 					"dismissed": "dismissed",
 					"pending": "pending"
-				},
-				"unknown": "unknown"
+				}
 			}
 		},
 		"ping": {
