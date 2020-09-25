@@ -1,32 +1,42 @@
 {
 	"command": {
-		"githubalias": {
-			"common": {
-				"execute": {
-					"no_guild": "Please use this command in the server you want to edit settings for"
+		"github": {
+			"alias": {
+				"common": {
+					"execute": {
+						"no_guild": "Please use this command in the server you want to edit settings for"
+					},
+					"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
+					"invalid_sub": "Invalid sub-command `{{command}}`. Valid arguments are: {{valid_commands}}",
+					"alias_format": "`alias:owner/repository`"
 				},
-				"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
-				"invalid_sub": "Invalid sub-command `{{command}}`. Valid arguments are: {{valid_commands}}",
-				"alias_format": "`alias:owner/repository`"
+				"add": {
+					"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}.",
+					"no_add": "No new repository aliases were added.",
+					"title": "The following repository aliases have been enabled on this guild / server:"
+				},
+				"remove": {
+					"no_args": "Please provide valid repository aliases to remove. Valid format: {{- format}}.",
+					"no_current": "This guild / server does not have any repository aliases enabled at this time.",
+					"no_remove": "No repository aliases have been removed.",
+					"title": "The following repository aliases have been disabled on this guild / server:"
+				},
+				"list": {
+					"no_current": "This guild / server does not have any repository aliases at this time.",
+					"title": "The following repository aliases are enabled on this guild / server:"
+				}
 			},
-			"add": {
-				"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}.",
-				"no_add": "No new repository aliases were added.",
-				"title": "The following repository aliases have been enabled on this guild / server:"
+			"common": {
+				"error": "Error while trying to fetch GitHub API information."
 			},
-			"remove": {
-				"no_args": "Please provide valid repository aliases to remove. Valid format: {{- format}}.",
-				"no_current": "This guild / server does not have any repository aliases enabled at this time.",
-				"no_remove": "No repository aliases have been removed.",
-				"title": "The following repository aliases have been disabled on this guild / server:"
-			},
-			"list": {
-				"no_current": "This guild / server does not have any repository aliases at this time.",
-				"title": "The following repository aliases are enabled on this guild / server:"
-			}
-		},
-		"issue-pr": {
 			"execute": {
+				"args_missing": "Missing arguments, correct usage: `issue-pr <owner> <repository> <issue>` or `issue-pr <alias> <issue>`",
+				"no_token": "Could not access GitHub token to use.",
+				"invalid_owner": "Please provide a valid GitHub owner.",
+				"invalid_repository": "Please provide a valid GitHub repository.",
+				"invalid_issue": "Please provide a valid issue number."
+			},
+			"issue-pr": {
 				"action": {
 					"close": "closed",
 					"draft": "draft opened",
@@ -35,15 +45,6 @@
 					"merge_in": "merged in {{commit}}",
 					"merge": "merged",
 					"open": "opened"
-				},
-				"error": "Error while trying to fetch GitHub API information.",
-				"review_state": {
-					"approved": "approved",
-					"review_required": "review required",
-					"changes_requested": "changes requested",
-					"commented": "commented",
-					"dismissed": "dismissed",
-					"pending": "pending"
 				},
 				"comment_count": "{{count}} comment",
 				"comment_count_plural": "{{count}} comments",
@@ -55,11 +56,14 @@
 						"changes_requested": "Reviews (status: changes requested)"
 					}
 				},
-				"args_missing": "Missing arguments, correct usage: `issue-pr <owner> <repository> <issue>` or `issue-pr <alias> <issue>`",
-				"no_token": "Could not access GitHub token to use.",
-				"invalid_owner": "Please provide a valid GitHub owner.",
-				"invalid_repository": "Please provide a valid GitHub repository.",
-				"invalid_issue": "Please provide a valid issue number.",
+				"review_state": {
+					"approved": "approved",
+					"review_required": "review required",
+					"changes_requested": "changes requested",
+					"commented": "commented",
+					"dismissed": "dismissed",
+					"pending": "pending"
+				},
 				"unknown": "unknown"
 			}
 		},
