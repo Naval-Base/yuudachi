@@ -6,20 +6,19 @@ import fetch from 'node-fetch';
 
 import { GITHUB_BASE_URL, GITHUB_COLOR_COMMIT, GITHUB_ICON_COMMIT } from '../../../../Constants';
 import { GitHubAPIError } from '../github';
-import { expression } from 'joi';
 import { truncateEmbed } from '../../../../util';
 
 export async function commit(
 	owner: string,
 	repository: string,
-	expressions: string,
+	expression: string,
 	locale: string,
 	isPrefixed: boolean,
 	rest: Rest,
 	message: Message,
 ) {
 	try {
-		const query = buildQuery(owner, repository, expressions);
+		const query = buildQuery(owner, repository, expression);
 		const res: GitHubAPIResult = await fetch(GITHUB_BASE_URL, {
 			method: 'POST',
 			headers: {
