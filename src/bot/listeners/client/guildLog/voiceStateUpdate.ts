@@ -1,6 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { MessageEmbed, VoiceState } from 'discord.js';
-import { SETTINGS } from '../../../util/constants';
+import { COLORS, SETTINGS } from '../../../util/constants';
 
 export default class VoiceStateUpdateGuildLogListener extends Listener {
 	public constructor() {
@@ -21,7 +21,7 @@ export default class VoiceStateUpdateGuildLogListener extends Listener {
 			if (!webhook) return;
 			if (!newState.member) return;
 			const embed = new MessageEmbed()
-				.setColor(0x33ffff)
+				.setColor(COLORS.VOICE_UPDATE)
 				.setAuthor(`${newState.member.user.tag} (${newState.member.id})`, newState.member.user.displayAvatarURL())
 				.setTimestamp(new Date())
 				.setFooter('Voice State Updated');
