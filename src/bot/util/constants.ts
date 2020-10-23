@@ -16,6 +16,8 @@ export enum ACTIONS {
 	TAG,
 }
 
+export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
+
 export enum COLORS {
 	BAN = 16718080,
 	UNBAN = 8450847,
@@ -28,8 +30,7 @@ export enum COLORS {
 	TAG = 16776960,
 	WARN = 16776960,
 
-	MEMBER_JOIN = 8450847,
-	MEMBER_LEFT = 16745216,
+	MEMBER_LEFT = 3092790,
 }
 
 export enum SETTINGS {
