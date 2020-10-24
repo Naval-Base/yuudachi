@@ -1,6 +1,6 @@
 FROM node:alpine
 
-WORKDIR /usr/yukikaze
+WORKDIR /usr/yuudachi
 COPY package.json yarn.lock tsconfig.base.json .yarnrc.yml ./
 COPY .yarn ./.yarn
 
