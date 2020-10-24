@@ -40,6 +40,7 @@ const commands = new Map<string, Command>();
 
 const files = readdirp(resolve(__dirname, '..', 'src', 'commands'), {
 	fileFilter: '*.js',
+	directoryFilter: '!sub',
 });
 
 void (async () => {
