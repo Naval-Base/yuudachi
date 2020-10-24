@@ -1,5 +1,85 @@
 {
 	"command": {
+		"github": {
+			"alias": {
+				"common": {
+					"execute": {
+						"no_guild": "Please use this command in the server you want to edit settings for"
+					},
+					"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
+					"invalid_sub": "Invalid sub-command `{{command}}`. Valid arguments are: {{valid_commands}}",
+					"alias_format": "`alias:owner/repository`"
+				},
+				"add": {
+					"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}. Also make sure the desired alias does not already exist.",
+					"no_add": "No new repository aliases were added.",
+					"title": "The following repository aliases have been enabled on this guild / server:"
+				},
+				"remove": {
+					"no_args": "Please provide valid repository aliases to remove. Valid format: {{- format}}.",
+					"no_current": "This guild / server does not have any repository aliases enabled at this time.",
+					"no_remove": "No repository aliases have been removed.",
+					"title": "The following repository aliases have been disabled on this guild / server:"
+				},
+				"list": {
+					"no_current": "This guild / server does not have any repository aliases at this time.",
+					"title": "The following repository aliases are enabled on this guild / server:"
+				}
+			},
+			"commit": {
+				"errors": {
+					"not_found": "Could not find a commit based on {{expression}} on the repository {{owner}}/{{repository}}."
+				},
+				"files_count": "{{count}} file changed",
+				"filed_count_plural": "{{count}} files changed"
+			},
+			"common": {
+				"errors": {
+					"fetch": "Error while trying to fetch GitHub API information.",
+					"no_result": "Could not find any results."
+				},
+				"unknown": "unknown"
+			},
+			"execute": {
+				"args_missing": "Missing arguments, correct usage: \n• `github <owner> <repository> <issue>` \n• `github <alias> <issue>`\n• `github alias <add|remove> <...alias>`\n• `github alias list`",
+				"no_token": "Could not access GitHub token to use.",
+				"invalid_owner": "Please provide a valid GitHub owner.",
+				"invalid_repository": "Please provide a valid GitHub repository.",
+				"invalid_issue": "Please provide a valid issue number."
+			},
+			"issue-pr": {
+				"action": {
+					"close": "closed",
+					"draft": "draft opened",
+					"merge_by_in": "merged by {{user}} in {{commit}}",
+					"merge_by": "merged by {{user}}",
+					"merge_in": "merged in {{commit}}",
+					"merge": "merged",
+					"open": "opened"
+				},
+				"comment_count": "{{count}} comment",
+				"comment_count_plural": "{{count}} comments",
+				"errors": {
+					"not_found": "Could not find issue {{issue}} on the repository {{owner}}/{{repository}}."
+				},
+				"heading": {
+					"install": "Install with",
+					"reviews": {
+						"approved": "Reviews (status: approved)",
+						"review_required": "Reviews (status: review required)",
+						"changes_requested": "Reviews (status: changes requested)"
+					}
+				},
+				"review_state": {
+					"approved": "approved",
+					"review_required": "review required",
+					"changes_requested": "changes requested",
+					"commented": "commented",
+					"dismissed": "dismissed",
+					"pending": "pending"
+				}
+			}
+		},
 		"ping": {
 			"execute": {
 				"pre_ping": "Pinging...",
