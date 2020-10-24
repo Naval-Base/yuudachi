@@ -3,7 +3,7 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions, TextChannel } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { MESSAGES } from '../../util/constants';
+import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
 
 export default class ChannelInfoCommand extends Command {
 	public constructor() {
@@ -39,7 +39,7 @@ export default class ChannelInfoCommand extends Command {
 				• Type: ${channel.type}
 				• Topic: ${channel.topic || 'None'}
 				• NSFW: ${Boolean(channel.nsfw)}
-				• Creation Date: ${moment.utc(channel.createdAt).format('YYYY/MM/DD hh:mm:ss')}
+				• Creation Date: ${moment.utc(channel.createdAt).format(DATE_FORMAT_WITH_SECONDS)}
 			`,
 			)
 			.setThumbnail(message.guild!.iconURL() ?? '');

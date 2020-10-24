@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { MESSAGES } from '../../util/constants';
+import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
 import { Tags } from '../../util/graphQLTypes';
 
 export default class TagInfoCommand extends Command {
@@ -57,8 +57,8 @@ export default class TagInfoCommand extends Command {
 					: 'No aliases.',
 			)
 			.addField('❯ Uses', tag.uses)
-			.addField('❯ Created at', moment.utc(tag.createdAt).format('YYYY/MM/DD hh:mm:ss'))
-			.addField('❯ Modified at', moment.utc(tag.updatedAt).format('YYYY/MM/DD hh:mm:ss'));
+			.addField('❯ Created at', moment.utc(tag.createdAt).format(DATE_FORMAT_WITH_SECONDS))
+			.addField('❯ Modified at', moment.utc(tag.updatedAt).format(DATE_FORMAT_WITH_SECONDS));
 		if (lastModifiedBy) {
 			embed.addField(
 				'❯ Last modified by',

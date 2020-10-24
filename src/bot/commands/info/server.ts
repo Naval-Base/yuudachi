@@ -3,7 +3,7 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { MESSAGES } from '../../util/constants';
+import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
 
 interface HumanLevels {
 	[key: string]: string;
@@ -57,7 +57,7 @@ export default class GuildInfoCommand extends Command {
 				stripIndents`
 				• Roles: ${guild.roles.cache.size}
 				• Region: ${guild.region}
-				• Created at: ${moment.utc(guild.createdAt).format('YYYY/MM/DD hh:mm:ss')}
+				• Created at: ${moment.utc(guild.createdAt).format(DATE_FORMAT_WITH_SECONDS)}
 				• Verification Level: ${HUMAN_LEVELS[guild.verificationLevel]}
 			`,
 			)

@@ -4,7 +4,7 @@ import { GuildEmoji, Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import * as emojis from 'node-emoji';
 import * as punycode from 'punycode';
-import { MESSAGES } from '../../util/constants';
+import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
 
 const EMOJI_REGEX = /<(?:a)?:(?:\w{2,32}):(\d{17,19})>?/;
 
@@ -50,7 +50,7 @@ export default class EmojiInfoCommand extends Command {
 				'❯ Info',
 				stripIndents`
 				• Identifier: \`<${emoji.identifier}>\`
-				• Creation Date: ${moment.utc(emoji.createdAt ?? 0).format('YYYY/MM/DD hh:mm:ss')}
+				• Creation Date: ${moment.utc(emoji.createdAt ?? 0).format(DATE_FORMAT_WITH_SECONDS)}
 				• URL: ${emoji.url}
 				`,
 			);

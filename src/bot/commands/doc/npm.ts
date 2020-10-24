@@ -3,7 +3,7 @@ import { Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
 import fetch from 'node-fetch';
-import { MESSAGES } from '../../util/constants';
+import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
 
 export default class NPMCommand extends Command {
 	public constructor() {
@@ -50,8 +50,8 @@ export default class NPMCommand extends Command {
 			.addField('❯ Version', body['dist-tags']?.latest ?? 'Unknown', true)
 			.addField('❯ License', body.license || 'None', true)
 			.addField('❯ Author', body.author ? body.author.name : 'Unknown', true)
-			.addField('❯ Creation Date', moment.utc(body.time.created).format('YYYY/MM/DD hh:mm:ss'), true)
-			.addField('❯ Modification Date', moment.utc(body.time.modified).format('YYYY/MM/DD hh:mm:ss'), true)
+			.addField('❯ Creation Date', moment.utc(body.time.created).format(DATE_FORMAT_WITH_SECONDS), true)
+			.addField('❯ Modification Date', moment.utc(body.time.modified).format(DATE_FORMAT_WITH_SECONDS), true)
 			.addField('❯ Main File', version.main || 'index.js', true)
 			.addField('❯ Dependencies', dependencies?.length ? dependencies.join(', ') : 'None')
 			.addField('❯ Maintainers', maintainers.join(', '));

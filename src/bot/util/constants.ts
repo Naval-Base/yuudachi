@@ -18,6 +18,8 @@ export enum ACTIONS {
 
 export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 
+export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD hh:mm:ss';
+
 export enum COLORS {
 	BAN = 16718080,
 	UNBAN = 8450847,
