@@ -2,7 +2,6 @@ import { Listener } from 'discord-akairo';
 import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import { SETTINGS, MAX_TRUST_ACCOUNT_AGE } from '../../../util/constants';
 import * as moment from 'moment';
-import { stripIndents } from 'common-tags';
 
 function colorFromDuration(duration: number) {
 	const percent = Math.min(duration / (MAX_TRUST_ACCOUNT_AGE / 100), 100);
@@ -48,22 +47,16 @@ export default class GuildMemberAddMemberLogListener extends Listener {
 				.setFooter('User joined')
 				.setTimestamp(new Date());
 
+			const parts = [];
+
 			if (memberlog.MENTION) {
-				embed.setDescription(
-					stripIndents`
-						• Profile: ${member}
-						• Created: ${sinceCreationFormatted} (${creationFormatted})
-						• Joined: ${joinFormatted}
-					`,
-				);
-			} else {
-				embed.setDescription(
-					stripIndents`
-						• Created: ${sinceCreationFormatted} (${creationFormatted})
-						• Joined: ${joinFormatted}
-					`,
-				);
+				parts.push(`• Profile: ${member}`);
 			}
+
+			parts.push(`• Created: ${sinceCreationFormatted} (${creationFormatted})`);
+			parts.push(`• Joined: ${joinFormatted}`);
+
+			embed.setDescription(parts.join('\n'));
 
 			return (this.client.channels.cache.get(memberlog.ID) as TextChannel).send(embed);
 		}

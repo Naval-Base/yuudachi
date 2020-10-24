@@ -2,7 +2,6 @@ import { Listener } from 'discord-akairo';
 import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import { COLORS, SETTINGS } from '../../../util/constants';
 import * as moment from 'moment';
-import { stripIndents } from 'common-tags';
 
 export default class GuildMemberRemoveMemberLogListener extends Listener {
 	public constructor() {
@@ -25,22 +24,19 @@ export default class GuildMemberRemoveMemberLogListener extends Listener {
 				.setFooter('User left')
 				.setTimestamp(new Date());
 
+			const parts = [];
+
 			if (memberlog.MENTION) {
-				embed.setDescription(
-					stripIndents`
-						• Profile: ${member}
-						• Joined: ${sinceJoinFormatted} (${joinFormatted})
-						• Left: ${leaveFormatted}
-					`,
-				);
-			} else {
-				embed.setDescription(
-					stripIndents`
-						• Joined: ${sinceJoinFormatted} (${joinFormatted})
-						• Left: ${leaveFormatted}
-					`,
-				);
+				parts.push(`• Profile: ${member}`);
 			}
+
+			if (member.joinedTimestamp) {
+				parts.push(`• Joined: ${sinceJoinFormatted} (${joinFormatted})`);
+			}
+
+			parts.push(`• Left: ${leaveFormatted}`);
+
+			embed.setDescription(parts.join('\n'));
 
 			return (this.client.channels.cache.get(memberlog.ID) as TextChannel).send(embed);
 		}
