@@ -1,6 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { SETTINGS } from '../../../util/constants';
+import { COLORS, SETTINGS } from '../../../util/constants';
 
 export default class MessageDeleteGuildLogListener extends Listener {
 	public constructor() {
@@ -21,12 +21,12 @@ export default class MessageDeleteGuildLogListener extends Listener {
 			if (!webhook) return;
 			const attachment = message.attachments.first();
 			const embed = new MessageEmbed()
-				.setColor(0x824aee)
+				.setColor(COLORS.MESSAGE_DELETE)
 				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
 				.addField('❯ Channel', message.channel)
-				.addField('❯ Message', `${message.content.substring(0, 1020)}`)
-				.addField('❯ Message', `[Jump To](${message.url})`, true);
-			if (attachment) embed.addField('❯ Attachment(s)', attachment.url);
+				.addField('❯ Content', `${message.content.substring(0, 1020)}`)
+				.addField('❯ Context Link', `[Jump To](${message.url})`, true);
+			if (attachment) embed.addField('❯ Attachment(s)', attachment.proxyURL);
 			embed.setTimestamp(new Date());
 			embed.setFooter('Deleted');
 
