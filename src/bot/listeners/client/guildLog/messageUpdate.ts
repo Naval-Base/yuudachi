@@ -1,6 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { Message, MessageEmbed, Util } from 'discord.js';
-import { SETTINGS } from '../../../util/constants';
+import { COLORS, SETTINGS } from '../../../util/constants';
 const diff = require('diff'); // eslint-disable-line
 
 export default class MessageUpdateGuildLogListener extends Listener {
@@ -21,7 +21,7 @@ export default class MessageUpdateGuildLogListener extends Listener {
 			const webhook = this.client.webhooks.get(guildLogs);
 			if (!webhook) return;
 			const embed = new MessageEmbed()
-				.setColor(0x306bff)
+				.setColor(COLORS.MESSAGE_EDIT)
 				.setAuthor(`${newMessage.author.tag} (${newMessage.author.id})`, newMessage.author.displayAvatarURL())
 				.addField('❯ Channel', newMessage.channel);
 			let msg = '';
