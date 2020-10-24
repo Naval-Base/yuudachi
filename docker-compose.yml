@@ -169,6 +169,7 @@ services:
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
       TRANSLATIONS_API: "http://api:3500"
+      GITHUB_TOKEN: ""
     restart: unless-stopped
 
   api:

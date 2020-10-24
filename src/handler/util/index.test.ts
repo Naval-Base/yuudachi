@@ -1,4 +1,4 @@
-import { ellipsis, truncateEmbed, addField } from '.';
+import { ellipsis, truncateEmbed, addField, uniqueValidatedValues } from '.';
 import {
 	EMBED_AUTHOR_NAME_LIMIT,
 	EMBED_DESCRIPTION_LIMIT,
@@ -25,6 +25,24 @@ describe('ellipsis', () => {
 
 	test('text longer than total', () => {
 		expect(ellipsis(text, 7)).toBe('lore...');
+	});
+});
+
+describe('uniqueValidatedValues', () => {
+	test('empty', () => {
+		expect(uniqueValidatedValues([])).toEqual([]);
+	});
+
+	test('undefined value', () => {
+		expect(uniqueValidatedValues([undefined])).toEqual([]);
+	});
+
+	test('duplicates', () => {
+		expect(uniqueValidatedValues([1, 2, 3, 3, 4].sort())).toEqual([1, 2, 3, 4].sort());
+	});
+
+	test('mixed example', () => {
+		expect(uniqueValidatedValues([1, undefined, 2, 2, 2, 3, 4, 4, 3, 1, 2].sort())).toEqual([1, 2, 3, 4].sort());
 	});
 });
 
