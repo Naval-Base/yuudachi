@@ -155,7 +155,8 @@ create table guild_settings (
 	reaction_role_id text,
 	role_state boolean default false,
 	moderation boolean default false,
-	locale text default 'en'
+	locale text default 'en',
+	repository_aliases text[]
 );
 
 alter table guild_settings

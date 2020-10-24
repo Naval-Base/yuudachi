@@ -93,6 +93,7 @@ services:
       PGUSERNAME: "yukikaze"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
+      GITHUB_TOKEN: ""
       TRANSLATIONS_API: ""
 
   api:

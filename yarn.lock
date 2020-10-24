@@ -2537,6 +2537,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^14.10.1":
+  version: 14.10.1
+  resolution: "@types/node@npm:14.10.1"
+  checksum: 086b4baffc1f13eee84fb4ff072d685b3fecad59f4166c4367f1ab0db6aa30fc81cf67e6469775072b51126c52bcfec40bae6fafef4e4dc8f4c42f94211e28f4
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.0
   resolution: "@types/normalize-package-data@npm:2.4.0"
@@ -3035,13 +3042,15 @@ __metadata:
     "@msgpack/msgpack": ^2.0.0
     "@spectacles/brokers": ^0.8.3
     "@spectacles/types": ^0.2.1
-    "@types/node": ^14.6.4
+    "@types/node": ^14.10.1
+    "@types/node-fetch": ^2.5.7
     "@yuudachi/rest": "workspace:^2.0.0"
     env-cmd: ^10.1.0
     i18next: ^19.7.0
     i18next-http-backend: ^1.0.18
     joi: ^17.2.1
     lexure: ^0.17.0
+    node-fetch: 2.6.1
     postgres: ^2.0.0-beta.0
     readdirp: ^3.4.0
     reflect-metadata: ^0.1.13
@@ -8807,7 +8816,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.1":
+"node-fetch@npm:2.6.1, node-fetch@npm:^2.6.1":
   version: 2.6.1
   resolution: "node-fetch@npm:2.6.1"
   checksum: cbb171635e538162b977eac5dfe7a1e07a9a02e991924377a6435502291e2f823d306b95aabc455caebf4a118ccf836868462bc70ccc3095af02bb9da61fda37
