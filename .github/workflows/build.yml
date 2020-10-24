@@ -22,6 +22,3 @@ jobs:
         run: |
           docker build --build-arg VERSION=${{ github.sha }} -f Dockerfile_bot -t docker.pkg.github.com/naval-base/yukikaze/yukikaze_bot:latest .
           docker push docker.pkg.github.com/naval-base/yukikaze/yukikaze_bot:latest
-
-      - name: Logout of GitHub docker registry
-        uses: azure/container-actions/docker-logout@master
