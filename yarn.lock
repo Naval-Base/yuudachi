@@ -2686,13 +2686,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/isomorphic-fetch@npm:^0.0.35":
-  version: 0.0.35
-  resolution: "@types/isomorphic-fetch@npm:0.0.35"
-  checksum: a9806f9618e860b7b8b37b8b283ca67ef81bc67fb6110c87d06684fe256d81b2e4ef395852c6b7804014c7c7023fddf42112a7868bf71a5d13d84d44e67b08ed
-  languageName: node
-  linkType: hard
-
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.3
   resolution: "@types/istanbul-lib-coverage@npm:2.0.3"
@@ -3274,7 +3267,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yuudachi/api@workspace:packages/api"
   dependencies:
-    "@types/isomorphic-fetch": ^0.0.35
     "@yuudachi/types": "workspace:packages/types"
     cross-fetch: ^3.0.6
     rimraf: ^3.0.2
@@ -3300,7 +3292,6 @@ __metadata:
   resolution: "@yuudachi/service_api@workspace:src/api"
   dependencies:
     "@hapi/boom": ^9.1.0
-    "@msgpack/msgpack": ^2.3.0
     "@naval-base/ms": ^3.1.0
     "@spectacles/brokers": ^0.8.3
     "@spectacles/types": ^0.2.1
@@ -3348,7 +3339,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yuudachi/service_handler@workspace:src/handler"
   dependencies:
-    "@msgpack/msgpack": ^2.3.0
     "@spectacles/brokers": ^0.8.3
     "@spectacles/types": ^0.2.1
     "@types/node": ^14.14.2

@@ -8,12 +8,11 @@ import { Lexer, Parser, prefixedStrategy, Args, Token, ParserOutput } from 'lexu
 import { resolve } from 'path';
 import readdirp from 'readdirp';
 import API from '@yuudachi/api';
-import Rest from '@yuudachi/rest';
+import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
 import { Message } from '@spectacles/types';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
-import { decode, encode } from '@msgpack/msgpack';
 
 import Command, { commandInfo, ExecutionContext } from '../src/Command';
 import { kSQL } from '../src/tokens';
@@ -25,15 +24,7 @@ const apiURL = process.env.API_URL;
 if (!apiURL) throw new Error('missing API_URL');
 
 const api = new API(apiURL);
-const restBroker = new Amqp('rest', {
-	serialize: (data: any) => {
-		const encoded = encode(data);
-		return Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-	},
-	deserialize: (data: Buffer | Uint8Array) => {
-		return decode(data);
-	},
-});
+const restBroker = createAmqpBroker('rest');
 const rest = new Rest(token, restBroker);
 const broker = new Amqp('gateway');
 const sql = postgres();
