@@ -43,7 +43,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 		// maybe expire the state here
 
 		const response = await discordOAuth2({ code: req.query.code });
-		const me: DiscordUser = await fetch('https://discordapp.com/api/users/@me', {
+		const me: DiscordUser = await fetch('https://discord.com/api/users/@me', {
 			headers: {
 				authorization: `Bearer ${response.access_token}`,
 			},
