@@ -2,7 +2,7 @@ import { Listener } from 'discord-akairo';
 import { Collection, Message, MessageEmbed } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { COLORS, SETTINGS } from '../../../util/constants';
+import { COLORS, DATE_FORMAT_WITH_SECONDS, SETTINGS } from '../../../util/constants';
 
 export default class MessageDeleteBulkGuildLogListener extends Listener {
 	public constructor() {
@@ -21,7 +21,7 @@ export default class MessageDeleteBulkGuildLogListener extends Listener {
 			if (!webhook) return;
 			const output = messages.reduce((out, msg) => {
 				const attachments = msg.attachments;
-				out += `[${moment.utc(msg.createdTimestamp).format('YYYY/MM/DD hh:mm:ss')}] ${msg.author.tag} (${
+				out += `[${moment.utc(msg.createdTimestamp).format(DATE_FORMAT_WITH_SECONDS)}] ${msg.author.tag} (${
 					msg.author.id
 				}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${
 					attachments.size

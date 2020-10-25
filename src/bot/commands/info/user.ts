@@ -3,7 +3,7 @@ import { Command } from 'discord-akairo';
 import { GuildMember, Message, MessageEmbed, Permissions } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { MESSAGES } from '../../util/constants';
+import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
 
 export default class UserInfoCommand extends Command {
 	public constructor() {
@@ -39,7 +39,7 @@ export default class UserInfoCommand extends Command {
 				stripIndents`
 				${member.nickname == undefined /* eslint-disable-line */ ? '• No nickname' : ` • Nickname: ${member.nickname}`}
 				• Roles: ${member.roles.cache.map((roles) => `\`${roles.name}\``).join(' ')}
-				• Joined at: ${moment.utc(member.joinedAt ?? 0).format('YYYY/MM/DD hh:mm:ss')}
+				• Joined at: ${moment.utc(member.joinedAt ?? 0).format(DATE_FORMAT_WITH_SECONDS)}
 			`,
 			)
 			.addField(
@@ -47,7 +47,7 @@ export default class UserInfoCommand extends Command {
 				stripIndents`
 				• ID: ${member.id}
 				• Username: ${member.user.tag}
-				• Created at: ${moment.utc(user.createdAt).format('YYYY/MM/DD hh:mm:ss')}${user.bot ? '\n• Is a bot account' : ''}
+				• Created at: ${moment.utc(user.createdAt).format(DATE_FORMAT_WITH_SECONDS)}${user.bot ? '\n• Is a bot account' : ''}
 				• Status: ${user.presence.status.toUpperCase()}
 				• Activity: ${user.presence.activities?.[0]?.name ?? 'None'}
 			`,

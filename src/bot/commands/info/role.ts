@@ -3,7 +3,7 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed, Permissions, Role } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { MESSAGES } from '../../util/constants';
+import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
 
 interface PermissionsIndex {
 	[key: string]: string;
@@ -78,7 +78,7 @@ export default class RoleInfoCommand extends Command {
 				• Color: ${role.hexColor.toUpperCase()}
 				• Hoisted: ${role.hoist ? 'Yes' : 'No'}
 				• Mentionable: ${role.mentionable ? 'Yes' : 'No'}
-				• Creation Date: ${moment.utc(role.createdAt).format('YYYY/MM/DD hh:mm:ss')}
+				• Creation Date: ${moment.utc(role.createdAt).format(DATE_FORMAT_WITH_SECONDS)}
 			`,
 			)
 			.addField(

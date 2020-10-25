@@ -1,6 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
-import { SETTINGS, MAX_TRUST_ACCOUNT_AGE } from '../../../util/constants';
+import { SETTINGS, MAX_TRUST_ACCOUNT_AGE, DATE_FORMAT_WITH_SECONDS } from '../../../util/constants';
 import * as moment from 'moment';
 
 function colorFromDuration(duration: number) {
@@ -39,8 +39,8 @@ export default class GuildMemberAddMemberLogListener extends Listener {
 		const memberlog = this.client.settings.get(member.guild, SETTINGS.MEMBER_LOG);
 		if (memberlog) {
 			const sinceCreationFormatted = moment.utc(member.user.createdAt ?? 0).fromNow();
-			const creationFormatted = moment.utc(member.user.createdAt ?? 0).format();
-			const joinFormatted = moment.utc().format();
+			const creationFormatted = moment.utc(member.user.createdAt ?? 0).format(DATE_FORMAT_WITH_SECONDS);
+			const joinFormatted = moment.utc().format(DATE_FORMAT_WITH_SECONDS);
 			const embed = new MessageEmbed()
 				.setColor(colorFromDuration(Date.now() - member.user.createdTimestamp))
 				.setAuthor(`${member.user.tag} (${member.id})`, member.user.displayAvatarURL())
