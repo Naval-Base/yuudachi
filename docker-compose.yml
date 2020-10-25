@@ -168,8 +168,8 @@ services:
       PGUSERNAME: ""
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
-      TRANSLATIONS_API: "http://api:3500"
       GITHUB_TOKEN: ""
+      API_URL: "http://api:3500"
     restart: unless-stopped
 
   api:

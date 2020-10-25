@@ -6,8 +6,9 @@ COPY .yarn ./.yarn
 
 COPY src/api ./src/api
 COPY packages/rest ./packages/rest
+COPY packages/types ./packages/types
 
-RUN yarn workspaces focus @yuudachi/rest @yuudachi/api
+RUN yarn workspaces focus @yuudachi/service_api
 RUN yarn workspaces foreach --parallel --topological-dev run build
 
-CMD yarn workspace @yuudachi/api run start
+CMD yarn workspace @yuudachi/service_api run start

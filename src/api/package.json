@@ -1,5 +1,5 @@
 {
-	"name": "@yuudachi/api",
+	"name": "@yuudachi/service_api",
 	"version": "2.0.0",
 	"description": "",
 	"main": "dist/index.js",
@@ -14,10 +14,12 @@
 	"private": true,
 	"dependencies": {
 		"@hapi/boom": "^9.1.0",
+		"@msgpack/msgpack": "^2.3.0",
 		"@naval-base/ms": "^3.1.0",
 		"@spectacles/brokers": "^0.8.3",
 		"@spectacles/util": "^0.4.0",
-		"@yuudachi/rest": "workspace:^2.0.0",
+		"@yuudachi/rest": "workspace:packages/rest",
+		"@yuudachi/types": "workspace:packages/types",
 		"common-tags": "^1.8.0",
 		"cookie": "^0.4.1",
 		"cors": "^2.8.5",

@@ -30,7 +30,7 @@
       num_retries: 0
       interval_sec: 10
       timeout_sec: 60
-    webhook: http://api:3500/hasura/hooks/mod_log
+    webhook: http://api:3500/api/hasura/hooks/mod_log
 - table:
     schema: public
     name: connections

@@ -16,10 +16,13 @@ export default class SettingsManager {
 	) {}
 
 	public async get(guildId: string, prop: string): Promise<string | null> {
-		const [data]: any = await this.sql`
-			select ${prop} as value
+		const [data]: any = await this.sql.unsafe(
+			`select ${prop} as value
 			from guild_settings
-			where guild_id = ${guildId}`;
+			where guild_id = $1`,
+			[guildId],
+		);
+		console.log(data);
 
 		return data?.value ?? null;
 	}

@@ -1604,7 +1604,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.10.1, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.4":
   version: 7.12.1
   resolution: "@babel/runtime@npm:7.12.1"
   dependencies:
@@ -2686,6 +2686,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/isomorphic-fetch@npm:^0.0.35":
+  version: 0.0.35
+  resolution: "@types/isomorphic-fetch@npm:0.0.35"
+  checksum: a9806f9618e860b7b8b37b8b283ca67ef81bc67fb6110c87d06684fe256d81b2e4ef395852c6b7804014c7c7023fddf42112a7868bf71a5d13d84d44e67b08ed
+  languageName: node
+  linkType: hard
+
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.3
   resolution: "@types/istanbul-lib-coverage@npm:2.0.3"
@@ -3263,11 +3270,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yuudachi/api@workspace:src/api":
+"@yuudachi/api@workspace:packages/api":
   version: 0.0.0-use.local
-  resolution: "@yuudachi/api@workspace:src/api"
+  resolution: "@yuudachi/api@workspace:packages/api"
+  dependencies:
+    "@types/isomorphic-fetch": ^0.0.35
+    "@yuudachi/types": "workspace:packages/types"
+    cross-fetch: ^3.0.6
+    rimraf: ^3.0.2
+    tslib: ^2.0.3
+    typescript: ^4.0.3
+  languageName: unknown
+  linkType: soft
+
+"@yuudachi/rest@workspace:^2.0.0, @yuudachi/rest@workspace:packages/rest":
+  version: 0.0.0-use.local
+  resolution: "@yuudachi/rest@workspace:packages/rest"
+  dependencies:
+    "@spectacles/brokers": ^0.8.3
+    rimraf: ^3.0.2
+    tslib: ^2.0.3
+    typescript: ^4.0.3
+  languageName: unknown
+  linkType: soft
+
+"@yuudachi/service_api@workspace:src/api":
+  version: 0.0.0-use.local
+  resolution: "@yuudachi/service_api@workspace:src/api"
   dependencies:
     "@hapi/boom": ^9.1.0
+    "@msgpack/msgpack": ^2.3.0
     "@naval-base/ms": ^3.1.0
     "@spectacles/brokers": ^0.8.3
     "@spectacles/types": ^0.2.1
@@ -3283,7 +3315,8 @@ __metadata:
     "@types/node-fetch": ^2.5.7
     "@types/supertest": ^2.0.10
     "@types/trouter": ^3.1.0
-    "@yuudachi/rest": "workspace:^2.0.0"
+    "@yuudachi/rest": "workspace:packages/rest"
+    "@yuudachi/types": "workspace:packages/types"
     common-tags: ^1.8.0
     cookie: ^0.4.1
     cors: ^2.8.5
@@ -3310,16 +3343,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@yuudachi/handler@workspace:src/handler":
+"@yuudachi/service_handler@workspace:src/handler":
   version: 0.0.0-use.local
-  resolution: "@yuudachi/handler@workspace:src/handler"
+  resolution: "@yuudachi/service_handler@workspace:src/handler"
   dependencies:
     "@msgpack/msgpack": ^2.3.0
     "@spectacles/brokers": ^0.8.3
     "@spectacles/types": ^0.2.1
     "@types/node": ^14.14.2
     "@types/node-fetch": ^2.5.7
+    "@yuudachi/api": "workspace:packages/api"
     "@yuudachi/rest": "workspace:^2.0.0"
+    "@yuudachi/types": "workspace:packages/types"
     env-cmd: ^10.1.0
     i18next: ^19.8.2
     i18next-http-backend: ^1.0.21
@@ -3336,13 +3371,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@yuudachi/rest@workspace:^2.0.0, @yuudachi/rest@workspace:packages/rest":
+"@yuudachi/types@workspace:packages/types":
   version: 0.0.0-use.local
-  resolution: "@yuudachi/rest@workspace:packages/rest"
+  resolution: "@yuudachi/types@workspace:packages/types"
   dependencies:
-    "@spectacles/brokers": ^0.8.3
     rimraf: ^3.0.2
-    tslib: ^2.0.3
     typescript: ^4.0.3
   languageName: unknown
   linkType: soft
@@ -6996,11 +7029,11 @@ fsevents@^1.2.7:
   linkType: hard
 
 "i18next@npm:^19.8.2":
-  version: 19.8.2
-  resolution: "i18next@npm:19.8.2"
+  version: 19.8.3
+  resolution: "i18next@npm:19.8.3"
   dependencies:
-    "@babel/runtime": ^7.10.1
-  checksum: 2f3f15eb7b8f5e733f6e03f0c74c1e1479a8df72cae141ebfe18e5589ee62aabf6579becd9c76585dc3547f3cdac6954248ee1983f1c1254aecf94b6d3f99bfd
+    "@babel/runtime": ^7.12.0
+  checksum: 0dd7b4a9971e830a387f8b163485c89da4c5fa975f7d1a6441b1500ab58d063ff9a3866cf02e961fe4ee6f87a260991688a325c78d668411ee711f694ee7fe91
   languageName: node
   linkType: hard
 

@@ -6,6 +6,7 @@ import postgres from 'postgres';
 import readdirp from 'readdirp';
 import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
+import { encode, decode } from '@msgpack/msgpack';
 
 import Route, { pathToRouteInfo } from '../src/Route';
 import createApp from '../src/app';
@@ -15,7 +16,15 @@ import Config from '../src/Config';
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('no discord token');
 
-const restBroker = new Amqp('rest');
+const restBroker = new Amqp('rest', {
+	serialize: (data: any) => {
+		const encoded = encode(data);
+		return Buffer.from(encoded.buffer, encoded.byteOffset, encoded.byteLength);
+	},
+	deserialize: (data: Buffer | Uint8Array) => {
+		return decode(data);
+	},
+});
 const rest = new Rest(token, restBroker);
 const pg = postgres({ debug: console.log });
 

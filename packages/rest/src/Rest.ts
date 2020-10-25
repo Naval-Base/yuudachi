@@ -1,4 +1,5 @@
 import { Amqp } from '@spectacles/brokers';
+import HttpException from './HttpException';
 
 interface Request {
 	method: string;
@@ -67,11 +68,15 @@ export default class Rest {
 
 		// TODO: handle non-2xx status codes
 		if (res.status === 0) {
-			const body = (res.body as ResponseBody).body;
-			try {
-				return JSON.parse(body.toString()) as T;
-			} catch {
-				return (body as unknown) as T;
+			const httpRes = res.body as ResponseBody;
+			if (httpRes.status >= 200 && httpRes.status < 300) {
+				try {
+					return JSON.parse(httpRes.body.toString()) as T;
+				} catch {
+					return (body as unknown) as T;
+				}
+			} else {
+				throw new HttpException(httpRes.status, httpRes.body.toString());
 			}
 		}
 		throw new Error(res.body as string);

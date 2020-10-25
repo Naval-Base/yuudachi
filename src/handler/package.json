@@ -1,5 +1,5 @@
 {
-	"name": "@yuudachi/handler",
+	"name": "@yuudachi/service_handler",
 	"version": "2.0.0",
 	"description": "",
 	"main": "dist/index.js",
@@ -15,7 +15,9 @@
 	"dependencies": {
 		"@msgpack/msgpack": "^2.3.0",
 		"@spectacles/brokers": "^0.8.3",
+		"@yuudachi/api": "workspace:packages/api",
 		"@yuudachi/rest": "workspace:^2.0.0",
+		"@yuudachi/types": "workspace:packages/types",
 		"i18next": "^19.8.2",
 		"i18next-http-backend": "^1.0.21",
 		"joi": "^17.3.0",

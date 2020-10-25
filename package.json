@@ -4,7 +4,8 @@
 	"description": "",
 	"scripts": {
 		"test": "jest",
-		"test:ci": "jest --ci --no-stack-trace --verbose"
+		"test:ci": "jest --ci --no-stack-trace --verbose",
+		"build": "yarn workspaces foreach --parallel --topological-dev run build"
 	},
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@outlook.com>",
@@ -46,7 +47,6 @@
 	},
 	"workspaces": [
 		"packages/**",
-		"!packages/types",
 		"src/**"
 	]
 }
