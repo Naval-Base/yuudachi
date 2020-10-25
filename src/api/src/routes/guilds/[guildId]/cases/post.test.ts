@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 
+import { CaseAction } from '@yuudachi/types';
 import supertest from 'supertest';
 import { container } from 'tsyringe';
 
 import CreateCaseRoute from './post';
-import CaseManager, { CaseAction } from '../../../../managers/CaseManager';
+import CaseManager from '../../../../managers/CaseManager';
 import createApp from '../../../../app';
 import { RouteMethod } from '../../../../Route';
 import { USER_ID_HEADER } from '../../../../Constants';
