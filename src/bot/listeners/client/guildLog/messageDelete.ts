@@ -30,7 +30,10 @@ export default class MessageDeleteGuildLogListener extends Listener {
 			}
 
 			if (message.attachments.size) {
-				embed.addField('❯ Attachment(s)', message.attachments.map((attachment) => attachment.proxyURL).join('\n'));
+				embed.addField(
+					'❯ Attachment(s)',
+					`• ${message.attachments.map((attachment) => attachment.proxyURL).join('\n• ')}`,
+				);
 			}
 
 			if (!message.content && message.embeds.length) {
