@@ -1,7 +1,6 @@
 import { Listener } from 'discord-akairo';
 import { GuildMember, TextChannel } from 'discord.js';
 import { SETTINGS, MESSAGES, COLORS, ACTIONS } from '../../../util/constants';
-import ms from '@naval-base/ms';
 
 export default class GuildMemberAddAntiraidListener extends Listener {
 	public constructor() {
@@ -34,7 +33,7 @@ export default class GuildMemberAddAntiraidListener extends Listener {
 					member: member,
 					action: mode === 'BAN' ? 'Ban' : 'Kick',
 					caseNum: totalCases,
-					reason: MESSAGES.ANTIRAID.REASON(ms(age, true)),
+					reason: MESSAGES.ANTIRAID.REASON,
 					message: { author: this.client.user!, guild: guild },
 					nsfw: true,
 				})

@@ -120,7 +120,7 @@ export const MESSAGES = {
 	},
 
 	ANTIRAID: {
-		REASON: (age: string) => `automated anti raid action (account age less than ${age})`,
+		REASON: `Automated anti raid action`,
 	},
 
 	COMMANDS: {
