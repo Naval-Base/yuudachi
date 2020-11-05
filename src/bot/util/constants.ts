@@ -120,7 +120,7 @@ export const MESSAGES = {
 	},
 
 	ANTIRAID: {
-		REASON: `Automated anti raid action`,
+		REASON: `Automated anti-raid action`,
 	},
 
 	COMMANDS: {
@@ -568,11 +568,11 @@ export const MESSAGES = {
 					RETRY: (author: User | null) => `${author}, please pick one of \`ban|kick|disable\``,
 				},
 
-				DISABLED: `Successfully disabled anti raid mode`,
+				DISABLED: `Successfully disabled anti-raid mode`,
 				NO_AGE: (author: User | null) =>
 					`${author}, you need to tell me the minimum age members can have without being actioned!`,
 				ENABLED: (action: string, age: string) =>
-					`Successfully enabled anti raid mode with action \`${action}\` for users with an account age under ${age}.`,
+					`Successfully enabled anti-raid mode with action \`${action}\` for users with an account age under ${age}.`,
 			},
 
 			MUTE: {
