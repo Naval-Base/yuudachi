@@ -32,6 +32,7 @@ export enum COLORS {
 	TAG = 16776960,
 	WARN = 16776960,
 	ERROR = 15290191,
+	ANTIRAID = 4549089,
 
 	MEMBER_LEFT = 3092790,
 	MESSAGE_DELETE = 0x824aee,
@@ -54,6 +55,8 @@ export enum SETTINGS {
 	DEFAULT_DOCS = 'DEFAULT_DOCS',
 	BLACKLIST = 'BLACKLIST',
 	MEMBER_LOG = 'MEMBER_LOG',
+	ANTIRAID_MODE = 'ANTIRAID_MODE',
+	ANTIRAID_AGE = 'ANTIRAID_AGE',
 }
 
 export interface Settings {
@@ -79,6 +82,8 @@ export interface Settings {
 		ID: string;
 		MENTION: boolean;
 	};
+	ANTIRAID_MODE: string;
+	ANTIRAID_AGE: number;
 }
 
 export const MESSAGES = {
@@ -112,6 +117,10 @@ export const MESSAGES = {
 
 	LOCKDOWN_SCHEDULER: {
 		INIT: 'Lockdown scheduler initialized',
+	},
+
+	ANTIRAID: {
+		REASON: `Automated anti-raid action`,
 	},
 
 	COMMANDS: {
@@ -550,6 +559,20 @@ export const MESSAGES = {
 
 				REMOVED: (channel: TextChannel) => `Successfully removed lockdown on ${channel}`,
 				REPLY: (channel: TextChannel) => `Successfully locked down ${channel}`,
+			},
+
+			ANTIRAID: {
+				DESCRIPTION: 'Configures the servers anti-raid mode using the provided parameters.',
+				PROMPT: {
+					START: (author: User | null) => `${author}, please pick one of \`ban|kick|disable\``,
+					RETRY: (author: User | null) => `${author}, please pick one of \`ban|kick|disable\``,
+				},
+
+				DISABLED: `Successfully disabled anti-raid mode`,
+				NO_AGE: (author: User | null) =>
+					`${author}, you need to tell me the minimum age members can have without being actioned!`,
+				ENABLED: (action: string, age: string) =>
+					`Successfully enabled anti-raid mode with action \`${action}\` for users with an account age under ${age}.`,
 			},
 
 			MUTE: {
