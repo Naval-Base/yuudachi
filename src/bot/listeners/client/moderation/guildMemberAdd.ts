@@ -47,7 +47,7 @@ export default class GuildMemberAddAntiraidListener extends Listener {
 			caseId: totalCases,
 			targetId: user.id,
 			targetTag: user.tag,
-			action: ACTIONS.BAN,
+			action: mode === 'BAN' ? ACTIONS.BAN : ACTIONS.KICK,
 		});
 	}
 }
