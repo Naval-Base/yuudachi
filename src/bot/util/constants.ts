@@ -868,6 +868,15 @@ export const MESSAGES = {
 		NO_RESTRICT: 'there are no restricted roles configured on this server.',
 		NO_MUTE: 'there is no mute role configured on this server.',
 
+		ANTIRAID: {
+			MESSAGE: (guild: string, action: string) => stripIndents`
+				**You have been ${action} from ${guild}**
+				**Reason:** Automated anti-raid measure
+				${action === 'banned' ? 'You can appeal by DMing `Crawl#0002` with a message explaining the situation.' : ''}
+			`,
+			AUDIT: (action: string, cases: number) => `Automated ${action}| Case #${cases}`,
+		},
+
 		BAN: {
 			AWAIT_MESSAGE: 'You sure you want me to ban this [no gender specified]?',
 			TIMEOUT: 'timed out. Cancelled ban.',
