@@ -874,7 +874,7 @@ export const MESSAGES = {
 				**Reason:** Automated anti-raid measure
 				${action === 'banned' ? 'You can appeal by DMing `Crawl#0002` with a message explaining the situation.' : ''}
 			`,
-			AUDIT: (action: string, cases: number) => `Automated ${action}| Case #${cases}`,
+			AUDIT: (action: string, cases: number) => `Automated ${action} | Case #${cases}`,
 		},
 
 		BAN: {
