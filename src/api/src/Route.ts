@@ -50,7 +50,7 @@ export default abstract class Route {
 			try {
 				await this.handle(req, res, next!);
 			} catch (e) {
-				next!(e);
+				next?.(e);
 			}
 		});
 	}

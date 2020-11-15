@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v1.3.0.cli-migrations-v2
+    image: hasura/graphql-engine:v1.3.2.cli-migrations-v2
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:
@@ -189,7 +189,7 @@ services:
       DISCORD_CLIENT_ID: ""
       PUBLIC_API_DOMAIN: ""
       PUBLIC_FRONTEND_DOMAIN: ""
-      DISCORD_SCOPES: "identify,email"
+      DISCORD_SCOPES: "identify,email,guilds"
       DISCORD_CLIENT_SECRET: ""
     expose:
       - "3500"

@@ -1,13 +1,15 @@
 FROM node:alpine
 
 WORKDIR /usr/yuudachi
-COPY package.json yarn.lock tsconfig.base.json .yarnrc.yml ./
-COPY .yarn ./.yarn
+
+RUN npm i -g npm@7
+
+COPY package.json package-lock.json tsconfig.base.json ./
 
 COPY src/handler ./src/handler
 COPY packages/rest ./packages/rest
 
-RUN yarn workspaces focus @yuudachi/rest @yuudachi/handler
-RUN yarn workspaces foreach --parallel --topological-dev run build
+RUN npm ci --legacy-peer-deps
+RUN cd /usr/yuudachi/packages/rest && npm i --legacy-peer-deps && npx -p typescript tsc
 
-CMD yarn workspace @yuudachi/handler run start
+CMD cd /usr/yuudachi/src/handler && npm run start
