@@ -33,7 +33,7 @@ export default class BanCommand extends Command {
 					type: 'integer',
 					match: 'option',
 					flag: ['--days=', '-d='],
-					default: 7,
+					default: 1,
 				},
 				{
 					id: 'ref',
@@ -66,6 +66,7 @@ export default class BanCommand extends Command {
 			reason,
 		}: { member: GuildMember | User; days: number; ref: number; nsfw: boolean; reason: string },
 	) {
+		days = Math.min(Math.max(days, 0), 7);
 		const guild = message.guild!;
 		const key = `${guild.id}:${member.id}:BAN`;
 		guild.caseQueue.add(async () =>
