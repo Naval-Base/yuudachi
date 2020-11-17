@@ -59,7 +59,7 @@ export default class LaunchCybernukeCommand extends Command {
 					type: 'integer',
 					match: 'option',
 					flag: ['--days=', '-d='],
-					default: 7,
+					default: 1,
 				},
 			],
 		});
