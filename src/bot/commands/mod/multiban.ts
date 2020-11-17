@@ -117,6 +117,7 @@ export default class MultiBanCommand extends Command {
 			`${MESSAGES.COMMANDS.MOD.MULTIBAN.PROMPT.CONFIRMATION(message.author, validTargetString)} (y/n)${
 				parts.length ? `\n${parts.join('\n')}` : ''
 			}`,
+			{ split: true },
 		);
 
 		const filter = (m: Message) =>
