@@ -97,7 +97,10 @@ export default class LaunchCybernukeCommand extends Command {
 		}
 
 		await message.util?.send(
-			`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
+			`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
+				message.author,
+				members.size,
+			)}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
 				`\`${nowFormatted} (UTC)\``,
 				`\`${joinCutoffFormatted} (UTC)\``,
 				`\`${ageCutoffFormatted} (UTC)\``,
