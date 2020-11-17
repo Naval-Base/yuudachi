@@ -14,7 +14,7 @@
 	"private": true,
 	"dependencies": {
 		"@spectacles/brokers": "^0.8.4",
-		"i18next": "^19.8.3",
+		"i18next": "^19.8.4",
 		"i18next-http-backend": "^1.0.21",
 		"joi": "^17.3.0",
 		"lexure": "^0.17.0",
@@ -27,10 +27,10 @@
 	},
 	"devDependencies": {
 		"@spectacles/types": "^0.2.1",
-		"@types/node": "^14.14.7",
+		"@types/node": "^14.14.9",
 		"@types/node-fetch": "^2.5.7",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.0.5"
+		"typescript": "^4.1.2"
 	}
 }

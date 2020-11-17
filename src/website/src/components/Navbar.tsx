@@ -14,16 +14,20 @@ const Navbar = () => {
 	const LoginButton = () =>
 		user.loggedIn ? (
 			<Link href="/user/me">
-				<Button variant="ghost">{user.username}</Button>
+				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
+					{user.username}
+				</Button>
 			</Link>
 		) : (
 			<Link href="http://localhost:3500/api/auth/discord">
-				<Button variant="ghost">Log In</Button>
+				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
+					Log In
+				</Button>
 			</Link>
 		);
 
 	return (
-		<Flex as="nav" p={6} align="center" justify="space-between" wrap="wrap" bg="gray.800">
+		<Flex as="nav" p={4} align="center" justify="space-between" wrap="wrap">
 			<Flex align="center" mr={5}>
 				<Link href="/">
 					<Button variant="ghost">Yuudachi</Button>
@@ -32,7 +36,7 @@ const Navbar = () => {
 
 			<Flex align="center">
 				<IconButton
-					display={{ base: 'inline-flex', md: 'none' }}
+					display={{ base: 'flex', md: 'none' }}
 					aria-label="Open menu"
 					fontSize="20px"
 					variant="ghost"
@@ -42,17 +46,24 @@ const Navbar = () => {
 			</Flex>
 
 			<Box
-				display={{ base: show ? 'flex' : 'none', md: 'flex' }}
+				display={{ base: show ? 'flex' : 'none', md: 'block' }}
+				flexDirection={{ base: 'column', md: 'unset' }}
 				width={{ base: 'full', md: 'auto' }}
-				alignItems="center"
-				flexGrow={1}
+				flexGrow={{ base: 0, md: 1 }}
+				justifyContent="start"
+				py={{ base: 2, md: 'unset' }}
 			>
-				<Button mt={{ base: 4, md: 0 }} variant="link" display="block">
-					Dashboard
-				</Button>
+				<Link href="/">
+					<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
+						Dashboard
+					</Button>
+				</Link>
+				<Box display={{ base: 'block', md: 'none' }}>
+					<LoginButton />
+				</Box>
 			</Box>
 
-			<Box display={{ base: show ? 'flex' : 'none', md: 'flex' }} mt={{ base: 4, md: 0 }}>
+			<Box display={{ base: 'none', md: 'block' }}>
 				<LoginButton />
 			</Box>
 		</Flex>

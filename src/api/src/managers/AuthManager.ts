@@ -46,7 +46,7 @@ export default class AuthManager {
 
 	public static respondWith(credentials: AuthCredentials, res: Response) {
 		res.cookie('access_token', credentials.access.token, {
-			expires: credentials.access.expiration,
+			expires: credentials.refresh.expiration,
 			path: '/',
 			sameSite: 'strict',
 		});
@@ -70,8 +70,8 @@ export default class AuthManager {
 		return this.create(accessData.sub);
 	}
 
-	public async verify(token: string): Promise<string> {
-		const data = jwt.verify(token, this.config.secretKey) as AccessTokenData;
+	public async verify(token: string, ignoreExpiration = false): Promise<string> {
+		const data = jwt.verify(token, this.config.secretKey, { ignoreExpiration }) as AccessTokenData;
 
 		const [user] = (await this.sql`select token_reset_at from users where id = ${data.sub}`) as [
 			{ token_reset_at: string },
@@ -84,11 +84,11 @@ export default class AuthManager {
 	}
 
 	public async create(userId: string): Promise<AuthCredentials> {
-		const [{ token_reset_at }] = (await this.sql`
+		const [{ role, token_reset_at }] = (await this.sql`
 			update users set token_reset_at = now()
 			where id = ${userId}
-			returning token_reset_at
-		`) as [{ token_reset_at: string }];
+			returning role, token_reset_at
+		`) as [{ role: string; token_reset_at: string }];
 
 		const iat = Math.ceil(new Date(token_reset_at).getTime() / 1000);
 
@@ -96,8 +96,8 @@ export default class AuthManager {
 			sub: userId,
 			iat,
 			'https://hasura.io/jwt/claims': {
-				'x-hasura-allowed-roles': ['user', 'mod', 'admin'],
-				'x-hasura-default-role': 'user',
+				'x-hasura-allowed-roles': ['user', role],
+				'x-hasura-default-role': role,
 				'x-hasura-user-id': userId,
 			},
 			refresh: false,
