@@ -521,6 +521,29 @@ export const MESSAGES = {
 				},
 			},
 
+			MULTIBAN: {
+				DESCRIPTION: 'Bans provided members',
+				PROMPT: {
+					START: (author: User | null) => `${author}, which members do you want me to ban?`,
+					RETRY: (author: User | null) => `${author}, you have to provide members to ban!`,
+					CONFIRMATION: (author: User | null, members: string) => `${author}, awaiting confirmation to ban ${members}`,
+				},
+				INVALID: {
+					FILTERED: `Invalid users filtered:`,
+					INPUT: (amount: number) => `• Invalid input: ${amount}`,
+					MANAGED: (amount: number) => `• Currently being managed: ${amount}`,
+					MANAGEABLE: (amount: number) => `• Users not manageable by the client or yourself: ${amount}`,
+					BANNED: (amount: number) => `• Already banned: ${amount}`,
+				},
+				FAIL: {
+					VALID_USER: `Command execution failed. Provide at least one valid user to ban.`,
+					TIMEOUT: `Action timed out.`,
+					CONFIRMATION: `Action cancelled.`,
+				},
+				SUCCESS: (confirmed: string, survivors: string) => `• Banned: ${confirmed}\n• Survivors: ${survivors}`,
+				REPORT: 'The requested report is ready!',
+			},
+
 			DURATION: {
 				DESCRIPTION: 'Sets the duration for a mute and reschedules it.',
 				PROMPT: {
