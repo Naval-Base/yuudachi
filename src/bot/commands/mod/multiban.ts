@@ -15,7 +15,11 @@ export default class MultiBanCommand extends Command {
 			},
 			category: 'mod',
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS, Permissions.FLAGS.MANAGE_GUILD],
+			clientPermissions: [
+				Permissions.FLAGS.BAN_MEMBERS,
+				Permissions.FLAGS.MANAGE_GUILD,
+				Permissions.FLAGS.ATTACH_FILES,
+			],
 			ratelimit: 2,
 			flags: ['--report', '-r'],
 			channel: 'guild',
@@ -33,11 +37,22 @@ export default class MultiBanCommand extends Command {
 					match: 'flag',
 					flag: ['--report', '-r'],
 				},
+				{
+					id: 'days',
+					type: 'integer',
+					match: 'option',
+					flag: ['--days=', '-d='],
+					default: 1,
+				},
 			],
 		});
 	}
 
-	public async exec(message: Message, { targets, report }: { targets: Array<GuildMember | string>; report: boolean }) {
+	public async exec(
+		message: Message,
+		{ targets, report, days }: { targets: Array<GuildMember | string>; report: boolean; days: number },
+	) {
+		days = Math.min(Math.max(days, 0), 7);
 		const guild = message.guild!;
 
 		await message.util?.send('Making preparations...');
@@ -133,6 +148,7 @@ export default class MultiBanCommand extends Command {
 				for (const user of validTargets.values()) {
 					try {
 						await guild.members.ban(user, {
+							days,
 							reason: `Multi ban by ${message.author.tag} (${++i}/${validTargets.size})`,
 						});
 						confirmed.set(user.id, user);
