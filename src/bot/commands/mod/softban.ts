@@ -63,6 +63,7 @@ export default class SoftbanCommand extends Command {
 			reason,
 		}: { member: GuildMember; days: number; ref: number; nsfw: boolean; reason: string },
 	) {
+		days = Math.min(Math.max(days, 0), 7);
 		const guild = message.guild!;
 		const keys = [`${guild.id}:${member.id}:BAN`, `${guild.id}:${member.id}:UNBAN`];
 		guild.caseQueue.add(async () =>
