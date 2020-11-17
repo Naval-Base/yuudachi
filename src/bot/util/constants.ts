@@ -18,9 +18,9 @@ export enum ACTIONS {
 
 export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 
-export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD hh:mm:ss';
+export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
 
-export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD hh-mm-ss';
+export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD_HH-mm-ss';
 
 export enum COLORS {
 	BAN = 16718080,
@@ -816,16 +816,17 @@ export const MESSAGES = {
 							`${author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
 						RETRY: (author: User | null) => `${author}, the minimum is \`6 seconds\`.`,
 					},
-					CONFIRMATION: (author: User | null, members: number, join: string, age: string) =>
-						`${author}, cybernuke is projected to hit \`${members}\` guild members. Proceed? (y/n)\nParameters:\n• Join Date after: ${join}\n• Account Creation after: ${age}`,
+					CONFIRMATION: (author: User | null, members: number) =>
+						`${author}, cybernuke is projected to hit \`${members}\` guild members. Proceed? (y/n)`,
 				},
 				REPORT: 'The requested report is ready!',
 				FAIL: {
-					NO_MEMBERS: (join: string, age: string) =>
-						`Command execution failed. This cybernuke will not hit anyone, you might want to re-adjust the parameters and try again!\nParameters:\n• Join Date after: ${join}\n• Account Creation after: ${age}`,
+					NO_MEMBERS: `Command execution failed. This cybernuke will not hit anyone, you might want to re-adjust the parameters and try again!`,
 					CONFIRMATION: 'Action cancelled.',
 					TIMEOUT: 'Action timed out.',
 				},
+				PARAMETERS: (now: string, join: string, age: string) =>
+					`Parameters:\n• Current time: ${now}\n• Join date after: ${join}\n• Account creation after: ${age}`,
 			},
 
 			EVAL: {

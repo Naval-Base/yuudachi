@@ -175,9 +175,9 @@ export default class MultiBanCommand extends Command {
 				}
 				return null;
 			}
-			return message.util?.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.CONFIRMATION);
+			return message.channel.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.CONFIRMATION);
 		} catch {
-			message.util?.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.TIMEOUT);
+			message.channel.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.TIMEOUT);
 		}
 	}
 }

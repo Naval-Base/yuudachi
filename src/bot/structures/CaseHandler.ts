@@ -201,7 +201,7 @@ export default class CaseHandler {
 
 	private logMessage({ member, action, duration, message, reason, channel, reference }: Log) {
 		let msg = stripIndents`
-			**Member:** ${member instanceof User ? member.tag : member.user.tag} (${member.id})
+			**Member:** \`${member instanceof User ? member.tag : member.user.tag}\` (${member.id})
 			**Action:** ${action}
 		`;
 		if (action === 'Mute' && duration) {

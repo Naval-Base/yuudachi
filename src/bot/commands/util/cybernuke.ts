@@ -1,7 +1,7 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions, MessageAttachment } from 'discord.js';
-import { MESSAGES, DATE_FORMAT_LOGFILE } from '../../util/constants';
+import { MESSAGES, DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../util/constants';
 import * as moment from 'moment';
 import { ms } from '@naval-base/ms';
 import { EVENTS, TOPICS } from '../../util/logger';
@@ -78,8 +78,9 @@ export default class LaunchCybernukeCommand extends Command {
 		const joinCutoff = Date.now() - join;
 		const ageCutoff = Date.now() - age;
 
-		const joinCutoffFormatted = moment.utc(joinCutoff).format('YYYY/MM/DD hh:mm:ss');
-		const ageCutoffFormatted = moment.utc(ageCutoff).format('YYYY/MM/DD hh:mm:ss');
+		const nowFormatted = moment.utc().format(DATE_FORMAT_WITH_SECONDS);
+		const joinCutoffFormatted = moment.utc(joinCutoff).format(DATE_FORMAT_WITH_SECONDS);
+		const ageCutoffFormatted = moment.utc(ageCutoff).format(DATE_FORMAT_WITH_SECONDS);
 
 		const members = fetchedMembers.filter(
 			(member) => (member.joinedTimestamp ?? 0) > joinCutoff && member.user.createdTimestamp > ageCutoff,
@@ -87,17 +88,20 @@ export default class LaunchCybernukeCommand extends Command {
 
 		if (!members.size) {
 			return message.util?.send(
-				MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.NO_MEMBERS(`${joinCutoffFormatted} (UTC)`, `${ageCutoffFormatted} (UTC)`),
+				`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.NO_MEMBERS}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
+					`\`${nowFormatted} (UTC)\``,
+					`\`${joinCutoffFormatted} (UTC)\``,
+					`\`${ageCutoffFormatted} (UTC)\``,
+				)}`,
 			);
 		}
 
 		await message.util?.send(
-			MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
-				message.author,
-				members.size,
-				`${joinCutoffFormatted} (UTC)`,
-				`${ageCutoffFormatted} (UTC)`,
-			),
+			`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
+				`\`${nowFormatted} (UTC)\``,
+				`\`${joinCutoffFormatted} (UTC)\``,
+				`\`${ageCutoffFormatted} (UTC)\``,
+			)}`,
 		);
 
 		const filter = (m: Message) =>
@@ -177,9 +181,9 @@ export default class LaunchCybernukeCommand extends Command {
 				return null;
 			}
 
-			return message.util?.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.CONFIRMATION);
+			return message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.CONFIRMATION);
 		} catch {
-			message.util?.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.TIMEOUT);
+			message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.TIMEOUT);
 		}
 
 		return null;

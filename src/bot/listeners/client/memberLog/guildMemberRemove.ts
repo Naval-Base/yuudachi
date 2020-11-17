@@ -31,10 +31,10 @@ export default class GuildMemberRemoveMemberLogListener extends Listener {
 			}
 
 			if (member.joinedTimestamp) {
-				parts.push(`• Joined: ${sinceJoinFormatted} (${joinFormatted})`);
+				parts.push(`• Joined: \`${joinFormatted}\` (${sinceJoinFormatted})`);
 			}
 
-			parts.push(`• Left: ${leaveFormatted}`);
+			parts.push(`• Left: \`${leaveFormatted}\``);
 
 			embed.setDescription(parts.join('\n'));
 
