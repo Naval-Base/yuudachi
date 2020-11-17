@@ -177,9 +177,9 @@ export default class LaunchCybernukeCommand extends Command {
 				return null;
 			}
 
-			return message.util?.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.CONFIRMATION);
+			return message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.CONFIRMATION);
 		} catch {
-			message.util?.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.TIMEOUT);
+			message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.TIMEOUT);
 		}
 
 		return null;
