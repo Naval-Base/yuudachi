@@ -20,6 +20,8 @@ export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 
 export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD hh:mm:ss';
 
+export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD hh-mm-ss';
+
 export enum COLORS {
 	BAN = 16718080,
 	UNBAN = 8450847,
@@ -517,6 +519,29 @@ export const MESSAGES = {
 					START: (author: User | null) => `${author}, what member do you want to ban?`,
 					RETRY: (author: User | null) => `${author}, please mention a member.`,
 				},
+			},
+
+			MULTIBAN: {
+				DESCRIPTION: 'Bans provided members',
+				PROMPT: {
+					START: (author: User | null) => `${author}, which members do you want me to ban?`,
+					RETRY: (author: User | null) => `${author}, you have to provide members to ban!`,
+					CONFIRMATION: (author: User | null, members: string) => `${author}, awaiting confirmation to ban ${members}`,
+				},
+				INVALID: {
+					FILTERED: `Invalid users filtered:`,
+					INPUT: (amount: number) => `• Invalid input: ${amount}`,
+					MANAGED: (amount: number) => `• Currently being managed: ${amount}`,
+					MANAGEABLE: (amount: number) => `• Users not manageable by the client or yourself: ${amount}`,
+					BANNED: (amount: number) => `• Already banned: ${amount}`,
+				},
+				FAIL: {
+					VALID_USER: `Command execution failed. Provide at least one valid user to ban.`,
+					TIMEOUT: `Action timed out.`,
+					CONFIRMATION: `Action cancelled.`,
+				},
+				SUCCESS: (confirmed: string, survivors: string) => `• Banned: ${confirmed}\n• Survivors: ${survivors}`,
+				REPORT: 'The requested report is ready!',
 			},
 
 			DURATION: {
