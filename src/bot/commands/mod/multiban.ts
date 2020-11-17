@@ -10,7 +10,7 @@ export default class MultiBanCommand extends Command {
 			aliases: ['multiban', 'massban', 'nuke'],
 			description: {
 				content: MESSAGES.COMMANDS.MOD.MULTIBAN.DESCRIPTION,
-				usage: '<...members>',
+				usage: '<...user>',
 				examples: ['81440962496172032 83886770768314368'],
 			},
 			category: 'mod',
