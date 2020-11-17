@@ -783,16 +783,26 @@ export const MESSAGES = {
 			CYBERNUKE: {
 				DESCRIPTION: 'Bans all members that have joined recently, with new accounts.',
 				PROMPT: {
-					START: (author: User | null) =>
-						`${author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
-					RETRY: (author: User | null) => `${author}, the minimum is \`0.1\` and the maximum \`120\` minutes.`,
-				},
-				PROMPT_2: {
-					START: (author: User | null) =>
-						`${author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
-					RETRY: (author: User | null) => `${author}, the minimum is \`0.1\` minutes.`,
+					JOIN: {
+						START: (author: User | null) =>
+							`${author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
+						RETRY: (author: User | null) => `${author}, the minimum is \`6 seconds\` and the maximum \`2 hours\`.`,
+					},
+					AGE: {
+						START: (author: User | null) =>
+							`${author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
+						RETRY: (author: User | null) => `${author}, the minimum is \`6 seconds\`.`,
+					},
+					CONFIRMATION: (author: User | null, members: number, join: string, age: string) =>
+						`${author}, cybernuke is projected to hit \`${members}\` guild members. Proceed? (y/n)\nParameters:\n• Join Date after: ${join}\n• Account Creation after: ${age}`,
 				},
 				REPORT: 'The requested report is ready!',
+				FAIL: {
+					NO_MEMBERS: (join: string, age: string) =>
+						`Command execution failed. This cybernuke will not hit anyone, you might want to re-adjust the parameters and try again!\nParameters:\n• Join Date after: ${join}\n• Account Creation after: ${age}`,
+					CONFIRMATION: 'Action cancelled.',
+					TIMEOUT: 'Action timed out.',
+				},
 			},
 
 			EVAL: {
