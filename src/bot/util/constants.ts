@@ -20,6 +20,8 @@ export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 
 export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD hh:mm:ss';
 
+export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD hh-mm-ss';
+
 export enum COLORS {
 	BAN = 16718080,
 	UNBAN = 8450847,
@@ -781,14 +783,25 @@ export const MESSAGES = {
 			CYBERNUKE: {
 				DESCRIPTION: 'Bans all members that have joined recently, with new accounts.',
 				PROMPT: {
-					START: (author: User | null) =>
-						`${author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
-					RETRY: (author: User | null) => `${author}, the minimum is \`0.1\` and the maximum \`120\` minutes.`,
+					JOIN: {
+						START: (author: User | null) =>
+							`${author}, how old (in minutes) should a member be for the cybernuke to ignore them (server join date)?`,
+						RETRY: (author: User | null) => `${author}, the minimum is \`6 seconds\` and the maximum \`2 hours\`.`,
+					},
+					AGE: {
+						START: (author: User | null) =>
+							`${author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
+						RETRY: (author: User | null) => `${author}, the minimum is \`6 seconds\`.`,
+					},
+					CONFIRMATION: (author: User | null, members: number, join: string, age: string) =>
+						`${author}, cybernuke is projected to hit \`${members}\` guild members. Proceed? (y/n)\nParameters:\n• Join Date after: ${join}\n• Account Creation after: ${age}`,
 				},
-				PROMPT_2: {
-					START: (author: User | null) =>
-						`${author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
-					RETRY: (author: User | null) => `${author}, the minimum is \`0.1\` minutes.`,
+				REPORT: 'The requested report is ready!',
+				FAIL: {
+					NO_MEMBERS: (join: string, age: string) =>
+						`Command execution failed. This cybernuke will not hit anyone, you might want to re-adjust the parameters and try again!\nParameters:\n• Join Date after: ${join}\n• Account Creation after: ${age}`,
+					CONFIRMATION: 'Action cancelled.',
+					TIMEOUT: 'Action timed out.',
 				},
 			},
 
