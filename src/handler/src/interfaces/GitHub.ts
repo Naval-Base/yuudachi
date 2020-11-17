@@ -4,10 +4,6 @@ export interface GitHubUser {
 	url: string;
 }
 
-export interface GitHubUser {
-	login: string;
-}
-
 export interface GitActor {
 	avatarUrl?: string;
 	user?: GitHubUser;
@@ -23,18 +19,18 @@ export interface GitHubCommit {
 	pushedDate?: string;
 }
 
-export interface GitHubReview {
-	author: GitHubUser;
-	state: GitHubReviewState;
-	url: string;
-}
-
 export enum GitHubReviewState {
 	PENDING = 'PENDING',
 	COMMENTED = 'COMMENTED',
 	APPROVED = 'APPROVED',
 	CHANGES_REQUESTED = 'CHANGES_REQUESTED',
 	DISMISSED = 'DISMISSED',
+}
+
+export interface GitHubReview {
+	author: GitHubUser;
+	state: GitHubReviewState;
+	url: string;
 }
 
 export interface GitHubIssue {

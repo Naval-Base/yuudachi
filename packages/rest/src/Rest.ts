@@ -1,5 +1,9 @@
 import { Amqp } from '@spectacles/brokers';
 
+interface RequestOptions {
+	reason?: string;
+}
+
 interface Request {
 	method: string;
 	path: string;
@@ -18,10 +22,6 @@ interface ResponseBody {
 interface Response {
 	status: number;
 	body: unknown;
-}
-
-interface RequestOptions {
-	reason?: string;
 }
 
 export default class Rest {

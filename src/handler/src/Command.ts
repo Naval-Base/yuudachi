@@ -2,6 +2,11 @@ import { Message } from '@spectacles/types';
 import { Args } from 'lexure';
 import { basename, parse, sep, extname } from 'path';
 
+export enum ExecutionContext {
+	PREFIXED,
+	REGEXP,
+}
+
 export default interface Command {
 	name?: string;
 	aliases?: string[];
@@ -11,11 +16,6 @@ export default interface Command {
 	userPermissions?: string[];
 	regExp?: RegExp;
 	execute(message: Message, args: Args, locale: string, executionContext: ExecutionContext): unknown | Promise<unknown>;
-}
-
-export enum ExecutionContext {
-	PREFIXED,
-	REGEXP,
 }
 
 export interface CommandInfo {

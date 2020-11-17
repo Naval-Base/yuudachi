@@ -5,7 +5,9 @@
 	},
 	"include": [
 		"**/*.ts",
+		"**/*.tsx",
 		"**/*.js",
+		"**/*.jsx",
 		"**/*.test.ts",
 		"**/*.test.js",
 		"**/*.spec.ts",

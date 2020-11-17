@@ -8,22 +8,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Node v14
+      - name: Install Node v15
         uses: actions/setup-node@v1
         with:
-          node-version: 14
-
-      - name: Install yarn
-        run: npm i -g yarn
+          node-version: 15
 
       - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Run Build
-        run: yarn workspaces foreach --parallel --topological-dev run build
+        run: npm i --legacy-peer-deps
 
       - name: Run Tests
-        run: yarn run test:ci
+        run: npm run test:ci
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v1
