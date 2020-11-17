@@ -54,11 +54,23 @@ export default class LaunchCybernukeCommand extends Command {
 					match: 'flag',
 					flag: ['--report', '-r'],
 				},
+				{
+					id: 'days',
+					type: 'integer',
+					match: 'option',
+					flag: ['--days=', '-d='],
+					default: 7,
+				},
 			],
 		});
 	}
 
-	public async exec(message: Message, { join, age, report }: { join: number; age: number; report: boolean }) {
+	public async exec(
+		message: Message,
+		{ join, age, report, days }: { join: number; age: number; report: boolean; days: number },
+	) {
+		days = Math.min(Math.max(days, 0), 7);
+
 		const guild = message.guild!;
 		await message.util?.send('Calculating targeting parameters for cybernuke...');
 		const fetchedMembers = await guild.members.fetch();
@@ -114,7 +126,7 @@ export default class LaunchCybernukeCommand extends Command {
 								this.client.logger.error(error, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR });
 							})
 							.then(async () =>
-								member.ban({ days: 7, reason: `Cybernuke by ${message.author.tag} (${++i}/${members.size})` }),
+								member.ban({ days, reason: `Cybernuke by ${message.author.tag} (${++i}/${members.size})` }),
 							)
 							.then(() => {
 								fatalities.push(member);
