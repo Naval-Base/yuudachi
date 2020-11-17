@@ -4,25 +4,6 @@ import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 
-export async function alias(message: Message, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
-	const sub = args.single();
-
-	switch (sub) {
-		case 'add': {
-			return add(message, args, locale, sql, rest);
-		}
-
-		case 'rm':
-		case 'remove':
-		case 'delete': {
-			return remove(message, args, locale, sql, rest);
-		}
-
-		default:
-			throw new Error(i18next.t('command.tag.alias.execute.invalid_subcommand', { lng: locale }));
-	}
-}
-
 async function checkAliases(name: string, message: Message, locale: string, sql: Sql<any>) {
 	const [aliasedTags] = await sql<{ name: string }>`
 		select name
@@ -100,4 +81,23 @@ async function remove(message: Message, args: Args, locale: string, sql: Sql<any
 			joinArrays: ', ',
 		}),
 	});
+}
+
+export async function alias(message: Message, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
+	const sub = args.single();
+
+	switch (sub) {
+		case 'add': {
+			return add(message, args, locale, sql, rest);
+		}
+
+		case 'rm':
+		case 'remove':
+		case 'delete': {
+			return remove(message, args, locale, sql, rest);
+		}
+
+		default:
+			throw new Error(i18next.t('command.tag.alias.execute.invalid_subcommand', { lng: locale }));
+	}
 }

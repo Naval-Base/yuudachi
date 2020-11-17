@@ -48,6 +48,83 @@ type TimestampsWithoutMerged = Omit<typeof Timestamps, 'MERGED'>;
 
 type TimestampsWithoutMergedKey = TimestampsWithoutMerged[keyof TimestampsWithoutMerged];
 
+function buildQuery(owner: string, repository: string, issueID: number) {
+	return `
+		{
+			repository(owner: "${owner}", name: "${repository}") {
+				name
+				issueOrPullRequest(number: ${issueID}) {
+					... on PullRequest {
+						commits(last: 1) {
+							nodes {
+								commit {
+									abbreviatedOid
+								}
+							}
+						}
+						author {
+							avatarUrl
+							login
+							url
+						}
+						body
+						merged
+						mergeCommit {
+							abbreviatedOid
+						}
+						headRef {
+							name
+						}
+						headRepository {
+							nameWithOwner
+						}
+						mergedAt
+						mergedBy {
+							login
+						}
+						isDraft
+						number
+						publishedAt
+						title
+						url
+						closed
+						closedAt
+						comments {
+							totalCount
+						}
+						reviewDecision
+						latestOpinionatedReviews(last: 99) {
+							nodes {
+								author {
+									login
+								}
+								state
+								url
+							}
+						}
+					}
+					... on Issue {
+						author {
+							avatarUrl
+							login
+							url
+						}
+						body
+						number
+						publishedAt
+						title
+						url
+						closed
+						closedAt
+						comments {
+							totalCount
+						}
+					}
+				}
+			}
+		}`;
+}
+
 export async function issuePR(
 	owner: string,
 	repository: string,
@@ -217,81 +294,4 @@ export async function issuePR(
 
 		throw new Error(i18next.t('command.github.common.errors.fetch', { lng: locale }));
 	}
-}
-
-function buildQuery(owner: string, repository: string, issueID: number) {
-	return `
-		{
-			repository(owner: "${owner}", name: "${repository}") {
-				name
-				issueOrPullRequest(number: ${issueID}) {
-					... on PullRequest {
-						commits(last: 1) {
-							nodes {
-								commit {
-									abbreviatedOid
-								}
-							}
-						}
-						author {
-							avatarUrl
-							login
-							url
-						}
-						body
-						merged
-						mergeCommit {
-							abbreviatedOid
-						}
-						headRef {
-							name
-						}
-						headRepository {
-							nameWithOwner
-						}
-						mergedAt
-						mergedBy {
-							login
-						}
-						isDraft
-						number
-						publishedAt
-						title
-						url
-						closed
-						closedAt
-						comments {
-							totalCount
-						}
-						reviewDecision
-						latestOpinionatedReviews(last: 99) {
-							nodes {
-								author {
-									login
-								}
-								state
-								url
-							}
-						}
-					}
-					... on Issue {
-						author {
-							avatarUrl
-							login
-							url
-						}
-						body
-						number
-						publishedAt
-						title
-						url
-						closed
-						closedAt
-						comments {
-							totalCount
-						}
-					}
-				}
-			}
-		}`;
 }

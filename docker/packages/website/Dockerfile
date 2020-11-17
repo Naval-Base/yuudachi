@@ -1,12 +1,13 @@
 FROM node:alpine
 
 WORKDIR /usr/yuudachi
-COPY package.json yarn.lock tsconfig.base.json .yarnrc.yml ./
-COPY .yarn ./.yarn
+
+RUN npm i -g npm@7
+
+COPY package.json package-lock.json tsconfig.base.json ./
 
 COPY src/website ./src/website
 
-RUN yarn workspaces focus @yuudachi/website
-RUN yarn workspaces foreach --parallel run build
+RUN npm ci --legacy-peer-deps
 
-CMD yarn workspace @yuudachi/website run start
+CMD cd /usr/yuudachi/src/website && npm run start

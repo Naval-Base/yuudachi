@@ -8,6 +8,32 @@ import { GITHUB_BASE_URL, GITHUB_COLOR_COMMIT, GITHUB_ICON_COMMIT } from '../../
 import { GitHubAPIError } from '../github';
 import { truncateEmbed } from '../../../../util';
 
+function buildQuery(owner: string, repository: string, expression: string) {
+	return `
+		{
+			repository(owner: "${owner}", name: "${repository}") {
+				object(expression: "${expression}") {
+					... on Commit {
+						messageHeadline
+						abbreviatedOid
+						changedFiles
+						commitUrl
+						pushedDate
+						author {
+							avatarUrl
+							name
+							user {
+								login
+								avatarUrl
+								url
+							}
+						}
+					}
+				}
+			}
+		}`;
+}
+
 export async function commit(
 	owner: string,
 	repository: string,
@@ -77,30 +103,4 @@ export async function commit(
 
 		throw new Error(i18next.t('command.github.common.errors.fetch', { lng: locale }));
 	}
-}
-
-function buildQuery(owner: string, repository: string, expression: string) {
-	return `
-		{
-			repository(owner: "${owner}", name: "${repository}") {
-				object(expression: "${expression}") {
-					... on Commit {
-						messageHeadline
-						abbreviatedOid
-						changedFiles
-						commitUrl
-						pushedDate
-						author {
-							avatarUrl
-							name
-							user {
-								login
-								avatarUrl
-								url
-							}
-						}
-					}
-				}
-			}
-		}`;
 }

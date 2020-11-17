@@ -5,7 +5,7 @@
 	"main": "dist/index.js",
 	"typings": "typings/index.d.ts",
 	"scripts": {
-		"build": "rimraf dist typings && tsc"
+		"build": "npx rimraf dist typings && npx -p typescript tsc"
 	},
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@outlook.com>",
@@ -14,8 +14,9 @@
 		"tslib": "^2.0.3"
 	},
 	"devDependencies": {
-		"@spectacles/brokers": "^0.8.3",
+		"@spectacles/brokers": "^0.8.4",
+		"@types/node": "^14.14.7",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.0.3"
+		"typescript": "^4.0.5"
 	}
 }
