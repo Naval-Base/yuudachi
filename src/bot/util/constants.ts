@@ -20,6 +20,8 @@ export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 
 export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD hh:mm:ss';
 
+export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD hh-mm-ss';
+
 export enum COLORS {
 	BAN = 16718080,
 	UNBAN = 8450847,
@@ -790,6 +792,7 @@ export const MESSAGES = {
 						`${author}, how old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?`,
 					RETRY: (author: User | null) => `${author}, the minimum is \`0.1\` minutes.`,
 				},
+				REPORT: 'The requested report is ready!',
 			},
 
 			EVAL: {

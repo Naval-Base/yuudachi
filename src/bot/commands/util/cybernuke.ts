@@ -1,8 +1,9 @@
 import { stripIndents } from 'common-tags';
 import { Argument, Command } from 'discord-akairo';
-import { GuildMember, Message, Permissions } from 'discord.js';
-import { MESSAGES } from '../../util/constants';
+import { GuildMember, Message, Permissions, MessageAttachment } from 'discord.js';
+import { MESSAGES, DATE_FORMAT_LOGFILE } from '../../util/constants';
 import { EVENTS, TOPICS } from '../../util/logger';
+import * as moment from 'moment';
 
 export default class LaunchCybernukeCommand extends Command {
 	public constructor() {
@@ -34,11 +35,16 @@ export default class LaunchCybernukeCommand extends Command {
 						retry: (message: Message) => MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT_2.RETRY(message.author),
 					},
 				},
+				{
+					id: 'report',
+					match: 'flag',
+					flag: ['--report', '-r'],
+				},
 			],
 		});
 	}
 
-	public async exec(message: Message, { join, age }: { join: number; age: number }) {
+	public async exec(message: Message, { join, age, report }: { join: number; age: number; report: boolean }) {
 		const guild = message.guild!;
 		await message.util?.send('Calculating targeting parameters for cybernuke...');
 		await guild.members.fetch();
@@ -79,7 +85,7 @@ export default class LaunchCybernukeCommand extends Command {
 				member
 					.send(
 						stripIndents`
-					Sorry, but you've been automatically targetted by the cybernuke in the "${guild.name}" server.
+					Sorry, but you've been automatically targeted by the cybernuke in the "${guild.name}" server.
 					This means that you have been banned, likely in the case of a server raid.
 					Please contact them if you believe this ban to be in error.
 				`,
@@ -110,7 +116,7 @@ export default class LaunchCybernukeCommand extends Command {
 		}
 
 		await Promise.all(promises);
-		await statusMessage?.edit('Cybernuke impact confirmed. Casuality report incoming...');
+		await statusMessage?.edit('Cybernuke impact confirmed. Casualty report incoming...');
 		await response?.reply(
 			stripIndents`
 			__**Fatalities:**__
@@ -135,6 +141,14 @@ export default class LaunchCybernukeCommand extends Command {
 		`,
 			{ split: true },
 		);
+
+		if (report) {
+			const buffer = Buffer.from(fatalities.map((u) => u.id).join('\r\n'));
+			const d = moment.utc().format(DATE_FORMAT_LOGFILE);
+			const attachment = new MessageAttachment(buffer, `${d} cybernuke-report.txt`);
+
+			await message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.REPORT, [attachment]);
+		}
 
 		return null;
 	}
