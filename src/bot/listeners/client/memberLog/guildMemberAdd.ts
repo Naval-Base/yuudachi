@@ -53,8 +53,8 @@ export default class GuildMemberAddMemberLogListener extends Listener {
 				parts.push(`• Profile: ${member}`);
 			}
 
-			parts.push(`• Created: \`${creationFormatted}\` (${sinceCreationFormatted})`);
-			parts.push(`• Joined: \`${joinFormatted}\``);
+			parts.push(`• Created: \`${creationFormatted} (UTC)\` (${sinceCreationFormatted})`);
+			parts.push(`• Joined: \`${joinFormatted} (UTC)\``);
 
 			embed.setDescription(parts.join('\n'));
 
