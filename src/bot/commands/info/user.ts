@@ -1,6 +1,6 @@
 import { stripIndents } from 'common-tags';
-import { Command } from 'discord-akairo';
-import { GuildMember, Message, MessageEmbed, Permissions } from 'discord.js';
+import { Argument, Command } from 'discord-akairo';
+import { GuildMember, Message, MessageEmbed, Permissions, User } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
 import { DATE_FORMAT_WITH_SECONDS, MESSAGES } from '../../util/constants';
@@ -22,38 +22,61 @@ export default class UserInfoCommand extends Command {
 				{
 					id: 'member',
 					match: 'content',
-					type: 'member',
-					default: (message: Message) => message.member,
+					type: Argument.union('member', 'string'),
 				},
 			],
+			before: (message) => message.guild?.members.fetch(),
 		});
 	}
 
-	public async exec(message: Message, { member }: { member: GuildMember }) {
-		const { user } = member;
+	public addUserDetails(embed: MessageEmbed, user: User): MessageEmbed {
+		const sinceCreationFormatted = moment.utc(user.createdAt ?? 0).fromNow();
+		const creationFormatted = moment.utc(user.createdAt ?? 0).format(DATE_FORMAT_WITH_SECONDS);
+		return embed.setThumbnail(user.displayAvatarURL()).addField(
+			`❯ ${user.bot ? 'Bot' : 'User'} Details`,
+			stripIndents`
+				• ID: \`${user.id}\`
+				• Username: \`${user.tag}\`
+				• Created: \`${creationFormatted} (UTC)\` (${sinceCreationFormatted})
+				• Status: \`${user.presence.status.toUpperCase()}\`
+			`,
+		);
+	}
+
+	public addMemberDetails(embed: MessageEmbed, member: GuildMember): MessageEmbed {
+		const sinceJoinFormatted = moment.utc(member.joinedAt ?? 0).fromNow();
+		const joinFormatted = moment.utc(member.joinedAt ?? 0).format(DATE_FORMAT_WITH_SECONDS);
+
+		return embed.addField(
+			'❯ Member Details',
+			stripIndents`
+				${member.nickname == undefined /* eslint-disable-line */ ? '• No nickname' : `• Nickname: \`${member.nickname}\``}
+				• Roles: ${member.roles.cache.map((roles) => `\`${roles.name}\``).join(', ')}
+				• Joined: \`${joinFormatted} (UTC)\` (${sinceJoinFormatted})
+				• Activity: \`${member.presence.activities?.[0]?.name ?? 'None'}\`
+			`,
+		);
+	}
+
+	public async exec(message: Message, { member }: { member: GuildMember | string }) {
 		const embed = new MessageEmbed()
 			.setColor(3447003)
-			.setDescription(`Info about **${user.tag}** (ID: ${member.id})`)
-			.addField(
-				'❯ Member Details',
-				stripIndents`
-				${member.nickname == undefined /* eslint-disable-line */ ? '• No nickname' : ` • Nickname: ${member.nickname}`}
-				• Roles: ${member.roles.cache.map((roles) => `\`${roles.name}\``).join(' ')}
-				• Joined at: ${moment.utc(member.joinedAt ?? 0).format(DATE_FORMAT_WITH_SECONDS)}
-			`,
-			)
-			.addField(
-				'❯ User Details',
-				stripIndents`
-				• ID: ${member.id}
-				• Username: ${member.user.tag}
-				• Created at: ${moment.utc(user.createdAt).format(DATE_FORMAT_WITH_SECONDS)}${user.bot ? '\n• Is a bot account' : ''}
-				• Status: ${user.presence.status.toUpperCase()}
-				• Activity: ${user.presence.activities?.[0]?.name ?? 'None'}
-			`,
-			)
-			.setThumbnail(user.displayAvatarURL());
+			.setFooter(
+				`Requested by ${message.member?.displayName} (${message.author.id})`,
+				message.author.displayAvatarURL(),
+			);
+		if (member instanceof GuildMember) {
+			this.addMemberDetails(embed, member);
+			this.addUserDetails(embed, member.user);
+			return message.util?.send(embed);
+		}
 
-		return message.util?.send(embed);
+		try {
+			const user = await this.client.users.fetch(member);
+			this.addUserDetails(embed, user);
+			return message.util?.send(embed);
+		} catch {
+			this.exec(message, { member: message.member! });
+		}
 	}
 }
