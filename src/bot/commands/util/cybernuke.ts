@@ -56,6 +56,11 @@ export default class LaunchCybernukeCommand extends Command {
 					flag: ['--report', '-r'],
 				},
 				{
+					id: 'list',
+					match: 'flag',
+					flag: ['--list', '-ls', '-l'],
+				},
+				{
 					id: 'days',
 					type: 'integer',
 					match: 'option',
@@ -109,6 +114,21 @@ export default class LaunchCybernukeCommand extends Command {
 			);
 		}
 
+		if (list) {
+			await message.channel.send(
+				`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
+					message.author,
+					members.size,
+				)}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
+					`\`${nowFormatted} (UTC)\``,
+					`\`${joinCutoffFormatted} (UTC)\``,
+					`\`${ageCutoffFormatted} (UTC)\``,
+				)}\n• Projected targets:\n${members.map((m) => `\`${m.user.tag}\``).join(', ')}`,
+				{
+					split: true,
+				},
+			);
+		} else {
 		await message.util?.send(
 			`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
 				message.author,
@@ -119,6 +139,7 @@ export default class LaunchCybernukeCommand extends Command {
 				`\`${ageCutoffFormatted} (UTC)\``,
 			)}`,
 		);
+		}
 
 		const filter = (m: Message) =>
 			m.author.id === message.author.id && ['y', 'yes', 'n', 'no'].includes(m.content.toLowerCase());
