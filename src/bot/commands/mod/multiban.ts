@@ -66,7 +66,7 @@ export default class MultiBanCommand extends Command {
 		days = Math.min(Math.max(days, 0), 7);
 		const guild = message.guild!;
 
-		await message.util?.send('Making preparations...');
+		message.channel.startTyping();
 		await guild.members.fetch();
 
 		let invalidInput = 0;
@@ -135,16 +135,22 @@ export default class MultiBanCommand extends Command {
 		}
 
 		if (!validTargets.size) {
-			return message.util?.send(parts.join('\n'));
+			message.channel.stopTyping();
+			return message.channel.send(parts.join('\n'));
 		}
 
 		const validTargetString = validTargets.map((u) => `\`${u.tag}\``).join(', ');
-		message.util?.send(
-			`${MESSAGES.COMMANDS.MOD.MULTIBAN.PROMPT.CONFIRMATION(message.author, validTargetString)} (y/n)${
-				parts.length ? `\n${parts.join('\n')}` : ''
-			}`,
-			{ split: true },
-		);
+		message.channel.stopTyping();
+		message.channel
+			.send(
+				`${MESSAGES.COMMANDS.MOD.MULTIBAN.PROMPT.CONFIRMATION(message.author, validTargetString)} (y/n)${
+					parts.length ? `\n${parts.join('\n')}` : ''
+				}`,
+				{
+					split: true,
+				},
+			)
+			.catch((err) => console.error(err, err._errors));
 
 		const filter = (m: Message) =>
 			m.author.id === message.author.id && ['y', 'yes', 'n', 'no'].includes(m.content.toLowerCase());
@@ -154,6 +160,8 @@ export default class MultiBanCommand extends Command {
 			if (['yes', 'y'].includes(collected.first()!.content)) {
 				const survivors: Collection<string, User> = new Collection();
 				const confirmed: Collection<string, User> = new Collection();
+
+				message.channel.startTyping();
 
 				let i = 0;
 				for (const user of validTargets.values()) {
@@ -165,7 +173,7 @@ export default class MultiBanCommand extends Command {
 								member: user,
 								keys: key,
 								reason: `Multi ban \`(${++i}/${validTargets.size})\``,
-							days,
+								days,
 								nsfw,
 								skipPrompt: true,
 								skipResponse: true,
@@ -199,6 +207,10 @@ export default class MultiBanCommand extends Command {
 			return message.channel.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.CONFIRMATION);
 		} catch {
 			message.channel.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.TIMEOUT);
+		} finally {
+			message.channel.stopTyping();
 		}
+
+		return null;
 	}
 }
