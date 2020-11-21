@@ -66,7 +66,6 @@ export default class Rest {
 			},
 		});
 
-		// TODO: handle non-2xx status codes
 		if (res.status === 0) {
 			const httpRes = res.body as ResponseBody;
 			if (httpRes.status >= 200 && httpRes.status < 300) {

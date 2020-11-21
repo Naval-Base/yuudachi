@@ -9,6 +9,7 @@ import CaseManager from '../../../../managers/CaseManager';
 import createApp from '../../../../app';
 import { RouteMethod } from '../../../../Route';
 import { USER_ID_HEADER } from '../../../../Constants';
+import { HttpException } from '@yuudachi/rest';
 
 jest.mock('../../../../managers/CaseManager');
 
@@ -114,4 +115,64 @@ test('role action', async () => {
 			},
 		],
 	});
+});
+
+test('handles 404 HttpException while creating cases', async () => {
+	mockedCaseManager.create.mockRejectedValue(new HttpException(404, 'not found'));
+
+	const res = await supertest(app.server)
+		.post('/api/test/7890')
+		.type('json')
+		.set(USER_ID_HEADER, '09876543210987654321')
+		.send({
+			cases: [
+				{
+					action: CaseAction.KICK,
+					reason: 'foo',
+					targetId: '34567891234567891234',
+				},
+			],
+		});
+
+	expect(res.status).toBe(404);
+});
+
+test('handles 403 HttpException while creating cases', async () => {
+	mockedCaseManager.create.mockRejectedValue(new HttpException(403, 'forbidden'));
+
+	const res = await supertest(app.server)
+		.post('/api/test/7890')
+		.type('json')
+		.set(USER_ID_HEADER, '09876543210987654321')
+		.send({
+			cases: [
+				{
+					action: CaseAction.KICK,
+					reason: 'foo',
+					targetId: '34567891234567891234',
+				},
+			],
+		});
+
+	expect(res.status).toBe(403);
+});
+
+test('handles generic exception while creating cases', async () => {
+	mockedCaseManager.create.mockRejectedValue(new Error('oops'));
+
+	const res = await supertest(app.server)
+		.post('/api/test/7890')
+		.type('json')
+		.set(USER_ID_HEADER, '09876543210987654321')
+		.send({
+			cases: [
+				{
+					action: CaseAction.KICK,
+					reason: 'foo',
+					targetId: '34567891234567891234',
+				},
+			],
+		});
+
+	expect(res.status).toBe(500);
 });
