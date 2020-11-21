@@ -90,7 +90,7 @@ export default class LaunchCybernukeCommand extends Command {
 		days = Math.min(Math.max(days, 0), 7);
 
 		const guild = message.guild!;
-		await message.util?.send('Calculating targeting parameters for cybernuke...');
+		message.channel.startTyping();
 		const fetchedMembers = await guild.members.fetch();
 
 		const joinCutoff = Date.now() - join;
@@ -104,8 +104,9 @@ export default class LaunchCybernukeCommand extends Command {
 			(member) => (member.joinedTimestamp ?? 0) > joinCutoff && member.user.createdTimestamp > ageCutoff,
 		);
 
+		message.channel.stopTyping();
 		if (!members.size) {
-			return message.util?.send(
+			return message.channel.send(
 				`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.NO_MEMBERS}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
 					`\`${nowFormatted} (UTC)\``,
 					`\`${joinCutoffFormatted} (UTC)\``,
@@ -129,16 +130,16 @@ export default class LaunchCybernukeCommand extends Command {
 				},
 			);
 		} else {
-		await message.util?.send(
-			`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
-				message.author,
-				members.size,
-			)}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
-				`\`${nowFormatted} (UTC)\``,
-				`\`${joinCutoffFormatted} (UTC)\``,
-				`\`${ageCutoffFormatted} (UTC)\``,
-			)}`,
-		);
+			await message.util?.send(
+				`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
+					message.author,
+					members.size,
+				)}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
+					`\`${nowFormatted} (UTC)\``,
+					`\`${joinCutoffFormatted} (UTC)\``,
+					`\`${ageCutoffFormatted} (UTC)\``,
+				)}`,
+			);
 		}
 
 		const filter = (m: Message) =>
@@ -152,6 +153,8 @@ export default class LaunchCybernukeCommand extends Command {
 				const fatalities: GuildMember[] = [];
 				const survivors: { member: GuildMember; error: Error }[] = [];
 				const promises: Promise<Message | void>[] = [];
+
+				message.channel.startTyping();
 
 				let i = 0;
 				for (const member of members.values()) {
@@ -234,6 +237,8 @@ export default class LaunchCybernukeCommand extends Command {
 			return message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.CONFIRMATION);
 		} catch {
 			message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.TIMEOUT);
+		} finally {
+			message.channel.stopTyping();
 		}
 
 		return null;
