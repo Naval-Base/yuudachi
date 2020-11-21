@@ -1,14 +1,15 @@
 {
-	"extends": "../../tsconfig.base.json",
+	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"module": "CommonJS",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
 		"sourceRoot": "./",
 		"outDir": "dist"
 	},
 	"include": [
 		"./src",
 		"./bin"
+	],
+	"references": [
+		{ "path": "../../packages/types" },
+		{ "path": "../../packages/api" }
 	]
 }

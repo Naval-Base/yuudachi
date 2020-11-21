@@ -25,3 +25,4 @@ typings/
 # Miscellaneous
 .tmp/
 dump.sql
+tsconfig.tsbuildinfo

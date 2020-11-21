@@ -10,7 +10,6 @@
 		],
 		"allowJs": true,
 		"noEmit": true,
-		"incremental": false,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
