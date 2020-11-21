@@ -40,13 +40,19 @@ export default class TagInfoCommand extends Command {
 			lastModifiedBy = null;
 		}
 		const guild = this.client.guilds.cache.get(tag.guild);
-		const embed = new MessageEmbed().setColor(3447003).addField('❯ Name', tag.name);
+		const embed = new MessageEmbed().setColor(3447003).addField('❯ Name', `\`${tag.name}\``);
 		if (tag.templated) {
 			embed.addField('❯ Templated', '❗This tag is templated and resolves mentions and templates.');
 		}
+
+		const sinceCreationFormatted = moment.utc(tag.createdAt).fromNow();
+		const creationFormatted = moment.utc(tag.createdAt).format(DATE_FORMAT_WITH_SECONDS);
+		const sinceModifiedFormatted = moment.utc(tag.updatedAt).fromNow();
+		const modifiedFormatted = moment.utc(tag.updatedAt).format(DATE_FORMAT_WITH_SECONDS);
+
 		embed
-			.addField('❯ User', user ? `${user.tag} (ID: ${user.id})` : "Couldn't fetch user.")
-			.addField('❯ Guild', guild ? `${guild.name}` : "Couldn't fetch guild.")
+			.addField('❯ User', user ? `\`${user.tag}\` (${user.id})` : "Couldn't fetch user.")
+			.addField('❯ Guild', guild ? `\`${guild.name}\`` : "Couldn't fetch guild.")
 			.addField(
 				'❯ Aliases',
 				tag.aliases.length
@@ -56,13 +62,13 @@ export default class TagInfoCommand extends Command {
 							.join(', ')
 					: 'No aliases.',
 			)
-			.addField('❯ Uses', tag.uses)
-			.addField('❯ Created at', moment.utc(tag.createdAt).format(DATE_FORMAT_WITH_SECONDS))
-			.addField('❯ Modified at', moment.utc(tag.updatedAt).format(DATE_FORMAT_WITH_SECONDS));
+			.addField('❯ Uses', `${tag.uses}`)
+			.addField('❯ Created', `\`${creationFormatted} (UTC)\` (${sinceCreationFormatted})`)
+			.addField('❯ Last Modified', `\`${modifiedFormatted} (UTC)\` (${sinceModifiedFormatted})`);
 		if (lastModifiedBy) {
 			embed.addField(
 				'❯ Last modified by',
-				lastModifiedBy ? `${lastModifiedBy.tag} (ID: ${lastModifiedBy.id})` : "Couldn't fetch user.",
+				lastModifiedBy ? `\`${lastModifiedBy.tag}\` (${lastModifiedBy.id})` : "Couldn't fetch user.",
 			);
 		}
 
