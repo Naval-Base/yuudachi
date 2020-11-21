@@ -14,6 +14,9 @@ export interface ActionData {
 	days?: number;
 	duration?: number;
 	nsfw?: boolean;
+	skipPrompt?: boolean;
+	skipResponse?: boolean;
+	overrideColor?: number;
 }
 
 export default abstract class Action {
@@ -35,6 +38,12 @@ export default abstract class Action {
 
 	protected nsfw?: boolean;
 
+	protected skipPrompt?: boolean;
+
+	protected skipResponse?: boolean;
+
+	protected overrideColor?: number;
+
 	public constructor(protected action: ACTIONS, data: ActionData) {
 		this.client = data.message.client as YukikazeClient;
 		this.message = data.message;
@@ -45,6 +54,9 @@ export default abstract class Action {
 		this.days = data.days;
 		this.duration = data.duration;
 		this.nsfw = data.nsfw;
+		this.skipPrompt = data.skipPrompt;
+		this.skipResponse = data.skipResponse;
+		this.overrideColor = data.overrideColor;
 	}
 
 	protected get reason() {
@@ -80,6 +92,7 @@ export default abstract class Action {
 	}
 
 	protected get color() {
+		if (this.overrideColor) return this.overrideColor;
 		switch (this.action) {
 			case ACTIONS.BAN:
 				return COLORS.BAN;
