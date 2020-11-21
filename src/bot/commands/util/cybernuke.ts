@@ -1,10 +1,11 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions, MessageAttachment } from 'discord.js';
-import { MESSAGES, DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../util/constants';
+import { MESSAGES, DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS, COLORS } from '../../util/constants';
 import * as moment from 'moment';
 import { ms } from '@naval-base/ms';
 import { EVENTS, TOPICS } from '../../util/logger';
+import BanAction from '../../structures/case/actions/Ban';
 
 export default class LaunchCybernukeCommand extends Command {
 	public constructor() {
@@ -61,13 +62,25 @@ export default class LaunchCybernukeCommand extends Command {
 					flag: ['--days=', '-d='],
 					default: 1,
 				},
+				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
 			],
 		});
 	}
 
 	public async exec(
 		message: Message,
-		{ join, age, report, days }: { join: number; age: number; report: boolean; days: number },
+		{
+			join,
+			age,
+			report,
+			days,
+			list,
+			nsfw,
+		}: { join: number; age: number; report: boolean; days: number; list: boolean; nsfw: boolean },
 	) {
 		days = Math.min(Math.max(days, 0), 7);
 
@@ -132,9 +145,22 @@ export default class LaunchCybernukeCommand extends Command {
 							.catch((error: any) => {
 								this.client.logger.error(error, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR });
 							})
-							.then(async () =>
-								member.ban({ days, reason: `Cybernuke by ${message.author.tag} (${++i}/${members.size})` }),
-							)
+							.then(async () => {
+								const key = `${guild.id}:${member.id}:BAN`;
+								await guild.caseQueue.add(async () => {
+									new BanAction({
+										message,
+										member,
+										keys: key,
+										reason: `Cybernuke \`(${++i}/${members.size})\``,
+										days,
+										nsfw,
+										skipPrompt: true,
+										skipResponse: true,
+										overrideColor: COLORS.ANTIRAID,
+									}).commit();
+								});
+							})
 							.then(() => {
 								fatalities.push(member);
 							})
