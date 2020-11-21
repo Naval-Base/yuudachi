@@ -1,8 +1,9 @@
 import { Argument, Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions, Collection, MessageAttachment, User } from 'discord.js';
-import { DATE_FORMAT_LOGFILE, MESSAGES } from '../../util/constants';
+import { COLORS, DATE_FORMAT_LOGFILE, MESSAGES } from '../../util/constants';
 import { EVENTS, TOPICS } from '../../util/logger';
 import * as moment from 'moment';
+import BanAction from '../../structures/case/actions/Ban';
 
 export default class MultiBanCommand extends Command {
 	public constructor() {
@@ -38,6 +39,11 @@ export default class MultiBanCommand extends Command {
 					flag: ['--report', '-r'],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'days',
 					type: 'integer',
 					match: 'option',
@@ -50,7 +56,12 @@ export default class MultiBanCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ targets, report, days }: { targets: Array<GuildMember | string>; report: boolean; days: number },
+		{
+			targets,
+			report,
+			days,
+			nsfw,
+		}: { targets: Array<GuildMember | string>; report: boolean; days: number; nsfw: boolean },
 	) {
 		days = Math.min(Math.max(days, 0), 7);
 		const guild = message.guild!;
@@ -147,10 +158,20 @@ export default class MultiBanCommand extends Command {
 				let i = 0;
 				for (const user of validTargets.values()) {
 					try {
-						await guild.members.ban(user, {
+						const key = `${guild.id}:${user.id}:BAN`;
+						await guild.caseQueue.add(async () =>
+							new BanAction({
+								message,
+								member: user,
+								keys: key,
+								reason: `Multi ban \`(${++i}/${validTargets.size})\``,
 							days,
-							reason: `Multi ban by ${message.author.tag} (${++i}/${validTargets.size})`,
-						});
+								nsfw,
+								skipPrompt: true,
+								skipResponse: true,
+								overrideColor: COLORS.ANTIRAID,
+							}).commit(),
+						);
 						confirmed.set(user.id, user);
 					} catch (err) {
 						this.client.logger.error(err, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR });
