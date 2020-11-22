@@ -22,7 +22,6 @@ export default class MultiBanCommand extends Command {
 				Permissions.FLAGS.ATTACH_FILES,
 			],
 			ratelimit: 2,
-			flags: ['--report', '-r'],
 			channel: 'guild',
 			args: [
 				{

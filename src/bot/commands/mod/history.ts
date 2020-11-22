@@ -34,7 +34,6 @@ export default class HistoryCommand extends Command {
 					flag: ['--cases', '-c'],
 				},
 			],
-			flags: ['--profile', '-p'],
 			before: (message) => message.guild?.members.fetch(),
 		});
 	}
