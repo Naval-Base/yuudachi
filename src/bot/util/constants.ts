@@ -564,7 +564,6 @@ export const MESSAGES = {
 
 			HISTORY: {
 				DESCRIPTION: 'Check the history of a member.',
-				NO_PERMISSION: 'you know, I know, we should just leave it at that.',
 			},
 
 			KICK: {

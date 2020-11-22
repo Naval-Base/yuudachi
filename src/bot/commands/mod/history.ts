@@ -1,6 +1,7 @@
 import { Argument, Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions } from 'discord.js';
 import { MESSAGES, SETTINGS } from '../../util/constants';
+import UserInfoCommand from '../info/user';
 
 export default class HistoryCommand extends Command {
 	public constructor() {
@@ -18,26 +19,43 @@ export default class HistoryCommand extends Command {
 			args: [
 				{
 					id: 'member',
-					match: 'content',
-					type: Argument.union('member', async (_, phrase) => {
-						if (!phrase) return null;
-						const m = await this.client.users.fetch(phrase);
-						if (m) return { id: m.id, user: m };
-						return null;
-					}),
+					match: 'phrase',
+					type: Argument.union('member', 'string'),
 					default: (message: Message) => message.member,
 				},
+				{
+					id: 'showProfile',
+					match: 'flag',
+					flag: ['--profile', '-p'],
+				},
 			],
+			flags: ['--profile', '-p'],
+			before: (message) => message.guild?.members.fetch(),
 		});
 	}
 
-	public async exec(message: Message, { member }: { member: GuildMember }) {
+	public async exec(message: Message, { member, showProfile }: { member: GuildMember | string; showProfile: boolean }) {
 		const staffRole = message.member?.roles.cache.has(this.client.settings.get(message.guild!, SETTINGS.MOD_ROLE));
-		if (!staffRole && message.author.id !== member.id) {
-			return message.reply(MESSAGES.COMMANDS.MOD.HISTORY.NO_PERMISSION);
+		if (!staffRole) return;
+
+		const userInfoCmd = this.handler.findCommand('user') as UserInfoCommand;
+
+		if (member instanceof GuildMember) {
+			const embed = await this.client.caseHandler.history(member);
+			if (showProfile) {
+				userInfoCmd.addMemberDetails(embed, member);
+				userInfoCmd.addUserDetails(embed, member.user);
+			}
+			return message.util?.send(embed);
 		}
 
-		const embed = await this.client.caseHandler.history(member);
-		return message.util?.send(embed);
+		try {
+			const user = await this.client.users.fetch(member);
+			const embed = await this.client.caseHandler.history(user);
+			if (showProfile) {
+				userInfoCmd.addUserDetails(embed, user);
+			}
+			return message.util?.send(embed);
+		} catch {}
 	}
 }
