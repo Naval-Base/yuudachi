@@ -10,8 +10,8 @@ export default class HistoryCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.HISTORY.DESCRIPTION,
-				usage: '<member>',
-				examples: ['@Crawl'],
+				usage: '<member> [--profile] [--cases]',
+				examples: ['@Crawl', '@Crawl --profile', '81440962496172032 --cases'],
 			},
 			channel: 'guild',
 			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.EMBED_LINKS],

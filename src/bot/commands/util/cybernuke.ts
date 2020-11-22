@@ -13,7 +13,7 @@ export default class LaunchCybernukeCommand extends Command {
 			aliases: ['cybernuke', 'launch-cybernuke'],
 			description: {
 				content: MESSAGES.COMMANDS.UTIL.CYBERNUKE.DESCRIPTION,
-				usage: '<join> <age>',
+				usage: '<join> <age> [--report] [--list] [--days=3] [--nsfw]',
 				examples: ['10 120'],
 			},
 			category: 'util',
