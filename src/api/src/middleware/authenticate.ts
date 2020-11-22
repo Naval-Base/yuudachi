@@ -17,15 +17,13 @@ export interface OAuthInfo {
 export default async (req: Request, _: Response, next?: NextHandler) => {
 	const authManager = container.resolve(AuthManager);
 
-	let token: string;
-
+	let token: string | undefined;
 	if (req.headers.authorization?.startsWith('Bearer ')) {
 		token = req.headers.authorization.substr('Bearer '.length);
 	} else if (req.headers.cookie) {
 		token = cookie.parse(req.headers.cookie).access_token;
-	} else {
-		return next?.(unauthorized('Malformed or missing JWT'));
 	}
+	if (!token) return next?.(unauthorized('Malformed or missing JWT'));
 
 	try {
 		const userId = await authManager.verify(token);

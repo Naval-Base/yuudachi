@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 
 import Rest from '@yuudachi/rest';
+import { Case, CaseAction } from '@yuudachi/types';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
-import CaseManager, { CaseAction, Case } from './CaseManager';
+import CaseManager from './CaseManager';
 import { kSQL } from '../tokens';
 
 jest.mock('@yuudachi/rest');

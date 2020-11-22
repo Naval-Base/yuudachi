@@ -1,11 +1,12 @@
 import { Role, Message } from '@spectacles/types';
+import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 
-import { RawCase, CaseAction } from './CaseManager';
+import { RawCase } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
 import { kSQL } from '../tokens';
 

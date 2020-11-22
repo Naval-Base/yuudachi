@@ -122,6 +122,22 @@
 					"invalid_subcommand": "no valid subcommand provided"
 				}
 			}
+		},
+		"mod": {
+			"common": {
+				"execute": {
+					"no_user_id": "no user ID provided",
+					"invalid_user_id": "**{{id}}** is not a valid user ID",
+					"no_guild": "this command can only be used in a guild / server",
+					"no_reason": "mod actions require a reason",
+					"target_not_found": "the given member is not in this guild / server"
+				}
+			},
+			"kick": {
+				"success": "successfully kicked {{- member}}",
+				"missing_permissions": "missing permissions to kick this member",
+				"failure": "unable to kick {{- member}}"
+			}
 		}
 	}
 }

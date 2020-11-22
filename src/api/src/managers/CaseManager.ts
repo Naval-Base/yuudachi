@@ -1,20 +1,11 @@
 import { User } from '@spectacles/types';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
+import { Case, CaseAction } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
 import { URLSearchParams } from 'url';
 
 import { kSQL } from '../tokens';
-
-export enum CaseAction {
-	ROLE,
-	UNROLE,
-	WARN,
-	KICK,
-	SOFTBAN,
-	BAN,
-	UNBAN,
-}
 
 export interface RawCase {
 	action_expiration: string | null;
@@ -32,20 +23,6 @@ export interface RawCase {
 	created_at: string;
 	mod_tag: string;
 	guild_id: string;
-}
-
-export interface Case {
-	caseId: number;
-	guildId: string;
-	targetId: string;
-	moderatorId: string;
-	action: CaseAction;
-	roleId?: string;
-	actionExpiration?: Date;
-	reason: string;
-	deleteMessageDays?: number;
-	contextMessageId?: string;
-	referenceId?: number;
 }
 
 @injectable()

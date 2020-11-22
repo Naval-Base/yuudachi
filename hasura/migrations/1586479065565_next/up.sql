@@ -1,6 +1,6 @@
 -- UTIL
 
-create function next_case(bigint) returns integer
+create function next_case(text) returns integer
 language plpgsql
 stable
 as $$

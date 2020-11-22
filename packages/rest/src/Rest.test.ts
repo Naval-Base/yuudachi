@@ -9,6 +9,8 @@ afterEach(() => {
 	mockedAmqp.call.mockClear();
 });
 
+const serialize = (data: any) => Buffer.from(JSON.stringify(data));
+
 test('constructs', () => {
 	expect(() => new Rest('token', mockedAmqp)).not.toThrow();
 });
@@ -25,7 +27,8 @@ test('sends get', async () => {
 	mockedAmqp.call.mockResolvedValue({
 		status: 0,
 		body: {
-			body: Buffer.from(JSON.stringify({ abc: 'def' })),
+			status: 200,
+			body: serialize({ abc: 'def' }),
 		},
 	});
 
@@ -50,7 +53,7 @@ test('sends post', async () => {
 
 	mockedAmqp.call.mockResolvedValue({
 		status: 0,
-		body: { body: 'baz' },
+		body: { status: 200, body: serialize('baz') },
 	});
 
 	const res = await rest.post('/foo/bar', { foo: 'bar' });
@@ -59,7 +62,7 @@ test('sends post', async () => {
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
 		method: 'POST',
 		path: '/foo/bar',
-		body: Buffer.from(JSON.stringify({ foo: 'bar' })),
+		body: serialize({ foo: 'bar' }),
 		headers: {
 			Authorization: 'Bot token',
 			'X-RateLimit-Precision': 'millisecond',
@@ -76,7 +79,8 @@ test('sends put', async () => {
 	mockedAmqp.call.mockResolvedValue({
 		status: 0,
 		body: {
-			body: null,
+			status: 200,
+			body: serialize(null),
 		},
 	});
 
@@ -103,7 +107,8 @@ test('sends patch', async () => {
 	mockedAmqp.call.mockResolvedValue({
 		status: 0,
 		body: {
-			body: null,
+			status: 200,
+			body: serialize(null),
 		},
 	});
 
@@ -130,7 +135,8 @@ test('sends delete', async () => {
 	mockedAmqp.call.mockResolvedValue({
 		status: 0,
 		body: {
-			body: null,
+			status: 200,
+			body: serialize(null),
 		},
 	});
 
@@ -178,7 +184,8 @@ test('sends audit log reason', async () => {
 	mockedAmqp.call.mockResolvedValue({
 		status: 0,
 		body: {
-			body: 'foo',
+			status: 200,
+			body: serialize('foo'),
 		},
 	});
 

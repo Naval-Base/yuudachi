@@ -41,7 +41,7 @@ insert into settings (
 						) as "RESTRICT_ROLES"
 				) d)
 		) as settings
-	from guild_settings;
+	from guild_settings
 );
 
 drop table guild_settings;

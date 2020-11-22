@@ -1,10 +1,9 @@
 import 'reflect-metadata';
 
-import { Amqp } from '@spectacles/brokers';
 import { resolve } from 'path';
 import postgres from 'postgres';
 import readdirp from 'readdirp';
-import Rest from '@yuudachi/rest';
+import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
 
 import Route, { pathToRouteInfo } from '../src/Route';
@@ -15,7 +14,7 @@ import Config from '../src/Config';
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('no discord token');
 
-const restBroker = new Amqp('rest');
+const restBroker = createAmqpBroker('rest');
 const rest = new Rest(token, restBroker);
 const pg = postgres({ debug: console.log });
 

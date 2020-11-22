@@ -1,23 +1,24 @@
 import 'reflect-metadata';
 
 import { stripIndents } from 'common-tags';
-import postgres, { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
+import { CaseAction } from '@yuudachi/types';
 import { container } from 'tsyringe';
 
 import CaseLogManager from './CaseLogManager';
-import { CaseAction } from './CaseManager';
-import { SettingsKeys } from './SettingsManager';
+import SettingsManager, { SettingsKeys } from './SettingsManager';
 import { kSQL } from '../tokens';
 
 jest.mock('@yuudachi/rest');
-jest.mock('postgres', () => jest.fn(() => jest.fn()));
+jest.mock('./SettingsManager');
 
 const mockedRest: jest.Mocked<Rest> = new (Rest as any)();
-const mockedPostgres: jest.MockedFunction<Sql<any>> = postgres() as any;
+const mockedPostgres = jest.fn();
+const mockedSettingsManager: jest.Mocked<SettingsManager> = new (SettingsManager as any)();
 
 container.register(kSQL, { useValue: mockedPostgres });
 container.register(Rest, { useValue: mockedRest });
+container.register(SettingsManager, { useValue: mockedSettingsManager });
 
 const NOW = new Date().toISOString();
 
@@ -38,14 +39,19 @@ const contextChannelId = '23456';
 const contextMessageId = '34567';
 const actionExpiration = new Date(Date.parse(NOW) + 1e5).toString();
 
-// Array holding results for SQL queries during the test
-let postgresResults: any[] = [];
+mockedSettingsManager.get.mockImplementation((_, prop) => {
+	switch (prop) {
+		case SettingsKeys.MOD_LOG_CHANNEL_ID:
+			return Promise.resolve(logChannelId);
+		case SettingsKeys.PREFIX:
+			return Promise.resolve('?');
+	}
+
+	throw new Error('unexpected prop');
+});
 
 // eslint-disable-next-line no-extend-native
 Date.prototype.toISOString = jest.fn(() => NOW);
-
-let sqlCalls = 0;
-mockedPostgres.mockImplementation((): any => Promise.resolve([postgresResults[sqlCalls++]]));
 
 // there is only one rest call that happens during case creation
 let restCalls = 0;
@@ -59,14 +65,14 @@ mockedRest.post.mockImplementation(() => {
 });
 
 afterEach(() => {
-	postgresResults = [];
-	sqlCalls = 0;
 	restCalls = 0;
 
 	jest.clearAllMocks();
 });
 
 test('fails when no log channel is available', async () => {
+	mockedSettingsManager.get.mockResolvedValueOnce(null);
+
 	const logManager = container.resolve(CaseLogManager);
 	await expect(() =>
 		logManager.create({
@@ -90,8 +96,6 @@ test('fails when no log channel is available', async () => {
 });
 
 test('creates basic kick case', async () => {
-	postgresResults.push({ value: logChannelId });
-
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
 		action: CaseAction.KICK,
@@ -111,21 +115,10 @@ test('creates basic kick case', async () => {
 		target_tag: targetTag,
 	});
 
-	expect(mockedPostgres).toHaveBeenCalledTimes(2);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(
-		1,
-		[
-			`
-			select `,
-			` as value
-			from guild_settings
-			where guild_id = `,
-			'',
-		],
-		SettingsKeys.MOD_LOG_CHANNEL_ID,
-		guildId,
-	);
+	expect(mockedSettingsManager.get).toHaveBeenCalledTimes(1);
+	expect(mockedSettingsManager.get).toHaveBeenCalledWith(guildId, SettingsKeys.MOD_LOG_CHANNEL_ID);
 
+	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenLastCalledWith(
 		[
 			`
@@ -159,7 +152,7 @@ test('creates basic kick case', async () => {
 });
 
 test('creates reference role case', async () => {
-	postgresResults = [{ value: logChannelId }, { log_message_id: refLogMessageId }];
+	mockedPostgres.mockResolvedValue([{ log_message_id: refLogMessageId }]);
 	mockedRest.get.mockResolvedValue([{ id: roleId, name: roleName }]);
 
 	const logManager = container.resolve(CaseLogManager);
@@ -181,9 +174,9 @@ test('creates reference role case', async () => {
 		target_tag: targetTag,
 	});
 
-	expect(mockedPostgres).toHaveBeenCalledTimes(3);
+	expect(mockedPostgres).toHaveBeenCalledTimes(2);
 	expect(mockedPostgres).toHaveBeenNthCalledWith(
-		2,
+		1,
 		[
 			`
 				select log_message_id
@@ -218,7 +211,7 @@ test('creates reference role case', async () => {
 });
 
 test('creates contextual softban case', async () => {
-	postgresResults = [{ value: logChannelId }, { channel_id: contextChannelId }];
+	mockedPostgres.mockResolvedValue([{ channel_id: contextChannelId }]);
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -239,9 +232,9 @@ test('creates contextual softban case', async () => {
 		target_tag: targetTag,
 	});
 
-	expect(mockedPostgres).toHaveBeenCalledTimes(3);
+	expect(mockedPostgres).toHaveBeenCalledTimes(2);
 	expect(mockedPostgres).toHaveBeenNthCalledWith(
-		2,
+		1,
 		[
 			`
 				select channel_id
@@ -270,7 +263,15 @@ test('creates contextual softban case', async () => {
 });
 
 test('creates temporary ban case with context and reference', async () => {
-	postgresResults = [{ value: logChannelId }, { channel_id: contextChannelId }, { log_message_id: refLogMessageId }];
+	let calls = 0;
+	mockedPostgres.mockImplementation(() => {
+		switch (calls++) {
+			case 0:
+				return [{ channel_id: contextChannelId }];
+			case 1:
+				return [{ log_message_id: refLogMessageId }];
+		}
+	});
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -291,9 +292,9 @@ test('creates temporary ban case with context and reference', async () => {
 		target_tag: targetTag,
 	});
 
-	expect(mockedPostgres).toHaveBeenCalledTimes(4);
+	expect(mockedPostgres).toHaveBeenCalledTimes(3);
 	expect(mockedPostgres).toHaveBeenNthCalledWith(
-		2,
+		1,
 		[
 			`
 				select channel_id
@@ -304,7 +305,7 @@ test('creates temporary ban case with context and reference', async () => {
 		contextMessageId,
 	);
 	expect(mockedPostgres).toHaveBeenNthCalledWith(
-		3,
+		2,
 		[
 			`
 				select log_message_id
@@ -338,7 +339,7 @@ test('creates temporary ban case with context and reference', async () => {
 });
 
 test('creates ban without a reason', async () => {
-	postgresResults = [{ value: logChannelId }, { value: '?' }];
+	mockedPostgres.mockResolvedValue({ value: '?' });
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -359,21 +360,7 @@ test('creates ban without a reason', async () => {
 		target_tag: targetTag,
 	});
 
-	expect(mockedPostgres).toHaveBeenCalledTimes(3);
-	expect(mockedPostgres).toHaveBeenNthCalledWith(
-		2,
-		[
-			`
-			select `,
-			` as value
-			from guild_settings
-			where guild_id = `,
-			'',
-		],
-		SettingsKeys.PREFIX,
-		guildId,
-	);
-
+	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenLastCalledWith(
 		[
 			`

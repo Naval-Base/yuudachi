@@ -1,8 +1,12 @@
 {
-	"extends": "../../tsconfig.base.json",
+	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"module": "CommonJS",
+		"declarationDir": "typings",
 		"sourceRoot": "./",
+		"rootDir": "./src",
 		"outDir": "dist"
-	}
+	},
+	"include": [
+		"./src"
+	]
 }
