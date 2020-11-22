@@ -66,6 +66,8 @@ export default class HistoryCommand extends Command {
 				embed.thumbnail = null;
 			}
 			return message.util?.send(embed);
-		} catch {}
+		} catch {
+			return message.util?.send(MESSAGES.COMMANDS.MOD.HISTORY.NO_USER);
+		}
 	}
 }

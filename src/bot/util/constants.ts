@@ -565,6 +565,7 @@ export const MESSAGES = {
 
 			HISTORY: {
 				DESCRIPTION: 'Check the history of a member.',
+				NO_USER: "I was looking everywhere, but i can't find this target!",
 			},
 
 			KICK: {
