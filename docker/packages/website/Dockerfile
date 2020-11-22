@@ -2,7 +2,7 @@ FROM node:alpine
 
 WORKDIR /usr/yuudachi
 
-RUN npm i -g npm@7
+RUN npm i -g npm@next-7
 
 COPY package.json package-lock.json tsconfig.base.json ./
 

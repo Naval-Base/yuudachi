@@ -1,10 +1,13 @@
+import { Case, CaseAction } from '@yuudachi/types';
+import { forbidden, notFound } from '@hapi/boom';
 import Joi from 'joi';
 import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 
 import Route from '../../../../Route';
 import { authorize, validate, bodyParser } from '../../../../middleware';
-import CaseManager, { Case, CaseAction } from '../../../../managers/CaseManager';
+import CaseManager from '../../../../managers/CaseManager';
+import { HttpException } from '@yuudachi/rest';
 
 interface CasesPostBody {
 	cases: Case[];
@@ -69,8 +72,24 @@ export default class CreateCaseRoute extends Route {
 			created.push(this.caseManager.create(case_));
 		}
 
+		let cases: Case[];
+		try {
+			cases = await Promise.all(created);
+		} catch (e) {
+			if (e instanceof HttpException) {
+				switch (e.status) {
+					case 403:
+						throw forbidden(e.body);
+					case 404:
+						throw notFound(e.body);
+				}
+			}
+
+			throw e;
+		}
+
 		res.statusCode = 201;
 		res.setHeader('content-type', 'application/json; charset=utf-8');
-		res.end(JSON.stringify({ cases: await Promise.all(created) }));
+		res.end(JSON.stringify({ cases }));
 	}
 }

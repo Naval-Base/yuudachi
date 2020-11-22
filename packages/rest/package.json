@@ -5,12 +5,13 @@
 	"main": "dist/index.js",
 	"typings": "typings/index.d.ts",
 	"scripts": {
-		"build": "npx rimraf dist typings && npx -p typescript tsc"
+		"build": "rimraf dist typings && tsc"
 	},
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@outlook.com>",
 	"license": "UNLICENSED",
 	"dependencies": {
+		"@msgpack/msgpack": "^2.3.0",
 		"tslib": "^2.0.3"
 	},
 	"devDependencies": {

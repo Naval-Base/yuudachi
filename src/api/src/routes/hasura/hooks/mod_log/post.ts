@@ -16,7 +16,7 @@ enum HasuraAction {
 
 interface HasuraMogLogEventPayload {
 	event: {
-		session_variables: Record<string, string>;
+		session_variables: Record<string, string> | null;
 		op: keyof typeof HasuraAction;
 		data: {
 			old: Record<string, unknown> | null;
@@ -44,7 +44,7 @@ export default class HasuraModLogEventHook extends Route {
 				.keys({
 					event: Joi.object()
 						.keys({
-							session_variables: Joi.object(),
+							session_variables: Joi.object().allow(null),
 							op: Joi.string().valid('INSERT', 'UPDATE', 'DELETE', 'MANUAL').required(),
 							data: Joi.object({
 								old: Joi.object().allow(null),
