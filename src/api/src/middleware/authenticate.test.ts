@@ -61,7 +61,7 @@ afterEach(() => {
 });
 
 const app = createApp();
-app.use(authenticate);
+app.use(authenticate(true));
 app.get('/test', mockHandler);
 app.listen(0);
 
@@ -82,14 +82,14 @@ test('missing jwt cookie property', async () => {
 test('has valid user jwt cookie', async () => {
 	await supertest(app.server).get('/test').set('Cookie', `access_token=${token}`).expect(200);
 
-	expect(mockedAuthManager.verify).toHaveBeenCalledWith(token);
+	expect(mockedAuthManager.verify).toHaveBeenCalledWith(token, true);
 });
 
 test('has valid authorization header', async () => {
 	await supertest(app.server).get('/test').set('authorization', `Bearer ${token}`).expect(200);
 
 	mockedAuthManager.verify.mockReturnValue('12345');
-	expect(mockedAuthManager.verify).toHaveBeenCalledWith(token);
+	expect(mockedAuthManager.verify).toHaveBeenCalledWith(token, true);
 });
 
 test('has expired user jwt cookie', async () => {
@@ -99,5 +99,5 @@ test('has expired user jwt cookie', async () => {
 	});
 
 	await supertest(app.server).get('/test').set('Cookie', `access_token=${expiredToken}`).expect(401);
-	expect(mockedAuthManager.verify).toHaveBeenCalledWith(expiredToken);
+	expect(mockedAuthManager.verify).toHaveBeenCalledWith(expiredToken, true);
 });

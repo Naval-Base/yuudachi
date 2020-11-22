@@ -12,11 +12,11 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 		const sql = container.resolve<postgres.Sql<any>>(kSQL);
 		const cookies = cookie.parse(req.headers.cookie) as { token: string };
 
-		let decoded: { provider: 'Discord' | 'Twitch'; access_token: string };
+		let decoded: { provider: 'discord' | 'twitch'; access_token: string };
 		try {
 			const config = container.resolve<Config>(kConfig);
 			decoded = jwt.verify(cookies.token, config.secretKey) as {
-				provider: 'Discord' | 'Twitch';
+				provider: 'discord' | 'twitch';
 				access_token: string;
 			};
 
