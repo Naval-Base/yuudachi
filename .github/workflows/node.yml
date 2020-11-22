@@ -14,7 +14,10 @@ jobs:
           node-version: 15
 
       - name: Install dependencies
-        run: npm i --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
+
+      - name: Build packages
+        run: npm run build
 
       - name: Run Tests
         run: npm run test:ci

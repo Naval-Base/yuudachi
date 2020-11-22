@@ -75,6 +75,10 @@ test('missing jwt cookie', async () => {
 	expect(mockHandler).not.toHaveBeenCalled();
 });
 
+test('missing jwt cookie property', async () => {
+	await supertest(app.server).get('/test').set('Cookie', 'foo=bar').expect(401);
+});
+
 test('has valid user jwt cookie', async () => {
 	await supertest(app.server).get('/test').set('Cookie', `access_token=${token}`).expect(200);
 

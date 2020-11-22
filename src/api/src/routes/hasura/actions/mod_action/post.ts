@@ -1,10 +1,11 @@
+import { Case } from '@yuudachi/types';
 import Joi from 'joi';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 
 import Route from '../../../../Route';
 import { validate, bodyParser } from '../../../../middleware';
-import CaseManager, { Case } from '../../../../managers/CaseManager';
+import CaseManager from '../../../../managers/CaseManager';
 
 enum Actions {
 	MOD_ACTION = 'mod_action',

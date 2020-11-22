@@ -1,9 +1,7 @@
 {
-	"extends": "../../tsconfig.base.json",
+	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"declaration": true,
 		"declarationDir": "typings",
-		"module": "CommonJS",
 		"sourceRoot": "./",
 		"rootDir": "./src",
 		"outDir": "dist"

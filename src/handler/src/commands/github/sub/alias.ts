@@ -3,8 +3,8 @@ import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
-import { ellipsis, uniqueValidatedValues } from '../../../../util';
-import { MESSAGE_CONTENT_LIMIT } from '../../../../Constants';
+import { ellipsis, uniqueValidatedValues } from '../../../util';
+import { MESSAGE_CONTENT_LIMIT } from '../../../Constants';
 
 const validSubCommands = ['`add`', '`remove`', '`list`'];
 const regExp = /([A-Za-z0-9_.-]+):(?:https:\/\/github\.com\/|git@github\.com:)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+?)(?:\.git)?$/;
