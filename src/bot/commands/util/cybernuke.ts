@@ -17,6 +17,7 @@ export default class LaunchCybernukeCommand extends Command {
 				examples: ['10 120'],
 			},
 			category: 'util',
+			channel: 'guild',
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
 			ratelimit: 2,
