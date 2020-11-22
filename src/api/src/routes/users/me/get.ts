@@ -8,7 +8,7 @@ import { kSQL } from '../../../tokens';
 
 @injectable()
 export default class DiscordLoginRoute extends Route {
-	public middleware = [authenticate];
+	public middleware = [authenticate()];
 
 	public constructor(
 		@inject(kSQL)

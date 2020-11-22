@@ -16,8 +16,8 @@
 	},
 	"devDependencies": {
 		"@spectacles/brokers": "^0.8.4",
-		"@types/node": "^14.14.7",
+		"@types/node": "^14.14.9",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.0.5"
+		"typescript": "^4.1.2"
 	}
 }

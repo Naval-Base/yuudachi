@@ -55,7 +55,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 			join connections
 			on connections.user_id = users.id
 			where connections.id = ${me.id}
-				and provider = 'Discord';
+				and provider = 'discord';
 		`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (user) {
@@ -65,7 +65,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 					access_token = ${response.access_token},
 					refresh_token = ${response.refresh_token},
 					expires_at = ${new Date(Date.now() + response.expires_in * 1000).toISOString()}
-				where id = ${me.id} and provider = 'Discord'
+				where id = ${me.id} and provider = 'discord'
 			`;
 		} else {
 			[user] = await this.sql<{ id: string }>`
@@ -89,7 +89,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 				) values (
 					${me.id},
 					${user.id},
-					'Discord',
+					'discord',
 					true,
 					${avatar},
 					${response.access_token},

@@ -14,7 +14,7 @@ export interface OAuthInfo {
 	userId: string;
 }
 
-export default async (req: Request, _: Response, next?: NextHandler) => {
+export default (ignoreExpiration = false) => async (req: Request, _: Response, next?: NextHandler) => {
 	const authManager = container.resolve(AuthManager);
 
 	let token: string | undefined;
@@ -26,7 +26,7 @@ export default async (req: Request, _: Response, next?: NextHandler) => {
 	if (!token) return next?.(unauthorized('Malformed or missing JWT'));
 
 	try {
-		const userId = await authManager.verify(token);
+		const userId = await authManager.verify(token, ignoreExpiration);
 
 		req.auth = { userId, token };
 		return next?.();

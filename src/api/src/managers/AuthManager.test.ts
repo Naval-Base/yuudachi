@@ -64,7 +64,7 @@ test('sends response', () => {
 test('refreshes token', async () => {
 	advanceTo();
 
-	mockedPostgres.mockReturnValue([{ token_reset_at: new Date().toISOString() }] as any);
+	mockedPostgres.mockReturnValue([{ role: 'user', token_reset_at: new Date().toISOString() }] as any);
 
 	const accessToken =
 		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicmVmcmVzaCI6ZmFsc2V9.h38LyY0OlJlS4Q8ZH1OtPj9FP9JI5SbNNBlrFBKiZxw';
@@ -77,7 +77,7 @@ test('refreshes token', async () => {
 		access: {
 			expiration: new Date(900000), // 0 + 15m
 			token:
-				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjowLCJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsidXNlciIsIm1vZCIsImFkbWluIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InVzZXIiLCJ4LWhhc3VyYS11c2VyLWlkIjoiMTIzNDU2Nzg5MCJ9LCJyZWZyZXNoIjpmYWxzZSwiZXhwIjo5MDB9.H_IVsGeMkkQa939DASj4ARIK4DccUIDhZeUfkxrBA2I',
+				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjowLCJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsidXNlciIsInVzZXIiXSwieC1oYXN1cmEtZGVmYXVsdC1yb2xlIjoidXNlciIsIngtaGFzdXJhLXVzZXItaWQiOiIxMjM0NTY3ODkwIn0sInJlZnJlc2giOmZhbHNlLCJleHAiOjkwMH0.KntOpGBacs_lKS12qN_iG3S5_eNT3NC64jvTgUT0Ey8',
 		},
 		refresh: {
 			expiration: new Date(604800000), // 0 + 7d
@@ -88,7 +88,7 @@ test('refreshes token', async () => {
 });
 
 test('verifies token', async () => {
-	mockedPostgres.mockReturnValue([{ token_reset_at: 0 }] as any);
+	mockedPostgres.mockReturnValue([{ role: 'user', token_reset_at: 0 }] as any);
 	const authManager = container.resolve(AuthManager);
 
 	const token =

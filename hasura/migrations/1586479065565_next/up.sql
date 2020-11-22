@@ -12,12 +12,17 @@ begin
 end;
 $$;
 
+-- ROLES
+
+create type roles as enum('admin', 'moderator', 'user');
+
 -- USERS
 
 create table users (
   id uuid default gen_random_uuid() not null,
   email text not null,
   username text not null,
+  role roles default 'user',
   token_reset_at timestamp
 );
 
@@ -30,7 +35,7 @@ comment on column users.token_reset_at is 'When this user''s token was reset';
 
 -- PROVIDERS
 
-create type providers as enum('Discord', 'Twitch');
+create type providers as enum('discord', 'twitch');
 
 -- CONNECTIONS
 
@@ -146,8 +151,8 @@ create table guild_settings (
 	prefix text default '?',
 	mod_log_channel_id text,
 	mod_role_id text,
-	guild_log_id text,
-	member_log_id text,
+	guild_log_channel_id text,
+	member_log_channel_id text,
 	mute_role_id text,
 	tag_role_id text,
 	embed_role_id text,
@@ -168,8 +173,8 @@ insert into guild_settings (
 		coalesce((settings ->> 'PREFIX')::text, '?') as prefix,
 		(settings ->> 'MOD_LOG')::text as mod_log_channel_id,
 		(settings ->> 'MOD_ROLE')::text as mod_role_id,
-		(settings ->> 'GUILD_LOG')::text as guild_log_id,
-		(settings -> 'MEMBER_LOG' ->> 'ID')::text as member_log_id,
+		(settings ->> 'GUILD_LOG')::text as guild_log_channel_id,
+		(settings -> 'MEMBER_LOG' ->> 'ID')::text as member_log_channel_id,
 		(settings ->> 'MUTE_ROLE')::text as mute_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'TAG')::text as tag_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::text as embed_role_id,

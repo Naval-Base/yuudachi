@@ -9,7 +9,7 @@ import { authenticate } from '../../../middleware';
 
 @injectable()
 export default class TokenRefreshRoute extends Route {
-	public middleware = [authenticate];
+	public middleware = [authenticate(true)];
 
 	public constructor(public authManager: AuthManager) {
 		super();
