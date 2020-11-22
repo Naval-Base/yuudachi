@@ -1,7 +1,6 @@
 import supertest from 'supertest';
 import bodyParser from './bodyParser';
-
-import createApp from '../app';
+import { createApp } from '@yuudachi/http';
 
 const mockHandler = jest.fn((_, res) => res.end());
 

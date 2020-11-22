@@ -9,6 +9,7 @@
 		"./bin"
 	],
 	"references": [
+		{ "path": "../../packages/core" },
 		{ "path": "../../packages/types" },
 		{ "path": "../../packages/api" }
 	]

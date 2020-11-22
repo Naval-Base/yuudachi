@@ -1,7 +1,8 @@
 import { injectable, inject } from 'tsyringe';
 import { Sql } from 'postgres';
+import { Tokens } from '@yuudachi/core';
 
-import { kSQL } from '../tokens';
+const { kSQL } = Tokens;
 
 export enum SettingsKeys {
 	PREFIX = 'prefix',

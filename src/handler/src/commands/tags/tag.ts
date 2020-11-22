@@ -4,14 +4,16 @@ import { Args, joinTokens } from 'lexure';
 import Rest from '@yuudachi/rest';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
+import { Tokens } from '@yuudachi/core';
 
 import Command from '../../Command';
-import { kSQL } from '../../tokens';
 
 import { add } from './sub/add';
 import { update } from './sub/update';
 import { remove } from './sub/remove';
 import { alias } from './sub/alias';
+
+const { kSQL } = Tokens;
 
 @injectable()
 export default class implements Command {

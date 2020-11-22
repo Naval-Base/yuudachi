@@ -1,8 +1,10 @@
 import supertest from 'supertest';
+import { createApp } from '@yuudachi/http';
+import { Constants } from '@yuudachi/core';
 
 import authorize from './authorize';
-import { USER_ID_HEADER } from '../Constants';
-import createApp from '../app';
+
+const { USER_ID_HEADER } = Constants;
 
 const mockHandler = jest.fn((_, res) => res.end());
 

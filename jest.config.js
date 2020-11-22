@@ -13,8 +13,12 @@ module.exports = {
 		},
 	},
 	roots: ['<rootDir>packages/', '<rootDir>src/'],
-	moduleNameMapper: {
-		'@yuudachi/rest': '<rootDir>packages/rest/src/index.ts',
-	},
-	setupFiles: ['jest-date-mock'],
+	coveragePathIgnorePatterns: [
+		'packages/api/dist/',
+		'packages/core/dist/',
+		'packages/http/dist/',
+		'packages/rest/dist/',
+		'packages/types/dist/',
+	],
+	setupFiles: ['./jest-setup.ts', 'jest-date-mock'],
 };

@@ -1,7 +1,8 @@
 import { badRequest } from '@hapi/boom';
 import { Request, Response, NextHandler } from 'polka';
+import { Constants } from '@yuudachi/core';
 
-import { USER_ID_HEADER } from '../Constants';
+const { USER_ID_HEADER } = Constants;
 
 export default function authorize(req: Request, res: Response, next?: NextHandler) {
 	const userId = req.headers[USER_ID_HEADER] as string;

@@ -1,9 +1,11 @@
 import 'reflect-metadata';
 
 import { container } from 'tsyringe';
+import { Tokens } from '@yuudachi/core';
 
-import { kSQL } from '../tokens';
 import SettingsManager from './SettingsManager';
+
+const { kSQL } = Tokens;
 
 const mockedPostgres = { unsafe: jest.fn() };
 

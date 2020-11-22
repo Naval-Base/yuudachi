@@ -2,7 +2,7 @@ import { Message, Embed } from '@spectacles/types';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
-import { addField, truncateEmbed } from '../../../../util';
+import { addField, truncateEmbed } from '../../../util';
 import { isPR, GitHubReviewDecision, GitHubReviewState, GitHubAPIResult } from '../../../interfaces/GitHub';
 
 import {
@@ -17,7 +17,7 @@ import {
 	GITHUB_ICON_PR_DRAFT,
 	GITHUB_ICON_PR_MERGED,
 	GITHUB_ICON_PR_OPEN,
-} from '../../../../Constants';
+} from '../../../Constants';
 import { GitHubAPIError } from '../github';
 
 enum ResultStatePR {

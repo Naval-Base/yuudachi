@@ -12,6 +12,8 @@ services:
     environment:
       DISCORD_TOKEN: ""
       JWT_SECRET: ""
+  auth:
+    environment:
       DISCORD_CLIENT_ID: ""
       DISCORD_CLIENT_SECRET: ""
   gateway:

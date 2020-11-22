@@ -13,9 +13,11 @@ import { container } from 'tsyringe';
 import { Message } from '@spectacles/types';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
+import { Tokens } from '@yuudachi/core';
 
 import Command, { commandInfo, ExecutionContext } from '../src/Command';
-import { kSQL } from '../src/tokens';
+
+const { kSQL } = Tokens;
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('missing DISCORD_TOKEN');

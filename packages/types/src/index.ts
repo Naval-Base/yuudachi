@@ -1,3 +1,5 @@
+import { AuthInfo, OAuthInfo } from './AuthInfo';
+import Config from './Config';
 import Case, { CreateCase, CaseAction } from './Case';
 
-export { Case, CreateCase, CaseAction };
+export { AuthInfo, OAuthInfo, Config, Case, CreateCase, CaseAction };

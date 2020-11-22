@@ -4,13 +4,15 @@ import { Message } from '@spectacles/types';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
+import { Tokens } from '@yuudachi/core';
 
 import Command, { ExecutionContext } from '../../Command';
-import { kSQL } from '../../tokens';
 
 import { alias } from './sub/alias';
 import { issuePR } from './sub/issue-pr';
 import { commit } from './sub/commit';
+
+const { kSQL } = Tokens;
 
 interface RepositoryEntry {
 	owner: string;

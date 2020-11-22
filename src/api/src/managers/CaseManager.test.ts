@@ -4,9 +4,11 @@ import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import { Tokens } from '@yuudachi/core';
 
 import CaseManager from './CaseManager';
-import { kSQL } from '../tokens';
+
+const { kSQL } = Tokens;
 
 jest.mock('@yuudachi/rest');
 jest.mock('postgres', () => jest.fn(() => jest.fn()));
