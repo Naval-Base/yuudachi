@@ -10,7 +10,7 @@ export default class AntiraidCommand extends Command {
 			category: 'mod',
 			description: {
 				content: MESSAGES.COMMANDS.MOD.ANTIRAID.DESCRIPTION,
-				usage: '<kick|ban> <age> | <disable>',
+				usage: '<kick|ban> <<age>|disable>',
 				examples: ['kick 10h', 'ban 1w', 'disable'],
 			},
 			channel: 'guild',
