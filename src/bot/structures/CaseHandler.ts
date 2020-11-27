@@ -2,9 +2,10 @@ import ms from '@naval-base/ms';
 import { oneLine, stripIndents } from 'common-tags';
 import { Guild, GuildMember, Message, MessageEmbed, TextChannel, User } from 'discord.js';
 import YukikazeClient from '../client/YukikazeClient';
-import { PRODUCTION, SETTINGS } from '../util/constants';
+import { DATE_FORMAT_DATE, PRODUCTION, SETTINGS } from '../util/constants';
 import { GRAPHQL, graphQLClient } from '../util/graphQL';
 import { Cases, CasesInsertInput } from '../util/graphQLTypes';
+import * as moment from 'moment';
 
 interface Footer {
 	warn?: number;
@@ -162,14 +163,14 @@ export default class CaseHandler {
 		return embed;
 	}
 
-	public async history(member: GuildMember | User) {
+	public async history(member: GuildMember | User, listCases = false) {
 		const { data } = await graphQLClient.query<any, CasesInsertInput>({
 			query: GRAPHQL.QUERY.HISTORY_CASE,
 			variables: {
 				targetId: member.id,
 			},
 		});
-		let cases: Pick<Cases, 'action'>[];
+		let cases: Cases[];
 		if (PRODUCTION) cases = data.cases;
 		else cases = data.casesStaging;
 		const footer = cases.reduce((count: Footer, c) => {
@@ -185,8 +186,7 @@ export default class CaseHandler {
 			values.reduce((a, b) => a + b),
 			colors.length - 1,
 		);
-
-		return new MessageEmbed()
+		const embed = new MessageEmbed()
 			.setAuthor(
 				`${member instanceof User ? member.tag : member.user.tag} (${member.id})`,
 				member instanceof User ? member.displayAvatarURL() : member.user.displayAvatarURL(),
@@ -197,6 +197,34 @@ export default class CaseHandler {
 				${kick} kick${kick > 1 || kick === 0 ? 's' : ''},
 				and ${ban} ban${ban > 1 || ban === 0 ? 's' : ''}.
 			`);
+
+		if (listCases && cases.length) {
+			const summary: string[] = [];
+
+			let truncated = false;
+			for (const c of cases.reverse()) {
+				const dateFormatted = moment.utc(c.createdAt).format(DATE_FORMAT_DATE);
+				const caseString = `• \`${dateFormatted} ${ACTION_KEYS[c.action].toUpperCase()} #${c.caseId}\` ${
+					c.reason?.replace(/`/g, '').replace(/\*/g, '') || 'n/a'
+				}`;
+
+				if (summary.join('\n').length + caseString.length + 1 < 2040) {
+					summary.push(caseString);
+					continue;
+				}
+
+				truncated = true;
+				break;
+			}
+
+			if (truncated) {
+				embed.setDescription(`${summary.join('\n')}\n• more...`);
+			} else {
+				embed.setDescription(summary.join('\n'));
+			}
+		}
+
+		return embed;
 	}
 
 	private logMessage({ member, action, duration, message, reason, channel, reference }: Log) {

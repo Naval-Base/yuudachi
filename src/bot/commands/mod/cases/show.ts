@@ -79,7 +79,7 @@ export default class CaseCommand extends Command {
 			.setColor(COLORS[color])
 			.setDescription(
 				stripIndents`
-				**Member:** ${dbCase.targetTag} (${dbCase.targetId})
+				**Member:** \`${dbCase.targetTag}\` (${dbCase.targetId})
 				**Action:** ${ACTION_KEYS[dbCase.action]}${
 					dbCase.action === 5
 						? `\n**Length:** ${ms(

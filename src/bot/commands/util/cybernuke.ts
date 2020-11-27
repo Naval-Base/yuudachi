@@ -1,10 +1,11 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions, MessageAttachment } from 'discord.js';
-import { MESSAGES, DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../util/constants';
+import { MESSAGES, DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS, COLORS } from '../../util/constants';
 import * as moment from 'moment';
 import { ms } from '@naval-base/ms';
 import { EVENTS, TOPICS } from '../../util/logger';
+import BanAction from '../../structures/case/actions/Ban';
 
 export default class LaunchCybernukeCommand extends Command {
 	public constructor() {
@@ -12,10 +13,11 @@ export default class LaunchCybernukeCommand extends Command {
 			aliases: ['cybernuke', 'launch-cybernuke'],
 			description: {
 				content: MESSAGES.COMMANDS.UTIL.CYBERNUKE.DESCRIPTION,
-				usage: '<join> <age>',
+				usage: '<join> <age> [--report] [--list] [--days=3] [--nsfw]',
 				examples: ['10 120'],
 			},
 			category: 'util',
+			channel: 'guild',
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
 			ratelimit: 2,
@@ -55,11 +57,21 @@ export default class LaunchCybernukeCommand extends Command {
 					flag: ['--report', '-r'],
 				},
 				{
+					id: 'list',
+					match: 'flag',
+					flag: ['--list', '-ls', '-l'],
+				},
+				{
 					id: 'days',
 					type: 'integer',
 					match: 'option',
 					flag: ['--days=', '-d='],
 					default: 1,
+				},
+				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
 				},
 			],
 		});
@@ -67,12 +79,19 @@ export default class LaunchCybernukeCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ join, age, report, days }: { join: number; age: number; report: boolean; days: number },
+		{
+			join,
+			age,
+			report,
+			days,
+			list,
+			nsfw,
+		}: { join: number; age: number; report: boolean; days: number; list: boolean; nsfw: boolean },
 	) {
 		days = Math.min(Math.max(days, 0), 7);
 
 		const guild = message.guild!;
-		await message.util?.send('Calculating targeting parameters for cybernuke...');
+		message.channel.startTyping();
 		const fetchedMembers = await guild.members.fetch();
 
 		const joinCutoff = Date.now() - join;
@@ -86,8 +105,9 @@ export default class LaunchCybernukeCommand extends Command {
 			(member) => (member.joinedTimestamp ?? 0) > joinCutoff && member.user.createdTimestamp > ageCutoff,
 		);
 
+		message.channel.stopTyping();
 		if (!members.size) {
-			return message.util?.send(
+			return message.channel.send(
 				`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.NO_MEMBERS}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
 					`\`${nowFormatted} (UTC)\``,
 					`\`${joinCutoffFormatted} (UTC)\``,
@@ -96,16 +116,32 @@ export default class LaunchCybernukeCommand extends Command {
 			);
 		}
 
-		await message.util?.send(
-			`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
-				message.author,
-				members.size,
-			)}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
-				`\`${nowFormatted} (UTC)\``,
-				`\`${joinCutoffFormatted} (UTC)\``,
-				`\`${ageCutoffFormatted} (UTC)\``,
-			)}`,
-		);
+		if (list) {
+			await message.channel.send(
+				`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
+					message.author,
+					members.size,
+				)}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
+					`\`${nowFormatted} (UTC)\``,
+					`\`${joinCutoffFormatted} (UTC)\``,
+					`\`${ageCutoffFormatted} (UTC)\``,
+				)}\n• Projected targets:\n${members.map((m) => `\`${m.user.tag}\``).join(', ')}`,
+				{
+					split: true,
+				},
+			);
+		} else {
+			await message.util?.send(
+				`${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PROMPT.CONFIRMATION(
+					message.author,
+					members.size,
+				)}\n${MESSAGES.COMMANDS.UTIL.CYBERNUKE.PARAMETERS(
+					`\`${nowFormatted} (UTC)\``,
+					`\`${joinCutoffFormatted} (UTC)\``,
+					`\`${ageCutoffFormatted} (UTC)\``,
+				)}`,
+			);
+		}
 
 		const filter = (m: Message) =>
 			m.author.id === message.author.id && ['y', 'yes', 'n', 'no'].includes(m.content.toLowerCase());
@@ -118,6 +154,8 @@ export default class LaunchCybernukeCommand extends Command {
 				const fatalities: GuildMember[] = [];
 				const survivors: { member: GuildMember; error: Error }[] = [];
 				const promises: Promise<Message | void>[] = [];
+
+				message.channel.startTyping();
 
 				let i = 0;
 				for (const member of members.values()) {
@@ -132,9 +170,22 @@ export default class LaunchCybernukeCommand extends Command {
 							.catch((error: any) => {
 								this.client.logger.error(error, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR });
 							})
-							.then(async () =>
-								member.ban({ days, reason: `Cybernuke by ${message.author.tag} (${++i}/${members.size})` }),
-							)
+							.then(async () => {
+								const key = `${guild.id}:${member.id}:BAN`;
+								await guild.caseQueue.add(async () => {
+									new BanAction({
+										message,
+										member,
+										keys: key,
+										reason: `Cybernuke \`(${++i}/${members.size})\``,
+										days,
+										nsfw,
+										skipPrompt: true,
+										skipResponse: true,
+										overrideColor: COLORS.ANTIRAID,
+									}).commit();
+								});
+							})
 							.then(() => {
 								fatalities.push(member);
 							})
@@ -187,6 +238,8 @@ export default class LaunchCybernukeCommand extends Command {
 			return message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.CONFIRMATION);
 		} catch {
 			message.channel.send(MESSAGES.COMMANDS.UTIL.CYBERNUKE.FAIL.TIMEOUT);
+		} finally {
+			message.channel.stopTyping();
 		}
 
 		return null;

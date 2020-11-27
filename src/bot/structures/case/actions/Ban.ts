@@ -10,6 +10,11 @@ export default class BanAction extends Action {
 	}
 
 	public async before() {
+		if (this.skipPrompt) {
+			this.client.caseHandler.cachedCases.add(this.keys as string);
+			return true;
+		}
+
 		const staff = this.client.settings.get(this.message.guild!, SETTINGS.MOD_ROLE);
 		if (this.member instanceof GuildMember && this.member.roles.cache.has(staff ?? '')) {
 			throw new Error(MESSAGES.ACTIONS.NO_STAFF);
@@ -49,8 +54,11 @@ export default class BanAction extends Action {
 		const guild = this.message.guild!;
 		const totalCases = this.client.settings.get(guild, SETTINGS.CASES, 0) + 1;
 
-		const sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.BAN.PRE_REPLY(user.tag));
+		let sentMessage: Message | null = null;
 
+		if (!this.skipResponse) {
+			sentMessage = await this.message.channel.send(MESSAGES.ACTIONS.BAN.PRE_REPLY(user.tag));
+		}
 		try {
 			try {
 				await this.member.send(MESSAGES.ACTIONS.BAN.MESSAGE(guild.name, this._reason));
@@ -66,6 +74,8 @@ export default class BanAction extends Action {
 
 		this.client.settings.set(guild, SETTINGS.CASES, totalCases);
 
-		sentMessage.edit(MESSAGES.ACTIONS.BAN.REPLY(user.tag));
+		if (!this.skipResponse) {
+			sentMessage?.edit(MESSAGES.ACTIONS.BAN.REPLY(user.tag));
+		}
 	}
 }

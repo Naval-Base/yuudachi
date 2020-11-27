@@ -1,8 +1,9 @@
 import { Argument, Command } from 'discord-akairo';
 import { GuildMember, Message, Permissions, Collection, MessageAttachment, User } from 'discord.js';
-import { DATE_FORMAT_LOGFILE, MESSAGES } from '../../util/constants';
+import { COLORS, DATE_FORMAT_LOGFILE, MESSAGES } from '../../util/constants';
 import { EVENTS, TOPICS } from '../../util/logger';
 import * as moment from 'moment';
+import BanAction from '../../structures/case/actions/Ban';
 
 export default class MultiBanCommand extends Command {
 	public constructor() {
@@ -10,7 +11,7 @@ export default class MultiBanCommand extends Command {
 			aliases: ['multiban', 'massban', 'nuke'],
 			description: {
 				content: MESSAGES.COMMANDS.MOD.MULTIBAN.DESCRIPTION,
-				usage: '<...user>',
+				usage: '<...user> [--report] [--nsfw] [--days=3]',
 				examples: ['81440962496172032 83886770768314368'],
 			},
 			category: 'mod',
@@ -21,7 +22,6 @@ export default class MultiBanCommand extends Command {
 				Permissions.FLAGS.ATTACH_FILES,
 			],
 			ratelimit: 2,
-			flags: ['--report', '-r'],
 			channel: 'guild',
 			args: [
 				{
@@ -38,6 +38,11 @@ export default class MultiBanCommand extends Command {
 					flag: ['--report', '-r'],
 				},
 				{
+					id: 'nsfw',
+					match: 'flag',
+					flag: ['--nsfw'],
+				},
+				{
 					id: 'days',
 					type: 'integer',
 					match: 'option',
@@ -50,12 +55,17 @@ export default class MultiBanCommand extends Command {
 
 	public async exec(
 		message: Message,
-		{ targets, report, days }: { targets: Array<GuildMember | string>; report: boolean; days: number },
+		{
+			targets,
+			report,
+			days,
+			nsfw,
+		}: { targets: Array<GuildMember | string>; report: boolean; days: number; nsfw: boolean },
 	) {
 		days = Math.min(Math.max(days, 0), 7);
 		const guild = message.guild!;
 
-		await message.util?.send('Making preparations...');
+		message.channel.startTyping();
 		await guild.members.fetch();
 
 		let invalidInput = 0;
@@ -124,16 +134,22 @@ export default class MultiBanCommand extends Command {
 		}
 
 		if (!validTargets.size) {
-			return message.util?.send(parts.join('\n'));
+			message.channel.stopTyping();
+			return message.channel.send(parts.join('\n'));
 		}
 
 		const validTargetString = validTargets.map((u) => `\`${u.tag}\``).join(', ');
-		message.util?.send(
-			`${MESSAGES.COMMANDS.MOD.MULTIBAN.PROMPT.CONFIRMATION(message.author, validTargetString)} (y/n)${
-				parts.length ? `\n${parts.join('\n')}` : ''
-			}`,
-			{ split: true },
-		);
+		message.channel.stopTyping();
+		message.channel
+			.send(
+				`${MESSAGES.COMMANDS.MOD.MULTIBAN.PROMPT.CONFIRMATION(message.author, validTargetString)} (y/n)${
+					parts.length ? `\n${parts.join('\n')}` : ''
+				}`,
+				{
+					split: true,
+				},
+			)
+			.catch((err) => console.error(err, err._errors));
 
 		const filter = (m: Message) =>
 			m.author.id === message.author.id && ['y', 'yes', 'n', 'no'].includes(m.content.toLowerCase());
@@ -144,13 +160,25 @@ export default class MultiBanCommand extends Command {
 				const survivors: Collection<string, User> = new Collection();
 				const confirmed: Collection<string, User> = new Collection();
 
+				message.channel.startTyping();
+
 				let i = 0;
 				for (const user of validTargets.values()) {
 					try {
-						await guild.members.ban(user, {
-							days,
-							reason: `Multi ban by ${message.author.tag} (${++i}/${validTargets.size})`,
-						});
+						const key = `${guild.id}:${user.id}:BAN`;
+						await guild.caseQueue.add(async () =>
+							new BanAction({
+								message,
+								member: user,
+								keys: key,
+								reason: `Multi ban \`(${++i}/${validTargets.size})\``,
+								days,
+								nsfw,
+								skipPrompt: true,
+								skipResponse: true,
+								overrideColor: COLORS.ANTIRAID,
+							}).commit(),
+						);
 						confirmed.set(user.id, user);
 					} catch (err) {
 						this.client.logger.error(err, { topic: TOPICS.DISCORD, event: EVENTS.COMMAND_ERROR });
@@ -178,6 +206,10 @@ export default class MultiBanCommand extends Command {
 			return message.channel.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.CONFIRMATION);
 		} catch {
 			message.channel.send(MESSAGES.COMMANDS.MOD.MULTIBAN.FAIL.TIMEOUT);
+		} finally {
+			message.channel.stopTyping();
 		}
+
+		return null;
 	}
 }

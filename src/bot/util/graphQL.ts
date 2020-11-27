@@ -81,6 +81,9 @@ export const GRAPHQL = {
 					targetId: { _eq: $targetId }
 				}) {
 					action
+					caseId
+					reason
+					createdAt
 				}
 			}
 		`,

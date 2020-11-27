@@ -19,6 +19,7 @@ export enum ACTIONS {
 export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 
 export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
+export const DATE_FORMAT_DATE = 'YYYY/MM/DD';
 
 export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD_HH-mm-ss';
 
@@ -564,7 +565,7 @@ export const MESSAGES = {
 
 			HISTORY: {
 				DESCRIPTION: 'Check the history of a member.',
-				NO_PERMISSION: 'you know, I know, we should just leave it at that.',
+				NO_USER: "I was looking everywhere, but i can't find this target!",
 			},
 
 			KICK: {

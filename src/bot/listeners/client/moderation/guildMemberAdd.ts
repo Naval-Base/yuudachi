@@ -87,10 +87,10 @@ export default class GuildMemberAddAntiraidListener extends Listener {
 					.setAuthor(MESSAGES.ANTIRAID.REASON)
 					.setDescription(
 						stripIndents`
-							**Member:** ${member.user.tag} (${member.user.id})
+							**Member:** \`${member.user.tag}\` (${member.user.id})
 							**Action:** ${mode.toLowerCase().replace(/(^|\s)\S/g, (t) => t.toUpperCase())}
-							**Created:** ${sinceCreationFormatted} (${creationFormatted})
-							**Joined:** ${sinceJoinFormatted} (${joinFormatted})
+							**Created:** \`${creationFormatted} (UTC)\` (${sinceCreationFormatted})
+							**Joined:** \`${joinFormatted} (UTC)\` (${sinceJoinFormatted})
 						`,
 					)
 					.setFooter(`Case ${totalCases}`)
