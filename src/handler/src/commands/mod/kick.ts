@@ -5,6 +5,7 @@ import { CaseAction } from '@yuudachi/types';
 import i18next from 'i18next';
 import { Args, joinTokens } from 'lexure';
 import { injectable } from 'tsyringe';
+
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
 

@@ -186,15 +186,34 @@ services:
       PGPASSWORD: ""
       DISCORD_TOKEN: ""
       JWT_SECRET: ""
+    expose:
+      - "3500"
+    ports:
+      - "127.0.0.1:3500:3500"
+    restart: unless-stopped
+    
+  auth:
+    build:
+      context: ./
+      dockerfile: ./docker/packages/auth/Dockerfile
+    labels:
+      com.naval-base.description: "Auth API"
+    environment:
+      PGHOST: "postgres"
+      PGPORT: "5432"
+      PGDATABASE: ""
+      PGUSERNAME: ""
+      PGPASSWORD: ""
+      JWT_SECRET: ""
       DISCORD_CLIENT_ID: ""
       PUBLIC_API_DOMAIN: ""
       PUBLIC_FRONTEND_DOMAIN: ""
       DISCORD_SCOPES: "identify,email,guilds"
       DISCORD_CLIENT_SECRET: ""
     expose:
-      - "3500"
+      - "3600"
     ports:
-      - "127.0.0.1:3500:3500"
+      - "127.0.0.1:3600:3600"
     restart: unless-stopped
 
   website:

@@ -3,11 +3,11 @@ import { forbidden, notFound } from '@hapi/boom';
 import Joi from 'joi';
 import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
+import { Route } from '@yuudachi/http';
+import { HttpException } from '@yuudachi/rest';
 
-import Route from '../../../../Route';
 import { authorize, validate, bodyParser } from '../../../../middleware';
 import CaseManager from '../../../../managers/CaseManager';
-import { HttpException } from '@yuudachi/rest';
 
 interface CasesPostBody {
 	cases: Case[];

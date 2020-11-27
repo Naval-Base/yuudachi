@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
-		"build": "npx rimraf dist && npx -p typescript tsc",
+		"build": "rimraf dist && tsc",
 		"start": "npm run build && node dist/bin/index.js",
 		"dev": "npm run build && env-cmd npm run start"
 	},

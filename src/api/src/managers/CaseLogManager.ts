@@ -5,10 +5,12 @@ import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
+import { Tokens } from '@yuudachi/core';
 
 import { RawCase } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
-import { kSQL } from '../tokens';
+
+const { kSQL } = Tokens;
 
 @injectable()
 export default class CaseLogManager {

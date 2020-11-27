@@ -4,9 +4,9 @@ import i18next from 'i18next';
 import { GitHubAPIResult } from '../../../interfaces/GitHub';
 import fetch from 'node-fetch';
 
-import { GITHUB_BASE_URL, GITHUB_COLOR_COMMIT, GITHUB_ICON_COMMIT } from '../../../../Constants';
+import { GITHUB_BASE_URL, GITHUB_COLOR_COMMIT, GITHUB_ICON_COMMIT } from '../../../Constants';
 import { GitHubAPIError } from '../github';
-import { truncateEmbed } from '../../../../util';
+import { truncateEmbed } from '../../../util';
 
 function buildQuery(owner: string, repository: string, expression: string) {
 	return `

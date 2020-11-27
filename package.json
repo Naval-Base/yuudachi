@@ -3,7 +3,7 @@
 	"version": "2.0.0",
 	"description": "",
 	"scripts": {
-		"build": "tsc --build packages/types packages/rest packages/api --force",
+		"build": "tsc --build packages/core packages/http packages/types packages/rest packages/api --force",
 		"test": "jest",
 		"test:ci": "jest --ci --no-stack-trace --verbose",
 		"lint": "eslint src packages --ext .ts,.tsx --fix"
@@ -52,9 +52,11 @@
 		}
 	},
 	"workspaces": [
+		"packages/types",
+		"packages/core",
+		"packages/http",
 		"packages/api",
 		"packages/rest",
-		"packages/types",
 		"src/api",
 		"src/handler",
 		"src/website"

@@ -1,0 +1,16 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"declarationDir": "typings",
+		"sourceRoot": "./",
+		"rootDir": "./src",
+		"outDir": "dist"
+	},
+	"include": [
+		"./src"
+	],
+	"references": [
+		{ "path": "../core" },
+		{ "path": "../types" }
+	]
+}
