@@ -1,10 +1,10 @@
 import Joi from 'joi';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
+import { Route } from '@yuudachi/http';
 
 import { validate, bodyParser } from '../../../../middleware';
 import CaseLogManager from '../../../../managers/CaseLogManager';
-import Route from '../../../../Route';
 import { RawCase } from '../../../../managers/CaseManager';
 
 enum HasuraAction {

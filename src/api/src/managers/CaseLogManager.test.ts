@@ -4,10 +4,12 @@ import { stripIndents } from 'common-tags';
 import Rest from '@yuudachi/rest';
 import { CaseAction } from '@yuudachi/types';
 import { container } from 'tsyringe';
+import { Tokens } from '@yuudachi/core';
 
 import CaseLogManager from './CaseLogManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
-import { kSQL } from '../tokens';
+
+const { kSQL } = Tokens;
 
 jest.mock('@yuudachi/rest');
 jest.mock('./SettingsManager');

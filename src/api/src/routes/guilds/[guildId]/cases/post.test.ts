@@ -3,13 +3,14 @@ import 'reflect-metadata';
 import { CaseAction } from '@yuudachi/types';
 import supertest from 'supertest';
 import { container } from 'tsyringe';
+import { createApp, RouteMethod } from '@yuudachi/http';
+import { HttpException } from '@yuudachi/rest';
+import { Constants } from '@yuudachi/core';
 
 import CreateCaseRoute from './post';
 import CaseManager from '../../../../managers/CaseManager';
-import createApp from '../../../../app';
-import { RouteMethod } from '../../../../Route';
-import { USER_ID_HEADER } from '../../../../Constants';
-import { HttpException } from '@yuudachi/rest';
+
+const { USER_ID_HEADER } = Constants;
 
 jest.mock('../../../../managers/CaseManager');
 

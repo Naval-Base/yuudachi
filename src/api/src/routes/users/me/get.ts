@@ -1,10 +1,10 @@
 import { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
+import { Route } from '@yuudachi/http';
+import { Tokens, authenticate } from '@yuudachi/core';
 
-import Route from '../../../Route';
-import { authenticate } from '../../../middleware';
-import { kSQL } from '../../../tokens';
+const { kSQL } = Tokens;
 
 @injectable()
 export default class DiscordLoginRoute extends Route {

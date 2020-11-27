@@ -19,7 +19,7 @@ const Navbar = () => {
 				</Button>
 			</Link>
 		) : (
-			<Link href="http://localhost:3500/api/auth/discord">
+			<Link href="http://localhost:3600/api/auth/discord">
 				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
 					Log In
 				</Button>

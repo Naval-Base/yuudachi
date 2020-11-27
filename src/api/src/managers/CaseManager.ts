@@ -4,8 +4,9 @@ import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
 import { URLSearchParams } from 'url';
+import { Tokens } from '@yuudachi/core';
 
-import { kSQL } from '../tokens';
+const { kSQL } = Tokens;
 
 export interface RawCase {
 	action_expiration: string | null;

@@ -1,0 +1,47 @@
+{
+	"name": "@yuudachi/http",
+	"version": "2.0.0",
+	"description": "",
+	"main": "dist/index.js",
+	"typings": "typings/index.d.ts",
+	"scripts": {
+		"build": "rimraf dist typings && tsc"
+	},
+	"keywords": [],
+	"author": "iCrawl <icrawltogo@outlook.com>",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"@hapi/boom": "^9.1.0",
+		"cookie": "^0.4.1",
+		"cors": "^2.8.5",
+		"form-data": "^3.0.0",
+		"helmet": "^4.2.0",
+		"joi": "^17.3.0",
+		"jsonwebtoken": "^8.5.1",
+		"lodash": "^4.17.20",
+		"node-fetch": "^2.6.1",
+		"polka": "^1.0.0-next.11",
+		"postgres": "^2.0.0-beta.2",
+		"readdirp": "^3.5.0",
+		"reflect-metadata": "^0.1.13",
+		"sirv": "^1.0.7",
+		"tslib": "^2.0.3"
+	},
+	"devDependencies": {
+		"@types/cookie": "^0.4.0",
+		"@types/cors": "^2.8.8",
+		"@types/helmet": "^4.0.0",
+		"@types/jsonwebtoken": "^8.5.0",
+		"@types/lodash": "^4.14.165",
+		"@types/node": "^14.14.9",
+		"@types/node-fetch": "^2.5.7",
+		"@types/supertest": "^2.0.10",
+		"@types/trouter": "^3.1.0",
+		"cpy-cli": "^3.1.1",
+		"env-cmd": "^10.1.0",
+		"jest-date-mock": "^1.0.8",
+		"rimraf": "^3.0.2",
+		"supertest": "^6.0.1",
+		"typescript": "^4.1.2"
+	}
+}
