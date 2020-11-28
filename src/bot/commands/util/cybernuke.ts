@@ -74,6 +74,7 @@ export default class LaunchCybernukeCommand extends Command {
 					flag: ['--nsfw'],
 				},
 			],
+			before: (message) => message.guild?.members.fetch(),
 		});
 	}
 
@@ -92,7 +93,6 @@ export default class LaunchCybernukeCommand extends Command {
 
 		const guild = message.guild!;
 		message.channel.startTyping();
-		const fetchedMembers = await guild.members.fetch();
 
 		const joinCutoff = Date.now() - join;
 		const ageCutoff = Date.now() - age;
@@ -101,7 +101,7 @@ export default class LaunchCybernukeCommand extends Command {
 		const joinCutoffFormatted = moment.utc(joinCutoff).format(DATE_FORMAT_WITH_SECONDS);
 		const ageCutoffFormatted = moment.utc(ageCutoff).format(DATE_FORMAT_WITH_SECONDS);
 
-		const members = fetchedMembers.filter(
+		const members = guild.members.cache.filter(
 			(member) => (member.joinedTimestamp ?? 0) > joinCutoff && member.user.createdTimestamp > ageCutoff,
 		);
 

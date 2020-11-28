@@ -50,6 +50,7 @@ export default class MultiBanCommand extends Command {
 					default: 1,
 				},
 			],
+			before: (message) => message.guild?.members.fetch(),
 		});
 	}
 
@@ -66,7 +67,6 @@ export default class MultiBanCommand extends Command {
 		const guild = message.guild!;
 
 		message.channel.startTyping();
-		await guild.members.fetch();
 
 		let invalidInput = 0;
 		let currentlyManaged = 0;
@@ -77,25 +77,24 @@ export default class MultiBanCommand extends Command {
 
 		const bans = await guild.fetchBans();
 		for (const value of targets) {
-			const member = value instanceof GuildMember ? value : guild.member(value);
-			if (member) {
-				if (!member.bannable || member.roles.highest.position >= message.member!.roles.highest.position) {
+			if (value instanceof GuildMember) {
+				if (!value.bannable || value.roles.highest.position >= message.member!.roles.highest.position) {
 					notManageable++;
 					continue;
 				}
 
-				const key = `${guild.id}:${member.id}:BAN`;
+				const key = `${guild.id}:${value.id}:BAN`;
 				if (this.client.caseHandler.cachedCases.has(key)) {
 					currentlyManaged++;
 					continue;
 				}
 
-				validTargets.set(member.id, member.user);
+				validTargets.set(value.id, value.user);
 				continue;
 			}
 
 			try {
-				const user = await this.client.users.fetch(value as string);
+				const user = await this.client.users.fetch(value);
 				if (bans.has(user.id)) {
 					alreadyBanned++;
 					continue;
