@@ -115,7 +115,7 @@ services:
       PGPASSWORD: "admin"
       JWT_SECRET: ""
       DISCORD_CLIENT_ID: ""
-      PUBLIC_API_DOMAIN: "http://localhost:3500"
+      PUBLIC_API_DOMAIN: "http://localhost:3600"
       PUBLIC_FRONTEND_DOMAIN: "http://localhost:4000"
       # DISCORD_SCOPES: ""
       DISCORD_CLIENT_SECRET: ""

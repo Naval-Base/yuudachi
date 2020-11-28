@@ -1,6 +1,24 @@
-actions: []
+actions:
+- name: oauth_guilds
+  definition:
+    kind: ""
+    handler: http://api:3500/api/hasura/actions/guilds
+- name: users_me
+  definition:
+    kind: ""
+    handler: http://api:3500/api/hasura/actions/me
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+  - name: oauth_guilds_output
+  - name: users_me_output
+    relationships:
+    - remote_table:
+        schema: public
+        name: users
+      name: user
+      type: object
+      field_mapping:
+        user_id: id
   scalars: []

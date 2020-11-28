@@ -8,11 +8,11 @@ import { useQueryGuilds } from '../../hooks/useQueryGuilds';
 import { Guild } from '../../interfaces/Guild';
 import GuildSettings from '../../components/GuildSettings';
 
-const GuildPage = () => {
+const GuildPage = (props: any) => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
 	const cache = useQueryCache();
-	useQueryGuilds(user.loggedIn);
+	useQueryGuilds(user.loggedIn, props);
 
 	const { id } = router.query;
 

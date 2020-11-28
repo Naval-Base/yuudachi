@@ -5,10 +5,11 @@ import postgres from 'postgres';
 import readdirp from 'readdirp';
 import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
+import { Config } from '@yuudachi/types';
 import { createApp, Route, pathToRouteInfo } from '@yuudachi/http';
 import { Tokens } from '@yuudachi/core';
 
-const { kSQL } = Tokens;
+const { kSQL, kConfig } = Tokens;
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('no discord token');
@@ -19,6 +20,12 @@ const pg = postgres({ debug: console.log });
 
 container.register(Rest, { useValue: rest });
 container.register(kSQL, { useValue: pg });
+container.register(kSQL, { useValue: pg });
+container.register<Pick<Config, 'secretKey'>>(kConfig, {
+	useValue: {
+		secretKey: process.env.JWT_SECRET!,
+	},
+});
 
 const app = createApp(join(__dirname, '..', 'public'));
 

@@ -35,7 +35,7 @@ const shouldRefresh = (error: { response: Response; body: any }) =>
 	error.response.status === 401 || error.body.errors[0].extensions.code === 'invalid-jwt';
 
 const refreshToken = () => {
-	return fetchJSON('http://localhost:3500/api/auth/refresh', { credentials: 'include' });
+	return fetchJSON('http://localhost:3600/api/auth/refresh', { credentials: 'include' });
 };
 
 const refreshFetch = configureRefreshFetch({

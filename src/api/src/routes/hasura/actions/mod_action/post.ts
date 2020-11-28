@@ -34,7 +34,7 @@ export default class HasuraModActionHandler extends Route {
 				.keys({
 					action: Joi.object()
 						.keys({
-							name: Joi.string().required(),
+							name: Joi.string().valid(Actions.MOD_ACTION).required(),
 						})
 						.required(),
 					input: Joi.object()

@@ -5,12 +5,9 @@ import supertest from 'supertest';
 import { container } from 'tsyringe';
 import { createApp, RouteMethod } from '@yuudachi/http';
 import { HttpException } from '@yuudachi/rest';
-import { Constants } from '@yuudachi/core';
 
 import CreateCaseRoute from './post';
 import CaseManager from '../../../../managers/CaseManager';
-
-const { USER_ID_HEADER } = Constants;
 
 jest.mock('../../../../managers/CaseManager');
 
@@ -67,6 +64,7 @@ describe('invalid data', () => {
 						action: CaseAction.ROLE,
 						roleId: '12345678912345678912',
 						reason: 'foo',
+						moderatorId: '09876543210987654321',
 						targetId: '34567891234567891234',
 						deleteMessageDays: 5,
 					},
@@ -91,13 +89,13 @@ test('role action', async () => {
 	const res = await supertest(app.server)
 		.post('/api/test/7890')
 		.type('json')
-		.set(USER_ID_HEADER, '09876543210987654321')
 		.send({
 			cases: [
 				{
 					action: CaseAction.ROLE,
 					roleId: '12345678912345678912',
 					reason: 'foo',
+					moderatorId: '09876543210987654321',
 					targetId: '34567891234567891234',
 				},
 			],
@@ -124,12 +122,12 @@ test('handles 404 HttpException while creating cases', async () => {
 	const res = await supertest(app.server)
 		.post('/api/test/7890')
 		.type('json')
-		.set(USER_ID_HEADER, '09876543210987654321')
 		.send({
 			cases: [
 				{
 					action: CaseAction.KICK,
 					reason: 'foo',
+					moderatorId: '09876543210987654321',
 					targetId: '34567891234567891234',
 				},
 			],
@@ -144,12 +142,12 @@ test('handles 403 HttpException while creating cases', async () => {
 	const res = await supertest(app.server)
 		.post('/api/test/7890')
 		.type('json')
-		.set(USER_ID_HEADER, '09876543210987654321')
 		.send({
 			cases: [
 				{
 					action: CaseAction.KICK,
 					reason: 'foo',
+					moderatorId: '09876543210987654321',
 					targetId: '34567891234567891234',
 				},
 			],
@@ -164,12 +162,12 @@ test('handles generic exception while creating cases', async () => {
 	const res = await supertest(app.server)
 		.post('/api/test/7890')
 		.type('json')
-		.set(USER_ID_HEADER, '09876543210987654321')
 		.send({
 			cases: [
 				{
 					action: CaseAction.KICK,
 					reason: 'foo',
+					moderatorId: '09876543210987654321',
 					targetId: '34567891234567891234',
 				},
 			],

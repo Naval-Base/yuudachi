@@ -6,7 +6,7 @@ import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { HttpException } from '@yuudachi/rest';
 
-import { authorize, validate, bodyParser } from '../../../../middleware';
+import { validate, bodyParser } from '../../../../middleware';
 import CaseManager from '../../../../managers/CaseManager';
 
 interface CasesPostBody {
@@ -38,6 +38,9 @@ export default class CreateCaseRoute extends Route {
 										otherwise: Joi.forbidden(),
 									}),
 									reason: Joi.string().required(),
+									moderatorId: Joi.string()
+										.pattern(/\d{17,20}/)
+										.required(),
 									targetId: Joi.string()
 										.pattern(/\d{17,20}/)
 										.required(),
@@ -55,7 +58,6 @@ export default class CreateCaseRoute extends Route {
 				})
 				.required(),
 		),
-		authorize,
 	];
 
 	public constructor(public readonly caseManager: CaseManager) {
@@ -68,7 +70,6 @@ export default class CreateCaseRoute extends Route {
 
 		for (const case_ of body.cases) {
 			case_.guildId = req.params.guildId;
-			case_.moderatorId = req.userId!;
 			created.push(this.caseManager.create(case_));
 		}
 
