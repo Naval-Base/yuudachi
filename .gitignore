@@ -26,3 +26,4 @@ typings/
 .tmp/
 dump.sql
 tsconfig.tsbuildinfo
+hasura/hasura.exe

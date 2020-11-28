@@ -1,19 +1,38 @@
 import { useQuery, useQueryCache } from 'react-query';
-import fetch from '../util/fetch';
+import { useCookie } from 'next-cookie';
+import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { Guild } from '../interfaces/Guild';
+import { Guilds } from '../interfaces/Guilds';
 
-export function useQueryGuilds(loggedIn = false) {
+export function useQueryGuilds(loggedIn = false, props: any) {
+	const cookie = useCookie(props.cookie);
 	const cache = useQueryCache();
 
-	return useQuery<{ guilds: Guild[] }>(
+	const { data, isLoading } = useQuery<Guilds>(
 		'guilds',
-		() => fetch('http://localhost:3500/api/guilds', { credentials: 'include' }).then(({ response }) => response.json()),
+		() =>
+			fetchGraphQL(
+				`query Guilds {
+					guilds: oauth_guilds {
+						features
+						icon
+						id
+						name
+						owner
+						permissions
+						permissions_new
+					}
+				}`,
+				{},
+				{ headers: { authorization: `Bearer ${cookie.get<string>('access_token')}` } },
+			).then(({ response }) => response.json()),
 		{
 			enabled: loggedIn,
 			onSuccess: (data) => {
-				data.guilds.forEach((guild) => cache.setQueryData(['guilds', guild.id], guild));
+				data.data.guilds.forEach((guild) => cache.setQueryData(['guilds', guild.id], guild));
 			},
 		},
 	);
+
+	return { data: data?.data, isLoading };
 }

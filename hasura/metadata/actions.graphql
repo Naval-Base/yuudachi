@@ -1,2 +1,26 @@
+type Query {
+  oauth_guilds : [oauth_guilds_output!]!
+}
 
+
+type Query {
+  users_me : users_me_output
+}
+
+
+
+
+type oauth_guilds_output {
+  features : [String!]!
+  icon : String!
+  id : String!
+  name : String!
+  owner : Boolean!
+  permissions : Int!
+  permissions_new : String!
+}
+
+type users_me_output {
+  user_id : String!
+}
 

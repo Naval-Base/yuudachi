@@ -7,9 +7,9 @@ import GuildsStyles from '../styles/modules/Guilds.module.scss';
 import { RootState } from '../store';
 import { useQueryGuilds } from '../hooks/useQueryGuilds';
 
-const Guilds = () => {
+const Guilds = (props: any) => {
 	const user = useSelector((state: RootState) => state.user);
-	const { data } = useQueryGuilds(user.loggedIn);
+	const { data } = useQueryGuilds(user.loggedIn, props);
 
 	return (
 		<Grid templateColumns="repeat(auto-fill, 150px)" gap="32px 0px" justifyContent="center">
