@@ -2,13 +2,13 @@ import { useMutation, useQueryCache } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { GuildSettings } from '../interfaces/GuildSettings';
+import { GraphQLGuildSettings } from '../interfaces/GuildSettings';
 
 export function useMutationInsertGuildSettings(id: string, props: any) {
 	const cookie = useCookie(props.cookie);
 	const cache = useQueryCache();
 
-	return useMutation<GuildSettings>(
+	return useMutation<GraphQLGuildSettings>(
 		() =>
 			fetchGraphQL(
 				`mutation Guild($guild_id: String!) {

@@ -38,7 +38,7 @@ export default function createApp(publicFolder?: string) {
 				origin: process.env.CORS?.split(',') ?? '*',
 				credentials: true,
 			}) as any,
-			helmet() as any,
+			helmet({ contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false }) as any,
 			publicFolder
 				? sirv(publicFolder, {
 						/* istanbul ignore next */

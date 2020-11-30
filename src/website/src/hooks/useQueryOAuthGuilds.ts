@@ -2,23 +2,23 @@ import { useQuery, useQueryCache } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { Guilds } from '../interfaces/Guilds';
+import { GraphQLOAuthGuilds } from '../interfaces/Guild';
 
-export function useQueryGuilds(loggedIn = false, props: any) {
+export function useQueryOAuthGuilds(loggedIn = false, props: any) {
 	const cookie = useCookie(props.cookie);
 	const cache = useQueryCache();
 
-	const { data, isLoading } = useQuery<Guilds>(
+	const { data, isLoading } = useQuery<GraphQLOAuthGuilds>(
 		'guilds',
 		() =>
 			fetchGraphQL(
 				`query Guilds {
-					guilds: oauth_guilds {
-						features
-						icon
+					guilds: guilds_oauth {
 						id
 						name
+						icon
 						owner
+						features
 						permissions
 						permissions_new
 					}

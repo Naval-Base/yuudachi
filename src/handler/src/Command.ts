@@ -1,4 +1,4 @@
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import { Args } from 'lexure';
 import { basename, parse, sep, extname } from 'path';
 
@@ -15,7 +15,12 @@ export default interface Command {
 	clientPermissions?: string[];
 	userPermissions?: string[];
 	regExp?: RegExp;
-	execute(message: Message, args: Args, locale: string, executionContext: ExecutionContext): unknown | Promise<unknown>;
+	execute(
+		message: APIMessage,
+		args: Args,
+		locale: string,
+		executionContext: ExecutionContext,
+	): unknown | Promise<unknown>;
 }
 
 export interface CommandInfo {

@@ -98,21 +98,9 @@ services:
       com.naval-base.description: "Grafana"
     environment:
       GF_DEFAULT_INSTANCE_NAME: ""
-      # GF_SERVER_DOMAIN: ""
-      # GF_SERVER_ROOT_URL: ""
       GF_SECURITY_ADMIN_USER: ""
       GF_SECURITY_ADMIN_PASSWORD: ""
       GF_AUTH_ANONYMOUS_ENABLED: ""
-      # GF_AUTH_ANONYMOUS_ORG_NAME: ""
-      # GF_AUTH_GITHUB_ENABLED: ""
-      # GF_AUTH_GITHUB_ALLOW_SIGN_UP: ""
-      # GF_AUTH_GITHUB_CLIENT_ID: ""
-      # GF_AUTH_GITHUB_CLIENT_SECRET: ""
-      # GF_AUTH_GITHUB_SCOPES: user:email,read:org
-      # GF_AUTH_GITHUB_AUTH_URL: https://github.com/login/oauth/authorize
-      # GF_AUTH_GITHUB_TOKEN_URL: https://github.com/login/oauth/access_token
-      # GF_AUTH_GITHUB_API_URL: https://api.github.com/user
-      # GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS: ""
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
     expose:
@@ -130,11 +118,11 @@ services:
       DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
       BROKER_TYPE: ""
       BROKER_GROUP: ""
-      BROKER_MESSAGE_TIMEOUT: ""
+      BROKER_MESSAGE_TIMEOUT: "10m"
       PROMETHEUS_ADDRESS: ":8080"
       PROMETHEUS_ENDPOINT: "/metrics"
       AMQP_URL: "amqp://rabbitmq"
-      SHARD_STORE_TYPE: ""
+      SHARD_STORE_TYPE: "redis"
       SHARD_STORE_PREFIX: "gateway"
       REDIS_URL: "redis://redis:6379"
       REDIS_POOL_SIZE: 5
@@ -191,7 +179,27 @@ services:
     ports:
       - "127.0.0.1:3500:3500"
     restart: unless-stopped
-    
+
+  graphql:
+    build:
+      context: ./
+      dockerfile: ./docker/packages/graphql/Dockerfile
+    labels:
+      com.naval-base.description: "GraphQL API"
+    environment:
+      PGHOST: "postgres"
+      PGPORT: "5432"
+      PGDATABASE: ""
+      PGUSERNAME: ""
+      PGPASSWORD: ""
+      JWT_SECRET: ""
+      API_URL: "http://api:3500"
+    expose:
+      - "3550"
+    ports:
+      - "127.0.0.1:3550:3550"
+    restart: unless-stopped
+
   auth:
     build:
       context: ./
@@ -206,8 +214,8 @@ services:
       PGPASSWORD: ""
       JWT_SECRET: ""
       DISCORD_CLIENT_ID: ""
-      PUBLIC_API_DOMAIN: ""
-      PUBLIC_FRONTEND_DOMAIN: ""
+      PUBLIC_API_DOMAIN: "http://localhost:3600"
+      PUBLIC_FRONTEND_DOMAIN: "http://localhost:4000"
       DISCORD_SCOPES: "identify,email,guilds"
       DISCORD_CLIENT_SECRET: ""
     expose:

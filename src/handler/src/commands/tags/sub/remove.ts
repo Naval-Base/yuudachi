@@ -1,10 +1,10 @@
 import { Args, joinTokens } from 'lexure';
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 
-export async function remove(message: Message, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
+export async function remove(message: APIMessage, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
 	const name = args.many();
 	const user = args.option('user');
 

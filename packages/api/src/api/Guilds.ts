@@ -1,10 +1,25 @@
-import { CreateCase } from '@yuudachi/types';
+import { Case, CreateCase } from '@yuudachi/types';
+import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types/v6';
 import API from '..';
 
 export default class Guilds {
 	public constructor(private readonly api: API) {}
 
-	public createCase(userId: string, guildId: string, ...cases: CreateCase[]) {
-		return this.api.make(userId, 'post', `/guilds/${guildId}/cases`, { cases });
+	public get() {
+		return this.api.make<RESTGetAPICurrentUserGuildsResult>('get', '/guilds');
+	}
+
+	public getOAuth(userId: string) {
+		return this.api.make<RESTGetAPICurrentUserGuildsResult>('get', '/guilds/oauth', undefined, {
+			'x-hasura-user-id': userId,
+		});
+	}
+
+	public getRoles(guildId: string) {
+		return this.api.make<RESTGetAPIGuildRolesResult>('get', `/guilds/${guildId}/roles`);
+	}
+
+	public createCase(guildId: string, ...cases: CreateCase[]) {
+		return this.api.make<Case[]>('post', `/guilds/${guildId}/cases`, { cases });
 	}
 }

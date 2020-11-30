@@ -16,10 +16,9 @@ if (!token) throw new Error('no discord token');
 
 const restBroker = createAmqpBroker('rest');
 const rest = new Rest(token, restBroker);
-const pg = postgres({ debug: console.log });
+const pg = postgres();
 
 container.register(Rest, { useValue: rest });
-container.register(kSQL, { useValue: pg });
 container.register(kSQL, { useValue: pg });
 container.register<Pick<Config, 'secretKey'>>(kConfig, {
 	useValue: {

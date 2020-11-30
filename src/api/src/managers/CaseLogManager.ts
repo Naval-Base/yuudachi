@@ -1,4 +1,4 @@
-import { Role, Message } from '@spectacles/types';
+import { RESTGetAPIGuildRolesResult, APIMessage } from 'discord-api-types/v6';
 import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
@@ -27,7 +27,7 @@ export default class CaseLogManager {
 			throw new Error('no mod log channel configured');
 		}
 
-		const logMessage: Message = await this.rest.post(`/channels/${logChannelId}/messages`, {
+		const logMessage: APIMessage = await this.rest.post(`/channels/${logChannelId}/messages`, {
 			embed: {
 				title: `${item.mod_tag} (${item.mod_id})`,
 				description: await this.generateLogMessage(item, logChannelId),
@@ -48,7 +48,7 @@ export default class CaseLogManager {
 	protected async generateLogMessage(case_: RawCase, logChannelId: string) {
 		let action = CaseAction[case_.action];
 		if (case_.action === CaseAction.ROLE && case_.role_id) {
-			const roles: Role[] = await this.rest.get(`/guilds/${case_.guild_id}/roles`);
+			const roles: RESTGetAPIGuildRolesResult = await this.rest.get(`/guilds/${case_.guild_id}/roles`);
 			const role = roles.find((role) => role.id === case_.role_id);
 
 			if (role) action += ` "${role.name}" (${case_.role_id})`;

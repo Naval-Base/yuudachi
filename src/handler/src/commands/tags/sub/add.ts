@@ -1,10 +1,10 @@
 import { Args, joinTokens } from 'lexure';
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 
-export async function add(message: Message, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
+export async function add(message: APIMessage, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
 	const name = args.single();
 	if (!name) {
 		throw new Error(i18next.t('command.tag.common.execute.name_missing', { lng: locale }));

@@ -38,6 +38,6 @@ test('de/serializes with msgpack', () => {
 	const serialize = (MockedAmqp.mock.calls[0][1] as AmqpOptions).serialize;
 	const deserialize = (MockedAmqp.mock.calls[0][1] as AmqpOptions).deserialize;
 
-	expect(serialize(deserialized)).toStrictEqual(serialized);
-	expect(deserialize(serialized)).toStrictEqual(deserialized);
+	expect(serialize!(deserialized)).toStrictEqual(serialized);
+	expect(deserialize!(serialized)).toStrictEqual(deserialized);
 });

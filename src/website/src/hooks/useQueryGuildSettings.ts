@@ -2,12 +2,12 @@ import { useQuery } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { GuildSettings } from '../interfaces/GuildSettings';
+import { GraphQLGuildSettings } from '../interfaces/GuildSettings';
 
 export function useQueryGuildSettings(id: string, loggedIn = false, props: any) {
 	const cookie = useCookie(props.cookie);
 
-	const { data, isLoading } = useQuery<GuildSettings>(
+	const { data, isLoading } = useQuery<GraphQLGuildSettings>(
 		['guilds', id, 'settings'],
 		() =>
 			fetchGraphQL(

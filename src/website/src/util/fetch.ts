@@ -1,4 +1,4 @@
-import fetch, { RequestInfo, Response } from 'node-fetch';
+import fetch from 'cross-fetch';
 import { configureRefreshFetch, fetchJSON } from 'refresh-fetch';
 
 class ResponseError extends Error {
@@ -10,6 +10,7 @@ class ResponseError extends Error {
 }
 
 const fetchWithToken = (input: string | Request | URL, options: Record<string, any> = { headers: {} }) => {
+	// eslint-disable-next-line no-undef
 	return fetch(input as RequestInfo, {
 		...options,
 		headers: { 'Content-Type': 'application/json', ...options.headers },

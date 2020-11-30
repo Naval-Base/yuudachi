@@ -1,13 +1,17 @@
 import { useRouter } from 'next/router';
-import { FormControl, FormLabel, Switch, Text, Input, Button, Box } from '@chakra-ui/react';
-import { useForm, UseFormMethods } from 'react-hook-form';
+import Link from 'next/link';
+import { FormControl, FormLabel, Switch, Text, Input, Button, Box, Select } from '@chakra-ui/react';
+import { useForm, UseFormMethods, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import { APIRole } from 'discord-api-types/v6';
 
 import { RootState } from '../store';
+import { useQueryGuild } from '../hooks/useQueryGuild';
 import { useQueryGuildSettings } from '../hooks/useQueryGuildSettings';
+import { useQueryGuildRoles } from '../hooks/useQueryGuildRoles';
 import { useMutationInsertGuildSettings } from '../hooks/useMutationInsertGuildSettings';
 import { useMutationUpdateGuildSettings } from '../hooks/useMutationUpdateGuildSettings';
-import { GuildSetingsPayload, GuildSettings as IGuildSettings } from '../interfaces/GuildSettings';
+import { GuildSetingsPayload, GraphQLGuildSettings } from '../interfaces/GuildSettings';
 
 const CustomFormControl = ({
 	register,
@@ -18,7 +22,7 @@ const CustomFormControl = ({
 	placeholder = '',
 }: {
 	register: UseFormMethods['register'];
-	guildData: IGuildSettings['data'];
+	guildData: GraphQLGuildSettings['data'];
 	id: string;
 	label: string;
 	name: string;
@@ -35,10 +39,47 @@ const CustomFormControl = ({
 	</FormControl>
 );
 
+const CustomFormSelectControl = ({
+	control,
+	options,
+	guildData,
+	id,
+	label,
+	name,
+	placeholder = '',
+}: {
+	control: UseFormMethods['control'];
+	options: APIRole[];
+	guildData: GraphQLGuildSettings['data'];
+	id: string;
+	label: string;
+	name: string;
+	placeholder?: string;
+}) => (
+	<FormControl id={id} pb={4}>
+		<FormLabel>{label}</FormLabel>
+		<Controller
+			as={
+				<Select>
+					{options.map((option, i) => (
+						<option key={i} value={option.id}>
+							{option.name}
+						</option>
+					))}
+				</Select>
+			}
+			name={name}
+			placeholder={placeholder}
+			control={control}
+			defaultValue={(guildData.guild![id] as string | null) ?? undefined}
+		/>
+	</FormControl>
+);
+
 const GuildSettings = (props: any) => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
-	const { handleSubmit, register } = useForm<GuildSetingsPayload>({
+	const { handleSubmit, register, control } = useForm<GuildSetingsPayload>({
 		defaultValues: {
 			prefix: '?',
 			moderation: false,
@@ -56,7 +97,17 @@ const GuildSettings = (props: any) => {
 	});
 	const { id } = router.query;
 
-	const { data: gqlData, isLoading } = useQueryGuildSettings(id as string, user.loggedIn, props);
+	const { data: gqlDataGuild, isLoading: isLoadingGuild } = useQueryGuild(id as string, user.loggedIn, props);
+	const { data: gqlDataGuildSettings, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
+		id as string,
+		user.loggedIn && Boolean(gqlDataGuild?.guild),
+		props,
+	);
+	const { data: gqlGuildRoles, isLoading: isLoadingRoles } = useQueryGuildRoles(
+		id as string,
+		user.loggedIn && Boolean(gqlDataGuild?.guild),
+		props,
+	);
 	const [guildSettingsInsertMutate, guildSettingsInsertMutateStatus] = useMutationInsertGuildSettings(
 		id as string,
 		props,
@@ -86,23 +137,45 @@ const GuildSettings = (props: any) => {
 		await guildSettingsUpdateMutate(guildSettings);
 	}
 
-	return gqlData?.guild ? (
+	if (isLoadingGuild || isLoadingGuildSettings || isLoadingRoles) {
+		return <Text textAlign="center">Loading...</Text>;
+	}
+
+	if (gqlDataGuild && !gqlDataGuild.guild) {
+		return (
+			<Box textAlign="center">
+				<Text mb={6}>Yuudachi is not in this guild yet.</Text>
+				<Link href={''}>
+					<Button>Invite</Button>
+				</Link>
+			</Box>
+		);
+	}
+
+	return gqlDataGuildSettings?.guild && gqlGuildRoles?.roles ? (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<CustomFormControl register={register} guildData={gqlData} id="prefix" label="Prefix" name="prefix" />
+			<CustomFormControl
+				register={register}
+				guildData={gqlDataGuildSettings}
+				id="prefix"
+				label="Prefix"
+				name="prefix"
+			/>
 			<FormControl id="moderation" pb={4}>
 				<FormLabel>Moderation</FormLabel>
 				<Switch
 					name="moderation"
 					ref={register}
-					isChecked={gqlData.guild.moderation}
+					isChecked={gqlDataGuildSettings.guild.moderation}
 					onChange={handleSubmit(onSubmit)}
 				/>
 			</FormControl>
-			{gqlData.guild.moderation ? (
+			{gqlDataGuildSettings.guild.moderation ? (
 				<>
-					<CustomFormControl
-						register={register}
-						guildData={gqlData}
+					<CustomFormSelectControl
+						control={control}
+						options={gqlGuildRoles.roles}
+						guildData={gqlDataGuildSettings}
 						id="mod_role_id"
 						label="Moderator Role Id"
 						name="mod_role_id"
@@ -110,7 +183,7 @@ const GuildSettings = (props: any) => {
 					/>
 					<CustomFormControl
 						register={register}
-						guildData={gqlData}
+						guildData={gqlDataGuildSettings}
 						id="mod_log_channel_id"
 						label="Moderation Log Channel Id"
 						name="mod_log_channel_id"
@@ -118,7 +191,7 @@ const GuildSettings = (props: any) => {
 					/>
 					<CustomFormControl
 						register={register}
-						guildData={gqlData}
+						guildData={gqlDataGuildSettings}
 						id="guild_log_channel_id"
 						label="Guild Log Channel Id"
 						name="guild_log_channel_id"
@@ -126,47 +199,52 @@ const GuildSettings = (props: any) => {
 					/>
 					<CustomFormControl
 						register={register}
-						guildData={gqlData}
+						guildData={gqlDataGuildSettings}
 						id="member_log_channel_id"
 						label="Member Log Channel Id"
 						name="member_log_channel_id"
 						placeholder="The discord channel id for member logs"
 					/>
-					<CustomFormControl
-						register={register}
-						guildData={gqlData}
+					<CustomFormSelectControl
+						control={control}
+						options={gqlGuildRoles.roles}
+						guildData={gqlDataGuildSettings}
 						id="mute_role_id"
 						label="Mute Role Id"
 						name="mute_role_id"
 						placeholder="The discord role id for mutes"
 					/>
-					<CustomFormControl
-						register={register}
-						guildData={gqlData}
+					<CustomFormSelectControl
+						control={control}
+						options={gqlGuildRoles.roles}
+						guildData={gqlDataGuildSettings}
 						id="tag_role_id"
 						label="Tag Role Id"
 						name="tag_role_id"
 						placeholder="The discord role id for tag restrictions"
 					/>
-					<CustomFormControl
-						register={register}
-						guildData={gqlData}
+					<CustomFormSelectControl
+						control={control}
+						options={gqlGuildRoles.roles}
+						guildData={gqlDataGuildSettings}
 						id="embed_role_id"
 						label="Embed Role Id"
 						name="embed_role_id"
 						placeholder="The discord role id for embed restrictions"
 					/>
-					<CustomFormControl
-						register={register}
-						guildData={gqlData}
+					<CustomFormSelectControl
+						control={control}
+						options={gqlGuildRoles.roles}
+						guildData={gqlDataGuildSettings}
 						id="emoji_role_id"
 						label="Emoji Role Id"
 						name="emoji_role_id"
 						placeholder="The discord role id for emoji restrictions"
 					/>
-					<CustomFormControl
-						register={register}
-						guildData={gqlData}
+					<CustomFormSelectControl
+						control={control}
+						options={gqlGuildRoles.roles}
+						guildData={gqlDataGuildSettings}
 						id="reaction_role_id"
 						label="Reaction Role Id"
 						name="reaction_role_id"
@@ -174,7 +252,7 @@ const GuildSettings = (props: any) => {
 					/>
 					<FormControl id="role_state" pb={4}>
 						<FormLabel>Role State</FormLabel>
-						<Switch name="role_state" ref={register} isChecked={gqlData.guild.role_state} />
+						<Switch name="role_state" ref={register} isChecked={gqlDataGuildSettings.guild.role_state} />
 					</FormControl>
 				</>
 			) : (
@@ -187,8 +265,6 @@ const GuildSettings = (props: any) => {
 				</Button>
 			</Box>
 		</form>
-	) : isLoading ? (
-		<Text textAlign="center">Loading...</Text>
 	) : (
 		<Box textAlign="center">
 			<Text mb={6}>No guild settings initialized yet.</Text>
