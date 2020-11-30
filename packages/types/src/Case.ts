@@ -13,6 +13,7 @@ export interface CreateCase {
 	roleId?: string;
 	actionExpiration?: Date;
 	reason: string;
+	moderatorId: string;
 	targetId: string;
 	deleteMessageDays?: number;
 	contextMessageId?: string;

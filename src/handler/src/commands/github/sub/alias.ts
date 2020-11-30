@@ -1,4 +1,4 @@
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
@@ -13,7 +13,14 @@ function argsFormat(locale: string) {
 	return i18next.t('command.github.alias.common.alias_format', { lng: locale });
 }
 
-async function add(message: Message, locale: string, current: string[], cleaned: string[], sql: Sql<any>, rest: Rest) {
+async function add(
+	message: APIMessage,
+	locale: string,
+	current: string[],
+	cleaned: string[],
+	sql: Sql<any>,
+	rest: Rest,
+) {
 	if (!cleaned.length) {
 		throw new Error(
 			i18next.t('command.github.alias.add.no_args', {
@@ -50,7 +57,7 @@ async function add(message: Message, locale: string, current: string[], cleaned:
 }
 
 async function remove(
-	message: Message,
+	message: APIMessage,
 	locale: string,
 	current: string[],
 	cleaned: string[],
@@ -99,7 +106,7 @@ async function remove(
 	});
 }
 
-function list(message: Message, locale: string, current: string[], rest: Rest) {
+function list(message: APIMessage, locale: string, current: string[], rest: Rest) {
 	if (!current.length) {
 		throw new Error(
 			i18next.t('command.github.alias.list.no_current', {
@@ -147,7 +154,7 @@ function cleanAliasCandidates(inputs: string[], predicate: (current: string) => 
 	return inputs.map((i) => resolveAlias(i)).filter((e) => e && predicate(e)) as string[];
 }
 
-export async function alias(message: Message, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
+export async function alias(message: APIMessage, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
 	if (!message.guild_id) {
 		throw new Error(i18next.t('command.github.alias.common.execute.no_guild', { lng: locale }));
 	}

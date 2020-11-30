@@ -1,21 +1,44 @@
 version: "3.7"
 
 services:
+  grafana:
+    environment: []
+      # GF_SERVER_DOMAIN: ""
+      # GF_SERVER_ROOT_URL: ""
+      # GF_AUTH_ANONYMOUS_ORG_NAME: ""
+      # GF_AUTH_GITHUB_ENABLED: ""
+      # GF_AUTH_GITHUB_ALLOW_SIGN_UP: ""
+      # GF_AUTH_GITHUB_CLIENT_ID: ""
+      # GF_AUTH_GITHUB_CLIENT_SECRET: ""
+      # GF_AUTH_GITHUB_SCOPES: user:email,read:org
+      # GF_AUTH_GITHUB_AUTH_URL: https://github.com/login/oauth/authorize
+      # GF_AUTH_GITHUB_TOKEN_URL: https://github.com/login/oauth/access_token
+      # GF_AUTH_GITHUB_API_URL: https://api.github.com/user
+      # GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS: ""
+
   hasura:
     environment:
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256","key":""}'
+
+  gateway:
+    environment:
+      DISCORD_TOKEN: ""
+
   handler:
     environment:
       DISCORD_TOKEN: ""
       GITHUB_TOKEN: ""
+
   api:
     environment:
       DISCORD_TOKEN: ""
       JWT_SECRET: ""
+
+  graphql:
+    environment:
+      JWT_SECRET: ""
+
   auth:
     environment:
       DISCORD_CLIENT_ID: ""
       DISCORD_CLIENT_SECRET: ""
-  gateway:
-    environment:
-      DISCORD_TOKEN: ""

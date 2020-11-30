@@ -1,9 +1,13 @@
-export interface Guild {
-	id: string;
-	name: string;
-	icon: string;
-	owner: boolean;
-	permissions: number;
-	permissions_new: string;
-	features: string[];
+import { RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult } from 'discord-api-types/v6';
+
+export interface GraphQLOAuthGuilds {
+	data: {
+		guilds: RESTGetAPICurrentUserGuildsResult;
+	};
+}
+
+export interface GraphQLGuild {
+	data: {
+		guild: RESTAPIPartialCurrentUserGuild | null;
+	};
 }

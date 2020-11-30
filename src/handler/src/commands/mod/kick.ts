@@ -1,4 +1,4 @@
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import API, { HttpException } from '@yuudachi/api';
 import Rest from '@yuudachi/rest';
 import { CaseAction } from '@yuudachi/types';
@@ -13,7 +13,7 @@ import parseMember from '../../parsers/member';
 export default class KickCommand implements Command {
 	public constructor(private readonly rest: Rest, private readonly api: API) {}
 
-	public async execute(message: Message, args: Args, locale: string): Promise<void> {
+	public async execute(message: APIMessage, args: Args, locale: string): Promise<void> {
 		if (!message.guild_id) throw new Error(i18next.t('command.mod.common.execute.no_guild', { lng: locale }));
 
 		const maybeMember = args.singleParse(parseMember);
@@ -27,9 +27,10 @@ export default class KickCommand implements Command {
 		const memberMention = `<@${maybeMember.value}>`;
 
 		try {
-			await this.api.guilds.createCase(message.author.id, message.guild_id, {
+			await this.api.guilds.createCase(message.guild_id, {
 				action: CaseAction.KICK,
 				reason: reason,
+				moderatorId: message.author.id,
 				targetId: maybeMember.value,
 				contextMessageId: message.id,
 			});

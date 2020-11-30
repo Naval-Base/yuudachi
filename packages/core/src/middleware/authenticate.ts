@@ -10,11 +10,14 @@ declare module 'polka' {
 	export interface Request {
 		cookies?: Record<string, string>;
 		auth?: AuthInfo;
-		userId?: string;
 	}
 }
 
-export default (ignoreExpiration = false) => async (req: Request, _: Response, next?: NextHandler) => {
+export default (ignoreExpiration = false, fallthrough = false) => async (
+	req: Request,
+	_: Response,
+	next?: NextHandler,
+) => {
 	const authManager = container.resolve(AuthManager);
 
 	let token: string | undefined;
@@ -23,7 +26,7 @@ export default (ignoreExpiration = false) => async (req: Request, _: Response, n
 	} else if (req.headers.cookie) {
 		token = cookie.parse(req.headers.cookie).access_token;
 	}
-	if (!token) return next?.(unauthorized('Malformed or missing JWT'));
+	if (!token) return next?.(fallthrough ? undefined : unauthorized('Malformed or missing JWT'));
 
 	try {
 		const userId = await authManager.verify(token, ignoreExpiration);
@@ -31,6 +34,6 @@ export default (ignoreExpiration = false) => async (req: Request, _: Response, n
 		req.auth = { userId, token };
 		return next?.();
 	} catch {
-		return next?.(unauthorized());
+		return next?.(fallthrough ? undefined : unauthorized());
 	}
 };

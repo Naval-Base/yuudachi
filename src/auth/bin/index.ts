@@ -10,7 +10,7 @@ import { Tokens } from '@yuudachi/core';
 
 const { kSQL, kConfig } = Tokens;
 
-const pg = postgres({ debug: console.log });
+const pg = postgres();
 
 container.register(kSQL, { useValue: pg });
 container.register<Config>(kConfig, {

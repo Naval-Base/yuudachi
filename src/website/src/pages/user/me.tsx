@@ -33,7 +33,7 @@ const UserPage = () => {
 				<UserDisplay />
 			</Grid>
 			<Box mb={12} px={{ base: 0, md: 200 }}>
-				<Box px={16} pb={8}>
+				<Box px={8} pb={8}>
 					<Heading>Manage</Heading>
 					<Text>Severs you can manage</Text>
 				</Box>

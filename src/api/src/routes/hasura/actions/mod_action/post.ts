@@ -3,8 +3,9 @@ import Joi from 'joi';
 import { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
+import { bodyParser } from '@yuudachi/core';
 
-import { validate, bodyParser } from '../../../../middleware';
+import { validate } from '../../../../middleware';
 import CaseManager from '../../../../managers/CaseManager';
 
 enum Actions {

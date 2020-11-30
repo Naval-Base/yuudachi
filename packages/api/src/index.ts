@@ -10,10 +10,16 @@ export default class API {
 
 	public guilds = new Guilds(this);
 
-	public async make(userId: string, method: string, endpoint: string, body?: unknown) {
+	public async make<T = unknown>(
+		method: string,
+		endpoint: string,
+		body?: unknown,
+		headers_: Record<string, string> = {},
+	): Promise<T> {
 		const headers: Record<string, string> =
-			method.toLowerCase() === 'put' || method.toLowerCase() === 'post' ? { 'content-type': 'application/json' } : {};
-		headers['x-user-id'] = userId;
+			method.toLowerCase() === 'put' || method.toLowerCase() === 'post'
+				? { 'content-type': 'application/json', ...headers_ }
+				: { ...headers_ };
 
 		const res = await fetch(`${this.baseURL}/api${endpoint}`, {
 			method,

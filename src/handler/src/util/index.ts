@@ -1,4 +1,4 @@
-import { Embed, EmbedField } from '@spectacles/types';
+import { APIEmbed, APIEmbedField } from 'discord-api-types/v6';
 import {
 	EMBED_AUTHOR_NAME_LIMIT,
 	EMBED_DESCRIPTION_LIMIT,
@@ -9,7 +9,7 @@ import {
 	EMBED_TITLE_LIMIT,
 } from '../Constants';
 
-export function addField(embed: Embed, data: EmbedField): Embed {
+export function addField(embed: APIEmbed, data: APIEmbedField): APIEmbed {
 	return {
 		...embed,
 		fields: [...(embed.fields ?? []), data],
@@ -31,7 +31,7 @@ export function uniqueValidatedValues<T>(input: T[]): T[] {
 	return Array.from(new Set(input)).filter((element) => element);
 }
 
-export function truncateEmbed(embed: Embed): Embed {
+export function truncateEmbed(embed: APIEmbed): APIEmbed {
 	return {
 		...embed,
 		description: embed.description ? ellipsis(embed.description, EMBED_DESCRIPTION_LIMIT) : undefined,

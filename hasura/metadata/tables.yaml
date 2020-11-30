@@ -38,6 +38,29 @@
   - name: user
     using:
       foreign_key_constraint_on: user_id
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - avatar
+      - id
+      - main
+      - provider
+      - user_id
+      filter:
+        user_id:
+          _eq: x-hasura-user-id
+  - role: user
+    permission:
+      columns:
+      - avatar
+      - id
+      - main
+      - provider
+      - user_id
+      filter:
+        user_id:
+          _eq: x-hasura-user-id
 - table:
     schema: public
     name: guild_settings
@@ -64,3 +87,24 @@
         table:
           schema: public
           name: connections
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - email
+      - id
+      - role
+      - username
+      filter:
+        id:
+          _eq: x-hasura-user-id
+  - role: user
+    permission:
+      columns:
+      - email
+      - id
+      - role
+      - username
+      filter:
+        id:
+          _eq: x-hasura-user-id

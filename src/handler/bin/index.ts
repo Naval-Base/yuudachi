@@ -10,7 +10,7 @@ import readdirp from 'readdirp';
 import API from '@yuudachi/api';
 import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
 import { Tokens } from '@yuudachi/core';
@@ -72,7 +72,7 @@ void (async () => {
 	}
 
 	for await (const [message, { ack }] of on(broker, 'MESSAGE_CREATE') as AsyncIterableIterator<
-		[Message, AmqpResponseOptions]
+		[APIMessage, AmqpResponseOptions]
 	>) {
 		ack();
 

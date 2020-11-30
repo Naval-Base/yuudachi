@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import { Args, joinTokens } from 'lexure';
 import Rest from '@yuudachi/rest';
 import { Sql } from 'postgres';
@@ -19,7 +19,7 @@ const { kSQL } = Tokens;
 export default class implements Command {
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(message: Message, args: Args, locale: string) {
+	public async execute(message: APIMessage, args: Args, locale: string) {
 		if (!message.guild_id) {
 			throw new Error(i18next.t('command.tag.common.execute.no_guild', { lng: locale }));
 		}

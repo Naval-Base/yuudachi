@@ -1,4 +1,4 @@
-import { Message, Embed } from '@spectacles/types';
+import { APIMessage, APIEmbed } from 'discord-api-types/v6';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
@@ -132,7 +132,7 @@ export async function issuePR(
 	locale: string,
 	isPrefixed: boolean,
 	rest: Rest,
-	message: Message,
+	message: APIMessage,
 ) {
 	try {
 		const query = buildQuery(owner, repository, num);
@@ -228,7 +228,7 @@ export async function issuePR(
 			? GITHUB_COLOR_OPEN
 			: GITHUB_COLOR_CLOSED;
 
-		const e1: Embed = {
+		const e1: APIEmbed = {
 			author: {
 				icon_url: `${issue.author.avatarUrl}?anticache=${Date.now()}`,
 				name: issue.author.login,
@@ -243,7 +243,7 @@ export async function issuePR(
 
 		// install with
 		const installable = Reflect.has(InstallableState, resultState);
-		const e2: Embed =
+		const e2: APIEmbed =
 			isPR(issue) && installable
 				? addField(e1, {
 						name: i18next.t('command.github.issue-pr.heading.install', { lng: locale }),
@@ -280,7 +280,7 @@ export async function issuePR(
 				: i18next.t('command.github.issue-pr.heading.reviews.review_required', { lng: locale })
 			: '';
 
-		const e3: Embed = reviews.length ? addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
+		const e3: APIEmbed = reviews.length ? addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
 
 		await rest.post(`/channels/${message.channel_id}/messages`, {
 			embed: truncateEmbed(e3),

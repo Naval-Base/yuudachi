@@ -15,7 +15,6 @@ pids
 # Env
 .env
 config.yaml
-codegen.yml
 docker-compose.config.yml
 
 # Dist
