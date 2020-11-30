@@ -1,4 +1,4 @@
-import { User } from '@spectacles/types';
+import { APIUser } from 'discord-api-types/v6';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
@@ -79,9 +79,9 @@ export default class CaseManager {
 				break;
 		}
 
-		const [target, mod]: [User, User] = await Promise.all([
-			this.rest.get<User>(`/users/${case_.targetId}`),
-			this.rest.get<User>(`/users/${case_.moderatorId}`),
+		const [target, mod]: [APIUser, APIUser] = await Promise.all([
+			this.rest.get<APIUser>(`/users/${case_.targetId}`),
+			this.rest.get<APIUser>(`/users/${case_.moderatorId}`),
 		]);
 
 		const [newCase] = await this.sql`

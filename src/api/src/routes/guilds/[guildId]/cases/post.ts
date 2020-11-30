@@ -5,8 +5,9 @@ import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { HttpException } from '@yuudachi/rest';
+import { bodyParser } from '@yuudachi/core';
 
-import { validate, bodyParser } from '../../../../middleware';
+import { validate } from '../../../../middleware';
 import CaseManager from '../../../../managers/CaseManager';
 
 interface CasesPostBody {

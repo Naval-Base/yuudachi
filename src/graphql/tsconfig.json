@@ -1,0 +1,17 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"sourceRoot": "./",
+		"outDir": "dist"
+	},
+	"include": [
+		"./src",
+		"./bin"
+	],
+	"references": [
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/http" },
+		{ "path": "../../packages/types" },
+		{ "path": "../../packages/rest" }
+	]
+}

@@ -5,7 +5,7 @@ on:
   label:
   push:
     branches:
-      - master
+      - next
     paths:
       - '.github/labels.yml'
 jobs:

@@ -6,27 +6,25 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { RootState } from '../store';
 import { setUser } from '../store/slices/user';
-import { User } from '../interfaces/User';
+import { GraphQLUser } from '../interfaces/User';
 
 export function useQueryMe(props: any) {
 	const cookie = useCookie(props.cookie);
 	const user = useSelector((state: RootState) => state.user);
 	const dispatch = useDispatch();
 
-	const { data, isLoading } = useQuery<User>(
+	const { data, isLoading } = useQuery<GraphQLUser>(
 		'user',
 		() =>
 			fetchGraphQL(
 				`query Me {
-					me: users_me {
-						user {
-							connections {
-								id
-								avatar
-								main
-							}
-							username
+					me: users {
+						connections {
+							id
+							avatar
+							main
 						}
+						username
 					}
 				}`,
 				{},
@@ -38,10 +36,15 @@ export function useQueryMe(props: any) {
 	);
 
 	useEffect(() => {
-		if (!user.loggedIn && data?.data.me.user && data.data.me.user.connections.length) {
-			const connection = data.data.me.user.connections.find((c) => c.main)!;
+		if (!user.loggedIn && data?.data.me[0] && data.data.me[0].connections.length) {
+			const connection = data.data.me[0].connections.find((c) => c.main)!;
 			dispatch(
-				setUser({ loggedIn: true, id: connection.id, username: data.data.me.user.username, avatar: connection.avatar }),
+				setUser({
+					loggedIn: true,
+					id: connection.id,
+					username: data.data.me[0].username,
+					avatar: connection.avatar,
+				}),
 			);
 		}
 	});

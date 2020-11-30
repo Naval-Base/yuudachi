@@ -1,6 +1,6 @@
 import { Args } from 'lexure';
 import { injectable, inject } from 'tsyringe';
-import { Message } from '@spectacles/types';
+import { APIMessage } from 'discord-api-types/v6';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
@@ -28,7 +28,7 @@ export default class GitHub implements Command {
 
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(message: Message, args: Args, locale: string, executionContext: ExecutionContext) {
+	public async execute(message: APIMessage, args: Args, locale: string, executionContext: ExecutionContext) {
 		const isPrefixed = executionContext === ExecutionContext['PREFIXED'];
 
 		if (!message.guild_id) return;

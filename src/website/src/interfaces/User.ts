@@ -1,12 +1,10 @@
 import { Connection } from './Connection';
 
-export interface User {
+export interface GraphQLUser {
 	data: {
 		me: {
-			user: {
-				username: string;
-				connections: Connection[];
-			};
-		};
+			username: string;
+			connections: Connection[];
+		}[];
 	};
 }

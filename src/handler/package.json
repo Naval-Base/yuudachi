@@ -16,7 +16,6 @@
 		"@spectacles/brokers": "^0.8.4",
 		"i18next": "^19.8.4",
 		"i18next-http-backend": "^1.0.21",
-		"joi": "^17.3.0",
 		"lexure": "^0.17.0",
 		"node-fetch": "2.6.1",
 		"postgres": "^2.0.0-beta.2",
@@ -26,9 +25,9 @@
 		"tsyringe": "^4.4.0"
 	},
 	"devDependencies": {
-		"@spectacles/types": "^0.2.1",
-		"@types/node": "^14.14.9",
+		"@types/node": "^14.14.10",
 		"@types/node-fetch": "^2.5.7",
+		"discord-api-types": "^0.9.1",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.1.2"

@@ -1,4 +1,4 @@
-import { Message, Embed } from '@spectacles/types';
+import { APIMessage, APIEmbed } from 'discord-api-types/v6';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import { GitHubAPIResult } from '../../../interfaces/GitHub';
@@ -41,7 +41,7 @@ export async function commit(
 	locale: string,
 	isPrefixed: boolean,
 	rest: Rest,
-	message: Message,
+	message: APIMessage,
 ) {
 	try {
 		const query = buildQuery(owner, repository, expression);
@@ -75,7 +75,7 @@ export async function commit(
 			? `\`${commit.abbreviatedOid}\` ${commit.messageHeadline}`
 			: commit.abbreviatedOid;
 
-		const embed: Embed = {
+		const embed: APIEmbed = {
 			author: {
 				icon_url: commit.author.user?.avatarUrl ?? commit.author.avatarUrl,
 				name: commit.author.user?.login ?? commit.author.name,

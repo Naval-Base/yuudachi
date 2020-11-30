@@ -1,1 +1,5 @@
-[]
+- name: service_graphql
+  definition:
+    url: http://graphql:3550/graphql
+    timeout_seconds: 60
+    forward_client_headers: true

@@ -26,7 +26,6 @@ services:
     environment:
       HASURA_GRAPHQL_DATABASE_URL: "postgresql://yuudachi:admin@postgres:5432/yuudachi"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
       HASURA_GRAPHQL_ADMIN_SECRET: "admin"
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256","key":""}'
     expose:
@@ -44,7 +43,8 @@ services:
       - "127.0.0.1:6379:6379"
 
   redis-exporter:
-    environment: []
+    environment:
+      REDIS_ADDR: "redis://redis:6379"
 
   prometheus:
     volumes:
@@ -55,21 +55,9 @@ services:
   grafana:
     environment:
       GF_DEFAULT_INSTANCE_NAME: "yuudachi"
-      # GF_SERVER_DOMAIN: ""
-      # GF_SERVER_ROOT_URL: ""
       GF_SECURITY_ADMIN_USER: "admin"
       GF_SECURITY_ADMIN_PASSWORD: "admin"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
-      # GF_AUTH_ANONYMOUS_ORG_NAME: ""
-      # GF_AUTH_GITHUB_ENABLED: ""
-      # GF_AUTH_GITHUB_ALLOW_SIGN_UP: ""
-      # GF_AUTH_GITHUB_CLIENT_ID: ""
-      # GF_AUTH_GITHUB_CLIENT_SECRET: ""
-      # GF_AUTH_GITHUB_SCOPES: user:email,read:org
-      # GF_AUTH_GITHUB_AUTH_URL: https://github.com/login/oauth/authorize
-      # GF_AUTH_GITHUB_TOKEN_URL: https://github.com/login/oauth/access_token
-      # GF_AUTH_GITHUB_API_URL: https://api.github.com/user
-      # GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS: ""
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
     volumes:
@@ -79,28 +67,16 @@ services:
     image: spectacles/gateway:latest
     environment:
       DISCORD_TOKEN: ""
-      # DISCORD_EVENTS: ""
       BROKER_TYPE: "amqp"
       BROKER_GROUP: "gateway"
-      BROKER_MESSAGE_TIMEOUT: "10m"
-      PROMETHEUS_ADDRESS: ":8080"
-      PROMETHEUS_ENDPOINT: "/metrics"
-      # AMQP_URL: ""
-      SHARD_STORE_TYPE: "redis"
-      # REDIS_URL: ""
-      REDIS_POOL_SIZE: 5
 
   proxy:
     environment:
-      # REDIS_URL: ""
-      # AMQP_URL: ""
       AMQP_GROUP: "rest"
       AMQP_EVENT: "REQUEST"
 
   handler:
     environment:
-      # PGHOST: ""
-      # PGPORT: ""
       PGDATABASE: "yuudachi"
       PGUSERNAME: "yuudachi"
       PGPASSWORD: "admin"
@@ -110,26 +86,26 @@ services:
 
   api:
     environment:
-      # PGHOST: ""
-      # PGPORT: ""
       PGDATABASE: "yuudachi"
       PGUSERNAME: "yuudachi"
       PGPASSWORD: "admin"
       DISCORD_TOKEN: ""
       JWT_SECRET: ""
 
+  graphql:
+    environment:
+      POSTGRES_USER: "yuudachi"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "yuudachi"
+      JWT_SECRET: ""
+
   auth:
     environment:
-      # PGHOST: ""
-      # PGPORT: ""
       PGDATABASE: "yuudachi"
       PGUSERNAME: "yuudachi"
       PGPASSWORD: "admin"
       JWT_SECRET: ""
       DISCORD_CLIENT_ID: ""
-      PUBLIC_API_DOMAIN: "http://localhost:3600"
-      PUBLIC_FRONTEND_DOMAIN: "http://localhost:4000"
-      # DISCORD_SCOPES: ""
       DISCORD_CLIENT_SECRET: ""
 
   website:
