@@ -695,7 +695,7 @@ export const MESSAGES = {
 				DESCRIPTION: 'Alias a tag.',
 				PROMPT: {
 					START: (author: User | null) => `${author}, what tag do you want to alias?`,
-					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exist.`,
 				},
 				PROMPT_2: {
 					START: (author: User | null) => `${author}, what alias do you want to apply to this tag?`,
@@ -715,7 +715,7 @@ export const MESSAGES = {
 				DESCRIPTION: 'Deletes a tag.',
 				PROMPT: {
 					START: (author: User | null) => `${author}, what tag do you want to delete?`,
-					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exist.`,
 				},
 				OWN_TAG: 'you can only delete your own tags.',
 				REPLY: (tag: string) => `successfully deleted **${tag}**.`,
@@ -730,7 +730,7 @@ export const MESSAGES = {
 				DESCRIPTION: 'Edit a tag (Markdown can be used).',
 				PROMPT: {
 					START: (author: User | null) => `${author}, what tag do you want to edit?`,
-					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exist.`,
 				},
 				PROMPT_2: {
 					START: (author: User | null) => `${author}, what should the new content be?`,
@@ -759,7 +759,7 @@ export const MESSAGES = {
 				DESCRIPTION: 'Displays information about a tag.',
 				PROMPT: {
 					START: (author: User | null) => `${author}, what tag do you want information on?`,
-					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exist.`,
 				},
 			},
 
@@ -789,7 +789,7 @@ export const MESSAGES = {
 				DESCRIPTION: 'Displays a tags source (Highlighted with Markdown).',
 				PROMPT: {
 					START: (author: User | null) => `${author}, what tag do you want to see the source of?`,
-					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exists.`,
+					RETRY: (author: User | null, val: string) => `${author}, a tag with the name **${val}** does not exist.`,
 				},
 			},
 		},
