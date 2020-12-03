@@ -20,7 +20,7 @@ export interface CreateCase {
 	referenceId?: number;
 }
 
-export default interface Case {
+export interface Case {
 	caseId: number;
 	guildId: string;
 	targetId: string;

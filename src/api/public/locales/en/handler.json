@@ -27,6 +27,7 @@
 				}
 			},
 			"commit": {
+				"no_guild": "this command can only be used in a guild / server",
 				"errors": {
 					"not_found": "Could not find a commit based on {{expression}} on the repository {{owner}}/{{repository}}."
 				},

@@ -45,7 +45,7 @@ interface RefreshTokenData {
 }
 
 @injectable()
-export default class AuthManager {
+export class AuthManager {
 	public constructor(
 		@inject(kConfig)
 		public readonly config: Config,

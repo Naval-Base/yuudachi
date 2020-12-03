@@ -2,6 +2,7 @@ import { APIMessage, APIEmbed } from 'discord-api-types/v6';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
+
 import { addField, truncateEmbed } from '../../../util';
 import { isPR, GitHubReviewDecision, GitHubReviewState, GitHubAPIResult } from '../../../interfaces/GitHub';
 

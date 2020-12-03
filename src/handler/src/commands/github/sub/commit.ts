@@ -1,9 +1,9 @@
 import { APIMessage, APIEmbed } from 'discord-api-types/v6';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
-import { GitHubAPIResult } from '../../../interfaces/GitHub';
 import fetch from 'node-fetch';
 
+import { GitHubAPIResult } from '../../../interfaces/GitHub';
 import { GITHUB_BASE_URL, GITHUB_COLOR_COMMIT, GITHUB_ICON_COMMIT } from '../../../Constants';
 import { GitHubAPIError } from '../github';
 import { truncateEmbed } from '../../../util';

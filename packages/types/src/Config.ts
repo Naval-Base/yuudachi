@@ -1,4 +1,4 @@
-export default interface Config {
+export interface Config {
 	secretKey: string;
 	discordClientId: string;
 	publicApiDomain: string;

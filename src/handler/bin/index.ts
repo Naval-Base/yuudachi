@@ -16,6 +16,8 @@ import HttApi, { BackendOptions } from 'i18next-http-backend';
 import { Tokens } from '@yuudachi/core';
 
 import Command, { commandInfo, ExecutionContext } from '../src/Command';
+import { CommandModules } from '../src/Constants';
+import { has } from '../src/util/modules';
 
 const { kSQL } = Tokens;
 
@@ -76,13 +78,19 @@ void (async () => {
 	>) {
 		ack();
 
-		const [data] = await sql<{ prefix: string | null; locale: string }>`select prefix
+		const [data] = await sql<{
+			prefix: string | null;
+			locale: string | null;
+			modules: number | null;
+		}>`select prefix, locale, modules
 			from guild_settings
 			where guild_id = ${message.guild_id ?? null};`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const prefix = data?.prefix ?? '?';
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const locale = data?.locale ?? 'en';
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		const modules = data?.modules ?? CommandModules.All;
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
 			['“', '”'],
@@ -97,6 +105,9 @@ void (async () => {
 
 			const command = commands.get(cmd.value);
 			if (command) {
+				if (!has(modules, command.category)) {
+					continue;
+				}
 				try {
 					await command.execute(message, new Args(out), locale, ExecutionContext['PREFIXED']);
 				} catch (error) {
@@ -108,9 +119,13 @@ void (async () => {
 		}
 
 		for (const command of commands.values()) {
-			if (!command.regExp) continue;
+			if (!has(modules, command.category) || !command.regExp) {
+				continue;
+			}
 			const match = command.regExp.exec(message.content);
-			if (!match) continue;
+			if (!match) {
+				continue;
+			}
 
 			const [, ...args] = match;
 			const tokens: Token[] = args.filter((v) => v).map((s) => ({ raw: s, trailing: '', value: s }));

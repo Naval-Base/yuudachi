@@ -1,6 +1,7 @@
 import { APIMessage } from 'discord-api-types/v6';
 import { Args } from 'lexure';
 import { basename, parse, sep, extname } from 'path';
+import { CommandModules } from './Constants';
 
 export enum ExecutionContext {
 	PREFIXED,
@@ -10,7 +11,7 @@ export enum ExecutionContext {
 export default interface Command {
 	name?: string;
 	aliases?: string[];
-	category?: string;
+	category: CommandModules;
 	description?: string;
 	clientPermissions?: string[];
 	userPermissions?: string[];

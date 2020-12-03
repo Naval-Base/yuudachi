@@ -16,7 +16,7 @@ declare module 'http' {
 	}
 }
 
-export default function createApp(publicFolder?: string) {
+export function createApp(publicFolder?: string) {
 	return polka<polka.Request>({
 		onError(err, _, res) {
 			console.error(err); // TODO: better error logging

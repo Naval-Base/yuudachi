@@ -7,6 +7,7 @@ import Rest from '@yuudachi/rest';
 import { Tokens } from '@yuudachi/core';
 
 import Command, { ExecutionContext } from '../../Command';
+import { CommandModules } from '../../Constants';
 
 import { alias } from './sub/alias';
 import { issuePR } from './sub/issue-pr';
@@ -25,13 +26,16 @@ export class GitHubAPIError extends Error {}
 export default class GitHub implements Command {
 	public readonly regExp = /(?:([A-Za-z0-9_.-]+)\/)?([A-Za-z0-9_.-]+)#([A-Za-z0-9_.-]+)/;
 	public readonly aliases = ['gh'];
+	public readonly category = CommandModules.GitHub;
 
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: APIMessage, args: Args, locale: string, executionContext: ExecutionContext) {
-		const isPrefixed = executionContext === ExecutionContext['PREFIXED'];
+		if (!message.guild_id) {
+			throw new Error(i18next.t('command.github.common.execute.no_guild', { lng: locale }));
+		}
 
-		if (!message.guild_id) return;
+		const isPrefixed = executionContext === ExecutionContext['PREFIXED'];
 
 		const githubToken = process.env.GITHUB_TOKEN;
 
