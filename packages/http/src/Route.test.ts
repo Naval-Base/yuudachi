@@ -1,6 +1,6 @@
 import { sep } from 'path';
 
-import Route, { pathToRouteInfo, RouteMethod } from './Route';
+import { Route, pathToRouteInfo, RouteMethod } from './Route';
 
 test('invalid file name', () => {
 	expect(pathToRouteInfo('foo')).toBeNull();

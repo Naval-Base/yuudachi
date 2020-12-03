@@ -1,7 +1,7 @@
 import { Boom } from '@hapi/boom';
 import { Response } from 'polka';
 
-import { discordOAuth2, State } from './auth';
+export * from './auth';
 
 export function sendBoom(err: Boom, res: Response) {
 	res.statusCode = err.output.statusCode;
@@ -11,5 +11,3 @@ export function sendBoom(err: Boom, res: Response) {
 
 	res.end(JSON.stringify(err.output.payload));
 }
-
-export { discordOAuth2, State };

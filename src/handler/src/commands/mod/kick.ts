@@ -8,21 +8,31 @@ import { injectable } from 'tsyringe';
 
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
+import { CommandModules } from '../../Constants';
 
 @injectable()
 export default class KickCommand implements Command {
+	public readonly category = CommandModules.Moderation;
+
 	public constructor(private readonly rest: Rest, private readonly api: API) {}
 
 	public async execute(message: APIMessage, args: Args, locale: string): Promise<void> {
-		if (!message.guild_id) throw new Error(i18next.t('command.mod.common.execute.no_guild', { lng: locale }));
+		if (!message.guild_id) {
+			throw new Error(i18next.t('command.mod.common.execute.no_guild', { lng: locale }));
+		}
 
 		const maybeMember = args.singleParse(parseMember);
-		if (!maybeMember) throw new Error(i18next.t('command.mod.common.execute.no_user_id', { lng: locale }));
-		if (!maybeMember.success)
+		if (!maybeMember) {
+			throw new Error(i18next.t('command.mod.common.execute.no_user_id', { lng: locale }));
+		}
+		if (!maybeMember.success) {
 			throw new Error(i18next.t('command.mod.common.execute.invalid_user_id', { lng: locale, id: maybeMember.error }));
+		}
 
 		const reason = joinTokens(args.many());
-		if (!reason.length) throw new Error(i18next.t('command.mod.common.execute.no_reason', { lng: locale }));
+		if (!reason.length) {
+			throw new Error(i18next.t('command.mod.common.execute.no_reason', { lng: locale }));
+		}
 
 		const memberMention = `<@${maybeMember.value}>`;
 

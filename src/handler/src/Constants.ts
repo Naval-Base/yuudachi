@@ -1,3 +1,12 @@
+export enum CommandModules {
+	None = 0,
+	Utility = 1,
+	Moderation = 1 << 1,
+	Tags = 1 << 2,
+	GitHub = 1 << 3,
+	All = Utility | Moderation | Tags | GitHub,
+}
+
 export const EMBED_TITLE_LIMIT = 256;
 export const EMBED_DESCRIPTION_LIMIT = 2048;
 export const EMBED_FOOTER_TEXT_LIMIT = 2048;

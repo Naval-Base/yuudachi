@@ -41,7 +41,7 @@ export function pathToRouteInfo(path: string): RouteInfo | null {
 	};
 }
 
-export default abstract class Route {
+export abstract class Route {
 	public readonly middleware: RequestHandler<Request>[] = [];
 	public abstract handle(req: Request, res: Response, next: NextHandler): void | Promise<void>;
 

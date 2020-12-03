@@ -7,6 +7,7 @@ import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
 
 import Command from '../../Command';
+import { CommandModules } from '../../Constants';
 
 import { add } from './sub/add';
 import { update } from './sub/update';
@@ -17,6 +18,8 @@ const { kSQL } = Tokens;
 
 @injectable()
 export default class implements Command {
+	public readonly category = CommandModules.Tags;
+
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: APIMessage, args: Args, locale: string) {

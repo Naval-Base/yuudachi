@@ -161,6 +161,7 @@ create table guild_settings (
 	role_state boolean default false,
 	moderation boolean default false,
 	locale text default 'en',
+	modules integer,
 	repository_aliases text[]
 );
 

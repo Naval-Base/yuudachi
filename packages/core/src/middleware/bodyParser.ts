@@ -1,7 +1,7 @@
 import { Request, Response, NextHandler } from 'polka';
 import { badRequest, badData } from '@hapi/boom';
 
-export default async function bodyParser(req: Request, _: Response, next?: NextHandler) {
+export default async (req: Request, _: Response, next?: NextHandler) => {
 	if (!req.headers['content-type']?.startsWith('application/json')) {
 		return next?.(badRequest('unexpected content type'));
 	}
@@ -16,4 +16,4 @@ export default async function bodyParser(req: Request, _: Response, next?: NextH
 	} catch (e) {
 		next?.(badData(e?.toString()));
 	}
-}
+};

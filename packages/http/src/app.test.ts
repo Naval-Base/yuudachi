@@ -4,8 +4,8 @@ import supertest from 'supertest';
 import { container } from 'tsyringe';
 import { Request, Response, NextHandler } from 'polka';
 
-import createApp from './app';
-import Route, { RouteMethod } from './Route';
+import { createApp } from './app';
+import { Route, RouteMethod } from './Route';
 
 class TestRoute extends Route {
 	public handle(_: Request, __: Response, next: NextHandler) {

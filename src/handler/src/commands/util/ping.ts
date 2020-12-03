@@ -5,9 +5,12 @@ import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 
 import Command from '../../Command';
+import { CommandModules } from '../../Constants';
 
 @injectable()
 export default class implements Command {
+	public readonly category = CommandModules.Utility;
+
 	public constructor(private readonly rest: Rest) {}
 
 	public async execute(message: APIMessage, _: Args, locale: string) {
