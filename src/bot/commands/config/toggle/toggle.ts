@@ -22,6 +22,7 @@ export default class ToggleCommand extends Command {
 				['config-toggle-moderation', 'mod', 'moderation'],
 				['config-toggle-role-state', 'role', 'rolestate', 'role-state'],
 				['config-toggle-token-filtering', 'tokenfilter', 'tokenfiltering', 'token'],
+				['config-toggle-mention-raiding', 'mentionraid', 'mentionraiding', 'mention'],
 			],
 			otherwise: (msg: Message) => {
 				const prefix = (this.handler.prefix as PrefixSupplier)(msg);

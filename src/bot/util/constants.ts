@@ -55,6 +55,7 @@ export enum SETTINGS {
 	GUILD_LOG = 'GUILD_LOG',
 	ROLE_STATE = 'ROLE_STATE',
 	TOKEN_FILTER = 'TOKEN_FILTER',
+	MENTION_RAIDING = 'MENTION_RAIDING',
 	DEFAULT_DOCS = 'DEFAULT_DOCS',
 	BLACKLIST = 'BLACKLIST',
 	MEMBER_LOG = 'MEMBER_LOG',
@@ -79,6 +80,7 @@ export interface Settings {
 	GUILD_LOG: string;
 	ROLE_STATE: boolean;
 	TOKEN_FILTER: boolean;
+	MENTION_RAIDING: boolean;
 	DEFAULT_DOCS: string;
 	BLACKLIST: string[];
 	MEMBER_LOG: {
@@ -151,6 +153,7 @@ export const MESSAGES = {
 				 • mod
 				 • rolestate
 				 • tokenfiltering
+				 • mentionraiding
 
 				Required: \`<>\` | Optional: \`[]\`
 			`,
@@ -332,6 +335,12 @@ export const MESSAGES = {
 					DESCRIPTION: 'Toggle token filtering feature on the server.',
 					REPLY_ACTIVATED: 'successfully activated token filtering!',
 					REPLY_DEACTIVATED: 'successfully deactivated token filtering!',
+				},
+
+				MENTION_RAIDING: {
+					DESCRIPTION: 'Toggle mention raid blocking on the server.',
+					REPLY_ACTIVATED: 'successfully activated mention raid blocking!',
+					REPLY_DEACTIVATED: 'successfully deactivated mention raid blocking!',
 				},
 			},
 		},
