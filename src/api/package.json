@@ -21,7 +21,6 @@
 		"joi": "^17.3.0",
 		"lodash": "^4.17.20",
 		"node-fetch": "^2.6.1",
-		"polka": "^1.0.0-next.11",
 		"postgres": "^2.0.0-beta.2",
 		"readdirp": "^3.5.0",
 		"reflect-metadata": "^0.1.13",
@@ -38,6 +37,7 @@
 		"cpy-cli": "^3.1.1",
 		"discord-api-types": "^0.9.1",
 		"env-cmd": "^10.1.0",
+		"polka": "^1.0.0-next.11",
 		"rimraf": "^3.0.2",
 		"supertest": "^6.0.1",
 		"typescript": "^4.1.2"

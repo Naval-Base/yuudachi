@@ -1,4 +1,4 @@
-import { ellipsis, truncateEmbed, addField, uniqueValidatedValues } from '.';
+import { ellipsis, truncateEmbed, addFields, uniqueValidatedValues } from '.';
 import {
 	EMBED_AUTHOR_NAME_LIMIT,
 	EMBED_DESCRIPTION_LIMIT,
@@ -49,7 +49,7 @@ describe('uniqueValidatedValues', () => {
 describe('addField', () => {
 	test('no fields', () => {
 		const embed = {};
-		const added = addField(embed, { name: 'foo', value: 'bar' });
+		const added = addFields(embed, { name: 'foo', value: 'bar' });
 		expect(added.fields.length).toBe(1);
 		const addedField = added.fields[0];
 		expect(addedField.name).toBe('foo');
@@ -65,7 +65,7 @@ describe('addField', () => {
 				},
 			],
 		};
-		const added = addField(embed, { name: 'newFieldName', value: 'newFieldValue' });
+		const added = addFields(embed, { name: 'newFieldName', value: 'newFieldValue' });
 		expect(added.fields.length).toBe(2);
 		const oldField = added.fields[0];
 		const newField = added.fields[1];

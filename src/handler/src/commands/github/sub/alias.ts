@@ -24,7 +24,7 @@ async function add(
 ) {
 	if (!cleaned.length) {
 		throw new Error(
-			i18next.t('command.github.alias.add.no_args', {
+			i18next.t('command.github.alias.add.errors.no_args', {
 				lng: locale,
 				format: argsFormat(locale),
 			}),
@@ -67,7 +67,7 @@ async function remove(
 ) {
 	if (!cleaned.length) {
 		throw new Error(
-			i18next.t('command.github.alias.remove.no_args', {
+			i18next.t('command.github.alias.remove.errors.no_args', {
 				lng: locale,
 				format: argsFormat(locale),
 			}),
@@ -76,7 +76,7 @@ async function remove(
 
 	if (!current.length) {
 		throw new Error(
-			i18next.t('command.github.alias.remove.no_current', {
+			i18next.t('command.github.alias.common.errors.no_current', {
 				lng: locale,
 			}),
 		);
@@ -110,7 +110,7 @@ async function remove(
 function list(message: APIMessage, locale: string, current: string[], rest: Rest) {
 	if (!current.length) {
 		throw new Error(
-			i18next.t('command.github.alias.list.no_current', {
+			i18next.t('command.github.alias.common.no_current', {
 				lng: locale,
 			}),
 		);
@@ -157,7 +157,7 @@ function cleanAliasCandidates(inputs: string[], predicate: (current: string) => 
 
 export async function alias(message: APIMessage, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
 	if (!message.guild_id) {
-		throw new Error(i18next.t('command.github.alias.common.execute.no_guild', { lng: locale }));
+		throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 	}
 
 	const current = await fetchAliases(message.guild_id, sql);
@@ -167,7 +167,7 @@ export async function alias(message: APIMessage, args: Args, locale: string, sql
 
 	if (!sub) {
 		throw new Error(
-			i18next.t('command.github.alias.common.no_sub', {
+			i18next.t('command.github.alias.common.errors.no_sub', {
 				lng: locale,
 				valid_commands: validSubCommands.join(', '),
 			}),
@@ -198,7 +198,7 @@ export async function alias(message: APIMessage, args: Args, locale: string, sql
 
 		case 'default': {
 			throw new Error(
-				i18next.t('command.github.alias.common.invalid_sub', {
+				i18next.t('command.github.alias.common.errors.invalid_sub', {
 					lng: locale,
 					command: sub,
 					valid_commands: validSubCommands.join(', '),

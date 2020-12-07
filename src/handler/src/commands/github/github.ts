@@ -32,7 +32,7 @@ export default class GitHub implements Command {
 
 	public async execute(message: APIMessage, args: Args, locale: string, executionContext: ExecutionContext) {
 		if (!message.guild_id) {
-			throw new Error(i18next.t('command.github.common.execute.no_guild', { lng: locale }));
+			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
 		const isPrefixed = executionContext === ExecutionContext['PREFIXED'];
@@ -41,7 +41,7 @@ export default class GitHub implements Command {
 
 		if (!githubToken) {
 			if (!isPrefixed) return;
-			throw new Error(i18next.t('command.github.execute.no_token', { lng: locale }));
+			throw new Error(i18next.t('command.github.common.errors.no_token', { lng: locale }));
 		}
 
 		const first = args.single();
@@ -55,7 +55,7 @@ export default class GitHub implements Command {
 
 		if (!first) {
 			if (!isPrefixed) return;
-			throw new Error(i18next.t('command.github.execute.args_missing', { lng: locale }));
+			throw new Error(i18next.t('command.github.common.errors.args_missing', { lng: locale }));
 		}
 
 		const repositoryAliases = await this.fetchAliases(message.guild_id);
@@ -67,17 +67,17 @@ export default class GitHub implements Command {
 
 		if (!owner || !repository || !issueOrExpression) {
 			if (!isPrefixed) return;
-			throw new Error(i18next.t('command.github.execute.args_missing', { lng: locale }));
+			throw new Error(i18next.t('command.github.common.errors.args_missing', { lng: locale }));
 		}
 
 		if (!GitHub.validateGitHubName(owner)) {
 			if (!isPrefixed) return;
-			throw new Error(i18next.t('command.github.execute.invalid_owner', { lng: locale }));
+			throw new Error(i18next.t('command.github.common.errors.invalid_owner', { lng: locale }));
 		}
 
 		if (!GitHub.validateGitHubName(repository)) {
 			if (!isPrefixed) return;
-			throw new Error(i18next.t('command.github.execute.invalid_repository', { lng: locale }));
+			throw new Error(i18next.t('command.github.common.errors.invalid_repository', { lng: locale }));
 		}
 
 		const parsed = Number(issueOrExpression);
