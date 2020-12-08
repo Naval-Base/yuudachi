@@ -1,4 +1,4 @@
-import { RESTGetAPIGuildRolesResult, APIMessage } from 'discord-api-types/v6';
+import { RESTGetAPIGuildRolesResult, APIMessage, APIUser, APIEmbed } from 'discord-api-types/v6';
 import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
@@ -27,16 +27,23 @@ export default class CaseLogManager {
 			throw new Error('no mod log channel configured');
 		}
 
-		const logMessage: APIMessage = await this.rest.post(`/channels/${logChannelId}/messages`, {
-			embed: {
-				title: `${item.mod_tag} (${item.mod_id})`,
-				description: await this.generateLogMessage(item, logChannelId),
-				footer: {
-					text: `Case ${item.case_id}`,
-				},
-				timestamp: new Date().toISOString(),
+		const mod = await this.rest.get<APIUser>(`/users/${item.mod_id}`);
+		const avatar = mod.avatar
+			? `http://cdn.discordapp.com/avatars/${mod.id}/${mod.avatar}.${mod.avatar.startsWith('a_') ? 'gif' : 'png'}`
+			: `http://cdn.discordapp.com/embed/avatars/${Number(mod.discriminator) % 5}.png`;
+		const embed: APIEmbed = {
+			author: {
+				name: `${item.mod_tag} (${item.mod_id})`,
+				icon_url: avatar,
 			},
-		});
+			description: await this.generateLogMessage(item, logChannelId),
+			footer: {
+				text: `Case ${item.case_id}`,
+			},
+			timestamp: new Date().toISOString(),
+		};
+
+		const logMessage: APIMessage = await this.rest.post(`/channels/${logChannelId}/messages`, { embed });
 
 		await this.sql`
 			update cases
@@ -55,8 +62,8 @@ export default class CaseLogManager {
 		}
 
 		let msg = stripIndents`
-			**Member:** ${case_.target_tag} (${case_.target_id})
-			**Action:** ${action}
+			**Member:** \`${case_.target_tag}\` (${case_.target_id})
+			**Action:** ${action[0].toUpperCase() + action.substr(1).toLowerCase()}
 		`;
 
 		if (case_.action_expiration) {

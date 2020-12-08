@@ -23,6 +23,7 @@ interface HasuraMogLogEventPayload {
 			old: Record<string, unknown> | null;
 			new: Record<string, unknown> | null;
 		};
+		trace_context: unknown;
 	};
 	delivery_info: Record<string, string>;
 	created_at: Date;
@@ -51,6 +52,7 @@ export default class HasuraModLogEventHook extends Route {
 								old: Joi.object().allow(null),
 								new: Joi.object().allow(null),
 							}).required(),
+							trace_context: Joi.object().allow(null),
 						})
 						.required(),
 					delivery_info: Joi.object(),

@@ -59,10 +59,10 @@ export default class implements Command {
 		const creationFormatted = DateTime.fromMillis(createdTimestamp, { zone: 'utc' }).toFormat(DATE_FORMAT_WITH_SECONDS);
 
 		const avatar = targetUser.value.avatar
-			? `https://cdn.discordapp.com/avatars/${targetUser.value.id}/${
-					targetUser.value.avatar.startsWith('_a') ? `${targetUser.value.avatar}.gif` : `${targetUser.value.avatar}.png`
+			? `https://cdn.discordapp.com/avatars/${targetUser.value.id}/${targetUser.value.avatar}.${
+					targetUser.value.avatar.startsWith('_a') ? 'gif' : 'png'
 			  }`
-			: `https://cdn.discordapp.com/embed/avatars/${parseInt(targetUser.value.discriminator, 10) % 5}.png`;
+			: `https://cdn.discordapp.com/embed/avatars/${Number(targetUser.value.discriminator) % 5}.png`;
 		let embed: APIEmbed = addFields(
 			{
 				author: {
