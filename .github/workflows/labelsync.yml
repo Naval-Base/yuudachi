@@ -2,6 +2,9 @@ name: Label Sync
 on:
   workflow_dispatch:
   issues:
+    types:
+      - labeled
+      - unlabeled
   label:
   push:
     branches:

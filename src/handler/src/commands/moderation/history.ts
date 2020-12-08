@@ -90,6 +90,7 @@ export default class implements Command {
 				name: 'Member Details',
 				value: stripIndents`
 						${targetMember.value.nick ? `• Nickname: \`${targetMember.value.nick}\`` : '• No nickname'}
+						• Roles: ${targetMember.value.roles.map((role) => `<@&${role}>`)}
 						• Joined: \`${joinFormatted} (UTC)\` (${sinceJoinFormatted})
 					`,
 			});
