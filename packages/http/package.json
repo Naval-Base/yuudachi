@@ -21,7 +21,7 @@
 		"postgres": "^2.0.0-beta.2",
 		"readdirp": "^3.5.0",
 		"reflect-metadata": "^0.1.13",
-		"sirv": "^1.0.9",
+		"sirv": "^1.0.10",
 		"tslib": "^2.0.3"
 	},
 	"devDependencies": {
