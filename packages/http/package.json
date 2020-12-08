@@ -11,17 +11,17 @@
 	"author": "iCrawl <icrawltogo@outlook.com>",
 	"license": "UNLICENSED",
 	"dependencies": {
+		"@discordjs/form-data": "^3.0.1",
 		"@hapi/boom": "^9.1.0",
 		"cookie": "^0.4.1",
 		"cors": "^2.8.5",
-		"form-data": "^3.0.0",
 		"helmet": "^4.2.0",
 		"node-fetch": "^2.6.1",
 		"polka": "^1.0.0-next.11",
 		"postgres": "^2.0.0-beta.2",
 		"readdirp": "^3.5.0",
 		"reflect-metadata": "^0.1.13",
-		"sirv": "^1.0.7",
+		"sirv": "^1.0.9",
 		"tslib": "^2.0.3"
 	},
 	"devDependencies": {

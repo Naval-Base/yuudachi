@@ -1,54 +1,100 @@
 {
 	"command": {
+		"commom": {
+			"errors": {
+				"no_user_id": "No user Id provided.",
+				"invalid_user_id": "**{{id}}** is not a valid user Id.",
+				"no_user_found": "The given user does not exist.",
+				"no_guild": "This command can only be used in a guild.",
+				"target_not_found": "The given member is not in this guild."
+			}
+		},
+		"utility": {
+			"ping": {
+				"pre_ping": "Pinging...",
+				"post_ping": "{{ping}}ms"
+			}
+		},
+		"mod": {
+			"common": {
+				"errors": {
+					"no_reason": "Mod actions require a reason."
+				}
+			},
+			"kick": {
+				"errors": {
+					"missing_permissions": "Missing permissions to kick this member.",
+					"failure": "Unable to kick {{- member}}"
+				},
+				"success": "Successfully kicked {{- member}}"
+			}
+		},
+		"tag": {
+			"common": {
+				"errors": {
+					"no_name": "No tag name provided.",
+					"no_query": "No query provided.",
+					"not_found": "No tag(s) found."
+				}
+			},
+			"search": {
+				"errors": {
+					"too_long": "Query too broad, too many results."
+				}
+			}
+		},
 		"github": {
+			"common": {
+				"errors": {
+					"fetch": "Error while trying to fetch GitHub API information.",
+					"no_result": "Could not find any results.",
+					"args_missing": "Missing arguments, correct usage: \n• `github <owner> <repository> <issue>` \n• `github <alias> <issue>`\n• `github alias <add|remove> <...alias>`\n• `github alias list`",
+					"no_token": "Could not access GitHub token to use.",
+					"invalid_owner": "Please provide a valid GitHub owner.",
+					"invalid_repository": "Please provide a valid GitHub repository.",
+					"invalid_issue": "Please provide a valid issue number."
+				},
+				"unknown": "unknown"
+			},
 			"alias": {
 				"common": {
-					"execute": {
-						"no_guild": "Please use this command in the server you want to edit settings for"
+					"errors": {
+						"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
+						"invalid_sub": "Invalid sub-command `{{command}}`. Valid arguments are: {{valid_commands}}",
+						"no_current": "This guild does not have any repository aliases enabled at this time."
 					},
-					"no_sub": "Missing sub-command, valid arguments are {{valid_commands}}",
-					"invalid_sub": "Invalid sub-command `{{command}}`. Valid arguments are: {{valid_commands}}",
 					"alias_format": "`alias:owner/repository`"
 				},
 				"add": {
-					"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}. Also make sure the desired alias does not already exist.",
+					"errors": {
+						"no_args": "Please provide valid repository aliases to add. Valid format: {{- format}}. Also make sure the desired alias does not already exist."
+					},
 					"no_add": "No new repository aliases were added.",
-					"title": "The following repository aliases have been enabled on this guild / server:"
+					"title": "The following repository aliases have been enabled on this guild:"
 				},
 				"remove": {
-					"no_args": "Please provide valid repository aliases to remove. Valid format: {{- format}}.",
-					"no_current": "This guild / server does not have any repository aliases enabled at this time.",
+					"errors": {
+						"no_args": "Please provide valid repository aliases to remove. Valid format: {{- format}}."
+						
+					},
 					"no_remove": "No repository aliases have been removed.",
-					"title": "The following repository aliases have been disabled on this guild / server:"
+					"title": "The following repository aliases have been disabled on this guild:"
 				},
 				"list": {
-					"no_current": "This guild / server does not have any repository aliases at this time.",
-					"title": "The following repository aliases are enabled on this guild / server:"
+					"title": "The following repository aliases are enabled on this guild:"
 				}
 			},
 			"commit": {
-				"no_guild": "this command can only be used in a guild / server",
 				"errors": {
 					"not_found": "Could not find a commit based on {{expression}} on the repository {{owner}}/{{repository}}."
 				},
 				"files_count": "{{count}} file changed",
 				"filed_count_plural": "{{count}} files changed"
 			},
-			"common": {
-				"errors": {
-					"fetch": "Error while trying to fetch GitHub API information.",
-					"no_result": "Could not find any results."
-				},
-				"unknown": "unknown"
-			},
-			"execute": {
-				"args_missing": "Missing arguments, correct usage: \n• `github <owner> <repository> <issue>` \n• `github <alias> <issue>`\n• `github alias <add|remove> <...alias>`\n• `github alias list`",
-				"no_token": "Could not access GitHub token to use.",
-				"invalid_owner": "Please provide a valid GitHub owner.",
-				"invalid_repository": "Please provide a valid GitHub repository.",
-				"invalid_issue": "Please provide a valid issue number."
-			},
 			"issue-pr": {
+				"errors": {
+					"not_found": "Could not find issue {{issue}} on the repository {{owner}}/{{repository}}."
+				},
 				"action": {
 					"close": "closed",
 					"draft": "draft opened",
@@ -60,9 +106,6 @@
 				},
 				"comment_count": "{{count}} comment",
 				"comment_count_plural": "{{count}} comments",
-				"errors": {
-					"not_found": "Could not find issue {{issue}} on the repository {{owner}}/{{repository}}."
-				},
 				"heading": {
 					"install": "Install with",
 					"reviews": {
@@ -81,63 +124,12 @@
 				}
 			}
 		},
-		"ping": {
-			"execute": {
-				"pre_ping": "Pinging...",
-				"post_ping": "Don't think this means anything special! {{ping}}ms"
-			}
-		},
-		"tag": {
+		"documentation": {
 			"common": {
-				"execute": {
-					"no_guild": "tags can only be used inside a guild / server",
-					"name_missing": "no tag name provided",
-					"content_missing": "no content provided",
-					"not_found": "no tag(s) found"
+				"errors": {
+					"no_matching_source": "No matching source found.",
+					"no_results": "No results."
 				}
-			},
-			"add": {
-				"execute": {
-					"added": "**{{name}}** has been added"
-				}
-			},
-			"update": {
-				"execute": {
-					"updated": "**{{name}}** updated"
-				}
-			},
-			"delete": {
-				"execute": {
-					"deleted": "**{{name}}** deleted",
-					"deleted_user": "deleted {{ count }} tag from **{{user}}**",
-					"deleted_user_plural": "deleted {{ count }} tags from **{{user}}**",
-					"missing_arguments": "no tag name or user provided"
-				}
-			},
-			"alias": {
-				"execute": {
-					"alias_missing": "no alias provided",
-					"exists": "**{{name}}** already exists",
-					"aliased": "**{{name}}** successfully aliased with **{{aliases}}**",
-					"unaliased": "**{{name}}** successfully unaliased **{{aliases}}**",
-					"invalid_subcommand": "no valid subcommand provided"
-				}
-			}
-		},
-		"mod": {
-			"common": {
-				"execute": {
-					"no_user_id": "no user ID provided",
-					"invalid_user_id": "**{{id}}** is not a valid user ID",
-					"no_guild": "this command can only be used in a guild / server",
-					"no_reason": "mod actions require a reason",
-					"target_not_found": "the given member is not in this guild / server"
-				}
-			},
-			"kick": {
-				"success": "successfully kicked {{- member}}",
-				"missing_permissions": "missing permissions to kick this member",
-				"failure": "unable to kick {{- member}}"
 			}
 		}
 	}

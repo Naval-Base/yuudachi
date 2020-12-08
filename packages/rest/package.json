@@ -11,6 +11,7 @@
 	"author": "iCrawl <icrawltogo@outlook.com>",
 	"license": "UNLICENSED",
 	"dependencies": {
+		"@discordjs/form-data": "^3.0.1",
 		"@msgpack/msgpack": "^2.3.0",
 		"tslib": "^2.0.3"
 	},

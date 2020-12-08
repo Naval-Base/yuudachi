@@ -17,7 +17,7 @@ import { Tokens } from '@yuudachi/core';
 
 import Command, { commandInfo, ExecutionContext } from '../src/Command';
 import { CommandModules } from '../src/Constants';
-import { has } from '../src/util/modules';
+import { has } from '../src/util';
 
 const { kSQL } = Tokens;
 
@@ -31,7 +31,7 @@ const api = new API(apiURL);
 const restBroker = createAmqpBroker('rest');
 const rest = new Rest(token, restBroker);
 const broker = new Amqp('gateway');
-const sql = postgres();
+const sql = postgres({ debug: console.log });
 
 container.register(API, { useValue: api });
 container.register(Rest, { useValue: rest });
@@ -54,6 +54,7 @@ void (async () => {
 		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 		backend: {
 			loadPath: `${apiURL}/locales/{{lng}}/{{ns}}.json`,
+			reloadInterval: 60000,
 		} as BackendOptions,
 		cleanCode: true,
 		fallbackLng: ['en'],
@@ -90,7 +91,7 @@ void (async () => {
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const locale = data?.locale ?? 'en';
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		const modules = data?.modules ?? CommandModules.All;
+		const modules = data?.modules ?? CommandModules.Config;
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
 			['“', '”'],

@@ -158,8 +158,6 @@ create table guild_settings (
 	embed_role_id text,
 	emoji_role_id text,
 	reaction_role_id text,
-	role_state boolean default false,
-	moderation boolean default false,
 	locale text default 'en',
 	modules integer,
 	repository_aliases text[]
@@ -180,9 +178,7 @@ insert into guild_settings (
 		(settings -> 'RESTRICT_ROLES' ->> 'TAG')::text as tag_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::text as embed_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMOJI')::text as emoji_role_id,
-		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::text as reaction_role_id,
-		coalesce((settings ->> 'ROLE_STATE')::boolean, false) as role_state,
-		coalesce((settings ->> 'MODERATION')::boolean, false) as moderation
+		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::text as reaction_role_id
 	from settings
 );
 

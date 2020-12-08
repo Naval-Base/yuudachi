@@ -15,10 +15,10 @@ export default class implements Command {
 
 	public async execute(message: APIMessage, _: Args, locale: string) {
 		const msg: APIMessage = await this.rest.post(`/channels/${message.channel_id}/messages`, {
-			content: i18next.t('command.ping.execute.pre_ping', { lng: locale }),
+			content: i18next.t('command.utility.ping.pre_ping', { lng: locale }),
 		});
 		void this.rest.patch(`/channels/${message.channel_id}/messages/${msg.id}`, {
-			content: i18next.t('command.ping.execute.post_ping', {
+			content: i18next.t('command.utility.ping.post_ping', {
 				ping:
 					Date.parse(msg.edited_timestamp ?? msg.timestamp) - Date.parse(message.edited_timestamp ?? message.timestamp),
 				lng: locale,

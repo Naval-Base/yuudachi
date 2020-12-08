@@ -1,11 +1,28 @@
 export enum CommandModules {
 	None = 0,
-	Utility = 1,
-	Moderation = 1 << 1,
-	Tags = 1 << 2,
-	GitHub = 1 << 3,
-	All = Utility | Moderation | Tags | GitHub,
+	Config = 1,
+	Utility = 1 << 1,
+	Moderation = 1 << 2,
+	Tags = 1 << 3,
+	GitHub = 1 << 4,
+	Documentation = 1 << 5,
+	All = Config | Utility | Moderation | Tags | GitHub | Documentation,
 }
+
+export const DISCORD_EPOCH = 1420070400000;
+export const DATE_FORMAT_WITH_SECONDS = 'yyyy/MM/dd HH:mm:ss';
+export const DATE_FORMAT_DATE = 'yyyy/MM/dd';
+
+export const DOCUMENTATION_SOURCES = [
+	'stable',
+	'master',
+	'rpc',
+	'commando',
+	'akairo',
+	'akairo-master',
+	'v11',
+	'collection',
+];
 
 export const EMBED_TITLE_LIMIT = 256;
 export const EMBED_DESCRIPTION_LIMIT = 2048;

@@ -1,8 +1,14 @@
 import { Amqp } from '@spectacles/brokers';
+import FormData from '@discordjs/form-data';
+
 import HttpException from './HttpException';
 
 interface RequestOptions {
 	reason?: string;
+	files?: {
+		name: string;
+		file: Buffer | Uint8Array;
+	}[];
 }
 
 interface Request {
@@ -52,17 +58,33 @@ export default class Rest {
 		const options = req.options;
 		delete req.options;
 
-		const body = req.body ? Buffer.from(JSON.stringify(req.body)) : undefined;
-		const headers = options?.reason ? { 'X-Audit-Log-Reason': options.reason } : {};
+		let body;
+		let headers = {};
+		if (options) {
+			if (options.reason) {
+				headers = { ...headers, 'X-Audit-Log-Reason': options.reason };
+			}
+			if (options.files) {
+				const form = new FormData();
+				for (const file of options.files) form.append(file.name, file.file, file.name);
+				if (req.body) form.append('payload_json', JSON.stringify(req.body));
+				body = form.getBuffer();
+				headers = { ...headers, ...form.getHeaders() };
+			}
+		}
+
+		if (!body) {
+			body = req.body ? Buffer.from(JSON.stringify(req.body)) : undefined;
+			headers = { ...headers, 'Content-Type': 'application/json' };
+		}
 
 		const res: Response = await this.broker.call('REQUEST', {
 			...req,
 			body,
 			headers: {
-				...headers,
 				Authorization: `Bot ${this.token}`,
 				'X-RateLimit-Precision': 'millisecond',
-				'Content-Type': 'application/json',
+				...headers,
 			},
 		});
 

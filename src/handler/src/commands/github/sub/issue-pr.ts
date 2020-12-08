@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 
-import { addField, truncateEmbed } from '../../../util';
+import { addFields, truncateEmbed } from '../../../util';
 import { isPR, GitHubReviewDecision, GitHubReviewState, GitHubAPIResult } from '../../../interfaces/GitHub';
 
 import {
@@ -246,7 +246,7 @@ export async function issuePR(
 		const installable = Reflect.has(InstallableState, resultState);
 		const e2: APIEmbed =
 			isPR(issue) && installable
-				? addField(e1, {
+				? addFields(e1, {
 						name: i18next.t('command.github.issue-pr.heading.install', { lng: locale }),
 						value: `\`npm i ${issue.headRepository.nameWithOwner}#${
 							issue.headRef?.name ?? i18next.t('command.github.common.unknown', { lng: locale }) ?? ''
@@ -281,7 +281,7 @@ export async function issuePR(
 				: i18next.t('command.github.issue-pr.heading.reviews.review_required', { lng: locale })
 			: '';
 
-		const e3: APIEmbed = reviews.length ? addField(e2, { name: reviewTitle, value: reviewBody }) : e2;
+		const e3: APIEmbed = reviews.length ? addFields(e2, { name: reviewTitle, value: reviewBody }) : e2;
 
 		await rest.post(`/channels/${message.channel_id}/messages`, {
 			embed: truncateEmbed(e3),

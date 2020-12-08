@@ -9,10 +9,10 @@ import {
 	EMBED_TITLE_LIMIT,
 } from '../Constants';
 
-export function addField(embed: APIEmbed, data: APIEmbedField): APIEmbed {
+export function addFields(embed: APIEmbed, ...data: APIEmbedField[]): APIEmbed {
 	return {
 		...embed,
-		fields: [...(embed.fields ?? []), data],
+		fields: [...(embed.fields ?? []), ...data],
 	};
 }
 
