@@ -28,7 +28,7 @@
 		"@types/cookie": "^0.4.0",
 		"@types/cors": "^2.8.8",
 		"@types/helmet": "^4.0.0",
-		"@types/node": "^14.14.10",
+		"@types/node": "^14.14.11",
 		"@types/node-fetch": "^2.5.7",
 		"@types/supertest": "^2.0.10",
 		"@types/trouter": "^3.1.0",
