@@ -1,4 +1,4 @@
-import { RESTGetAPIGuildRolesResult, APIMessage, APIUser, APIEmbed } from 'discord-api-types/v6';
+import { RESTGetAPIGuildRolesResult, APIMessage, APIUser, APIEmbed, Routes } from 'discord-api-types';
 import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
 import { has } from 'lodash';
@@ -43,7 +43,7 @@ export default class CaseLogManager {
 			timestamp: new Date().toISOString(),
 		};
 
-		const logMessage: APIMessage = await this.rest.post(`/channels/${logChannelId}/messages`, { embed });
+		const logMessage: APIMessage = await this.rest.post(Routes.channelMessages(logChannelId), { embed });
 
 		await this.sql`
 			update cases
@@ -58,7 +58,7 @@ export default class CaseLogManager {
 			const roles: RESTGetAPIGuildRolesResult = await this.rest.get(`/guilds/${case_.guild_id}/roles`);
 			const role = roles.find((role) => role.id === case_.role_id);
 
-			if (role) action += ` "${role.name}" (${case_.role_id})`;
+			if (role) action += ` \`${role.name}\` (${case_.role_id})`;
 		}
 
 		let msg = stripIndents`

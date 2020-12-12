@@ -1,4 +1,4 @@
-import { APIMessage } from 'discord-api-types/v6';
+import { APIMessage, Routes } from 'discord-api-types';
 import API, { HttpException } from '@yuudachi/api';
 import Rest from '@yuudachi/rest';
 import { CaseAction } from '@yuudachi/types';
@@ -45,7 +45,7 @@ export default class implements Command {
 				contextMessageId: message.id,
 			});
 
-			void this.rest.post(`/channels/${message.channel_id}/messages`, {
+			void this.rest.post(Routes.channelMessages(message.channel_id), {
 				content: i18next.t('command.mod.kick.success', { lng: locale, member: memberMention }),
 			});
 		} catch (e) {

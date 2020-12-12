@@ -1,4 +1,4 @@
-import { APIMessage, APIEmbed } from 'discord-api-types/v6';
+import { APIMessage, APIEmbed } from 'discord-api-types';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';

@@ -1,5 +1,5 @@
 import { Case, CreateCase } from '@yuudachi/types';
-import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types/v6';
+import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types';
 import API from '..';
 
 export default class Guilds {

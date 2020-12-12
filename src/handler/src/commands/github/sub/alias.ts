@@ -1,4 +1,4 @@
-import { APIMessage } from 'discord-api-types/v6';
+import { APIMessage, Routes } from 'discord-api-types';
 import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
@@ -52,7 +52,7 @@ async function add(
 		.map((r) => `• \`${r}\``)
 		.join('\n')}`;
 
-	void rest.post(`/channels/${message.channel_id}/messages`, {
+	void rest.post(Routes.channelMessages(message.channel_id), {
 		content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
 	});
 }
@@ -102,7 +102,7 @@ async function remove(
 		.map((r) => `\`${r}\``)
 		.join(', ')}`;
 
-	void rest.post(`/channels/${message.channel_id}/messages`, {
+	void rest.post(Routes.channelMessages(message.channel_id), {
 		content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
 	});
 }
@@ -120,7 +120,7 @@ function list(message: APIMessage, locale: string, current: string[], rest: Rest
 		.map((r) => `• \`${r}\``)
 		.join('\n')}`;
 
-	void rest.post(`/channels/${message.channel_id}/messages`, {
+	void rest.post(Routes.channelMessages(message.channel_id), {
 		content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
 	});
 }

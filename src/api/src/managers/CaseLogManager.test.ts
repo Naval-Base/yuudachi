@@ -98,6 +98,8 @@ test('fails when no log channel is available', async () => {
 });
 
 test('creates basic kick case', async () => {
+	mockedRest.get.mockResolvedValueOnce({ id: modId, avatar: 'randomHash', discriminator: '0002' });
+
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
 		action: CaseAction.KICK,
@@ -140,10 +142,13 @@ test('creates basic kick case', async () => {
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
 		embed: {
-			title: `${modTag} (${modId})`,
+			author: {
+				name: `${modTag} (${modId})`,
+				icon_url: `http://cdn.discordapp.com/avatars/${modId}/randomHash.png`,
+			},
 			description: stripIndents`
-				**Member:** ${targetTag} (${targetId})
-				**Action:** KICK
+				**Member:** \`${targetTag}\` (${targetId})
+				**Action:** Kick
 				**Reason:** foo`,
 			footer: {
 				text: `Case ${caseId}`,
@@ -155,7 +160,9 @@ test('creates basic kick case', async () => {
 
 test('creates reference role case', async () => {
 	mockedPostgres.mockResolvedValue([{ log_message_id: refLogMessageId }]);
-	mockedRest.get.mockResolvedValue([{ id: roleId, name: roleName }]);
+	mockedRest.get
+		.mockResolvedValueOnce({ id: modId, avatar: 'randomHash', discriminator: '0002' })
+		.mockResolvedValueOnce([{ id: roleId, name: roleName }]);
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -192,16 +199,19 @@ test('creates reference role case', async () => {
 		guildId,
 	);
 
-	expect(mockedRest.get).toHaveBeenCalledTimes(1);
+	expect(mockedRest.get).toHaveBeenCalledTimes(2);
 	expect(mockedRest.get).toHaveBeenCalledWith(`/guilds/${guildId}/roles`);
 
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
 		embed: {
-			title: `${modTag} (${modId})`,
+			author: {
+				name: `${modTag} (${modId})`,
+				icon_url: `http://cdn.discordapp.com/avatars/${modId}/randomHash.png`,
+			},
 			description: stripIndents`
-				**Member:** ${targetTag} (${targetId})
-				**Action:** ROLE "${roleName}" (${roleId})
+				**Member:** \`${targetTag}\` (${targetId})
+				**Action:** Role \`${roleName}\` (${roleId})
 				**Reason:** foo
 				**Ref case:** [${refCaseId}](https://discordapp.com/channels/${guildId}/${logChannelId}/${refLogMessageId})`,
 			footer: {
@@ -214,6 +224,7 @@ test('creates reference role case', async () => {
 
 test('creates contextual softban case', async () => {
 	mockedPostgres.mockResolvedValue([{ channel_id: contextChannelId }]);
+	mockedRest.get.mockResolvedValue({ id: modId, avatar: 'randomHash', discriminator: '0002' });
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -250,10 +261,13 @@ test('creates contextual softban case', async () => {
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
 		embed: {
-			title: `${modTag} (${modId})`,
+			author: {
+				name: `${modTag} (${modId})`,
+				icon_url: `http://cdn.discordapp.com/avatars/${modId}/randomHash.png`,
+			},
 			description: stripIndents`
-				**Member:** ${targetTag} (${targetId})
-				**Action:** SOFTBAN
+				**Member:** \`${targetTag}\` (${targetId})
+				**Action:** Softban
 				**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
 				**Reason:** foo`,
 			footer: {
@@ -265,15 +279,10 @@ test('creates contextual softban case', async () => {
 });
 
 test('creates temporary ban case with context and reference', async () => {
-	let calls = 0;
-	mockedPostgres.mockImplementation(() => {
-		switch (calls++) {
-			case 0:
-				return [{ channel_id: contextChannelId }];
-			case 1:
-				return [{ log_message_id: refLogMessageId }];
-		}
-	});
+	mockedPostgres
+		.mockResolvedValueOnce([{ channel_id: contextChannelId }])
+		.mockResolvedValueOnce([{ log_message_id: refLogMessageId }]);
+	mockedRest.get.mockResolvedValue({ id: modId, avatar: 'randomHash', discriminator: '0002' });
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -324,10 +333,13 @@ test('creates temporary ban case with context and reference', async () => {
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
 		embed: {
-			title: `${modTag} (${modId})`,
+			author: {
+				name: `${modTag} (${modId})`,
+				icon_url: `http://cdn.discordapp.com/avatars/${modId}/randomHash.png`,
+			},
 			description: stripIndents`
-				**Member:** ${targetTag} (${targetId})
-				**Action:** BAN
+				**Member:** \`${targetTag}\` (${targetId})
+				**Action:** Ban
 				**Expiration:** ${actionExpiration}
 				**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
 				**Reason:** foo
@@ -342,6 +354,7 @@ test('creates temporary ban case with context and reference', async () => {
 
 test('creates ban without a reason', async () => {
 	mockedPostgres.mockResolvedValue({ value: '?' });
+	mockedRest.get.mockResolvedValue({ id: modId, avatar: 'randomHash', discriminator: '0002' });
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -382,10 +395,13 @@ test('creates ban without a reason', async () => {
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
 	expect(mockedRest.post).toHaveBeenCalledWith(`/channels/${logChannelId}/messages`, {
 		embed: {
-			title: `${modTag} (${modId})`,
+			author: {
+				name: `${modTag} (${modId})`,
+				icon_url: `http://cdn.discordapp.com/avatars/${modId}/randomHash.png`,
+			},
 			description: stripIndents`
-				**Member:** ${targetTag} (${targetId})
-				**Action:** BAN
+				**Member:** \`${targetTag}\` (${targetId})
+				**Action:** Ban
 				**Reason:** Use \`?reason 1 <...reason>\` to set a reason for this case`,
 			footer: {
 				text: `Case ${caseId}`,

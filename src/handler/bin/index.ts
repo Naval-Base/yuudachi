@@ -10,7 +10,7 @@ import readdirp from 'readdirp';
 import API from '@yuudachi/api';
 import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
-import { APIMessage } from 'discord-api-types/v6';
+import { APIMessage, Routes } from 'discord-api-types';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
 import { Tokens } from '@yuudachi/core';
@@ -112,7 +112,7 @@ void (async () => {
 				try {
 					await command.execute(message, new Args(out), locale, ExecutionContext['PREFIXED']);
 				} catch (error) {
-					void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+					void rest.post(Routes.channelMessages(message.channel_id), { content: error.message });
 				}
 
 				continue;
@@ -139,7 +139,7 @@ void (async () => {
 			try {
 				await command.execute(message, new Args(out), locale, ExecutionContext['REGEXP']);
 			} catch (error) {
-				void rest.post(`/channels/${message.channel_id}/messages`, { content: error.message });
+				void rest.post(Routes.channelMessages(message.channel_id), { content: error.message });
 			}
 
 			break;

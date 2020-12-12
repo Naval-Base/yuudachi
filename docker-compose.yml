@@ -137,6 +137,7 @@ services:
     environment:
       RUST_LOG: info
       TIMEOUT: ""
+      DISCORD_API_VERSION: 8
       REDIS_URL: "redis://redis:6379"
       AMQP_URL: "amqp://rabbitmq"
       AMQP_GROUP: ""

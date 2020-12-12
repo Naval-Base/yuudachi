@@ -1,4 +1,4 @@
-import { APIEmbed, APIGuildMember, APIMessage, APIUser } from 'discord-api-types/v6';
+import { APIMessage, APIEmbed, APIGuildMember, APIUser } from 'discord-api-types';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import { Args } from 'lexure';
@@ -17,7 +17,7 @@ const { kSQL } = Tokens;
 
 const ACTION_KEYS = ['', 'restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban'];
 
-interface Footer {
+interface CaseFooter {
 	warn?: number;
 	restriction?: number;
 	mute?: number;
@@ -99,10 +99,11 @@ export default class implements Command {
 		const cases = await this.sql<{ case_id: number; action: number; reason: string; created_at: Date }>`
 			select case_id, action, reason, created_at
 			from cases
-			where target_id = ${targetUser.value.id}
+			where guild_id = ${message.guild_id}
+				and target_id = ${targetUser.value.id}
 			order by created_at desc`;
 
-		const footer = cases.reduce((count: Footer, c) => {
+		const footer = cases.reduce((count: CaseFooter, c) => {
 			const action = ACTION_KEYS[c.action];
 			count[action] = (count[action] ?? 0) + 1;
 			return count;

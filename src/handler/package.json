@@ -29,11 +29,11 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/luxon": "^1.25.0",
-		"@types/node": "^14.14.10",
+		"@types/node": "^14.14.12",
 		"@types/node-fetch": "^2.5.7",
-		"discord-api-types": "^0.9.1",
+		"discord-api-types": "^0.10.0",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.1.2"
+		"typescript": "^4.1.3"
 	}
 }
