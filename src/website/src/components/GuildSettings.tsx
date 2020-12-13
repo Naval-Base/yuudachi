@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { FormControl, FormLabel, Switch, Text, Input, Button, Box, Select } from '@chakra-ui/react';
+import { FormControl, FormLabel, Text, Input, Button, Box, Select } from '@chakra-ui/react';
 import { useForm, UseFormMethods, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { APIRole } from 'discord-api-types';
@@ -82,7 +82,6 @@ const GuildSettings = (props: any) => {
 	const { handleSubmit, register, control } = useForm<GuildSetingsPayload>({
 		defaultValues: {
 			prefix: '?',
-			moderation: false,
 			mod_role_id: null,
 			mod_log_channel_id: null,
 			guild_log_channel_id: null,
@@ -92,7 +91,6 @@ const GuildSettings = (props: any) => {
 			embed_role_id: null,
 			emoji_role_id: null,
 			reaction_role_id: null,
-			role_state: false,
 		},
 	});
 	const { id } = router.query;
@@ -161,15 +159,6 @@ const GuildSettings = (props: any) => {
 				label="Prefix"
 				name="prefix"
 			/>
-			<FormControl id="moderation" pb={4}>
-				<FormLabel>Moderation</FormLabel>
-				<Switch
-					name="moderation"
-					ref={register}
-					isChecked={gqlDataGuildSettings.guild.moderation}
-					onChange={handleSubmit(onSubmit)}
-				/>
-			</FormControl>
 			{gqlDataGuildSettings.guild.moderation ? (
 				<>
 					<CustomFormSelectControl
@@ -250,10 +239,6 @@ const GuildSettings = (props: any) => {
 						name="reaction_role_id"
 						placeholder="The discord role id for reaction restrictions"
 					/>
-					<FormControl id="role_state" pb={4}>
-						<FormLabel>Role State</FormLabel>
-						<Switch name="role_state" ref={register} isChecked={gqlDataGuildSettings.guild.role_state} />
-					</FormControl>
 				</>
 			) : (
 				<></>

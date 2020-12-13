@@ -14,12 +14,9 @@ export function useMutationUpdateGuildSettings(id: string, props: any) {
 				`mutation Guild($guild_id: String!, $_set: guild_settings_set_input) {
 					guild: update_guild_settings_by_pk(pk_columns: {guild_id: $guild_id}, _set: $_set) {
 						tag_role_id
-						role_state
-						repository_aliases
 						reaction_role_id
 						prefix
 						mute_role_id
-						moderation
 						mod_role_id
 						mod_log_channel_id
 						member_log_channel_id

@@ -63,25 +63,6 @@ CREATE TABLE public.settings (
     settings jsonb DEFAULT jsonb_build_object() NOT NULL
 );
 COMMENT ON COLUMN public.settings.guild IS 'The id of the guild this setting belongs to';
-CREATE TABLE public.tags (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    guild text NOT NULL,
-    "user" text NOT NULL,
-    name text NOT NULL,
-    aliases text[] DEFAULT '{}'::text[] NOT NULL,
-    content text NOT NULL,
-    hoisted boolean DEFAULT false,
-    uses integer DEFAULT 0 NOT NULL,
-    last_modified text,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    templated boolean DEFAULT false NOT NULL
-);
-COMMENT ON COLUMN public.tags.guild IS 'The id of the guild this tag belongs to';
-COMMENT ON COLUMN public.tags."user" IS 'The id of the user this tag belongs to';
-COMMENT ON COLUMN public.tags.hoisted IS 'Whether the tag is a hoisted guild tag or not';
-COMMENT ON COLUMN public.tags.last_modified IS 'The id of the user who last modified this tag';
-COMMENT ON COLUMN public.tags.templated IS 'Whether the tag is templated or not';
 ALTER TABLE ONLY public.cases
     ADD CONSTRAINT cases_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.lockdowns
@@ -96,9 +77,3 @@ ALTER TABLE ONLY public.settings
     ADD CONSTRAINT settings_guild_key UNIQUE (guild);
 ALTER TABLE ONLY public.settings
     ADD CONSTRAINT settings_pkey PRIMARY KEY (guild);
-ALTER TABLE ONLY public.tags
-    ADD CONSTRAINT tags_guild_name_key UNIQUE (guild, name);
-ALTER TABLE ONLY public.tags
-    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
-CREATE TRIGGER set_public_tags_updated_at BEFORE UPDATE ON public.tags FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
-COMMENT ON TRIGGER set_public_tags_updated_at ON public.tags IS 'trigger to set value of column "updated_at" to current timestamp on row update';

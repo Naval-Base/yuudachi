@@ -2,9 +2,9 @@ import { CommandModules } from '../Constants';
 import { add, remove, has } from './modules';
 
 describe('add', () => {
-	test('tags and moderation', () => {
+	test('config and moderation', () => {
 		expect(
-			has(add(CommandModules.Tags, CommandModules.Moderation), CommandModules.Tags | CommandModules.Moderation),
+			has(add(CommandModules.Config, CommandModules.Moderation), CommandModules.Config | CommandModules.Moderation),
 		).toBe(true);
 	});
 });
@@ -16,7 +16,7 @@ describe('remove', () => {
 });
 
 describe('has', () => {
-	test('has tags', () => {
-		expect(has(CommandModules.All, CommandModules.Tags)).toBe(true);
+	test('has moderation', () => {
+		expect(has(CommandModules.All, CommandModules.Moderation)).toBe(true);
 	});
 });

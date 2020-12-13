@@ -159,8 +159,7 @@ create table guild_settings (
 	emoji_role_id text,
 	reaction_role_id text,
 	locale text default 'en',
-	modules integer,
-	repository_aliases text[]
+	modules integer
 );
 
 alter table guild_settings
@@ -183,8 +182,3 @@ insert into guild_settings (
 );
 
 drop table settings;
-
--- TAGS
-
-alter table tags rename guild to guild_id;
-alter table tags rename "user" to user_id;

@@ -20,7 +20,6 @@ export function useQueryOAuthGuilds(loggedIn = false, props: any) {
 						owner
 						features
 						permissions
-						permissions_new
 					}
 				}`,
 				{},

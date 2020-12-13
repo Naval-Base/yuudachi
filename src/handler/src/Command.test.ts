@@ -13,7 +13,7 @@ test('non-js file', () => {
 test('instance', () => {
 	class TestCommand implements Command {
 		public name = 'test';
-		public category = 'test';
+		public category = 1;
 
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 		public execute(): void {}
@@ -22,26 +22,23 @@ test('instance', () => {
 	const test = new TestCommand();
 
 	expect(test.name).toBe('test');
-	expect(test.category).toBe('test');
+	expect(test.category).toBe(1);
 });
 
 test('no category', () => {
 	const command = commandInfo('test.js');
 	expect(command).not.toBeNull();
 	expect(command!.name).toBe('test');
-	expect(command!.category).toBe('none');
 });
 
 test('category', () => {
 	const command = commandInfo(`test${sep}test2.js`);
 	expect(command).not.toBeNull();
 	expect(command!.name).toBe('test2');
-	expect(command!.category).toBe('test');
 });
 
 test('nested category', () => {
 	const command = commandInfo(`test${sep}test2${sep}test3.js`);
 	expect(command).not.toBeNull();
 	expect(command!.name).toBe('test3');
-	expect(command!.category).toBe('test2');
 });

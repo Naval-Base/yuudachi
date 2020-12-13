@@ -30,9 +30,6 @@ export default class implements Command {
 		}
 
 		const reason = joinTokens(args.many());
-		if (!reason.length) {
-			throw new Error(i18next.t('command.mod.common.errors.no_reason', { lng: locale }));
-		}
 
 		const memberMention = `<@${maybeMember.value}>`;
 

@@ -11,5 +11,4 @@ export interface GuildSettings {
 	reaction_role_id: string;
 	locale: string;
 	modules: number;
-	repository_aliases: string[];
 }

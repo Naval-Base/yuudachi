@@ -75,9 +75,6 @@
     name: role_states
 - table:
     schema: public
-    name: tags
-- table:
-    schema: public
     name: users
   array_relationships:
   - name: connections

@@ -1,13 +1,3 @@
--- TAGS
-
-alter table tags
-	alter guild_id set data type text,
-	alter user_id set data type text
-;
-
-alter table tags rename user_id to "user";
-alter table tags rename guild_id to guild;
-
 -- SETTINGS
 
 create table settings (

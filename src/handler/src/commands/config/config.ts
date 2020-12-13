@@ -44,18 +44,6 @@ export default class implements Command {
 				value: has(settings.modules, CommandModules.Moderation) ? '`✅`' : '`❌`',
 			},
 			{
-				name: 'Tags',
-				value: has(settings.modules, CommandModules.Tags) ? '`✅`' : '`❌`',
-			},
-			{
-				name: 'GitHub',
-				value: has(settings.modules, CommandModules.GitHub) ? '`✅`' : '`❌`',
-			},
-			{
-				name: 'Documentation',
-				value: has(settings.modules, CommandModules.Documentation) ? '`✅`' : '`❌`',
-			},
-			{
 				name: 'Utility',
 				value: has(settings.modules, CommandModules.Utility) ? '`✅`' : '`❌`',
 			},
