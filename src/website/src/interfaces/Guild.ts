@@ -1,4 +1,4 @@
-import { RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult } from 'discord-api-types/v6';
+import { RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult } from 'discord-api-types';
 
 export interface GraphQLOAuthGuilds {
 	data: {

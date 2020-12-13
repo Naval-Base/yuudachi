@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { FormControl, FormLabel, Switch, Text, Input, Button, Box, Select } from '@chakra-ui/react';
 import { useForm, UseFormMethods, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { APIRole } from 'discord-api-types/v6';
+import { APIRole } from 'discord-api-types';
 
 import { RootState } from '../store';
 import { useQueryGuild } from '../hooks/useQueryGuild';

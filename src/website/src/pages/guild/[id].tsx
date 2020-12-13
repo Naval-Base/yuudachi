@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { Box, Grid, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useQueryCache } from 'react-query';
-import { RESTAPIPartialCurrentUserGuild } from 'discord-api-types/v6';
+import { RESTAPIPartialCurrentUserGuild } from 'discord-api-types';
 
 import GuildIcon from '../../components/GuildIcon';
 
