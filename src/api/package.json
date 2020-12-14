@@ -30,7 +30,7 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/lodash": "^4.14.165",
-		"@types/node": "^14.14.12",
+		"@types/node": "^14.14.13",
 		"@types/node-fetch": "^2.5.7",
 		"@types/supertest": "^2.0.10",
 		"@types/trouter": "^3.1.0",
