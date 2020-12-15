@@ -1,29 +1,26 @@
 import { useRouter } from 'next/router';
 import { Box, Grid, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { useQueryClient } from 'react-query';
-import { RESTAPIPartialCurrentUserGuild } from 'discord-api-types';
 
 import GuildIcon from '../../components/GuildIcon';
 
 import { RootState } from '../../store';
 import { useQueryOAuthGuilds } from '../../hooks/useQueryOAuthGuilds';
+import { useQueryGuild } from '../../hooks/useQueryGuild';
 import GuildSettings from '../../components/GuildSettings';
 
 const GuildPage = (props: any) => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
-	const cache = useQueryClient();
-	useQueryOAuthGuilds(user.loggedIn, props);
 
 	const { id } = router.query;
-
-	const guild = cache.getQueryData<RESTAPIPartialCurrentUserGuild>(['guilds', id]);
+	const { data: gqlGuildData } = useQueryGuild(id as string, user.loggedIn, props);
+	const { data: gqlFallbackGuildData } = useQueryOAuthGuilds(user.loggedIn, props);
 
 	const GuildDisplay = () =>
-		guild ? (
+		gqlGuildData?.guild ?? gqlFallbackGuildData?.guilds.length ? (
 			<Grid
-				templateColumns={{ base: 'auto', md: '150px' }}
+				templateColumns={{ base: 'auto', md: '300px' }}
 				gap={{ base: '32px', md: '8px' }}
 				justifyItems="center"
 				justifyContent="center"
@@ -32,8 +29,10 @@ const GuildPage = (props: any) => {
 				my={12}
 				px={{ base: 0, md: 200 }}
 			>
-				<GuildIcon guild={guild} />
-				<Text fontSize="2xl">{guild.name}</Text>
+				<GuildIcon guild={gqlGuildData?.guild ?? gqlFallbackGuildData?.guilds.find((guild) => guild.id === id)} />
+				<Text fontSize="2xl">
+					{gqlGuildData?.guild?.name ?? gqlFallbackGuildData?.guilds.find((guild) => guild.id === id)?.name}
+				</Text>
 			</Grid>
 		) : (
 			<></>

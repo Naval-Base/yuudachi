@@ -16,7 +16,7 @@ const Guilds = (props: any) => {
 	return (
 		<Grid templateColumns="repeat(auto-fill, 150px)" gap="32px 0px" justifyContent="center">
 			{data?.guilds
-				.filter((guild) => (guild.permissions & (1 << 5)) === 1 << 5)
+				.filter((guild) => BigInt(guild.permissions) & BigInt(1 << 5))
 				.map((guild, i) => {
 					return (
 						<Link href={`/guild/${guild.id}`} key={i}>

@@ -1,6 +1,69 @@
 - table:
     schema: public
     name: cases
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - guild_id
+      - log_message_id
+      - case_id
+      - ref_id
+      - target_id
+      - target_tag
+      - mod_id
+      - mod_tag
+      - action
+      - reason
+      - action_expiration
+      - action_processed
+      - created_at
+      - context_message_id
+      - role_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+      - role_id
+      - created_at
+      - action
+      - case_id
+      - action_expiration
+      - ref_id
+      - guild_id
+      - context_message_id
+      - log_message_id
+      - mod_id
+      - target_id
+      - reason
+      - mod_tag
+      - target_tag
+      - action_processed
+      filter:
+        target_id:
+          _eq: x-hasura-user-id
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - role_id
+      - created_at
+      - action
+      - case_id
+      - action_expiration
+      - ref_id
+      - guild_id
+      - context_message_id
+      - log_message_id
+      - mod_id
+      - target_id
+      - reason
+      - mod_tag
+      - target_tag
+      - action_processed
+      filter: {}
+      check: {}
   event_triggers:
   - name: mod_log
     definition:
@@ -64,15 +127,125 @@
 - table:
     schema: public
     name: guild_settings
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - repository_aliases
+      - modules
+      - embed_role_id
+      - emoji_role_id
+      - guild_id
+      - guild_log_channel_id
+      - locale
+      - member_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - mute_role_id
+      - prefix
+      - reaction_role_id
+      - tag_role_id
+      backend_only: false
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - guild_id
+      - prefix
+      - mod_log_channel_id
+      - mod_role_id
+      - guild_log_channel_id
+      - member_log_channel_id
+      - mute_role_id
+      - tag_role_id
+      - embed_role_id
+      - emoji_role_id
+      - reaction_role_id
+      - locale
+      - modules
+      - repository_aliases
+      filter: {}
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - repository_aliases
+      - modules
+      - embed_role_id
+      - emoji_role_id
+      - guild_id
+      - guild_log_channel_id
+      - locale
+      - member_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - mute_role_id
+      - prefix
+      - reaction_role_id
+      - tag_role_id
+      filter: {}
+      check: {}
 - table:
     schema: public
     name: lockdowns
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - expiration
+      - channel_id
+      backend_only: false
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - channel_id
+      - expiration
+      filter: {}
+      allow_aggregations: true
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - expiration
+      - channel_id
+      filter: {}
+      check: {}
 - table:
     schema: public
     name: messages
 - table:
     schema: public
     name: role_states
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - guild_id
+      - member_id
+      - roles
+      backend_only: false
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - guild_id
+      - member_id
+      - roles
+      filter: {}
+      allow_aggregations: true
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - guild_id
+      - member_id
+      - roles
+      filter: {}
+      check: {}
 - table:
     schema: public
     name: tags

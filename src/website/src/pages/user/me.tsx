@@ -1,7 +1,5 @@
-import { Box, Grid, Text, Img, Heading } from '@chakra-ui/react';
+import { Grid, Img, Heading } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-
-import Guilds from '../../components/Guilds';
 
 import { RootState } from '../../store';
 
@@ -27,18 +25,11 @@ const UserPage = () => {
 				justifyItems="center"
 				justifyContent="center"
 				alignItems="center"
-				my={12}
+				my={{ base: 12 }}
 				px={{ base: 0, md: 200 }}
 			>
 				<UserDisplay />
 			</Grid>
-			<Box mb={12} px={{ base: 0, md: 200 }}>
-				<Box px={8} pb={8}>
-					<Heading>Manage</Heading>
-					<Text>Severs you can manage</Text>
-				</Box>
-				<Guilds />
-			</Box>
 		</>
 	);
 };

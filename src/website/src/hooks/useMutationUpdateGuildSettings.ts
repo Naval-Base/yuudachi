@@ -25,7 +25,7 @@ export function useMutationUpdateGuildSettings(id: string, props: any) {
 						guild_log_channel_id
 						emoji_role_id
 						embed_role_id
-						guild_id,
+						guild_id
 						modules
 					}
 				}`,

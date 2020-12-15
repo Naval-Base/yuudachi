@@ -25,7 +25,7 @@ export function useQueryGuildSettings(id: string, loggedIn = false, props: any) 
 						guild_log_channel_id
 						emoji_role_id
 						embed_role_id
-						guild_id,
+						guild_id
 						modules
 					}
 				}`,
