@@ -207,7 +207,7 @@ test('creates reference role case', async () => {
 		embed: {
 			author: {
 				name: `${modTag} (${modId})`,
-				icon_url: `http://cdn.discordapp.com/embed/avatars/${modId}/2.png`,
+				icon_url: `http://cdn.discordapp.com/embed/avatars/2.png`,
 			},
 			description: stripIndents`
 				**Member:** \`${targetTag}\` (${targetId})
