@@ -14,20 +14,19 @@ export function useQueryGuildSettings(id: string, loggedIn = false, props: any) 
 				`query Guild($guild_id: String!) {
 					guild: guild_settings_by_pk(guild_id: $guild_id) {
 						tag_role_id
-						role_state
 						repository_aliases
 						reaction_role_id
 						prefix
 						mute_role_id
-						moderation
 						mod_role_id
 						mod_log_channel_id
 						member_log_channel_id
 						locale
 						guild_log_channel_id
-						guild_id
 						emoji_role_id
 						embed_role_id
+						guild_id,
+						modules
 					}
 				}`,
 				{ guild_id: id },

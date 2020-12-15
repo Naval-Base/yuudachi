@@ -108,14 +108,14 @@ const GuildSettings = (props: any) => {
 		user.loggedIn && Boolean(gqlDataGuild?.guild),
 		props,
 	);
-	const [guildSettingsInsertMutate, guildSettingsInsertMutateStatus] = useMutationInsertGuildSettings(
-		id as string,
-		props,
-	);
-	const [guildSettingsUpdateMutate, guildSettingsUpdateMutateStatus] = useMutationUpdateGuildSettings(
-		id as string,
-		props,
-	);
+	const {
+		mutateAsync: guildSettingsInsertMutate,
+		isLoading: isLoadingGuildSettingsInsertMutate,
+	} = useMutationInsertGuildSettings(id as string, props);
+	const {
+		mutateAsync: guildSettingsUpdateMutate,
+		isLoading: isLoadingGuildSettingsUpdateMutate,
+	} = useMutationUpdateGuildSettings(id as string, props);
 
 	async function onInitialize() {
 		await guildSettingsInsertMutate();
@@ -260,7 +260,7 @@ const GuildSettings = (props: any) => {
 			)}
 
 			<Box textAlign="right">
-				<Button type="submit" isLoading={guildSettingsUpdateMutateStatus.isLoading} loadingText="Submitting">
+				<Button type="submit" isLoading={isLoadingGuildSettingsUpdateMutate} loadingText="Submitting">
 					Submit
 				</Button>
 			</Box>
@@ -268,7 +268,7 @@ const GuildSettings = (props: any) => {
 	) : (
 		<Box textAlign="center">
 			<Text mb={6}>No guild settings initialized yet.</Text>
-			<Button onClick={onInitialize} isLoading={guildSettingsInsertMutateStatus.isLoading} loadingText="Initializing">
+			<Button onClick={onInitialize} isLoading={isLoadingGuildSettingsInsertMutate} loadingText="Initializing">
 				Initialize
 			</Button>
 		</Box>
