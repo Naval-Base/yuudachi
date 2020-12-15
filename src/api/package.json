@@ -19,7 +19,6 @@
 		"@spectacles/util": "^0.4.0",
 		"common-tags": "^1.8.0",
 		"joi": "^17.3.0",
-		"lodash": "^4.17.20",
 		"node-fetch": "^2.6.1",
 		"postgres": "^2.0.0-beta.2",
 		"readdirp": "^3.5.0",
@@ -29,8 +28,7 @@
 	},
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
-		"@types/lodash": "^4.14.165",
-		"@types/node": "^14.14.12",
+		"@types/node": "^14.14.13",
 		"@types/node-fetch": "^2.5.7",
 		"@types/supertest": "^2.0.10",
 		"@types/trouter": "^3.1.0",

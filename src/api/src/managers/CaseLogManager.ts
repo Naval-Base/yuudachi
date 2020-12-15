@@ -1,7 +1,6 @@
 import { RESTGetAPIGuildRolesResult, APIMessage, APIUser, APIEmbed, Routes } from 'discord-api-types';
 import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
-import { has } from 'lodash';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
@@ -76,7 +75,7 @@ export default class CaseLogManager {
 				from messages
 				where id = ${case_.context_message_id}`;
 
-			if (has(contextMessage, 'channel_id')) {
+			if (Reflect.has(contextMessage, 'channel_id')) {
 				msg += `\n**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${case_.guild_id}/${
 					(contextMessage as { channel_id: string }).channel_id
 				}/${case_.context_message_id})`;
@@ -97,7 +96,7 @@ export default class CaseLogManager {
 				where case_id = ${case_.ref_id}
 					and guild_id = ${case_.guild_id}`;
 
-			if (has(reference, 'log_message_id')) {
+			if (Reflect.has(reference, 'log_message_id')) {
 				msg += `\n**Ref case:** [${case_.ref_id}](https://discordapp.com/channels/${case_.guild_id}/${logChannelId}/${
 					(reference as { log_message_id: string }).log_message_id
 				})`;

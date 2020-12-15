@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { Box, Grid, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { RESTAPIPartialCurrentUserGuild } from 'discord-api-types';
 
 import GuildIcon from '../../components/GuildIcon';
@@ -13,7 +13,7 @@ import GuildSettings from '../../components/GuildSettings';
 const GuildPage = (props: any) => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
-	const cache = useQueryCache();
+	const cache = useQueryClient();
 	useQueryOAuthGuilds(user.loggedIn, props);
 
 	const { id } = router.query;
