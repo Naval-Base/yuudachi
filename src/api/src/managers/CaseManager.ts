@@ -108,7 +108,7 @@ export default class CaseManager {
 				${case_.action},
 				${case_.roleId ?? null},
 				${case_.actionExpiration ?? null},
-				${case_.reason},
+				${case_.reason ?? null},
 				${case_.contextMessageId ?? null},
 				${case_.referenceId ?? null}
 			)

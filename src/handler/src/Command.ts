@@ -1,6 +1,6 @@
-import { APIMessage } from 'discord-api-types/v6';
+import { APIMessage } from 'discord-api-types';
 import { Args } from 'lexure';
-import { basename, parse, sep, extname } from 'path';
+import { basename, extname } from 'path';
 import { CommandModules } from './Constants';
 
 export enum ExecutionContext {
@@ -26,7 +26,6 @@ export default interface Command {
 
 export interface CommandInfo {
 	name: string;
-	category: string;
 }
 
 export function commandInfo(path: string): CommandInfo | null {
@@ -34,11 +33,5 @@ export function commandInfo(path: string): CommandInfo | null {
 		return null;
 	}
 
-	let category = parse(path).dir.split(sep).pop();
-	if (!category) category = 'none';
-
-	return {
-		name: basename(path, '.js'),
-		category,
-	};
+	return { name: basename(path, '.js') };
 }

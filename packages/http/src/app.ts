@@ -40,7 +40,7 @@ export function createApp(publicFolder?: string) {
 			}) as any,
 			helmet({ contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false }) as any,
 			publicFolder
-				? sirv(publicFolder, {
+				? /* istanbul ignore next */ sirv(publicFolder, {
 						/* istanbul ignore next */
 						onNoMatch(_, res) {
 							res.setHeader('content-type', 'application/json');

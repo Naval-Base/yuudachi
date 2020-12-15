@@ -16,11 +16,6 @@
 			}
 		},
 		"mod": {
-			"common": {
-				"errors": {
-					"no_reason": "Mod actions require a reason."
-				}
-			},
 			"kick": {
 				"errors": {
 					"missing_permissions": "Missing permissions to kick this member.",

@@ -98,7 +98,7 @@ test('fails when no log channel is available', async () => {
 });
 
 test('creates basic kick case', async () => {
-	mockedRest.get.mockResolvedValueOnce({ id: modId, avatar: 'randomHash', discriminator: '0002' });
+	mockedRest.get.mockResolvedValueOnce({ id: modId, avatar: 'a_randomHash', discriminator: '0002' });
 
 	const logManager = container.resolve(CaseLogManager);
 	await logManager.create({
@@ -144,7 +144,7 @@ test('creates basic kick case', async () => {
 		embed: {
 			author: {
 				name: `${modTag} (${modId})`,
-				icon_url: `http://cdn.discordapp.com/avatars/${modId}/randomHash.png`,
+				icon_url: `http://cdn.discordapp.com/avatars/${modId}/a_randomHash.gif`,
 			},
 			description: stripIndents`
 				**Member:** \`${targetTag}\` (${targetId})
@@ -161,7 +161,7 @@ test('creates basic kick case', async () => {
 test('creates reference role case', async () => {
 	mockedPostgres.mockResolvedValue([{ log_message_id: refLogMessageId }]);
 	mockedRest.get
-		.mockResolvedValueOnce({ id: modId, avatar: 'randomHash', discriminator: '0002' })
+		.mockResolvedValueOnce({ id: modId, discriminator: '0002' })
 		.mockResolvedValueOnce([{ id: roleId, name: roleName }]);
 
 	const logManager = container.resolve(CaseLogManager);
@@ -207,7 +207,7 @@ test('creates reference role case', async () => {
 		embed: {
 			author: {
 				name: `${modTag} (${modId})`,
-				icon_url: `http://cdn.discordapp.com/avatars/${modId}/randomHash.png`,
+				icon_url: `http://cdn.discordapp.com/embed/avatars/${modId}/2.png`,
 			},
 			description: stripIndents`
 				**Member:** \`${targetTag}\` (${targetId})
