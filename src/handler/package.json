@@ -29,7 +29,7 @@
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
 		"@types/luxon": "^1.25.0",
-		"@types/node": "^14.14.13",
+		"@types/node": "^14.14.14",
 		"@types/node-fetch": "^2.5.7",
 		"discord-api-types": "^0.10.0",
 		"env-cmd": "^10.1.0",
