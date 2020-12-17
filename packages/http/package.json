@@ -12,7 +12,7 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@discordjs/form-data": "^3.0.1",
-		"@hapi/boom": "^9.1.0",
+		"@hapi/boom": "^9.1.1",
 		"cookie": "^0.4.1",
 		"cors": "^2.8.5",
 		"helmet": "^4.2.0",
