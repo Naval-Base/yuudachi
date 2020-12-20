@@ -5,6 +5,7 @@ node_modules
 # Build artifacts
 dist/
 typings/
+tsconfig.tsbuildinfo
 
 # Log files
 logs
@@ -20,19 +21,32 @@ pids
 .vscode
 
 # Docker (experimental)
-docker
+docker/
 Dockerfile
 .dockerignore
+docker-compose.yml
+docker-compose.local.yml
+docker-compose.prod.yml
+docker-compose.config.yml
+docker-compose.config.example.yml
 
-# Authentication
-.env
-.env.example
+# Tests
+coverage/
+jest-setup.ts
+jest.config.js
+
+# Linting
+.eslingignore
+.eslintrc.json
+tsconfig.eslint.json
 
 # Miscellaneous
 .tmp
 .github
 .git
-migrations
-docker-compose.yml
-docker-compose.local.yml
-docker-compose.prod.yml
+hasura/
+.gitattributes
+.gitignore
+README.md
+y.ps1
+y.sh

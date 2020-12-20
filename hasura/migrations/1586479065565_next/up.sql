@@ -1,17 +1,3 @@
--- UTIL
-
-create function next_case(text) returns integer
-language plpgsql
-stable
-as $$
-declare next_id integer;
-begin
-	select max(case_id) into next_id from cases where guild_id = $1;
-	if next_id is null then return 1; end if;
-	return next_id + 1;
-end;
-$$;
-
 -- ROLES
 
 create type roles as enum('admin', 'moderator', 'user');
@@ -22,7 +8,7 @@ create table users (
   id uuid default gen_random_uuid() not null,
   email text not null,
   username text not null,
-  role roles default 'user',
+  "role" roles default 'user',
   token_reset_at timestamp
 );
 
@@ -31,6 +17,7 @@ alter table users add constraint users_pkey primary key (id);
 comment on column users.id is 'The id of this user';
 comment on column users.email is 'The email of this user';
 comment on column users.username is 'The username of this user';
+comment on column users."role" is 'The role of this user';
 comment on column users.token_reset_at is 'When this user''s token was reset';
 
 -- PROVIDERS
@@ -56,40 +43,11 @@ alter table connections add constraint connections_user_id_fkey foreign key (use
 comment on column connections.id is 'The user id of this connection';
 comment on column connections.user_id is 'The id of the user this connection belongs to';
 comment on column connections.provider is 'The provider this connection belongs to';
+comment on column connections.main is 'Whether this is the main account of this users connection';
 comment on column connections.avatar is 'The access token of this connection';
 comment on column connections.access_token is 'The access token of this connection';
 comment on column connections.refresh_token is 'The refresh token of this connection';
 comment on column connections.expires_at is 'The expiration of this connections access token';
-
--- MESSAGES
-
-create table messages (
-	id text,
-	channel_id text not null,
-	guild_id text,
-	author_id text,
-	content text,
-	"type" integer,
-	flags integer,
-	embeds jsonb,
-	attachments jsonb,
-	created_at timestamp default now() not null,
-	edited_at timestamp
-);
-
-alter table messages
-	add constraint messages_pkey primary key (id)
-;
-
-comment on column public.messages.id IS 'The message id';
-comment on column public.messages.channel_id IS 'The id of the channel this message belongs to';
-comment on column public.messages.guild_id IS 'The id of the guild this message belongs to';
-comment on column public.messages.author_id IS 'The id of the author this message belongs to';
-comment on column public.messages.content IS 'The content of this message';
-comment on column public.messages.type IS 'The type of this message';
-comment on column public.messages.flags IS 'The flags of this message';
-comment on column public.messages.embeds IS 'The embeds of this message';
-comment on column public.messages.attachments IS 'The attachments of this message';
 
 -- CASES
 
@@ -132,7 +90,7 @@ alter table lockdowns
 	add constraint lockdowns_pkey primary key (channel_id)
 ;
 
--- ROLE STATES
+-- ROLE_STATES
 
 alter table role_states rename guild to guild_id;
 alter table role_states rename member to member_id;

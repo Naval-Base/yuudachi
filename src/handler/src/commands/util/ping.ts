@@ -1,28 +1,30 @@
 import { injectable } from 'tsyringe';
-import { APIMessage, Routes } from 'discord-api-types';
+import { APIInteraction, APIMessage } from 'discord-api-types';
 import { Args } from 'lexure';
-import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 
 import Command from '../../Command';
 import { CommandModules } from '../../Constants';
+import { send } from '../../util';
 
 @injectable()
 export default class implements Command {
 	public readonly category = CommandModules.Utility;
 
-	public constructor(private readonly rest: Rest) {}
+	private parse(args: Args) {
+		return args.flag('hide');
+	}
 
-	public async execute(message: APIMessage, _: Args, locale: string) {
-		const msg: APIMessage = await this.rest.post(Routes.channelMessages(message.channel_id), {
-			content: i18next.t('command.utility.ping.pre_ping', { lng: locale }),
-		});
-		void this.rest.patch(Routes.channelMessage(message.channel_id, msg.id), {
-			content: i18next.t('command.utility.ping.post_ping', {
-				ping:
-					Date.parse(msg.edited_timestamp ?? msg.timestamp) - Date.parse(message.edited_timestamp ?? message.timestamp),
-				lng: locale,
-			}),
-		});
+	public execute(message: APIMessage | APIInteraction, args: Args, locale: string) {
+		const hide = this.parse(args);
+
+		void send(
+			message,
+			{
+				content: i18next.t('command.utility.ping.success', { lng: locale }),
+				flags: hide ? 64 : undefined,
+			},
+			hide ? 3 : 4,
+		);
 	}
 }

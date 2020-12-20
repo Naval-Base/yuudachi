@@ -1,5 +1,25 @@
 - table:
-    schema: public
+    schema: logs
+    name: messages
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - id
+      - channel_id
+      - guild_id
+      - author_id
+      - content
+      - type
+      - flags
+      - embeds
+      - attachments
+      - created_at
+      - updated_at
+      filter: {}
+      allow_aggregations: true
+- table:
+    schema: moderation
     name: cases
   select_permissions:
   - role: moderator
@@ -70,8 +90,6 @@
       enable_manual: false
       insert:
         columns: '*'
-      delete:
-        columns: '*'
       update:
         columns:
         - role_id
@@ -94,6 +112,66 @@
       interval_sec: 10
       timeout_sec: 60
     webhook: http://api:3500/api/hasura/hooks/mod_log
+- table:
+    schema: moderation
+    name: lockdowns
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - expiration
+      - channel_id
+      backend_only: false
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - channel_id
+      - expiration
+      filter: {}
+      allow_aggregations: true
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - expiration
+      - channel_id
+      filter: {}
+      check: {}
+- table:
+    schema: moderation
+    name: role_states
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - guild_id
+      - member_id
+      - roles
+      backend_only: false
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - guild_id
+      - member_id
+      - roles
+      filter: {}
+      allow_aggregations: true
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - guild_id
+      - member_id
+      - roles
+      filter: {}
+      check: {}
+- table:
+    schema: organizational
+    name: tags
 - table:
     schema: public
     name: connections
@@ -186,69 +264,6 @@
       - tag_role_id
       filter: {}
       check: {}
-- table:
-    schema: public
-    name: lockdowns
-  insert_permissions:
-  - role: moderator
-    permission:
-      check: {}
-      columns:
-      - expiration
-      - channel_id
-      backend_only: false
-  select_permissions:
-  - role: moderator
-    permission:
-      columns:
-      - channel_id
-      - expiration
-      filter: {}
-      allow_aggregations: true
-  update_permissions:
-  - role: moderator
-    permission:
-      columns:
-      - expiration
-      - channel_id
-      filter: {}
-      check: {}
-- table:
-    schema: public
-    name: messages
-- table:
-    schema: public
-    name: role_states
-  insert_permissions:
-  - role: moderator
-    permission:
-      check: {}
-      columns:
-      - guild_id
-      - member_id
-      - roles
-      backend_only: false
-  select_permissions:
-  - role: moderator
-    permission:
-      columns:
-      - guild_id
-      - member_id
-      - roles
-      filter: {}
-      allow_aggregations: true
-  update_permissions:
-  - role: moderator
-    permission:
-      columns:
-      - guild_id
-      - member_id
-      - roles
-      filter: {}
-      check: {}
-- table:
-    schema: public
-    name: tags
 - table:
     schema: public
     name: users

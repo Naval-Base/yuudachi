@@ -1,4 +1,4 @@
-import { Case, CreateCase } from '@yuudachi/types';
+import { Case, CreateCase, UpdateCase } from '@yuudachi/types';
 import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types';
 import API from '..';
 
@@ -21,5 +21,9 @@ export default class Guilds {
 
 	public createCase(guildId: string, ...cases: CreateCase[]) {
 		return this.api.make<Case[]>('post', `/guilds/${guildId}/cases`, { cases });
+	}
+
+	public updateCase(guildId: string, ...cases: UpdateCase[]) {
+		return this.api.make<Case[]>('patch', `/guilds/${guildId}/cases`, { cases });
 	}
 }

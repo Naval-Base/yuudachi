@@ -22,6 +22,7 @@ export function createApp(publicFolder?: string) {
 			console.error(err); // TODO: better error logging
 			res.setHeader('content-type', 'application/json');
 			if (isBoom(err as any)) {
+				/* istanbul ignore next */
 				sendBoom(err as any, res);
 			} else {
 				sendBoom(new Boom(err), res);
@@ -38,7 +39,9 @@ export function createApp(publicFolder?: string) {
 				origin: process.env.CORS?.split(',') ?? '*',
 				credentials: true,
 			}) as any,
-			helmet({ contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false }) as any,
+			helmet({
+				contentSecurityPolicy: process.env.NODE_ENV === 'production' ? /* istanbul ignore next */ undefined : false,
+			}) as any,
 			publicFolder
 				? /* istanbul ignore next */ sirv(publicFolder, {
 						/* istanbul ignore next */

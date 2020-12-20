@@ -80,6 +80,7 @@ services:
       PGDATABASE: "yuudachi"
       PGUSERNAME: "yuudachi"
       PGPASSWORD: "admin"
+      DISCORD_CLIENT_ID: ""
       DISCORD_TOKEN: ""
       GITHUB_TOKEN: ""
       API_URL: "http://api:3500"

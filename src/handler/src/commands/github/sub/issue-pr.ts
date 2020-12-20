@@ -2,6 +2,7 @@ import { APIMessage, APIEmbed } from 'discord-api-types';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
+import { container } from 'tsyringe';
 
 import { addFields, truncateEmbed } from '../../../util';
 import { isPR, GitHubReviewDecision, GitHubReviewState, GitHubAPIResult } from '../../../interfaces/GitHub';
@@ -132,9 +133,10 @@ export async function issuePR(
 	num: number,
 	locale: string,
 	isPrefixed: boolean,
-	rest: Rest,
 	message: APIMessage,
 ) {
+	const rest = container.resolve(Rest);
+
 	try {
 		const query = buildQuery(owner, repository, num);
 		const res: GitHubAPIResult = await fetch(GITHUB_BASE_URL, {

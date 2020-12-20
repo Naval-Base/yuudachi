@@ -28,7 +28,7 @@ function generateSQLResult(case_: Case) {
 	return [
 		[
 			`
-			insert into cases (
+			insert into moderation.cases (
 				case_id,
 				guild_id,
 				mod_id,
@@ -77,7 +77,7 @@ function generateSQLResult(case_: Case) {
 		`${targetUsername}#${targetDiscriminator}`,
 		case_.action,
 		case_.roleId ?? null,
-		case_.actionExpiration ?? null,
+		case_.actionExpiration?.toISOString() ?? null,
 		case_.reason,
 		case_.contextMessageId ?? null,
 		case_.referenceId ?? null,
@@ -120,7 +120,11 @@ test('creates role case', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', {}, { reason: 'Case #0' });
+	expect(mockedRest.put).toHaveBeenCalledWith(
+		'/guilds/1234/members/3456/roles/4567',
+		{},
+		{ reason: 'Mod: abc#0001 | foo' },
+	);
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -142,7 +146,9 @@ test('creates un-role case', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', { reason: 'Case #0' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', {
+		reason: 'Mod: abc#0001 | foo',
+	});
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -184,7 +190,7 @@ test('creates kick case with context', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456', { reason: 'Case #0' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456', { reason: 'Mod: abc#0001 | foo' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -206,11 +212,12 @@ test('creates softban with delete message days', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=3&reason=Case+%230', {
-		reason: 'Case #0',
+	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456', {
+		delete_message_days: 3,
+		reason: 'Mod: abc#0001 | foo',
 	});
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Case #0' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Mod: abc#0001 | foo' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });
@@ -233,8 +240,9 @@ test('creates ban with expiration & default delete message days', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456?delete-message-days=1&reason=Case+%230', {
-		reason: 'Case #0',
+	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456', {
+		delete_message_days: 0,
+		reason: 'Mod: abc#0001 | foo',
 	});
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
@@ -258,7 +266,7 @@ test('creates unban case', async () => {
 	expect(saved).toBe(case_);
 	expect(saved.caseId).toBe(1);
 	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Case #0' });
+	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Mod: abc#0001 | foo' });
 	expect(mockedPostgres).toHaveBeenCalledTimes(1);
 	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 });

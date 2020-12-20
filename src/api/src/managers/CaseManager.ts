@@ -3,7 +3,6 @@ import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
-import { URLSearchParams } from 'url';
 import { Tokens } from '@yuudachi/core';
 
 const { kSQL } = Tokens;
@@ -26,6 +25,11 @@ export interface RawCase {
 	guild_id: string;
 }
 
+export type PatchCase = Pick<
+	Case,
+	'guildId' | 'caseId' | 'actionExpiration' | 'reason' | 'contextMessageId' | 'referenceId'
+>;
+
 @injectable()
 export default class CaseManager {
 	public constructor(
@@ -35,7 +39,14 @@ export default class CaseManager {
 	) {}
 
 	public async create(case_: Case) {
-		const requestOptions = { reason: `Case #${case_.caseId}` };
+		const [target, mod]: [APIUser, APIUser] = await Promise.all([
+			this.rest.get<APIUser>(`/users/${case_.targetId}`),
+			this.rest.get<APIUser>(`/users/${case_.moderatorId}`),
+		]);
+
+		const requestOptions = {
+			reason: `Mod: ${mod.username}#${mod.discriminator}${case_.reason ? ` | ${case_.reason}` : ''}`,
+		};
 		switch (case_.action) {
 			case CaseAction.ROLE:
 				await this.rest.put(
@@ -56,22 +67,18 @@ export default class CaseManager {
 				await this.rest.delete(`/guilds/${case_.guildId}/members/${case_.targetId}`, requestOptions);
 				break;
 			case CaseAction.SOFTBAN: {
-				const params = new URLSearchParams({
-					'delete-message-days': case_.deleteMessageDays?.toString() ?? '1',
-					reason: requestOptions.reason,
+				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}`, {
+					...requestOptions,
+					delete_message_days: case_.deleteMessageDays ?? 1,
 				});
-
-				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params.toString()}`, requestOptions);
 				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, requestOptions);
 				break;
 			}
 			case CaseAction.BAN: {
-				const params = new URLSearchParams({
-					'delete-message-days': case_.deleteMessageDays?.toString() ?? '1',
-					reason: requestOptions.reason,
+				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}`, {
+					...requestOptions,
+					delete_message_days: case_.deleteMessageDays ?? 0,
 				});
-
-				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}?${params.toString()}`, requestOptions);
 				break;
 			}
 			case CaseAction.UNBAN:
@@ -79,13 +86,8 @@ export default class CaseManager {
 				break;
 		}
 
-		const [target, mod]: [APIUser, APIUser] = await Promise.all([
-			this.rest.get<APIUser>(`/users/${case_.targetId}`),
-			this.rest.get<APIUser>(`/users/${case_.moderatorId}`),
-		]);
-
 		const [newCase] = await this.sql`
-			insert into cases (
+			insert into moderation.cases (
 				case_id,
 				guild_id,
 				mod_id,
@@ -107,7 +109,7 @@ export default class CaseManager {
 				${`${target.username}#${target.discriminator}`},
 				${case_.action},
 				${case_.roleId ?? null},
-				${case_.actionExpiration ?? null},
+				${case_.actionExpiration?.toISOString() ?? null},
 				${case_.reason ?? null},
 				${case_.contextMessageId ?? null},
 				${case_.referenceId ?? null}
@@ -116,5 +118,47 @@ export default class CaseManager {
 
 		case_.caseId = newCase.case_id;
 		return case_;
+	}
+
+	public async update(case_: PatchCase) {
+		if (case_.actionExpiration) {
+			await this.sql`
+				update moderation.cases
+				set action_expiration = ${case_.actionExpiration.toISOString()}
+				where guild_id = ${case_.guildId}
+					and case_id = ${case_.caseId}`;
+		}
+
+		if (case_.reason) {
+			await this.sql`
+				update moderation.cases
+				set reason = ${case_.reason}
+				where guild_id = ${case_.guildId}
+					and case_id = ${case_.caseId}`;
+		}
+
+		if (case_.contextMessageId) {
+			await this.sql`
+				update moderation.cases
+				set context_message_id = ${case_.contextMessageId}
+				where guild_id = ${case_.guildId}
+					and case_id = ${case_.caseId}`;
+		}
+
+		if (case_.referenceId) {
+			await this.sql`
+				update moderation.cases
+				set ref_id = ${case_.referenceId}
+				where guild_id = ${case_.guildId}
+					and case_id = ${case_.caseId}`;
+		}
+
+		const [updatedCase] = await this.sql`
+			select *
+			from moderation.cases
+			where guild_id = ${case_.guildId}
+				and case_id = ${case_.caseId}`;
+
+		return updatedCase as Case;
 	}
 }

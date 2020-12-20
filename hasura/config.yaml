@@ -1,0 +1,8 @@
+version: 2
+endpoint: http://localhost:8080
+admin_secret: admin
+metadata_directory: metadata
+migrations_directory: migrations
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000
