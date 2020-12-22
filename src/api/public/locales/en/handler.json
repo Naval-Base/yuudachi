@@ -1,6 +1,6 @@
 {
 	"command": {
-		"commom": {
+		"common": {
 			"errors": {
 				"no_user_id": "No user Id provided.",
 				"invalid_user_id": "**{{id}}** is not a valid user Id.",
@@ -11,17 +11,69 @@
 		},
 		"utility": {
 			"ping": {
-				"pre_ping": "Pinging...",
-				"post_ping": "{{ping}}ms"
+				"success": "ok"
 			}
 		},
 		"mod": {
+			"common": {
+				"errors": {
+					"no_case_id": "No case Id provided."
+				}
+			},
+			"warn": {
+				"errors": {
+					"failure": "Unable to warn {{- member}}"
+				},
+				"success": "Successfully warned {{- member}}"
+			},
 			"kick": {
 				"errors": {
 					"missing_permissions": "Missing permissions to kick this member.",
 					"failure": "Unable to kick {{- member}}"
 				},
 				"success": "Successfully kicked {{- member}}"
+			},
+			"softban": {
+				"errors": {
+					"missing_permissions": "Missing permissions to softban this member.",
+					"failure": "Unable to softban {{- member}}"
+				},
+				"success":"Successfully softbanned {{- member}}"
+			},
+			"ban": {
+				"errors": {
+					"missing_permissions": "Missing permissions to ban this member.",
+					"failure": "Unable to ban {{- member}}"
+				},
+				"success":"Successfully banned {{- member}}"
+			},
+			"unban": {
+				"errors": {
+					"missing_permissions": "Missing permissions to unban this member.",
+					"failure": "Unable to unban {{- member}}"
+				},
+				"success": "Successfully unbanned {{- member}}"
+			},
+			"reason": {
+				"errors": {
+					"no_reason": "No reason provided.",
+					"failure": "Unable to to set reason for case #{{case}}"
+				},
+				"success":"Successfully set reason for case #{{case}}"
+			},
+			"reference": {
+				"errors": {
+					"no_ref_id": "No reference Id provided.",
+					"failure": "Unable to to set reference for case #{{case}} to #{{ref}}"
+				},
+				"success":"Successfully set reference for case #{{case}} to #{{ref}}"
+			},
+			"duration": {
+				"errors": {
+					"duration_format": "Wrong duration format.",
+					"failure": "Unable to to set duration for case #{{case}}"
+				},
+				"success": "Successfully set duration for case #{{case}}"
 			}
 		},
 		"tag": {

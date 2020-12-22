@@ -1,10 +1,11 @@
-import { APIMessage } from 'discord-api-types';
+import { APIInteraction, APIMessage, APIApplicationCommandInteractionDataOption } from 'discord-api-types';
 import { Args } from 'lexure';
 import { basename, extname } from 'path';
 import { CommandModules } from './Constants';
 
 export enum ExecutionContext {
 	PREFIXED,
+	INTERACTION,
 	REGEXP,
 }
 
@@ -17,8 +18,8 @@ export default interface Command {
 	userPermissions?: string[];
 	regExp?: RegExp;
 	execute(
-		message: APIMessage,
-		args: Args,
+		message: APIMessage | APIInteraction,
+		args: Args | APIApplicationCommandInteractionDataOption[],
 		locale: string,
 		executionContext: ExecutionContext,
 	): unknown | Promise<unknown>;

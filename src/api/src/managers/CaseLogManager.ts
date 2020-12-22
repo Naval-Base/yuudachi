@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Tokens } from '@yuudachi/core';
+import ms from '@naval-base/ms';
 
 import { RawCase } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
@@ -42,13 +43,17 @@ export default class CaseLogManager {
 			timestamp: new Date().toISOString(),
 		};
 
-		const logMessage: APIMessage = await this.rest.post(Routes.channelMessages(logChannelId), { embed });
+		if (item.log_message_id) {
+			await this.rest.patch(Routes.channelMessage(logChannelId, item.log_message_id), { embed });
+		} else {
+			const logMessage: APIMessage = await this.rest.post(Routes.channelMessages(logChannelId), { embed });
 
-		await this.sql`
-			update cases
-			set log_message_id = ${logMessage.id}
-			where case_id = ${item.case_id}
-				and guild_id = ${item.guild_id}`;
+			await this.sql`
+				update moderation.cases
+				set log_message_id = ${logMessage.id}
+				where guild_id = ${item.guild_id}
+					and case_id = ${item.case_id}`;
+		}
 	}
 
 	protected async generateLogMessage(case_: RawCase, logChannelId: string) {
@@ -66,17 +71,18 @@ export default class CaseLogManager {
 		`;
 
 		if (case_.action_expiration) {
-			msg += `\n**Expiration:** ${case_.action_expiration}`;
+			msg += `\n**Expiration:** ${ms(Date.parse(case_.action_expiration), true)}`;
 		}
 
 		if (case_.context_message_id) {
 			const [contextMessage] = await this.sql`
 				select channel_id
-				from messages
+				from logs.messages
 				where id = ${case_.context_message_id}`;
 
-			if (Reflect.has(contextMessage, 'channel_id')) {
-				msg += `\n**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${case_.guild_id}/${
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
+				msg += `\n**Context:** [Beam me up, Yuu](https://discordapp.com/channels/${case_.guild_id}/${
 					(contextMessage as { channel_id: string }).channel_id
 				}/${case_.context_message_id})`;
 			}
@@ -92,11 +98,12 @@ export default class CaseLogManager {
 		if (case_.ref_id) {
 			const [reference] = await this.sql`
 				select log_message_id
-				from cases
-				where case_id = ${case_.ref_id}
-					and guild_id = ${case_.guild_id}`;
+				from moderation.cases
+				where guild_id = ${case_.guild_id}
+					and case_id = ${case_.ref_id}`;
 
-			if (Reflect.has(reference, 'log_message_id')) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (Reflect.has(reference ?? {}, 'log_message_id')) {
 				msg += `\n**Ref case:** [${case_.ref_id}](https://discordapp.com/channels/${case_.guild_id}/${logChannelId}/${
 					(reference as { log_message_id: string }).log_message_id
 				})`;

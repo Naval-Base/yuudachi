@@ -67,6 +67,7 @@ services:
       PGDATABASE: "yuudachi"
       PGUSERNAME: "yuudachi"
       PGPASSWORD: "admin"
+      DISCORD_CLIENT_ID: ""
       DISCORD_TOKEN: ""
       GITHUB_TOKEN: ""
 

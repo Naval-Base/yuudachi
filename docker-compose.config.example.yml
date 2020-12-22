@@ -26,6 +26,7 @@ services:
 
   handler:
     environment:
+      DISCORD_CLIENT_ID: ""
       DISCORD_TOKEN: ""
       GITHUB_TOKEN: ""
 

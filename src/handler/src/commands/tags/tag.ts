@@ -31,7 +31,7 @@ export default class implements Command {
 
 		switch (sub) {
 			case 'search': {
-				return search(message, args, locale, this.sql, this.rest);
+				return search(message, args, locale);
 			}
 
 			default: {
@@ -43,7 +43,7 @@ export default class implements Command {
 
 				const [tag] = await this.sql<{ content: string }>`
 					select content
-					from tags
+					from organizational.tags
 					where name = ${name}
 						or ${name} = ANY(aliases)
 						and guild_id = ${message.guild_id};`;

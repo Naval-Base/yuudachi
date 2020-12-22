@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { FormControl, FormLabel, Switch, Text, Input, Button, Box, Select } from '@chakra-ui/react';
+import { FormControl, FormLabel, Text, Input, Button, Box, Select } from '@chakra-ui/react';
 import { useForm, UseFormMethods, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { APIRole } from 'discord-api-types';
+
+import Loading from './Loading';
 
 import { RootState } from '../store';
 import { useQueryGuild } from '../hooks/useQueryGuild';
@@ -136,7 +138,7 @@ const GuildSettings = (props: any) => {
 	}
 
 	if (isLoadingGuild || isLoadingGuildSettings || isLoadingRoles) {
-		return <Text textAlign="center">Loading...</Text>;
+		return <Loading />;
 	}
 
 	if (gqlDataGuild && !gqlDataGuild.guild) {

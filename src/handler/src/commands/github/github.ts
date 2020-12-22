@@ -3,7 +3,6 @@ import { injectable, inject } from 'tsyringe';
 import { APIMessage } from 'discord-api-types';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
-import Rest from '@yuudachi/rest';
 import { Tokens } from '@yuudachi/core';
 
 import Command, { ExecutionContext } from '../../Command';
@@ -28,7 +27,7 @@ export default class GitHub implements Command {
 	public readonly aliases = ['gh'];
 	public readonly category = CommandModules.GitHub;
 
-	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
+	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: APIMessage, args: Args, locale: string, executionContext: ExecutionContext) {
 		if (!message.guild_id) {
@@ -47,7 +46,7 @@ export default class GitHub implements Command {
 		const first = args.single();
 
 		if (first === 'alias' && isPrefixed) {
-			return alias(message, args, locale, this.sql, this.rest);
+			return alias(message, args, locale);
 		}
 
 		const second = args.single();
@@ -82,10 +81,10 @@ export default class GitHub implements Command {
 
 		const parsed = Number(issueOrExpression);
 		if (isNaN(parsed)) {
-			return commit(owner, repository, issueOrExpression, locale, isPrefixed, this.rest, message);
+			return commit(owner, repository, issueOrExpression, locale, isPrefixed, message);
 		}
 
-		return issuePR(owner, repository, parsed, locale, isPrefixed, this.rest, message);
+		return issuePR(owner, repository, parsed, locale, isPrefixed, message);
 	}
 
 	private static validateGitHubName(name: string): boolean {

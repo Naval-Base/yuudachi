@@ -17,7 +17,7 @@ export default class API {
 		headers_: Record<string, string> = {},
 	): Promise<T> {
 		const headers: Record<string, string> =
-			method.toLowerCase() === 'put' || method.toLowerCase() === 'post'
+			method.toLowerCase() === 'patch' || method.toLowerCase() === 'put' || method.toLowerCase() === 'post'
 				? { 'content-type': 'application/json', ...headers_ }
 				: { ...headers_ };
 

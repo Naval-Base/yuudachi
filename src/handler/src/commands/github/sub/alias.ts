@@ -3,9 +3,13 @@ import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
+import { container } from 'tsyringe';
+import { Tokens } from '@yuudachi/core';
 
 import { ellipsis, uniqueValidatedValues } from '../../../util';
 import { MESSAGE_CONTENT_LIMIT } from '../../../Constants';
+
+const { kSQL } = Tokens;
 
 const validSubCommands = ['`add`', '`remove`', '`list`'];
 const regExp = /([A-Za-z0-9_.-]+):(?:https:\/\/github\.com\/|git@github\.com:)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+?)(?:\.git)?$/;
@@ -14,14 +18,10 @@ function argsFormat(locale: string) {
 	return i18next.t('command.github.alias.common.alias_format', { lng: locale });
 }
 
-async function add(
-	message: APIMessage,
-	locale: string,
-	current: string[],
-	cleaned: string[],
-	sql: Sql<any>,
-	rest: Rest,
-) {
+async function add(message: APIMessage, locale: string, current: string[], cleaned: string[]) {
+	const rest = container.resolve(Rest);
+	const sql = container.resolve<Sql<any>>(kSQL);
+
 	if (!cleaned.length) {
 		throw new Error(
 			i18next.t('command.github.alias.add.errors.no_args', {
@@ -57,14 +57,10 @@ async function add(
 	});
 }
 
-async function remove(
-	message: APIMessage,
-	locale: string,
-	current: string[],
-	cleaned: string[],
-	sql: Sql<any>,
-	rest: Rest,
-) {
+async function remove(message: APIMessage, locale: string, current: string[], cleaned: string[]) {
+	const rest = container.resolve(Rest);
+	const sql = container.resolve<Sql<any>>(kSQL);
+
 	if (!cleaned.length) {
 		throw new Error(
 			i18next.t('command.github.alias.remove.errors.no_args', {
@@ -107,7 +103,9 @@ async function remove(
 	});
 }
 
-function list(message: APIMessage, locale: string, current: string[], rest: Rest) {
+function list(message: APIMessage, locale: string, current: string[]) {
+	const rest = container.resolve(Rest);
+
 	if (!current.length) {
 		throw new Error(
 			i18next.t('command.github.alias.common.no_current', {
@@ -155,7 +153,9 @@ function cleanAliasCandidates(inputs: string[], predicate: (current: string) => 
 	return inputs.map((i) => resolveAlias(i)).filter((e) => e && predicate(e)) as string[];
 }
 
-export async function alias(message: APIMessage, args: Args, locale: string, sql: Sql<any>, rest: Rest) {
+export async function alias(message: APIMessage, args: Args, locale: string) {
+	const sql = container.resolve<Sql<any>>(kSQL);
+
 	if (!message.guild_id) {
 		throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 	}
@@ -183,17 +183,17 @@ export async function alias(message: APIMessage, args: Args, locale: string, sql
 				});
 			};
 			const cleaned = cleanAliasCandidates(candidates, predicate);
-			return add(message, locale, current, cleaned, sql, rest);
+			return add(message, locale, current, cleaned);
 		}
 
 		case 'remove':
 		case 'delete': {
 			const cleaned = cleanAliasCandidates(candidates, () => true);
-			return remove(message, locale, current, cleaned, sql, rest);
+			return remove(message, locale, current, cleaned);
 		}
 
 		case 'list': {
-			return list(message, locale, current, rest);
+			return list(message, locale, current);
 		}
 
 		case 'default': {

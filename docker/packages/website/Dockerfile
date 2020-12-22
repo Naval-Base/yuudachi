@@ -2,12 +2,8 @@ FROM node:alpine
 
 WORKDIR /usr/yuudachi
 
-RUN npm i -g npm@next-7
+COPY . .
 
-COPY package.json package-lock.json tsconfig.base.json ./
-
-COPY src/website ./src/website
-
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
 CMD cd /usr/yuudachi/src/website && npm run start

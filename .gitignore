@@ -1,28 +1,29 @@
 # Packages
-node_modules/
+node_modules
+**/node_modules
+
+# Build artifacts
+dist/
+typings/
+tsconfig.tsbuildinfo
 
 # Log files
-logs/
+logs
 *.log
 npm-debug.log*
-coverage/
 
 # Runtime data
 pids
 *.pid
 *.seed
 
-# Env
-.env
-config.yaml
+# Docker (experimental)
 docker-compose.config.yml
 
-# Dist
-dist/
-typings/
+# Tests
+coverage/
 
 # Miscellaneous
 .tmp/
 dump.sql
-tsconfig.tsbuildinfo
 hasura/hasura.exe

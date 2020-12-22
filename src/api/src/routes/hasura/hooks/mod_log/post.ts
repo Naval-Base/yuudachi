@@ -11,7 +11,6 @@ import { RawCase } from '../../../../managers/CaseManager';
 enum HasuraAction {
 	INSERT = 'INSERT',
 	UPDATE = 'UPDATE',
-	DELETE = 'DELETE',
 	MANUAL = 'UPDATE',
 }
 
@@ -87,14 +86,11 @@ export default class HasuraModLogEventHook extends Route {
 		switch (body.event.op) {
 			case 'UPDATE':
 			case 'MANUAL':
-				// this.caseLogManager.update(body.event.data.new);
+				void this.caseLogManager.create((body.event.data.new as unknown) as RawCase);
 				break;
 			case 'INSERT':
 				if (!body.event.data.new) break;
 				void this.caseLogManager.create((body.event.data.new as unknown) as RawCase);
-				break;
-			case 'DELETE':
-				// this.caseLogManager.delete(body.event.data.old);
 				break;
 		}
 

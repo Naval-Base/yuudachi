@@ -47,7 +47,7 @@ export default class CreateCaseRoute extends Route {
 										.required(),
 									deleteMessageDays: Joi.when('action', {
 										is: Joi.valid(CaseAction.BAN, CaseAction.SOFTBAN),
-										then: Joi.number().positive().max(7).default(1),
+										then: Joi.number().positive().allow(0).max(7).default(0),
 										otherwise: Joi.forbidden(),
 									}),
 									contextMessageId: Joi.string().pattern(/\d{17,20}/),

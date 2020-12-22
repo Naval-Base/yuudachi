@@ -2,6 +2,7 @@ import { APIMessage, APIEmbed } from 'discord-api-types';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import fetch from 'node-fetch';
+import { container } from 'tsyringe';
 
 import { GitHubAPIResult } from '../../../interfaces/GitHub';
 import { GITHUB_BASE_URL, GITHUB_COLOR_COMMIT, GITHUB_ICON_COMMIT } from '../../../Constants';
@@ -40,9 +41,10 @@ export async function commit(
 	expression: string,
 	locale: string,
 	isPrefixed: boolean,
-	rest: Rest,
 	message: APIMessage,
 ) {
+	const rest = container.resolve(Rest);
+
 	try {
 		const query = buildQuery(owner, repository, expression);
 		const res: GitHubAPIResult = await fetch(GITHUB_BASE_URL, {

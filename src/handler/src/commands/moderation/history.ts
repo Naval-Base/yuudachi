@@ -1,4 +1,4 @@
-import { APIMessage, APIEmbed, APIGuildMember, APIUser } from 'discord-api-types';
+import { APIMessage, APIEmbed, APIGuildMember, APIUser, APIInteraction } from 'discord-api-types';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import { Args } from 'lexure';
@@ -11,11 +11,11 @@ import { Tokens } from '@yuudachi/core';
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
 import { CommandModules, DATE_FORMAT_DATE, DATE_FORMAT_WITH_SECONDS, DISCORD_EPOCH } from '../../Constants';
-import { addFields } from '../../util';
+import { addFields, send } from '../../util';
 
 const { kSQL } = Tokens;
 
-const ACTION_KEYS = ['', 'restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban'];
+const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban'];
 
 interface CaseFooter {
 	warn?: number;
@@ -33,12 +33,17 @@ export default class implements Command {
 
 	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(message: APIMessage, args: Args, locale: string): Promise<void> {
+	private parse(args: Args) {
+		const user = args.option('user');
+		return user ? parseMember(user) : args.singleParse(parseMember);
+	}
+
+	public async execute(message: APIMessage | APIInteraction, args: Args, locale: string): Promise<void> {
 		if (!message.guild_id) {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const maybeMember = args.singleParse(parseMember);
+		const maybeMember = this.parse(args);
 		if (!maybeMember) {
 			throw new Error(i18next.t('command.common.errors.no_user_id', { lng: locale }));
 		}
@@ -90,7 +95,7 @@ export default class implements Command {
 				name: 'Member Details',
 				value: stripIndents`
 						${targetMember.value.nick ? `• Nickname: \`${targetMember.value.nick}\`` : '• No nickname'}
-						• Roles: ${targetMember.value.roles.map((role) => `<@&${role}>`)}
+						• Roles: ${targetMember.value.roles.map((role) => `<@&${role}>`).join(', ')}
 						• Joined: \`${joinFormatted} (UTC)\` (${sinceJoinFormatted})
 					`,
 			});
@@ -98,7 +103,7 @@ export default class implements Command {
 
 		const cases = await this.sql<{ case_id: number; action: number; reason: string; created_at: Date }>`
 			select case_id, action, reason, created_at
-			from cases
+			from moderation.cases
 			where guild_id = ${message.guild_id}
 				and target_id = ${targetUser.value.id}
 			order by created_at desc`;
@@ -150,6 +155,6 @@ export default class implements Command {
 			embed = { description: summary.join('\n'), ...embed };
 		}
 
-		void this.rest.post(`/channels/${message.channel_id}/messages`, { embed });
+		void send(message, { embed });
 	}
 }

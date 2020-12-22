@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v1.3.2.cli-migrations-v2
+    image: hasura/graphql-engine:v1.3.3.cli-migrations-v2
     labels:
       com.naval-base.description: "Hasura GraphQL Engine"
     environment:
@@ -115,7 +115,7 @@ services:
       com.naval-base.description: "Gateway Ingress"
     environment:
       DISCORD_TOKEN: ""
-      DISCORD_EVENTS: "READY,MESSAGE_CREATE,GUILD_CREATE,PRESENCE_UPDATE"
+      DISCORD_EVENTS: "READY,MESSAGE_CREATE,INTERACTION_CREATE,GUILD_CREATE"
       BROKER_TYPE: ""
       BROKER_GROUP: ""
       BROKER_MESSAGE_TIMEOUT: "10m"
@@ -156,6 +156,7 @@ services:
       PGDATABASE: ""
       PGUSERNAME: ""
       PGPASSWORD: ""
+      DISCORD_CLIENT_ID: ""
       DISCORD_TOKEN: ""
       GITHUB_TOKEN: ""
       API_URL: "http://api:3500"

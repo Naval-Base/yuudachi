@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 import GuildsStyles from '../styles/modules/Guilds.module.scss';
 
+import Loading from './Loading';
 import GuildIcon from './GuildIcon';
 
 import { RootState } from '../store';
@@ -11,7 +12,11 @@ import { useQueryOAuthGuilds } from '../hooks/useQueryOAuthGuilds';
 
 const Guilds = (props: any) => {
 	const user = useSelector((state: RootState) => state.user);
-	const { data } = useQueryOAuthGuilds(user.loggedIn, props);
+	const { data, isLoading } = useQueryOAuthGuilds(user.loggedIn, props);
+
+	if (isLoading) {
+		return <Loading />;
+	}
 
 	return (
 		<Grid templateColumns="repeat(auto-fill, 150px)" gap="32px 0px" justifyContent="center">

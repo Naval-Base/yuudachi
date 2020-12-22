@@ -5,6 +5,7 @@ import Rest from '@yuudachi/rest';
 import { CaseAction } from '@yuudachi/types';
 import { container } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
+import ms from '@naval-base/ms';
 
 import CaseLogManager from './CaseLogManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
@@ -39,7 +40,7 @@ const roleId = '12345';
 const roleName = 'bar';
 const contextChannelId = '23456';
 const contextMessageId = '34567';
-const actionExpiration = new Date(Date.parse(NOW) + 1e5).toString();
+const actionExpiration = new Date(Date.parse(NOW) + 1e5).toISOString();
 
 mockedSettingsManager.get.mockImplementation((_, prop) => {
 	switch (prop) {
@@ -83,7 +84,7 @@ test('fails when no log channel is available', async () => {
 			action_processed: true,
 			case_id: caseId,
 			context_message_id: null,
-			created_at: new Date().toString(),
+			created_at: new Date().toISOString(),
 			guild_id: guildId,
 			log_message_id: null,
 			mod_id: modId,
@@ -107,7 +108,7 @@ test('creates basic kick case', async () => {
 		action_processed: true,
 		case_id: caseId,
 		context_message_id: null,
-		created_at: new Date().toString(),
+		created_at: new Date().toISOString(),
 		guild_id: guildId,
 		log_message_id: null,
 		mod_id: modId,
@@ -126,17 +127,17 @@ test('creates basic kick case', async () => {
 	expect(mockedPostgres).toHaveBeenLastCalledWith(
 		[
 			`
-			update cases
-			set log_message_id = `,
+				update moderation.cases
+				set log_message_id = `,
 			`
-			where case_id = `,
+				where guild_id = `,
 			`
-				and guild_id = `,
+					and case_id = `,
 			'',
 		],
 		logMessageId,
-		1,
 		guildId,
+		1,
 	);
 
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
@@ -171,7 +172,7 @@ test('creates reference role case', async () => {
 		action_processed: true,
 		case_id: caseId,
 		context_message_id: null,
-		created_at: new Date().toString(),
+		created_at: new Date().toISOString(),
 		guild_id: guildId,
 		log_message_id: null,
 		mod_id: modId,
@@ -189,14 +190,14 @@ test('creates reference role case', async () => {
 		[
 			`
 				select log_message_id
-				from cases
-				where case_id = `,
+				from moderation.cases
+				where guild_id = `,
 			`
-					and guild_id = `,
+					and case_id = `,
 			'',
 		],
-		refCaseId,
 		guildId,
+		refCaseId,
 	);
 
 	expect(mockedRest.get).toHaveBeenCalledTimes(2);
@@ -233,7 +234,7 @@ test('creates contextual softban case', async () => {
 		action_processed: true,
 		case_id: caseId,
 		context_message_id: contextMessageId,
-		created_at: new Date().toString(),
+		created_at: new Date().toISOString(),
 		guild_id: guildId,
 		log_message_id: null,
 		mod_id: modId,
@@ -251,7 +252,7 @@ test('creates contextual softban case', async () => {
 		[
 			`
 				select channel_id
-				from messages
+				from logs.messages
 				where id = `,
 			'',
 		],
@@ -268,7 +269,7 @@ test('creates contextual softban case', async () => {
 			description: stripIndents`
 				**Member:** \`${targetTag}\` (${targetId})
 				**Action:** Softban
-				**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
+				**Context:** [Beam me up, Yuu](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
 				**Reason:** foo`,
 			footer: {
 				text: `Case ${caseId}`,
@@ -291,7 +292,7 @@ test('creates temporary ban case with context and reference', async () => {
 		action_processed: true,
 		case_id: caseId,
 		context_message_id: contextMessageId,
-		created_at: new Date().toString(),
+		created_at: new Date().toISOString(),
 		guild_id: guildId,
 		log_message_id: null,
 		mod_id: modId,
@@ -309,7 +310,7 @@ test('creates temporary ban case with context and reference', async () => {
 		[
 			`
 				select channel_id
-				from messages
+				from logs.messages
 				where id = `,
 			'',
 		],
@@ -320,14 +321,14 @@ test('creates temporary ban case with context and reference', async () => {
 		[
 			`
 				select log_message_id
-				from cases
-				where case_id = `,
+				from moderation.cases
+				where guild_id = `,
 			`
-					and guild_id = `,
+					and case_id = `,
 			'',
 		],
-		refCaseId,
 		guildId,
+		refCaseId,
 	);
 
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);
@@ -340,8 +341,8 @@ test('creates temporary ban case with context and reference', async () => {
 			description: stripIndents`
 				**Member:** \`${targetTag}\` (${targetId})
 				**Action:** Ban
-				**Expiration:** ${actionExpiration}
-				**Context:** [Beam me up, Yuki](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
+				**Expiration:** ${ms(Date.parse(actionExpiration), true)}
+				**Context:** [Beam me up, Yuu](https://discordapp.com/channels/${guildId}/${contextChannelId}/${contextMessageId})
 				**Reason:** foo
 				**Ref case:** [${refCaseId}](https://discordapp.com/channels/${guildId}/${logChannelId}/${refLogMessageId})`,
 			footer: {
@@ -363,7 +364,7 @@ test('creates ban without a reason', async () => {
 		action_processed: true,
 		case_id: caseId,
 		context_message_id: null,
-		created_at: new Date().toString(),
+		created_at: new Date().toISOString(),
 		guild_id: guildId,
 		log_message_id: null,
 		mod_id: modId,
@@ -379,17 +380,17 @@ test('creates ban without a reason', async () => {
 	expect(mockedPostgres).toHaveBeenLastCalledWith(
 		[
 			`
-			update cases
-			set log_message_id = `,
+				update moderation.cases
+				set log_message_id = `,
 			`
-			where case_id = `,
+				where guild_id = `,
 			`
-				and guild_id = `,
+					and case_id = `,
 			'',
 		],
 		logMessageId,
-		1,
 		guildId,
+		1,
 	);
 
 	expect(mockedRest.post).toHaveBeenCalledTimes(1);

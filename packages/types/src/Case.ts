@@ -12,12 +12,20 @@ export interface CreateCase {
 	action: CaseAction;
 	roleId?: string;
 	actionExpiration?: Date;
-	reason?: string;
+	reason?: string | null;
 	moderatorId: string;
 	targetId: string;
 	deleteMessageDays?: number;
 	contextMessageId?: string;
 	referenceId?: number;
+}
+
+export interface UpdateCase {
+	caseId: number | string;
+	actionExpiration?: Date;
+	reason?: string;
+	contextMessageId?: string;
+	referenceId?: number | string;
 }
 
 export interface Case {
