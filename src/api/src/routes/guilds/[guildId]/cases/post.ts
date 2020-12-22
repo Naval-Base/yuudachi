@@ -38,7 +38,7 @@ export default class CreateCaseRoute extends Route {
 										then: Joi.date(),
 										otherwise: Joi.forbidden(),
 									}),
-									reason: Joi.string(),
+									reason: Joi.string().optional(),
 									moderatorId: Joi.string()
 										.pattern(/\d{17,20}/)
 										.required(),
@@ -51,7 +51,7 @@ export default class CreateCaseRoute extends Route {
 										otherwise: Joi.forbidden(),
 									}),
 									contextMessageId: Joi.string().pattern(/\d{17,20}/),
-									referenceId: Joi.number(),
+									referenceId: Joi.number().optional(),
 								})
 								.required(),
 						)

@@ -20,11 +20,13 @@ export default class implements Command {
 		const user = args.option('user');
 		const reason = args.option('reason');
 		const days = args.option('days', 'd');
+		const refId = args.option('reference', 'ref');
 
 		return {
 			maybeMember: user ? parseMember(user) : args.singleParse(parseMember),
 			reason: reason ?? joinTokens(args.many()),
 			days,
+			refId: refId ?? undefined,
 		};
 	}
 
@@ -33,7 +35,7 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const { maybeMember, reason, days } = this.parse(args);
+		const { maybeMember, reason, days, refId } = this.parse(args);
 		if (!maybeMember) {
 			throw new Error(i18next.t('command.common.errors.no_user_id', { lng: locale }));
 		}
@@ -46,10 +48,11 @@ export default class implements Command {
 		try {
 			await this.api.guilds.createCase(message.guild_id, {
 				action: CaseAction.BAN,
-				reason,
+				reason: reason || undefined,
 				moderatorId: 'author' in message ? message.author.id : message.member.user.id,
 				targetId: maybeMember.value,
 				contextMessageId: message.id,
+				referenceId: refId ? Number(refId) : undefined,
 				deleteMessageDays: days ? Number(days) : 0,
 			});
 

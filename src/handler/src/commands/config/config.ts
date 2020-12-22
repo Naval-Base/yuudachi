@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { APIApplicationCommandInteractionDataOption, APIInteraction, APIMessage } from 'discord-api-types';
+import { APIInteraction, APIMessage } from 'discord-api-types';
 import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
@@ -18,13 +18,9 @@ export default class implements Command {
 
 	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(
-		message: APIMessage | APIInteraction,
-		_: Args | APIApplicationCommandInteractionDataOption[],
-		locale: string,
-	) {
+	public async execute(message: APIMessage | APIInteraction, _: Args, locale: string) {
 		if (!message.guild_id) {
-			throw new Error(i18next.t('command.config.common.execute.no_guild', { lng: locale }));
+			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
 		const [settings] = await this.sql<GuildSettings>`
@@ -33,7 +29,7 @@ export default class implements Command {
 			where guild_id = ${message.guild_id}`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!settings) {
-			throw new Error(i18next.t('command.config.common.execute.no_settings'));
+			throw new Error(i18next.t('command.config.common.errors.no_settings'));
 		}
 
 		const embed = addFields(

@@ -1,4 +1,4 @@
-import { APIUser } from 'discord-api-types';
+import { APIUser, Routes } from 'discord-api-types';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
@@ -40,8 +40,8 @@ export default class CaseManager {
 
 	public async create(case_: Case) {
 		const [target, mod]: [APIUser, APIUser] = await Promise.all([
-			this.rest.get<APIUser>(`/users/${case_.targetId}`),
-			this.rest.get<APIUser>(`/users/${case_.moderatorId}`),
+			this.rest.get<APIUser>(Routes.user(case_.targetId)),
+			this.rest.get<APIUser>(Routes.user(case_.moderatorId)),
 		]);
 
 		const requestOptions = {
@@ -49,40 +49,33 @@ export default class CaseManager {
 		};
 		switch (case_.action) {
 			case CaseAction.ROLE:
-				await this.rest.put(
-					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId!}`,
-					{},
-					requestOptions,
-				);
+				await this.rest.put(Routes.guildMemberRole(case_.guildId, case_.targetId, case_.roleId!), {}, requestOptions);
 				break;
 			case CaseAction.UNROLE:
-				await this.rest.delete(
-					`/guilds/${case_.guildId}/members/${case_.targetId}/roles/${case_.roleId!}`,
-					requestOptions,
-				);
+				await this.rest.delete(Routes.guildMemberRole(case_.guildId, case_.targetId, case_.roleId!), requestOptions);
 				break;
 			case CaseAction.WARN:
 				break;
 			case CaseAction.KICK:
-				await this.rest.delete(`/guilds/${case_.guildId}/members/${case_.targetId}`, requestOptions);
+				await this.rest.delete(Routes.guildMember(case_.guildId, case_.targetId), requestOptions);
 				break;
 			case CaseAction.SOFTBAN: {
-				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}`, {
+				await this.rest.put(Routes.guildBan(case_.guildId, case_.targetId), {
 					...requestOptions,
 					delete_message_days: case_.deleteMessageDays ?? 1,
 				});
-				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, requestOptions);
+				await this.rest.delete(Routes.guildBan(case_.guildId, case_.targetId), requestOptions);
 				break;
 			}
 			case CaseAction.BAN: {
-				await this.rest.put(`/guilds/${case_.guildId}/bans/${case_.targetId}`, {
+				await this.rest.put(Routes.guildBan(case_.guildId, case_.targetId), {
 					...requestOptions,
 					delete_message_days: case_.deleteMessageDays ?? 0,
 				});
 				break;
 			}
 			case CaseAction.UNBAN:
-				await this.rest.delete(`/guilds/${case_.guildId}/bans/${case_.targetId}`, requestOptions);
+				await this.rest.delete(Routes.guildBan(case_.guildId, case_.targetId), requestOptions);
 				break;
 		}
 

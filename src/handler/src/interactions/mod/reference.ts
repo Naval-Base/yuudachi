@@ -11,7 +11,7 @@ export default {
 		{
 			name: 'reference',
 			description: 'The reference case',
-			type: 3,
+			type: 4,
 		},
 		{
 			name: 'hide',

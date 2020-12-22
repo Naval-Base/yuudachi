@@ -18,5 +18,10 @@ export default {
 			description: 'The amount of days to deleted messages from',
 			type: 4,
 		},
+		{
+			name: 'reference',
+			description: 'The reference case',
+			type: 4,
+		},
 	],
 };

@@ -13,5 +13,10 @@ export default {
 			description: 'The reason of this action',
 			type: 3,
 		},
+		{
+			name: 'reference',
+			description: 'The reference case',
+			type: 4,
+		},
 	],
 };
