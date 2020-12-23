@@ -16,7 +16,7 @@
 	"private": true,
 	"dependencies": {
 		"@chakra-ui/react": "^1.0.3",
-		"@emotion/react": "^11.1.2",
+		"@emotion/react": "^11.1.4",
 		"@emotion/styled": "^11.0.0",
 		"@reduxjs/toolkit": "^1.5.0",
 		"clsx": "^1.1.1",
