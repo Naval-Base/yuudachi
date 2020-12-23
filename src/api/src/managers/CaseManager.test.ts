@@ -38,6 +38,7 @@ function generateSQLResult(case_: Case) {
 				action,
 				role_id,
 				action_expiration,
+				action_processed,
 				reason,
 				context_message_id,
 				ref_id
@@ -61,6 +62,8 @@ function generateSQLResult(case_: Case) {
 				`,
 			`,
 				`,
+			`
+				`,
 			`,
 				`,
 			`,
@@ -78,6 +81,7 @@ function generateSQLResult(case_: Case) {
 		case_.action,
 		case_.roleId ?? null,
 		case_.actionExpiration?.toISOString() ?? null,
+		case_.actionExpiration ? false : true,
 		case_.reason,
 		case_.contextMessageId ?? null,
 		case_.referenceId ?? null,
