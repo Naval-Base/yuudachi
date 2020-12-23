@@ -90,6 +90,7 @@ export default class CaseManager {
 				action,
 				role_id,
 				action_expiration,
+				action_processed,
 				reason,
 				context_message_id,
 				ref_id
@@ -103,6 +104,7 @@ export default class CaseManager {
 				${case_.action},
 				${case_.roleId ?? null},
 				${case_.actionExpiration?.toISOString() ?? null},
+				${case_.actionExpiration ? false : true}
 				${case_.reason ?? null},
 				${case_.contextMessageId ?? null},
 				${case_.referenceId ?? null}
@@ -153,5 +155,24 @@ export default class CaseManager {
 				and case_id = ${case_.caseId}`;
 
 		return updatedCase as Case;
+	}
+
+	public async s_delete(case_: RawCase) {
+		await this.sql`
+			update moderation.cases
+			set action_processed = true
+			where guild_id = ${case_.guild_id}
+				and case_id = ${case_.case_id}`;
+
+		void this.create({
+			guildId: case_.guild_id,
+			targetId: case_.target_id,
+			moderatorId: case_.mod_id,
+			action: case_.action === CaseAction.BAN ? CaseAction.UNBAN : CaseAction.UNROLE,
+			roleId: case_.role_id!,
+			reason: case_.reason,
+			contextMessageId: case_.context_message_id!,
+			referenceId: case_.case_id,
+		} as Case);
 	}
 }

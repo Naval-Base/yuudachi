@@ -3,10 +3,13 @@ import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import { Args } from 'lexure';
 import { inject, injectable } from 'tsyringe';
-import { DateTime } from 'luxon';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { oneLine, stripIndents } from 'common-tags';
 import { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
+
+dayjs.extend(relativeTime);
 
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
@@ -60,8 +63,8 @@ export default class implements Command {
 		}
 
 		const createdTimestamp = Number((BigInt(targetUser.value.id) >> BigInt(22)) + BigInt(DISCORD_EPOCH));
-		const sinceCreationFormatted = DateTime.fromMillis(createdTimestamp, { zone: 'utc' }).toRelative();
-		const creationFormatted = DateTime.fromMillis(createdTimestamp, { zone: 'utc' }).toFormat(DATE_FORMAT_WITH_SECONDS);
+		const sinceCreationFormatted = dayjs(createdTimestamp).fromNow();
+		const creationFormatted = dayjs(createdTimestamp).format(DATE_FORMAT_WITH_SECONDS);
 
 		const avatar = targetUser.value.avatar
 			? `https://cdn.discordapp.com/avatars/${targetUser.value.id}/${targetUser.value.avatar}.${
@@ -86,10 +89,8 @@ export default class implements Command {
 		);
 
 		if (targetMember.status === 'fulfilled') {
-			const sinceJoinFormatted = DateTime.fromISO(targetMember.value.joined_at, { zone: 'utc' }).toRelative();
-			const joinFormatted = DateTime.fromISO(targetMember.value.joined_at, { zone: 'utc' }).toFormat(
-				DATE_FORMAT_WITH_SECONDS,
-			);
+			const sinceJoinFormatted = dayjs(targetMember.value.joined_at).fromNow();
+			const joinFormatted = dayjs(targetMember.value.joined_at).format(DATE_FORMAT_WITH_SECONDS);
 
 			embed = addFields(embed, {
 				name: 'Member Details',
@@ -141,7 +142,7 @@ export default class implements Command {
 		let truncated = false;
 
 		for (const c of cases) {
-			const dateFormatted = DateTime.fromJSDate(c.created_at, { zone: 'utc' }).toFormat(DATE_FORMAT_DATE);
+			const dateFormatted = dayjs(c.created_at).format(DATE_FORMAT_DATE);
 			const caseString = `• \`${dateFormatted} ${ACTION_KEYS[c.action].toUpperCase()} #${
 				c.case_id
 			}\` ${c.reason.replace(/`/g, '').replace(/\*/g, '')}`;
