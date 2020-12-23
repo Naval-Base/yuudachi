@@ -36,12 +36,13 @@ test('sends get', async () => {
 
 	expect(mockedAmqp.call).toHaveBeenCalledTimes(1);
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
+		body: undefined,
 		method: 'GET',
 		path: '/foo/bar',
 		headers: {
 			Authorization: 'Bot token',
-			'X-RateLimit-Precision': 'millisecond',
 			'Content-Type': 'application/json',
+			'X-RateLimit-Precision': 'millisecond',
 		},
 	});
 
@@ -121,8 +122,8 @@ test('sends patch', async () => {
 		body: Buffer.from(JSON.stringify({ foo: 'bar' })),
 		headers: {
 			Authorization: 'Bot token',
-			'X-RateLimit-Precision': 'millisecond',
 			'Content-Type': 'application/json',
+			'X-RateLimit-Precision': 'millisecond',
 		},
 	});
 
@@ -144,12 +145,12 @@ test('sends delete', async () => {
 
 	expect(mockedAmqp.call).toHaveBeenCalledTimes(1);
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
+		body: undefined,
 		method: 'DELETE',
 		path: '/foo/bar',
 		headers: {
 			Authorization: 'Bot token',
 			'X-RateLimit-Precision': 'millisecond',
-			'Content-Type': 'application/json',
 		},
 	});
 
@@ -168,12 +169,13 @@ test('throws error', async () => {
 
 	expect(mockedAmqp.call).toHaveBeenCalledTimes(1);
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
+		body: undefined,
 		method: 'GET',
 		path: '/foo/bar',
 		headers: {
 			Authorization: 'Bot token',
-			'X-RateLimit-Precision': 'millisecond',
 			'Content-Type': 'application/json',
+			'X-RateLimit-Precision': 'millisecond',
 		},
 	});
 });
@@ -193,12 +195,13 @@ test('sends audit log reason', async () => {
 
 	expect(mockedAmqp.call).toHaveBeenCalledTimes(1);
 	expect(mockedAmqp.call).toHaveBeenCalledWith('REQUEST', {
+		body: undefined,
 		method: 'PUT',
 		path: '/foo/bar',
 		headers: {
 			Authorization: 'Bot token',
-			'X-RateLimit-Precision': 'millisecond',
 			'Content-Type': 'application/json',
+			'X-RateLimit-Precision': 'millisecond',
 			'X-Audit-Log-Reason': 'some reason',
 		},
 	});

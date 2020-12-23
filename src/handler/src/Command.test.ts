@@ -25,20 +25,22 @@ test('instance', () => {
 	expect(test.category).toBe(1);
 });
 
-test('no category', () => {
-	const command = commandInfo('test.js');
-	expect(command).not.toBeNull();
-	expect(command!.name).toBe('test');
-});
+describe('category', () => {
+	test('no category', () => {
+		const command = commandInfo('test.js');
+		expect(command).not.toBeNull();
+		expect(command!.name).toBe('test');
+	});
 
-test('category', () => {
-	const command = commandInfo(`test${sep}test2.js`);
-	expect(command).not.toBeNull();
-	expect(command!.name).toBe('test2');
-});
+	test('has category', () => {
+		const command = commandInfo(`test${sep}test2.js`);
+		expect(command).not.toBeNull();
+		expect(command!.name).toBe('test2');
+	});
 
-test('nested category', () => {
-	const command = commandInfo(`test${sep}test2${sep}test3.js`);
-	expect(command).not.toBeNull();
-	expect(command!.name).toBe('test3');
+	test('nested category', () => {
+		const command = commandInfo(`test${sep}test2${sep}test3.js`);
+		expect(command).not.toBeNull();
+		expect(command!.name).toBe('test3');
+	});
 });

@@ -75,7 +75,9 @@ export default class Rest {
 
 		if (!body) {
 			body = req.body ? Buffer.from(JSON.stringify(req.body)) : undefined;
-			headers = { ...headers, 'Content-Type': 'application/json' };
+			if (req.method !== 'DELETE') {
+				headers = { ...headers, 'Content-Type': 'application/json' };
+			}
 		}
 
 		const res: Response = await this.broker.call('REQUEST', {

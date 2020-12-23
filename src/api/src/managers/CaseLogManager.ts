@@ -5,7 +5,9 @@ import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Tokens } from '@yuudachi/core';
-import ms from '@naval-base/ms';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 import { RawCase } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
@@ -21,10 +23,14 @@ export default class CaseLogManager {
 		public readonly settings: SettingsManager,
 	) {}
 
-	public async create(item: RawCase) {
+	public async create(item: RawCase, old?: RawCase) {
 		const logChannelId = await this.settings.get(item.guild_id, SettingsKeys.MOD_LOG_CHANNEL_ID);
 		if (!logChannelId) {
 			throw new Error('no mod log channel configured');
+		}
+
+		if (item.action_processed && old && old.action_processed) {
+			return;
 		}
 
 		const mod = await this.rest.get<APIUser>(`/users/${item.mod_id}`);
@@ -58,7 +64,7 @@ export default class CaseLogManager {
 
 	protected async generateLogMessage(case_: RawCase, logChannelId: string) {
 		let action = CaseAction[case_.action];
-		if (case_.action === CaseAction.ROLE && case_.role_id) {
+		if ((case_.action === CaseAction.ROLE || case_.action === CaseAction.UNROLE) && case_.role_id) {
 			const roles: RESTGetAPIGuildRolesResult = await this.rest.get(`/guilds/${case_.guild_id}/roles`);
 			const role = roles.find((role) => role.id === case_.role_id);
 
@@ -71,7 +77,7 @@ export default class CaseLogManager {
 		`;
 
 		if (case_.action_expiration) {
-			msg += `\n**Expiration:** ${ms(Date.parse(case_.action_expiration), true)}`;
+			msg += `\n**Expiration:** ${dayjs(case_.action_expiration).fromNow(true)}`;
 		}
 
 		if (case_.context_message_id) {
