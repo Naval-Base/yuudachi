@@ -3,12 +3,11 @@ import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import { Args } from 'lexure';
 import { inject, injectable } from 'tsyringe';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { oneLine, stripIndents } from 'common-tags';
 import { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
-
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 import Command from '../../Command';

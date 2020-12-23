@@ -79,6 +79,7 @@ update cases set
 
 -- LOCKDOWNS
 
+alter table lockdowns rename guild to guild_id;
 alter table lockdowns rename channel to channel_id;
 alter table lockdowns rename duration to expiration;
 
@@ -86,7 +87,6 @@ alter table lockdowns
 	drop constraint lockdowns_guild_channel_key,
 	drop constraint lockdowns_pkey,
 	drop id,
-	drop guild,
 	add constraint lockdowns_pkey primary key (channel_id)
 ;
 

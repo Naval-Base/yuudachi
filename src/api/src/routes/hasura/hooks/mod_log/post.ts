@@ -86,7 +86,10 @@ export default class HasuraModLogEventHook extends Route {
 		switch (body.event.op) {
 			case 'UPDATE':
 			case 'MANUAL':
-				void this.caseLogManager.create((body.event.data.new as unknown) as RawCase);
+				void this.caseLogManager.create(
+					(body.event.data.new as unknown) as RawCase,
+					(body.event.data.old as unknown) as RawCase,
+				);
 				break;
 			case 'INSERT':
 				if (!body.event.data.new) break;

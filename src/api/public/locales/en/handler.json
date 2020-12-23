@@ -3,21 +3,33 @@
 		"common": {
 			"errors": {
 				"no_user_id": "No user Id provided.",
-				"invalid_user_id": "**{{id}}** is not a valid user Id.",
+				"invalid_user_id": "**{{- id}}** is not a valid user Id.",
+				"no_channel_id": "No channel Id provided.",
+				"invalid_channel_id": "**{{- id}}** is not a valid channel Id.",
 				"no_user_found": "The given user does not exist.",
 				"no_guild": "This command can only be used in a guild.",
-				"target_not_found": "The given member is not in this guild."
+				"target_not_found": "The given member is not in this guild.",
+				"duration_format": "Wrong duration format.",
+				"no_sub_command": "No sub command provided."
 			}
 		},
-		"utility": {
-			"ping": {
-				"success": "ok"
+		"config": {
+			"common": {
+				"errors": {
+					"no_settings": "No guild settings have been initialized yet."
+				}
+			},
+			"debug": {
+				"refresh": {
+					"success": "Sucessfully reloaded interaction (/) commands."
+				}
 			}
 		},
 		"mod": {
 			"common": {
 				"errors": {
-					"no_case_id": "No case Id provided."
+					"no_case_id": "No case Id provided.",
+					"no_duration": "No duration provided."
 				}
 			},
 			"warn": {
@@ -54,26 +66,96 @@
 				},
 				"success": "Successfully unbanned {{- member}}"
 			},
+			"restrict": {
+				"mute": {
+					"errors": {
+						"no_role": "No role for mutes has been configured.",
+						"missing_permissions": "Missing permissions to mute this member.",
+						"failure": "Unable to mute {{- member}}"
+					},
+					"success": "Successfully muted {{- member}}"
+				},
+				"embed": {
+					"errors": {
+						"no_role": "No role for embed restrictions has been configured.",
+						"missing_permissions": "Missing permissions to embed restrict this member.",
+						"failure": "Unable to embed restrict {{- member}}"
+					},
+					"success": "Successfully embed restricted {{- member}}"
+				},
+				"react": {
+					"errors": {
+						"no_role": "No role for reaction restrictions has been configured.",
+						"missing_permissions": "Missing permissions to react restrict this member.",
+						"failure": "Unable to react restrict {{- member}}"
+					},
+					"success": "Successfully react restricted {{- member}}"
+				},
+				"emoji": {
+					"errors": {
+						"no_role": "No role for emoji restrictions has been configured.",
+						"missing_permissions": "Missing permissions to emoji restrict this member.",
+						"failure": "Unable to emoji restrict {{- member}}"
+					},
+					"success": "Successfully emoji restricted {{- member}}"
+				},
+				"tag": {
+					"errors": {
+						"no_role": "No role for tag restrictions has been configured.",
+						"missing_permissions": "Missing permissions to tag restrict this member.",
+						"failure": "Unable to tag restrict {{- member}}"
+					},
+					"success": "Successfully tag restricted {{- member}}"
+				},
+				"unrole": {
+					"errors": {
+						"missing_permissions": "Missing permissions to unrole this case.",
+						"failure": "Unable to unrole case #{{case}}"
+					},
+					"success": "Successfully unroled case #{{case}}"
+				}
+			},
+			"lockdown": {
+				"lock": {
+					"errors": {
+						"missing_permissions": "Missing permissions to lock this channel.",
+						"failure": "Unable to lock {{- channel}}"
+					},
+					"message": "This channel has been locked due to moderation, it will be unlocked in **{{- duration}}**.",
+					"success": "Successfully locked {{- channel}}"
+				},
+				"lift": {
+					"errors": {
+						"missing_permissions": "Missing permissions to lift the lock on this channel.",
+						"failure": "Unable to lift the lock on {{- channel}}"
+					},
+					"success": "Successfully lifted lock on {{- channel}}"
+				}
+			},
 			"reason": {
 				"errors": {
 					"no_reason": "No reason provided.",
 					"failure": "Unable to to set reason for case #{{case}}"
 				},
-				"success":"Successfully set reason for case #{{case}}"
+				"success": "Successfully set reason for case #{{case}}"
 			},
 			"reference": {
 				"errors": {
 					"no_ref_id": "No reference Id provided.",
 					"failure": "Unable to to set reference for case #{{case}} to #{{ref}}"
 				},
-				"success":"Successfully set reference for case #{{case}} to #{{ref}}"
+				"success": "Successfully set reference for case #{{case}} to #{{ref}}"
 			},
 			"duration": {
 				"errors": {
-					"duration_format": "Wrong duration format.",
 					"failure": "Unable to to set duration for case #{{case}}"
 				},
 				"success": "Successfully set duration for case #{{case}}"
+			}
+		},
+		"utility": {
+			"ping": {
+				"success": "ok"
 			}
 		},
 		"tag": {

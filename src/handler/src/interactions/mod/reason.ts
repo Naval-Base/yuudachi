@@ -12,6 +12,7 @@ export default {
 			name: 'reason',
 			description: 'The reason',
 			type: 3,
+			required: true,
 		},
 		{
 			name: 'hide',

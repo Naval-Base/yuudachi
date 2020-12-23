@@ -23,5 +23,10 @@ export default {
 			description: 'The reference case',
 			type: 4,
 		},
+		{
+			name: 'duration',
+			description: 'The duration (if its a timed ban)',
+			type: 3,
+		},
 	],
 };
