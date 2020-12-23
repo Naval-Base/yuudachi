@@ -4,6 +4,7 @@ import { CaseAction } from '@yuudachi/types';
 import i18next from 'i18next';
 import { Args, joinTokens } from 'lexure';
 import { injectable } from 'tsyringe';
+import ms from '@naval-base/ms';
 
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
@@ -21,12 +22,14 @@ export default class implements Command {
 		const reason = args.option('reason');
 		const days = args.option('days', 'd');
 		const refId = args.option('reference', 'ref');
+		const duration = args.option('duration');
 
 		return {
 			maybeMember: user ? parseMember(user) : args.singleParse(parseMember),
 			reason: reason ?? joinTokens(args.many()),
 			days,
 			refId: refId ?? undefined,
+			duration,
 		};
 	}
 
@@ -35,7 +38,7 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const { maybeMember, reason, days, refId } = this.parse(args);
+		const { maybeMember, reason, days, refId, duration } = this.parse(args);
 		if (!maybeMember) {
 			throw new Error(i18next.t('command.common.errors.no_user_id', { lng: locale }));
 		}
@@ -44,6 +47,14 @@ export default class implements Command {
 		}
 
 		const memberMention = `<@${maybeMember.value}>`;
+
+		let parsedDuration;
+		if (duration) {
+			parsedDuration = ms(duration);
+			if (parsedDuration < 300000 || isNaN(parsedDuration)) {
+				throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
+			}
+		}
 
 		try {
 			await this.api.guilds.createCase(message.guild_id, {
@@ -54,6 +65,7 @@ export default class implements Command {
 				contextMessageId: message.id,
 				referenceId: refId ? Number(refId) : undefined,
 				deleteMessageDays: days ? Number(days) : 0,
+				actionExpiration: parsedDuration ? new Date(Date.now() + parsedDuration) : undefined,
 			});
 
 			void send(message, {

@@ -1,4 +1,4 @@
-import { Case, CreateCase, UpdateCase } from '@yuudachi/types';
+import { Case, CreateCase, UpdateCase, Lockdown, CreateLockdown, DeleteLockdown } from '@yuudachi/types';
 import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types';
 import API from '..';
 
@@ -25,5 +25,17 @@ export default class Guilds {
 
 	public updateCase(guildId: string, ...cases: UpdateCase[]) {
 		return this.api.make<Case[]>('patch', `/guilds/${guildId}/cases`, { cases });
+	}
+
+	public deleteCase(guildId: string, caseId: number) {
+		return this.api.make<Case[]>('delete', `/guilds/${guildId}/cases/${caseId}`);
+	}
+
+	public createLockdown(guildId: string, ...lockdowns: CreateLockdown[]) {
+		return this.api.make<Lockdown[]>('post', `/guilds/${guildId}/lockdowns`, { lockdowns });
+	}
+
+	public deleteLockdown(guildId: string, ...lockdowns: DeleteLockdown[]) {
+		return this.api.make<Lockdown[]>('delete', `/guilds/${guildId}/lockdowns`, { lockdowns });
 	}
 }

@@ -76,9 +76,11 @@ drop table cases cascade;
 
 create table moderation.lockdowns as table lockdowns;
 
+COMMENT ON COLUMN moderation.lockdowns.guild_id IS 'The id of the guild this lockdown belongs to';
 COMMENT ON COLUMN moderation.lockdowns.channel_id IS 'The id of the channel this lockdown belongs to';
 COMMENT ON COLUMN moderation.lockdowns.expiration IS 'The expiration of the lockdown';
 
+alter table moderation.lockdowns alter column guild_id set not null;
 alter table moderation.lockdowns alter column channel_id set not null;
 alter table moderation.lockdowns alter column expiration set not null;
 

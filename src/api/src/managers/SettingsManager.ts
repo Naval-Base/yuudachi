@@ -7,6 +7,7 @@ const { kSQL } = Tokens;
 export enum SettingsKeys {
 	PREFIX = 'prefix',
 	MOD_LOG_CHANNEL_ID = 'mod_log_channel_id',
+	MOD_ROLE_ID = 'mod_role_id',
 }
 
 @injectable()

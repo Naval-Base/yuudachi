@@ -1,6 +1,6 @@
 export default {
-	name: 'reference',
-	description: 'Change the reference of an action',
+	name: 'duration',
+	description: 'Change the duration of a timed action',
 	options: [
 		{
 			name: 'case',
@@ -9,9 +9,9 @@ export default {
 			required: true,
 		},
 		{
-			name: 'reference',
-			description: 'The reference case',
-			type: 4,
+			name: 'duration',
+			description: 'The duration',
+			type: 3,
 			required: true,
 		},
 		{
