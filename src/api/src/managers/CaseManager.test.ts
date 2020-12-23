@@ -5,6 +5,7 @@ import { Case, CaseAction } from '@yuudachi/types';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
+import { Routes } from 'discord-api-types';
 
 import CaseManager from './CaseManager';
 
@@ -62,7 +63,7 @@ function generateSQLResult(case_: Case) {
 				`,
 			`,
 				`,
-			`
+			`,
 				`,
 			`,
 				`,
@@ -82,7 +83,7 @@ function generateSQLResult(case_: Case) {
 		case_.roleId ?? null,
 		case_.actionExpiration?.toISOString() ?? null,
 		case_.actionExpiration ? false : true,
-		case_.reason,
+		case_.reason ?? null,
 		case_.contextMessageId ?? null,
 		case_.referenceId ?? null,
 	];
@@ -107,170 +108,477 @@ afterEach(() => {
 	jest.clearAllMocks();
 });
 
-test('creates role case', async () => {
-	const case_ = {
-		action: CaseAction.ROLE,
-		caseId: 0,
-		guildId: '1234',
-		moderatorId: '2345',
-		reason: 'foo',
-		targetId: '3456',
-		roleId: '4567',
-	};
+describe('create', () => {
+	test('without a reason', async () => {
+		const case_: Case = {
+			action: CaseAction.SOFTBAN,
+			caseId: 0,
+			guildId: '1234',
+			moderatorId: '2345',
+			targetId: '3456',
+		};
 
-	const manager = container.resolve(CaseManager);
-	const saved = await manager.create(case_);
+		const manager = container.resolve(CaseManager);
+		const saved = await manager.create(case_);
 
-	expect(saved).toBe(case_);
-	expect(saved.caseId).toBe(1);
-	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith(
-		'/guilds/1234/members/3456/roles/4567',
-		{},
-		{ reason: 'Mod: abc#0001 | foo' },
-	);
-	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
-});
-
-test('creates un-role case', async () => {
-	const case_ = {
-		action: CaseAction.UNROLE,
-		caseId: 0,
-		guildId: '1234',
-		moderatorId: '2345',
-		reason: 'foo',
-		targetId: '3456',
-		roleId: '4567',
-	};
-
-	const manager = container.resolve(CaseManager);
-	const saved = await manager.create(case_);
-
-	expect(saved).toBe(case_);
-	expect(saved.caseId).toBe(1);
-	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456/roles/4567', {
-		reason: 'Mod: abc#0001 | foo',
+		expect(saved).toBe(case_);
+		expect(saved.caseId).toBe(1);
+		expect(mockedRest.put).toHaveBeenCalledTimes(1);
+		expect(mockedRest.put).toHaveBeenCalledWith(Routes.guildBan('1234', '3456'), {
+			delete_message_days: 1,
+			reason: 'Mod: abc#0001',
+		});
+		expect(mockedRest.delete).toHaveBeenCalledTimes(1);
+		expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Mod: abc#0001' });
+		expect(mockedPostgres).toHaveBeenCalledTimes(1);
+		expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 	});
-	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
-});
 
-test('creates warn case with reference', async () => {
-	const case_: Case = {
-		action: CaseAction.WARN,
-		caseId: 0,
-		guildId: '1234',
-		moderatorId: '2345',
-		reason: 'foo',
-		targetId: '3456',
-		referenceId: 2,
-	};
+	test('role case', async () => {
+		const case_ = {
+			action: CaseAction.ROLE,
+			caseId: 0,
+			guildId: '1234',
+			moderatorId: '2345',
+			reason: 'foo',
+			targetId: '3456',
+			roleId: '4567',
+		};
 
-	const manager = container.resolve(CaseManager);
-	const saved = await manager.create(case_);
+		const manager = container.resolve(CaseManager);
+		const saved = await manager.create(case_);
 
-	expect(saved).toBe(case_);
-	expect(saved.caseId).toBe(1);
-	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
-});
-
-test('creates kick case with context', async () => {
-	const case_: Case = {
-		action: CaseAction.KICK,
-		caseId: 0,
-		guildId: '1234',
-		moderatorId: '2345',
-		reason: 'foo',
-		targetId: '3456',
-		contextMessageId: '4567',
-	};
-
-	const manager = container.resolve(CaseManager);
-	const saved = await manager.create(case_);
-
-	expect(saved).toBe(case_);
-	expect(saved.caseId).toBe(1);
-	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/members/3456', { reason: 'Mod: abc#0001 | foo' });
-	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
-});
-
-test('creates softban with delete message days', async () => {
-	const case_: Case = {
-		action: CaseAction.SOFTBAN,
-		caseId: 0,
-		guildId: '1234',
-		moderatorId: '2345',
-		reason: 'foo',
-		targetId: '3456',
-		deleteMessageDays: 3,
-	};
-
-	const manager = container.resolve(CaseManager);
-	const saved = await manager.create(case_);
-
-	expect(saved).toBe(case_);
-	expect(saved.caseId).toBe(1);
-	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456', {
-		delete_message_days: 3,
-		reason: 'Mod: abc#0001 | foo',
+		expect(saved).toBe(case_);
+		expect(saved.caseId).toBe(1);
+		expect(mockedRest.put).toHaveBeenCalledTimes(1);
+		expect(mockedRest.put).toHaveBeenCalledWith(
+			Routes.guildMemberRole('1234', '3456', '4567'),
+			{},
+			{ reason: 'Mod: abc#0001 | foo' },
+		);
+		expect(mockedPostgres).toHaveBeenCalledTimes(1);
+		expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 	});
-	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Mod: abc#0001 | foo' });
-	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
-});
 
-test('creates ban with expiration & default delete message days', async () => {
-	const case_: Case = {
-		action: CaseAction.BAN,
-		caseId: 0,
-		guildId: '1234',
-		moderatorId: '2345',
-		reason: 'foo',
-		targetId: '3456',
-		contextMessageId: '4567',
-		actionExpiration: new Date(),
-	};
+	test('warn case with reference', async () => {
+		const case_: Case = {
+			action: CaseAction.WARN,
+			caseId: 0,
+			guildId: '1234',
+			moderatorId: '2345',
+			reason: 'foo',
+			targetId: '3456',
+			referenceId: 2,
+		};
 
-	const manager = container.resolve(CaseManager);
-	const saved = await manager.create(case_);
+		const manager = container.resolve(CaseManager);
+		const saved = await manager.create(case_);
 
-	expect(saved).toBe(case_);
-	expect(saved.caseId).toBe(1);
-	expect(mockedRest.put).toHaveBeenCalledTimes(1);
-	expect(mockedRest.put).toHaveBeenCalledWith('/guilds/1234/bans/3456', {
-		delete_message_days: 0,
-		reason: 'Mod: abc#0001 | foo',
+		expect(saved).toBe(case_);
+		expect(saved.caseId).toBe(1);
+		expect(mockedPostgres).toHaveBeenCalledTimes(1);
+		expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
 	});
-	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
+
+	test('kick case with context', async () => {
+		const case_: Case = {
+			action: CaseAction.KICK,
+			caseId: 0,
+			guildId: '1234',
+			moderatorId: '2345',
+			reason: 'foo',
+			targetId: '3456',
+			contextMessageId: '4567',
+		};
+
+		const manager = container.resolve(CaseManager);
+		const saved = await manager.create(case_);
+
+		expect(saved).toBe(case_);
+		expect(saved.caseId).toBe(1);
+		expect(mockedRest.delete).toHaveBeenCalledTimes(1);
+		expect(mockedRest.delete).toHaveBeenCalledWith(Routes.guildMember('1234', '3456'), {
+			reason: 'Mod: abc#0001 | foo',
+		});
+		expect(mockedPostgres).toHaveBeenCalledTimes(1);
+		expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
+	});
+
+	test('softban with delete message days', async () => {
+		const case_: Case = {
+			action: CaseAction.SOFTBAN,
+			caseId: 0,
+			guildId: '1234',
+			moderatorId: '2345',
+			reason: 'foo',
+			targetId: '3456',
+			deleteMessageDays: 3,
+		};
+
+		const manager = container.resolve(CaseManager);
+		const saved = await manager.create(case_);
+
+		expect(saved).toBe(case_);
+		expect(saved.caseId).toBe(1);
+		expect(mockedRest.put).toHaveBeenCalledTimes(1);
+		expect(mockedRest.put).toHaveBeenCalledWith(Routes.guildBan('1234', '3456'), {
+			delete_message_days: 3,
+			reason: 'Mod: abc#0001 | foo',
+		});
+		expect(mockedRest.delete).toHaveBeenCalledTimes(1);
+		expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Mod: abc#0001 | foo' });
+		expect(mockedPostgres).toHaveBeenCalledTimes(1);
+		expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
+	});
+
+	test('ban with expiration & default delete message days', async () => {
+		const case_: Case = {
+			action: CaseAction.BAN,
+			caseId: 0,
+			guildId: '1234',
+			moderatorId: '2345',
+			reason: 'foo',
+			targetId: '3456',
+			contextMessageId: '4567',
+			actionExpiration: new Date(),
+		};
+
+		const manager = container.resolve(CaseManager);
+		const saved = await manager.create(case_);
+
+		expect(saved).toBe(case_);
+		expect(saved.caseId).toBe(1);
+		expect(mockedRest.put).toHaveBeenCalledTimes(1);
+		expect(mockedRest.put).toHaveBeenCalledWith(Routes.guildBan('1234', '3456'), {
+			delete_message_days: 0,
+			reason: 'Mod: abc#0001 | foo',
+		});
+		expect(mockedPostgres).toHaveBeenCalledTimes(1);
+		expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
+	});
+
+	test('unban case', async () => {
+		const case_: Case = {
+			action: CaseAction.UNBAN,
+			caseId: 0,
+			guildId: '1234',
+			moderatorId: '2345',
+			reason: 'foo',
+			targetId: '3456',
+			contextMessageId: '4567',
+		};
+
+		const manager = container.resolve(CaseManager);
+		const saved = await manager.create(case_);
+
+		expect(saved).toBe(case_);
+		expect(saved.caseId).toBe(1);
+		expect(mockedRest.delete).toHaveBeenCalledTimes(1);
+		expect(mockedRest.delete).toHaveBeenCalledWith(Routes.guildBan('1234', '3456'), { reason: 'Mod: abc#0001 | foo' });
+		expect(mockedPostgres).toHaveBeenCalledTimes(1);
+		expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
+	});
 });
 
-test('creates unban case', async () => {
-	const case_: Case = {
-		action: CaseAction.UNBAN,
-		caseId: 0,
-		guildId: '1234',
-		moderatorId: '2345',
-		reason: 'foo',
-		targetId: '3456',
-		contextMessageId: '4567',
-		actionExpiration: new Date(),
-	};
+describe('update ', () => {
+	test('expiration of a case', async () => {
+		const case_ = {
+			caseId: 0,
+			guildId: '1234',
+			actionExpiration: new Date(),
+		};
 
-	const manager = container.resolve(CaseManager);
-	const saved = await manager.create(case_);
+		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
 
-	expect(saved).toBe(case_);
-	expect(saved.caseId).toBe(1);
-	expect(mockedRest.delete).toHaveBeenCalledTimes(1);
-	expect(mockedRest.delete).toHaveBeenCalledWith('/guilds/1234/bans/3456', { reason: 'Mod: abc#0001 | foo' });
-	expect(mockedPostgres).toHaveBeenCalledTimes(1);
-	expect(mockedPostgres).toHaveBeenCalledWith(...generateSQLResult(case_));
+		const manager = container.resolve(CaseManager);
+		await manager.update(case_);
+
+		expect(mockedPostgres).toHaveBeenCalledTimes(2);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+				update moderation.cases
+				set action_expiration = `,
+				`
+				where guild_id = `,
+				`
+					and case_id = `,
+				'',
+			],
+			case_.actionExpiration.toISOString(),
+			'1234',
+			0,
+		);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			select *
+			from moderation.cases
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+	});
+
+	test('reason of a case', async () => {
+		const case_ = {
+			caseId: 0,
+			guildId: '1234',
+			reason: 'foo',
+		};
+
+		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
+
+		const manager = container.resolve(CaseManager);
+		await manager.update(case_);
+
+		expect(mockedPostgres).toHaveBeenCalledTimes(2);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+				update moderation.cases
+				set reason = `,
+				`
+				where guild_id = `,
+				`
+					and case_id = `,
+				'',
+			],
+			case_.reason,
+			'1234',
+			0,
+		);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			select *
+			from moderation.cases
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+	});
+
+	test('context of a case', async () => {
+		const case_ = {
+			caseId: 0,
+			guildId: '1234',
+			contextMessageId: '4567',
+		};
+
+		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
+
+		const manager = container.resolve(CaseManager);
+		await manager.update(case_);
+
+		expect(mockedPostgres).toHaveBeenCalledTimes(2);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+				update moderation.cases
+				set context_message_id = `,
+				`
+				where guild_id = `,
+				`
+					and case_id = `,
+				'',
+			],
+			case_.contextMessageId,
+			'1234',
+			0,
+		);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			select *
+			from moderation.cases
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+	});
+
+	test('reference of a case', async () => {
+		const case_ = {
+			caseId: 0,
+			guildId: '1234',
+			referenceId: 1,
+		};
+
+		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
+
+		const manager = container.resolve(CaseManager);
+		await manager.update(case_);
+
+		expect(mockedPostgres).toHaveBeenCalledTimes(2);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+				update moderation.cases
+				set ref_id = `,
+				`
+				where guild_id = `,
+				`
+					and case_id = `,
+				'',
+			],
+			case_.referenceId,
+			'1234',
+			0,
+		);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			select *
+			from moderation.cases
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+	});
+});
+
+describe('soft delete', () => {
+	test('timed ban', async () => {
+		const case_ = {
+			action: CaseAction.BAN,
+			case_id: 0,
+			guild_id: '1234',
+			mod_id: '2345',
+			reason: 'foo',
+			target_id: '3456',
+			context_message_id: '4567',
+		};
+
+		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
+
+		const manager = container.resolve(CaseManager);
+		await manager.delete(case_.guild_id, case_.case_id);
+
+		expect(mockedRest.delete).toHaveBeenCalledTimes(1);
+		expect(mockedRest.delete).toHaveBeenCalledWith(Routes.guildBan('1234', '3456'), {
+			reason: 'Mod: abc#0001 | Automatic unban based on duraton',
+		});
+		expect(mockedPostgres).toHaveBeenCalledTimes(3);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			update moderation.cases
+			set action_processed = true
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			update moderation.cases
+			set action_processed = true
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+
+		// TODO: Figure out whats wrong here
+		/* expect(mockedPostgres).toHaveBeenCalledWith(
+			...generateSQLResult({
+				action: CaseAction.UNBAN,
+				caseId: case_.case_id,
+				guildId: case_.guild_id,
+				moderatorId: case_.mod_id,
+				reason: case_.reason,
+				targetId: case_.target_id,
+				contextMessageId: case_.context_message_id,
+				roleId: case_.role_id,
+			} as any),
+		); */
+	});
+
+	test('timed role', async () => {
+		const case_ = {
+			action: CaseAction.ROLE,
+			case_id: 0,
+			guild_id: '1234',
+			mod_id: '2345',
+			reason: 'foo',
+			target_id: '3456',
+			context_message_id: '4567',
+			role_id: '5678',
+		};
+
+		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
+
+		const manager = container.resolve(CaseManager);
+		await manager.delete(case_.guild_id, case_.case_id);
+
+		expect(mockedRest.delete).toHaveBeenCalledTimes(1);
+		expect(mockedRest.delete).toHaveBeenCalledWith(Routes.guildMemberRole('1234', '3456', '5678'), {
+			reason: 'Mod: abc#0001 | Automatic unrole based on duration',
+		});
+		expect(mockedPostgres).toHaveBeenCalledTimes(3);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			update moderation.cases
+			set action_processed = true
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+		expect(mockedPostgres).toHaveBeenCalledWith(
+			[
+				`
+			update moderation.cases
+			set action_processed = true
+			where guild_id = `,
+				`
+				and case_id = `,
+				'',
+			],
+			'1234',
+			0,
+		);
+
+		// TODO: Figure out whats wrong here
+		/* expect(mockedPostgres).toHaveBeenCalledWith(
+			...generateSQLResult({
+				action: CaseAction.UNBAN,
+				caseId: case_.case_id,
+				guildId: case_.guild_id,
+				moderatorId: case_.mod_id,
+				reason: case_.reason,
+				targetId: case_.target_id,
+				contextMessageId: case_.context_message_id,
+				roleId: case_.role_id,
+			} as any),
+		); */
+	});
 });

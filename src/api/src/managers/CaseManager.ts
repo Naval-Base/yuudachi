@@ -104,7 +104,7 @@ export default class CaseManager {
 				${case_.action},
 				${case_.roleId ?? null},
 				${case_.actionExpiration?.toISOString() ?? null},
-				${case_.actionExpiration ? false : true}
+				${case_.actionExpiration ? false : true},
 				${case_.reason ?? null},
 				${case_.contextMessageId ?? null},
 				${case_.referenceId ?? null}
@@ -157,20 +157,39 @@ export default class CaseManager {
 		return updatedCase as Case;
 	}
 
-	public async s_delete(case_: RawCase) {
+	public async delete(guildId: string, caseId: number, manual = false) {
+		const [case_] = await this.sql<RawCase>`
+			select *
+			from moderation.cases
+			where guild_id = ${guildId}
+				and case_id = ${caseId}`;
+
 		await this.sql`
 			update moderation.cases
 			set action_processed = true
-			where guild_id = ${case_.guild_id}
-				and case_id = ${case_.case_id}`;
+			where guild_id = ${guildId}
+				and case_id = ${caseId}`;
 
-		void this.create({
+		let reason;
+		if (manual) {
+			if (case_.action === CaseAction.BAN) {
+				reason = 'Manual unban';
+			} else {
+				reason = 'Manual unrole';
+			}
+		} else if (case_.action === CaseAction.BAN) {
+			reason = 'Automatic unban based on duraton';
+		} else {
+			reason = 'Automatic unrole based on duration';
+		}
+
+		return this.create({
 			guildId: case_.guild_id,
 			targetId: case_.target_id,
 			moderatorId: case_.mod_id,
 			action: case_.action === CaseAction.BAN ? CaseAction.UNBAN : CaseAction.UNROLE,
 			roleId: case_.role_id!,
-			reason: case_.reason,
+			reason,
 			contextMessageId: case_.context_message_id!,
 			referenceId: case_.case_id,
 		} as Case);
