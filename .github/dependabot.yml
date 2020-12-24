@@ -1,61 +1,61 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/api"
+  - package-ecosystem: 'npm'
+    directory: '/packages/api'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/core"
+  - package-ecosystem: 'npm'
+    directory: '/packages/core'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/http"
+  - package-ecosystem: 'npm'
+    directory: '/packages/http'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/rest"
+  - package-ecosystem: 'npm'
+    directory: '/packages/rest'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/types"
+  - package-ecosystem: 'npm'
+    directory: '/packages/types'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/src/api"
+  - package-ecosystem: 'npm'
+    directory: '/src/api'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/auth"
+  - package-ecosystem: 'npm'
+    directory: '/packages/auth'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/graphql"
+  - package-ecosystem: 'npm'
+    directory: '/packages/graphql'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/handler"
+  - package-ecosystem: 'npm'
+    directory: '/packages/handler'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
-    directory: "/packages/website"
+  - package-ecosystem: 'npm'
+    directory: '/packages/website'
     schedule:
-      interval: "daily"
+      interval: 'daily'

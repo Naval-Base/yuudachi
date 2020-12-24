@@ -50,14 +50,14 @@
 					"missing_permissions": "Missing permissions to softban this member.",
 					"failure": "Unable to softban {{- member}}"
 				},
-				"success":"Successfully softbanned {{- member}}"
+				"success": "Successfully softbanned {{- member}}"
 			},
 			"ban": {
 				"errors": {
 					"missing_permissions": "Missing permissions to ban this member.",
 					"failure": "Unable to ban {{- member}}"
 				},
-				"success":"Successfully banned {{- member}}"
+				"success": "Successfully banned {{- member}}"
 			},
 			"unban": {
 				"errors": {
@@ -204,7 +204,6 @@
 				"remove": {
 					"errors": {
 						"no_args": "Please provide valid repository aliases to remove. Valid format: {{- format}}."
-						
 					},
 					"no_remove": "No repository aliases have been removed.",
 					"title": "The following repository aliases have been disabled on this guild:"

@@ -1,8 +1,9 @@
-version: "3.7"
+version: '3.7'
 
 services:
   grafana:
-    environment: []
+    environment:
+      []
       # GF_SERVER_DOMAIN: ""
       # GF_SERVER_ROOT_URL: ""
       # GF_AUTH_ANONYMOUS_ORG_NAME: ""
@@ -22,24 +23,24 @@ services:
 
   gateway:
     environment:
-      DISCORD_TOKEN: ""
+      DISCORD_TOKEN: ''
 
   handler:
     environment:
-      DISCORD_CLIENT_ID: ""
-      DISCORD_TOKEN: ""
-      GITHUB_TOKEN: ""
+      DISCORD_CLIENT_ID: ''
+      DISCORD_TOKEN: ''
+      GITHUB_TOKEN: ''
 
   api:
     environment:
-      DISCORD_TOKEN: ""
-      JWT_SECRET: ""
+      DISCORD_TOKEN: ''
+      JWT_SECRET: ''
 
   graphql:
     environment:
-      JWT_SECRET: ""
+      JWT_SECRET: ''
 
   auth:
     environment:
-      DISCORD_CLIENT_ID: ""
-      DISCORD_CLIENT_SECRET: ""
+      DISCORD_CLIENT_ID: ''
+      DISCORD_CLIENT_SECRET: ''

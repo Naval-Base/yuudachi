@@ -1,8 +1,5 @@
 {
-	"extends": [
-		"marine/prettier/react",
-		"marine/prettier/node"
-	],
+	"extends": ["marine/prettier/react", "marine/prettier/node"],
 	"parserOptions": {
 		"project": "./tsconfig.eslint.json"
 	},
@@ -13,9 +10,7 @@
 		"react/jsx-filename-extension": [
 			1,
 			{
-				"extensions": [
-					".tsx"
-				]
+				"extensions": [".tsx"]
 			}
 		]
 	}

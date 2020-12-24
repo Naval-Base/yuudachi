@@ -6,11 +6,6 @@
 		"rootDir": "./src",
 		"outDir": "dist"
 	},
-	"include": [
-		"./src"
-	],
-	"references": [
-		{ "path": "../core" },
-		{ "path": "../types" }
-	]
+	"include": ["./src"],
+	"references": [{ "path": "../core" }, { "path": "../types" }]
 }

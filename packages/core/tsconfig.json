@@ -8,10 +8,6 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true
 	},
-	"include": [
-		"./src"
-	],
-	"references": [
-		{ "path": "../types" }
-	]
+	"include": ["./src"],
+	"references": [{ "path": "../types" }]
 }

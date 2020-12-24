@@ -4,10 +4,7 @@
 		"sourceRoot": "./",
 		"outDir": "dist"
 	},
-	"include": [
-		"./src",
-		"./bin"
-	],
+	"include": ["./src", "./bin"],
 	"references": [
 		{ "path": "../../packages/core" },
 		{ "path": "../../packages/types" },
