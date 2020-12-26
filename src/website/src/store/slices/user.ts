@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { GraphQLRole } from '~/interfaces/Role';
+
 interface UserState {
 	loggedIn: boolean;
 	id?: string;
+	role?: GraphQLRole;
 	username?: string;
 	avatar?: string;
 }
@@ -10,6 +13,7 @@ interface UserState {
 const initialState: UserState = {
 	loggedIn: false,
 	id: undefined,
+	role: undefined,
 	username: undefined,
 	avatar: undefined,
 };
@@ -24,7 +28,10 @@ const userSlice = createSlice({
 		logout(state) {
 			state.loggedIn = false;
 		},
-		setUser(_, action: PayloadAction<{ loggedIn: boolean; id: string; username: string; avatar?: string }>) {
+		setUser(
+			_,
+			action: PayloadAction<{ loggedIn: boolean; id: string; role: GraphQLRole; username: string; avatar?: string }>,
+		) {
 			return { ...action.payload };
 		},
 	},

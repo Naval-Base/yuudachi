@@ -4,7 +4,7 @@ import { Box, Flex, Button, IconButton } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 
-import { RootState } from '../store';
+import { RootState } from '~/store/index';
 
 const Navbar = () => {
 	const user = useSelector((state: RootState) => state.user);
@@ -13,7 +13,7 @@ const Navbar = () => {
 
 	const LoginButton = () =>
 		user.loggedIn ? (
-			<Link href="/user/me">
+			<Link href="/users/me">
 				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
 					{user.username}
 				</Button>
@@ -53,11 +53,6 @@ const Navbar = () => {
 				justifyContent="start"
 				py={{ base: 2, md: 'unset' }}
 			>
-				<Link href="/">
-					<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
-						Dashboard
-					</Button>
-				</Link>
 				<Box display={{ base: 'block', md: 'none' }}>
 					<LoginButton />
 				</Box>

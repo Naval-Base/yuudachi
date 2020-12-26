@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { GraphQLGuildSettings } from '../interfaces/GuildSettings';
+import { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
 
 export function useMutationInsertGuildSettings(id: string, props: any) {
 	const cookie = useCookie(props.cookie);

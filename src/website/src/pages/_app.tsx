@@ -2,13 +2,13 @@ import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query-devtools';
 import { Hydrate } from 'react-query/hydration';
 
-import '../styles/main.scss';
+import '~/styles/main.scss';
 
-import store from '../store';
-import Layout from '../components/Layout';
+import store from '~/store/index';
+
+import Layout from '~/components/Layout';
 
 const queryCache = new QueryClient({
 	defaultOptions: {
@@ -30,7 +30,6 @@ const App = ({ Component, pageProps }: AppProps) => {
 					</ChakraProvider>
 				</Provider>
 			</Hydrate>
-			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
 };

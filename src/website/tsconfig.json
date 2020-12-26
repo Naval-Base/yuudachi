@@ -9,7 +9,15 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
-		"forceConsistentCasingInFileNames": false
+		"forceConsistentCasingInFileNames": false,
+		"baseUrl": ".",
+		"paths": {
+			"~/components/*": ["src/components/*"],
+			"~/hooks/*": ["src/hooks/*"],
+			"~/interfaces/*": ["src/interfaces/*"],
+			"~/store/*": ["src/store/*"],
+			"~/styles/*": ["src/styles/*"]
+		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules"]

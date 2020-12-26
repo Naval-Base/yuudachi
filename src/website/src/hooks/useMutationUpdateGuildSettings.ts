@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { GuildSetingsPayload, GraphQLGuildSettings } from '../interfaces/GuildSettings';
+import { GuildSettingsPayload, GraphQLGuildSettings, GuildModerationSettingsPayload } from '~/interfaces/GuildSettings';
 
 export function useMutationUpdateGuildSettings(id: string, props: any) {
 	const cookie = useCookie(props.cookie);
 	const cache = useQueryClient();
 
-	return useMutation<GraphQLGuildSettings, unknown, GuildSetingsPayload>(
+	return useMutation<GraphQLGuildSettings, unknown, GuildSettingsPayload | GuildModerationSettingsPayload>(
 		(guildSettings) =>
 			fetchGraphQL(
 				`mutation Guild($guild_id: String!, $_set: guild_settings_set_input) {

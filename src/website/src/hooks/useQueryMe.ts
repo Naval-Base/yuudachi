@@ -4,9 +4,10 @@ import { useCookie } from 'next-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { RootState } from '../store';
-import { setUser } from '../store/slices/user';
-import { GraphQLUser } from '../interfaces/User';
+import { RootState } from '~/store/index';
+import { setUser } from '~/store/slices/user';
+
+import { GraphQLUser } from '~/interfaces/User';
 
 export function useQueryMe(props: any) {
 	const cookie = useCookie(props.cookie);
@@ -25,6 +26,7 @@ export function useQueryMe(props: any) {
 							main
 						}
 						username
+						role
 					}
 				}`,
 				{},
@@ -42,6 +44,7 @@ export function useQueryMe(props: any) {
 				setUser({
 					loggedIn: true,
 					id: connection.id,
+					role: data.data.me[0].role,
 					username: data.data.me[0].username,
 					avatar: connection.avatar,
 				}),

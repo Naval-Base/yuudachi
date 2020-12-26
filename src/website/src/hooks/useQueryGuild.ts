@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { GraphQLGuild } from '../interfaces/Guild';
+import { GraphQLGuild } from '~/interfaces/Guild';
 
 export function useQueryGuild(id: string, loggedIn = false, props: any) {
 	const cookie = useCookie(props.cookie);
