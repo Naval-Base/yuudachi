@@ -57,8 +57,7 @@ alter table cases
 	alter context_message_id type bigint using context_message_id::bigint,
 	add role_id bigint,
 	drop constraint cases_pkey,
-	drop id,
-	add constraint cases_pkey primary key (guild_id, case_id)
+	drop id
 ;
 
 update cases set
@@ -85,8 +84,7 @@ alter table lockdowns
 	drop constraint lockdowns_pkey,
 	drop id,
 	drop guild,
-	alter channel_id type bigint using channel_id::bigint,
-	add constraint lockdowns_pkey primary key (channel_id)
+	alter channel_id type bigint using channel_id::bigint
 ;
 
 -- ROLE STATES
@@ -99,8 +97,7 @@ alter table role_states
 	alter member_id type bigint using member_id::bigint,
 	drop constraint role_states_guild_member_key,
 	drop constraint role_states_pkey,
-	drop id,
-	add constraint role_states_pkey primary key (guild_id, member_id)
+	drop id
 ;
 
 -- GUILD_SETTINGS
@@ -151,5 +148,7 @@ alter table tags rename "user" to user_id;
 
 alter table tags
 	alter guild_id type bigint using guild_id::bigint,
-	alter user_id type bigint using user_id::bigint
+	alter user_id type bigint using user_id::bigint,
+	drop constraint tags_guild_name_key,
+	drop constraint tags_pkey
 ;

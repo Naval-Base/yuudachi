@@ -59,8 +59,7 @@ alter table cases rename action_duration to action_expiration;
 alter table cases
 	add role_id text,
 	drop constraint cases_pkey,
-	drop id,
-	add constraint cases_pkey primary key (guild_id, case_id)
+	drop id
 ;
 
 update cases set
@@ -86,8 +85,7 @@ alter table lockdowns rename duration to expiration;
 alter table lockdowns
 	drop constraint lockdowns_guild_channel_key,
 	drop constraint lockdowns_pkey,
-	drop id,
-	add constraint lockdowns_pkey primary key (channel_id)
+	drop id
 ;
 
 -- ROLE_STATES
@@ -98,8 +96,7 @@ alter table role_states rename member to member_id;
 alter table role_states
 	drop constraint role_states_guild_member_key,
 	drop constraint role_states_pkey,
-	drop id,
-	add constraint role_states_pkey primary key (guild_id, member_id)
+	drop id
 ;
 
 -- GUILD_SETTINGS
@@ -146,3 +143,8 @@ drop table settings;
 
 alter table tags rename guild to guild_id;
 alter table tags rename "user" to user_id;
+
+alter table tags
+	drop constraint tags_guild_name_key,
+	drop constraint tags_pkey
+;
