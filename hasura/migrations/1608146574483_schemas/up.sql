@@ -121,7 +121,6 @@ comment on column organizational.tags.hoisted is 'Whether the tag is a hoisted g
 comment on column organizational.tags.last_modified is 'The id of the user who last modified this tag';
 comment on column organizational.tags.templated is 'Whether the tag is templated or not';
 
-alter table organizational.tags alter column id set default public.gen_random_uuid();
 alter table organizational.tags alter column aliases set default '{}'::text[];
 alter table organizational.tags alter column hoisted set default false;
 alter table organizational.tags alter column uses set default 0;
@@ -129,7 +128,6 @@ alter table organizational.tags alter column created_at set default now();
 alter table organizational.tags alter column updated_at set default now();
 alter table organizational.tags alter column templated set default false;
 
-alter table organizational.tags alter column id set not null;
 alter table organizational.tags alter column guild_id set not null;
 alter table organizational.tags alter column user_id set not null;
 alter table organizational.tags alter column "name" set not null;
@@ -141,8 +139,7 @@ alter table organizational.tags alter column updated_at set not null;
 alter table organizational.tags alter column templated set not null;
 
 alter table organizational.tags
-	add constraint tags_pkey primary key (id),
-	add constraint tags_guild_name_key unique (guild_id, name)
+	add constraint tags_pkey primary key (guild_id, name)
 ;
 
 create trigger set_organizational_tags_updated_at before update on organizational.tags for each row execute function public.set_current_timestamp_updated_at();

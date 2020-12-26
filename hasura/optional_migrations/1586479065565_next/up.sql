@@ -104,7 +104,7 @@ alter table role_states
 
 create table guild_settings (
 	guild_id bigint,
-	prefix text,
+	prefix text default '?',
 	mod_log_channel_id bigint,
 	mod_role_id bigint,
 	guild_log_channel_id bigint,
@@ -114,8 +114,9 @@ create table guild_settings (
 	embed_role_id bigint,
 	emoji_role_id bigint,
 	reaction_role_id bigint,
-	role_state boolean,
-	moderation boolean
+	locale text default 'en',
+	modules integer,
+	repository_aliases text[]
 );
 
 alter table guild_settings
@@ -134,8 +135,7 @@ insert into guild_settings (
 		(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::bigint as embed_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMOJI')::bigint as emoji_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::bigint as reaction_role_id,
-		coalesce((settings ->> 'ROLE_STATE')::boolean, false) as role_state,
-		coalesce((settings ->> 'MODERATION')::boolean, false) as moderation
+		(63)::integer as modules
 	from settings
 );
 
@@ -150,5 +150,6 @@ alter table tags
 	alter guild_id type bigint using guild_id::bigint,
 	alter user_id type bigint using user_id::bigint,
 	drop constraint tags_guild_name_key,
-	drop constraint tags_pkey
+	drop constraint tags_pkey,
+	drop id
 ;

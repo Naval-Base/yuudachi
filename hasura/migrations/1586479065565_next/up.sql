@@ -133,7 +133,8 @@ insert into guild_settings (
 		(settings -> 'RESTRICT_ROLES' ->> 'TAG')::text as tag_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::text as embed_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMOJI')::text as emoji_role_id,
-		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::text as reaction_role_id
+		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::text as reaction_role_id,
+		(63)::integer as modules
 	from settings
 );
 
@@ -146,5 +147,6 @@ alter table tags rename "user" to user_id;
 
 alter table tags
 	drop constraint tags_guild_name_key,
-	drop constraint tags_pkey
+	drop constraint tags_pkey,
+	drop id
 ;

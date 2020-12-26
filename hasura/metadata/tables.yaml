@@ -172,6 +172,66 @@
 - table:
     schema: organizational
     name: tags
+  insert_permissions:
+  - role: moderator
+    permission:
+      check: {}
+      columns:
+      - aliases
+      - content
+      - guild_id
+      - hoisted
+      - name
+      - templated
+      backend_only: false
+  select_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - aliases
+      - uses
+      - content
+      - name
+      - created_at
+      - updated_at
+      - guild_id
+      - user_id
+      - last_modified
+      - hoisted
+      - templated
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+      - aliases
+      - uses
+      - content
+      - name
+      - created_at
+      - updated_at
+      - guild_id
+      - user_id
+      - last_modified
+      - hoisted
+      - templated
+      filter: {}
+      allow_aggregations: true
+  update_permissions:
+  - role: moderator
+    permission:
+      columns:
+      - aliases
+      - content
+      - hoisted
+      - name
+      - templated
+      filter: {}
+      check: {}
+  delete_permissions:
+  - role: moderator
+    permission:
+      filter: {}
 - table:
     schema: public
     name: connections
