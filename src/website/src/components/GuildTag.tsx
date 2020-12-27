@@ -32,7 +32,7 @@ const GuildTag = ({ name }: { name: string }) => {
 				size="sm"
 				aria-label="Delete tag"
 				icon={<FiX />}
-				onClick={() => guildTagDeleteMutate}
+				onClick={() => guildTagDeleteMutate()}
 				isDisabled={isLoadingGuildTagDeleteMutate}
 			/>
 

@@ -22,7 +22,7 @@ export function useQueryOAuthGuilds(loggedIn = false) {
 					}
 				}`,
 				{},
-			).then(({ response }) => response.json()),
+			).then(({ body }) => body),
 		{
 			enabled: loggedIn,
 			onSuccess: (data) => {

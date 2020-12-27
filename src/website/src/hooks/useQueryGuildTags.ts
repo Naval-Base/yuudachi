@@ -29,7 +29,7 @@ export function useQueryGuildTags(
 					}
 				}`,
 				{ guild_id: id, order_by: orderBy, limit, offset },
-			).then(({ response }) => response.json()),
+			).then(({ body }) => body),
 		{
 			enabled: loggedIn,
 		},

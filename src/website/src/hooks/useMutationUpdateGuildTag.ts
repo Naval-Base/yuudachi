@@ -25,7 +25,7 @@ export function useMutationUpdateGuildTag(id: string, name: string) {
 					}
 				}`,
 				{ guild_id: id, name, _set: guildTag },
-			).then(({ response }) => response.json()),
+			).then(({ body }) => body),
 		{
 			onSuccess: () => {
 				void cache.invalidateQueries(['guilds', id, 'tags']);

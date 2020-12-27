@@ -28,7 +28,7 @@ export function useMutationInsertGuildSettings(id: string) {
 					}
 				}`,
 				{ guild_id: id },
-			).then(({ response }) => response.json()),
+			).then(({ body }) => body),
 		{
 			onSuccess: ({ data }) => {
 				void cache.invalidateQueries(['guilds', data.guild?.guild_id, 'settings']);

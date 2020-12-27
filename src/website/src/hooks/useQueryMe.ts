@@ -28,7 +28,7 @@ export function useQueryMe() {
 					}
 				}`,
 				{},
-			).then(({ response }) => response.json()),
+			).then(({ body }) => body),
 		{
 			enabled: !user.loggedIn,
 		},

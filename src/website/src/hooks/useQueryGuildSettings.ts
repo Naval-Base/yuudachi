@@ -27,7 +27,7 @@ export function useQueryGuildSettings(id: string, loggedIn = false) {
 					}
 				}`,
 				{ guild_id: id },
-			).then(({ response }) => response.json()),
+			).then(({ body }) => body),
 		{
 			enabled: loggedIn,
 		},

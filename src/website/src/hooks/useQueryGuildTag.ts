@@ -23,7 +23,7 @@ export function useQueryGuildTag(id: string, name: string, loggedIn = false) {
 					}
 				}`,
 				{ guild_id: id, name: name },
-			).then(({ response }) => response.json()),
+			).then(({ body }) => body),
 		{
 			enabled: loggedIn,
 		},
