@@ -1,13 +1,11 @@
 import { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
-import createFetch from '@vercel/fetch';
+import fetch from 'node-fetch';
 import { Route } from '@yuudachi/http';
 import { Constants, Tokens } from '@yuudachi/core';
 import { RESTGetAPICurrentUserGuildsResult } from 'discord-api-types';
 import { unauthorized } from '@hapi/boom';
-
-const fetch = createFetch();
 
 const { kSQL } = Tokens;
 const { USER_ID_HEADER } = Constants;

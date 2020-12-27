@@ -1,13 +1,11 @@
 import cookie from 'cookie';
 import { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
-import createFetch from '@vercel/fetch';
+import fetch from 'node-fetch';
 import { Sql } from 'postgres';
 import { badRequest } from '@hapi/boom';
 import { Route, discordOAuth2, State } from '@yuudachi/http';
 import { AuthManager, session, Tokens } from '@yuudachi/core';
-
-const fetch = createFetch();
 
 const { kSQL } = Tokens;
 
