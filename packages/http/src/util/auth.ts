@@ -1,9 +1,11 @@
 import { randomBytes } from 'crypto';
-import fetch from 'node-fetch';
+import createFetch from '@vercel/fetch';
 import FormData from '@discordjs/form-data';
 import { container } from 'tsyringe';
 import { Config } from '@yuudachi/types';
 import { Tokens } from '@yuudachi/core';
+
+const fetch = createFetch();
 
 const { kConfig } = Tokens;
 

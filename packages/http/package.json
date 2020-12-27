@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@discordjs/form-data": "^3.0.1",
 		"@hapi/boom": "^9.1.0",
+		"@vercel/fetch": "^6.1.0",
 		"cookie": "^0.4.1",
 		"cors": "^2.8.5",
 		"helmet": "^4.2.0",

@@ -1,5 +1,5 @@
 import { APIMessage, APIEmbed } from 'discord-api-types';
-import fetch from 'node-fetch';
+import createFetch from '@vercel/fetch';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
@@ -21,6 +21,8 @@ import {
 	GITHUB_ICON_PR_OPEN,
 } from '../../../Constants';
 import { GitHubAPIError } from '../github';
+
+const fetch = createFetch();
 
 enum ResultStatePR {
 	OPEN = 'OPEN',

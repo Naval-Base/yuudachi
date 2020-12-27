@@ -3,11 +3,13 @@ import { APIMessage } from 'discord-api-types';
 import { Args, joinTokens } from 'lexure';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
-import fetch from 'node-fetch';
+import createFetch from '@vercel/fetch';
 import * as qs from 'querystring';
 
 import Command from '../../Command';
 import { CommandModules, DOCUMENTATION_SOURCES } from '../../Constants';
+
+const fetch = createFetch();
 
 @injectable()
 export default class implements Command {
