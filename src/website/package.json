@@ -23,6 +23,7 @@
 		"@skyra/discord-components-react": "^2.0.2",
 		"clsx": "^1.1.1",
 		"cross-fetch": "^3.0.6",
+		"dayjs": "^1.9.8",
 		"discord-markdown": "^2.4.1",
 		"framer-motion": "^3.1.1",
 		"next": "^10.0.4",
@@ -36,7 +37,8 @@
 		"react-table": "^7.6.2",
 		"refresh-fetch": "^0.7.0",
 		"sass": "^1.30.0",
-		"tslib": "^2.0.3"
+		"tslib": "^2.0.3",
+		"universal-cookie": "^4.0.4"
 	},
 	"devDependencies": {
 		"@types/node": "^14.14.16",

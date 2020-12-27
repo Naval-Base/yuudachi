@@ -26,4 +26,5 @@ coverage/
 # Miscellaneous
 .tmp/
 dump.sql
+init.sql.bak
 hasura/hasura.exe
