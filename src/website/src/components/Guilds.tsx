@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Grid, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 
-import GuildsStyles from '~/styles/modules/Guilds.module.scss';
+import GuildsStyles from '~/styles/modules/guilds.module.scss';
 
 const Loading = dynamic(() => import('./Loading'));
 const GuildIcon = dynamic(() => import('./GuildIcon'));
