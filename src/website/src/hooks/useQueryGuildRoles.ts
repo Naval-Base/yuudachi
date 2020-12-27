@@ -1,12 +1,9 @@
 import { useQuery } from 'react-query';
-import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { GraphQLGuildRoles } from '~/interfaces/GuildRole';
 
-export function useQueryGuildRoles(id: string, loggedIn = false, props: any) {
-	const cookie = useCookie(props.cookie);
-
+export function useQueryGuildRoles(id: string, loggedIn = false) {
 	const { data, isLoading } = useQuery<GraphQLGuildRoles>(
 		['guilds', id, 'roles'],
 		() =>
@@ -19,7 +16,6 @@ export function useQueryGuildRoles(id: string, loggedIn = false, props: any) {
 					}
 				}`,
 				{ guild_id: id },
-				{ headers: { authorization: `Bearer ${cookie.get<string>('access_token')}` } },
 			).then(({ response }) => response.json()),
 		{
 			enabled: loggedIn,

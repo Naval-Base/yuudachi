@@ -1,17 +1,15 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { GuildSettingsPayload, GraphQLGuildSettings, GuildModerationSettingsPayload } from '~/interfaces/GuildSettings';
 
-export function useMutationUpdateGuildSettings(id: string, props: any) {
-	const cookie = useCookie(props.cookie);
+export function useMutationUpdateGuildSettings(id: string) {
 	const cache = useQueryClient();
 
 	return useMutation<GraphQLGuildSettings, unknown, GuildSettingsPayload | GuildModerationSettingsPayload>(
 		(guildSettings) =>
 			fetchGraphQL(
-				`mutation Guild($guild_id: String!, $_set: guild_settings_set_input) {
+				`mutation GuildSettings($guild_id: String!, $_set: guild_settings_set_input) {
 					guild: update_guild_settings_by_pk(pk_columns: {guild_id: $guild_id}, _set: $_set) {
 						tag_role_id
 						repository_aliases
@@ -30,11 +28,10 @@ export function useMutationUpdateGuildSettings(id: string, props: any) {
 					}
 				}`,
 				{ guild_id: id, _set: guildSettings },
-				{ headers: { authorization: `Bearer ${cookie.get<string>('access_token')}` } },
 			).then(({ response }) => response.json()),
 		{
 			onSuccess: ({ data }) => {
-				cache.setQueryData(['guilds', data.guild?.guild_id, 'settings'], { data });
+				void cache.invalidateQueries(['guilds', data.guild?.guild_id, 'settings']);
 			},
 		},
 	);

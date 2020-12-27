@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
 	Button,
+	IconButton,
 	Modal,
 	ModalOverlay,
 	ModalContent,
@@ -23,6 +24,7 @@ import {
 	AccordionPanel,
 	AccordionIcon,
 } from '@chakra-ui/react';
+import { FiPlus, FiX } from 'react-icons/fi';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { DiscordMessages, DiscordMessage } from '@skyra/discord-components-react';
@@ -37,7 +39,7 @@ import { useMutationUpdateGuildTag } from '~/hooks/useMutationUpdateGuildTag';
 
 import { GuildTagPayload } from '~/interfaces/GuildTags';
 
-const GuildSettings = (props: any) => {
+const GuildSettings = ({ name, isOpen, onClose }: { name: string; isOpen: boolean; onClose: () => void }) => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
 	const [content, setContent] = useState('');
@@ -47,37 +49,37 @@ const GuildSettings = (props: any) => {
 
 	const { data: gqlGuildTagData, isLoading: isLoadingGuildTag } = useQueryGuildTag(
 		id as string,
-		props.name,
-		user.loggedIn && props.isOpen,
-		props,
+		name,
+		user.loggedIn && isOpen,
 	);
 	const { mutateAsync: guildTagUpdateMutate, isLoading: isLoadingTagUpdateMutate } = useMutationUpdateGuildTag(
 		id as string,
-		props.name,
-		props,
+		name,
 	);
 
 	async function onSubmit(values: Omit<GuildTagPayload, 'aliases'> & { aliases?: { value: string }[] }) {
 		const { aliases, ...rest } = values;
 		const payload: GuildTagPayload = {
 			...rest,
-			aliases: `{${(aliases ?? [])
+			aliases: `{${fields
 				.map((alias) => alias.value)
 				.filter((v) => v)
 				.join(',')}}`,
 		};
-		console.log(payload);
 		await guildTagUpdateMutate(payload);
 	}
 
 	const watchContent = watch('content', gqlGuildTagData?.tag.content ?? '');
 	useEffect(() => {
 		setContent(watchContent);
+	}, [watchContent, gqlGuildTagData?.tag.content]);
+
+	useEffect(() => {
 		gqlGuildTagData?.tag.aliases.map((alias) => append({ value: alias }));
-	}, [watchContent, append, gqlGuildTagData?.tag.content, gqlGuildTagData?.tag.aliases]);
+	}, [append, gqlGuildTagData?.tag.aliases]);
 
 	return (
-		<Modal size="xl" isOpen={props.isOpen} onClose={props.onClose}>
+		<Modal size="xl" isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>Tag {gqlGuildTagData?.tag.name}</ModalHeader>
@@ -111,19 +113,27 @@ const GuildSettings = (props: any) => {
 															ref={register()}
 															defaultValue={item.value}
 														/>
-														<InputRightElement width="6rem" pr={0}>
-															<Button size="sm" colorScheme="red" onClick={() => remove(i)}>
-																Delete
-															</Button>
+														<InputRightElement width="4rem" pr={0}>
+															<IconButton
+																colorScheme="red"
+																size="sm"
+																aria-label="Delete alias"
+																icon={<FiX />}
+																onClick={() => remove(i)}
+															/>
 														</InputRightElement>
 													</InputGroup>
 												</Box>
 											))}
 										</FormControl>
 										<Box textAlign="right">
-											<Button size="sm" colorScheme="green" onClick={() => append({ value: '' })}>
-												Add alias
-											</Button>
+											<IconButton
+												colorScheme="green"
+												size="sm"
+												aria-label="Delete alias"
+												icon={<FiPlus />}
+												onClick={() => append({ value: '' })}
+											/>
 										</Box>
 									</AccordionPanel>
 								</AccordionItem>
@@ -150,13 +160,13 @@ const GuildSettings = (props: any) => {
 								type="submit"
 								colorScheme="green"
 								mr={3}
-								onClick={props.onClose}
+								onClick={onClose}
 								isLoading={isLoadingTagUpdateMutate}
 								loadingText="Submitting"
 							>
 								Submit
 							</Button>
-							<Button onClick={props.onClose}>Close</Button>
+							<Button onClick={onClose}>Close</Button>
 						</ModalFooter>
 					</form>
 				) : (

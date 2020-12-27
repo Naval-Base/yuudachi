@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { useCookie } from 'next-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
@@ -9,8 +8,7 @@ import { setUser } from '~/store/slices/user';
 
 import { GraphQLUser } from '~/interfaces/User';
 
-export function useQueryMe(props: any) {
-	const cookie = useCookie(props.cookie);
+export function useQueryMe() {
 	const user = useSelector((state: RootState) => state.user);
 	const dispatch = useDispatch();
 
@@ -30,7 +28,6 @@ export function useQueryMe(props: any) {
 					}
 				}`,
 				{},
-				{ headers: { authorization: `Bearer ${cookie.get<string>('access_token')}` } },
 			).then(({ response }) => response.json()),
 		{
 			enabled: !user.loggedIn,

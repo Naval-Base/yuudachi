@@ -27,7 +27,7 @@ import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSe
 import { GuildSettingsPayload } from '~/interfaces/GuildSettings';
 import { GraphQLRole } from '~/interfaces/Role';
 
-const GuildSettings = (props: any) => {
+const GuildSettings = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
 	const { handleSubmit, register } = useForm<GuildSettingsPayload>({
@@ -39,17 +39,16 @@ const GuildSettings = (props: any) => {
 
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
-		user.loggedIn && props.isOpen,
-		props,
+		user.loggedIn && isOpen,
 	);
 	const {
 		mutateAsync: guildSettingsInsertMutate,
 		isLoading: isLoadingGuildSettingsInsertMutate,
-	} = useMutationInsertGuildSettings(id as string, props);
+	} = useMutationInsertGuildSettings(id as string);
 	const {
 		mutateAsync: guildSettingsUpdateMutate,
 		isLoading: isLoadingGuildSettingsUpdateMutate,
-	} = useMutationUpdateGuildSettings(id as string, props);
+	} = useMutationUpdateGuildSettings(id as string);
 
 	async function onInitialize() {
 		await guildSettingsInsertMutate();
@@ -60,7 +59,7 @@ const GuildSettings = (props: any) => {
 	}
 
 	return (
-		<Modal size="lg" isOpen={props.isOpen} onClose={props.onClose}>
+		<Modal size="lg" isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>Guild Settings</ModalHeader>
@@ -83,13 +82,13 @@ const GuildSettings = (props: any) => {
 								type="submit"
 								colorScheme="green"
 								mr={3}
-								onClick={props.onClose}
+								onClick={onClose}
 								isLoading={isLoadingGuildSettingsUpdateMutate}
 								loadingText="Submitting"
 							>
 								Submit
 							</Button>
-							<Button onClick={props.onClose}>Close</Button>
+							<Button onClick={onClose}>Close</Button>
 						</ModalFooter>
 					</form>
 				) : (
@@ -105,7 +104,7 @@ const GuildSettings = (props: any) => {
 								onClick={onInitialize}
 								isLoading={isLoadingGuildSettingsInsertMutate}
 								loadingText="Initializing"
-								disabled={user.role === GraphQLRole.user}
+								isDisabled={user.role === GraphQLRole.user}
 							>
 								Initialize
 							</Button>

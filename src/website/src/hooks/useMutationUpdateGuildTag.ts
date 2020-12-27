@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { GraphQLGuildTag, GuildTagPayload } from '~/interfaces/GuildTags';
 
-export function useMutationUpdateGuildTag(id: string, name: string, props: any) {
-	const cookie = useCookie(props.cookie);
+export function useMutationUpdateGuildTag(id: string, name: string) {
 	const cache = useQueryClient();
 
 	return useMutation<GraphQLGuildTag, unknown, GuildTagPayload>(
@@ -27,11 +25,10 @@ export function useMutationUpdateGuildTag(id: string, name: string, props: any) 
 					}
 				}`,
 				{ guild_id: id, name, _set: guildTag },
-				{ headers: { authorization: `Bearer ${cookie.get<string>('access_token')}` } },
 			).then(({ response }) => response.json()),
 		{
-			onSuccess: ({ data }) => {
-				cache.setQueryData(['guilds', data.tag?.guild_id, 'tags', data.tag?.name], { data });
+			onSuccess: () => {
+				void cache.invalidateQueries(['guilds', id, 'tags']);
 			},
 		},
 	);

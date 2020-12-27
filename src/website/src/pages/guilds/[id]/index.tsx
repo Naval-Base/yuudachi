@@ -13,13 +13,13 @@ import { RootState } from '~/store/index';
 import { useQueryOAuthGuilds } from '~/hooks/useQueryOAuthGuilds';
 import { useQueryGuild } from '~/hooks/useQueryGuild';
 
-const GuildPage = (props: any) => {
+const GuildPage = () => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
 
 	const { id } = router.query;
-	const { data: gqlGuildData, isLoading: isLoadingGuild } = useQueryGuild(id as string, user.loggedIn, props);
-	const { data: gqlFallbackGuildData, isLoading: isLoadingFallbackGuild } = useQueryOAuthGuilds(user.loggedIn, props);
+	const { data: gqlGuildData, isLoading: isLoadingGuild } = useQueryGuild(id as string, user.loggedIn);
+	const { data: gqlFallbackGuildData, isLoading: isLoadingFallbackGuild } = useQueryOAuthGuilds(user.loggedIn);
 
 	if (isLoadingGuild || isLoadingFallbackGuild) {
 		return <Loading />;

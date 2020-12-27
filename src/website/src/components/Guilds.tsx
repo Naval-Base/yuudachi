@@ -12,9 +12,9 @@ import { RootState } from '~/store/index';
 
 import { useQueryOAuthGuilds } from '~/hooks/useQueryOAuthGuilds';
 
-const Guilds = (props: any) => {
+const Guilds = () => {
 	const user = useSelector((state: RootState) => state.user);
-	const { data, isLoading } = useQueryOAuthGuilds(user.loggedIn, props);
+	const { data, isLoading } = useQueryOAuthGuilds(user.loggedIn);
 
 	if (isLoading) {
 		return <Loading />;

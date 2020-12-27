@@ -1,5 +1,6 @@
 import fetch from 'cross-fetch';
 import { configureRefreshFetch, fetchJSON } from 'refresh-fetch';
+import Cookies from 'universal-cookie';
 
 class ResponseError extends Error {
 	public readonly name = 'ResponseError';
@@ -10,6 +11,13 @@ class ResponseError extends Error {
 }
 
 const fetchWithToken = (input: string | Request | URL, options: Record<string, any> = { headers: {} }) => {
+	const cookies = new Cookies();
+	const token = cookies.get<string>('access_token');
+
+	if (token) {
+		options.headers = { ...options.headers, authorization: `Bearer ${token}` };
+	}
+
 	// eslint-disable-next-line no-undef
 	return fetch(input as RequestInfo, {
 		...options,

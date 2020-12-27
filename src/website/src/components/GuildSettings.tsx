@@ -10,7 +10,7 @@ const GuildSettings = () => {
 		<>
 			<Button onClick={onOpen}>Open Guild Settings</Button>
 
-			<GuildSettingsModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+			<GuildSettingsModal isOpen={isOpen} onClose={onClose} />
 		</>
 	);
 };

@@ -5,14 +5,14 @@ const Navbar = dynamic(() => import('~/components/Navbar'));
 
 import { useQueryMe } from '~/hooks/useQueryMe';
 
-const Layout = (props: any) => {
-	useQueryMe(props);
+const Layout = ({ children }: { children: React.ReactNode }) => {
+	useQueryMe();
 
 	return (
 		<Grid templateRows="auto 1fr auto" h="100%">
 			<Navbar />
 			<Box w="100%" h="100%">
-				{props.children}
+				{children}
 			</Box>
 			<Box w="100%" h="100%">
 				Footer

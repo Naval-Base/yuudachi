@@ -1,5 +1,4 @@
 import { useQuery } from 'react-query';
-import { useCookie } from 'next-cookie';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { GraphQLGuildTags, GuildTag } from '~/interfaces/GuildTags';
@@ -10,10 +9,7 @@ export function useQueryGuildTags(
 	limit: number,
 	offset: number,
 	loggedIn = false,
-	props: any,
 ) {
-	const cookie = useCookie(props.cookie);
-
 	const { data, isLoading } = useQuery<GraphQLGuildTags>(
 		['guilds', id, 'tags'],
 		() =>
@@ -33,7 +29,6 @@ export function useQueryGuildTags(
 					}
 				}`,
 				{ guild_id: id, order_by: orderBy, limit, offset },
-				{ headers: { authorization: `Bearer ${cookie.get<string>('access_token')}` } },
 			).then(({ response }) => response.json()),
 		{
 			enabled: loggedIn,
