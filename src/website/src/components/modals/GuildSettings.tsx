@@ -81,7 +81,8 @@ const GuildSettings = (props: any) => {
 						<ModalFooter>
 							<Button
 								type="submit"
-								mr={4}
+								colorScheme="green"
+								mr={3}
 								onClick={props.onClose}
 								isLoading={isLoadingGuildSettingsUpdateMutate}
 								loadingText="Submitting"
@@ -100,6 +101,7 @@ const GuildSettings = (props: any) => {
 						</ModalBody>
 						<ModalFooter justifyContent="center">
 							<Button
+								colorScheme="green"
 								onClick={onInitialize}
 								isLoading={isLoadingGuildSettingsInsertMutate}
 								loadingText="Initializing"
