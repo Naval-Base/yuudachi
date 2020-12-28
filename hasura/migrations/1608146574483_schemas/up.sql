@@ -117,16 +117,12 @@ create table organizational.tags as table tags;
 
 comment on column organizational.tags.guild_id is 'The id of the guild this tag belongs to';
 comment on column organizational.tags.user_id is 'The id of the user this tag belongs to';
-comment on column organizational.tags.hoisted is 'Whether the tag is a hoisted guild tag or not';
 comment on column organizational.tags.last_modified is 'The id of the user who last modified this tag';
-comment on column organizational.tags.templated is 'Whether the tag is templated or not';
 
 alter table organizational.tags alter column aliases set default '{}'::text[];
-alter table organizational.tags alter column hoisted set default false;
 alter table organizational.tags alter column uses set default 0;
 alter table organizational.tags alter column created_at set default now();
 alter table organizational.tags alter column updated_at set default now();
-alter table organizational.tags alter column templated set default false;
 
 alter table organizational.tags alter column guild_id set not null;
 alter table organizational.tags alter column user_id set not null;
@@ -136,7 +132,6 @@ alter table organizational.tags alter column content set not null;
 alter table organizational.tags alter column uses set not null;
 alter table organizational.tags alter column created_at set not null;
 alter table organizational.tags alter column updated_at set not null;
-alter table organizational.tags alter column templated set not null;
 
 alter table organizational.tags
 	add constraint tags_pkey primary key (guild_id, name)

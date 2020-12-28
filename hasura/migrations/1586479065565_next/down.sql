@@ -4,6 +4,12 @@ alter table tags rename user_id to "user";
 alter table tags rename guild_id to guild;
 
 alter table tags
+	add column id uuid default public.gen_random_uuid() not null,
+	add column hoisted boolean default false,
+	add column templated boolean default false
+;
+
+alter table tags
 	add constraint tags_guild_name_key unique (guilds, name),
 	add constraint tags_pkey primary key (id)
 ;

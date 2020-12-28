@@ -1,9 +1,14 @@
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
+
+import { RootState } from '~/store/index';
 
 import { GraphQLGuild } from '~/interfaces/Guild';
 
-export function useQueryGuild(id: string, loggedIn = false) {
+export function useQueryGuild(id: string) {
+	const user = useSelector((state: RootState) => state.user);
+
 	const { data, isLoading } = useQuery<GraphQLGuild>(
 		['guilds', 'bot', id],
 		() =>
@@ -21,7 +26,7 @@ export function useQueryGuild(id: string, loggedIn = false) {
 				{ guild_id: id },
 			).then(({ body }) => body),
 		{
-			enabled: loggedIn,
+			enabled: user.loggedIn,
 		},
 	);
 
