@@ -6,20 +6,20 @@ import { RootState } from '~/store/index';
 
 import { GraphQLGuildTag, GuildTagPayload } from '~/interfaces/GuildTags';
 
-export function useMutationUpdateGuildTag(id: string, name: string) {
+export function useMutationInsertGuildTag(id: string) {
 	const user = useSelector((state: RootState) => state.user);
 	const cache = useQueryClient();
 
 	return useMutation<GraphQLGuildTag, unknown, GuildTagPayload>(
 		(guildTag) =>
 			fetchGraphQL(
-				`mutation GuildTag($guild_id: String!, $name: String!, $_set: organizational_tags_set_input!) {
-					tag: update_organizational_tags_by_pk(pk_columns: {guild_id: $guild_id, name: $name}, _set: $_set) {
+				`mutation GuildTag($object: organizational_tags_insert_input!) {
+					tag: insert_organizational_tags_one(object: $object) {
 						guild_id
 						name
 					}
 				}`,
-				{ guild_id: id, name, _set: { ...guildTag, last_modified: user.id } },
+				{ object: { ...guildTag, guild_id: id, user_id: user.id, last_modified: user.id } },
 			).then(({ body }) => body),
 		{
 			onSuccess: () => {

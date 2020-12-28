@@ -1,20 +1,16 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Grid, Text } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 
 import GuildsStyles from '~/styles/modules/guilds.module.scss';
 
 const Loading = dynamic(() => import('./Loading'));
 const GuildIcon = dynamic(() => import('./GuildIcon'));
 
-import { RootState } from '~/store/index';
-
 import { useQueryOAuthGuilds } from '~/hooks/useQueryOAuthGuilds';
 
 const Guilds = () => {
-	const user = useSelector((state: RootState) => state.user);
-	const { data, isLoading } = useQueryOAuthGuilds(user.loggedIn);
+	const { data, isLoading } = useQueryOAuthGuilds();
 
 	if (isLoading) {
 		return <Loading />;

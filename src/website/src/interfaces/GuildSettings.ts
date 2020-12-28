@@ -1,5 +1,8 @@
-export interface GuildSetingsPayload {
+export interface GuildSettingsPayload {
 	prefix: string;
+}
+
+export interface GuildModerationSettingsPayload {
 	mod_role_id: string | null;
 	mod_log_channel_id: string | null;
 	guild_log_channel_id: string | null;

@@ -12,7 +12,7 @@ export function useQueryMe() {
 	const user = useSelector((state: RootState) => state.user);
 	const dispatch = useDispatch();
 
-	const { data, isLoading } = useQuery<GraphQLUser>(
+	const { data, isLoading } = useQuery<GraphQLUser & { errors: unknown[] }>(
 		'user',
 		() =>
 			fetchGraphQL(
@@ -35,6 +35,10 @@ export function useQueryMe() {
 	);
 
 	useEffect(() => {
+		if (data?.errors) {
+			return;
+		}
+
 		if (!user.loggedIn && data?.data.me[0] && data.data.me[0].connections.length) {
 			const connection = data.data.me[0].connections.find((c) => c.main)!;
 			dispatch(

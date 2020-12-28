@@ -9,10 +9,8 @@ export interface GuildTag {
 	content: string;
 	created_at: string;
 	guild_id: string;
-	hoisted: false;
 	name: string;
 	last_modified: string | null;
-	templated: boolean;
 	updated_at: string;
 	user_id: string;
 	uses: number;
@@ -20,6 +18,11 @@ export interface GuildTag {
 
 export interface GraphQLGuildTags {
 	data: {
+		tagCount: {
+			aggregate: {
+				count: number;
+			};
+		};
 		tags: GuildTag[];
 	};
 }

@@ -148,5 +148,7 @@ alter table tags rename "user" to user_id;
 alter table tags
 	drop constraint tags_guild_name_key,
 	drop constraint tags_pkey,
-	drop id
+	drop id,
+	drop hoisted,
+	drop templated
 ;

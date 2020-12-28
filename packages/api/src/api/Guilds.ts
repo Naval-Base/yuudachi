@@ -1,6 +1,9 @@
 import { Case, CreateCase, UpdateCase, Lockdown, CreateLockdown, DeleteLockdown } from '@yuudachi/types';
+import { Constants } from '@yuudachi/core';
 import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types';
 import API from '..';
+
+const { USER_ID_HEADER } = Constants;
 
 export default class Guilds {
 	public constructor(private readonly api: API) {}
@@ -11,7 +14,7 @@ export default class Guilds {
 
 	public getOAuth(userId: string) {
 		return this.api.make<RESTGetAPICurrentUserGuildsResult>('get', '/guilds/oauth', undefined, {
-			'x-hasura-user-id': userId,
+			[USER_ID_HEADER]: userId,
 		});
 	}
 

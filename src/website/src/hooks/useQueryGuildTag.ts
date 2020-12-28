@@ -1,9 +1,14 @@
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
+
+import { RootState } from '~/store/index';
 
 import { GraphQLGuildTag } from '~/interfaces/GuildTags';
 
-export function useQueryGuildTag(id: string, name: string, loggedIn = false) {
+export function useQueryGuildTag(id: string, name: string, enabled = false) {
+	const user = useSelector((state: RootState) => state.user);
+
 	const { data, isLoading } = useQuery<GraphQLGuildTag>(
 		['guilds', id, 'tags', name],
 		() =>
@@ -13,10 +18,8 @@ export function useQueryGuildTag(id: string, name: string, loggedIn = false) {
 						aliases
 						content
 						created_at
-						hoisted
 						name
 						last_modified
-						templated
 						updated_at
 						user_id
 						uses
@@ -25,7 +28,7 @@ export function useQueryGuildTag(id: string, name: string, loggedIn = false) {
 				{ guild_id: id, name: name },
 			).then(({ body }) => body),
 		{
-			enabled: loggedIn,
+			enabled: user.loggedIn && enabled,
 		},
 	);
 

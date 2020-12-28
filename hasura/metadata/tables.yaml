@@ -21,6 +21,15 @@
 - table:
     schema: moderation
     name: cases
+  object_relationships:
+  - name: target
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: connections
+        column_mapping:
+          target_id: id
   select_permissions:
   - role: moderator
     permission:
@@ -61,8 +70,10 @@
       - target_tag
       - action_processed
       filter:
-        target_id:
-          _eq: x-hasura-user-id
+        target:
+          user_id:
+            _eq: x-hasura-user-id
+      allow_aggregations: true
   update_permissions:
   - role: moderator
     permission:
@@ -115,42 +126,22 @@
 - table:
     schema: moderation
     name: lockdowns
-  insert_permissions:
-  - role: moderator
-    permission:
-      check: {}
-      columns:
-      - expiration
-      - channel_id
-      backend_only: false
   select_permissions:
   - role: moderator
     permission:
       columns:
-      - channel_id
       - expiration
+      - channel_id
+      - guild_id
+      - mod_id
+      - overwrites
+      - reason
+      - mod_tag
       filter: {}
       allow_aggregations: true
-  update_permissions:
-  - role: moderator
-    permission:
-      columns:
-      - expiration
-      - channel_id
-      filter: {}
-      check: {}
 - table:
     schema: moderation
     name: role_states
-  insert_permissions:
-  - role: moderator
-    permission:
-      check: {}
-      columns:
-      - guild_id
-      - member_id
-      - roles
-      backend_only: false
   select_permissions:
   - role: moderator
     permission:
@@ -160,15 +151,6 @@
       - roles
       filter: {}
       allow_aggregations: true
-  update_permissions:
-  - role: moderator
-    permission:
-      columns:
-      - guild_id
-      - member_id
-      - roles
-      filter: {}
-      check: {}
 - table:
     schema: organizational
     name: tags
@@ -180,41 +162,37 @@
       - aliases
       - content
       - guild_id
-      - hoisted
+      - last_modified
       - name
-      - templated
+      - user_id
       backend_only: false
   select_permissions:
   - role: moderator
     permission:
       columns:
       - aliases
-      - uses
       - content
-      - name
       - created_at
-      - updated_at
       - guild_id
-      - user_id
       - last_modified
-      - hoisted
-      - templated
+      - name
+      - updated_at
+      - user_id
+      - uses
       filter: {}
       allow_aggregations: true
   - role: user
     permission:
       columns:
       - aliases
-      - uses
       - content
-      - name
       - created_at
-      - updated_at
       - guild_id
-      - user_id
       - last_modified
-      - hoisted
-      - templated
+      - name
+      - updated_at
+      - user_id
+      - uses
       filter: {}
       allow_aggregations: true
   update_permissions:
@@ -223,9 +201,8 @@
       columns:
       - aliases
       - content
-      - hoisted
+      - last_modified
       - name
-      - templated
       filter: {}
       check: {}
   delete_permissions:

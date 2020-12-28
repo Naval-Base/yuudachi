@@ -1,9 +1,14 @@
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
+
+import { RootState } from '~/store/index';
 
 import { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
 
-export function useQueryGuildSettings(id: string, loggedIn = false) {
+export function useQueryGuildSettings(id: string, enabled = false) {
+	const user = useSelector((state: RootState) => state.user);
+
 	const { data, isLoading } = useQuery<GraphQLGuildSettings>(
 		['guilds', id, 'settings'],
 		() =>
@@ -29,7 +34,7 @@ export function useQueryGuildSettings(id: string, loggedIn = false) {
 				{ guild_id: id },
 			).then(({ body }) => body),
 		{
-			enabled: loggedIn,
+			enabled: user.loggedIn && enabled,
 		},
 	);
 
