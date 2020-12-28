@@ -77,12 +77,12 @@ test('refreshes token', async () => {
 		access: {
 			expiration: new Date(900000), // 0 + 15m
 			token:
-				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjowLCJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsidXNlciIsInVzZXIiXSwieC1oYXN1cmEtZGVmYXVsdC1yb2xlIjoidXNlciIsIngtaGFzdXJhLXVzZXItaWQiOiIxMjM0NTY3ODkwIn0sInJlZnJlc2giOmZhbHNlLCJleHAiOjkwMH0.KntOpGBacs_lKS12qN_iG3S5_eNT3NC64jvTgUT0Ey8',
+				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjotMiwiaHR0cHM6Ly9oYXN1cmEuaW8vand0L2NsYWltcyI6eyJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInVzZXIiLCJ1c2VyIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InVzZXIiLCJ4LWhhc3VyYS11c2VyLWlkIjoiMTIzNDU2Nzg5MCJ9LCJyZWZyZXNoIjpmYWxzZSwiZXhwIjo4OTh9.rcr3SuVyiATt-FCqOB5DZKYAWcauwrcLRVodBtzmXfY',
 		},
 		refresh: {
 			expiration: new Date(604800000), // 0 + 7d
 			token:
-				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjowLCJyZWZyZXNoIjp0cnVlLCJleHAiOjYwNDgwMH0.Uuc2uYdCazvBNFjZV_woPzYUs-4dYJOIHew5U_S-FU8',
+				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjotMiwicmVmcmVzaCI6dHJ1ZSwiZXhwIjo2MDQ3OTh9.jwIm_ti6BbmuZi3_wF08y7ob8eAcHTbDGud1mUi6QnU',
 		},
 	});
 });

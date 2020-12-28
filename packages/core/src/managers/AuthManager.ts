@@ -85,9 +85,11 @@ export class AuthManager {
 		const [user] = (await this.sql`select token_reset_at from users where id = ${data.sub}`) as [
 			{ token_reset_at: string },
 		];
+
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!user) throw new Error('invalid user');
-		if (new Date(user.token_reset_at).getTime() / 1000 > data.iat) throw new Error('invalid token');
+		// Intentionally date back iat by 2 seconds
+		if (Math.ceil(new Date(user.token_reset_at).getTime() / 1000 - 2) > data.iat) throw new Error('invalid token');
 
 		return data.sub;
 	}
@@ -99,7 +101,8 @@ export class AuthManager {
 			returning role, token_reset_at
 		`) as [{ role: string; token_reset_at: string }];
 
-		const iat = Math.ceil(new Date(token_reset_at).getTime() / 1000);
+		// Intentionally date back iat by 2 seconds
+		const iat = Math.ceil(new Date(token_reset_at).getTime() / 1000 - 2);
 
 		const tokenData: AccessTokenData = {
 			sub: userId,
