@@ -1,6 +1,8 @@
 import fetch from 'cross-fetch';
 import Cookies from 'universal-cookie';
 
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 class ResponseError extends Error {
 	public readonly name = 'ResponseError';
 
@@ -9,48 +11,51 @@ class ResponseError extends Error {
 	}
 }
 
-function refreshFetch() {
+export default async function refreshFetch(
+	input: string | Request | URL,
+	options: Record<string, any> = { headers: {} },
+	attempt = 0,
+): Promise<{ response: Response; body: any }> {
 	const cookies = new Cookies();
-	let token = cookies.get<string>('access_token');
+	const token = cookies.get<string>('access_token');
 
-	return async (input: string | Request | URL, options: Record<string, any> = { headers: {} }) => {
-		try {
-			if (token) {
-				options.headers = { ...options.headers, authorization: `Bearer ${token}` };
+	if (token) {
+		options.headers = { ...options.headers, authorization: `Bearer ${token}` };
+	}
+
+	try {
+		if (attempt) {
+			await delay(2 ** attempt * 1000);
+		}
+		const response = await fetch(input as RequestInfo, options);
+		const body = await response.clone().json();
+		if (response.ok) {
+			if (body.errors?.[0].extensions.code === 'invalid-jwt') {
+				throw new ResponseError(response.status, response, body);
 			}
+			return { response, body };
+		}
 
-			const response = await fetch(input as RequestInfo, options);
-			const body = await response.clone().json();
-			if (response.ok) {
-				if (body.errors?.[0].extensions.code === 'invalid-jwt') {
-					throw new ResponseError(response.status, response, body);
-				}
-				return { response, body };
-			}
-
-			throw new ResponseError(response.status, response, body);
-		} catch (error) {
-			if (error.response.status === 401 || error.body.errors[0].extensions.code === 'invalid-jwt') {
+		throw new ResponseError(response.status, response, body);
+	} catch (error) {
+		if (error.body.errors[0].extensions.code === 'invalid-jwt') {
+			if (/JWTExpired/.test(error.body.errors[0].message)) {
 				try {
-					await fetch('http://localhost:3600/api/auth/refresh', { credentials: 'include' });
-
-					token = cookies.get<string>('access_token');
-					if (token) {
-						options.headers = { ...options.headers, authorization: `Bearer ${token}` };
+					const res = await fetch('http://localhost:3600/api/auth/refresh', { credentials: 'include' });
+					if (!res.ok || res.status === 401) {
+						throw new ResponseError(res.status, res, {});
 					}
-
-					const response = await fetch(input as RequestInfo, options);
-					const body = await response.clone().json();
-
-					return { response, body };
+					return refreshFetch(input, options, attempt++);
 				} catch (e) {
+					cookies.remove('access_token');
 					throw e;
 				}
+			} else if (/JWTIssuedAtFuture/.test(error.body.errors[0].message)) {
+				return refreshFetch(input, options);
 			}
-
-			throw error;
 		}
-	};
-}
 
-export default refreshFetch();
+		cookies.remove('access_token');
+		throw error;
+	}
+}
