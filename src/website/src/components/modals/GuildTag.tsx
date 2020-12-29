@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import {
 	Button,
 	IconButton,
@@ -24,6 +23,7 @@ import {
 	AccordionButton,
 	AccordionPanel,
 	AccordionIcon,
+	ButtonGroup,
 } from '@chakra-ui/react';
 import { FiPlus, FiX } from 'react-icons/fi';
 import TextareaAutosize from 'react-autosize-textarea';
@@ -33,7 +33,7 @@ import { toHTML } from 'discord-markdown';
 
 const Loading = dynamic(() => import('../Loading'));
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GuildTagPayload } from '~/interfaces/GuildTags';
 import { GraphQLRole } from '~/interfaces/Role';
@@ -43,7 +43,7 @@ import { useMutationUpdateGuildTag } from '~/hooks/useMutationUpdateGuildTag';
 import { useMutationInsertGuildTag } from '~/hooks/useMutationInsertGuildTag';
 
 const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; onClose: () => void }) => {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const router = useRouter();
 	const [content, setContent] = useState('');
 	const { handleSubmit, register, control, watch } = useForm<GuildTagPayload>();
@@ -138,7 +138,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 												</InputGroup>
 											</Box>
 										))}
-										<Box textAlign="right">
+										<ButtonGroup d="flex" justifyContent="flex-end">
 											<IconButton
 												colorScheme="green"
 												size="sm"
@@ -147,7 +147,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 												onClick={() => append({ value: '' })}
 												isDisabled={user.role === GraphQLRole.user}
 											/>
-										</Box>
+										</ButtonGroup>
 									</AccordionPanel>
 								</AccordionItem>
 							</Accordion>

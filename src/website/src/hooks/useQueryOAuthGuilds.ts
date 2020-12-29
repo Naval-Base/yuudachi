@@ -1,13 +1,12 @@
 import { useQuery, useQueryClient } from 'react-query';
-import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GraphQLOAuthGuilds } from '~/interfaces/Guild';
 
 export function useQueryOAuthGuilds() {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const cache = useQueryClient();
 
 	const { data, isLoading } = useQuery<GraphQLOAuthGuilds>(

@@ -1,19 +1,18 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import { IconButton, useDisclosure } from '@chakra-ui/react';
 import { FiEye, FiEdit, FiX } from 'react-icons/fi';
 
 const GuildTagModal = dynamic(() => import('~/components/modals/GuildTag'));
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GraphQLRole } from '~/interfaces/Role';
 
 import { useMutationDeleteGuildTag } from '~/hooks/useMutationDeleteGuildTag';
 
 const GuildTag = ({ name }: { name: string }) => {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { id } = router.query;

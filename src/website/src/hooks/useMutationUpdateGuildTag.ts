@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GraphQLGuildTag, GuildTagPayload } from '~/interfaces/GuildTags';
 
 export function useMutationUpdateGuildTag(id: string, name: string) {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const cache = useQueryClient();
 
 	return useMutation<GraphQLGuildTag, unknown, GuildTagPayload>(

@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { Box, Button, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { useQueryClient } from 'react-query';
+import { Button, ButtonGroup, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -12,26 +12,30 @@ const Table = dynamic(() => import('~/components/Table'));
 const GuildTag = dynamic(() => import('~/components/GuildTag'));
 const GuildTagModal = dynamic(() => import('~/components/modals/GuildTag'));
 
-import { RootState } from '~/store/index';
+import { useUserStore, useTableStore } from '~/store/index';
 
 import { GraphQLRole } from '~/interfaces/Role';
 
 import { useQueryGuildTags } from '~/hooks/useQueryGuildTags';
 
 const GuildTagsPage = () => {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const router = useRouter();
-	const [limit, setLimit] = useState(50);
-	const [page, setPage] = useState(1);
+	const cache = useQueryClient();
+	const table = useTableStore();
 	const actionColumWidth = useBreakpointValue({ base: '40%', sm: '30%', md: '20%', lg: '20%' });
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	useEffect(() => {
+		return () => table.reset();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const { id } = router.query;
 	const { data: gqlData, isLoading } = useQueryGuildTags(
 		id as string,
 		[{ created_at: 'desc' }],
-		limit,
-		limit * (page - 1),
+		table.limit,
+		table.limit * (table.page - 1),
 	);
 
 	const columns = useMemo(
@@ -54,28 +58,22 @@ const GuildTagsPage = () => {
 		return <Loading />;
 	}
 
-	const handlePageChange = (next: boolean) => {
-		setPage((old) => (next ? old++ : old--));
-	};
-
-	const handleLimitChange = (limit: number) => {
-		setLimit(limit);
+	const handleRefreshChange = () => {
+		void cache.invalidateQueries(['guilds', id as string, 'tags']);
 	};
 
 	return (
 		<>
-			<Box mb={4} mr={2} textAlign="right">
+			<ButtonGroup mb={4} mr={2} d="flex" justifyContent="flex-end">
 				<Button colorScheme="green" onClick={onOpen} isDisabled={isOpen || user.role === GraphQLRole.user}>
 					Add Tag
 				</Button>
-			</Box>
+			</ButtonGroup>
 			<Table
 				columns={columns}
 				data={gqlData?.tags ?? []}
 				count={gqlData?.tagCount.aggregate.count ?? 0}
-				onPageChange={handlePageChange}
-				onLimitChange={handleLimitChange}
-				invalidateKey={['guilds', id as string, 'tags']}
+				onRefreshChange={handleRefreshChange}
 			/>
 
 			<GuildTagModal isOpen={isOpen} onClose={onClose} />

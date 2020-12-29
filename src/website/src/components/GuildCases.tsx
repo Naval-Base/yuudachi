@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useQueryClient } from 'react-query';
 import { CaseAction } from '@yuudachi/types';
 import { useBreakpointValue } from '@chakra-ui/react';
 
@@ -8,21 +9,27 @@ import EllipsisPopover from '~/components/EllipsisPopover';
 
 const Loading = dynamic(() => import('~/components/Loading'));
 const Table = dynamic(() => import('~/components/Table'));
+import { useTableStore } from '~/store/index';
 
 import { useQueryGuildCases } from '~/hooks/useQueryGuildCases';
 
 const GuildCasesPage = () => {
 	const router = useRouter();
-	const [limit, setLimit] = useState(50);
-	const [page, setPage] = useState(1);
+	const cache = useQueryClient();
+	const table = useTableStore();
 	const actionColumWidth = useBreakpointValue({ base: '40%', sm: '30%', md: '20%', lg: '20%' });
+
+	useEffect(() => {
+		return () => table.reset();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const { id } = router.query;
 	const { data: gqlData, isLoading } = useQueryGuildCases(
 		id as string,
 		[{ case_id: 'desc' }],
-		limit,
-		limit * (page - 1),
+		table.limit,
+		table.limit * (table.page - 1),
+		table.search,
 	);
 
 	const columns = useMemo(
@@ -30,6 +37,7 @@ const GuildCasesPage = () => {
 			{
 				Header: 'Case',
 				accessor: 'case_id',
+				search: true,
 			},
 			{
 				Header: 'Action',
@@ -44,22 +52,28 @@ const GuildCasesPage = () => {
 				accessor: 'mod_tag',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string | null }) => <EllipsisPopover text={value ?? ''} total={20} />,
+				search: true,
 			},
 			{
 				Header: 'Target',
 				accessor: 'target_tag',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string }) => <EllipsisPopover text={value} total={20} />,
+				search: true,
 			},
 			{
 				Header: 'Reason',
 				accessor: 'reason',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string | null }) => <EllipsisPopover text={value ?? ''} total={20} />,
+				search: {
+					op: '_ilike',
+				},
 			},
 			{
 				Header: 'Reference',
 				accessor: 'ref_id',
+				search: true,
 			},
 		],
 		[],
@@ -69,12 +83,8 @@ const GuildCasesPage = () => {
 		return <Loading />;
 	}
 
-	const handlePageChange = (next: boolean) => {
-		setPage((old) => (next ? old++ : old--));
-	};
-
-	const handleLimitChange = (limit: number) => {
-		setLimit(limit);
+	const handleRefreshChange = () => {
+		void cache.invalidateQueries(['guilds', id, 'cases']);
 	};
 
 	return (
@@ -83,9 +93,7 @@ const GuildCasesPage = () => {
 			hiddenColumns={['ref_id']}
 			data={gqlData?.cases ?? []}
 			count={gqlData?.caseCount.aggregate.count ?? 0}
-			onPageChange={handlePageChange}
-			onLimitChange={handleLimitChange}
-			invalidateKey={['guilds', id as string, 'cases']}
+			onRefreshChange={handleRefreshChange}
 		/>
 	);
 };
