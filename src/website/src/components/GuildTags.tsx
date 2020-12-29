@@ -64,7 +64,7 @@ const GuildTagsPage = () => {
 
 	return (
 		<>
-			<Box mb={4} mr={4} textAlign="right">
+			<Box mb={4} mr={2} textAlign="right">
 				<Button colorScheme="green" onClick={onOpen} isDisabled={isOpen || user.role === GraphQLRole.user}>
 					Add Tag
 				</Button>
@@ -75,6 +75,7 @@ const GuildTagsPage = () => {
 				count={gqlData?.tagCount.aggregate.count ?? 0}
 				onPageChange={handlePageChange}
 				onLimitChange={handleLimitChange}
+				invalidateKey={['guilds', id as string, 'tags']}
 			/>
 
 			<GuildTagModal isOpen={isOpen} onClose={onClose} />

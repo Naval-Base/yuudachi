@@ -19,8 +19,9 @@ import {
 	Button,
 	FormLabel,
 } from '@chakra-ui/react';
-import { FiMoreVertical } from 'react-icons/fi';
+import { FiMoreVertical, FiRefreshCw } from 'react-icons/fi';
 import { useTable } from 'react-table';
+import { useQueryClient } from 'react-query';
 
 const Table = ({
 	columns,
@@ -28,6 +29,7 @@ const Table = ({
 	count,
 	onPageChange,
 	onLimitChange,
+	invalidateKey,
 }: {
 	columns: {
 		Header: string;
@@ -37,6 +39,7 @@ const Table = ({
 	count: number;
 	onPageChange: (...args: any) => void;
 	onLimitChange: (...args: any) => void;
+	invalidateKey: string[];
 }) => {
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns } = useTable({
 		columns,
@@ -44,6 +47,7 @@ const Table = ({
 	});
 	const [limit, setLimit] = useState(50);
 	const [page, setPage] = useState(1);
+	const cache = useQueryClient();
 
 	const handlePageChange = (next: boolean) => {
 		setPage((old) => (next ? old++ : old--));
@@ -56,13 +60,17 @@ const Table = ({
 		onLimitChange(limit);
 	};
 
+	const handleRefreshChange = () => {
+		void cache.invalidateQueries(invalidateKey);
+	};
+
 	return (
 		<>
-			<Box mb={4} mr={4} textAlign="right">
+			<Box mb={4} mr={2} textAlign="right">
 				<Box display="inline-block">
 					<FormLabel as="legend">Items per page</FormLabel>
 				</Box>
-				<Box display="inline-block" pr={2}>
+				<Box display="inline-block" mr={2}>
 					<Select defaultValue={50} size="sm" onChange={handleLimitChange}>
 						<option value={50}>50</option>
 						<option value={100}>100</option>
@@ -70,7 +78,7 @@ const Table = ({
 					</Select>
 				</Box>
 				<Menu closeOnSelect={false} isLazy>
-					<MenuButton as={IconButton} icon={<FiMoreVertical />} size="sm" />
+					<MenuButton mr={2} as={IconButton} aria-label="Column selection" icon={<FiMoreVertical />} size="sm" />
 					<MenuList minWidth="150px">
 						{allColumns.map((column) => (
 							<MenuItem key={column.id}>
@@ -81,6 +89,7 @@ const Table = ({
 						))}
 					</MenuList>
 				</Menu>
+				<IconButton aria-label="Refresh table" icon={<FiRefreshCw />} size="sm" onClick={handleRefreshChange} />
 			</Box>
 			<ChakraTable {...getTableProps()}>
 				<Thead>
