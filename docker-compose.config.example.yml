@@ -34,6 +34,7 @@ services:
   api:
     environment:
       DISCORD_TOKEN: ''
+      CORS: ''
       JWT_SECRET: ''
 
   graphql:
@@ -42,5 +43,7 @@ services:
 
   auth:
     environment:
+      CORS: ''
+      JWT_SECRET: ''
       DISCORD_CLIENT_ID: ''
       DISCORD_CLIENT_SECRET: ''

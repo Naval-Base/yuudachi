@@ -175,6 +175,7 @@ services:
       PGUSERNAME: ''
       PGPASSWORD: ''
       DISCORD_TOKEN: ''
+      CORS: ''
       JWT_SECRET: ''
     expose:
       - '3500'
@@ -214,6 +215,7 @@ services:
       PGDATABASE: ''
       PGUSERNAME: ''
       PGPASSWORD: ''
+      CORS: ''
       JWT_SECRET: ''
       DISCORD_CLIENT_ID: ''
       PUBLIC_API_DOMAIN: 'http://localhost:3600'

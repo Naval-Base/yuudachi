@@ -91,13 +91,14 @@ services:
       PGUSERNAME: 'yuudachi'
       PGPASSWORD: 'admin'
       DISCORD_TOKEN: ''
+      CORS: ''
       JWT_SECRET: ''
 
   graphql:
     environment:
       POSTGRES_USER: 'yuudachi'
-      POSTGRES_PASSWORD: 'admin'
       POSTGRES_DB: 'yuudachi'
+      POSTGRES_PASSWORD: 'admin'
       JWT_SECRET: ''
 
   auth:
@@ -105,6 +106,7 @@ services:
       PGDATABASE: 'yuudachi'
       PGUSERNAME: 'yuudachi'
       PGPASSWORD: 'admin'
+      CORS: ''
       JWT_SECRET: ''
       DISCORD_CLIENT_ID: ''
       DISCORD_CLIENT_SECRET: ''
