@@ -25,31 +25,36 @@ const GuildTag = ({ name }: { name: string }) => {
 
 	return (
 		<>
-			<IconButton
-				mr={2}
-				size="sm"
-				aria-label="Show tag"
-				icon={<FiEye />}
-				onClick={onOpen}
-				isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
-			/>
-			<IconButton
-				mr={2}
-				size="sm"
-				aria-label="Edit tag"
-				icon={<FiEdit />}
-				onClick={onOpen}
-				isDisabled={isOpen || isLoadingGuildTagDeleteMutate || user.role === GraphQLRole.user}
-			/>
-			<IconButton
-				colorScheme="red"
-				size="sm"
-				aria-label="Delete tag"
-				icon={<FiX />}
-				onClick={() => guildTagDeleteMutate()}
-				isLoading={isLoadingGuildTagDeleteMutate}
-				isDisabled={isOpen || isLoadingGuildTagDeleteMutate || user.role === GraphQLRole.user}
-			/>
+			{user.role === GraphQLRole.user ? (
+				<IconButton
+					mr={2}
+					size="sm"
+					aria-label="Show tag"
+					icon={<FiEye />}
+					onClick={onOpen}
+					isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
+				/>
+			) : (
+				<>
+					<IconButton
+						mr={2}
+						size="sm"
+						aria-label="Edit tag"
+						icon={<FiEdit />}
+						onClick={onOpen}
+						isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
+					/>
+					<IconButton
+						colorScheme="red"
+						size="sm"
+						aria-label="Delete tag"
+						icon={<FiX />}
+						onClick={() => guildTagDeleteMutate()}
+						isLoading={isLoadingGuildTagDeleteMutate}
+						isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
+					/>
+				</>
+			)}
 
 			<GuildTagModal name={name} isOpen={isOpen} onClose={onClose} />
 		</>

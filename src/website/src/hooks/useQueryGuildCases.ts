@@ -4,7 +4,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { RootState } from '~/store/index';
 
-import { GraphQLGuildCases, GuildCase } from '~/interfaces/Cases';
+import { GraphQLGuildCases, GuildCase } from '~/interfaces/GuildCases';
 
 export function useQueryGuildCases(
 	id: string,

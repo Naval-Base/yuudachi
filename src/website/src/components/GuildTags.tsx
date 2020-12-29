@@ -23,7 +23,7 @@ const GuildTagsPage = () => {
 	const router = useRouter();
 	const [limit, setLimit] = useState(50);
 	const [page, setPage] = useState(1);
-	const actionColumWidth = useBreakpointValue({ base: '50%', sm: '45%', md: '30%' });
+	const actionColumWidth = useBreakpointValue({ base: '40%', sm: '30%', md: '20%', lg: '20%' });
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const { id } = router.query;

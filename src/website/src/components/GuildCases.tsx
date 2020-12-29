@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { CaseAction } from '@yuudachi/types';
+import { useBreakpointValue } from '@chakra-ui/react';
 
 import EllipsisPopover from '~/components/EllipsisPopover';
 
@@ -14,6 +15,7 @@ const GuildCasesPage = () => {
 	const router = useRouter();
 	const [limit, setLimit] = useState(50);
 	const [page, setPage] = useState(1);
+	const actionColumWidth = useBreakpointValue({ base: '40%', sm: '30%', md: '20%', lg: '20%' });
 
 	const { id } = router.query;
 	const { data: gqlData, isLoading } = useQueryGuildCases(
@@ -55,6 +57,10 @@ const GuildCasesPage = () => {
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string | null }) => <EllipsisPopover text={value ?? ''} total={20} />,
 			},
+			{
+				Header: 'Reference',
+				accessor: 'ref_id',
+			},
 		],
 		[],
 	);
@@ -74,6 +80,7 @@ const GuildCasesPage = () => {
 	return (
 		<Table
 			columns={columns}
+			hiddenColumns={['ref_id']}
 			data={gqlData?.cases ?? []}
 			count={gqlData?.caseCount.aggregate.count ?? 0}
 			onPageChange={handlePageChange}

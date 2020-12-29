@@ -25,6 +25,7 @@ import { useQueryClient } from 'react-query';
 
 const Table = ({
 	columns,
+	hiddenColumns = [],
 	data = [],
 	count,
 	onPageChange,
@@ -35,6 +36,7 @@ const Table = ({
 		Header: string;
 		accessor: string;
 	}[];
+	hiddenColumns?: string[];
 	data: any[];
 	count: number;
 	onPageChange: (...args: any) => void;
@@ -44,6 +46,9 @@ const Table = ({
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns } = useTable({
 		columns,
 		data,
+		initialState: {
+			hiddenColumns,
+		},
 	});
 	const [limit, setLimit] = useState(50);
 	const [page, setPage] = useState(1);

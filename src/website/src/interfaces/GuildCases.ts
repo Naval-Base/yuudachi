@@ -25,3 +25,9 @@ export interface GraphQLGuildCases {
 		cases: GuildCase[];
 	};
 }
+
+export interface GraphQLGuildCase {
+	data: {
+		case: GuildCase;
+	};
+}

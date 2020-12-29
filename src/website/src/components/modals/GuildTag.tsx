@@ -42,7 +42,7 @@ import { useQueryGuildTag } from '~/hooks/useQueryGuildTag';
 import { useMutationUpdateGuildTag } from '~/hooks/useMutationUpdateGuildTag';
 import { useMutationInsertGuildTag } from '~/hooks/useMutationInsertGuildTag';
 
-const GuildSettings = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; onClose: () => void }) => {
+const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; onClose: () => void }) => {
 	const user = useSelector((state: RootState) => state.user);
 	const router = useRouter();
 	const [content, setContent] = useState('');
@@ -199,4 +199,4 @@ const GuildSettings = ({ name, isOpen, onClose }: { name?: string; isOpen: boole
 	);
 };
 
-export default GuildSettings;
+export default GuildTag;
