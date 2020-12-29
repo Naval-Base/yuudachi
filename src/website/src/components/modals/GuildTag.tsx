@@ -160,6 +160,7 @@ const GuildSettings = ({ name, isOpen, onClose }: { name?: string; isOpen: boole
 									resize="none"
 									name="content"
 									transition="height none"
+									rows={5}
 									ref={register}
 									as={TextareaAutosize as any /* fuck ts */}
 									defaultValue={gqlGuildTagData?.tag.content}

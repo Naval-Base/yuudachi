@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { CaseAction } from '@yuudachi/types';
 
 import EllipsisPopover from '~/components/EllipsisPopover';
 
@@ -31,6 +32,10 @@ const GuildCasesPage = () => {
 			{
 				Header: 'Action',
 				accessor: 'action',
+				Cell: ({ value }: { value: number }) => {
+					const action = CaseAction[value];
+					return `${action[0].toUpperCase() + action.substr(1).toLowerCase()}`;
+				},
 			},
 			{
 				Header: 'Moderator',
@@ -73,6 +78,7 @@ const GuildCasesPage = () => {
 			count={gqlData?.caseCount.aggregate.count ?? 0}
 			onPageChange={handlePageChange}
 			onLimitChange={handleLimitChange}
+			invalidateKey={['guilds', id as string, 'cases']}
 		/>
 	);
 };
