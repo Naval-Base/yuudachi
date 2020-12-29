@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { Box, Flex, Button, IconButton } from '@chakra-ui/react';
+import { Box, Flex, Button, IconButton, Img } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 
@@ -15,7 +15,8 @@ const Navbar = () => {
 		user.loggedIn ? (
 			<Link href="/users/me">
 				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
-					{user.username}
+					<Box mr={2}>{user.username}</Box>
+					<Img rounded="full" boxSize="25px" src={user.avatar} alt={user.username} />
 				</Button>
 			</Link>
 		) : (
