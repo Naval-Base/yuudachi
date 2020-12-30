@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { CaseAction } from '@yuudachi/types';
-import { IconButton, useBreakpointValue } from '@chakra-ui/react';
-import { FiSettings } from 'react-icons/fi';
+import { useBreakpointValue } from '@chakra-ui/react';
 
 import EllipsisPopover from '~/components/EllipsisPopover';
 

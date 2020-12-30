@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { IconButton, useDisclosure, useToast } from '@chakra-ui/react';
+import { ButtonGroup, IconButton, useDisclosure, useToast } from '@chakra-ui/react';
 import { FiEye, FiEdit, FiX } from 'react-icons/fi';
 
 const GuildTagModal = dynamic(() => import('~/components/modals/GuildTag'));
@@ -38,7 +38,6 @@ const GuildTag = ({ name }: { name: string }) => {
 		<>
 			{user.role === GraphQLRole.user ? (
 				<IconButton
-					mr={2}
 					size="sm"
 					aria-label="Show tag"
 					icon={<FiEye />}
@@ -46,9 +45,8 @@ const GuildTag = ({ name }: { name: string }) => {
 					isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
 				/>
 			) : (
-				<>
+				<ButtonGroup>
 					<IconButton
-						mr={2}
 						size="sm"
 						aria-label="Edit tag"
 						icon={<FiEdit />}
@@ -64,7 +62,7 @@ const GuildTag = ({ name }: { name: string }) => {
 						isLoading={isLoadingGuildTagDeleteMutate}
 						isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
 					/>
-				</>
+				</ButtonGroup>
 			)}
 
 			<GuildTagModal name={name} isOpen={isOpen} onClose={onClose} />

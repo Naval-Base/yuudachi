@@ -2,8 +2,7 @@ import { useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
-import { Button, ButtonGroup, IconButton, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
-import { FiSettings } from 'react-icons/fi';
+import { Button, ButtonGroup, useDisclosure } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -24,7 +23,6 @@ const GuildTagsPage = () => {
 	const router = useRouter();
 	const cache = useQueryClient();
 	const table = useTableStore();
-	const actionColumWidth = useBreakpointValue({ base: '40%', sm: '30%', md: '20%', lg: '20%' });
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	useEffect(() => {
@@ -51,13 +49,12 @@ const GuildTagsPage = () => {
 				},
 			},
 			{
-				id: 'actions',
-				Header: <IconButton aria-label="Actions" icon={<FiSettings />} size="sm" variant="ghost" />,
+				Header: 'Actions',
 				Cell: ({ row }: { row: any }) => <GuildTag name={row.values.name} />,
-				style: { width: actionColumWidth },
+				style: { width: '1%' },
 			},
 		],
-		[actionColumWidth],
+		[],
 	);
 
 	if (isLoading) {
