@@ -14,9 +14,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 			<Box w="100%" h="100%">
 				{children}
 			</Box>
-			<Box w="100%" h="100%">
-				Footer
-			</Box>
+			<Box w="100%" h="100%"></Box>
 		</Grid>
 	);
 };

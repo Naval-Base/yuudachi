@@ -24,8 +24,8 @@ export function useQueryGuildCases(
 		['guilds', id, 'cases', `?limit=${limit}&offset=${offset}${search ? `&search=${search.query as string}` : ''}`],
 		() =>
 			fetchGraphQL(
-				`query GuildCases($where: moderation_cases_bool_exp!, $guild_id: String!, $order_by: [moderation_cases_order_by!], $limit: Int, $offset: Int) {
-					caseCount: moderation_cases_aggregate(where: {guild_id: {_eq: $guild_id}}) {
+				`query GuildCases($where: moderation_cases_bool_exp!, $order_by: [moderation_cases_order_by!], $limit: Int, $offset: Int) {
+					caseCount: moderation_cases_aggregate(where: $where) {
 						aggregate {
 							count
 						}
@@ -48,7 +48,7 @@ export function useQueryGuildCases(
 						target_tag
 					}
 				}`,
-				{ where, guild_id: id, order_by: orderBy, limit, offset },
+				{ where, order_by: orderBy, limit, offset },
 			).then(({ body }) => body),
 		{
 			enabled: user.loggedIn,

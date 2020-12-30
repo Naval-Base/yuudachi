@@ -4,27 +4,34 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 import { useUserStore } from '~/store/index';
 
 import { GraphQLGuildTags, GuildTag } from '~/interfaces/GuildTags';
+import { SearchQuery } from '~/interfaces/SearchQuery';
 
 export function useQueryGuildTags(
 	id: string,
 	orderBy: { [K in keyof GuildTag]?: 'asc' | 'desc' }[],
 	limit: number,
 	offset: number,
+	search: SearchQuery | null = null,
 ) {
 	const user = useUserStore();
 
+	let where = { guild_id: { _eq: id } };
+	if (search?.query) {
+		where = { ...where, [search.key]: { [search.op]: search.query } };
+	}
+
 	const { data, isLoading } = useQuery<GraphQLGuildTags>(
-		['guilds', id, 'tags', `?limit=${limit}&offset=${offset}`],
+		['guilds', id, 'tags', `?limit=${limit}&offset=${offset}${search ? `&search=${search.query as string}` : ''}`],
 		() =>
 			fetchGraphQL(
-				`query GuildTags($guild_id: String!, $order_by: [organizational_tags_order_by!], $limit: Int, $offset: Int) {
-					tagCount: organizational_tags_aggregate(where: {guild_id: {_eq: $guild_id}}) {
+				`query GuildTags($where: organizational_tags_bool_exp!, $order_by: [organizational_tags_order_by!], $limit: Int, $offset: Int) {
+					tagCount: organizational_tags_aggregate(where: $where) {
 						aggregate {
 							count
 						}
 					}
 					
-					tags: organizational_tags(where: {guild_id: {_eq: $guild_id}}, order_by: $order_by, limit: $limit, offset: $offset) {
+					tags: organizational_tags(where: $where, order_by: $order_by, limit: $limit, offset: $offset) {
 						aliases
 						content
 						created_at
@@ -35,7 +42,7 @@ export function useQueryGuildTags(
 						uses
 					}
 				}`,
-				{ guild_id: id, order_by: orderBy, limit, offset },
+				{ where, order_by: orderBy, limit, offset },
 			).then(({ body }) => body),
 		{
 			enabled: user.loggedIn,

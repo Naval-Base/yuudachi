@@ -2,7 +2,8 @@ import { useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
-import { Button, ButtonGroup, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonGroup, IconButton, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { FiSettings } from 'react-icons/fi';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -36,6 +37,7 @@ const GuildTagsPage = () => {
 		[{ created_at: 'desc' }],
 		table.limit,
 		table.limit * (table.page - 1),
+		table.search,
 	);
 
 	const columns = useMemo(
@@ -43,10 +45,13 @@ const GuildTagsPage = () => {
 			{
 				Header: 'Name',
 				accessor: 'name',
+				search: {
+					op: '_ilike',
+				},
 			},
 			{
-				Header: 'Actions',
-				accessor: '',
+				id: 'actions',
+				Header: <IconButton aria-label="Actions" icon={<FiSettings />} size="sm" variant="ghost" />,
 				Cell: ({ row }: { row: any }) => <GuildTag name={row.values.name} />,
 				style: { width: actionColumWidth },
 			},
@@ -70,6 +75,7 @@ const GuildTagsPage = () => {
 				</Button>
 			</ButtonGroup>
 			<Table
+				// @ts-ignore
 				columns={columns}
 				data={gqlData?.tags ?? []}
 				count={gqlData?.tagCount.aggregate.count ?? 0}
