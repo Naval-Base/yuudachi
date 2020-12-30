@@ -10,7 +10,7 @@ import readdirp from 'readdirp';
 import API from '@yuudachi/api';
 import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
-import { APIInteraction, APIMessage } from 'discord-api-types';
+import { APIInteraction, APIMessage, GatewayDispatchEvents } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
 import { Tokens } from '@yuudachi/core';
@@ -46,7 +46,7 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'commands'), {
 });
 
 const messageCreate = async () => {
-	for await (const [message, { ack }] of on(broker, 'MESSAGE_CREATE') as AsyncIterableIterator<
+	for await (const [message, { ack }] of on(broker, GatewayDispatchEvents.MessageCreate) as AsyncIterableIterator<
 		[APIMessage, AmqpResponseOptions]
 	>) {
 		ack();
@@ -122,9 +122,10 @@ const messageCreate = async () => {
 };
 
 const interactionCreate = async () => {
-	for await (const [interaction, { ack }] of on(broker, 'INTERACTION_CREATE') as AsyncIterableIterator<
-		[APIInteraction, AmqpResponseOptions]
-	>) {
+	for await (const [interaction, { ack }] of on(
+		broker,
+		GatewayDispatchEvents.InteractionCreate,
+	) as AsyncIterableIterator<[APIInteraction, AmqpResponseOptions]>) {
 		ack();
 
 		const out = interactionParse(interaction.data?.options ?? []);
@@ -163,7 +164,7 @@ const interactionCreate = async () => {
 
 void (async () => {
 	const conn = await broker.connect('rabbitmq');
-	await broker.subscribe(['MESSAGE_CREATE', 'INTERACTION_CREATE']);
+	await broker.subscribe([GatewayDispatchEvents.MessageCreate, GatewayDispatchEvents.InteractionCreate]);
 
 	await restBroker.connect(conn);
 
