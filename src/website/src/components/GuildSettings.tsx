@@ -1,13 +1,12 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { Text, Button, Box } from '@chakra-ui/react';
+import { Text, Button, Box, ButtonGroup } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 
 const Loading = dynamic(() => import('./Loading'));
 const GuildSettingsFormControl = dynamic(() => import('./GuildSettingsFormControl'));
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
 import { useMutationInsertGuildSettings } from '~/hooks/useMutationInsertGuildSettings';
@@ -17,7 +16,7 @@ import { GuildSettingsPayload } from '~/interfaces/GuildSettings';
 import { GraphQLRole } from '~/interfaces/Role';
 
 const GuildSettings = () => {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const router = useRouter();
 	const { handleSubmit, register } = useForm<GuildSettingsPayload>({
 		defaultValues: {
@@ -64,7 +63,7 @@ const GuildSettings = () => {
 				label="Prefix"
 				name="prefix"
 			/>
-			<Box textAlign="right">
+			<ButtonGroup d="flex" justifyContent="flex-end">
 				<Button
 					type="submit"
 					colorScheme="green"
@@ -75,7 +74,7 @@ const GuildSettings = () => {
 				>
 					Submit
 				</Button>
-			</Box>
+			</ButtonGroup>
 		</form>
 	) : (
 		<>

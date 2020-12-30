@@ -1,8 +1,7 @@
 import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GraphQLGuildTags, GuildTag } from '~/interfaces/GuildTags';
 
@@ -12,7 +11,7 @@ export function useQueryGuildTags(
 	limit: number,
 	offset: number,
 ) {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 
 	const { data, isLoading } = useQuery<GraphQLGuildTags>(
 		['guilds', id, 'tags', `?limit=${limit}&offset=${offset}`],

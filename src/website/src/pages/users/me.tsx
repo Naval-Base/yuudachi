@@ -2,14 +2,13 @@ import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Box, Grid, Img, Text, Heading } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 
 const Guilds = dynamic(() => import('~/components/Guilds'));
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 const UserPage = () => {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const router = useRouter();
 
 	useEffect(() => {
@@ -21,7 +20,7 @@ const UserPage = () => {
 	const UserDisplay = () =>
 		user.loggedIn ? (
 			<>
-				<Img rounded="full" boxSize="100px" src={user.avatar} alt={user.username} />
+				<Img rounded="full" boxSize="100px" src={user.avatar ?? ''} alt={user.username!} />
 				<Heading>{user.username}</Heading>
 			</>
 		) : (

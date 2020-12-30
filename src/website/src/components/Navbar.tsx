@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Box, Flex, Button, IconButton, Img } from '@chakra-ui/react';
-import { FiMenu } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
+import { FiMenu, FiX } from 'react-icons/fi';
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 const Navbar = () => {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 	const [show, setShow] = useState(false);
 	const handleToggleShow = () => setShow(!show);
 
@@ -16,7 +15,7 @@ const Navbar = () => {
 			<Link href="/users/me">
 				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
 					<Box mr={2}>{user.username}</Box>
-					<Img rounded="full" boxSize="25px" src={user.avatar} alt={user.username} />
+					<Img rounded="full" boxSize="25px" src={user.avatar ?? ''} alt={user.username!} />
 				</Button>
 			</Link>
 		) : (
@@ -37,29 +36,29 @@ const Navbar = () => {
 
 			<Flex align="center">
 				<IconButton
-					display={{ base: 'flex', md: 'none' }}
+					d={{ base: 'flex', md: 'none' }}
 					aria-label="Open menu"
 					fontSize="20px"
 					variant="ghost"
-					icon={<FiMenu />}
+					icon={show ? <FiX /> : <FiMenu />}
 					onClick={handleToggleShow}
 				/>
 			</Flex>
 
 			<Box
-				display={{ base: show ? 'flex' : 'none', md: 'block' }}
+				d={{ base: show ? 'flex' : 'none', md: 'block' }}
 				flexDirection={{ base: 'column', md: 'unset' }}
 				width={{ base: 'full', md: 'auto' }}
 				flexGrow={{ base: 0, md: 1 }}
 				justifyContent="start"
 				py={{ base: 2, md: 'unset' }}
 			>
-				<Box display={{ base: 'block', md: 'none' }}>
+				<Box d={{ base: 'block', md: 'none' }}>
 					<LoginButton />
 				</Box>
 			</Box>
 
-			<Box display={{ base: 'none', md: 'block' }}>
+			<Box d={{ base: 'none', md: 'block' }}>
 				<LoginButton />
 			</Box>
 		</Flex>

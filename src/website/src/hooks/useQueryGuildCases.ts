@@ -1,31 +1,37 @@
 import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GraphQLGuildCases, GuildCase } from '~/interfaces/GuildCases';
+import { SearchQuery } from '~/interfaces/SearchQuery';
 
 export function useQueryGuildCases(
 	id: string,
 	orderBy: { [K in keyof GuildCase]?: 'asc' | 'desc' }[],
 	limit: number,
 	offset: number,
+	search: SearchQuery | null = null,
 ) {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
+
+	let where = { guild_id: { _eq: id } };
+	if (search?.query) {
+		where = { ...where, [search.key]: { [search.op]: search.query } };
+	}
 
 	const { data, isLoading } = useQuery<GraphQLGuildCases>(
-		['guilds', id, 'cases', `?limit=${limit}&offset=${offset}`],
+		['guilds', id, 'cases', `?limit=${limit}&offset=${offset}${search ? `&search=${search.query as string}` : ''}`],
 		() =>
 			fetchGraphQL(
-				`query GuildCases($guild_id: String!, $order_by: [moderation_cases_order_by!], $limit: Int, $offset: Int) {
+				`query GuildCases($where: moderation_cases_bool_exp!, $guild_id: String!, $order_by: [moderation_cases_order_by!], $limit: Int, $offset: Int) {
 					caseCount: moderation_cases_aggregate(where: {guild_id: {_eq: $guild_id}}) {
 						aggregate {
 							count
 						}
 					}
 
-					cases: moderation_cases(where: {guild_id: {_eq: $guild_id}}, order_by: $order_by, limit: $limit, offset: $offset) {
+					cases: moderation_cases(where: $where, order_by: $order_by, limit: $limit, offset: $offset) {
 						action
 						action_expiration
 						action_processed
@@ -42,7 +48,7 @@ export function useQueryGuildCases(
 						target_tag
 					}
 				}`,
-				{ guild_id: id, order_by: orderBy, limit, offset },
+				{ where, guild_id: id, order_by: orderBy, limit, offset },
 			).then(({ body }) => body),
 		{
 			enabled: user.loggedIn,

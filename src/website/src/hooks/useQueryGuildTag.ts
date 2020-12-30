@@ -1,13 +1,12 @@
 import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GraphQLGuildTag } from '~/interfaces/GuildTags';
 
 export function useQueryGuildTag(id: string, name: string, enabled = false) {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 
 	const { data, isLoading } = useQuery<GraphQLGuildTag>(
 		['guilds', id, 'tags', name],

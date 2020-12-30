@@ -1,13 +1,12 @@
 import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { RootState } from '~/store/index';
+import { useUserStore } from '~/store/index';
 
 import { GraphQLGuildRoles } from '~/interfaces/GuildRole';
 
 export function useQueryGuildRoles(id: string, enabled = false) {
-	const user = useSelector((state: RootState) => state.user);
+	const user = useUserStore();
 
 	const { data, isLoading } = useQuery<GraphQLGuildRoles>(
 		['guilds', id, 'roles'],
