@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 import { edit } from './edit';
-import { Routes } from 'discord-api-types';
+import { Routes } from 'discord-api-types/v8';
 
 jest.mock('@yuudachi/rest');
 

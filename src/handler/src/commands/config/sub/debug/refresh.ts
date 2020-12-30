@@ -1,4 +1,4 @@
-import { APIInteraction, APIMessage, Routes } from 'discord-api-types';
+import { APIInteraction, APIMessage, Routes } from 'discord-api-types/v8';
 import { Args } from 'lexure';
 import i18next from 'i18next';
 import { container } from 'tsyringe';

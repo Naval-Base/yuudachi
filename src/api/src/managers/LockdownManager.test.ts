@@ -5,7 +5,7 @@ import { Lockdown } from '@yuudachi/types';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
-import { OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types';
+import { OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types/v8';
 
 import LockdownManager from './LockdownManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';

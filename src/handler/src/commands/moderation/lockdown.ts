@@ -1,4 +1,4 @@
-import { APIInteraction, APIMessage } from 'discord-api-types';
+import { APIInteraction, APIMessage } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import { Args, joinTokens, ok } from 'lexure';
 import { injectable } from 'tsyringe';

@@ -1,4 +1,4 @@
-import { APIRole } from 'discord-api-types';
+import { APIRole } from 'discord-api-types/v8';
 
 export interface GraphQLGuildRoles {
 	data: {

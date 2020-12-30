@@ -1,4 +1,4 @@
-import { APIMessage, Routes } from 'discord-api-types';
+import { APIMessage, Routes } from 'discord-api-types/v8';
 import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';

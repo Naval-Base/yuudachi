@@ -3,7 +3,7 @@ import Rest from '@yuudachi/rest';
 import { Lockdown } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
-import { APIChannel, APIOverwrite, APIUser, OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types';
+import { APIChannel, APIOverwrite, APIUser, OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types/v8';
 import SettingsManager from './SettingsManager';
 
 const { kSQL } = Tokens;

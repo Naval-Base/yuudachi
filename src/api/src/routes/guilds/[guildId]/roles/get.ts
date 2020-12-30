@@ -2,7 +2,7 @@ import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import Rest, { HttpException } from '@yuudachi/rest';
 import { Route } from '@yuudachi/http';
-import { RESTGetAPIGuildRolesResult } from 'discord-api-types';
+import { RESTGetAPIGuildRolesResult } from 'discord-api-types/v8';
 import { forbidden, notFound } from '@hapi/boom';
 
 @injectable()

@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { APIMessage } from 'discord-api-types';
+import { APIMessage } from 'discord-api-types/v8';
 import { Args, joinTokens } from 'lexure';
 import Rest from '@yuudachi/rest';
 import { Sql } from 'postgres';

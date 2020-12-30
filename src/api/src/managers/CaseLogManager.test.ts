@@ -8,7 +8,7 @@ import { Tokens } from '@yuudachi/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
-import { Routes } from 'discord-api-types';
+import { Routes } from 'discord-api-types/v8';
 
 import CaseLogManager from './CaseLogManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';

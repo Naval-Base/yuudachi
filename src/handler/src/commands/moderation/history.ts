@@ -1,4 +1,4 @@
-import { APIMessage, APIEmbed, APIGuildMember, APIUser, APIInteraction } from 'discord-api-types';
+import { APIMessage, APIEmbed, APIGuildMember, APIUser, APIInteraction } from 'discord-api-types/v8';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import { Args } from 'lexure';

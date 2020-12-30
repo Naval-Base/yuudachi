@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { APIInteraction, APIMessage } from 'discord-api-types';
+import { APIInteraction, APIMessage } from 'discord-api-types/v8';
 import { Args } from 'lexure';
 import i18next from 'i18next';
 

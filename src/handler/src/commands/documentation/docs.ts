@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { APIMessage } from 'discord-api-types';
+import { APIMessage } from 'discord-api-types/v8';
 import { Args, joinTokens } from 'lexure';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';

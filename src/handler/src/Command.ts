@@ -1,4 +1,4 @@
-import { APIInteraction, APIMessage, APIApplicationCommandInteractionDataOption } from 'discord-api-types';
+import { APIInteraction, APIMessage, APIApplicationCommandInteractionDataOption } from 'discord-api-types/v8';
 import { Args } from 'lexure';
 import { basename, extname } from 'path';
 import { CommandModules } from './Constants';

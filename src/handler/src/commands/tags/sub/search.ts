@@ -1,5 +1,5 @@
 import { Args } from 'lexure';
-import { APIMessage } from 'discord-api-types';
+import { APIMessage } from 'discord-api-types/v8';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import Rest from '@yuudachi/rest';
