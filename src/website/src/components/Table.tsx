@@ -20,6 +20,7 @@ import {
 	Button,
 	FormLabel,
 	ButtonGroup,
+	useToast,
 } from '@chakra-ui/react';
 import { FiMoreVertical, FiMoreHorizontal, FiRefreshCw, FiX } from 'react-icons/fi';
 import { useTable } from 'react-table';
@@ -53,10 +54,32 @@ const Table = ({
 	});
 	const table = useTableStore();
 	const [menuOpen, setMenuOpen] = useState(false);
+	const toast = useToast();
 
 	const handleLimitChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		const limit = Number(event.target.value);
 		table.setLimit(limit);
+	};
+
+	const handleClearSearchChange = () => {
+		toast({
+			title: 'Cleared search.',
+			status: 'info',
+			isClosable: true,
+			position: 'top',
+		});
+		table.setSearch(null);
+	};
+
+	const handleRefreshChange = () => {
+		toast({
+			title: 'Refreshed table.',
+			status: 'info',
+			isClosable: true,
+			position: 'top',
+		});
+		table.setSearch(null);
+		onRefreshChange();
 	};
 
 	return (
@@ -72,7 +95,7 @@ const Table = ({
 							icon={<FiX />}
 							colorScheme="red"
 							size="sm"
-							onClick={() => table.setSearch(null)}
+							onClick={handleClearSearchChange}
 						></IconButton>
 					</Box>
 				) : (
@@ -107,15 +130,7 @@ const Table = ({
 							))}
 						</MenuList>
 					</Menu>
-					<IconButton
-						aria-label="Refresh table"
-						icon={<FiRefreshCw />}
-						size="sm"
-						onClick={() => {
-							table.setSearch(null);
-							onRefreshChange();
-						}}
-					/>
+					<IconButton aria-label="Refresh table" icon={<FiRefreshCw />} size="sm" onClick={handleRefreshChange} />
 				</Box>
 			</Box>
 			<ChakraTable {...getTableProps()}>
@@ -157,7 +172,7 @@ const Table = ({
 			</ChakraTable>
 
 			<ButtonGroup mt={4} d="flex" justifyContent="flex-end">
-				<Button mr={2} size="sm" onClick={() => table.prevPage()} isDisabled={table.page <= 1}>
+				<Button size="sm" onClick={() => table.prevPage()} isDisabled={table.page <= 1}>
 					Previous Page
 				</Button>
 				<Button

@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { IconButton, useDisclosure } from '@chakra-ui/react';
+import { IconButton, useDisclosure, useToast } from '@chakra-ui/react';
 import { FiEye, FiEdit, FiX } from 'react-icons/fi';
 
 const GuildTagModal = dynamic(() => import('~/components/modals/GuildTag'));
@@ -14,13 +14,25 @@ import { useMutationDeleteGuildTag } from '~/hooks/useMutationDeleteGuildTag';
 const GuildTag = ({ name }: { name: string }) => {
 	const user = useUserStore();
 	const router = useRouter();
+	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { id } = router.query;
 
-	const { mutate: guildTagDeleteMutate, isLoading: isLoadingGuildTagDeleteMutate } = useMutationDeleteGuildTag(
+	const { mutateAsync: guildTagDeleteMutate, isLoading: isLoadingGuildTagDeleteMutate } = useMutationDeleteGuildTag(
 		id as string,
 		name,
 	);
+
+	const handleOnClick = async () => {
+		toast({
+			title: 'Tag deleted.',
+			description: `You successfully deleted the tag.`,
+			status: 'success',
+			isClosable: true,
+			position: 'top',
+		});
+		await guildTagDeleteMutate();
+	};
 
 	return (
 		<>
@@ -48,7 +60,7 @@ const GuildTag = ({ name }: { name: string }) => {
 						size="sm"
 						aria-label="Delete tag"
 						icon={<FiX />}
-						onClick={() => guildTagDeleteMutate()}
+						onClick={handleOnClick}
 						isLoading={isLoadingGuildTagDeleteMutate}
 						isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
 					/>

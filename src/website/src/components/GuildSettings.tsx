@@ -67,7 +67,6 @@ const GuildSettings = () => {
 				<Button
 					type="submit"
 					colorScheme="green"
-					mr={3}
 					isLoading={isLoadingGuildSettingsUpdateMutate}
 					loadingText="Submitting"
 					isDisabled={isLoadingGuildSettingsUpdateMutate}

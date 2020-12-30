@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
@@ -24,6 +24,7 @@ import {
 	AccordionPanel,
 	AccordionIcon,
 	ButtonGroup,
+	useToast,
 } from '@chakra-ui/react';
 import { FiPlus, FiX } from 'react-icons/fi';
 import TextareaAutosize from 'react-autosize-textarea';
@@ -45,6 +46,7 @@ import { useMutationInsertGuildTag } from '~/hooks/useMutationInsertGuildTag';
 const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; onClose: () => void }) => {
 	const user = useUserStore();
 	const router = useRouter();
+	const toast = useToast();
 	const [content, setContent] = useState('');
 	const { handleSubmit, register, control, watch } = useForm<GuildTagPayload>();
 	const { fields, append, remove } = useFieldArray({ control, name: 'aliases' });
@@ -63,22 +65,36 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 		id as string,
 	);
 
-	async function onSubmit(values: Omit<GuildTagPayload, 'aliases'> & { aliases?: { value: string }[] }) {
-		const { aliases, ...rest } = values;
-		const payload: GuildTagPayload = {
-			...rest,
-			aliases: `{${(aliases ?? [])
-				.map((alias) => alias.value)
-				.filter((v) => v)
-				.join(',')}}`,
-		};
+	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		await handleSubmit(async (values: Omit<GuildTagPayload, 'aliases'> & { aliases?: { value: string }[] }) => {
+			const { aliases, ...rest } = values;
+			const payload: GuildTagPayload = {
+				...rest,
+				aliases: `{${(aliases ?? [])
+					.map((alias) => alias.value)
+					.filter((v) => v)
+					.join(',')}}`,
+			};
 
-		if (name) {
-			await guildTagUpdateMutate(payload);
-		} else {
-			await guildTagInsertMutate(payload);
-		}
-	}
+			if (name) {
+				await guildTagUpdateMutate(payload);
+			} else {
+				await guildTagInsertMutate(payload);
+			}
+		})(event);
+	};
+
+	const handleOnClose = () => {
+		toast({
+			title: name ? 'Tag edited.' : 'Tag created.',
+			description: `You successfully ${name ? 'edited' : 'created'} the tag.`,
+			status: 'success',
+			isClosable: true,
+			position: 'top',
+		});
+		onClose();
+	};
 
 	const watchContent = watch('content', gqlGuildTagData?.tag.content ?? '');
 	useEffect(() => {
@@ -99,91 +115,94 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 				{isLoadingGuildTag ? (
 					<Loading />
 				) : (
-					<form onSubmit={handleSubmit(onSubmit)}>
+					<>
 						<ModalBody>
-							<FormControl id="name" pb={4} isReadOnly={user.role === GraphQLRole.user}>
-								<FormLabel>Name</FormLabel>
-								<Input name="name" ref={register} defaultValue={gqlGuildTagData?.tag.name} />
-							</FormControl>
+							<form id="guild-tag-modal" onSubmit={handleOnSubmit}>
+								<FormControl id="name" pb={4} isReadOnly={user.role === GraphQLRole.user}>
+									<FormLabel>Name</FormLabel>
+									<Input name="name" ref={register} defaultValue={gqlGuildTagData?.tag.name} />
+								</FormControl>
 
-							<Accordion allowToggle pb={4}>
-								<AccordionItem>
-									<AccordionButton>
-										<Box flex="1" textAlign="left">
-											Edit aliases
-										</Box>
-										<AccordionIcon />
-									</AccordionButton>
-									<AccordionPanel>
-										{fields.map((item, i) => (
-											<Box key={item.id}>
-												<InputGroup>
-													<Input
-														mb={4}
-														name={`aliases[${i.toString()}].value`}
-														ref={register()}
-														defaultValue={item.value}
-														isReadOnly={user.role === GraphQLRole.user}
-													/>
-													<InputRightElement width="4rem" pr={0}>
-														<IconButton
-															colorScheme="red"
-															size="sm"
-															aria-label="Delete alias"
-															icon={<FiX />}
-															onClick={() => remove(i)}
-															isDisabled={user.role === GraphQLRole.user}
-														/>
-													</InputRightElement>
-												</InputGroup>
+								<Accordion allowToggle pb={4}>
+									<AccordionItem>
+										<AccordionButton>
+											<Box flex="1" textAlign="left">
+												Edit aliases
 											</Box>
-										))}
-										<ButtonGroup d="flex" justifyContent="flex-end">
-											<IconButton
-												colorScheme="green"
-												size="sm"
-												aria-label="Delete alias"
-												icon={<FiPlus />}
-												onClick={() => append({ value: '' })}
-												isDisabled={user.role === GraphQLRole.user}
-											/>
-										</ButtonGroup>
-									</AccordionPanel>
-								</AccordionItem>
-							</Accordion>
+											<AccordionIcon />
+										</AccordionButton>
+										<AccordionPanel>
+											{fields.map((item, i) => (
+												<Box key={item.id}>
+													<InputGroup>
+														<Input
+															mb={4}
+															name={`aliases[${i.toString()}].value`}
+															ref={register()}
+															defaultValue={item.value}
+															isReadOnly={user.role === GraphQLRole.user}
+														/>
+														<InputRightElement width="4rem" pr={0}>
+															<IconButton
+																colorScheme="red"
+																size="sm"
+																aria-label="Delete alias"
+																icon={<FiX />}
+																onClick={() => remove(i)}
+																isDisabled={user.role === GraphQLRole.user}
+															/>
+														</InputRightElement>
+													</InputGroup>
+												</Box>
+											))}
+											<ButtonGroup d="flex" justifyContent="flex-end">
+												<IconButton
+													colorScheme="green"
+													size="sm"
+													aria-label="Delete alias"
+													icon={<FiPlus />}
+													onClick={() => append({ value: '' })}
+													isDisabled={user.role === GraphQLRole.user}
+												/>
+											</ButtonGroup>
+										</AccordionPanel>
+									</AccordionItem>
+								</Accordion>
 
-							<FormControl id="content" pb={4} isReadOnly={user.role === GraphQLRole.user}>
-								<FormLabel>Content</FormLabel>
-								<Textarea
-									minH="unset"
-									overflow="hidden"
-									resize="none"
-									name="content"
-									transition="height none"
-									rows={5}
-									ref={register}
-									as={TextareaAutosize as any /* fuck ts */}
-									defaultValue={gqlGuildTagData?.tag.content}
-								/>
-							</FormControl>
+								<FormControl id="content" pb={4} isReadOnly={user.role === GraphQLRole.user}>
+									<FormLabel>Content</FormLabel>
+									<Textarea
+										minH="unset"
+										overflow="hidden"
+										resize="none"
+										name="content"
+										transition="height none"
+										rows={5}
+										ref={register}
+										as={TextareaAutosize as any /* fuck ts */}
+										defaultValue={gqlGuildTagData?.tag.content}
+									/>
+								</FormControl>
 
-							<FormLabel>Preview</FormLabel>
-							<DiscordMessages>
-								<DiscordMessage
-									author="Yuudachi"
-									avatar="https://cdn.discordapp.com/app-icons/474807795183648809/9c72320c06dbaecac51fc1151aede1b6.png?size=256"
-									bot
-								>
-									<Box dangerouslySetInnerHTML={{ __html: toHTML(content) }}></Box>
-								</DiscordMessage>
-							</DiscordMessages>
+								<FormLabel>Preview</FormLabel>
+								<DiscordMessages>
+									<DiscordMessage
+										author="Yuudachi"
+										avatar="https://cdn.discordapp.com/app-icons/474807795183648809/9c72320c06dbaecac51fc1151aede1b6.png?size=256"
+										bot
+									>
+										<Box dangerouslySetInnerHTML={{ __html: toHTML(content) }}></Box>
+									</DiscordMessage>
+								</DiscordMessages>
+							</form>
 						</ModalBody>
 						<ModalFooter>
 							<Button
 								type="submit"
+								form="guild-tag-modal"
 								colorScheme="green"
 								mr={3}
-								onClick={onClose}
+								onClick={handleOnClose}
 								isLoading={isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
 								loadingText="Submitting"
 								isDisabled={user.role === GraphQLRole.user}
@@ -192,7 +211,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 							</Button>
 							<Button onClick={onClose}>Close</Button>
 						</ModalFooter>
-					</form>
+					</>
 				)}
 			</ModalContent>
 		</Modal>
