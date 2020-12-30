@@ -28,7 +28,8 @@ const GuildCasesPage = () => {
 
 	useEffect(() => {
 		return () => table.reset();
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const { id } = router.query;
 	const { data: gqlData, isLoading } = useQueryGuildCases(
@@ -88,7 +89,8 @@ const GuildCasesPage = () => {
 				search: true,
 			},
 		],
-		[hiddenColumns], // eslint-disable-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[hiddenColumns],
 	);
 
 	if (isLoading) {

@@ -9,8 +9,6 @@ const GuildIcon = ({ guild }: { guild?: RESTAPIPartialCurrentUserGuild }) =>
 			src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}${guild.icon.startsWith('a_') ? '.gif' : '.png'}`}
 			alt={guild.name}
 		/>
-	) : (
-		<></>
-	);
+	) : null;
 
 export default GuildIcon;

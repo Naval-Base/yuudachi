@@ -29,8 +29,6 @@ const GuildDisplay = ({
 				{guild?.guild?.name ?? fallbackGuild?.guilds.find((guild) => guild.id === id)?.name}
 			</Heading>
 		</Grid>
-	) : (
-		<></>
-	);
+	) : null;
 
 export default GuildDisplay;

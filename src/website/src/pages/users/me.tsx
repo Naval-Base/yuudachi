@@ -23,9 +23,7 @@ const UserPage = () => {
 				<Img rounded="full" boxSize="100px" src={user.avatar ?? ''} alt={user.username!} />
 				<Heading>{user.username}</Heading>
 			</>
-		) : (
-			<></>
-		);
+		) : null;
 
 	return (
 		<>

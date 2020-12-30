@@ -29,7 +29,8 @@ const GuildTagsPage = () => {
 
 	useEffect(() => {
 		return () => table.reset();
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const { id } = router.query;
 	const { data: gqlData, isLoading } = useQueryGuildTags(
