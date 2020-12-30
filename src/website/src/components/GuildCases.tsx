@@ -3,12 +3,14 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { CaseAction } from '@yuudachi/types';
-import { useBreakpointValue } from '@chakra-ui/react';
+import { IconButton, useBreakpointValue } from '@chakra-ui/react';
+import { FiSettings } from 'react-icons/fi';
 
 import EllipsisPopover from '~/components/EllipsisPopover';
 
 const Loading = dynamic(() => import('~/components/Loading'));
 const Table = dynamic(() => import('~/components/Table'));
+
 import { useTableStore } from '~/store/index';
 
 import { useQueryGuildCases } from '~/hooks/useQueryGuildCases';
@@ -17,7 +19,12 @@ const GuildCasesPage = () => {
 	const router = useRouter();
 	const cache = useQueryClient();
 	const table = useTableStore();
-	const actionColumWidth = useBreakpointValue({ base: '40%', sm: '30%', md: '20%', lg: '20%' });
+	const hiddenColumns = useBreakpointValue({
+		base: ['mod_tag', 'action', 'reason', 'ref_id'],
+		md: ['reason', 'ref_id'],
+		lg: ['ref_id'],
+		xl: [],
+	});
 
 	useEffect(() => {
 		return () => table.reset();
@@ -35,8 +42,9 @@ const GuildCasesPage = () => {
 	const columns = useMemo(
 		() => [
 			{
-				Header: 'Case',
+				Header: 'Id',
 				accessor: 'case_id',
+				style: { width: '15%' },
 				search: true,
 			},
 			{
@@ -46,12 +54,14 @@ const GuildCasesPage = () => {
 					const action = CaseAction[value];
 					return `${action[0].toUpperCase() + action.substr(1).toLowerCase()}`;
 				},
+				style: { width: '1%' },
 			},
 			{
-				Header: 'Moderator',
+				Header: 'Mod',
 				accessor: 'mod_tag',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string | null }) => <EllipsisPopover text={value ?? ''} total={20} />,
+				style: { width: '15%' },
 				search: true,
 			},
 			{
@@ -59,6 +69,7 @@ const GuildCasesPage = () => {
 				accessor: 'target_tag',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string }) => <EllipsisPopover text={value} total={20} />,
+				style: { width: '15%' },
 				search: true,
 			},
 			{
@@ -71,12 +82,13 @@ const GuildCasesPage = () => {
 				},
 			},
 			{
-				Header: 'Reference',
+				Header: 'Ref',
 				accessor: 'ref_id',
+				style: { width: '15%' },
 				search: true,
 			},
 		],
-		[],
+		[hiddenColumns], // eslint-disable-line react-hooks/exhaustive-deps
 	);
 
 	if (isLoading) {
@@ -89,8 +101,9 @@ const GuildCasesPage = () => {
 
 	return (
 		<Table
+			// @ts-ignore
 			columns={columns}
-			hiddenColumns={['ref_id']}
+			hiddenColumns={hiddenColumns ?? []}
 			data={gqlData?.cases ?? []}
 			count={gqlData?.caseCount.aggregate.count ?? 0}
 			onRefreshChange={handleRefreshChange}

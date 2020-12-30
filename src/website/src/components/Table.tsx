@@ -123,7 +123,13 @@ const Table = ({
 						<MenuList minWidth="150px">
 							{allColumns.map((column) => (
 								<MenuItem key={column.id}>
-									<Checkbox onChange={() => column.toggleHidden()} defaultIsChecked={column.isVisible}>
+									<Checkbox
+										onChange={(e) => {
+											e.preventDefault();
+											column.toggleHidden();
+										}}
+										defaultIsChecked={column.isVisible}
+									>
 										{column.Header}
 									</Checkbox>
 								</MenuItem>
@@ -141,7 +147,7 @@ const Table = ({
 								<Th style={(column as any).style ?? {}} {...column.getHeaderProps()}>
 									{column.render('Header')}{' '}
 									{(column as any).search ? (
-										<Box d="inline-block" ml={2}>
+										<Box d="inline-block">
 											<TableColumnSearch
 												header={column.Header as string | undefined}
 												id={column.id}

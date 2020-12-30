@@ -56,7 +56,7 @@ const TableColumnSearch = ({
 	return (
 		<Popover isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
 			<PopoverTrigger>
-				<IconButton aria-label={`Search ${id}`} icon={<FiSearch />} size="sm" />
+				<IconButton aria-label={`Search ${id}`} icon={<FiSearch />} size="sm" variant="ghost" />
 			</PopoverTrigger>
 			<PopoverContent p={5}>
 				<PopoverArrow />
