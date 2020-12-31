@@ -43,7 +43,7 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 		<>
 			<Grid
 				templateColumns={{ base: 'auto', md: 'auto', lg: '250px auto' }}
-				templateRows={{ base: 'max-content', md: 'unset' }}
+				templateRows={{ base: 'max-content', lg: 'unset' }}
 				h="100%"
 				w="100%"
 			>
