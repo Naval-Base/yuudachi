@@ -82,9 +82,9 @@ services:
 
   graphql:
     environment:
-      POSTGRES_USER: 'yuudachi'
-      POSTGRES_DB: 'yuudachi'
-      POSTGRES_PASSWORD: 'admin'
+      PGDATABASE: 'yuudachi'
+      PGUSERNAME: 'yuudachi'
+      PGPASSWORD: 'admin'
       JWT_SECRET: ''
 
   auth:

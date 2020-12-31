@@ -9,6 +9,8 @@ import EllipsisPopover from '~/components/EllipsisPopover';
 
 const Loading = dynamic(() => import('~/components/Loading'));
 const Table = dynamic(() => import('~/components/Table'));
+const GuildCase = dynamic(() => import('~/components/GuildCase'));
+const GuildCaseReference = dynamic(() => import('~/components/GuildCaseReference'));
 
 import { useTableStore } from '~/store/index';
 
@@ -19,8 +21,9 @@ const GuildCasesPage = () => {
 	const cache = useQueryClient();
 	const table = useTableStore();
 	const hiddenColumns = useBreakpointValue({
-		base: ['mod_tag', 'action', 'reason', 'ref_id'],
-		md: ['reason', 'ref_id'],
+		base: ['case_id', 'mod_tag', 'action', 'reason', 'ref_id'],
+		sm: ['mod_tag', 'action', 'reason', 'ref_id'],
+		md: ['mod_tag', 'reason', 'ref_id'],
 		lg: ['ref_id'],
 		xl: [],
 	});
@@ -84,8 +87,14 @@ const GuildCasesPage = () => {
 			{
 				Header: 'Ref',
 				accessor: 'ref_id',
+				Cell: ({ value }: { value: number }) => <GuildCaseReference caseId={value} />,
 				style: { width: '15%' },
 				search: true,
+			},
+			{
+				Header: 'Actions',
+				Cell: ({ row }: { row: any }) => <GuildCase caseId={row.values.case_id} />,
+				style: { width: '1%' },
 			},
 		],
 		// eslint-disable-next-line react-hooks/exhaustive-deps

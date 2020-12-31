@@ -4,12 +4,12 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLUser } from '~/interfaces/User';
+import { GraphQLMe } from '~/interfaces/User';
 
 export function useQueryMe() {
 	const user = useUserStore();
 
-	const { data, isLoading } = useQuery<GraphQLUser & { errors: unknown[] }>(
+	const { data, isLoading } = useQuery<GraphQLMe & { errors: unknown[] }>(
 		'user',
 		() =>
 			fetchGraphQL(

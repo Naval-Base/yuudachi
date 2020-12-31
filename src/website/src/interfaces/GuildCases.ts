@@ -1,3 +1,10 @@
+export interface GuildCasePayload {
+	ref_id: number;
+	reason: string;
+	mod_id?: string;
+	mod_tag?: string;
+}
+
 export interface GuildCase {
 	action: number;
 	action_expiration: string | null;
@@ -5,6 +12,7 @@ export interface GuildCase {
 	case_id: number;
 	context_message_id: string | null;
 	created_at: string;
+	guild_id: string;
 	log_message_id: string | null;
 	mod_id: string | null;
 	mod_tag: string | null;
