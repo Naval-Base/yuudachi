@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { CaseAction } from '@yuudachi/types';
-import { useBreakpointValue } from '@chakra-ui/react';
+import { Center, useBreakpointValue } from '@chakra-ui/react';
 
 import EllipsisPopover from '~/components/EllipsisPopover';
 
@@ -93,7 +93,11 @@ const GuildCasesPage = () => {
 	);
 
 	if (isLoading) {
-		return <Loading />;
+		return (
+			<Center h="100%">
+				<Loading />
+			</Center>
+		);
 	}
 
 	const handleRefreshChange = () => {

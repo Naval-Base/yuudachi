@@ -98,9 +98,7 @@ const Table = ({
 							onClick={handleClearSearchChange}
 						></IconButton>
 					</Box>
-				) : (
-					<></>
-				)}
+				) : null}
 				<Box>
 					<Box d="inline-block">
 						<FormLabel as="legend">Items per page</FormLabel>

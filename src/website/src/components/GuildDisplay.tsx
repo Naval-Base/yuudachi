@@ -22,7 +22,6 @@ const GuildDisplay = ({
 			alignItems="center"
 			textAlign="center"
 			my={12}
-			px={{ base: 0, md: 200 }}
 		>
 			<GuildIcon guild={guild?.guild ?? fallbackGuild?.guilds.find((guild) => guild.id === id)} />
 			<Heading fontSize="2xl">

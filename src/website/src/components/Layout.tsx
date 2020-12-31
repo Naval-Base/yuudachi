@@ -11,10 +11,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<Grid templateRows="auto 1fr auto" h="100%">
 			<Navbar />
-			<Box w="100%" h="100%">
-				{children}
-			</Box>
-			<Box w="100%" h="100%"></Box>
+			<Box>{children}</Box>
+			<Box></Box>
 		</Grid>
 	);
 };

@@ -24,6 +24,7 @@ import {
 	AccordionPanel,
 	AccordionIcon,
 	ButtonGroup,
+	Center,
 	useToast,
 } from '@chakra-ui/react';
 import { FiPlus, FiX } from 'react-icons/fi';
@@ -113,7 +114,9 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 				<ModalHeader>Tag {gqlGuildTagData?.tag.name}</ModalHeader>
 				<ModalCloseButton />
 				{isLoadingGuildTag ? (
-					<Loading />
+					<Center h="100%">
+						<Loading />
+					</Center>
 				) : (
 					<>
 						<ModalBody>

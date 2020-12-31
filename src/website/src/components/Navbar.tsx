@@ -1,21 +1,19 @@
-import { useState } from 'react';
 import Link from 'next/link';
-import { Box, Flex, Button, IconButton, Img } from '@chakra-ui/react';
+import { Box, Flex, Button, IconButton, Img, useDisclosure } from '@chakra-ui/react';
 import { FiMenu, FiX } from 'react-icons/fi';
 
 import { useUserStore } from '~/store/index';
 
 const Navbar = () => {
 	const user = useUserStore();
-	const [show, setShow] = useState(false);
-	const handleToggleShow = () => setShow(!show);
+	const { isOpen, onToggle } = useDisclosure();
 
 	const LoginButton = () =>
 		user.loggedIn ? (
 			<Link href="/users/me">
 				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
-					<Box mr={2}>{user.username}</Box>
-					<Img rounded="full" boxSize="25px" src={user.avatar ?? ''} alt={user.username!} />
+					<Img mr={2} rounded="full" boxSize="25px" src={user.avatar ?? ''} alt={user.username!} />
+					<Box>{user.username}</Box>
 				</Button>
 			</Link>
 		) : (
@@ -38,27 +36,17 @@ const Navbar = () => {
 				<IconButton
 					d={{ base: 'flex', md: 'none' }}
 					aria-label="Open menu"
-					fontSize="20px"
 					variant="ghost"
-					icon={show ? <FiX /> : <FiMenu />}
-					onClick={handleToggleShow}
+					icon={isOpen ? <FiX /> : <FiMenu />}
+					onClick={onToggle}
 				/>
 			</Flex>
 
 			<Box
-				d={{ base: show ? 'flex' : 'none', md: 'block' }}
+				d={{ base: isOpen ? 'flex' : 'none', md: 'block' }}
 				flexDirection={{ base: 'column', md: 'unset' }}
 				width={{ base: 'full', md: 'auto' }}
-				flexGrow={{ base: 0, md: 1 }}
-				justifyContent="start"
-				py={{ base: 2, md: 'unset' }}
 			>
-				<Box d={{ base: 'block', md: 'none' }}>
-					<LoginButton />
-				</Box>
-			</Box>
-
-			<Box d={{ base: 'none', md: 'block' }}>
 				<LoginButton />
 			</Box>
 		</Flex>

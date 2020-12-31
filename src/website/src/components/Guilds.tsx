@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Grid, Text } from '@chakra-ui/react';
+import { Center, Grid, Text } from '@chakra-ui/react';
 
 import GuildsStyles from '~/styles/modules/guilds.module.scss';
 
@@ -13,7 +13,11 @@ const Guilds = () => {
 	const { data, isLoading } = useQueryOAuthGuilds();
 
 	if (isLoading) {
-		return <Loading />;
+		return (
+			<Center h="100%">
+				<Loading />
+			</Center>
+		);
 	}
 
 	return (

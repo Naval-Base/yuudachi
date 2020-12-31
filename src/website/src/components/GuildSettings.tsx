@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { Text, Button, Box, ButtonGroup } from '@chakra-ui/react';
+import { Center, Text, Button, Box, ButtonGroup } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 const Loading = dynamic(() => import('./Loading'));
@@ -51,7 +51,11 @@ const GuildSettings = () => {
 	}
 
 	if (isLoadingGuildSettings) {
-		return <Loading />;
+		return (
+			<Center h="100%">
+				<Loading />
+			</Center>
+		);
 	}
 
 	return gqlGuildSettingsData?.guild ? (

@@ -2,7 +2,7 @@ import { useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
-import { Button, ButtonGroup, useDisclosure } from '@chakra-ui/react';
+import { Center, Button, ButtonGroup, useDisclosure } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -58,7 +58,11 @@ const GuildTagsPage = () => {
 	);
 
 	if (isLoading) {
-		return <Loading />;
+		return (
+			<Center h="100%">
+				<Loading />
+			</Center>
+		);
 	}
 
 	const handleRefreshChange = () => {
