@@ -36,7 +36,7 @@ export function useQueryMe() {
 			return;
 		}
 
-		if (!user.loggedIn && data?.data.me[0] && data.data.me[0].connections.length) {
+		if (!user.loggedIn && data?.data?.me[0] && data.data?.me[0].connections.length) {
 			const connection = data.data.me[0].connections.find((c) => c.main)!;
 			user.setUser({
 				loggedIn: true,
@@ -46,7 +46,7 @@ export function useQueryMe() {
 				avatar: connection.avatar,
 			});
 		}
-	}, [user, data?.data.me, data?.errors]);
+	}, [user, data?.data?.me, data?.errors]);
 
 	return { data: data?.data, isLoading };
 }

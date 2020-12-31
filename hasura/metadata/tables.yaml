@@ -78,21 +78,12 @@
   - role: moderator
     permission:
       columns:
-      - role_id
-      - created_at
-      - action
-      - case_id
       - action_expiration
-      - ref_id
-      - guild_id
       - context_message_id
-      - log_message_id
       - mod_id
-      - target_id
-      - reason
       - mod_tag
-      - target_tag
-      - action_processed
+      - reason
+      - ref_id
       filter: {}
       check: {}
   event_triggers:

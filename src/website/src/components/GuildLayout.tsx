@@ -47,7 +47,7 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 				h="100%"
 				w="100%"
 			>
-				<Box borderRightWidth="1px" borderRightColor="black">
+				<Box>
 					<GuildDisplay id={id as string} guild={gqlGuildData} fallbackGuild={gqlFallbackGuildData} />
 					<GuildNavbar />
 				</Box>

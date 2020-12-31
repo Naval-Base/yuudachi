@@ -200,19 +200,20 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 							</form>
 						</ModalBody>
 						<ModalFooter>
-							<Button
-								type="submit"
-								form="guild-tag-modal"
-								colorScheme="green"
-								mr={3}
-								onClick={handleOnClose}
-								isLoading={isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
-								loadingText="Submitting"
-								isDisabled={user.role === GraphQLRole.user}
-							>
-								Submit
-							</Button>
-							<Button onClick={onClose}>Close</Button>
+							<ButtonGroup>
+								<Button
+									type="submit"
+									form="guild-tag-modal"
+									colorScheme="green"
+									onClick={handleOnClose}
+									isLoading={isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
+									loadingText="Submitting"
+									isDisabled={user.role === GraphQLRole.user}
+								>
+									Submit
+								</Button>
+								<Button onClick={onClose}>Close</Button>
+							</ButtonGroup>
 						</ModalFooter>
 					</>
 				)}

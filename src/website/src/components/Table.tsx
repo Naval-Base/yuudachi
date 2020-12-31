@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, Fragment, useState } from 'react';
 import dynamic from 'next/dynamic';
 import {
 	Table as ChakraTable,
@@ -23,7 +23,7 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { FiMoreVertical, FiMoreHorizontal, FiRefreshCw, FiX } from 'react-icons/fi';
-import { useTable } from 'react-table';
+import { useTable, useExpanded } from 'react-table';
 
 const TableColumnSearch = dynamic(() => import('~/components/TableColumnSearch'));
 
@@ -45,13 +45,16 @@ const Table = ({
 	count: number;
 	onRefreshChange: (...args: any) => void;
 }) => {
-	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns } = useTable({
-		columns,
-		data,
-		initialState: {
-			hiddenColumns,
+	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns, visibleColumns } = useTable(
+		{
+			columns,
+			data,
+			initialState: {
+				hiddenColumns,
+			},
 		},
-	});
+		useExpanded,
+	);
 	const table = useTableStore();
 	const [menuOpen, setMenuOpen] = useState(false);
 	const toast = useToast();
@@ -119,19 +122,21 @@ const Table = ({
 							size="sm"
 						/>
 						<MenuList minWidth="150px">
-							{allColumns.map((column) => (
-								<MenuItem key={column.id}>
-									<Checkbox
-										onChange={(e) => {
-											e.preventDefault();
-											column.toggleHidden();
-										}}
-										defaultIsChecked={column.isVisible}
-									>
-										{column.Header}
-									</Checkbox>
-								</MenuItem>
-							))}
+							{allColumns
+								.filter((column) => column.id !== 'expander')
+								.map((column) => (
+									<MenuItem key={column.id}>
+										<Checkbox
+											onChange={(e) => {
+												e.preventDefault();
+												column.toggleHidden();
+											}}
+											defaultIsChecked={column.isVisible}
+										>
+											{column.Header}
+										</Checkbox>
+									</MenuItem>
+								))}
 						</MenuList>
 					</Menu>
 					<IconButton aria-label="Refresh table" icon={<FiRefreshCw />} size="sm" onClick={handleRefreshChange} />
@@ -162,14 +167,21 @@ const Table = ({
 					))}
 				</Thead>
 				<Tbody {...getTableBodyProps()}>
-					{rows.map((row) => {
+					{rows.map((row: any) => {
 						prepareRow(row);
 						return (
-							<Tr {...row.getRowProps()}>
-								{row.cells.map((cell) => (
-									<Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
-								))}
-							</Tr>
+							<Fragment key={row.getRowProps().key}>
+								<Tr>
+									{row.cells.map((cell: any) => (
+										<Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
+									))}
+								</Tr>
+								{row.isExpanded ? (
+									<Tr>
+										<Td colSpan={visibleColumns.length}>Test</Td>
+									</Tr>
+								) : null}
+							</Fragment>
 						);
 					})}
 				</Tbody>
