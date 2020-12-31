@@ -2,6 +2,7 @@ import fetch from 'cross-fetch';
 
 import HttpException from './HttpException';
 import Guilds from './api/Guilds';
+import Users from './api/Users';
 
 export { HttpException };
 
@@ -9,6 +10,7 @@ export default class API {
 	public constructor(private readonly baseURL: string) {}
 
 	public guilds = new Guilds(this);
+	public users = new Users(this);
 
 	public async make<T = unknown>(
 		method: string,

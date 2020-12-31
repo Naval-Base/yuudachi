@@ -29,7 +29,7 @@ export default class CaseLogManager {
 			throw new Error('no mod log channel configured');
 		}
 
-		if (item.action_processed && old && old.action_processed) {
+		if (item.action_processed && old && !old.action_processed) {
 			return;
 		}
 

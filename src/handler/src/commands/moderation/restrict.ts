@@ -22,8 +22,7 @@ export default class implements Command {
 	private parse(args: Args) {
 		const user = args.option('user');
 		const duration = args.option('duration');
-		// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-		const reason = args.option('reason') || undefined;
+		const reason = args.option('reason');
 		const refId = args.option('reference', 'ref');
 
 		const sub = args.single();
@@ -39,7 +38,7 @@ export default class implements Command {
 			sub,
 			maybeMember: user ? parseMember(user) : args.singleParse(parseMember),
 			duration: duration ?? args.single(),
-			reason: reason ?? joinTokens(args.many()),
+			reason: reason ?? (joinTokens(args.many()) || undefined),
 			refId: refId ?? undefined,
 		};
 	}
