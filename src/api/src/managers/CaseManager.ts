@@ -1,4 +1,4 @@
-import { APIUser, Routes } from 'discord-api-types';
+import { APIUser, Routes } from 'discord-api-types/v8';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';

@@ -1,6 +1,6 @@
 import { FormControl, FormLabel, Select } from '@chakra-ui/react';
 import { UseFormMethods, Controller } from 'react-hook-form';
-import { APIRole } from 'discord-api-types';
+import { APIRole } from 'discord-api-types/v8';
 
 import { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
 

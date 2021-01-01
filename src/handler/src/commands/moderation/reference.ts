@@ -1,4 +1,4 @@
-import { APIInteraction, APIMessage } from 'discord-api-types';
+import { APIInteraction, APIMessage } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
 import i18next from 'i18next';
 import { Args, joinTokens } from 'lexure';

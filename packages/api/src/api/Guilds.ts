@@ -1,6 +1,6 @@
 import { Case, CreateCase, UpdateCase, Lockdown, CreateLockdown, DeleteLockdown } from '@yuudachi/types';
 import { Constants } from '@yuudachi/core';
-import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types';
+import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types/v8';
 import API from '..';
 
 const { USER_ID_HEADER } = Constants;

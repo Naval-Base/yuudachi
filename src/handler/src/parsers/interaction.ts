@@ -1,4 +1,4 @@
-import { APIApplicationCommandInteractionDataOption } from 'discord-api-types';
+import { APIApplicationCommandInteractionDataOption } from 'discord-api-types/v8';
 import { ParserOutput } from 'lexure';
 
 function parseOptions(

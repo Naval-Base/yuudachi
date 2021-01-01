@@ -1,4 +1,4 @@
-import { RESTGetAPIGuildRolesResult, APIMessage, APIUser, APIEmbed, Routes } from 'discord-api-types';
+import { RESTGetAPIGuildRolesResult, APIMessage, APIUser, APIEmbed, Routes } from 'discord-api-types/v8';
 import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
 import { inject, injectable } from 'tsyringe';

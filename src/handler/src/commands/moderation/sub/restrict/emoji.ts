@@ -1,4 +1,4 @@
-import { APIInteraction, APIMessage } from 'discord-api-types';
+import { APIInteraction, APIMessage } from 'discord-api-types/v8';
 import { Ok } from 'lexure';
 import i18next from 'i18next';
 import API, { HttpException } from '@yuudachi/api';

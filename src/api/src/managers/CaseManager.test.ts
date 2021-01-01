@@ -5,7 +5,7 @@ import { Case, CaseAction } from '@yuudachi/types';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
-import { Routes } from 'discord-api-types';
+import { Routes } from 'discord-api-types/v8';
 
 import CaseManager from './CaseManager';
 

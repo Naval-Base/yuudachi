@@ -5,7 +5,7 @@ import {
 	APIInteractionApplicationCommandCallbackData,
 	RESTPostAPIChannelMessageJSONBody,
 	Routes,
-} from 'discord-api-types';
+} from 'discord-api-types/v8';
 import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 
