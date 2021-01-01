@@ -48,7 +48,10 @@ const GuildCasesPage = () => {
 				Header: 'Id',
 				accessor: 'case_id',
 				style: { width: '15%' },
-				search: true,
+				search: {
+					label: 'Case Id',
+					type: 'number',
+				},
 			},
 			{
 				Header: 'Action',
@@ -65,7 +68,10 @@ const GuildCasesPage = () => {
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string | null }) => <EllipsisPopover text={value ?? ''} total={20} />,
 				style: { width: '15%' },
-				search: true,
+				search: {
+					label: 'Mod Id',
+					type: 'number',
+				},
 			},
 			{
 				Header: 'Target',
@@ -73,7 +79,10 @@ const GuildCasesPage = () => {
 				// eslint-disable-next-line react/display-name
 				Cell: ({ value }: { value: string }) => <EllipsisPopover text={value} total={20} />,
 				style: { width: '15%' },
-				search: true,
+				search: {
+					label: 'Target Id',
+					type: 'number',
+				},
 			},
 			{
 				Header: 'Reason',
@@ -89,7 +98,10 @@ const GuildCasesPage = () => {
 				accessor: 'ref_id',
 				Cell: ({ value }: { value: number }) => <GuildCaseReference caseId={value} />,
 				style: { width: '15%' },
-				search: true,
+				search: {
+					label: 'Ref Id',
+					type: 'number',
+				},
 			},
 			{
 				Header: 'Actions',

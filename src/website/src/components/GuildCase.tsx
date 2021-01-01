@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { ButtonGroup, IconButton, useDisclosure } from '@chakra-ui/react';
 import { FiEye, FiEdit } from 'react-icons/fi';
@@ -7,7 +8,6 @@ const GuildCaseModal = dynamic(() => import('~/components/modals/GuildCase'));
 import { useUserStore } from '~/store/index';
 
 import { GraphQLRole } from '~/interfaces/Role';
-import { useState } from 'react';
 
 const GuildCase = ({ caseId }: { caseId: number }) => {
 	const user = useUserStore();
@@ -17,7 +17,16 @@ const GuildCase = ({ caseId }: { caseId: number }) => {
 	return (
 		<>
 			{user.role === GraphQLRole.user ? (
-				<IconButton size="sm" aria-label="Show case" icon={<FiEye />} onClick={onOpen} isDisabled={isOpen} />
+				<IconButton
+					size="sm"
+					aria-label="Show case"
+					icon={<FiEye />}
+					onClick={() => {
+						setReadOnly(true);
+						onOpen();
+					}}
+					isDisabled={isOpen}
+				/>
 			) : (
 				<ButtonGroup>
 					<IconButton

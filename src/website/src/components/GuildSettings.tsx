@@ -11,6 +11,7 @@ import {
 	Input,
 	FormErrorMessage,
 	FormErrorIcon,
+	useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
@@ -28,6 +29,7 @@ import { GraphQLRole } from '~/interfaces/Role';
 const GuildSettings = () => {
 	const user = useUserStore();
 	const router = useRouter();
+	const toast = useToast();
 	const { handleSubmit, register, errors, formState } = useForm<GuildSettingsPayload>({
 		defaultValues: {
 			prefix: '?',
@@ -50,10 +52,26 @@ const GuildSettings = () => {
 
 	async function onInitialize() {
 		await guildSettingsInsertMutate();
+
+		toast({
+			title: 'Guild settings initialized.',
+			description: `You successfully initialized the guild settings.`,
+			status: 'success',
+			isClosable: true,
+			position: 'top',
+		});
 	}
 
 	async function onSubmit(values: GuildSettingsPayload) {
 		await guildSettingsUpdateMutate(values);
+
+		toast({
+			title: 'Guild settings edited.',
+			description: `You successfully edited the guild settings.`,
+			status: 'success',
+			isClosable: true,
+			position: 'top',
+		});
 	}
 
 	if (user.role === GraphQLRole.user) {
@@ -70,7 +88,7 @@ const GuildSettings = () => {
 
 	return gqlGuildSettingsData?.guild ? (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<FormControl id="prefix">
+			<FormControl id="prefix" pb={4} isInvalid={Boolean(errors.prefix)}>
 				<FormLabel>Prefix</FormLabel>
 				<Input
 					name="prefix"

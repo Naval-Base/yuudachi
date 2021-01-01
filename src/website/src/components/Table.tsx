@@ -91,7 +91,7 @@ const Table = ({
 				{table.search ? (
 					<Box d="inline-flex">
 						<FormLabel ml={5} alignSelf="center" as="legend">
-							Current search on column &quot;{table.search.header}&quot; | Query: {table.search.query}
+							Current search on column &quot;{table.search.label}&quot; | Query: {table.search.query}
 						</FormLabel>
 						<IconButton
 							aria-label="Clear search"
@@ -152,9 +152,10 @@ const Table = ({
 									{(column as any).search ? (
 										<Box d="inline-block">
 											<TableColumnSearch
-												header={column.Header as string | undefined}
+												label={(column as any).search.label ?? (column.Header as string | undefined)}
 												id={column.id}
 												op={(column as any).search.op ?? '_eq'}
+												type={(column as any).search.type ?? 'string'}
 												onSearchChange={(searchQ) => table.setSearch(searchQ)}
 											/>
 										</Box>
