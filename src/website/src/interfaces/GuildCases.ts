@@ -1,5 +1,5 @@
 export interface GuildCasePayload {
-	ref_id: number;
+	ref_id: number | null;
 	reason: string;
 	mod_id?: string;
 	mod_tag?: string;

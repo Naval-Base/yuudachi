@@ -30,7 +30,8 @@
 			"common": {
 				"errors": {
 					"no_case_id": "No case Id provided.",
-					"no_duration": "No duration provided."
+					"no_duration": "No duration provided.",
+					"max_length_reason": "Max length of 1900 for reason exceeded."
 				}
 			},
 			"warn": {
@@ -72,7 +73,8 @@
 					"errors": {
 						"no_role": "No role for mutes has been configured.",
 						"missing_permissions": "Missing permissions to mute this member.",
-						"failure": "Unable to mute {{- member}}"
+						"failure": "Unable to mute {{- member}}",
+						"already_restricted": "This member is already muted."
 					},
 					"success": "Successfully muted {{- member}}"
 				},
@@ -80,7 +82,8 @@
 					"errors": {
 						"no_role": "No role for embed restrictions has been configured.",
 						"missing_permissions": "Missing permissions to embed restrict this member.",
-						"failure": "Unable to embed restrict {{- member}}"
+						"failure": "Unable to embed restrict {{- member}}",
+						"already_restricted": "This member is already embed restricted."
 					},
 					"success": "Successfully embed restricted {{- member}}"
 				},
@@ -88,7 +91,8 @@
 					"errors": {
 						"no_role": "No role for reaction restrictions has been configured.",
 						"missing_permissions": "Missing permissions to react restrict this member.",
-						"failure": "Unable to react restrict {{- member}}"
+						"failure": "Unable to react restrict {{- member}}",
+						"already_restricted": "This member is already reaction restricted."
 					},
 					"success": "Successfully react restricted {{- member}}"
 				},
@@ -96,7 +100,8 @@
 					"errors": {
 						"no_role": "No role for emoji restrictions has been configured.",
 						"missing_permissions": "Missing permissions to emoji restrict this member.",
-						"failure": "Unable to emoji restrict {{- member}}"
+						"failure": "Unable to emoji restrict {{- member}}",
+						"already_restricted": "This member is already emoji restricted."
 					},
 					"success": "Successfully emoji restricted {{- member}}"
 				},
@@ -104,14 +109,16 @@
 					"errors": {
 						"no_role": "No role for tag restrictions has been configured.",
 						"missing_permissions": "Missing permissions to tag restrict this member.",
-						"failure": "Unable to tag restrict {{- member}}"
+						"failure": "Unable to tag restrict {{- member}}",
+						"already_restricted": "This member is already tag restricted."
 					},
 					"success": "Successfully tag restricted {{- member}}"
 				},
 				"unrole": {
 					"errors": {
 						"missing_permissions": "Missing permissions to unrole this case.",
-						"failure": "Unable to unrole case #{{case}}"
+						"failure": "Unable to unrole case #{{case}}",
+						"already_processed": "This case has no running restrictions."
 					},
 					"success": "Successfully unroled case #{{case}}"
 				}

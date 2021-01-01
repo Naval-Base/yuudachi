@@ -43,7 +43,9 @@ export default class implements Command {
 			select mod_role_id
 			from moderation.guild_settings
 			where guild_id = ${message.guild_id}`;
-		if (!message.member?.roles.includes(data.mod_role_id ?? '')) {
+
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		if (!message.member?.roles.includes(data?.mod_role_id ?? '')) {
 			throw new Error(i18next.t('command.common.errors.no_mod_role'));
 		}
 
@@ -53,6 +55,9 @@ export default class implements Command {
 		}
 		if (!maybeMember.success) {
 			throw new Error(i18next.t('command.common.errors.invalid_user_id', { lng: locale, id: maybeMember.error }));
+		}
+		if (reason && reason.length >= 1900) {
+			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 
 		const memberMention = `<@${maybeMember.value}>`;

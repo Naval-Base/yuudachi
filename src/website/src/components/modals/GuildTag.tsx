@@ -26,10 +26,12 @@ import {
 	ButtonGroup,
 	Center,
 	useToast,
+	FormErrorMessage,
+	FormErrorIcon,
 } from '@chakra-ui/react';
 import { FiPlus, FiX } from 'react-icons/fi';
 import TextareaAutosize from 'react-autosize-textarea';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, FieldErrors } from 'react-hook-form';
 import { DiscordMessages, DiscordMessage } from '@skyra/discord-components-react';
 import { toHTML } from 'discord-markdown';
 
@@ -49,7 +51,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 	const router = useRouter();
 	const toast = useToast();
 	const [content, setContent] = useState('');
-	const { handleSubmit, register, control, watch } = useForm<GuildTagPayload>();
+	const { handleSubmit, register, control, watch, errors, formState } = useForm<GuildTagPayload>();
 	const { fields, append, remove } = useFieldArray({ control, name: 'aliases' });
 	const { id } = router.query;
 
@@ -83,18 +85,17 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 			} else {
 				await guildTagInsertMutate(payload);
 			}
-		})(event);
-	};
 
-	const handleOnClose = () => {
-		toast({
-			title: name ? 'Tag edited.' : 'Tag created.',
-			description: `You successfully ${name ? 'edited' : 'created'} the tag.`,
-			status: 'success',
-			isClosable: true,
-			position: 'top',
-		});
-		onClose();
+			toast({
+				title: name ? 'Tag edited.' : 'Tag created.',
+				description: `You successfully ${name ? 'edited' : 'created'} the tag.`,
+				status: 'success',
+				isClosable: true,
+				position: 'top',
+			});
+			remove();
+			onClose();
+		})(event);
 	};
 
 	const watchContent = watch('content', gqlGuildTagData?.tag.content ?? '');
@@ -121,9 +122,25 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 					<>
 						<ModalBody>
 							<form id="guild-tag-modal" onSubmit={handleOnSubmit}>
-								<FormControl id="name" pb={4} isReadOnly={user.role === GraphQLRole.user}>
+								<FormControl
+									id="name"
+									pb={4}
+									isReadOnly={user.role === GraphQLRole.user}
+									isInvalid={Boolean(errors.name)}
+								>
 									<FormLabel>Name</FormLabel>
-									<Input name="name" ref={register} defaultValue={gqlGuildTagData?.tag.name} />
+									<Input
+										name="name"
+										ref={register({
+											required: { value: true, message: 'No empty tags allowed' },
+											maxLength: { value: 20, message: 'Max length of 20 exceeded' },
+										})}
+										defaultValue={gqlGuildTagData?.tag.name}
+									/>
+									<FormErrorMessage>
+										<FormErrorIcon />
+										{errors.name?.message}
+									</FormErrorMessage>
 								</FormControl>
 
 								<Accordion allowToggle pb={4}>
@@ -137,25 +154,36 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 										<AccordionPanel>
 											{fields.map((item, i) => (
 												<Box key={item.id}>
-													<InputGroup>
-														<Input
-															mb={4}
-															name={`aliases[${i.toString()}].value`}
-															ref={register()}
-															defaultValue={item.value}
-															isReadOnly={user.role === GraphQLRole.user}
-														/>
-														<InputRightElement width="4rem" pr={0}>
-															<IconButton
-																colorScheme="red"
-																size="sm"
-																aria-label="Delete alias"
-																icon={<FiX />}
-																onClick={() => remove(i)}
-																isDisabled={user.role === GraphQLRole.user}
+													<FormControl
+														pb={4}
+														isReadOnly={user.role === GraphQLRole.user}
+														isInvalid={Boolean((errors.aliases as FieldErrors | undefined)?.[i]?.value)}
+													>
+														<InputGroup>
+															<Input
+																name={`aliases[${i.toString()}].value`}
+																ref={register({
+																	required: { value: true, message: 'No empty aliases allowed' },
+																	maxLength: { value: 20, message: 'Max length of 20 exceeded' },
+																})}
+																defaultValue={item.value}
 															/>
-														</InputRightElement>
-													</InputGroup>
+															<InputRightElement width="4rem" pr={0}>
+																<IconButton
+																	colorScheme="red"
+																	size="sm"
+																	aria-label="Delete alias"
+																	icon={<FiX />}
+																	onClick={() => remove(i)}
+																	isDisabled={user.role === GraphQLRole.user}
+																/>
+															</InputRightElement>
+														</InputGroup>
+														<FormErrorMessage>
+															<FormErrorIcon />
+															{(errors.aliases as FieldErrors | undefined)?.[i]?.value.message}
+														</FormErrorMessage>
+													</FormControl>
 												</Box>
 											))}
 											<ButtonGroup d="flex" justifyContent="flex-end">
@@ -172,7 +200,12 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 									</AccordionItem>
 								</Accordion>
 
-								<FormControl id="content" pb={4} isReadOnly={user.role === GraphQLRole.user}>
+								<FormControl
+									id="content"
+									pb={4}
+									isReadOnly={user.role === GraphQLRole.user}
+									isInvalid={Boolean(errors.content)}
+								>
 									<FormLabel>Content</FormLabel>
 									<Textarea
 										minH="unset"
@@ -181,10 +214,17 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 										name="content"
 										transition="height none"
 										rows={5}
-										ref={register}
+										ref={register({
+											required: { value: true, message: 'No empty tags allowed' },
+											maxLength: { value: 1900, message: 'Max length of 1900 exceeded' },
+										})}
 										as={TextareaAutosize as any /* fuck ts */}
 										defaultValue={gqlGuildTagData?.tag.content}
 									/>
+									<FormErrorMessage>
+										<FormErrorIcon />
+										{errors.content?.message}
+									</FormErrorMessage>
 								</FormControl>
 
 								<FormLabel>Preview</FormLabel>
@@ -205,8 +245,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 									type="submit"
 									form="guild-tag-modal"
 									colorScheme="green"
-									onClick={handleOnClose}
-									isLoading={isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
+									isLoading={formState.isSubmitting || isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
 									loadingText="Submitting"
 									isDisabled={user.role === GraphQLRole.user}
 								>

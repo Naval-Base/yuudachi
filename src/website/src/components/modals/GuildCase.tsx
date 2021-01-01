@@ -1,3 +1,4 @@
+import { FormEvent } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -23,6 +24,9 @@ import {
 	NumberInputStepper,
 	NumberIncrementStepper,
 	NumberDecrementStepper,
+	useToast,
+	FormErrorMessage,
+	FormErrorIcon,
 } from '@chakra-ui/react';
 import TextareaAutosize from 'react-autosize-textarea';
 import dayjs from 'dayjs';
@@ -30,18 +34,19 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 const Loading = dynamic(() => import('../Loading'));
+const GuildCaseReference = dynamic(() => import('~/components/GuildCaseReference'));
 
 import { useUserStore } from '~/store/index';
 
-import { GuildTagPayload } from '~/interfaces/GuildTags';
+import { GuildCasePayload } from '~/interfaces/GuildCases';
 import { GraphQLRole } from '~/interfaces/Role';
 
 import { useQueryGuildCase } from '~/hooks/useQueryGuildCase';
 import { useQueryGuildRoles } from '~/hooks/useQueryGuildRoles';
-import { useMutationUpdateGuildCase } from '~/hooks/useMutationUpdateGuildCase';
-import { GuildCasePayload } from '~/interfaces/GuildCases';
-import { DATE_FORMAT_WITH_SECONDS } from 'src/Constants';
 import { useQueryUser } from '~/hooks/useQueryUser';
+import { useMutationUpdateGuildCase } from '~/hooks/useMutationUpdateGuildCase';
+
+import { DATE_FORMAT_WITH_SECONDS } from 'src/Constants';
 
 const GuildCase = ({
 	caseId,
@@ -56,8 +61,8 @@ const GuildCase = ({
 }) => {
 	const user = useUserStore();
 	const router = useRouter();
-	const { handleSubmit, register } = useForm<GuildTagPayload>();
-
+	const toast = useToast();
+	const { handleSubmit, register, errors, formState } = useForm<GuildCasePayload>();
 	const { id } = router.query;
 
 	const { data: gqlGuildCaseData, isLoading: isLoadingGuildCase } = useQueryGuildCase(
@@ -72,25 +77,37 @@ const GuildCase = ({
 		caseId!,
 	);
 
-	async function onSubmit(values: { reference: number; reason: string }) {
-		const { reference, ...rest } = values;
-		let payload: GuildCasePayload = {
-			...rest,
-			ref_id: reference,
-		};
+	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		await handleSubmit(async (values: { reference: number; reason: string }) => {
+			const { reference, ...rest } = values;
+			let payload: GuildCasePayload = {
+				...rest,
+				ref_id: reference || null,
+			};
 
-		if (!gqlGuildCaseData?.case.mod_id) {
-			if (gqlUserData) {
-				payload = {
-					...payload,
-					mod_id: user.id!,
-					mod_tag: `${gqlUserData.user.username as string}#${gqlUserData.user.discriminator as string}`,
-				};
+			if (!gqlGuildCaseData?.case.mod_id) {
+				if (gqlUserData) {
+					payload = {
+						...payload,
+						mod_id: user.id!,
+						mod_tag: `${gqlUserData.user.username as string}#${gqlUserData.user.discriminator as string}`,
+					};
+				}
 			}
-		}
 
-		await guildCaseUpdateMutate(payload);
-	}
+			await guildCaseUpdateMutate(payload);
+
+			toast({
+				title: 'Case edited.',
+				description: `You successfully edited the case.`,
+				status: 'success',
+				isClosable: true,
+				position: 'top',
+			});
+			onClose();
+		})(event);
+	};
 
 	return (
 		<Modal size="xl" isOpen={isOpen} onClose={onClose}>
@@ -107,7 +124,7 @@ const GuildCase = ({
 				) : (
 					<>
 						<ModalBody>
-							<form id="guild-case-modal" onSubmit={handleSubmit(onSubmit)}>
+							<form id="guild-case-modal" onSubmit={handleOnSubmit}>
 								<Box pb={4}>
 									<FormLabel as="legend">Created at</FormLabel>
 									<Text>
@@ -118,16 +135,27 @@ const GuildCase = ({
 
 								<FormControl id="reference" pb={4} isReadOnly={readOnly || user.role === GraphQLRole.user}>
 									<FormLabel>Reference</FormLabel>
-									<NumberInput
-										defaultValue={gqlGuildCaseData?.case.ref_id ?? undefined}
-										isReadOnly={readOnly || user.role === GraphQLRole.user}
-									>
-										<NumberInputField name="reference" ref={register} />
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
+									<Box>
+										<NumberInput
+											d="inline-block"
+											mr={2}
+											top="3px"
+											w={gqlGuildCaseData?.case.ref_id ? '90%' : '100%'}
+											defaultValue={gqlGuildCaseData?.case.ref_id ?? undefined}
+											isReadOnly={readOnly || user.role === GraphQLRole.user}
+										>
+											<NumberInputField name="reference" ref={register} />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+										{gqlGuildCaseData?.case.ref_id ? (
+											<Box d="inline-block" bottom="3px">
+												<GuildCaseReference caseId={gqlGuildCaseData.case.ref_id} size="md" />
+											</Box>
+										) : null}
+									</Box>
 								</FormControl>
 
 								<Box pb={4}>
@@ -148,12 +176,19 @@ const GuildCase = ({
 									</Box>
 								) : null}
 
-								{gqlGuildCaseData?.case.action_processed ? null : (
+								{gqlGuildCaseData?.case.action_expiration ? (
 									<Box pb={4}>
-										<FormLabel as="legend">Expires in</FormLabel>
-										<Text>{dayjs(gqlGuildCaseData?.case.action_expiration ?? undefined).fromNow(true)}</Text>
+										<FormLabel as="legend">Expiration</FormLabel>
+										<Text>
+											{gqlGuildCaseData.case.action_processed
+												? dayjs(gqlGuildCaseData.case.action_expiration).from(
+														dayjs(gqlGuildCaseData.case.created_at),
+														true,
+												  )
+												: dayjs(gqlGuildCaseData?.case.action_expiration ?? undefined).fromNow(true)}
+										</Text>
 									</Box>
-								)}
+								) : null}
 
 								<Box pb={4}>
 									<FormLabel as="legend">Moderator</FormLabel>
@@ -169,7 +204,12 @@ const GuildCase = ({
 									})`}</Text>
 								</Box>
 
-								<FormControl id="reason" pb={4} isReadOnly={readOnly || user.role === GraphQLRole.user}>
+								<FormControl
+									id="reason"
+									pb={4}
+									isReadOnly={readOnly || user.role === GraphQLRole.user}
+									isInvalid={Boolean(errors.reason)}
+								>
 									<FormLabel>Reason</FormLabel>
 									<Textarea
 										minH="unset"
@@ -178,10 +218,13 @@ const GuildCase = ({
 										name="reason"
 										transition="height none"
 										rows={5}
-										ref={register}
+										ref={register({ maxLength: { value: 1900, message: 'Max length of 1900 exceeded' } })}
 										as={TextareaAutosize as any /* fuck ts */}
 										defaultValue={gqlGuildCaseData?.case.reason ?? undefined}
 									/>
+									<FormErrorMessage>
+										<FormErrorIcon /> {errors.reason?.message}
+									</FormErrorMessage>
 								</FormControl>
 							</form>
 						</ModalBody>
@@ -191,8 +234,7 @@ const GuildCase = ({
 									type="submit"
 									form="guild-case-modal"
 									colorScheme="green"
-									onClick={onClose}
-									isLoading={isLoadingGuildCaseUpdateMutate}
+									isLoading={formState.isSubmitting || isLoadingGuildCaseUpdateMutate}
 									loadingText="Submitting"
 									isDisabled={readOnly || user.role === GraphQLRole.user}
 								>

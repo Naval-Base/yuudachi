@@ -1,10 +1,20 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { Center, Text, Button, Box, ButtonGroup } from '@chakra-ui/react';
+import {
+	Center,
+	Text,
+	Button,
+	Box,
+	ButtonGroup,
+	FormControl,
+	FormLabel,
+	Input,
+	FormErrorMessage,
+	FormErrorIcon,
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 const Loading = dynamic(() => import('./Loading'));
-const GuildSettingsFormControl = dynamic(() => import('./GuildSettingsFormControl'));
 
 import { useUserStore } from '~/store/index';
 
@@ -18,7 +28,7 @@ import { GraphQLRole } from '~/interfaces/Role';
 const GuildSettings = () => {
 	const user = useUserStore();
 	const router = useRouter();
-	const { handleSubmit, register } = useForm<GuildSettingsPayload>({
+	const { handleSubmit, register, errors, formState } = useForm<GuildSettingsPayload>({
 		defaultValues: {
 			prefix: '?',
 		},
@@ -60,18 +70,27 @@ const GuildSettings = () => {
 
 	return gqlGuildSettingsData?.guild ? (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<GuildSettingsFormControl
-				register={register}
-				guildData={gqlGuildSettingsData}
-				id="prefix"
-				label="Prefix"
-				name="prefix"
-			/>
+			<FormControl id="prefix">
+				<FormLabel>Prefix</FormLabel>
+				<Input
+					name="prefix"
+					placeholder="Guild prefix"
+					ref={register({
+						required: { value: true, message: 'No empty prefix allowed' },
+						maxLength: { value: 5, message: 'Max length of 5 exceeded' },
+					})}
+					defaultValue={gqlGuildSettingsData.guild.prefix}
+				/>
+				<FormErrorMessage>
+					<FormErrorIcon />
+					{errors.prefix?.message}
+				</FormErrorMessage>
+			</FormControl>
 			<ButtonGroup d="flex" justifyContent="flex-end">
 				<Button
 					type="submit"
 					colorScheme="green"
-					isLoading={isLoadingGuildSettingsUpdateMutate}
+					isLoading={formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
 					loadingText="Submitting"
 					isDisabled={isLoadingGuildSettingsUpdateMutate}
 				>
