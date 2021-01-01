@@ -22,7 +22,7 @@ export default class SettingsManager {
 	 * @param guildId The guild ID for which to get settings
 	 * @param prop The settings key to fetch
 	 */
-	public async get(guildId: string, prop: string, table = ''): Promise<string | null> {
+	public async get(guildId: string, prop: string, table = 'guild_settings'): Promise<string | null> {
 		const [data]: any = await this.sql.unsafe(
 			`select ${prop} as value
 			from ${table}

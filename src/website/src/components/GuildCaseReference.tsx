@@ -3,12 +3,12 @@ import { Button, useDisclosure } from '@chakra-ui/react';
 
 const GuildCaseModal = dynamic(() => import('~/components/modals/GuildCase'));
 
-const GuildCaseReference = ({ caseId }: { caseId?: number }) => {
+const GuildCaseReference = ({ caseId, size = 'sm' }: { caseId?: number; size?: 'md' | 'sm' }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return caseId ? (
 		<>
-			<Button size="sm" onClick={onOpen}>
+			<Button size={size} onClick={onOpen}>
 				{caseId}
 			</Button>
 

@@ -33,6 +33,20 @@ export async function tag(
 		throw new Error(i18next.t('command.mod.restrict.tag.errors.no_role'));
 	}
 
+	const [action] = await sql<{ action_processed: boolean }>`
+		select action_processed
+		from moderation.cases
+		where guild_id = ${message.guild_id!}
+			and target_id = ${maybeMember.value}
+			and role_id = ${roles.tag_role_id}
+		order by created_at desc
+		limit 1`;
+
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (action && !action.action_processed) {
+		throw new Error(i18next.t('command.mod.restrict.tag.errors.already_restricted', { lng: locale }));
+	}
+
 	const parsedDuration = ms(duration);
 	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));

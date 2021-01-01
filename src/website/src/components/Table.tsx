@@ -131,7 +131,7 @@ const Table = ({
 												e.preventDefault();
 												column.toggleHidden();
 											}}
-											defaultIsChecked={column.isVisible}
+											defaultChecked={column.isVisible}
 										>
 											{column.Header}
 										</Checkbox>

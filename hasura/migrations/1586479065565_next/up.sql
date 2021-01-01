@@ -131,7 +131,7 @@ create table guild_settings (
 	emoji_role_id text,
 	reaction_role_id text,
 	locale text default 'en',
-	modules integer,
+	modules integer default 2,
 	repository_aliases text[]
 );
 
@@ -156,8 +156,7 @@ insert into guild_settings (
 		(settings -> 'RESTRICT_ROLES' ->> 'TAG')::text as tag_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::text as embed_role_id,
 		(settings -> 'RESTRICT_ROLES' ->> 'EMOJI')::text as emoji_role_id,
-		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::text as reaction_role_id,
-		(63)::integer as modules
+		(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::text as reaction_role_id
 	from settings
 );
 
