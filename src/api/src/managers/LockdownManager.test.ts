@@ -8,21 +8,17 @@ import { Tokens } from '@yuudachi/core';
 import { OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types/v8';
 
 import LockdownManager from './LockdownManager';
-import SettingsManager, { SettingsKeys } from './SettingsManager';
 
 const { kSQL } = Tokens;
 
 jest.mock('@yuudachi/rest');
 jest.mock('postgres', () => jest.fn(() => jest.fn()));
-jest.mock('./SettingsManager');
 
 const mockedRest: jest.Mocked<Rest> = new (Rest as any)();
 const mockedPostgres: jest.MockedFunction<Sql<any>> = postgres() as any;
-const mockedSettingsManager: jest.Mocked<SettingsManager> = new (SettingsManager as any)();
 
 container.register(kSQL, { useValue: mockedPostgres });
 container.register(Rest, { useValue: mockedRest });
-container.register(SettingsManager, { useValue: mockedSettingsManager });
 
 const modUsername = 'abc';
 const modDiscriminator = '0001';
@@ -85,15 +81,6 @@ mockedPostgres.mockImplementation((): any =>
 
 // @ts-expect-error
 mockedPostgres.json = jest.fn(() => []);
-
-mockedSettingsManager.get.mockImplementation((_, prop) => {
-	switch (prop) {
-		case SettingsKeys.MOD_ROLE_ID:
-			return Promise.resolve('foo');
-	}
-
-	throw new Error('unexpected prop');
-});
 
 afterEach(() => {
 	getCalls = 0;

@@ -25,7 +25,7 @@ export async function emoji(
 
 	const [roles] = await sql<{ emoji_role_id: string }>`
 		select emoji_role_id
-		from guild_settings
+		from moderation.guild_settings
 		where guild_id = ${message.guild_id!}
 	`;
 

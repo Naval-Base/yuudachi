@@ -4,7 +4,6 @@ import { Lockdown } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
 import { APIChannel, APIOverwrite, APIUser, OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types/v8';
-import SettingsManager from './SettingsManager';
 
 const { kSQL } = Tokens;
 
@@ -22,7 +21,6 @@ export default class LockdownManager {
 		@inject(kSQL)
 		public readonly sql: Sql<any>,
 		public readonly rest: Rest,
-		public readonly settings: SettingsManager,
 	) {}
 
 	public async create(lockdown: Lockdown) {

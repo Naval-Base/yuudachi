@@ -125,7 +125,11 @@ describe('create', () => {
 		});
 
 		expect(mockedSettingsManager.get).toHaveBeenCalledTimes(1);
-		expect(mockedSettingsManager.get).toHaveBeenCalledWith(guildId, SettingsKeys.MOD_LOG_CHANNEL_ID);
+		expect(mockedSettingsManager.get).toHaveBeenCalledWith(
+			guildId,
+			SettingsKeys.MOD_LOG_CHANNEL_ID,
+			'moderation.guild_settings',
+		);
 
 		expect(mockedPostgres).toHaveBeenCalledTimes(1);
 		expect(mockedPostgres).toHaveBeenLastCalledWith(

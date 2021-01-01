@@ -57,7 +57,7 @@ const messageCreate = async () => {
 			modules: number | null;
 		}>`select prefix, locale, modules
 			from guild_settings
-			where guild_id = ${message.guild_id ?? null};`;
+			where guild_id = ${message.guild_id ?? null}`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const prefix = data?.prefix ?? '?';
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -134,7 +134,7 @@ const interactionCreate = async () => {
 			modules: number | null;
 		}>`select locale, modules
 			from guild_settings
-			where guild_id = ${interaction.guild_id};`;
+			where guild_id = ${interaction.guild_id}`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const locale = data?.locale ?? 'en';
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -149,9 +149,14 @@ const interactionCreate = async () => {
 			try {
 				await command.execute(interaction, new Args(out), locale, ExecutionContext['INTERACTION']);
 			} catch (error) {
-				void send(interaction, {
-					content: error.message,
-				});
+				void send(
+					interaction,
+					{
+						content: error.message,
+						flags: 64,
+					},
+					3,
+				);
 			}
 
 			continue;

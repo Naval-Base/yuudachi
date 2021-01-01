@@ -25,7 +25,7 @@ export async function react(
 
 	const [roles] = await sql<{ reaction_role_id: string }>`
 		select reaction_role_id
-		from guild_settings
+		from moderation.guild_settings
 		where guild_id = ${message.guild_id!}
 	`;
 

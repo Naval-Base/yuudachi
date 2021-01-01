@@ -25,7 +25,7 @@ export async function embed(
 
 	const [roles] = await sql<{ embed_role_id: string }>`
 		select embed_role_id
-		from guild_settings
+		from moderation.guild_settings
 		where guild_id = ${message.guild_id!}
 	`;
 

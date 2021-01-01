@@ -25,7 +25,7 @@ export async function mute(
 
 	const [roles] = await sql<{ mute_role_id: string }>`
 		select mute_role_id
-		from guild_settings
+		from moderation.guild_settings
 		where guild_id = ${message.guild_id!}
 	`;
 

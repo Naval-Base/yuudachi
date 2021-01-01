@@ -4,6 +4,33 @@ create schema "moderation";
 create schema "logs";
 create schema "organizational";
 
+-- LOG_SETTINGS
+
+create table logs.guild_settings as table guild_settings;
+
+COMMENT ON COLUMN logs.guild_settings.guild_id IS 'The id of the guild this setting belongs to';
+COMMENT ON COLUMN logs.guild_settings.guild_log_channel_id IS 'The id of the guilds log channel';
+
+alter table logs.guild_settings
+	add constraint settings_pkey primary key (guild_id),
+	drop prefix,
+	drop mod_log_channel_id,
+	drop member_log_channel_id,
+	drop mod_role_id,
+	drop mute_role_id,
+	drop tag_role_id,
+	drop embed_role_id,
+	drop emoji_role_id,
+	drop reaction_role_id,
+	drop locale,
+	drop modules,
+	drop repository_aliases
+;
+
+alter table guild_settings
+	drop guild_log_channel_id
+;
+
 -- MESSAGES
 
 create table logs.messages (
@@ -36,6 +63,39 @@ alter table logs.messages
 
 create trigger set_logs_messages_updated_at before update on logs.messages for each row execute function public.set_current_timestamp_updated_at();
 comment on trigger set_logs_messages_updated_at on logs.messages is 'trigger to set value of column "updated_at" to current timestamp on row update';
+
+-- MOD_SETTINGS
+
+create table moderation.guild_settings as table guild_settings;
+
+COMMENT ON COLUMN moderation.guild_settings.guild_id IS 'The id of the guild this setting belongs to';
+COMMENT ON COLUMN moderation.guild_settings.mod_log_channel_id IS 'The id of the guilds mod log channel';
+COMMENT ON COLUMN moderation.guild_settings.member_log_channel_id IS 'The id of the guilds member log channel';
+COMMENT ON COLUMN moderation.guild_settings.mod_role_id IS 'The id of the guilds mod role';
+COMMENT ON COLUMN moderation.guild_settings.mute_role_id IS 'The id of the guilds mute role';
+COMMENT ON COLUMN moderation.guild_settings.tag_role_id IS 'The id of the guilds tag restriction role';
+COMMENT ON COLUMN moderation.guild_settings.embed_role_id IS 'The id of the guilds embed restriction role';
+COMMENT ON COLUMN moderation.guild_settings.emoji_role_id IS 'The id of the guilds emoji restriction role';
+COMMENT ON COLUMN moderation.guild_settings.reaction_role_id IS 'The id of the guilds reaction restriction role';
+
+alter table moderation.guild_settings
+	add constraint settings_pkey primary key (guild_id),
+	drop prefix,
+	drop locale,
+	drop modules,
+	drop repository_aliases
+;
+
+alter table guild_settings
+	drop mod_log_channel_id,
+	drop member_log_channel_id,
+	drop mod_role_id,
+	drop mute_role_id,
+	drop tag_role_id,
+	drop embed_role_id,
+	drop emoji_role_id,
+	drop reaction_role_id
+;
 
 -- CASES
 

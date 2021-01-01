@@ -67,8 +67,8 @@ export default class DiscordLoginCallbackRoute extends Route {
 			`;
 		} else {
 			[user] = await this.sql<{ id: string }>`
-				insert into users (email, username)
-				values (${me.email}, ${me.username})
+				insert into users (email, username, role)
+				values (${me.email}, ${me.username}, 'user')
 				returning id;
 			`;
 			const avatar = me.avatar

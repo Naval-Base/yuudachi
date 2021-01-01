@@ -25,7 +25,7 @@ export async function tag(
 
 	const [roles] = await sql<{ tag_role_id: string }>`
 		select tag_role_id
-		from guild_settings
+		from moderation.guild_settings
 		where guild_id = ${message.guild_id!}
 	`;
 

@@ -21,7 +21,7 @@ export default class TokenRefreshRoute extends Route {
 
 		let credentials: AuthCredentials;
 		try {
-			credentials = await this.authManager.refresh(req.auth.token, cookies.refresh_token);
+			credentials = await this.authManager.refresh(req.auth!.token, cookies.refresh_token);
 		} catch {
 			return next(unauthorized());
 		}

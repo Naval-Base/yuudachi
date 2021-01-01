@@ -1,18 +1,27 @@
 -- ROLES
 
-create type roles as enum('admin', 'moderator', 'user');
+create table user_role (
+	"value" text primary key,
+	comment text
+);
+
+insert into user_role ("value") values
+	('admin'),
+	('moderator'),
+	('user');
 
 -- USERS
 
 create table users (
-  id uuid default gen_random_uuid() not null,
-  email text not null,
-  username text not null,
-  "role" roles default 'user',
-  token_reset_at timestamp
+	id uuid default gen_random_uuid() not null,
+	email text not null,
+	username text not null,
+	"role" text not null,
+	token_reset_at timestamp
 );
 
 alter table users add constraint users_pkey primary key (id);
+alter table users add constraint users_role_fkey foreign key ("role") references user_role;
 
 comment on column users.id is 'The id of this user';
 comment on column users.email is 'The email of this user';
@@ -22,23 +31,31 @@ comment on column users.token_reset_at is 'When this user''s token was reset';
 
 -- PROVIDERS
 
-create type providers as enum('discord', 'twitch');
+create table connection_provider (
+	"value" text primary key,
+	comment text
+);
+
+insert into connection_provider ("value") values
+	('discord'),
+	('twitch');
 
 -- CONNECTIONS
 
 create table connections (
-  id text not null,
-  user_id uuid not null,
-  provider providers not null,
-  main boolean default false,
-  avatar text,
-  access_token text not null,
-  refresh_token text,
-  expires_at timestamp with time zone
+	id text not null,
+	user_id uuid not null,
+	"provider" text not null,
+	main boolean default false,
+	avatar text,
+	access_token text not null,
+	refresh_token text,
+	expires_at timestamp with time zone
 );
 
 alter table connections add constraint connections_pkey primary key (id);
 alter table connections add constraint connections_user_id_fkey foreign key (user_id) references users (id) on delete cascade;
+alter table connections add constraint connections_provider_fkey foreign key ("provider") references connection_provider;
 
 comment on column connections.id is 'The user id of this connection';
 comment on column connections.user_id is 'The id of the user this connection belongs to';
@@ -117,6 +134,12 @@ create table guild_settings (
 	modules integer,
 	repository_aliases text[]
 );
+
+COMMENT ON COLUMN guild_settings.guild_id IS 'The id of the guild this setting belongs to';
+COMMENT ON COLUMN guild_settings.prefix IS 'The prefix of the guild';
+COMMENT ON COLUMN guild_settings.locale IS 'The locale of the guild';
+COMMENT ON COLUMN guild_settings.modules IS 'The modules of the guild';
+COMMENT ON COLUMN guild_settings.repository_aliases IS 'The repository aliases of the guild';
 
 alter table guild_settings
 	add constraint guild_settings_pkey primary key (guild_id)

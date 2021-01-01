@@ -10,7 +10,8 @@
 				"no_guild": "This command can only be used in a guild.",
 				"target_not_found": "The given member is not in this guild.",
 				"duration_format": "Wrong duration format.",
-				"no_sub_command": "No sub command provided."
+				"no_sub_command": "No sub command provided.",
+				"no_mod_role": "This command can only be used by moderators."
 			}
 		},
 		"config": {

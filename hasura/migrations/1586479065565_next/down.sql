@@ -102,7 +102,11 @@ drop table connections;
 
 -- PROVIDERS
 
-drop type providers;
+drop table connection_provider;
+
+-- ROLES
+
+drop table user_role;
 
 -- USERS
 

@@ -24,7 +24,11 @@ export default class CaseLogManager {
 	) {}
 
 	public async create(item: RawCase, old?: RawCase) {
-		const logChannelId = await this.settings.get(item.guild_id, SettingsKeys.MOD_LOG_CHANNEL_ID);
+		const logChannelId = await this.settings.get(
+			item.guild_id,
+			SettingsKeys.MOD_LOG_CHANNEL_ID,
+			'moderation.guild_settings',
+		);
 		if (!logChannelId) {
 			throw new Error('no mod log channel configured');
 		}
