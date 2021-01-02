@@ -105,15 +105,18 @@ const GuildCase = ({
 				}
 			}
 
-			await guildCaseUpdateMutate(payload);
-
-			toast({
-				title: 'Case edited.',
-				description: `You successfully edited the case.`,
-				status: 'success',
-				isClosable: true,
-				position: 'top',
+			await guildCaseUpdateMutate(payload, {
+				onSuccess: () => {
+					toast({
+						title: 'Case edited.',
+						description: `You successfully edited the case.`,
+						status: 'success',
+						isClosable: true,
+						position: 'top',
+					});
+				},
 			});
+
 			onClose();
 		})(event);
 	};

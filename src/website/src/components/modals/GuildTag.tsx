@@ -81,18 +81,42 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 			};
 
 			if (name) {
-				await guildTagUpdateMutate(payload);
+				await guildTagUpdateMutate(payload, {
+					onSuccess: () => {
+						toast({
+							title: 'Tag edited.',
+							description: `You successfully edited the tag.`,
+							status: 'success',
+							isClosable: true,
+							position: 'top',
+						});
+					},
+				});
 			} else {
-				await guildTagInsertMutate(payload);
+				try {
+					await guildTagInsertMutate(payload, {
+						onSuccess: () => {
+							toast({
+								title: 'Tag created.',
+								description: 'You successfully created the tag.',
+								status: 'success',
+								isClosable: true,
+								position: 'top',
+							});
+						},
+					});
+				} catch (error) {
+					toast({
+						title: 'Tag creation failed.',
+						description: error.message,
+						status: 'error',
+						isClosable: true,
+						position: 'top',
+					});
+					return;
+				}
 			}
 
-			toast({
-				title: name ? 'Tag edited.' : 'Tag created.',
-				description: `You successfully ${name ? 'edited' : 'created'} the tag.`,
-				status: 'success',
-				isClosable: true,
-				position: 'top',
-			});
 			remove();
 			onClose();
 		})(event);
