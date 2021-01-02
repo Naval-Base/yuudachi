@@ -70,7 +70,6 @@ const GuildCasesPage = () => {
 				style: { width: '15%' },
 				search: {
 					label: 'Mod Id',
-					type: 'number',
 				},
 			},
 			{
@@ -81,7 +80,6 @@ const GuildCasesPage = () => {
 				style: { width: '15%' },
 				search: {
 					label: 'Target Id',
-					type: 'number',
 				},
 			},
 			{
