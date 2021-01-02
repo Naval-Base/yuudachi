@@ -19,7 +19,16 @@ export function useMutationUpdateGuildTag(id: string, name: string) {
 					}
 				}`,
 				{ guild_id: id, name, _set: { ...guildTag, last_modified: user.id } },
-			).then(({ body }) => body),
+			).then(({ body }) => {
+				if (body.errors) {
+					if (body.errors?.[0]?.extensions?.code === 'constraint-violation') {
+						throw new Error('A tag with this name already exists.');
+					}
+					throw new Error(body.errors?.[0]?.message);
+				}
+
+				return body;
+			}),
 		{
 			onSuccess: () => {
 				void cache.invalidateQueries(['guilds', id, 'tags']);
