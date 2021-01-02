@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -41,6 +42,9 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 
 	return (
 		<>
+			<Head>
+				<title>{gqlGuildData?.guild?.name} | Yuudachi Dashboard</title>
+			</Head>
 			<Grid
 				templateColumns={{ base: 'auto', md: 'auto', lg: '250px auto' }}
 				templateRows={{ base: 'max-content', lg: 'unset' }}

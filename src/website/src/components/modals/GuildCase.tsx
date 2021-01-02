@@ -1,7 +1,7 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { CaseAction } from '@yuudachi/types';
 import {
 	Box,
@@ -29,6 +29,7 @@ import {
 	FormErrorIcon,
 } from '@chakra-ui/react';
 import TextareaAutosize from 'react-autosize-textarea';
+import DatePicker from '~/components/DatePicker';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -50,19 +51,20 @@ import { DATE_FORMAT_WITH_SECONDS } from 'src/Constants';
 
 const GuildCase = ({
 	caseId,
-	readOnly,
+	readOnly = false,
 	isOpen,
 	onClose,
 }: {
 	caseId?: number;
-	readOnly: boolean;
+	readOnly?: boolean;
 	isOpen: boolean;
 	onClose: () => void;
 }) => {
 	const user = useUserStore();
 	const router = useRouter();
 	const toast = useToast();
-	const { handleSubmit, register, errors, formState } = useForm<GuildCasePayload>();
+	const { handleSubmit, register, control, errors, formState } = useForm<GuildCasePayload>();
+	const [expirationTime, setExpirationTime] = useState<string | null>(null);
 	const { id } = router.query;
 
 	const { data: gqlGuildCaseData, isLoading: isLoadingGuildCase } = useQueryGuildCase(
@@ -71,19 +73,26 @@ const GuildCase = ({
 		Boolean(caseId) && isOpen,
 	);
 	const { data: gqlGuildRolesData } = useQueryGuildRoles(id as string, isOpen);
-	const { data: gqlUserData } = useQueryUser(user.id!, Boolean(gqlGuildCaseData?.case.mod_id));
+	const { data: gqlUserData } = useQueryUser(user.id!, !Boolean(gqlGuildCaseData?.case.mod_id) && isOpen);
 	const { mutateAsync: guildCaseUpdateMutate, isLoading: isLoadingGuildCaseUpdateMutate } = useMutationUpdateGuildCase(
 		id as string,
 		caseId!,
 	);
 
+	useEffect(() => {
+		if (isOpen) {
+			setExpirationTime(gqlGuildCaseData?.case.action_expiration ?? null);
+		}
+	}, [isOpen, gqlGuildCaseData?.case.action_expiration]);
+
 	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		await handleSubmit(async (values: { reference: number; reason: string }) => {
-			const { reference, ...rest } = values;
+		await handleSubmit(async (values: { expiration: Date | null; reference: number; reason: string }) => {
+			const { reference, expiration, ...rest } = values;
 			let payload: GuildCasePayload = {
 				...rest,
 				ref_id: reference || null,
+				action_expiration: expiration?.toISOString() ?? null,
 			};
 
 			if (!gqlGuildCaseData?.case.mod_id) {
@@ -140,7 +149,7 @@ const GuildCase = ({
 											d="inline-block"
 											mr={2}
 											top="3px"
-											w={gqlGuildCaseData?.case.ref_id ? '90%' : '100%'}
+											w={gqlGuildCaseData?.case.ref_id ? '80%' : '100%'}
 											defaultValue={gqlGuildCaseData?.case.ref_id ?? undefined}
 											isReadOnly={readOnly || user.role === GraphQLRole.user}
 										>
@@ -177,17 +186,49 @@ const GuildCase = ({
 								) : null}
 
 								{gqlGuildCaseData?.case.action_expiration ? (
-									<Box pb={4}>
-										<FormLabel as="legend">Expiration</FormLabel>
-										<Text>
-											{gqlGuildCaseData.case.action_processed
-												? dayjs(gqlGuildCaseData.case.action_expiration).from(
-														dayjs(gqlGuildCaseData.case.created_at),
-														true,
-												  )
-												: dayjs(gqlGuildCaseData?.case.action_expiration ?? undefined).fromNow(true)}
-										</Text>
-									</Box>
+									<>
+										<Box pb={4}>
+											<FormLabel as="legend">Expiration</FormLabel>
+											<Controller
+												name="expiration"
+												control={control}
+												defaultValue={dayjs(gqlGuildCaseData.case.action_expiration).toDate()}
+												render={(props: any) => (
+													<DatePicker
+														selectedDate={props.value}
+														onChange={(d) => {
+															if (isOpen) {
+																setExpirationTime(d);
+															}
+															props.onChange(d);
+														}}
+														filterDate={(date) => dayjs(date).add(1, 'd') > dayjs(gqlGuildCaseData.case.created_at)}
+														filterTime={(time) => {
+															if (expirationTime) {
+																if (dayjs(expirationTime).isSame(dayjs(), 'd')) {
+																	return dayjs(time).add(-10, 'm') > dayjs(gqlGuildCaseData.case.created_at);
+																}
+																return dayjs(expirationTime).isAfter(dayjs(gqlGuildCaseData.case.created_at), 'd');
+															}
+															return false;
+														}}
+														isReadOnly={readOnly || user.role === GraphQLRole.user}
+														isDisabled={gqlGuildCaseData.case.action_processed}
+													/>
+												)}
+											/>
+										</Box>
+
+										<Box pb={4}>
+											<FormLabel as="legend">Duration</FormLabel>
+											<Text>
+												{dayjs(gqlGuildCaseData.case.action_expiration).from(
+													dayjs(gqlGuildCaseData.case.created_at),
+													true,
+												)}
+											</Text>
+										</Box>
+									</>
 								) : null}
 
 								<Box pb={4}>

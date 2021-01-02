@@ -81,7 +81,7 @@ export default class CaseLogManager {
 		`;
 
 		if (case_.action_expiration) {
-			msg += `\n**Expiration:** ${dayjs(case_.action_expiration).fromNow(true)}`;
+			msg += `\n**Expiration:** ${dayjs(case_.action_expiration).from(case_.created_at, true)}`;
 		}
 
 		if (case_.context_message_id) {

@@ -13,6 +13,8 @@ import {
 	ButtonGroup,
 	Button,
 	Stack,
+	NumberInput,
+	NumberInputField,
 } from '@chakra-ui/react';
 import { FiSearch } from 'react-icons/fi';
 
@@ -35,21 +37,37 @@ const transformId = (id: string) => {
 };
 
 const TableColumnSearch = ({
-	header,
+	label,
 	id,
 	op = '_eq',
+	type = 'string',
 	onSearchChange,
 }: {
-	header?: string;
+	label?: string;
 	id: string;
 	op?: SearchQuery['op'];
+	type?: string;
 	onSearchChange: (searchQ: SearchQuery) => void;
 }) => {
 	const { onOpen, onClose, isOpen } = useDisclosure();
 	const { handleSubmit, register } = useForm<{ search: string }>();
 
+	let CustomInput: (() => JSX.Element) | null = null;
+	switch (type) {
+		case 'number':
+			CustomInput = () => (
+				<NumberInput size="sm">
+					<NumberInputField name="reference" ref={register} />
+				</NumberInput>
+			);
+			break;
+		default:
+			CustomInput = () => <Input name="search" ref={register} size="sm" />;
+			break;
+	}
+
 	const onSubmit = ({ search }: { search: string }) => {
-		onSearchChange({ header: header!, key: transformId(id), op, query: op === '_ilike' ? `%${search}%` : search });
+		onSearchChange({ label: label!, key: transformId(id), op, query: op === '_ilike' ? `%${search}%` : search });
 		onClose();
 	};
 
@@ -64,8 +82,8 @@ const TableColumnSearch = ({
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<Stack spacing={2}>
 						<FormControl id="search">
-							<FormLabel>Search {header ?? ''}</FormLabel>
-							<Input name="search" ref={register} size="sm" />
+							<FormLabel>Search {label ?? ''}</FormLabel>
+							<CustomInput />
 						</FormControl>
 						<ButtonGroup size="sm" d="flex" justifyContent="flex-end">
 							<Button type="submit" colorScheme="green">

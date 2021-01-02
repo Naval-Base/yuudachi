@@ -31,7 +31,7 @@ const GuildNavbar = () => {
 				flexDirection={{ base: 'column' }}
 				width={{ base: 'full' }}
 			>
-				<VStack>
+				<VStack px={2}>
 					<Link href={`/guilds/${id as string}`}>
 						<Button w="100%" variant="ghost">
 							Dashboard
