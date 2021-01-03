@@ -42,7 +42,14 @@ export default async function refreshFetch(
 		if (error.body.errors[0].extensions.code === 'invalid-jwt') {
 			if (/JWTExpired/.test(error.body.errors[0].message)) {
 				try {
-					const res = await fetch('http://localhost:3600/api/auth/refresh', { credentials: 'include' });
+					let refreshHeaders = {};
+					if (cookie) {
+						refreshHeaders = { cookie };
+					}
+					const res = await fetch('http://localhost:3600/api/auth/refresh', {
+						headers: { ...refreshHeaders },
+						credentials: 'include',
+					});
 					if (!res.ok || res.status === 401) {
 						throw new ResponseError(res.status, res, {});
 					}

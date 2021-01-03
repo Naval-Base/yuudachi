@@ -14,22 +14,32 @@ import { queryMe } from '~/hooks/useQueryMe';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	const userStore = initializeUserStore();
-	const res = await queryMe(context.req.headers.cookie);
 
-	if (res.data?.me[0] && res.data?.me[0].connections.length) {
-		const connection = res.data.me[0].connections.find((c: { main: boolean }) => c.main)!;
-		userStore.getState().setUser({
-			loggedIn: true,
-			id: connection.id,
-			role: res.data.me[0].role,
-			username: res.data.me[0].username,
-			avatar: connection.avatar,
-		});
+	try {
+		const res = await queryMe(context.req.headers.cookie);
+
+		if (res.data?.me[0] && res.data?.me[0].connections.length) {
+			const connection = res.data.me[0].connections.find((c: { main: boolean }) => c.main)!;
+			userStore.getState().setUser({
+				loggedIn: true,
+				id: connection.id,
+				role: res.data.me[0].role,
+				username: res.data.me[0].username,
+				avatar: connection.avatar,
+			});
+		}
+
+		return {
+			props: { initialStoreState: JSON.stringify(userStore.getState()) },
+		};
+	} catch {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: true,
+			},
+		};
 	}
-
-	return {
-		props: { initialStoreState: JSON.stringify(userStore.getState()) },
-	};
 }
 
 const GuildCasesPage = () => {

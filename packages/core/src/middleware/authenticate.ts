@@ -33,7 +33,8 @@ export default (ignoreExpiration = false, fallthrough = false) => async (
 
 		req.auth = { userId, token };
 		return next?.();
-	} catch {
+	} catch (error) {
+		console.log(error);
 		return next?.(fallthrough ? undefined : unauthorized());
 	}
 };
