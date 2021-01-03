@@ -159,7 +159,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 							<form id="guild-tag-modal" onSubmit={handleOnSubmit}>
 								<FormControl
 									id="name"
-									pb={4}
+									mb={4}
 									isReadOnly={user.role === GraphQLRole.user}
 									isInvalid={Boolean(errors.name)}
 								>
@@ -178,7 +178,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 									</FormErrorMessage>
 								</FormControl>
 
-								<Accordion allowToggle pb={4}>
+								<Accordion allowToggle mb={4}>
 									<AccordionItem>
 										<AccordionButton>
 											<Box flex="1" textAlign="left">
@@ -190,7 +190,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 											{fields.map((item, i) => (
 												<Box key={item.id}>
 													<FormControl
-														pb={4}
+														mb={4}
 														isReadOnly={user.role === GraphQLRole.user}
 														isInvalid={Boolean((errors.aliases as FieldErrors | undefined)?.[i]?.value)}
 													>
@@ -237,7 +237,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 
 								<FormControl
 									id="content"
-									pb={4}
+									mb={4}
 									isReadOnly={user.role === GraphQLRole.user}
 									isInvalid={Boolean(errors.content)}
 								>

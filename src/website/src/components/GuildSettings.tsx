@@ -51,7 +51,7 @@ const GuildSettings = () => {
 		isLoading: isLoadingGuildSettingsUpdateMutate,
 	} = useMutationUpdateGuildSettings(id as string);
 
-	async function onInitialize() {
+	const handleOnInitialize = async () => {
 		await guildSettingsInsertMutate();
 
 		toast({
@@ -61,7 +61,7 @@ const GuildSettings = () => {
 			isClosable: true,
 			position: 'top',
 		});
-	}
+	};
 
 	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -93,8 +93,8 @@ const GuildSettings = () => {
 	}
 
 	return gqlGuildSettingsData?.guild ? (
-		<form onSubmit={handleSubmit(handleOnSubmit)}>
-			<FormControl id="prefix" pb={4} isInvalid={Boolean(errors.prefix)}>
+		<form onSubmit={handleOnSubmit}>
+			<FormControl id="prefix" mb={4} isInvalid={Boolean(errors.prefix)}>
 				<FormLabel>Prefix</FormLabel>
 				<Input
 					name="prefix"
@@ -110,6 +110,7 @@ const GuildSettings = () => {
 					{errors.prefix?.message}
 				</FormErrorMessage>
 			</FormControl>
+
 			<ButtonGroup d="flex" justifyContent="flex-end">
 				<Button
 					type="submit"
@@ -130,7 +131,7 @@ const GuildSettings = () => {
 			<Box textAlign="center">
 				<Button
 					colorScheme="green"
-					onClick={onInitialize}
+					onClick={handleOnInitialize}
 					isLoading={isLoadingGuildSettingsInsertMutate}
 					loadingText="Initializing"
 					isDisabled={isLoadingGuildSettingsInsertMutate}

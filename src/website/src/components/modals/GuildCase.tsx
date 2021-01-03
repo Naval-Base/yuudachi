@@ -137,7 +137,7 @@ const GuildCase = ({
 					<>
 						<ModalBody>
 							<form id="guild-case-modal" onSubmit={handleOnSubmit}>
-								<Box pb={4}>
+								<Box mb={4}>
 									<FormLabel as="legend">Created at</FormLabel>
 									<Text>
 										{dayjs(gqlGuildCaseData?.case.created_at).format(DATE_FORMAT_WITH_SECONDS)} (UTC) (
@@ -145,7 +145,7 @@ const GuildCase = ({
 									</Text>
 								</Box>
 
-								<FormControl id="reference" pb={4} isReadOnly={readOnly || user.role === GraphQLRole.user}>
+								<FormControl id="reference" mb={4} isReadOnly={readOnly || user.role === GraphQLRole.user}>
 									<FormLabel>Reference</FormLabel>
 									<Box>
 										<NumberInput
@@ -170,7 +170,7 @@ const GuildCase = ({
 									</Box>
 								</FormControl>
 
-								<Box pb={4}>
+								<Box mb={4}>
 									<FormLabel as="legend">Action</FormLabel>
 									<Text>
 										{CaseAction[gqlGuildCaseData?.case.action ?? 0][0].toUpperCase() +
@@ -179,7 +179,7 @@ const GuildCase = ({
 								</Box>
 
 								{gqlGuildCaseData?.case.role_id ? (
-									<Box pb={4}>
+									<Box mb={4}>
 										<FormLabel as="legend">Role</FormLabel>
 										<Text>
 											{gqlGuildRolesData?.roles?.find((role) => role.id === gqlGuildCaseData.case.role_id)?.name} (
@@ -190,7 +190,7 @@ const GuildCase = ({
 
 								{gqlGuildCaseData?.case.action_expiration ? (
 									<>
-										<Box pb={4}>
+										<Box mb={4}>
 											<FormLabel as="legend">Expiration</FormLabel>
 											<Controller
 												name="expiration"
@@ -222,7 +222,7 @@ const GuildCase = ({
 											/>
 										</Box>
 
-										<Box pb={4}>
+										<Box mb={4}>
 											<FormLabel as="legend">Duration</FormLabel>
 											<Text>
 												{dayjs(gqlGuildCaseData.case.action_expiration).from(
@@ -234,14 +234,14 @@ const GuildCase = ({
 									</>
 								) : null}
 
-								<Box pb={4}>
+								<Box mb={4}>
 									<FormLabel as="legend">Moderator</FormLabel>
 									<Text>{`${gqlGuildCaseData?.case.mod_tag as string} (${
 										gqlGuildCaseData?.case.mod_id as string
 									})`}</Text>
 								</Box>
 
-								<Box pb={4}>
+								<Box mb={4}>
 									<FormLabel as="legend">Target</FormLabel>
 									<Text>{`${gqlGuildCaseData?.case.target_tag as string} (${
 										gqlGuildCaseData?.case.target_id as string
@@ -250,7 +250,7 @@ const GuildCase = ({
 
 								<FormControl
 									id="reason"
-									pb={4}
+									mb={4}
 									isReadOnly={readOnly || user.role === GraphQLRole.user}
 									isInvalid={Boolean(errors.reason)}
 								>

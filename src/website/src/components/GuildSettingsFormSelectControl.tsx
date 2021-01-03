@@ -21,7 +21,7 @@ const GuildSettingsFormSelectControl = ({
 	name: string;
 	placeholder?: string;
 }) => (
-	<FormControl id={id} pb={4}>
+	<FormControl id={id} mb={4}>
 		<FormLabel>{label}</FormLabel>
 		<Controller
 			as={
