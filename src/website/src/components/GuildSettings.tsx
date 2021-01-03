@@ -1,3 +1,4 @@
+import { FormEvent } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
@@ -62,17 +63,22 @@ const GuildSettings = () => {
 		});
 	}
 
-	async function onSubmit(values: GuildSettingsPayload) {
-		await guildSettingsUpdateMutate(values);
-
-		toast({
-			title: 'Guild settings edited.',
-			description: `You successfully edited the guild settings.`,
-			status: 'success',
-			isClosable: true,
-			position: 'top',
-		});
-	}
+	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		await handleSubmit(async (values: GuildSettingsPayload) => {
+			await guildSettingsUpdateMutate(values, {
+				onSuccess: () => {
+					toast({
+						title: 'Guild settings edited.',
+						description: `You successfully edited the guild settings.`,
+						status: 'success',
+						isClosable: true,
+						position: 'top',
+					});
+				},
+			});
+		})(event);
+	};
 
 	if (user.role === GraphQLRole.user) {
 		return <Text textAlign="center">You need to be a moderator to see the guild settings.</Text>;
@@ -87,7 +93,7 @@ const GuildSettings = () => {
 	}
 
 	return gqlGuildSettingsData?.guild ? (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form onSubmit={handleSubmit(handleOnSubmit)}>
 			<FormControl id="prefix" pb={4} isInvalid={Boolean(errors.prefix)}>
 				<FormLabel>Prefix</FormLabel>
 				<Input
