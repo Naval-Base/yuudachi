@@ -6,30 +6,28 @@ import { useUserStore } from '~/store/index';
 
 import { GraphQLMe } from '~/interfaces/User';
 
+export const queryMe = (cookie?: string) =>
+	fetchGraphQL(
+		`query Me {
+			me: users {
+				connections {
+					id
+					avatar
+					main
+				}
+				username
+				role
+			}
+		}`,
+		{},
+		{},
+		cookie,
+	).then(({ body }) => body);
+
 export function useQueryMe() {
 	const user = useUserStore();
 
-	const { data, isLoading } = useQuery<GraphQLMe & { errors: unknown[] }>(
-		'user',
-		() =>
-			fetchGraphQL(
-				`query Me {
-					me: users {
-						connections {
-							id
-							avatar
-							main
-						}
-						username
-						role
-					}
-				}`,
-				{},
-			).then(({ body }) => body),
-		{
-			enabled: !user.loggedIn,
-		},
-	);
+	const { data, isLoading } = useQuery<GraphQLMe & { errors: unknown[] }>('user', () => queryMe());
 
 	useEffect(() => {
 		if (data?.errors) {
@@ -46,7 +44,7 @@ export function useQueryMe() {
 				avatar: connection.avatar,
 			});
 		}
-	}, [user, data?.data?.me, data?.errors]);
+	}, [user.loggedIn, user, data?.data?.me, data?.errors]);
 
 	return { data: data?.data, isLoading };
 }

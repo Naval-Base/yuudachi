@@ -57,6 +57,8 @@ const GuildTagsPage = () => {
 		[],
 	);
 
+	const data = useMemo(() => gqlData?.tags ?? [], [gqlData?.tags]);
+
 	if (isLoading) {
 		return (
 			<Center h="100%">
@@ -79,7 +81,7 @@ const GuildTagsPage = () => {
 			<Table
 				// @ts-ignore
 				columns={columns}
-				data={gqlData?.tags ?? []}
+				data={data}
 				count={gqlData?.tagCount.aggregate.count ?? 0}
 				onRefreshChange={handleRefreshChange}
 			/>

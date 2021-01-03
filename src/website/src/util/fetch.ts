@@ -15,8 +15,9 @@ export default async function refreshFetch(
 	input: string | Request | URL,
 	options: Record<string, any> = { headers: {} },
 	attempt = 0,
+	cookie?: string,
 ): Promise<{ response: Response; body: any }> {
-	const cookies = new Cookies();
+	const cookies = new Cookies(cookie);
 	const token = cookies.get<string>('access_token');
 
 	if (token) {
@@ -45,13 +46,13 @@ export default async function refreshFetch(
 					if (!res.ok || res.status === 401) {
 						throw new ResponseError(res.status, res, {});
 					}
-					return refreshFetch(input, options, attempt++);
+					return refreshFetch(input, options, attempt++, cookie);
 				} catch (e) {
 					cookies.remove('access_token');
 					throw e;
 				}
 			} else if (/JWTIssuedAtFuture/.test(error.body.errors[0].message)) {
-				return refreshFetch(input, options);
+				return refreshFetch(input, options, 0, cookie);
 			}
 		}
 

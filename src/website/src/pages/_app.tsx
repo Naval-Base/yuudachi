@@ -2,11 +2,13 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
 
 import '~/styles/main.scss';
 
+import { ZustandProvider } from '~/components/ZustandProvider';
 import Layout from '~/components/Layout';
+
+import { useHydrateUserStore } from '~/store/index';
 
 const queryCache = new QueryClient({
 	defaultOptions: {
@@ -17,6 +19,8 @@ const queryCache = new QueryClient({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
+	const store = useHydrateUserStore(pageProps.initialStoreState);
+
 	return (
 		<>
 			<Head>
@@ -33,13 +37,13 @@ const App = ({ Component, pageProps }: AppProps) => {
 				<meta name="theme-color" content="#ffffff" />
 			</Head>
 			<QueryClientProvider client={queryCache}>
-				<Hydrate state={pageProps.dehydratedState}>
+				<ZustandProvider store={store}>
 					<ChakraProvider>
 						<Layout>
 							<Component {...pageProps} />
 						</Layout>
 					</ChakraProvider>
-				</Hydrate>
+				</ZustandProvider>
 			</QueryClientProvider>
 		</>
 	);

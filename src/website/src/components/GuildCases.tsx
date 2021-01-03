@@ -111,6 +111,8 @@ const GuildCasesPage = () => {
 		[hiddenColumns],
 	);
 
+	const data = useMemo(() => gqlData?.cases ?? [], [gqlData?.cases]);
+
 	if (isLoading) {
 		return (
 			<Center h="100%">
@@ -128,7 +130,7 @@ const GuildCasesPage = () => {
 			// @ts-ignore
 			columns={columns}
 			hiddenColumns={hiddenColumns ?? []}
-			data={gqlData?.cases ?? []}
+			data={data}
 			count={gqlData?.caseCount.aggregate.count ?? 0}
 			onRefreshChange={handleRefreshChange}
 		/>
