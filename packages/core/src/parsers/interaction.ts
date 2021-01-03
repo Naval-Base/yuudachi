@@ -25,7 +25,7 @@ function parseOptions(
 	return parseOptions(options, ordered, flags, opts);
 }
 
-export default function interaction(args: APIApplicationCommandInteractionDataOption[]): ParserOutput {
+export function parseInteraction(args: APIApplicationCommandInteractionDataOption[]): ParserOutput {
 	const [ordered, flags, options] = parseOptions(args);
 
 	return {

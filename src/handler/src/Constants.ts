@@ -1,14 +1,3 @@
-export enum CommandModules {
-	None = 0,
-	Config = 1,
-	Utility = 1 << 1,
-	Moderation = 1 << 2,
-	Tags = 1 << 3,
-	GitHub = 1 << 4,
-	Documentation = 1 << 5,
-	All = Config | Utility | Moderation | Tags | GitHub | Documentation,
-}
-
 export const DISCORD_EPOCH = 1420070400000;
 export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
 export const DATE_FORMAT_DATE = 'YYYY/MM/DD';

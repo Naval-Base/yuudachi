@@ -5,9 +5,9 @@ import Rest from '@yuudachi/rest';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { CommandModules } from '../../Constants';
 
 import { search } from './sub/search';
 

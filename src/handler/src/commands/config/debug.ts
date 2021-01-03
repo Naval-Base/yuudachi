@@ -4,9 +4,9 @@ import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { CommandModules } from '../../Constants';
 
 import { refresh } from './sub/debug/refresh';
 

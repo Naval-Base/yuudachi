@@ -2,9 +2,9 @@ import { injectable } from 'tsyringe';
 import { APIInteraction, APIMessage } from 'discord-api-types/v8';
 import { Args } from 'lexure';
 import i18next from 'i18next';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { CommandModules } from '../../Constants';
 import { send } from '../../util';
 
 @injectable()

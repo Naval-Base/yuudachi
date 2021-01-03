@@ -5,9 +5,10 @@ import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import fetch from 'node-fetch';
 import * as qs from 'querystring';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { CommandModules, DOCUMENTATION_SOURCES } from '../../Constants';
+import { DOCUMENTATION_SOURCES } from '../../Constants';
 
 @injectable()
 export default class implements Command {

@@ -6,9 +6,9 @@ import { inject, injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
 import { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { CommandModules } from '../../Constants';
 import { send } from '../../util';
 
 const { kSQL } = Tokens;

@@ -6,13 +6,14 @@ import { inject, injectable } from 'tsyringe';
 import { oneLine, stripIndents } from 'common-tags';
 import { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
-import { CommandModules, DATE_FORMAT_DATE, DATE_FORMAT_WITH_SECONDS, DISCORD_EPOCH } from '../../Constants';
+import { DATE_FORMAT_DATE, DATE_FORMAT_WITH_SECONDS, DISCORD_EPOCH } from '../../Constants';
 import { addFields, send } from '../../util';
 
 const { kSQL } = Tokens;

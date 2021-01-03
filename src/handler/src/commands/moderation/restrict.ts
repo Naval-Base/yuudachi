@@ -4,10 +4,10 @@ import { Args, joinTokens, Ok } from 'lexure';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
-import { CommandModules } from '../../Constants';
 import { send } from '../../util';
 
 import { mute } from './sub/restrict/mute';

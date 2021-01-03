@@ -4,10 +4,10 @@ import { Args, joinTokens, ok } from 'lexure';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
 import parseChannel from '../../parsers/channel';
-import { CommandModules } from '../../Constants';
 import { send } from '../../util';
 
 import { lock } from './sub/lockdown/lock';

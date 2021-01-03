@@ -4,9 +4,9 @@ import { Args } from 'lexure';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { CommandModules } from '../../Constants';
 import { addFields, has, send } from '../../util';
 import { GuildSettings } from '../../interfaces/GuildSettings';
 
@@ -45,14 +45,6 @@ export default class implements Command {
 			{
 				name: 'Tags',
 				value: has(settings.modules, CommandModules.Tags) ? '`✅`' : '`❌`',
-			},
-			{
-				name: 'GitHub',
-				value: has(settings.modules, CommandModules.GitHub) ? '`✅`' : '`❌`',
-			},
-			{
-				name: 'Documentation',
-				value: has(settings.modules, CommandModules.Documentation) ? '`✅`' : '`❌`',
 			},
 			{
 				name: 'Utility',

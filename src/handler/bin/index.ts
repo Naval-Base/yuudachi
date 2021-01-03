@@ -13,12 +13,11 @@ import { container } from 'tsyringe';
 import { APIInteraction, APIMessage, GatewayDispatchEvents } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
-import { Tokens } from '@yuudachi/core';
+import { Tokens, parseInteraction } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command, { commandInfo, ExecutionContext } from '../src/Command';
-import { CommandModules } from '../src/Constants';
 import { has, send } from '../src/util';
-import interactionParse from '../src/parsers/interaction';
 
 const { kSQL } = Tokens;
 
@@ -128,7 +127,7 @@ const interactionCreate = async () => {
 	) as AsyncIterableIterator<[APIInteraction, AmqpResponseOptions]>) {
 		ack();
 
-		const out = interactionParse(interaction.data?.options ?? []);
+		const out = parseInteraction(interaction.data?.options ?? []);
 		const [data] = await sql<{
 			locale: string | null;
 			modules: number | null;

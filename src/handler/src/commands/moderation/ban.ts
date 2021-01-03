@@ -1,6 +1,6 @@
 import { APIInteraction, APIMessage } from 'discord-api-types/v8';
 import API, { HttpException } from '@yuudachi/api';
-import { CaseAction } from '@yuudachi/types';
+import { CaseAction, CommandModules } from '@yuudachi/types';
 import i18next from 'i18next';
 import { Args, joinTokens } from 'lexure';
 import { inject, injectable } from 'tsyringe';
@@ -10,7 +10,6 @@ import { Tokens } from '@yuudachi/core';
 
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
-import { CommandModules } from '../../Constants';
 import { send } from '../../util';
 
 const { kSQL } = Tokens;

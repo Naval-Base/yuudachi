@@ -5,9 +5,9 @@ import { Args, joinTokens } from 'lexure';
 import { inject, injectable } from 'tsyringe';
 import { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { CommandModules } from '../../Constants';
 import { send } from '../../util';
 
 const { kSQL } = Tokens;

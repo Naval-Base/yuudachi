@@ -4,9 +4,9 @@ import { APIMessage } from 'discord-api-types/v8';
 import { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
+import { CommandModules } from '@yuudachi/types';
 
 import Command, { ExecutionContext } from '../../Command';
-import { CommandModules } from '../../Constants';
 
 import { alias } from './sub/alias';
 import { issuePR } from './sub/issue-pr';

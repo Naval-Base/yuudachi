@@ -1,4 +1,4 @@
-import { CommandModules } from '../Constants';
+import { CommandModules } from '@yuudachi/types';
 import { add, remove, has } from './modules';
 
 test('tags and moderation', () => {
@@ -8,9 +8,22 @@ test('tags and moderation', () => {
 });
 
 test('all but moderation', () => {
-	expect(has(remove(CommandModules.All, CommandModules.Moderation), CommandModules.Moderation)).toBe(false);
+	expect(
+		has(
+			remove(
+				CommandModules.Config | CommandModules.Moderation | CommandModules.Tags | CommandModules.Utility,
+				CommandModules.Moderation,
+			),
+			CommandModules.Moderation,
+		),
+	).toBe(false);
 });
 
 test('has tags', () => {
-	expect(has(CommandModules.All, CommandModules.Tags)).toBe(true);
+	expect(
+		has(
+			CommandModules.Config | CommandModules.Moderation | CommandModules.Tags | CommandModules.Utility,
+			CommandModules.Tags,
+		),
+	).toBe(true);
 });
