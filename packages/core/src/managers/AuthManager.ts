@@ -89,7 +89,8 @@ export class AuthManager {
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!user) throw new Error('invalid user');
 		// Intentionally date back iat by 2 seconds
-		if (Math.ceil(new Date(user.token_reset_at).getTime() / 1000 - 2) > data.iat) throw new Error('invalid token');
+		const reset = Math.ceil(new Date(user.token_reset_at).getTime() / 1000 - 2);
+		if (reset > data.iat) throw new Error(`invalid token`);
 
 		return data.sub;
 	}

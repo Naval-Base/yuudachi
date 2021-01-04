@@ -21,7 +21,7 @@ export function useQueryUser(userId: string, enabled = false) {
 				{ user_id: userId },
 			).then(({ body }) => body),
 		{
-			enabled: !user.loggedIn && enabled,
+			enabled: !Boolean(user.loggedIn) && enabled,
 		},
 	);
 

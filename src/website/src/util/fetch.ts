@@ -1,6 +1,8 @@
 import fetch from 'cross-fetch';
 import Cookies from 'universal-cookie';
 
+import { useUserStore } from '~/store/user';
+
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 class ResponseError extends Error {
@@ -55,6 +57,7 @@ export default async function refreshFetch(
 					}
 					return refreshFetch(input, options, attempt++, cookie);
 				} catch (e) {
+					useUserStore.getState().logout();
 					cookies.remove('access_token');
 					throw e;
 				}

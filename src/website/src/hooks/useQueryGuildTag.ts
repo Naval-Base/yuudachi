@@ -27,7 +27,7 @@ export function useQueryGuildTag(id: string, name: string, enabled = false) {
 				{ guild_id: id, name: name },
 			).then(({ body }) => body),
 		{
-			enabled: user.loggedIn && enabled,
+			enabled: Boolean(user.loggedIn) && enabled,
 		},
 	);
 

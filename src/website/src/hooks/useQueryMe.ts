@@ -6,35 +6,33 @@ import { useUserStore } from '~/store/index';
 
 import { GraphQLMe } from '~/interfaces/User';
 
-export const queryMe = (cookie?: string) =>
-	fetchGraphQL(
-		`query Me {
-			me: users {
-				connections {
-					id
-					avatar
-					main
-				}
-				username
-				role
-			}
-		}`,
-		{},
-		{},
-		cookie,
-	).then(({ body }) => body);
-
 export function useQueryMe() {
 	const user = useUserStore();
 
-	const { data, isLoading } = useQuery<GraphQLMe & { errors: unknown[] }>('user', () => queryMe());
+	const { data, isLoading } = useQuery<GraphQLMe & { errors: unknown[] }>('user', () =>
+		fetchGraphQL(
+			`query Me {
+				me: users {
+					connections {
+						id
+						avatar
+						main
+					}
+					username
+					role
+				}
+			}`,
+			{},
+		).then(({ body }) => body),
+	);
 
 	useEffect(() => {
 		if (data?.errors) {
+			user.logout();
 			return;
 		}
 
-		if (!user.loggedIn && data?.data?.me[0] && data.data?.me[0].connections.length) {
+		if (user.loggedIn === null && data?.data?.me[0] && data.data?.me[0].connections.length) {
 			const connection = data.data.me[0].connections.find((c) => c.main)!;
 			user.setUser({
 				loggedIn: true,

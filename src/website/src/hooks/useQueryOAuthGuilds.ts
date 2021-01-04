@@ -27,7 +27,7 @@ export function useQueryOAuthGuilds() {
 				{},
 			).then(({ body }) => body),
 		{
-			enabled: user.loggedIn,
+			enabled: Boolean(user.loggedIn),
 			onSuccess: (data) => {
 				data.data.guilds.forEach((guild) => cache.setQueryData(['guilds', guild.id], guild));
 			},

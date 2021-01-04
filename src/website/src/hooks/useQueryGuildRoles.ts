@@ -22,7 +22,7 @@ export function useQueryGuildRoles(id: string, enabled = false) {
 				{ guild_id: id },
 			).then(({ body }) => body),
 		{
-			enabled: user.loggedIn && enabled,
+			enabled: Boolean(user.loggedIn) && enabled,
 		},
 	);
 

@@ -5,10 +5,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import '~/styles/main.scss';
 
-import { ZustandProvider } from '~/components/ZustandProvider';
 import Layout from '~/components/Layout';
-
-import { useHydrateUserStore } from '~/store/index';
 
 const queryCache = new QueryClient({
 	defaultOptions: {
@@ -19,8 +16,6 @@ const queryCache = new QueryClient({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
-	const store = useHydrateUserStore(pageProps.initialStoreState);
-
 	return (
 		<>
 			<Head>
@@ -37,13 +32,11 @@ const App = ({ Component, pageProps }: AppProps) => {
 				<meta name="theme-color" content="#ffffff" />
 			</Head>
 			<QueryClientProvider client={queryCache}>
-				<ZustandProvider store={store}>
-					<ChakraProvider>
-						<Layout>
-							<Component {...pageProps} />
-						</Layout>
-					</ChakraProvider>
-				</ZustandProvider>
+				<ChakraProvider>
+					<Layout>
+						<Component {...pageProps} />
+					</Layout>
+				</ChakraProvider>
 			</QueryClientProvider>
 		</>
 	);

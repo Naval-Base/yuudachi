@@ -33,7 +33,7 @@ export function useQueryGuildCase(id: string, caseId: number, enabled = false) {
 				{ guild_id: id, case_id: caseId },
 			).then(({ body }) => body),
 		{
-			enabled: user.loggedIn && enabled,
+			enabled: Boolean(user.loggedIn) && enabled,
 		},
 	);
 

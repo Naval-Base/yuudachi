@@ -51,7 +51,7 @@ export function useQueryGuildCases(
 				{ where, order_by: orderBy, limit, offset },
 			).then(({ body }) => body),
 		{
-			enabled: user.loggedIn,
+			enabled: Boolean(user.loggedIn),
 			keepPreviousData: true,
 		},
 	);

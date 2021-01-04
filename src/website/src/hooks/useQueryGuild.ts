@@ -25,7 +25,7 @@ export function useQueryGuild(id: string) {
 				{ guild_id: id },
 			).then(({ body }) => body),
 		{
-			enabled: user.loggedIn,
+			enabled: Boolean(user.loggedIn),
 		},
 	);
 
