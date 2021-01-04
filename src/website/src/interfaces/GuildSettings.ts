@@ -2,6 +2,10 @@ export interface GuildSettingsPayload {
 	prefix: string;
 }
 
+export interface GuildModulesPayload {
+	modules: number;
+}
+
 export interface GuildModerationSettingsPayload {
 	mod_role_id: string | null;
 	mod_log_channel_id: string | null;
@@ -17,6 +21,14 @@ export interface GuildModerationSettingsPayload {
 export interface GuildSettings {
 	guild_id: string;
 	prefix: string;
+	locale: string;
+	modules: number;
+	repository_aliases: string[] | null;
+	[key: string]: string | number | string[] | null;
+}
+
+export interface GuildModerationSettings {
+	guild_id: string;
 	mod_role_id: string | null;
 	mod_log_channel_id: string | null;
 	guild_log_channel_id: string | null;
@@ -26,13 +38,17 @@ export interface GuildSettings {
 	embed_role_id: string | null;
 	emoji_role_id: string | null;
 	reaction_role_id: string | null;
-	repository_aliases: string[] | null;
-	locale: string;
-	[key: string]: string | string[] | boolean | null;
+	[key: string]: string | null;
 }
 
 export interface GraphQLGuildSettings {
 	data: {
 		guild: GuildSettings | null;
+	};
+}
+
+export interface GraphQLGuildModerationSettings {
+	data: {
+		guild: GuildModerationSettings | null;
 	};
 }
