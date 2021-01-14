@@ -18,7 +18,7 @@
 		"@spectacles/brokers": "^0.8.4",
 		"@spectacles/util": "^0.4.0",
 		"common-tags": "^1.8.0",
-		"dayjs": "^1.9.8",
+		"dayjs": "^1.10.3",
 		"joi": "^17.3.0",
 		"node-fetch": "^2.6.1",
 		"postgres": "^2.0.0-beta.2",
