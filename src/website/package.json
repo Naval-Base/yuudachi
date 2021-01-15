@@ -15,16 +15,16 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"@chakra-ui/react": "^1.1.0",
+		"@chakra-ui/react": "^1.1.4",
 		"@emotion/react": "^11.1.4",
 		"@emotion/styled": "^11.0.0",
 		"@skyra/discord-components-core": "^2.0.2",
 		"@skyra/discord-components-react": "^2.0.2",
 		"clsx": "^1.1.1",
 		"cross-fetch": "^3.0.6",
-		"dayjs": "^1.9.8",
+		"dayjs": "^1.10.3",
 		"discord-markdown": "^2.4.1",
-		"framer-motion": "^3.1.1",
+		"framer-motion": "^3.2.1",
 		"next": "^10.0.4",
 		"next-cookie": "^2.6.0",
 		"react": "^17.0.1",
@@ -42,7 +42,7 @@
 		"zustand": "^3.2.0"
 	},
 	"devDependencies": {
-		"@types/node": "^14.14.19",
+		"@types/node": "^14.14.21",
 		"@types/react": "^17.0.0",
 		"@types/react-datepicker": "^3.1.2",
 		"@types/react-table": "^7.0.26",

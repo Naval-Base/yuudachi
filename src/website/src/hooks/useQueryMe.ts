@@ -27,8 +27,11 @@ export function useQueryMe() {
 	);
 
 	useEffect(() => {
-		if (data?.errors) {
-			user.logout();
+		if (data?.errors && data.errors.length) {
+			if (user.loggedIn === null) {
+				user.logout();
+			}
+
 			return;
 		}
 
@@ -42,7 +45,7 @@ export function useQueryMe() {
 				avatar: connection.avatar,
 			});
 		}
-	}, [user.loggedIn, user, data?.data?.me, data?.errors]);
+	}, [data?.errors, data?.data?.me, user]);
 
 	return { data: data?.data, isLoading };
 }

@@ -16,7 +16,7 @@
 		"@naval-base/ms": "^3.1.0",
 		"@spectacles/brokers": "^0.8.4",
 		"common-tags": "^1.8.0",
-		"dayjs": "^1.9.8",
+		"dayjs": "^1.10.3",
 		"i18next": "^19.8.4",
 		"i18next-http-backend": "^1.0.21",
 		"lexure": "^0.17.0",
@@ -29,7 +29,7 @@
 	},
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
-		"@types/node": "^14.14.19",
+		"@types/node": "^14.14.21",
 		"@types/node-fetch": "^2.5.7",
 		"discord-api-types": "^0.12.0",
 		"env-cmd": "^10.1.0",
