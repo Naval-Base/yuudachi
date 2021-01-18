@@ -41,7 +41,9 @@ const GuildNavbar = () => {
 						Modules
 					</Button>
 					<Box d={{ base: isOpenModules ? 'block' : 'none' }} w="100%">
-						<Button w="100%">Moderation</Button>
+						<Link href={`/guilds/${id as string}/modules/moderation`}>
+							<Button w="100%">Moderation</Button>
+						</Link>
 					</Box>
 					<Link href={`/guilds/${id as string}/cases`}>
 						<Button w="100%" variant="ghost">

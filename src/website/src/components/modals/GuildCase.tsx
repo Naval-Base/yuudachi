@@ -147,11 +147,10 @@ const GuildCase = ({
 
 								<FormControl id="reference" mb={4} isReadOnly={readOnly || user.role === GraphQLRole.user}>
 									<FormLabel>Reference</FormLabel>
-									<Box>
+									<Box d="flex">
 										<NumberInput
 											d="inline-block"
 											mr={2}
-											top="3px"
 											w={gqlGuildCaseData?.case.ref_id ? '80%' : '100%'}
 											defaultValue={gqlGuildCaseData?.case.ref_id ?? undefined}
 											isReadOnly={readOnly || user.role === GraphQLRole.user}
@@ -163,7 +162,7 @@ const GuildCase = ({
 											</NumberInputStepper>
 										</NumberInput>
 										{gqlGuildCaseData?.case.ref_id ? (
-											<Box d="inline-block" bottom="3px">
+											<Box d="inline-block">
 												<GuildCaseReference caseId={gqlGuildCaseData.case.ref_id} size="md" />
 											</Box>
 										) : null}

@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useToast, Center, Grid, Box } from '@chakra-ui/react';
@@ -16,36 +16,39 @@ import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSe
 import { GuildModulesPayload } from '~/interfaces/GuildSettings';
 import { GraphQLRole } from '~/interfaces/Role';
 
-const CommandModulesInfo = [
-	{
-		name: CommandModules[CommandModules.Config],
-		perm: CommandModules.Config,
-		description: 'Configuration commands.',
-	},
-	{
-		name: CommandModules[CommandModules.Utility],
-		perm: CommandModules.Utility,
-		description: 'Utility commands.',
-	},
-	{
-		name: CommandModules[CommandModules.Moderation],
-		perm: CommandModules.Moderation,
-		description: 'Moderation commands.',
-		settings: true,
-	},
-	{
-		name: CommandModules[CommandModules.Tags],
-		perm: CommandModules.Tags,
-		description: 'Tag commands.',
-	},
-];
-
 const GuildModules = () => {
 	const user = useUserStore();
 	const router = useRouter();
 	const toast = useToast();
 	const { handleSubmit, control, formState } = useForm<GuildModulesPayload>();
 	const { id } = router.query;
+
+	const CommandModulesInfo = useMemo(
+		() => [
+			{
+				name: CommandModules[CommandModules.Config],
+				perm: CommandModules.Config,
+				description: 'Configuration commands.',
+			},
+			{
+				name: CommandModules[CommandModules.Utility],
+				perm: CommandModules.Utility,
+				description: 'Utility commands.',
+			},
+			{
+				name: CommandModules[CommandModules.Moderation],
+				perm: CommandModules.Moderation,
+				description: 'Moderation commands.',
+				settings: `/guilds/${id as string}/modules/moderation`,
+			},
+			{
+				name: CommandModules[CommandModules.Tags],
+				perm: CommandModules.Tags,
+				description: 'Tag commands.',
+			},
+		],
+		[id],
+	);
 
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,

@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import Link from 'next/link';
 import { Box, Flex, FormControl, FormLabel, Switch, Button, Text } from '@chakra-ui/react';
 import { UseFormMethods, Controller } from 'react-hook-form';
 import { CommandModules } from '@yuudachi/types';
@@ -12,7 +13,7 @@ const GuildModule = ({
 	handleOnSubmit,
 	isLoading,
 }: {
-	guildModule: { name: string; perm: CommandModules; description: string; settings?: boolean };
+	guildModule: { name: string; perm: CommandModules; description: string; settings?: string };
 	control: UseFormMethods['control'];
 	gqlGuildSettingsData: GraphQLGuildSettings['data'];
 	handleOnSubmit: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
@@ -29,7 +30,7 @@ const GuildModule = ({
 					defaultValue={Boolean((gqlGuildSettingsData?.guild?.modules ?? 2) & guildModule.perm)}
 					render={(props: any) => (
 						<Switch
-							onChange={(e) => {
+							onChange={(e: any) => {
 								props.onChange(e.target.checked);
 								void handleOnSubmit(e);
 							}}
@@ -42,9 +43,11 @@ const GuildModule = ({
 		</FormControl>
 		<Text>{guildModule.description}</Text>
 		{guildModule.settings ? (
-			<Button size="sm" mt={4}>
-				Settings
-			</Button>
+			<Link href={guildModule.settings}>
+				<Button size="sm" mt={4}>
+					Settings
+				</Button>
+			</Link>
 		) : null}
 	</Box>
 );

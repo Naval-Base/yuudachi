@@ -12,10 +12,6 @@ export function useMutationInsertGuildSettings(id: string) {
 				`mutation GuildSettings($guild_id: String!) {
 					guild: insert_guild_settings_one(object: {guild_id: $guild_id}) {
 						guild_id
-						prefix
-						locale
-						modules
-						repository_aliases
 					}
 				}`,
 				{ guild_id: id },

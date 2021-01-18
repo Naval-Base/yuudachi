@@ -21,10 +21,6 @@ export function useMutationUpdateGuildSettings(id: string) {
 				`mutation GuildSettings($guild_id: String!, $_set: guild_settings_set_input) {
 					guild: update_guild_settings_by_pk(pk_columns: {guild_id: $guild_id}, _set: $_set) {
 						guild_id
-						prefix
-						locale
-						modules
-						repository_aliases
 					}
 				}`,
 				{ guild_id: id, _set: guildSettings },
