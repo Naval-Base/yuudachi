@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
@@ -60,6 +60,9 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 		name!,
 		Boolean(name) && isOpen,
 	);
+
+	const guildTagData = useMemo(() => gqlGuildTagData, [gqlGuildTagData]);
+
 	const { mutateAsync: guildTagUpdateMutate, isLoading: isLoadingGuildTagUpdateMutate } = useMutationUpdateGuildTag(
 		id as string,
 		name!,
@@ -133,21 +136,21 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 		})(event);
 	};
 
-	const watchContent = watch('content', gqlGuildTagData?.tag.content ?? '');
+	const watchContent = watch('content', guildTagData?.tag.content ?? '');
 	useEffect(() => {
 		setContent(watchContent);
-	}, [watchContent, gqlGuildTagData?.tag.content]);
+	}, [watchContent, guildTagData?.tag.content]);
 
 	useEffect(() => {
 		remove();
-		gqlGuildTagData?.tag.aliases.map((alias) => append({ value: alias }));
-	}, [remove, gqlGuildTagData?.tag.aliases, append]);
+		guildTagData?.tag.aliases.map((alias) => append({ value: alias }));
+	}, [remove, guildTagData?.tag.aliases, append]);
 
 	return (
 		<Modal size="xl" isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Tag {gqlGuildTagData?.tag.name}</ModalHeader>
+				<ModalHeader>Tag {guildTagData?.tag.name}</ModalHeader>
 				<ModalCloseButton />
 				{isLoadingGuildTag ? (
 					<Center h="100%">
@@ -170,7 +173,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 											required: { value: true, message: 'No empty tags allowed' },
 											maxLength: { value: 20, message: 'Max length of 20 exceeded' },
 										})}
-										defaultValue={gqlGuildTagData?.tag.name}
+										defaultValue={guildTagData?.tag.name}
 									/>
 									<FormErrorMessage>
 										<FormErrorIcon />
@@ -254,7 +257,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 											maxLength: { value: 1900, message: 'Max length of 1900 exceeded' },
 										})}
 										as={TextareaAutosize as any /* fuck ts */}
-										defaultValue={gqlGuildTagData?.tag.content}
+										defaultValue={guildTagData?.tag.content}
 									/>
 									<FormErrorMessage>
 										<FormErrorIcon />

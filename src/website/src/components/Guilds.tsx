@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Center, Grid, Text } from '@chakra-ui/react';
@@ -10,9 +11,14 @@ const GuildIcon = dynamic(() => import('./GuildIcon'));
 import { useQueryOAuthGuilds } from '~/hooks/useQueryOAuthGuilds';
 
 const Guilds = () => {
-	const { data, isLoading } = useQueryOAuthGuilds();
+	const { data: gqlOAuthGuildsData, isLoading: isLoadingOAuthGuilds } = useQueryOAuthGuilds();
 
-	if (isLoading) {
+	const oAuthGuildsData = useMemo(
+		() => gqlOAuthGuildsData?.guilds?.filter((guild) => BigInt(guild.permissions) & BigInt(1 << 5)),
+		[gqlOAuthGuildsData],
+	);
+
+	if (isLoadingOAuthGuilds) {
 		return (
 			<Center h="100%">
 				<Loading />
@@ -22,18 +28,14 @@ const Guilds = () => {
 
 	return (
 		<Grid templateColumns="repeat(auto-fit, 150px)" gap="32px 0px" justifyContent="center">
-			{data?.guilds
-				.filter((guild) => BigInt(guild.permissions) & BigInt(1 << 5))
-				.map((guild, i) => {
-					return (
-						<Link href={`/guilds/${guild.id as string}`} key={i}>
-							<Grid gap="8px 0px" className={GuildsStyles.center}>
-								<GuildIcon guild={guild} />
-								<Text textAlign="center">{guild.name}</Text>
-							</Grid>
-						</Link>
-					);
-				})}
+			{oAuthGuildsData?.map((guild, i) => (
+				<Link href={`/guilds/${guild.id as string}`} key={i}>
+					<Grid gap="8px 0px" className={GuildsStyles.center}>
+						<GuildIcon guild={guild} />
+						<Text textAlign="center">{guild.name}</Text>
+					</Grid>
+				</Link>
+			))}
 		</Grid>
 	);
 };

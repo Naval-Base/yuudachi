@@ -1,21 +1,12 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import {
-	GuildSettingsPayload,
-	GraphQLGuildSettings,
-	GuildModerationSettingsPayload,
-	GuildModulesPayload,
-} from '~/interfaces/GuildSettings';
+import { GuildSettingsPayload, GraphQLGuildSettings, GuildModulesPayload } from '~/interfaces/GuildSettings';
 
 export function useMutationUpdateGuildSettings(id: string) {
 	const cache = useQueryClient();
 
-	return useMutation<
-		GraphQLGuildSettings,
-		unknown,
-		GuildSettingsPayload | GuildModulesPayload | GuildModerationSettingsPayload
-	>(
+	return useMutation<GraphQLGuildSettings, unknown, GuildSettingsPayload | GuildModulesPayload>(
 		(guildSettings) =>
 			fetchGraphQL(
 				`mutation GuildSettings($guild_id: String!, $_set: guild_settings_set_input) {

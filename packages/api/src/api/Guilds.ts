@@ -1,6 +1,10 @@
 import { Case, CreateCase, UpdateCase, Lockdown, CreateLockdown, DeleteLockdown } from '@yuudachi/types';
 import { Constants } from '@yuudachi/core';
-import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildRolesResult } from 'discord-api-types/v8';
+import {
+	RESTGetAPICurrentUserGuildsResult,
+	RESTGetAPIGuildChannelsResult,
+	RESTGetAPIGuildRolesResult,
+} from 'discord-api-types/v8';
 import API from '..';
 
 const { USER_ID_HEADER } = Constants;
@@ -16,6 +20,10 @@ export default class Guilds {
 		return this.api.make<RESTGetAPICurrentUserGuildsResult>('get', '/guilds/oauth', undefined, {
 			[USER_ID_HEADER]: userId,
 		});
+	}
+
+	public getChannels(guildId: string) {
+		return this.api.make<RESTGetAPIGuildChannelsResult>('get', `/guilds/${guildId}/channels`);
 	}
 
 	public getRoles(guildId: string) {

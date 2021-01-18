@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
@@ -20,6 +20,7 @@ const Loading = dynamic(() => import('./Loading'));
 
 import { useUserStore } from '~/store/index';
 
+import { useQueryGuild } from '~/hooks/useQueryGuild';
 import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
 import { useMutationInsertGuildSettings } from '~/hooks/useMutationInsertGuildSettings';
 import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSettings';
@@ -38,10 +39,14 @@ const GuildSettings = () => {
 	});
 	const { id } = router.query;
 
+	const { data: gqlDataGuild, isLoading: isLoadingGuild } = useQueryGuild(id as string);
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
-		user.role !== GraphQLRole.user,
+		Boolean(gqlDataGuild?.guild) && user.role !== GraphQLRole.user,
 	);
+
+	const guildSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
+
 	const {
 		mutateAsync: guildSettingsInsertMutate,
 		isLoading: isLoadingGuildSettingsInsertMutate,
@@ -84,7 +89,7 @@ const GuildSettings = () => {
 		return <Text textAlign="center">You need to be a moderator to see the guild settings.</Text>;
 	}
 
-	if (isLoadingGuildSettings) {
+	if (isLoadingGuild || isLoadingGuildSettings) {
 		return (
 			<Center h="100%">
 				<Loading />
@@ -92,7 +97,7 @@ const GuildSettings = () => {
 		);
 	}
 
-	return gqlGuildSettingsData?.guild ? (
+	return guildSettingsData ? (
 		<form onSubmit={handleOnSubmit}>
 			<FormControl id="prefix" mb={4} isInvalid={Boolean(errors.prefix)}>
 				<FormLabel>Prefix</FormLabel>
@@ -103,7 +108,7 @@ const GuildSettings = () => {
 						required: { value: true, message: 'No empty prefix allowed' },
 						maxLength: { value: 5, message: 'Max length of 5 exceeded' },
 					})}
-					defaultValue={gqlGuildSettingsData.guild.prefix}
+					defaultValue={guildSettingsData.prefix}
 				/>
 				<FormErrorMessage>
 					<FormErrorIcon />
