@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -18,6 +19,9 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 	const { data: gqlGuildData, isLoading: isLoadingGuild } = useQueryGuild(id as string);
 	const { data: gqlFallbackGuildData, isLoading: isLoadingFallbackGuild } = useQueryOAuthGuilds();
 
+	const guildData = useMemo(() => gqlGuildData, [gqlGuildData]);
+	const guildFallbackData = useMemo(() => gqlFallbackGuildData, [gqlFallbackGuildData]);
+
 	if (isLoadingGuild || isLoadingFallbackGuild) {
 		return (
 			<Center h="100%">
@@ -26,10 +30,10 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 		);
 	}
 
-	if (gqlGuildData && !gqlGuildData.guild) {
+	if (guildData && !guildData.guild) {
 		return (
 			<>
-				<GuildDisplay id={id as string} guild={gqlGuildData} fallbackGuild={gqlFallbackGuildData} />
+				<GuildDisplay id={id as string} guild={guildData} fallbackGuild={guildFallbackData} />
 				<Box textAlign="center">
 					<Text mb={6}>Yuudachi is not in this guild yet.</Text>
 					<Link href={''}>
@@ -43,7 +47,7 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<>
 			<Head>
-				<title>{gqlGuildData?.guild?.name} | Yuudachi Dashboard</title>
+				<title>{guildData?.guild?.name} | Yuudachi Dashboard</title>
 			</Head>
 			<Grid
 				templateColumns={{ base: 'auto', md: 'auto', lg: '250px auto' }}
@@ -52,7 +56,7 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 				w="100%"
 			>
 				<Box>
-					<GuildDisplay id={id as string} guild={gqlGuildData} fallbackGuild={gqlFallbackGuildData} />
+					<GuildDisplay id={id as string} guild={guildData} fallbackGuild={guildFallbackData} />
 					<GuildNavbar />
 				</Box>
 				<Box>{children}</Box>

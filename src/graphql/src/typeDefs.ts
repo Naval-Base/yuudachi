@@ -11,6 +11,31 @@ export default gql`
 		permissions_new: String!
 	}
 
+	type PermissionOverwrite {
+		id: String!
+		type: Int!
+		allow: String!
+		deny: String!
+	}
+
+	type GuildChannel {
+		id: String!
+		type: Int!
+		guild_id: String
+		position: Int
+		permission_overwrites: [PermissionOverwrite]
+		name: String
+		topic: String
+		nsfw: Boolean
+		last_message_id: String
+		bitrate: Int
+		user_limit: Int
+		rate_limit_per_user: Int
+		icon: String
+		parent_id: String
+		last_pin_timestamp: String
+	}
+
 	type GuildRoleTag {
 		bot_id: String
 		premium_subscriber: String
@@ -50,6 +75,7 @@ export default gql`
 		guild(guild_id: String!): PartialGuild
 		guilds: [PartialGuild]!
 		guilds_oauth: [PartialGuild]!
+		guild_channels(guild_id: String!): [GuildChannel]
 		guild_roles(guild_id: String!): [GuildRole]
 		user(user_id: String!): User
 	}

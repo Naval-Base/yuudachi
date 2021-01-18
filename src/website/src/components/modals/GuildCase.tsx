@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
@@ -74,6 +74,11 @@ const GuildCase = ({
 	);
 	const { data: gqlGuildRolesData } = useQueryGuildRoles(id as string, isOpen);
 	const { data: gqlUserData } = useQueryUser(user.id!, !Boolean(gqlGuildCaseData?.case.mod_id) && isOpen);
+
+	const guildCaseData = useMemo(() => gqlGuildCaseData, [gqlGuildCaseData]);
+	const guildRolesData = useMemo(() => gqlGuildRolesData, [gqlGuildRolesData]);
+	const userData = useMemo(() => gqlUserData, [gqlUserData]);
+
 	const { mutateAsync: guildCaseUpdateMutate, isLoading: isLoadingGuildCaseUpdateMutate } = useMutationUpdateGuildCase(
 		id as string,
 		caseId!,
@@ -81,9 +86,9 @@ const GuildCase = ({
 
 	useEffect(() => {
 		if (isOpen) {
-			setExpirationTime(gqlGuildCaseData?.case.action_expiration ?? null);
+			setExpirationTime(guildCaseData?.case.action_expiration ?? null);
 		}
-	}, [isOpen, gqlGuildCaseData?.case.action_expiration]);
+	}, [isOpen, guildCaseData?.case.action_expiration]);
 
 	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -95,12 +100,12 @@ const GuildCase = ({
 				action_expiration: expiration?.toISOString() ?? null,
 			};
 
-			if (!gqlGuildCaseData?.case.mod_id) {
-				if (gqlUserData) {
+			if (!guildCaseData?.case.mod_id) {
+				if (userData) {
 					payload = {
 						...payload,
 						mod_id: user.id!,
-						mod_tag: `${gqlUserData.user.username as string}#${gqlUserData.user.discriminator as string}`,
+						mod_tag: `${userData.user.username as string}#${userData.user.discriminator as string}`,
 					};
 				}
 			}
@@ -125,9 +130,7 @@ const GuildCase = ({
 		<Modal size="xl" isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>
-					Case {gqlGuildCaseData ? `#${gqlGuildCaseData.case.case_id.toString() as string}` : ''}
-				</ModalHeader>
+				<ModalHeader>Case {guildCaseData ? `#${guildCaseData.case.case_id.toString() as string}` : ''}</ModalHeader>
 				<ModalCloseButton />
 				{isLoadingGuildCase ? (
 					<Center h="100%">
@@ -140,8 +143,8 @@ const GuildCase = ({
 								<Box mb={4}>
 									<FormLabel as="legend">Created at</FormLabel>
 									<Text>
-										{dayjs(gqlGuildCaseData?.case.created_at).format(DATE_FORMAT_WITH_SECONDS)} (UTC) (
-										{dayjs(gqlGuildCaseData?.case.created_at).fromNow()})
+										{dayjs(guildCaseData?.case.created_at).format(DATE_FORMAT_WITH_SECONDS)} (UTC) (
+										{dayjs(guildCaseData?.case.created_at).fromNow()})
 									</Text>
 								</Box>
 
@@ -151,8 +154,8 @@ const GuildCase = ({
 										<NumberInput
 											d="inline-block"
 											mr={2}
-											w={gqlGuildCaseData?.case.ref_id ? '80%' : '100%'}
-											defaultValue={gqlGuildCaseData?.case.ref_id ?? undefined}
+											w={guildCaseData?.case.ref_id ? '80%' : '100%'}
+											defaultValue={guildCaseData?.case.ref_id ?? undefined}
 											isReadOnly={readOnly || user.role === GraphQLRole.user}
 										>
 											<NumberInputField name="reference" ref={register} />
@@ -161,9 +164,9 @@ const GuildCase = ({
 												<NumberDecrementStepper />
 											</NumberInputStepper>
 										</NumberInput>
-										{gqlGuildCaseData?.case.ref_id ? (
+										{guildCaseData?.case.ref_id ? (
 											<Box d="inline-block">
-												<GuildCaseReference caseId={gqlGuildCaseData.case.ref_id} size="md" />
+												<GuildCaseReference caseId={guildCaseData.case.ref_id} size="md" />
 											</Box>
 										) : null}
 									</Box>
@@ -172,29 +175,29 @@ const GuildCase = ({
 								<Box mb={4}>
 									<FormLabel as="legend">Action</FormLabel>
 									<Text>
-										{CaseAction[gqlGuildCaseData?.case.action ?? 0][0].toUpperCase() +
-											CaseAction[gqlGuildCaseData?.case.action ?? 0].substr(1).toLowerCase()}
+										{CaseAction[guildCaseData?.case.action ?? 0][0].toUpperCase() +
+											CaseAction[guildCaseData?.case.action ?? 0].substr(1).toLowerCase()}
 									</Text>
 								</Box>
 
-								{gqlGuildCaseData?.case.role_id ? (
+								{guildCaseData?.case.role_id ? (
 									<Box mb={4}>
 										<FormLabel as="legend">Role</FormLabel>
 										<Text>
-											{gqlGuildRolesData?.roles?.find((role) => role.id === gqlGuildCaseData.case.role_id)?.name} (
-											{gqlGuildRolesData?.roles?.find((role) => role.id === gqlGuildCaseData.case.role_id)?.id})
+											{guildRolesData?.roles?.find((role) => role.id === guildCaseData.case.role_id)?.name} (
+											{guildRolesData?.roles?.find((role) => role.id === guildCaseData.case.role_id)?.id})
 										</Text>
 									</Box>
 								) : null}
 
-								{gqlGuildCaseData?.case.action_expiration ? (
+								{guildCaseData?.case.action_expiration ? (
 									<>
 										<Box mb={4}>
 											<FormLabel as="legend">Expiration</FormLabel>
 											<Controller
 												name="expiration"
 												control={control}
-												defaultValue={dayjs(gqlGuildCaseData.case.action_expiration).toDate()}
+												defaultValue={dayjs(guildCaseData.case.action_expiration).toDate()}
 												render={(props: any) => (
 													<DatePicker
 														selectedDate={props.value}
@@ -204,18 +207,18 @@ const GuildCase = ({
 															}
 															props.onChange(d);
 														}}
-														filterDate={(date) => dayjs(date).add(1, 'd') > dayjs(gqlGuildCaseData.case.created_at)}
+														filterDate={(date) => dayjs(date).add(1, 'd') > dayjs(guildCaseData.case.created_at)}
 														filterTime={(time) => {
 															if (expirationTime) {
 																if (dayjs(expirationTime).isSame(dayjs(), 'd')) {
-																	return dayjs(time).add(-10, 'm') > dayjs(gqlGuildCaseData.case.created_at);
+																	return dayjs(time).add(-10, 'm') > dayjs(guildCaseData.case.created_at);
 																}
-																return dayjs(expirationTime).isAfter(dayjs(gqlGuildCaseData.case.created_at), 'd');
+																return dayjs(expirationTime).isAfter(dayjs(guildCaseData.case.created_at), 'd');
 															}
 															return false;
 														}}
 														isReadOnly={readOnly || user.role === GraphQLRole.user}
-														isDisabled={gqlGuildCaseData.case.action_processed}
+														isDisabled={guildCaseData.case.action_processed}
 													/>
 												)}
 											/>
@@ -224,10 +227,7 @@ const GuildCase = ({
 										<Box mb={4}>
 											<FormLabel as="legend">Duration</FormLabel>
 											<Text>
-												{dayjs(gqlGuildCaseData.case.action_expiration).from(
-													dayjs(gqlGuildCaseData.case.created_at),
-													true,
-												)}
+												{dayjs(guildCaseData.case.action_expiration).from(dayjs(guildCaseData.case.created_at), true)}
 											</Text>
 										</Box>
 									</>
@@ -235,15 +235,13 @@ const GuildCase = ({
 
 								<Box mb={4}>
 									<FormLabel as="legend">Moderator</FormLabel>
-									<Text>{`${gqlGuildCaseData?.case.mod_tag as string} (${
-										gqlGuildCaseData?.case.mod_id as string
-									})`}</Text>
+									<Text>{`${guildCaseData?.case.mod_tag as string} (${guildCaseData?.case.mod_id as string})`}</Text>
 								</Box>
 
 								<Box mb={4}>
 									<FormLabel as="legend">Target</FormLabel>
-									<Text>{`${gqlGuildCaseData?.case.target_tag as string} (${
-										gqlGuildCaseData?.case.target_id as string
+									<Text>{`${guildCaseData?.case.target_tag as string} (${
+										guildCaseData?.case.target_id as string
 									})`}</Text>
 								</Box>
 
@@ -263,7 +261,7 @@ const GuildCase = ({
 										rows={5}
 										ref={register({ maxLength: { value: 1900, message: 'Max length of 1900 exceeded' } })}
 										as={TextareaAutosize as any /* fuck ts */}
-										defaultValue={gqlGuildCaseData?.case.reason ?? undefined}
+										defaultValue={guildCaseData?.case.reason ?? undefined}
 									/>
 									<FormErrorMessage>
 										<FormErrorIcon /> {errors.reason?.message}

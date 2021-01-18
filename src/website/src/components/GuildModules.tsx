@@ -55,6 +55,8 @@ const GuildModules = () => {
 		user.role !== GraphQLRole.user,
 	);
 
+	const guildSettingsData = useMemo(() => gqlGuildSettingsData, [gqlGuildSettingsData]);
+
 	const {
 		mutateAsync: guildSettingsUpdateMutate,
 		isLoading: isLoadingGuildSettingsUpdateMutate,
@@ -67,7 +69,7 @@ const GuildModules = () => {
 			const payload = {
 				modules: Object.entries(values).reduce(
 					(acc, [key, value]) => (value ? acc | Number(key) : acc & ~Number(key)),
-					gqlGuildSettingsData?.guild?.modules ?? 2,
+					guildSettingsData?.guild?.modules ?? 2,
 				),
 			};
 
@@ -93,14 +95,14 @@ const GuildModules = () => {
 		);
 	}
 
-	return gqlGuildSettingsData?.guild ? (
+	return guildSettingsData?.guild ? (
 		<Grid templateColumns="repeat(auto-fit, minmax(280px, 350px))" gap="16px" justifyContent="center" mb={16}>
 			{CommandModulesInfo.map((commandModule, i) => (
 				<Box key={i}>
 					<GuildModule
 						guildModule={commandModule}
 						control={control}
-						gqlGuildSettingsData={gqlGuildSettingsData}
+						gqlGuildSettingsData={guildSettingsData}
 						handleOnSubmit={handleOnSubmit}
 						isLoading={formState.isSubmitting || isLoadingGuildSettings || isLoadingGuildSettingsUpdateMutate}
 					/>

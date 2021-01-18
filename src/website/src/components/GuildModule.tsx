@@ -41,7 +41,9 @@ const GuildModule = ({
 				/>
 			</Flex>
 		</FormControl>
+
 		<Text>{guildModule.description}</Text>
+
 		{guildModule.settings ? (
 			<Link href={guildModule.settings}>
 				<Button size="sm" mt={4}>
