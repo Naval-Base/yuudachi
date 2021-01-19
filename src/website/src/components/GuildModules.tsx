@@ -87,7 +87,7 @@ const GuildModules = () => {
 		})(event);
 	};
 
-	if (isLoadingGuildSettings) {
+	if (!user.loggedIn || isLoadingGuildSettings) {
 		return (
 			<Center h="100%">
 				<Loading />

@@ -8,9 +8,12 @@ import GuildsStyles from '~/styles/modules/guilds.module.scss';
 const Loading = dynamic(() => import('./Loading'));
 const GuildIcon = dynamic(() => import('./GuildIcon'));
 
+import { useUserStore } from '~/store/index';
+
 import { useQueryOAuthGuilds } from '~/hooks/useQueryOAuthGuilds';
 
 const Guilds = () => {
+	const user = useUserStore();
 	const { data: gqlOAuthGuildsData, isLoading: isLoadingOAuthGuilds } = useQueryOAuthGuilds();
 
 	const oAuthGuildsData = useMemo(
@@ -18,7 +21,7 @@ const Guilds = () => {
 		[gqlOAuthGuildsData],
 	);
 
-	if (isLoadingOAuthGuilds) {
+	if (!user.loggedIn || isLoadingOAuthGuilds) {
 		return (
 			<Center h="100%">
 				<Loading />

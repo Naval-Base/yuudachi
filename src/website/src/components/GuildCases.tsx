@@ -12,11 +12,12 @@ const Table = dynamic(() => import('~/components/Table'));
 const GuildCase = dynamic(() => import('~/components/GuildCase'));
 const GuildCaseReference = dynamic(() => import('~/components/GuildCaseReference'));
 
-import { useTableStore } from '~/store/index';
+import { useUserStore, useTableStore } from '~/store/index';
 
 import { useQueryGuildCases } from '~/hooks/useQueryGuildCases';
 
 const GuildCasesPage = () => {
+	const user = useUserStore();
 	const router = useRouter();
 	const cache = useQueryClient();
 	const table = useTableStore();
@@ -113,7 +114,7 @@ const GuildCasesPage = () => {
 
 	const data = useMemo(() => gqlData?.cases ?? [], [gqlData?.cases]);
 
-	if (isLoading) {
+	if (!user.loggedIn || isLoading) {
 		return (
 			<Center h="100%">
 				<Loading />

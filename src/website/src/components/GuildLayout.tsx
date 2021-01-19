@@ -9,10 +9,13 @@ const GuildNavbar = dynamic(() => import('~/components/GuildNavbar'));
 const Loading = dynamic(() => import('~/components/Loading'));
 const GuildDisplay = dynamic(() => import('~/components/GuildDisplay'));
 
+import { useUserStore } from '~/store/index';
+
 import { useQueryOAuthGuilds } from '~/hooks/useQueryOAuthGuilds';
 import { useQueryGuild } from '~/hooks/useQueryGuild';
 
 const GuildLayout = ({ children }: { children: React.ReactNode }) => {
+	const user = useUserStore();
 	const router = useRouter();
 
 	const { id } = router.query;
@@ -22,7 +25,7 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 	const guildData = useMemo(() => gqlGuildData, [gqlGuildData]);
 	const guildFallbackData = useMemo(() => gqlFallbackGuildData, [gqlFallbackGuildData]);
 
-	if (isLoadingGuild || isLoadingFallbackGuild) {
+	if (!user.loggedIn || isLoadingGuild || isLoadingFallbackGuild) {
 		return (
 			<Center h="100%">
 				<Loading />

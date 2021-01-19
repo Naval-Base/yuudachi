@@ -89,7 +89,7 @@ const GuildSettings = () => {
 		return <Text textAlign="center">You need to be a moderator to see the guild settings.</Text>;
 	}
 
-	if (isLoadingGuild || isLoadingGuildSettings) {
+	if (!user.loggedIn || isLoadingGuild || isLoadingGuildSettings) {
 		return (
 			<Center h="100%">
 				<Loading />

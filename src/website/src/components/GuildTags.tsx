@@ -59,7 +59,7 @@ const GuildTagsPage = () => {
 
 	const data = useMemo(() => gqlData?.tags ?? [], [gqlData?.tags]);
 
-	if (isLoading) {
+	if (!user.loggedIn || isLoading) {
 		return (
 			<Center h="100%">
 				<Loading />
