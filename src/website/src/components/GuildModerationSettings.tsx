@@ -120,7 +120,7 @@ const GuildModerationSettings = () => {
 					name="mod_role_id"
 					placeholder="The discord role id for moderators"
 					control={control}
-					defaultValue={guildModerationSettingsData.mod_role_id ?? undefined}
+					defaultValue={guildModerationSettingsData.mod_role_id ?? ''}
 				/>
 			</FormControl>
 
@@ -139,7 +139,7 @@ const GuildModerationSettings = () => {
 					name="mod_log_channel_id"
 					placeholder="The discord channel id for moderation logs"
 					control={control}
-					defaultValue={guildModerationSettingsData.mod_log_channel_id ?? undefined}
+					defaultValue={guildModerationSettingsData.mod_log_channel_id ?? ''}
 				/>
 			</FormControl>
 
@@ -158,7 +158,7 @@ const GuildModerationSettings = () => {
 					name="guild_log_channel_id"
 					placeholder="The discord channel id for guild logs"
 					control={control}
-					defaultValue={guildModerationSettingsData.guild_log_channel_id ?? undefined}
+					defaultValue={guildModerationSettingsData.guild_log_channel_id ?? ''}
 				/>
 			</FormControl>
 
@@ -177,7 +177,7 @@ const GuildModerationSettings = () => {
 					name="member_log_channel_id"
 					placeholder="The discord channel id for member logs"
 					control={control}
-					defaultValue={guildModerationSettingsData.member_log_channel_id ?? undefined}
+					defaultValue={guildModerationSettingsData.member_log_channel_id ?? ''}
 				/>
 			</FormControl>
 
@@ -196,7 +196,7 @@ const GuildModerationSettings = () => {
 					name="mute_role_id"
 					placeholder="The discord role id for mutes"
 					control={control}
-					defaultValue={guildModerationSettingsData.mute_role_id ?? undefined}
+					defaultValue={guildModerationSettingsData.mute_role_id ?? ''}
 				/>
 			</FormControl>
 
@@ -215,7 +215,7 @@ const GuildModerationSettings = () => {
 					name="embed_role_id"
 					placeholder="The discord role id for embed restrictions"
 					control={control}
-					defaultValue={guildModerationSettingsData.embed_role_id ?? undefined}
+					defaultValue={guildModerationSettingsData.embed_role_id ?? ''}
 				/>
 			</FormControl>
 
@@ -234,7 +234,7 @@ const GuildModerationSettings = () => {
 					name="emoji_role_id"
 					placeholder="The discord role id for emoji restrictions"
 					control={control}
-					defaultValue={guildModerationSettingsData.emoji_role_id ?? undefined}
+					defaultValue={guildModerationSettingsData.emoji_role_id ?? ''}
 				/>
 			</FormControl>
 
@@ -253,7 +253,7 @@ const GuildModerationSettings = () => {
 					name="reaction_role_id"
 					placeholder="The discord role id for reaction restrictions"
 					control={control}
-					defaultValue={guildModerationSettingsData.reaction_role_id ?? undefined}
+					defaultValue={guildModerationSettingsData.reaction_role_id ?? ''}
 				/>
 			</FormControl>
 
@@ -272,7 +272,7 @@ const GuildModerationSettings = () => {
 					name="tag_role_id"
 					placeholder="The discord role id for tag restrictions"
 					control={control}
-					defaultValue={guildModerationSettingsData.tag_role_id ?? undefined}
+					defaultValue={guildModerationSettingsData.tag_role_id ?? ''}
 				/>
 			</FormControl>
 
