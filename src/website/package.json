@@ -25,7 +25,7 @@
 		"dayjs": "^1.10.3",
 		"discord-markdown": "^2.4.1",
 		"framer-motion": "^3.2.1",
-		"next": "^10.0.4",
+		"next": "^10.0.5",
 		"next-cookie": "^2.6.0",
 		"react": "^17.0.1",
 		"react-autosize-textarea": "^7.1.0",
