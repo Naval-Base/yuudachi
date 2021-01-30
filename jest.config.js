@@ -1,3 +1,6 @@
+/**
+ * @type {import('@jest/types').Config.InitialOptions}
+ */
 module.exports = {
 	testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
 	testEnvironment: 'node',
@@ -6,10 +9,9 @@ module.exports = {
 	coverageReporters: ['text', 'lcov', 'clover'],
 	coverageThreshold: {
 		global: {
-			branches: 80,
-			functions: 80,
-			lines: 80,
-			statements: 80,
+			branches: 70,
+			lines: 70,
+			statements: 70,
 		},
 	},
 	roots: ['<rootDir>packages/', '<rootDir>src/'],
@@ -19,6 +21,9 @@ module.exports = {
 		'packages/http/dist/',
 		'packages/rest/dist/',
 		'packages/types/dist/',
+		'packages/core/src/managers/index.ts',
+		'src/api/src/middleware/index.ts',
+		'src/handler/src/util/index.ts',
 	],
 	setupFiles: ['./jest-setup.ts', 'jest-date-mock'],
 };
