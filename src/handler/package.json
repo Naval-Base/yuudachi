@@ -18,7 +18,7 @@
 		"common-tags": "^1.8.0",
 		"dayjs": "^1.10.3",
 		"i18next": "^19.8.4",
-		"i18next-http-backend": "^1.0.22",
+		"i18next-http-backend": "^1.1.0",
 		"lexure": "^0.17.0",
 		"node-fetch": "2.6.1",
 		"postgres": "^2.0.0-beta.2",
