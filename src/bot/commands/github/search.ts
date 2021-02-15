@@ -210,7 +210,7 @@ export default class GitHubSearchCommand extends Command {
 		if (d.commits) {
 			embed.addField(
 				'Install with',
-				`\`npm i discordjs/discord.js#${d.commits.nodes[0].commit.oid.substring(0, 12)}\``,
+				`\`npm i ${owner}/${repository}#${d.commits.nodes[0].commit.oid.substring(0, 12)}\``,
 			);
 		}
 

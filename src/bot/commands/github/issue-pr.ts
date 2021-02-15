@@ -14,7 +14,7 @@ export default class GitHubPROrIssueCommand extends Command {
 				usage: '<pr/issue>',
 				examples: ['1', '24', '100'],
 			},
-			regex: /\b(g|djs|commando|guide|rpc|collection)#(\d+)/i,
+			regex: /\b(g|djs|commando|guide|rpc|collection|opus)#(\d+)/i,
 			category: 'github',
 			channel: 'guild',
 			clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
@@ -64,6 +64,9 @@ export default class GitHubPROrIssueCommand extends Command {
 					owner = 'discordjs';
 					repo = 'collection';
 					break;
+				case 'opus':
+					owner = 'discordjs';
+					repo = 'opus';
 				default:
 					return message.util?.reply('No u.');
 			}
@@ -161,7 +164,7 @@ export default class GitHubPROrIssueCommand extends Command {
 			.setThumbnail(d.author?.avatarUrl ?? '')
 			.setTimestamp(new Date(d.publishedAt));
 		if (repo && !['guide'].includes(repo) && d.commits) {
-			embed.addField('Install with', `\`npm i ${owner}/${repo}#${d.commits.nodes[0].commit.oid.substring(0, 12)}\``);
+			embed.addField('Install with', `\`npm i ${owner}/${repo}#${d.number}/head\``);
 		}
 
 		if (
