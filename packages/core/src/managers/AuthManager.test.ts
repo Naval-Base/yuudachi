@@ -77,7 +77,7 @@ test('refreshes token', async () => {
 		access: {
 			expiration: new Date(900000), // 0 + 15m
 			token:
-				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjotMiwiaHR0cHM6Ly9oYXN1cmEuaW8vand0L2NsYWltcyI6eyJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInVzZXIiLCJ1c2VyIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InVzZXIiLCJ4LWhhc3VyYS11c2VyLWlkIjoiMTIzNDU2Nzg5MCJ9LCJyZWZyZXNoIjpmYWxzZSwiZXhwIjo4OTh9.rcr3SuVyiATt-FCqOB5DZKYAWcauwrcLRVodBtzmXfY',
+				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjotMiwiaHR0cHM6Ly9oYXN1cmEuaW8vand0L2NsYWltcyI6eyJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInVzZXIiXSwieC1oYXN1cmEtZGVmYXVsdC1yb2xlIjoidXNlciIsIngtaGFzdXJhLXVzZXItaWQiOiIxMjM0NTY3ODkwIn0sInJlZnJlc2giOmZhbHNlLCJleHAiOjg5OH0.fdn2HTdZh1G_l13zoeY3n8dhCjWpyYSBlorwszBIRNc',
 		},
 		refresh: {
 			expiration: new Date(604800000), // 0 + 7d
