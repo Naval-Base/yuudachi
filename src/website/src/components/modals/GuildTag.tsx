@@ -40,7 +40,6 @@ const Loading = dynamic(() => import('../Loading'));
 import { useUserStore } from '~/store/index';
 
 import { GuildTagPayload } from '~/interfaces/GuildTags';
-import { GraphQLRole } from '~/interfaces/Role';
 
 import { useQueryGuildTag } from '~/hooks/useQueryGuildTag';
 import { useMutationUpdateGuildTag } from '~/hooks/useMutationUpdateGuildTag';
@@ -163,7 +162,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 								<FormControl
 									id="name"
 									mb={4}
-									isReadOnly={user.role === GraphQLRole.user}
+									isReadOnly={!user.guilds?.includes(id as string)}
 									isInvalid={Boolean(errors.name)}
 								>
 									<FormLabel>Name</FormLabel>
@@ -194,7 +193,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 												<Box key={item.id}>
 													<FormControl
 														mb={4}
-														isReadOnly={user.role === GraphQLRole.user}
+														isReadOnly={!user.guilds?.includes(id as string)}
 														isInvalid={Boolean((errors.aliases as FieldErrors | undefined)?.[i]?.value)}
 													>
 														<InputGroup>
@@ -213,7 +212,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 																	aria-label="Delete alias"
 																	icon={<FiX />}
 																	onClick={() => remove(i)}
-																	isDisabled={user.role === GraphQLRole.user}
+																	isDisabled={!user.guilds?.includes(id as string)}
 																/>
 															</InputRightElement>
 														</InputGroup>
@@ -231,7 +230,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 													aria-label="Delete alias"
 													icon={<FiPlus />}
 													onClick={() => append({ value: '' })}
-													isDisabled={user.role === GraphQLRole.user}
+													isDisabled={!user.guilds?.includes(id as string)}
 												/>
 											</ButtonGroup>
 										</AccordionPanel>
@@ -241,7 +240,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 								<FormControl
 									id="content"
 									mb={4}
-									isReadOnly={user.role === GraphQLRole.user}
+									isReadOnly={!user.guilds?.includes(id as string)}
 									isInvalid={Boolean(errors.content)}
 								>
 									<FormLabel>Content</FormLabel>
@@ -285,7 +284,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 									colorScheme="green"
 									isLoading={formState.isSubmitting || isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
 									loadingText="Submitting"
-									isDisabled={user.role === GraphQLRole.user}
+									isDisabled={!user.guilds?.includes(id as string)}
 								>
 									Submit
 								</Button>

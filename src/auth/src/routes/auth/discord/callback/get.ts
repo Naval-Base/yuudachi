@@ -52,9 +52,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 			from users
 			join connections
 			on connections.user_id = users.id
-			where connections.id = ${me.id}
-				and provider = 'discord';
-		`;
+			where connections.id = ${me.id}`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (user) {
 			await this.sql`
@@ -63,12 +61,11 @@ export default class DiscordLoginCallbackRoute extends Route {
 					access_token = ${response.access_token},
 					refresh_token = ${response.refresh_token},
 					expires_at = ${new Date(Date.now() + response.expires_in * 1000).toISOString()}
-				where id = ${me.id} and provider = 'discord'
-			`;
+				where id = ${me.id}`;
 		} else {
 			[user] = await this.sql<{ id: string }>`
-				insert into users (email, username, role)
-				values (${me.email}, ${me.username}, 'user')
+				insert into users (email, username)
+				values (${me.email}, ${me.username})
 				returning id;
 			`;
 			const avatar = me.avatar
@@ -78,8 +75,6 @@ export default class DiscordLoginCallbackRoute extends Route {
 				insert into connections (
 					id,
 					user_id,
-					provider,
-					main,
 					avatar,
 					access_token,
 					refresh_token,
@@ -87,8 +82,6 @@ export default class DiscordLoginCallbackRoute extends Route {
 				) values (
 					${me.id},
 					${user.id},
-					'discord',
-					true,
 					${avatar},
 					${response.access_token},
 					${response.refresh_token},

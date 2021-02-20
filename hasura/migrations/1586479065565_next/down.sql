@@ -100,14 +100,6 @@ drop table messages;
 
 drop table connections;
 
--- PROVIDERS
-
-drop table connection_provider;
-
--- ROLES
-
-drop table user_role;
-
 -- USERS
 
 drop table users;

@@ -25,8 +25,7 @@ export default class GetOAuthGuildsRoute extends Route {
 		const [connection] = await this.sql<{ access_token: string }>`
 			select access_token
 			from connections
-			where user_id = ${userId} and provider = 'discord'
-		`;
+			where user_id = ${userId}`;
 		const guilds: RESTGetAPICurrentUserGuildsResult = await fetch('https://discord.com/api/users/@me/guilds', {
 			headers: {
 				authorization: `Bearer ${connection.access_token}`,

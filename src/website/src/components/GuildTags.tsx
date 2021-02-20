@@ -14,8 +14,6 @@ const GuildTagModal = dynamic(() => import('~/components/modals/GuildTag'));
 
 import { useUserStore, useTableStore } from '~/store/index';
 
-import { GraphQLRole } from '~/interfaces/Role';
-
 import { useQueryGuildTags } from '~/hooks/useQueryGuildTags';
 
 const GuildTagsPage = () => {
@@ -74,7 +72,7 @@ const GuildTagsPage = () => {
 	return (
 		<>
 			<ButtonGroup mb={4} mr={2} d="flex" justifyContent="flex-end">
-				<Button colorScheme="green" onClick={onOpen} isDisabled={isOpen || user.role === GraphQLRole.user}>
+				<Button colorScheme="green" onClick={onOpen} isDisabled={isOpen || !user.guilds?.includes(id as string)}>
 					Add Tag
 				</Button>
 			</ButtonGroup>

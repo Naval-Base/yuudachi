@@ -16,10 +16,11 @@ export function useQueryMe() {
 					connections {
 						id
 						avatar
-						main
+					}
+					guild_moderators {
+						guild_id
 					}
 					username
-					role
 				}
 			}`,
 			{},
@@ -36,13 +37,13 @@ export function useQueryMe() {
 		}
 
 		if (user.loggedIn === null && data?.data?.me[0] && data.data?.me[0].connections.length) {
-			const connection = data.data.me[0].connections.find((c) => c.main)!;
+			const connection = data.data.me[0].connections[0]!;
 			user.setUser({
 				loggedIn: true,
 				id: connection.id,
-				role: data.data.me[0].role,
 				username: data.data.me[0].username,
 				avatar: connection.avatar,
+				guilds: data.data.me[0].guild_moderators,
 			});
 		}
 	}, [data?.errors, data?.data?.me, user]);

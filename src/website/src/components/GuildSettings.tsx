@@ -26,7 +26,6 @@ import { useMutationInsertGuildSettings } from '~/hooks/useMutationInsertGuildSe
 import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSettings';
 
 import { GuildSettingsPayload } from '~/interfaces/GuildSettings';
-import { GraphQLRole } from '~/interfaces/Role';
 
 const GuildSettings = () => {
 	const user = useUserStore();
@@ -42,7 +41,7 @@ const GuildSettings = () => {
 	const { data: gqlDataGuild, isLoading: isLoadingGuild } = useQueryGuild(id as string);
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
-		Boolean(gqlDataGuild?.guild) && user.role !== GraphQLRole.user,
+		Boolean(gqlDataGuild?.guild) && user.guilds?.includes(id as string),
 	);
 
 	const guildSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
@@ -85,7 +84,7 @@ const GuildSettings = () => {
 		})(event);
 	};
 
-	if (user.role === GraphQLRole.user) {
+	if (!user.guilds?.includes(id as string)) {
 		return <Text textAlign="center">You need to be a moderator to see the guild settings.</Text>;
 	}
 

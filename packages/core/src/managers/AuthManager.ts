@@ -96,11 +96,10 @@ export class AuthManager {
 	}
 
 	public async create(userId: string): Promise<AuthCredentials> {
-		const [{ role, token_reset_at }] = (await this.sql`
+		const [{ token_reset_at }] = (await this.sql`
 			update users set token_reset_at = now()
 			where id = ${userId}
-			returning role, token_reset_at
-		`) as [{ role: string; token_reset_at: string }];
+			returning token_reset_at`) as [{ token_reset_at: string }];
 
 		// Intentionally date back iat by 2 seconds
 		const iat = Math.ceil(new Date(token_reset_at).getTime() / 1000 - 2);
@@ -109,8 +108,8 @@ export class AuthManager {
 			sub: userId,
 			iat,
 			'https://hasura.io/jwt/claims': {
-				'x-hasura-allowed-roles': ['user', role],
-				'x-hasura-default-role': role,
+				'x-hasura-allowed-roles': ['user'],
+				'x-hasura-default-role': 'user',
 				'x-hasura-user-id': userId,
 			},
 			refresh: false,

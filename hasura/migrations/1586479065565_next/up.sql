@@ -1,52 +1,24 @@
--- ROLES
-
-create table user_role (
-	"value" text primary key,
-	comment text
-);
-
-insert into user_role ("value") values
-	('admin'),
-	('moderator'),
-	('user');
-
 -- USERS
 
 create table users (
 	id uuid default gen_random_uuid() not null,
 	email text not null,
 	username text not null,
-	"role" text not null,
 	token_reset_at timestamp
 );
 
 alter table users add constraint users_pkey primary key (id);
-alter table users add constraint users_role_fkey foreign key ("role") references user_role;
 
 comment on column users.id is 'The id of this user';
 comment on column users.email is 'The email of this user';
 comment on column users.username is 'The username of this user';
-comment on column users."role" is 'The role of this user';
 comment on column users.token_reset_at is 'When this user''s token was reset';
-
--- PROVIDERS
-
-create table connection_provider (
-	"value" text primary key,
-	comment text
-);
-
-insert into connection_provider ("value") values
-	('discord'),
-	('twitch');
 
 -- CONNECTIONS
 
 create table connections (
 	id text not null,
 	user_id uuid not null,
-	"provider" text not null,
-	main boolean default false,
 	avatar text,
 	access_token text not null,
 	refresh_token text,
@@ -55,16 +27,26 @@ create table connections (
 
 alter table connections add constraint connections_pkey primary key (id);
 alter table connections add constraint connections_user_id_fkey foreign key (user_id) references users (id) on delete cascade;
-alter table connections add constraint connections_provider_fkey foreign key ("provider") references connection_provider;
 
 comment on column connections.id is 'The user id of this connection';
 comment on column connections.user_id is 'The id of the user this connection belongs to';
-comment on column connections.provider is 'The provider this connection belongs to';
-comment on column connections.main is 'Whether this is the main account of this users connection';
 comment on column connections.avatar is 'The access token of this connection';
 comment on column connections.access_token is 'The access token of this connection';
 comment on column connections.refresh_token is 'The refresh token of this connection';
 comment on column connections.expires_at is 'The expiration of this connections access token';
+
+-- GUILD MODERATORS
+
+create table guild_moderators (
+	guild_id text not null,
+	user_id uuid not null
+);
+
+alter table guild_moderators add constraint guild_moderators_pkey primary key (guild_id, user_id);
+alter table guild_moderators add constraint guild_moderators_user_id_fkey foreign key (user_id) references users (id) on delete cascade;
+
+comment on column guild_moderators.guild_id is 'The id of the guild this moderator belongs to';
+comment on column guild_moderators.user_id is 'The id of the moderator';
 
 -- CASES
 

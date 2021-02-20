@@ -1,5 +1,5 @@
 import { Request, Response, NextHandler } from 'polka';
-import postgres from 'postgres';
+import { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
@@ -9,14 +9,13 @@ import { kSQL, kConfig } from '../tokens';
 
 export default async (req: Request, res: Response, next?: NextHandler) => {
 	if (req.headers.cookie) {
-		const sql = container.resolve<postgres.Sql<any>>(kSQL);
+		const sql = container.resolve<Sql<any>>(kSQL);
 		const cookies = cookie.parse(req.headers.cookie) as { token: string };
 
-		let decoded: { provider: 'discord' | 'twitch'; access_token: string };
+		let decoded: { access_token: string };
 		try {
 			const config = container.resolve<Config>(kConfig);
 			decoded = jwt.verify(cookies.token, config.secretKey) as {
-				provider: 'discord' | 'twitch';
 				access_token: string;
 			};
 
@@ -32,8 +31,7 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 				from connections
 				join users
 				on connections.user_id = users.id
-				where access_token = ${decoded.access_token}
-					and provider = ${decoded.provider};
+				where access_token = ${decoded.access_token};
 			`;
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (existingUser) {
@@ -41,7 +39,6 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 				return res.end(
 					JSON.stringify({
 						token: cookies.token,
-						provider: decoded.provider,
 						user: {
 							id: existingUser.id,
 							user_id: existingUser.user_id,

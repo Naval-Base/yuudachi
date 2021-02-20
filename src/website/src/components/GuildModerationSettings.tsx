@@ -16,7 +16,6 @@ import { useMutationInsertGuildModerationSettings } from '~/hooks/useMutationIns
 import { useMutationUpdateGuildModerationSettings } from '~/hooks/useMutationUpdateGuildModerationSettings';
 
 import { GuildModerationSettingsPayload } from '~/interfaces/GuildSettings';
-import { GraphQLRole } from '~/interfaces/Role';
 
 const GuildModerationSettings = () => {
 	const user = useUserStore();
@@ -37,7 +36,10 @@ const GuildModerationSettings = () => {
 	const {
 		data: gqlGuildModerationSettingsData,
 		isLoading: isLoadingGuildModerationSettings,
-	} = useQueryGuildModerationSettings(id as string, Boolean(gqlGuildData?.guild) && user.role !== GraphQLRole.user);
+	} = useQueryGuildModerationSettings(
+		id as string,
+		Boolean(gqlGuildData?.guild) && user.guilds?.includes(id as string),
+	);
 
 	const guildModerationSettingsData = useMemo(() => gqlGuildModerationSettingsData?.guild, [
 		gqlGuildModerationSettingsData,
@@ -85,7 +87,7 @@ const GuildModerationSettings = () => {
 		})(event);
 	};
 
-	if (user.role === GraphQLRole.user) {
+	if (!user.guilds?.includes(id as string)) {
 		return <Text textAlign="center">You need to be a moderator to see the guilds moderation settings.</Text>;
 	}
 

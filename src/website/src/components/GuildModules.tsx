@@ -14,7 +14,6 @@ import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
 import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSettings';
 
 import { GuildModulesPayload } from '~/interfaces/GuildSettings';
-import { GraphQLRole } from '~/interfaces/Role';
 
 const GuildModules = () => {
 	const user = useUserStore();
@@ -52,7 +51,7 @@ const GuildModules = () => {
 
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
-		user.role !== GraphQLRole.user,
+		user.guilds?.includes(id as string),
 	);
 
 	const guildSettingsData = useMemo(() => gqlGuildSettingsData, [gqlGuildSettingsData]);

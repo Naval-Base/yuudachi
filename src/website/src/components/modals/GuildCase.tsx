@@ -40,7 +40,6 @@ const GuildCaseReference = dynamic(() => import('~/components/GuildCaseReference
 import { useUserStore } from '~/store/index';
 
 import { GuildCasePayload } from '~/interfaces/GuildCases';
-import { GraphQLRole } from '~/interfaces/Role';
 
 import { useQueryGuildCase } from '~/hooks/useQueryGuildCase';
 import { useQueryGuildRoles } from '~/hooks/useQueryGuildRoles';
@@ -148,7 +147,7 @@ const GuildCase = ({
 									</Text>
 								</Box>
 
-								<FormControl id="reference" mb={4} isReadOnly={readOnly || user.role === GraphQLRole.user}>
+								<FormControl id="reference" mb={4} isReadOnly={readOnly || !user.guilds?.includes(id as string)}>
 									<FormLabel>Reference</FormLabel>
 									<Box d="flex">
 										<NumberInput
@@ -156,7 +155,7 @@ const GuildCase = ({
 											mr={2}
 											w={guildCaseData?.case.ref_id ? '80%' : '100%'}
 											defaultValue={guildCaseData?.case.ref_id ?? undefined}
-											isReadOnly={readOnly || user.role === GraphQLRole.user}
+											isReadOnly={readOnly || !user.guilds?.includes(id as string)}
 										>
 											<NumberInputField name="reference" ref={register} />
 											<NumberInputStepper>
@@ -217,7 +216,7 @@ const GuildCase = ({
 															}
 															return false;
 														}}
-														isReadOnly={readOnly || user.role === GraphQLRole.user}
+														isReadOnly={readOnly || !user.guilds?.includes(id as string)}
 														isDisabled={guildCaseData.case.action_processed}
 													/>
 												)}
@@ -248,7 +247,7 @@ const GuildCase = ({
 								<FormControl
 									id="reason"
 									mb={4}
-									isReadOnly={readOnly || user.role === GraphQLRole.user}
+									isReadOnly={readOnly || !user.guilds?.includes(id as string)}
 									isInvalid={Boolean(errors.reason)}
 								>
 									<FormLabel>Reason</FormLabel>
@@ -277,7 +276,7 @@ const GuildCase = ({
 									colorScheme="green"
 									isLoading={formState.isSubmitting || isLoadingGuildCaseUpdateMutate}
 									loadingText="Submitting"
-									isDisabled={readOnly || user.role === GraphQLRole.user}
+									isDisabled={readOnly || !user.guilds?.includes(id as string)}
 								>
 									Submit
 								</Button>

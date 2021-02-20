@@ -7,8 +7,6 @@ const GuildTagModal = dynamic(() => import('~/components/modals/GuildTag'));
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLRole } from '~/interfaces/Role';
-
 import { useMutationDeleteGuildTag } from '~/hooks/useMutationDeleteGuildTag';
 
 const GuildTag = ({ name }: { name: string }) => {
@@ -36,15 +34,7 @@ const GuildTag = ({ name }: { name: string }) => {
 
 	return (
 		<>
-			{user.role === GraphQLRole.user ? (
-				<IconButton
-					size="sm"
-					aria-label="Show tag"
-					icon={<FiEye />}
-					onClick={onOpen}
-					isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
-				/>
-			) : (
+			{user.guilds?.includes(id as string) ? (
 				<ButtonGroup>
 					<IconButton
 						size="sm"
@@ -63,6 +53,14 @@ const GuildTag = ({ name }: { name: string }) => {
 						isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
 					/>
 				</ButtonGroup>
+			) : (
+				<IconButton
+					size="sm"
+					aria-label="Show tag"
+					icon={<FiEye />}
+					onClick={onOpen}
+					isDisabled={isOpen || isLoadingGuildTagDeleteMutate}
+				/>
 			)}
 
 			<GuildTagModal name={name} isOpen={isOpen} onClose={onClose} />
