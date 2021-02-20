@@ -4,5 +4,5 @@ import { Context } from '../../interfaces/Context';
 
 export default (_: any, __: any, { userId }: Context) => {
 	const api = container.resolve(API);
-	return api.guilds.getOAuth(userId!);
+	return api.guilds.getOAuth(userId);
 };

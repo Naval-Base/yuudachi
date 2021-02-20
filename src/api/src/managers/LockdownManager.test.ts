@@ -27,7 +27,7 @@ function generateSQLResult(lockdown: Lockdown) {
 	return [
 		[
 			`
-			insert into moderation.lockdowns (
+			insert into lockdowns (
 				guild_id,
 				channel_id,
 				expiration,
@@ -146,7 +146,7 @@ describe('lifts a lockdown', () => {
 			[
 				`
 			select overwrites
-			from moderation.lockdowns
+			from lockdowns
 			where channel_id = `,
 				'',
 			],
@@ -156,7 +156,7 @@ describe('lifts a lockdown', () => {
 			[
 				`
 			delete
-			from moderation.lockdowns
+			from lockdowns
 			where channel_id = `,
 				'',
 			],
@@ -195,7 +195,7 @@ describe('lifts a lockdown', () => {
 			[
 				`
 			select overwrites
-			from moderation.lockdowns
+			from lockdowns
 			where channel_id = `,
 				'',
 			],
@@ -205,7 +205,7 @@ describe('lifts a lockdown', () => {
 			[
 				`
 			delete
-			from moderation.lockdowns
+			from lockdowns
 			where channel_id = `,
 				'',
 			],

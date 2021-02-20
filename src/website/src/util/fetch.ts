@@ -30,7 +30,7 @@ export default async function refreshFetch(
 		if (attempt) {
 			await delay(2 ** attempt * 1000);
 		}
-		const response = await fetch(input as RequestInfo, options);
+		const response = await fetch(input as RequestInfo, { ...options, credentials: 'include' });
 		const body = await response.clone().json();
 		if (response.ok) {
 			if (body.errors?.[0].extensions.code === 'invalid-jwt') {

@@ -54,13 +54,13 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const [data] = await this.sql<{ mod_role_id: string | null }>`
+		const [data] = await this.sql<{ mod_role_id: `${bigint}` | null }>`
 			select mod_role_id
-			from moderation.guild_settings
+			from guild_settings
 			where guild_id = ${message.guild_id}`;
 
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		if (!message.member?.roles.includes(data?.mod_role_id ?? '')) {
+		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
 			throw new Error(i18next.t('command.common.errors.no_mod_role'));
 		}
 
@@ -89,23 +89,23 @@ export default class implements Command {
 
 		switch (sub) {
 			case 'mute': {
-				return mute(message, maybeMember as Ok<string>, duration as string, locale, reason, refId);
+				return mute(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
 			}
 
 			case 'embed': {
-				return embed(message, maybeMember as Ok<string>, duration as string, locale, reason, refId);
+				return embed(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
 			}
 
 			case 'react': {
-				return react(message, maybeMember as Ok<string>, duration as string, locale, reason, refId);
+				return react(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
 			}
 
 			case 'emoji': {
-				return emoji(message, maybeMember as Ok<string>, duration as string, locale, reason, refId);
+				return emoji(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
 			}
 
 			case 'tag': {
-				return tag(message, maybeMember as Ok<string>, duration as string, locale, reason, refId);
+				return tag(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
 			}
 
 			case 'unrole': {

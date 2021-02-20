@@ -24,7 +24,10 @@ export async function refresh(message: APIMessage | APIInteraction, args: Args, 
 
 			for await (const dir of files) {
 				const structure = (await import(dir.fullPath)).default as Record<string, any>;
-				await rest.post(Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, message.guild_id!), structure);
+				await rest.post(
+					Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as `${bigint}`, message.guild_id!),
+					structure,
+				);
 			}
 
 			void send(message, { content: i18next.t('command.config.debug.refresh.success') });

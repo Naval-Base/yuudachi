@@ -11,9 +11,9 @@ import { useUserStore } from '~/store/index';
 import { useQueryGuild } from '~/hooks/useQueryGuild';
 import { useQueryGuildRoles } from '~/hooks/useQueryGuildRoles';
 import { useQueryGuildChannels } from '~/hooks/useQueryGuildChannels';
-import { useQueryGuildModerationSettings } from '~/hooks/useQueryGuildModerationSettings';
-import { useMutationInsertGuildModerationSettings } from '~/hooks/useMutationInsertGuildModerationSettings';
-import { useMutationUpdateGuildModerationSettings } from '~/hooks/useMutationUpdateGuildModerationSettings';
+import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
+import { useMutationInsertGuildSettings } from '~/hooks/useMutationInsertGuildSettings';
+import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSettings';
 
 import { GuildModerationSettingsPayload } from '~/interfaces/GuildSettings';
 
@@ -33,33 +33,28 @@ const GuildModerationSettings = () => {
 		id as string,
 		Boolean(gqlGuildData?.guild),
 	);
-	const {
-		data: gqlGuildModerationSettingsData,
-		isLoading: isLoadingGuildModerationSettings,
-	} = useQueryGuildModerationSettings(
+	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
 		Boolean(gqlGuildData?.guild) && user.guilds?.includes(id as string),
 	);
 
-	const guildModerationSettingsData = useMemo(() => gqlGuildModerationSettingsData?.guild, [
-		gqlGuildModerationSettingsData,
-	]);
+	const guildModerationSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
 	const guildRolesData = useMemo(() => gqlGuildRolesData?.roles?.filter((r) => r.id !== id), [gqlGuildRolesData, id]);
 	const guildChannelsData = useMemo(() => gqlGuildChannelsData?.channels?.filter((c) => c.type === 0), [
 		gqlGuildChannelsData,
 	]);
 
 	const {
-		mutateAsync: guildModerationSettingsInsertMutate,
-		isLoading: isLoadingGuildModerationSettingsInsertMutate,
-	} = useMutationInsertGuildModerationSettings(id as string);
+		mutateAsync: guildSettingsInsertMutate,
+		isLoading: isLoadingGuildSettingsInsertMutate,
+	} = useMutationInsertGuildSettings(id as string);
 	const {
-		mutateAsync: guildModerationSettingsUpdateMutate,
-		isLoading: isLoadingGuildModerationSettingsUpdateMutate,
-	} = useMutationUpdateGuildModerationSettings(id as string);
+		mutateAsync: guildSettingsUpdateMutate,
+		isLoading: isLoadingGuildSettingsUpdateMutate,
+	} = useMutationUpdateGuildSettings(id as string);
 
 	const handleOnInitialize = async () => {
-		await guildModerationSettingsInsertMutate();
+		await guildSettingsInsertMutate();
 
 		toast({
 			title: 'Guild moderation settings initialized.',
@@ -73,7 +68,7 @@ const GuildModerationSettings = () => {
 	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		await handleSubmit(async (values: GuildModerationSettingsPayload) => {
-			await guildModerationSettingsUpdateMutate(values, {
+			await guildSettingsUpdateMutate(values, {
 				onSuccess: () => {
 					toast({
 						title: 'Guild moderation settings edited.',
@@ -91,13 +86,7 @@ const GuildModerationSettings = () => {
 		return <Text textAlign="center">You need to be a moderator to see the guilds moderation settings.</Text>;
 	}
 
-	if (
-		!user.loggedIn ||
-		isLoadingGuild ||
-		isLoadingGuildRoles ||
-		isLoadingGuildChannels ||
-		isLoadingGuildModerationSettings
-	) {
+	if (!user.loggedIn || isLoadingGuild || isLoadingGuildRoles || isLoadingGuildChannels || isLoadingGuildSettings) {
 		return (
 			<Center h="100%">
 				<Loading />
@@ -282,9 +271,9 @@ const GuildModerationSettings = () => {
 				<Button
 					type="submit"
 					colorScheme="green"
-					isLoading={formState.isSubmitting || isLoadingGuildModerationSettingsUpdateMutate}
+					isLoading={formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
 					loadingText="Submitting"
-					isDisabled={isLoadingGuildModerationSettingsUpdateMutate}
+					isDisabled={isLoadingGuildSettingsUpdateMutate}
 				>
 					Submit
 				</Button>
@@ -299,9 +288,9 @@ const GuildModerationSettings = () => {
 				<Button
 					colorScheme="green"
 					onClick={handleOnInitialize}
-					isLoading={isLoadingGuildModerationSettingsInsertMutate}
+					isLoading={isLoadingGuildSettingsInsertMutate}
 					loadingText="Initializing"
-					isDisabled={isLoadingGuildModerationSettingsInsertMutate}
+					isDisabled={isLoadingGuildSettingsInsertMutate}
 				>
 					Initialize
 				</Button>

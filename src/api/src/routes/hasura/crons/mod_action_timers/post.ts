@@ -15,9 +15,9 @@ export default class HasuraModActionTimersCron extends Route {
 	}
 
 	public async handle(_: Request, res: Response) {
-		const currentCases = await this.sql<{ guild_id: string; case_id: number; action_expiration: string }>`
+		const currentCases = await this.sql<{ guild_id: `${bigint}`; case_id: number; action_expiration: string }>`
 			select guild_id, case_id, action_expiration
-			from moderation.cases
+			from cases
 			where action_processed = false`;
 
 		for (const case_ of currentCases) {

@@ -14,7 +14,7 @@ const { kSQL } = Tokens;
 
 export async function mute(
 	message: APIMessage | APIInteraction,
-	maybeMember: Ok<string>,
+	maybeMember: Ok<`${bigint}`>,
 	duration: string,
 	locale: string,
 	reason?: string,
@@ -23,9 +23,9 @@ export async function mute(
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const api = container.resolve(API);
 
-	const [roles] = await sql<{ mute_role_id: string }>`
+	const [roles] = await sql<{ mute_role_id: `${bigint}` | '' }>`
 		select mute_role_id
-		from moderation.guild_settings
+		from guild_settings
 		where guild_id = ${message.guild_id!}
 	`;
 
@@ -35,7 +35,7 @@ export async function mute(
 
 	const [action] = await sql<{ action_processed: boolean }>`
 		select action_processed
-		from moderation.cases
+		from cases
 		where guild_id = ${message.guild_id!}
 			and target_id = ${maybeMember.value}
 			and role_id = ${roles.mute_role_id}

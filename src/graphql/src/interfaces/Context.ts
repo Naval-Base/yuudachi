@@ -1,3 +1,3 @@
 export interface Context {
-	userId?: string;
+	userId: string;
 }

@@ -10,13 +10,13 @@ export enum CaseAction {
 
 export interface CreateCase {
 	action: CaseAction;
-	roleId?: string;
+	roleId?: `${bigint}`;
 	actionExpiration?: Date;
 	reason?: string | null;
-	moderatorId: string;
+	moderatorId: `${bigint}`;
 	targetId: string;
 	deleteMessageDays?: number;
-	contextMessageId?: string;
+	contextMessageId?: `${bigint}`;
 	referenceId?: number;
 }
 
@@ -24,20 +24,20 @@ export interface UpdateCase {
 	caseId: number | string;
 	actionExpiration?: Date;
 	reason?: string;
-	contextMessageId?: string;
+	contextMessageId?: `${bigint}`;
 	referenceId?: number | string;
 }
 
 export interface Case {
 	caseId: number;
-	guildId: string;
-	targetId: string;
-	moderatorId: string;
+	guildId: `${bigint}`;
+	targetId: `${bigint}`;
+	moderatorId: `${bigint}`;
 	action: CaseAction;
-	roleId?: string;
+	roleId?: `${bigint}`;
 	actionExpiration?: Date;
 	reason?: string;
 	deleteMessageDays?: number;
-	contextMessageId?: string;
+	contextMessageId?: `${bigint}`;
 	referenceId?: number;
 }

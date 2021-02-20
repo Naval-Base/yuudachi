@@ -13,7 +13,7 @@ import { send } from '../../../../util';
 
 export async function lock(
 	message: APIMessage | APIInteraction,
-	maybeChannel: Ok<string>,
+	maybeChannel: Ok<`${bigint}`>,
 	duration: string,
 	reason: string,
 	locale: string,

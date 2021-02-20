@@ -15,7 +15,6 @@ export default class GetUserRoute extends Route {
 		let user: APIUser;
 		try {
 			user = await this.rest.get(`/users/${req.params.userId}`);
-			console.log(user);
 		} catch (e) {
 			if (e instanceof HttpException) {
 				switch (e.status) {

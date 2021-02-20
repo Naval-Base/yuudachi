@@ -21,7 +21,6 @@ export function useQueryOAuthGuilds() {
 						owner
 						features
 						permissions
-						permissions_new
 					}
 				}`,
 				{},

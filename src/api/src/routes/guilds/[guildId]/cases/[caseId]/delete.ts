@@ -16,7 +16,7 @@ export default class DeleteCaseRoute extends Route {
 	public async handle(req: Request, res: Response) {
 		let case_: Case;
 		try {
-			case_ = await this.caseManager.delete(req.params.guildId, Number(req.params.caseId), true);
+			case_ = await this.caseManager.delete(req.params.guildId as `${bigint}`, Number(req.params.caseId), true);
 		} catch (e) {
 			if (e instanceof HttpException) {
 				switch (e.status) {

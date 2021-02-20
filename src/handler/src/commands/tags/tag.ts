@@ -43,7 +43,7 @@ export default class implements Command {
 
 				const [tag] = await this.sql<{ content: string }>`
 					select content
-					from organizational.tags
+					from tags
 					where name = ${name}
 						or ${name} = ANY(aliases)
 						and guild_id = ${message.guild_id};`;

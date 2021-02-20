@@ -15,7 +15,7 @@ export async function unrole(message: APIMessage | APIInteraction, caseId: strin
 
 	const [action] = await sql<{ action_processed: boolean }>`
 		select action_processed
-		from moderation.cases
+		from cases
 		where guild_id = ${message.guild_id!}
 			and case_id = ${caseId}`;
 

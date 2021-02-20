@@ -22,31 +22,31 @@ export default class Guilds {
 		});
 	}
 
-	public getChannels(guildId: string) {
+	public getChannels(guildId: `${bigint}`) {
 		return this.api.make<RESTGetAPIGuildChannelsResult>('get', `/guilds/${guildId}/channels`);
 	}
 
-	public getRoles(guildId: string) {
+	public getRoles(guildId: `${bigint}`) {
 		return this.api.make<RESTGetAPIGuildRolesResult>('get', `/guilds/${guildId}/roles`);
 	}
 
-	public createCase(guildId: string, ...cases: CreateCase[]) {
+	public createCase(guildId: `${bigint}`, ...cases: CreateCase[]) {
 		return this.api.make<Case[]>('post', `/guilds/${guildId}/cases`, { cases });
 	}
 
-	public updateCase(guildId: string, ...cases: UpdateCase[]) {
+	public updateCase(guildId: `${bigint}`, ...cases: UpdateCase[]) {
 		return this.api.make<Case[]>('patch', `/guilds/${guildId}/cases`, { cases });
 	}
 
-	public deleteCase(guildId: string, caseId: number) {
+	public deleteCase(guildId: `${bigint}`, caseId: number) {
 		return this.api.make<Case[]>('delete', `/guilds/${guildId}/cases/${caseId}`);
 	}
 
-	public createLockdown(guildId: string, ...lockdowns: CreateLockdown[]) {
+	public createLockdown(guildId: `${bigint}`, ...lockdowns: CreateLockdown[]) {
 		return this.api.make<Lockdown[]>('post', `/guilds/${guildId}/lockdowns`, { lockdowns });
 	}
 
-	public deleteLockdown(guildId: string, ...lockdowns: DeleteLockdown[]) {
+	public deleteLockdown(guildId: `${bigint}`, ...lockdowns: DeleteLockdown[]) {
 		return this.api.make<Lockdown[]>('delete', `/guilds/${guildId}/lockdowns`, { lockdowns });
 	}
 }

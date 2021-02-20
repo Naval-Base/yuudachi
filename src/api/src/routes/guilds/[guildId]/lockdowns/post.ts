@@ -51,7 +51,7 @@ export default class CreateLockdownRoute extends Route {
 		const body: LockdownsPostBody = req.body as any;
 
 		for (const lockdown of body.lockdowns) {
-			lockdown.guildId = req.params.guildId;
+			lockdown.guildId = req.params.guildId as `${bigint}`;
 			created.push(this.lockdownManager.create(lockdown));
 		}
 

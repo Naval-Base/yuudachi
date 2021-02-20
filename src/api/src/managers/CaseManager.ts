@@ -11,18 +11,18 @@ export interface RawCase {
 	action_expiration: string | null;
 	ref_id: number | null;
 	action_processed: boolean;
-	target_id: string;
+	target_id: `${bigint}`;
 	action: number;
-	role_id: string | null;
+	role_id: `${bigint}` | null;
 	case_id: number;
-	context_message_id: string | null;
-	mod_id: string;
+	context_message_id: `${bigint}` | null;
+	mod_id: `${bigint}`;
 	target_tag: string;
 	reason: string;
-	log_message_id: string | null;
+	log_message_id: `${bigint}` | null;
 	created_at: string;
 	mod_tag: string;
-	guild_id: string;
+	guild_id: `${bigint}`;
 }
 
 export type PatchCase = Pick<
@@ -80,7 +80,7 @@ export default class CaseManager {
 		}
 
 		const [newCase] = await this.sql`
-			insert into moderation.cases (
+			insert into cases (
 				case_id,
 				guild_id,
 				mod_id,
@@ -118,7 +118,7 @@ export default class CaseManager {
 	public async update(case_: PatchCase) {
 		if (case_.actionExpiration) {
 			await this.sql`
-				update moderation.cases
+				update cases
 				set action_expiration = ${case_.actionExpiration.toISOString()}
 				where guild_id = ${case_.guildId}
 					and case_id = ${case_.caseId}`;
@@ -126,7 +126,7 @@ export default class CaseManager {
 
 		if (case_.reason) {
 			await this.sql`
-				update moderation.cases
+				update cases
 				set reason = ${case_.reason}
 				where guild_id = ${case_.guildId}
 					and case_id = ${case_.caseId}`;
@@ -134,7 +134,7 @@ export default class CaseManager {
 
 		if (case_.contextMessageId) {
 			await this.sql`
-				update moderation.cases
+				update cases
 				set context_message_id = ${case_.contextMessageId}
 				where guild_id = ${case_.guildId}
 					and case_id = ${case_.caseId}`;
@@ -142,7 +142,7 @@ export default class CaseManager {
 
 		if (case_.referenceId) {
 			await this.sql`
-				update moderation.cases
+				update cases
 				set ref_id = ${case_.referenceId}
 				where guild_id = ${case_.guildId}
 					and case_id = ${case_.caseId}`;
@@ -150,22 +150,22 @@ export default class CaseManager {
 
 		const [updatedCase] = await this.sql`
 			select *
-			from moderation.cases
+			from cases
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.caseId}`;
 
 		return updatedCase as Case;
 	}
 
-	public async delete(guildId: string, caseId: number, manual = false) {
+	public async delete(guildId: `${bigint}`, caseId: number, manual = false) {
 		const [case_] = await this.sql<RawCase>`
 			select *
-			from moderation.cases
+			from cases
 			where guild_id = ${guildId}
 				and case_id = ${caseId}`;
 
 		await this.sql`
-			update moderation.cases
+			update cases
 			set action_processed = true
 			where guild_id = ${guildId}
 				and case_id = ${caseId}`;

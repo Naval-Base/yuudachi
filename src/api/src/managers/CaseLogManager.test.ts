@@ -125,17 +125,13 @@ describe('create', () => {
 		});
 
 		expect(mockedSettingsManager.get).toHaveBeenCalledTimes(1);
-		expect(mockedSettingsManager.get).toHaveBeenCalledWith(
-			guildId,
-			SettingsKeys.MOD_LOG_CHANNEL_ID,
-			'moderation.guild_settings',
-		);
+		expect(mockedSettingsManager.get).toHaveBeenCalledWith(guildId, SettingsKeys.MOD_LOG_CHANNEL_ID, 'guild_settings');
 
 		expect(mockedPostgres).toHaveBeenCalledTimes(1);
 		expect(mockedPostgres).toHaveBeenLastCalledWith(
 			[
 				`
-				update moderation.cases
+				update cases
 				set log_message_id = `,
 				`
 				where guild_id = `,
@@ -198,7 +194,7 @@ describe('create', () => {
 			[
 				`
 				select log_message_id
-				from moderation.cases
+				from cases
 				where guild_id = `,
 				`
 					and case_id = `,
@@ -260,7 +256,7 @@ describe('create', () => {
 			[
 				`
 				select channel_id
-				from logs.messages
+				from messages
 				where id = `,
 				'',
 			],
@@ -318,7 +314,7 @@ describe('create', () => {
 			[
 				`
 				select channel_id
-				from logs.messages
+				from messages
 				where id = `,
 				'',
 			],
@@ -329,7 +325,7 @@ describe('create', () => {
 			[
 				`
 				select log_message_id
-				from moderation.cases
+				from cases
 				where guild_id = `,
 				`
 					and case_id = `,
@@ -388,7 +384,7 @@ describe('create', () => {
 		expect(mockedPostgres).toHaveBeenLastCalledWith(
 			[
 				`
-				update moderation.cases
+				update cases
 				set log_message_id = `,
 				`
 				where guild_id = `,

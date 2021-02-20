@@ -10,7 +10,7 @@ import { AuthManager, session, Tokens } from '@yuudachi/core';
 const { kSQL } = Tokens;
 
 interface DiscordUser {
-	id: string;
+	id: `${bigint}`;
 	email: string;
 	username: string;
 	discriminator: string;

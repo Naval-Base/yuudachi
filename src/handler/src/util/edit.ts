@@ -20,7 +20,7 @@ export function edit(
 		const { embed, ...r } = payload as RESTPostAPIChannelMessageJSONBody;
 		const response = { ...r, embeds: embed ? [embed] : undefined };
 
-		return rest.patch(Routes.webhookMessage(process.env.DISCORD_CLIENT_ID!, message.token), {
+		return rest.patch(Routes.webhookMessage(process.env.DISCORD_CLIENT_ID as `${bigint}`, message.token), {
 			type,
 			data: {
 				...response,

@@ -19,7 +19,7 @@ export async function search(message: APIMessage, args: Args, locale: string) {
 
 	const tags = await sql<{ name: string; aliases: string[] }>`
 		select name, aliases
-		from organizational.tags
+		from tags
 		where guild_id = ${message.guild_id!}`;
 	const filtered = tags.filter((t) => t.name.includes(query) || t.aliases.some((a) => a.includes(query)));
 	if (!filtered.length) {

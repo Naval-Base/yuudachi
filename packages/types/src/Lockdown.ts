@@ -1,19 +1,19 @@
 export interface CreateLockdown {
-	channelId: string;
+	channelId: `${bigint}`;
 	expiration: Date;
-	moderatorId: string;
+	moderatorId: `${bigint}`;
 	reason?: string;
 }
 
 export interface DeleteLockdown {
-	channelId: string;
+	channelId: `${bigint}`;
 }
 
 export interface Lockdown {
-	guildId: string;
-	channelId: string;
+	guildId: `${bigint}`;
+	channelId: `${bigint}`;
 	expiration: Date;
-	moderatorId: string;
+	moderatorId: `${bigint}`;
 	reason?: string;
-	overwrites?: Record<string, any>[];
+	overwrites?: Record<`${bigint}`, any>[];
 }

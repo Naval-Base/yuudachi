@@ -48,7 +48,7 @@ export default class UpdateCaseRoute extends Route {
 		const body: CasesPatchBody = req.body as any;
 
 		for (const case_ of body.cases) {
-			case_.guildId = req.params.guildId;
+			case_.guildId = req.params.guildId as `${bigint}`;
 			created.push(this.caseManager.update(case_));
 		}
 

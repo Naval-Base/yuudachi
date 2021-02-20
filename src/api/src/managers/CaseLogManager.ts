@@ -24,11 +24,7 @@ export default class CaseLogManager {
 	) {}
 
 	public async create(item: RawCase, old?: RawCase) {
-		const logChannelId = await this.settings.get(
-			item.guild_id,
-			SettingsKeys.MOD_LOG_CHANNEL_ID,
-			'moderation.guild_settings',
-		);
+		const logChannelId = await this.settings.get(item.guild_id, SettingsKeys.MOD_LOG_CHANNEL_ID, 'guild_settings');
 		if (!logChannelId) {
 			throw new Error('no mod log channel configured');
 		}
@@ -54,12 +50,14 @@ export default class CaseLogManager {
 		};
 
 		if (item.log_message_id) {
-			await this.rest.patch(Routes.channelMessage(logChannelId, item.log_message_id), { embed });
+			await this.rest.patch(Routes.channelMessage(logChannelId as `${bigint}`, item.log_message_id), { embed });
 		} else {
-			const logMessage: APIMessage = await this.rest.post(Routes.channelMessages(logChannelId), { embed });
+			const logMessage: APIMessage = await this.rest.post(Routes.channelMessages(logChannelId as `${bigint}`), {
+				embed,
+			});
 
 			await this.sql`
-				update moderation.cases
+				update cases
 				set log_message_id = ${logMessage.id}
 				where guild_id = ${item.guild_id}
 					and case_id = ${item.case_id}`;
@@ -87,7 +85,7 @@ export default class CaseLogManager {
 		if (case_.context_message_id) {
 			const [contextMessage] = await this.sql`
 				select channel_id
-				from logs.messages
+				from messages
 				where id = ${case_.context_message_id}`;
 
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -108,7 +106,7 @@ export default class CaseLogManager {
 		if (case_.ref_id) {
 			const [reference] = await this.sql`
 				select log_message_id
-				from moderation.cases
+				from cases
 				where guild_id = ${case_.guild_id}
 					and case_id = ${case_.ref_id}`;
 

@@ -4,7 +4,7 @@ import API from '..';
 export default class Users {
 	public constructor(private readonly api: API) {}
 
-	public get(userId: string) {
+	public get(userId: `${bigint}`) {
 		return this.api.make<APIUser>('get', `/users/${userId}`);
 	}
 }

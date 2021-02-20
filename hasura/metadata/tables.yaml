@@ -1,52 +1,5 @@
 - table:
-    schema: logs
-    name: guild_settings
-  array_relationships:
-  - name: moderators
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: guild_moderators
-        column_mapping:
-          guild_id: guild_id
-  insert_permissions:
-  - role: user
-    permission:
-      check:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      columns:
-      - guild_id
-      - guild_log_channel_id
-      backend_only: false
-  select_permissions:
-  - role: user
-    permission:
-      columns:
-      - guild_id
-      - guild_log_channel_id
-      filter:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      allow_aggregations: true
-  update_permissions:
-  - role: user
-    permission:
-      columns:
-      - guild_log_channel_id
-      filter:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      check:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-- table:
-    schema: logs
+    schema: public
     name: messages
   array_relationships:
   - name: guild_moderators
@@ -78,7 +31,7 @@
             _eq: X-Hasura-User-Id
       allow_aggregations: true
 - table:
-    schema: moderation
+    schema: public
     name: cases
   object_relationships:
   - name: target
@@ -173,75 +126,7 @@
       timeout_sec: 60
     webhook: http://api:3500/api/hasura/hooks/mod_log
 - table:
-    schema: moderation
-    name: guild_settings
-  array_relationships:
-  - name: moderators
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: guild_moderators
-        column_mapping:
-          guild_id: guild_id
-  insert_permissions:
-  - role: user
-    permission:
-      check:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      columns:
-      - guild_id
-      - mod_log_channel_id
-      - mod_role_id
-      - member_log_channel_id
-      - mute_role_id
-      - tag_role_id
-      - embed_role_id
-      - emoji_role_id
-      - reaction_role_id
-      backend_only: false
-  select_permissions:
-  - role: user
-    permission:
-      columns:
-      - guild_id
-      - embed_role_id
-      - emoji_role_id
-      - member_log_channel_id
-      - mod_log_channel_id
-      - mod_role_id
-      - mute_role_id
-      - reaction_role_id
-      - tag_role_id
-      filter:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      allow_aggregations: true
-  update_permissions:
-  - role: user
-    permission:
-      columns:
-      - embed_role_id
-      - emoji_role_id
-      - member_log_channel_id
-      - mod_log_channel_id
-      - mod_role_id
-      - mute_role_id
-      - reaction_role_id
-      - tag_role_id
-      filter:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      check:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-- table:
-    schema: moderation
+    schema: public
     name: lockdowns
   array_relationships:
   - name: guild_moderators
@@ -269,7 +154,7 @@
             _eq: X-Hasura-User-Id
       allow_aggregations: true
 - table:
-    schema: moderation
+    schema: public
     name: role_states
   array_relationships:
   - name: guild_moderators
@@ -293,7 +178,7 @@
             _eq: X-Hasura-User-Id
       allow_aggregations: true
 - table:
-    schema: organizational
+    schema: public
     name: tags
   array_relationships:
   - name: guild_moderators
@@ -417,6 +302,15 @@
       columns:
       - guild_id
       - prefix
+      - guild_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - member_log_channel_id
+      - mute_role_id
+      - tag_role_id
+      - embed_role_id
+      - emoji_role_id
+      - reaction_role_id
       - locale
       - modules
       - repository_aliases
@@ -426,9 +320,18 @@
     permission:
       columns:
       - guild_id
+      - prefix
+      - guild_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - member_log_channel_id
+      - mute_role_id
+      - tag_role_id
+      - embed_role_id
+      - emoji_role_id
+      - reaction_role_id
       - locale
       - modules
-      - prefix
       - repository_aliases
       filter:
         moderators:
@@ -439,9 +342,18 @@
   - role: user
     permission:
       columns:
+      - prefix
+      - guild_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - member_log_channel_id
+      - mute_role_id
+      - tag_role_id
+      - embed_role_id
+      - emoji_role_id
+      - reaction_role_id
       - locale
       - modules
-      - prefix
       - repository_aliases
       filter:
         moderators:

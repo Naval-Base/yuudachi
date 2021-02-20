@@ -31,7 +31,7 @@ const api = new API(apiURL);
 const restBroker = createAmqpBroker('rest');
 const rest = new Rest(token, restBroker);
 const broker = new Amqp('gateway');
-const sql = postgres({ debug: console.log });
+const sql = postgres();
 
 container.register(API, { useValue: api });
 container.register(Rest, { useValue: rest });

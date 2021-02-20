@@ -29,7 +29,7 @@ function generateSQLResult(case_: Case) {
 	return [
 		[
 			`
-			insert into moderation.cases (
+			insert into cases (
 				case_id,
 				guild_id,
 				mod_id,
@@ -297,7 +297,7 @@ describe('update ', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-				update moderation.cases
+				update cases
 				set action_expiration = `,
 				`
 				where guild_id = `,
@@ -313,7 +313,7 @@ describe('update ', () => {
 			[
 				`
 			select *
-			from moderation.cases
+			from cases
 			where guild_id = `,
 				`
 				and case_id = `,
@@ -340,7 +340,7 @@ describe('update ', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-				update moderation.cases
+				update cases
 				set reason = `,
 				`
 				where guild_id = `,
@@ -356,7 +356,7 @@ describe('update ', () => {
 			[
 				`
 			select *
-			from moderation.cases
+			from cases
 			where guild_id = `,
 				`
 				and case_id = `,
@@ -383,7 +383,7 @@ describe('update ', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-				update moderation.cases
+				update cases
 				set context_message_id = `,
 				`
 				where guild_id = `,
@@ -399,7 +399,7 @@ describe('update ', () => {
 			[
 				`
 			select *
-			from moderation.cases
+			from cases
 			where guild_id = `,
 				`
 				and case_id = `,
@@ -426,7 +426,7 @@ describe('update ', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-				update moderation.cases
+				update cases
 				set ref_id = `,
 				`
 				where guild_id = `,
@@ -442,7 +442,7 @@ describe('update ', () => {
 			[
 				`
 			select *
-			from moderation.cases
+			from cases
 			where guild_id = `,
 				`
 				and case_id = `,
@@ -479,7 +479,7 @@ describe('soft delete', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-			update moderation.cases
+			update cases
 			set action_processed = true
 			where guild_id = `,
 				`
@@ -492,7 +492,7 @@ describe('soft delete', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-			update moderation.cases
+			update cases
 			set action_processed = true
 			where guild_id = `,
 				`
@@ -543,7 +543,7 @@ describe('soft delete', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-			update moderation.cases
+			update cases
 			set action_processed = true
 			where guild_id = `,
 				`
@@ -556,7 +556,7 @@ describe('soft delete', () => {
 		expect(mockedPostgres).toHaveBeenCalledWith(
 			[
 				`
-			update moderation.cases
+			update cases
 			set action_processed = true
 			where guild_id = `,
 				`

@@ -6,7 +6,7 @@ import { container } from 'tsyringe';
 
 import { send } from '../../../../util';
 
-export async function lift(message: APIMessage | APIInteraction, maybeChannel: Ok<string>, locale: string) {
+export async function lift(message: APIMessage | APIInteraction, maybeChannel: Ok<`${bigint}`>, locale: string) {
 	const api = container.resolve(API);
 
 	const channelMention = `<#${maybeChannel.value}>`;

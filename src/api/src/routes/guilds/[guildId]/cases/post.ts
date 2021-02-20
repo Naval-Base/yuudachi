@@ -70,7 +70,7 @@ export default class CreateCaseRoute extends Route {
 		const body: CasesPostBody = req.body as any;
 
 		for (const case_ of body.cases) {
-			case_.guildId = req.params.guildId;
+			case_.guildId = req.params.guildId as `${bigint}`;
 			created.push(this.caseManager.create(case_));
 		}
 

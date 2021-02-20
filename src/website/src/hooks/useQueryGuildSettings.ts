@@ -16,6 +16,14 @@ export function useQueryGuildSettings(id: string, enabled = false) {
 					guild: guild_settings_by_pk(guild_id: $guild_id) {
 						guild_id
 						prefix
+						mod_role_id
+						mod_log_channel_id
+						member_log_channel_id
+						mute_role_id
+						embed_role_id
+						emoji_role_id
+						reaction_role_id
+						tag_role_id
 						locale
 						modules
 						repository_aliases

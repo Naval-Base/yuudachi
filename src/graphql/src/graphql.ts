@@ -22,8 +22,34 @@ export type PartialGuild = {
   icon?: Maybe<Scalars['String']>;
   owner: Scalars['Boolean'];
   features: Array<Maybe<Scalars['String']>>;
-  permissions: Scalars['Int'];
-  permissions_new: Scalars['String'];
+  permissions: Scalars['String'];
+};
+
+export type PermissionOverwrite = {
+  __typename?: 'PermissionOverwrite';
+  id: Scalars['String'];
+  type: Scalars['Int'];
+  allow: Scalars['String'];
+  deny: Scalars['String'];
+};
+
+export type GuildChannel = {
+  __typename?: 'GuildChannel';
+  id: Scalars['String'];
+  type: Scalars['Int'];
+  guild_id?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['Int']>;
+  permission_overwrites?: Maybe<Array<Maybe<PermissionOverwrite>>>;
+  name?: Maybe<Scalars['String']>;
+  topic?: Maybe<Scalars['String']>;
+  nsfw?: Maybe<Scalars['Boolean']>;
+  last_message_id?: Maybe<Scalars['String']>;
+  bitrate?: Maybe<Scalars['Int']>;
+  user_limit?: Maybe<Scalars['Int']>;
+  rate_limit_per_user?: Maybe<Scalars['Int']>;
+  icon?: Maybe<Scalars['String']>;
+  parent_id?: Maybe<Scalars['String']>;
+  last_pin_timestamp?: Maybe<Scalars['String']>;
 };
 
 export type GuildRoleTag = {
@@ -40,11 +66,27 @@ export type GuildRole = {
   color: Scalars['Int'];
   hoist: Scalars['Boolean'];
   position: Scalars['Int'];
-  permissions: Scalars['Int'];
-  permissions_new: Scalars['String'];
+  permissions: Scalars['String'];
   managed: Scalars['Boolean'];
   mentionable: Scalars['Boolean'];
   tags?: Maybe<Array<Maybe<GuildRoleTag>>>;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String'];
+  username: Scalars['String'];
+  discriminator: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
+  bot?: Maybe<Scalars['Boolean']>;
+  system?: Maybe<Scalars['Boolean']>;
+  mfa_enabled?: Maybe<Scalars['Boolean']>;
+  locale?: Maybe<Scalars['String']>;
+  verified?: Maybe<Scalars['Boolean']>;
+  email?: Maybe<Scalars['String']>;
+  flags?: Maybe<Scalars['Int']>;
+  premium_type?: Maybe<Scalars['Int']>;
+  public_flags?: Maybe<Scalars['Int']>;
 };
 
 export type Query = {
@@ -52,7 +94,9 @@ export type Query = {
   guild?: Maybe<PartialGuild>;
   guilds: Array<Maybe<PartialGuild>>;
   guilds_oauth: Array<Maybe<PartialGuild>>;
+  guild_channels?: Maybe<Array<Maybe<GuildChannel>>>;
   guild_roles?: Maybe<Array<Maybe<GuildRole>>>;
+  user?: Maybe<User>;
 };
 
 
@@ -61,8 +105,18 @@ export type QueryGuildArgs = {
 };
 
 
+export type QueryGuild_ChannelsArgs = {
+  guild_id: Scalars['String'];
+};
+
+
 export type QueryGuild_RolesArgs = {
   guild_id: Scalars['String'];
+};
+
+
+export type QueryUserArgs = {
+  user_id: Scalars['String'];
 };
 
 
@@ -146,9 +200,12 @@ export type ResolversTypes = {
   PartialGuild: ResolverTypeWrapper<PartialGuild>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  PermissionOverwrite: ResolverTypeWrapper<PermissionOverwrite>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  GuildChannel: ResolverTypeWrapper<GuildChannel>;
   GuildRoleTag: ResolverTypeWrapper<GuildRoleTag>;
   GuildRole: ResolverTypeWrapper<GuildRole>;
+  User: ResolverTypeWrapper<User>;
   Query: ResolverTypeWrapper<{}>;
 };
 
@@ -157,9 +214,12 @@ export type ResolversParentTypes = {
   PartialGuild: PartialGuild;
   String: Scalars['String'];
   Boolean: Scalars['Boolean'];
+  PermissionOverwrite: PermissionOverwrite;
   Int: Scalars['Int'];
+  GuildChannel: GuildChannel;
   GuildRoleTag: GuildRoleTag;
   GuildRole: GuildRole;
+  User: User;
   Query: {};
 };
 
@@ -169,8 +229,34 @@ export type PartialGuildResolvers<ContextType = Context, ParentType extends Reso
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   features?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
-  permissions?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  permissions_new?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  permissions?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PermissionOverwriteResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PermissionOverwrite'] = ResolversParentTypes['PermissionOverwrite']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  allow?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  deny?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GuildChannelResolvers<ContextType = Context, ParentType extends ResolversParentTypes['GuildChannel'] = ResolversParentTypes['GuildChannel']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  guild_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  position?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  permission_overwrites?: Resolver<Maybe<Array<Maybe<ResolversTypes['PermissionOverwrite']>>>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  topic?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  nsfw?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  last_message_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  bitrate?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  user_limit?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  rate_limit_per_user?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  parent_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  last_pin_timestamp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -187,11 +273,27 @@ export type GuildRoleResolvers<ContextType = Context, ParentType extends Resolve
   color?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   hoist?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   position?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  permissions?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  permissions_new?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  permissions?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   managed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   mentionable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['GuildRoleTag']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  discriminator?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  bot?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  system?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  mfa_enabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  locale?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  verified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  flags?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  premium_type?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  public_flags?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -199,13 +301,18 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   guild?: Resolver<Maybe<ResolversTypes['PartialGuild']>, ParentType, ContextType, RequireFields<QueryGuildArgs, 'guild_id'>>;
   guilds?: Resolver<Array<Maybe<ResolversTypes['PartialGuild']>>, ParentType, ContextType>;
   guilds_oauth?: Resolver<Array<Maybe<ResolversTypes['PartialGuild']>>, ParentType, ContextType>;
+  guild_channels?: Resolver<Maybe<Array<Maybe<ResolversTypes['GuildChannel']>>>, ParentType, ContextType, RequireFields<QueryGuild_ChannelsArgs, 'guild_id'>>;
   guild_roles?: Resolver<Maybe<Array<Maybe<ResolversTypes['GuildRole']>>>, ParentType, ContextType, RequireFields<QueryGuild_RolesArgs, 'guild_id'>>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'user_id'>>;
 };
 
 export type Resolvers<ContextType = Context> = {
   PartialGuild?: PartialGuildResolvers<ContextType>;
+  PermissionOverwrite?: PermissionOverwriteResolvers<ContextType>;
+  GuildChannel?: GuildChannelResolvers<ContextType>;
   GuildRoleTag?: GuildRoleTagResolvers<ContextType>;
   GuildRole?: GuildRoleResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

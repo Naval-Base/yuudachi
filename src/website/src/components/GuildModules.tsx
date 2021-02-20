@@ -1,7 +1,7 @@
 import { ChangeEvent, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useToast, Center, Grid, Box } from '@chakra-ui/react';
+import { useToast, Center, Grid, Box, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { CommandModules } from '@yuudachi/types';
 
@@ -64,7 +64,6 @@ const GuildModules = () => {
 	const handleOnSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		await handleSubmit(async (values: Record<CommandModules, boolean>) => {
-			console.log(values);
 			const payload = {
 				modules: Object.entries(values).reduce(
 					(acc, [key, value]) => (value ? acc | Number(key) : acc & ~Number(key)),
@@ -85,6 +84,10 @@ const GuildModules = () => {
 			});
 		})(event);
 	};
+
+	if (!user.guilds?.includes(id as string)) {
+		return <Text textAlign="center">You need to be a moderator to see the guild modules.</Text>;
+	}
 
 	if (!user.loggedIn || isLoadingGuildSettings) {
 		return (

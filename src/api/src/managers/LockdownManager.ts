@@ -9,8 +9,8 @@ const { kSQL } = Tokens;
 
 export interface RawLockdown {
 	expiration: string;
-	channel_id: string;
-	guild_id: string;
+	channel_id: `${bigint}`;
+	guild_id: `${bigint}`;
 }
 
 export type PatchLockdown = Exclude<Lockdown, 'guildId'>;
@@ -34,7 +34,7 @@ export default class LockdownManager {
 		});
 
 		const [newLockdown] = await this.sql<{ mod_tag: string; overwrites: APIOverwrite[] }>`
-			insert into moderation.lockdowns (
+			insert into lockdowns (
 				guild_id,
 				channel_id,
 				expiration,
@@ -57,10 +57,10 @@ export default class LockdownManager {
 		return lockdown;
 	}
 
-	public async delete(channelId: string) {
+	public async delete(channelId: `${bigint}`) {
 		const [channelOverwrites] = await this.sql<{ overwrites: APIOverwrite[] }>`
 			select overwrites
-			from moderation.lockdowns
+			from lockdowns
 			where channel_id = ${channelId}`;
 
 		for (const overwrite of channelOverwrites.overwrites) {
@@ -73,7 +73,7 @@ export default class LockdownManager {
 
 		await this.sql`
 			delete
-			from moderation.lockdowns
+			from lockdowns
 			where channel_id = ${channelId}`;
 
 		return channelId;

@@ -7,8 +7,7 @@ export default gql`
 		icon: String
 		owner: Boolean!
 		features: [String]!
-		permissions: Int!
-		permissions_new: String!
+		permissions: String!
 	}
 
 	type PermissionOverwrite {
@@ -48,8 +47,7 @@ export default gql`
 		color: Int!
 		hoist: Boolean!
 		position: Int!
-		permissions: Int!
-		permissions_new: String!
+		permissions: String!
 		managed: Boolean!
 		mentionable: Boolean!
 		tags: [GuildRoleTag]

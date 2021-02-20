@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import API from '@yuudachi/api';
 
-export default async (_?: any, args?: { guild_id?: string }) => {
+export default async (_?: any, args?: { guild_id?: `${bigint}` }) => {
 	const api = container.resolve(API);
 	const guilds = await api.guilds.get();
 
