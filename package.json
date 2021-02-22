@@ -25,7 +25,7 @@
 		"babel-plugin-transform-typescript-metadata": "^0.3.1",
 		"eslint": "^7.20.0",
 		"eslint-config-marine": "^8.1.0",
-		"eslint-config-prettier": "^7.2.0",
+		"eslint-config-prettier": "^8.0.0",
 		"eslint-plugin-prettier": "^3.3.1",
 		"eslint-plugin-react": "^7.22.0",
 		"eslint-plugin-react-hooks": "^4.2.0",
