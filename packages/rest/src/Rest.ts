@@ -1,5 +1,5 @@
 import { Amqp } from '@spectacles/brokers';
-import FormData from '@discordjs/form-data';
+import FormData from 'form-data';
 
 import HttpException from './HttpException';
 

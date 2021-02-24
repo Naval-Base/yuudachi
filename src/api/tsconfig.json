@@ -8,7 +8,7 @@
 	"references": [
 		{ "path": "../../packages/core" },
 		{ "path": "../../packages/http" },
-		{ "path": "../../packages/types" },
-		{ "path": "../../packages/rest" }
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/types" }
 	]
 }

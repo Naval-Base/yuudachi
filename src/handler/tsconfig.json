@@ -6,8 +6,8 @@
 	},
 	"include": ["./src", "./bin"],
 	"references": [
+		{ "path": "../../packages/api" },
 		{ "path": "../../packages/core" },
-		{ "path": "../../packages/types" },
-		{ "path": "../../packages/api" }
+		{ "path": "../../packages/types" }
 	]
 }

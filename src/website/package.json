@@ -24,19 +24,19 @@
 		"cross-fetch": "^3.0.6",
 		"dayjs": "^1.10.4",
 		"discord-markdown": "^2.4.2",
-		"framer-motion": "^3.6.2",
+		"framer-motion": "^3.7.0",
 		"next": "^10.0.7",
 		"next-cookie": "^2.6.0",
 		"react": "^17.0.1",
 		"react-autosize-textarea": "^7.1.0",
-		"react-datepicker": "^3.5.0",
+		"react-datepicker": "^3.6.0",
 		"react-dom": "^17.0.1",
-		"react-hook-form": "^6.15.2",
+		"react-hook-form": "^6.15.4",
 		"react-icons": "^4.2.0",
-		"react-query": "^3.9.8",
+		"react-query": "^3.12.0",
 		"react-table": "^7.6.3",
 		"sass": "^1.32.8",
-		"sharp": "^0.27.1",
+		"sharp": "^0.27.2",
 		"tslib": "^2.1.0",
 		"universal-cookie": "^4.0.4",
 		"zustand": "^3.3.2"
@@ -47,6 +47,6 @@
 		"@types/react-datepicker": "^3.1.5",
 		"@types/react-table": "^7.0.28",
 		"discord-api-types": "^0.12.1",
-		"typescript": "^4.2.1-rc"
+		"typescript": "^4.2.2"
 	}
 }

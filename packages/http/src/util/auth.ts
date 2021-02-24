@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import fetch from 'node-fetch';
-import FormData from '@discordjs/form-data';
+import FormData from 'form-data';
 import { container } from 'tsyringe';
 import { Config } from '@yuudachi/types';
 import { Tokens } from '@yuudachi/core';
