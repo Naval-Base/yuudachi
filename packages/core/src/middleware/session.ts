@@ -19,14 +19,16 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 				access_token: string;
 			};
 
-			const [existingUser] = await sql<{
-				id: string;
-				user_id: string;
-				avatar: string;
-				email: string;
-				username: string;
-				expires_at: string;
-			}>`
+			const [existingUser] = await sql<
+				{
+					id: string;
+					user_id: string;
+					avatar: string;
+					email: string;
+					username: string;
+					expires_at: string;
+				}[]
+			>`
 				select connections.id, user_id, avatar, email, username, expires_at
 				from connections
 				join users

@@ -124,7 +124,7 @@ function list(message: APIMessage, locale: string, current: string[]) {
 }
 
 async function fetchAliases(guild: string, sql: Sql<any>): Promise<string[]> {
-	const [result] = await sql<{ repository_aliases: string[] }>`
+	const [result] = await sql<{ repository_aliases: string[] }[]>`
 		select repository_aliases
 		from guild_settings
 		where guild_id = ${guild};`;

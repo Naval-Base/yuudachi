@@ -83,16 +83,14 @@ export default class CaseLogManager {
 		}
 
 		if (case_.context_message_id) {
-			const [contextMessage] = await this.sql`
+			const [contextMessage] = await this.sql<{ channel_id: string }[]>`
 				select channel_id
 				from messages
 				where id = ${case_.context_message_id}`;
 
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
-				msg += `\n**Context:** [Beam me up, Yuu](https://discordapp.com/channels/${case_.guild_id}/${
-					(contextMessage as { channel_id: string }).channel_id
-				}/${case_.context_message_id})`;
+				msg += `\n**Context:** [Beam me up, Yuu](https://discordapp.com/channels/${case_.guild_id}/${contextMessage.channel_id}/${case_.context_message_id})`;
 			}
 		}
 
@@ -104,7 +102,7 @@ export default class CaseLogManager {
 		}
 
 		if (case_.ref_id) {
-			const [reference] = await this.sql`
+			const [reference] = await this.sql<{ log_message_id: string }[]>`
 				select log_message_id
 				from cases
 				where guild_id = ${case_.guild_id}
@@ -112,9 +110,7 @@ export default class CaseLogManager {
 
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (Reflect.has(reference ?? {}, 'log_message_id')) {
-				msg += `\n**Ref case:** [${case_.ref_id}](https://discordapp.com/channels/${case_.guild_id}/${logChannelId}/${
-					(reference as { log_message_id: string }).log_message_id
-				})`;
+				msg += `\n**Ref case:** [${case_.ref_id}](https://discordapp.com/channels/${case_.guild_id}/${logChannelId}/${reference.log_message_id})`;
 			}
 		}
 		return msg;

@@ -23,7 +23,7 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const [settings] = await this.sql<GuildSettings>`
+		const [settings] = await this.sql<GuildSettings[]>`
 			select *
 			from guild_settings
 			where guild_id = ${message.guild_id}`;

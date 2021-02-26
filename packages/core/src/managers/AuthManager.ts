@@ -82,9 +82,9 @@ export class AuthManager {
 	public async verify(token: string, ignoreExpiration = false): Promise<string> {
 		const data = jwt.verify(token, this.config.secretKey, { ignoreExpiration }) as AccessTokenData;
 
-		const [user] = (await this.sql`select token_reset_at from users where id = ${data.sub}`) as [
-			{ token_reset_at: string },
-		];
+		const [user] = await this.sql<
+			{ token_reset_at: string }[]
+		>`select token_reset_at from users where id = ${data.sub}`;
 
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!user) throw new Error('invalid user');
@@ -96,10 +96,10 @@ export class AuthManager {
 	}
 
 	public async create(userId: string): Promise<AuthCredentials> {
-		const [{ token_reset_at }] = (await this.sql`
+		const [{ token_reset_at }] = await this.sql<{ token_reset_at: string }[]>`
 			update users set token_reset_at = now()
 			where id = ${userId}
-			returning token_reset_at`) as [{ token_reset_at: string }];
+			returning token_reset_at`;
 
 		// Intentionally date back iat by 2 seconds
 		const iat = Math.ceil(new Date(token_reset_at).getTime() / 1000 - 2);

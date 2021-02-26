@@ -17,7 +17,7 @@ export async function search(message: APIMessage, args: Args, locale: string) {
 		throw new Error(i18next.t('command.tag.common.errors.no_query', { lng: locale }));
 	}
 
-	const tags = await sql<{ name: string; aliases: string[] }>`
+	const tags = await sql<{ name: string; aliases: string[] }[]>`
 		select name, aliases
 		from tags
 		where guild_id = ${message.guild_id!}`;

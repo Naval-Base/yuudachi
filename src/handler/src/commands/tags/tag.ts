@@ -41,7 +41,7 @@ export default class implements Command {
 					throw new Error(i18next.t('command.tag.common.errors.no_name', { lng: locale }));
 				}
 
-				const [tag] = await this.sql<{ content: string }>`
+				const [tag] = await this.sql<{ content: string }[]>`
 					select content
 					from tags
 					where name = ${name}

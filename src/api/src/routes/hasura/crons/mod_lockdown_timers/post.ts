@@ -15,7 +15,7 @@ export default class HasuraModLockdownTimersCron extends Route {
 	}
 
 	public async handle(_: Request, res: Response) {
-		const currentLockdowns = await this.sql<{ channel_id: `${bigint}`; expiration: string }>`
+		const currentLockdowns = await this.sql<{ channel_id: `${bigint}`; expiration: string }[]>`
 			select channel_id, expiration
 			from lockdowns`;
 

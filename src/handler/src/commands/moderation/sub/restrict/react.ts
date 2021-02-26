@@ -23,7 +23,7 @@ export async function react(
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const api = container.resolve(API);
 
-	const [roles] = await sql<{ reaction_role_id: `${bigint}` | '' }>`
+	const [roles] = await sql<{ reaction_role_id: `${bigint}` | '' }[]>`
 		select reaction_role_id
 		from guild_settings
 		where guild_id = ${message.guild_id!}
@@ -33,7 +33,7 @@ export async function react(
 		throw new Error(i18next.t('command.mod.restrict.react.errors.no_role'));
 	}
 
-	const [action] = await sql<{ action_processed: boolean }>`
+	const [action] = await sql<{ action_processed: boolean }[]>`
 		select action_processed
 		from cases
 		where guild_id = ${message.guild_id!}

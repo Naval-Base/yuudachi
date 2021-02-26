@@ -22,7 +22,7 @@ export default class GetOAuthGuildsRoute extends Route {
 			return next(unauthorized());
 		}
 
-		const [connection] = await this.sql<{ access_token: string }>`
+		const [connection] = await this.sql<{ access_token: string }[]>`
 			select access_token
 			from connections
 			where user_id = ${userId}`;

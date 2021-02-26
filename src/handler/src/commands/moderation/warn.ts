@@ -36,7 +36,7 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const [data] = await this.sql<{ mod_role_id: `${bigint}` | null }>`
+		const [data] = await this.sql<{ mod_role_id: `${bigint}` | null }[]>`
 			select mod_role_id
 			from guild_settings
 			where guild_id = ${message.guild_id}`;

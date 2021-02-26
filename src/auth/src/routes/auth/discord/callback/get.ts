@@ -47,7 +47,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 			},
 		}).then((r) => r.json());
 
-		let [user] = await this.sql<{ id: string }>`
+		let [user] = await this.sql<{ id: string }[]>`
 			select users.id
 			from users
 			join connections
@@ -63,7 +63,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 					expires_at = ${new Date(Date.now() + response.expires_in * 1000).toISOString()}
 				where id = ${me.id}`;
 		} else {
-			[user] = await this.sql<{ id: string }>`
+			[user] = await this.sql<{ id: string }[]>`
 				insert into users (email, username)
 				values (${me.email}, ${me.username})
 				returning id;

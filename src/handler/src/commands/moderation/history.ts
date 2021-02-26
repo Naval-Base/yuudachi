@@ -116,7 +116,7 @@ export default class implements Command {
 			});
 		}
 
-		const cases = await this.sql<{ case_id: number; action: number; reason: string; created_at: Date }>`
+		const cases = await this.sql<{ case_id: number; action: number; reason: string; created_at: Date }[]>`
 			select case_id, action, reason, created_at
 			from cases
 			where guild_id = ${message.guild_id}

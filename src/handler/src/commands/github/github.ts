@@ -94,7 +94,7 @@ export default class GitHub implements Command {
 	}
 
 	private async fetchAliases(guild: string): Promise<Map<string, RepositoryEntry>> {
-		const [result] = await this.sql<{ repository_aliases: string[] }>`
+		const [result] = await this.sql<{ repository_aliases: string[] }[]>`
 			select repository_aliases
 			from guild_settings
 			where guild_id = ${guild}

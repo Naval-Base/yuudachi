@@ -50,11 +50,13 @@ const messageCreate = async () => {
 	>) {
 		ack();
 
-		const [data] = await sql<{
-			prefix: string | null;
-			locale: string | null;
-			modules: number | null;
-		}>`select prefix, locale, modules
+		const [data] = await sql<
+			{
+				prefix: string | null;
+				locale: string | null;
+				modules: number | null;
+			}[]
+		>`select prefix, locale, modules
 			from guild_settings
 			where guild_id = ${message.guild_id ?? null}`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -128,10 +130,12 @@ const interactionCreate = async () => {
 		ack();
 
 		const out = parseInteraction(interaction.data?.options ?? []);
-		const [data] = await sql<{
-			locale: string | null;
-			modules: number | null;
-		}>`select locale, modules
+		const [data] = await sql<
+			{
+				locale: string | null;
+				modules: number | null;
+			}[]
+		>`select locale, modules
 			from guild_settings
 			where guild_id = ${interaction.guild_id}`;
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

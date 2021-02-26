@@ -158,7 +158,7 @@ export default class CaseManager {
 	}
 
 	public async delete(guildId: `${bigint}`, caseId: number, manual = false) {
-		const [case_] = await this.sql<RawCase>`
+		const [case_] = await this.sql<RawCase[]>`
 			select *
 			from cases
 			where guild_id = ${guildId}

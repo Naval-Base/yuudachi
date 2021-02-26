@@ -13,7 +13,7 @@ export async function unrole(message: APIMessage | APIInteraction, caseId: strin
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const api = container.resolve(API);
 
-	const [action] = await sql<{ action_processed: boolean }>`
+	const [action] = await sql<{ action_processed: boolean }[]>`
 		select action_processed
 		from cases
 		where guild_id = ${message.guild_id!}
