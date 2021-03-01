@@ -13,7 +13,7 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"devDependencies": {
-		"@babel/core": "^7.13.1",
+		"@babel/core": "^7.13.8",
 		"@babel/plugin-proposal-decorators": "^7.13.5",
 		"@babel/preset-env": "^7.13.5",
 		"@babel/preset-typescript": "^7.13.0",
