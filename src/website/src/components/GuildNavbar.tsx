@@ -6,19 +6,22 @@ import { FiMenu, FiX } from 'react-icons/fi';
 const GuildNavbar = () => {
 	const router = useRouter();
 	const { isOpen, onToggle } = useDisclosure();
-	const { isOpen: isOpenModules, onToggle: onToggleModules } = useDisclosure();
+	const { isOpen: isOpenModules, onToggle: onToggleModules } = useDisclosure({
+		defaultIsOpen: router.route === '/guilds/[id]/modules/moderation',
+	});
 
 	const { id } = router.query;
 
 	return (
 		<Flex as="nav" align="center" justify="space-around" wrap="wrap">
-			<Flex d={{ base: 'block', lg: 'none' }}>
+			<Flex d={{ base: 'block', lg: 'none' }} mb={{ base: 2, lg: 0 }}>
 				<Heading size="md">Dashboard Navigation</Heading>
 			</Flex>
 
 			<Flex align="center">
 				<IconButton
 					d={{ base: 'flex', lg: 'none' }}
+					mb={{ base: 2, lg: 0 }}
 					aria-label="Open menu"
 					variant="ghost"
 					icon={isOpen ? <FiX /> : <FiMenu />}
