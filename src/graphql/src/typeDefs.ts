@@ -69,8 +69,33 @@ export default gql`
 		public_flags: Int
 	}
 
+	type Case {
+		caseId: Int!
+		guildId: String!
+		targetId: String!
+		moderatorId: String!
+		action: Int!
+		roleId: String
+		actionExpiration: String
+		reason: String
+		deleteMessageDays: String
+		contextMessageId: String
+		referenceId: Int
+	}
+
+	type GuildActionInput {
+		guild_id: String!
+		action: Int!
+		reason: String
+		moderatorId: String!
+		targetId: String!
+		contextMessageId: String
+		referenceId: Int
+	}
+
 	type Query {
 		guild(guild_id: String!): PartialGuild
+		guild_action(action: GuildActionInput): [Case]!
 		guilds: [PartialGuild]!
 		guilds_oauth: [PartialGuild]!
 		guild_channels(guild_id: String!): [GuildChannel]

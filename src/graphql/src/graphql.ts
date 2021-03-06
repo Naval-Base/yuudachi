@@ -89,9 +89,36 @@ export type User = {
   public_flags?: Maybe<Scalars['Int']>;
 };
 
+export type Case = {
+  __typename?: 'Case';
+  caseId: Scalars['Int'];
+  guildId: Scalars['String'];
+  targetId: Scalars['String'];
+  moderatorId: Scalars['String'];
+  action: Scalars['Int'];
+  roleId?: Maybe<Scalars['String']>;
+  actionExpiration?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
+  deleteMessageDays?: Maybe<Scalars['String']>;
+  contextMessageId?: Maybe<Scalars['String']>;
+  referenceId?: Maybe<Scalars['Int']>;
+};
+
+export type GuildActionInput = {
+  __typename?: 'GuildActionInput';
+  guild_id: Scalars['String'];
+  action: Scalars['Int'];
+  reason?: Maybe<Scalars['String']>;
+  moderatorId: Scalars['String'];
+  targetId: Scalars['String'];
+  contextMessageId?: Maybe<Scalars['String']>;
+  referenceId?: Maybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   guild?: Maybe<PartialGuild>;
+  guild_action: Array<Maybe<Case>>;
   guilds: Array<Maybe<PartialGuild>>;
   guilds_oauth: Array<Maybe<PartialGuild>>;
   guild_channels?: Maybe<Array<Maybe<GuildChannel>>>;
@@ -102,6 +129,11 @@ export type Query = {
 
 export type QueryGuildArgs = {
   guild_id: Scalars['String'];
+};
+
+
+export type QueryGuild_ActionArgs = {
+  action?: Maybe<GuildActionInput>;
 };
 
 
@@ -206,6 +238,8 @@ export type ResolversTypes = {
   GuildRoleTag: ResolverTypeWrapper<GuildRoleTag>;
   GuildRole: ResolverTypeWrapper<GuildRole>;
   User: ResolverTypeWrapper<User>;
+  Case: ResolverTypeWrapper<Case>;
+  GuildActionInput: ResolverTypeWrapper<GuildActionInput>;
   Query: ResolverTypeWrapper<{}>;
 };
 
@@ -220,6 +254,8 @@ export type ResolversParentTypes = {
   GuildRoleTag: GuildRoleTag;
   GuildRole: GuildRole;
   User: User;
+  Case: Case;
+  GuildActionInput: GuildActionInput;
   Query: {};
 };
 
@@ -297,8 +333,35 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CaseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Case'] = ResolversParentTypes['Case']> = {
+  caseId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  guildId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  targetId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  moderatorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  action?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  roleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  actionExpiration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deleteMessageDays?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contextMessageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  referenceId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GuildActionInputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['GuildActionInput'] = ResolversParentTypes['GuildActionInput']> = {
+  guild_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  action?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  moderatorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  targetId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  contextMessageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  referenceId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   guild?: Resolver<Maybe<ResolversTypes['PartialGuild']>, ParentType, ContextType, RequireFields<QueryGuildArgs, 'guild_id'>>;
+  guild_action?: Resolver<Array<Maybe<ResolversTypes['Case']>>, ParentType, ContextType, RequireFields<QueryGuild_ActionArgs, never>>;
   guilds?: Resolver<Array<Maybe<ResolversTypes['PartialGuild']>>, ParentType, ContextType>;
   guilds_oauth?: Resolver<Array<Maybe<ResolversTypes['PartialGuild']>>, ParentType, ContextType>;
   guild_channels?: Resolver<Maybe<Array<Maybe<ResolversTypes['GuildChannel']>>>, ParentType, ContextType, RequireFields<QueryGuild_ChannelsArgs, 'guild_id'>>;
@@ -313,6 +376,8 @@ export type Resolvers<ContextType = Context> = {
   GuildRoleTag?: GuildRoleTagResolvers<ContextType>;
   GuildRole?: GuildRoleResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  Case?: CaseResolvers<ContextType>;
+  GuildActionInput?: GuildActionInputResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 
