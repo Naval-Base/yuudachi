@@ -1,5 +1,8 @@
+import { CaseAction } from '@yuudachi/types';
+
 import { Context } from '../interfaces/Context';
 import guilds from './query/guilds';
+import guild_action from './query/guild_action';
 import guilds_oauth from './query/guilds_oauth';
 import guild_channels from './query/guild_channels';
 import guild_roles from './query/guild_roles';
@@ -8,6 +11,18 @@ import user from './query/user';
 export default {
 	Query: {
 		guild: (_: any, { guild_id }: { guild_id: `${bigint}` }) => guilds({}, { guild_id }),
+		guild_action: (
+			_: any,
+			args: {
+				guild_id: `${bigint}`;
+				action: CaseAction;
+				reason?: string;
+				moderatorId: `${bigint}`;
+				targetId: `${bigint}`;
+				contextMessageId?: `${bigint}`;
+				referenceId?: number;
+			},
+		) => guild_action({}, args),
 		guilds: () => guilds(),
 		guilds_oauth: (_: any, __: any, ctx: Context) => guilds_oauth({}, {}, ctx),
 		guild_channels: (_: any, { guild_id }: { guild_id: `${bigint}` }) => guild_channels({}, { guild_id }),

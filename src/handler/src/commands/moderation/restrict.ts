@@ -113,7 +113,10 @@ export default class implements Command {
 			}
 
 			default: {
-				void send(message, {}, 2);
+				void send(message, {
+					content: i18next.t('command.common.errors.no_valid_sub_command', { lng: locale }),
+					flags: 64,
+				});
 				break;
 			}
 		}

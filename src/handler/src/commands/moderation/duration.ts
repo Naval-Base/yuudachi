@@ -64,14 +64,10 @@ export default class implements Command {
 				actionExpiration: new Date(Date.now() + parsedDuration),
 			});
 
-			void send(
-				message,
-				{
-					content: i18next.t('command.mod.duration.success', { lng: locale, case: caseId }),
-					flags: hide ? 64 : undefined,
-				},
-				hide ? 3 : 4,
-			);
+			void send(message, {
+				content: i18next.t('command.mod.duration.success', { lng: locale, case: caseId }),
+				flags: hide ? 64 : undefined,
+			});
 		} catch (e) {
 			throw new Error(i18next.t('command.mod.duration.errors.failure', { lng: locale, case: caseId }));
 		}

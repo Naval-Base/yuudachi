@@ -18,13 +18,9 @@ export default class implements Command {
 	public execute(message: APIMessage | APIInteraction, args: Args, locale: string) {
 		const hide = this.parse(args);
 
-		void send(
-			message,
-			{
-				content: i18next.t('command.utility.ping.success', { lng: locale }),
-				flags: hide ? 64 : undefined,
-			},
-			hide ? 3 : 4,
-		);
+		void send(message, {
+			content: i18next.t('command.utility.ping.success', { lng: locale }),
+			flags: hide ? 64 : undefined,
+		});
 	}
 }

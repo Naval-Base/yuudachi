@@ -59,14 +59,10 @@ export default class implements Command {
 				referenceId: refId,
 			});
 
-			void send(
-				message,
-				{
-					content: i18next.t('command.mod.reference.success', { lng: locale, case: caseId, ref: refId }),
-					flags: hide ? 64 : undefined,
-				},
-				hide ? 3 : 4,
-			);
+			void send(message, {
+				content: i18next.t('command.mod.reference.success', { lng: locale, case: caseId, ref: refId }),
+				flags: hide ? 64 : undefined,
+			});
 		} catch (e) {
 			throw new Error(i18next.t('command.mod.reference.errors.failure', { lng: locale, case: caseId, ref: refId }));
 		}

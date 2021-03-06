@@ -61,14 +61,10 @@ export default class implements Command {
 				reason,
 			});
 
-			void send(
-				message,
-				{
-					content: i18next.t('command.mod.reason.success', { lng: locale, case: caseId }),
-					flags: hide ? 64 : undefined,
-				},
-				hide ? 3 : 4,
-			);
+			void send(message, {
+				content: i18next.t('command.mod.reason.success', { lng: locale, case: caseId }),
+				flags: hide ? 64 : undefined,
+			});
 		} catch (e) {
 			throw new Error(i18next.t('command.mod.reason.errors.failure', { lng: locale, case: caseId }));
 		}

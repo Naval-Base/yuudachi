@@ -146,26 +146,28 @@ const interactionCreate = async () => {
 		const command = commands.get(interaction.data?.name ?? '');
 		if (command && interaction.data) {
 			if (!has(modules, command.category)) {
-				void send(interaction, {}, 2);
+				void send(interaction, {
+					content: i18next.t('command.common.errors.no_enabled_module', { module: command.category, lng: locale }),
+					flags: 64,
+				});
 				continue;
 			}
 			try {
 				await command.execute(interaction, new Args(out), locale, ExecutionContext['INTERACTION']);
 			} catch (error) {
-				void send(
-					interaction,
-					{
-						content: error.message,
-						flags: 64,
-					},
-					3,
-				);
+				void send(interaction, {
+					content: error.message,
+					flags: 64,
+				});
 			}
 
 			continue;
 		}
 
-		void send(interaction, {}, 2);
+		void send(interaction, {
+			content: i18next.t('command.common.errors.generic', { lng: locale }),
+			flags: 64,
+		});
 		continue;
 	}
 };

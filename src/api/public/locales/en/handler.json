@@ -2,6 +2,8 @@
 	"command": {
 		"common": {
 			"errors": {
+				"generic": "Something went wrong.",
+				"no_enabled_module": "The {{ module }} is not enabled on this guild.",
 				"no_user_id": "No user Id provided.",
 				"invalid_user_id": "**{{- id}}** is not a valid user Id.",
 				"no_channel_id": "No channel Id provided.",
@@ -11,6 +13,7 @@
 				"target_not_found": "The given member is not in this guild.",
 				"duration_format": "Wrong duration format.",
 				"no_sub_command": "No sub command provided.",
+				"no_valid_sub_command": "No valid sub command provided.",
 				"no_mod_role": "This command can only be used by moderators."
 			}
 		},
