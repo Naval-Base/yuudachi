@@ -17,7 +17,7 @@
 		"@spectacles/brokers": "^0.8.4",
 		"common-tags": "^1.8.0",
 		"dayjs": "^1.10.4",
-		"i18next": "^19.9.0",
+		"i18next": "^19.9.1",
 		"i18next-http-backend": "^1.1.1",
 		"lexure": "^0.17.0",
 		"node-fetch": "2.6.1",
