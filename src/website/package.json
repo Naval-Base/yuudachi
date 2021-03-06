@@ -39,7 +39,7 @@
 		"sharp": "^0.27.2",
 		"tslib": "^2.1.0",
 		"universal-cookie": "^4.0.4",
-		"zustand": "^3.3.2"
+		"zustand": "^3.3.3"
 	},
 	"devDependencies": {
 		"@types/node": "^14.14.31",
