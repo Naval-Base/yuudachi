@@ -7,7 +7,7 @@ const Guilds = dynamic(() => import('~/components/Guilds'));
 
 import { useUserStore } from '~/store/index';
 
-const UserPage = () => {
+const Dashboard = () => {
 	const user = useUserStore();
 	const router = useRouter();
 
@@ -51,4 +51,4 @@ const UserPage = () => {
 	);
 };
 
-export default UserPage;
+export default Dashboard;

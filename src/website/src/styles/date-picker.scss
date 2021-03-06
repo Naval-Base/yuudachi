@@ -20,14 +20,17 @@
 	border: 1px solid;
 	border-color: #E2E8F0;
 }
+
 .react-datepicker__input-container > input:hover {
 	border-color: #E2E8F0;
 }
+
 .react-datepicker__input-container > input:focus-within {
 	z-index: 1;
 	border-color: #3182ce;
 	box-shadow: 0 0 0 1px #3182ce;
 }
+
 .react-datepicker__input-container > input:disabled {
 	opacity: 0.4;
 	cursor: not-allowed;

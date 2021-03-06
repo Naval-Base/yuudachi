@@ -10,12 +10,19 @@ const Navbar = () => {
 
 	const LoginButton = () =>
 		user.loggedIn ? (
-			<Link href="/users/me">
-				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
-					<Img mr={2} rounded="full" boxSize="25px" src={user.avatar ?? ''} alt={user.username!} />
-					<Box>{user.username}</Box>
-				</Button>
-			</Link>
+			<>
+				<Link href="/dashboard">
+					<Button variant="solid" justifyContent={{ base: 'start', md: 'unset' }} mr={2}>
+						Dashboard
+					</Button>
+				</Link>
+				<Link href="/dashboard">
+					<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
+						<Img mr={2} rounded="full" boxSize="25px" src={user.avatar ?? ''} alt={user.username!} />
+						<Box>{user.username}</Box>
+					</Button>
+				</Link>
+			</>
 		) : (
 			<Link href="http://localhost:3600/api/auth/discord">
 				<Button variant="ghost" justifyContent={{ base: 'start', md: 'unset' }}>
