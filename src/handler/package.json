@@ -34,6 +34,6 @@
 		"discord-api-types": "^0.12.1",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.2.2"
+		"typescript": "^4.2.3"
 	}
 }
