@@ -83,7 +83,7 @@ export default gql`
 		referenceId: Int
 	}
 
-	type GuildActionInput {
+	input GuildActionInput {
 		guild_id: String!
 		action: Int!
 		reason: String

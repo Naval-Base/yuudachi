@@ -1,10 +1,10 @@
-- name: mod_lockdown_timers
-  webhook: http://api:3500/api/hasura/crons/mod_lockdown_timers
+- name: mod_action_timers
+  webhook: http://api:3500/api/hasura/crons/mod_action_timers
   schedule: '* * * * *'
   include_in_metadata: true
   payload: {}
-- name: mod_action_timers
-  webhook: http://api:3500/api/hasura/crons/mod_action_timers
+- name: mod_lockdown_timers
+  webhook: http://api:3500/api/hasura/crons/mod_lockdown_timers
   schedule: '* * * * *'
   include_in_metadata: true
   payload: {}

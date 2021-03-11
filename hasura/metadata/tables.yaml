@@ -1,37 +1,5 @@
 - table:
     schema: public
-    name: messages
-  array_relationships:
-  - name: guild_moderators
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: guild_moderators
-        column_mapping:
-          guild_id: guild_id
-  select_permissions:
-  - role: user
-    permission:
-      columns:
-      - id
-      - channel_id
-      - guild_id
-      - author_id
-      - content
-      - type
-      - flags
-      - embeds
-      - attachments
-      - created_at
-      - updated_at
-      filter:
-        guild_moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      allow_aggregations: true
-- table:
-    schema: public
     name: cases
   object_relationships:
   - name: target
@@ -40,6 +8,7 @@
         remote_table:
           schema: public
           name: connections
+        insertion_order: null
         column_mapping:
           target_id: id
   array_relationships:
@@ -49,6 +18,7 @@
         remote_table:
           schema: public
           name: guild_moderators
+        insertion_order: null
         column_mapping:
           guild_id: guild_id
   select_permissions:
@@ -127,6 +97,125 @@
     webhook: http://api:3500/api/hasura/hooks/mod_log
 - table:
     schema: public
+    name: connections
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - avatar
+      - id
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+- table:
+    schema: public
+    name: guild_moderators
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - guild_id
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+- table:
+    schema: public
+    name: guild_settings
+  array_relationships:
+  - name: moderators
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: guild_moderators
+        insertion_order: null
+        column_mapping:
+          guild_id: guild_id
+  insert_permissions:
+  - role: user
+    permission:
+      check:
+        moderators:
+          user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+      - guild_id
+      - prefix
+      - guild_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - member_log_channel_id
+      - mute_role_id
+      - tag_role_id
+      - embed_role_id
+      - emoji_role_id
+      - reaction_role_id
+      - locale
+      - modules
+      - repository_aliases
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - guild_id
+      - prefix
+      - guild_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - member_log_channel_id
+      - mute_role_id
+      - tag_role_id
+      - embed_role_id
+      - emoji_role_id
+      - reaction_role_id
+      - locale
+      - modules
+      - repository_aliases
+      filter:
+        moderators:
+          user_id:
+            _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - prefix
+      - guild_log_channel_id
+      - mod_log_channel_id
+      - mod_role_id
+      - member_log_channel_id
+      - mute_role_id
+      - tag_role_id
+      - embed_role_id
+      - emoji_role_id
+      - reaction_role_id
+      - locale
+      - modules
+      - repository_aliases
+      filter:
+        moderators:
+          user_id:
+            _eq: X-Hasura-User-Id
+      check:
+        moderators:
+          user_id:
+            _eq: X-Hasura-User-Id
+- table:
+    schema: public
     name: lockdowns
   array_relationships:
   - name: guild_moderators
@@ -135,6 +224,7 @@
         remote_table:
           schema: public
           name: guild_moderators
+        insertion_order: null
         column_mapping:
           guild_id: guild_id
   select_permissions:
@@ -155,6 +245,39 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: messages
+  array_relationships:
+  - name: guild_moderators
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: guild_moderators
+        insertion_order: null
+        column_mapping:
+          guild_id: guild_id
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - id
+      - channel_id
+      - guild_id
+      - author_id
+      - content
+      - type
+      - flags
+      - embeds
+      - attachments
+      - created_at
+      - updated_at
+      filter:
+        guild_moderators:
+          user_id:
+            _eq: X-Hasura-User-Id
+      allow_aggregations: true
+- table:
+    schema: public
     name: role_states
   array_relationships:
   - name: guild_moderators
@@ -163,6 +286,7 @@
         remote_table:
           schema: public
           name: guild_moderators
+        insertion_order: null
         column_mapping:
           guild_id: guild_id
   select_permissions:
@@ -187,6 +311,7 @@
         remote_table:
           schema: public
           name: guild_moderators
+        insertion_order: null
         column_mapping:
           guild_id: guild_id
   insert_permissions:
@@ -243,124 +368,6 @@
     permission:
       filter:
         guild_moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-- table:
-    schema: public
-    name: connections
-  object_relationships:
-  - name: user
-    using:
-      foreign_key_constraint_on: user_id
-  select_permissions:
-  - role: user
-    permission:
-      columns:
-      - avatar
-      - id
-      - user_id
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
-      allow_aggregations: true
-- table:
-    schema: public
-    name: guild_moderators
-  object_relationships:
-  - name: user
-    using:
-      foreign_key_constraint_on: user_id
-  select_permissions:
-  - role: user
-    permission:
-      columns:
-      - guild_id
-      - user_id
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
-      allow_aggregations: true
-- table:
-    schema: public
-    name: guild_settings
-  array_relationships:
-  - name: moderators
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: guild_moderators
-        column_mapping:
-          guild_id: guild_id
-  insert_permissions:
-  - role: user
-    permission:
-      check:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      columns:
-      - guild_id
-      - prefix
-      - guild_log_channel_id
-      - mod_log_channel_id
-      - mod_role_id
-      - member_log_channel_id
-      - mute_role_id
-      - tag_role_id
-      - embed_role_id
-      - emoji_role_id
-      - reaction_role_id
-      - locale
-      - modules
-      - repository_aliases
-      backend_only: false
-  select_permissions:
-  - role: user
-    permission:
-      columns:
-      - guild_id
-      - prefix
-      - guild_log_channel_id
-      - mod_log_channel_id
-      - mod_role_id
-      - member_log_channel_id
-      - mute_role_id
-      - tag_role_id
-      - embed_role_id
-      - emoji_role_id
-      - reaction_role_id
-      - locale
-      - modules
-      - repository_aliases
-      filter:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      allow_aggregations: true
-  update_permissions:
-  - role: user
-    permission:
-      columns:
-      - prefix
-      - guild_log_channel_id
-      - mod_log_channel_id
-      - mod_role_id
-      - member_log_channel_id
-      - mute_role_id
-      - tag_role_id
-      - embed_role_id
-      - emoji_role_id
-      - reaction_role_id
-      - locale
-      - modules
-      - repository_aliases
-      filter:
-        moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
-      check:
-        moderators:
           user_id:
             _eq: X-Hasura-User-Id
 - table:

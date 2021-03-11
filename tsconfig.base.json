@@ -5,7 +5,7 @@
 		"removeComments": false,
 		"alwaysStrict": true,
 		"pretty": true,
-		"target": "es2019",
+		"target": "ES2019",
 		"lib": ["ESNext"],
 		"sourceMap": true,
 		"inlineSources": true,

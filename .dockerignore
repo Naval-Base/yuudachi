@@ -3,8 +3,9 @@ node_modules
 **/node_modules
 
 # Build artifacts
-dist/
-typings/
+dist
+src/website/dist
+typings
 tsconfig.tsbuildinfo
 
 # Log files
@@ -21,7 +22,7 @@ pids
 .vscode
 
 # Docker (experimental)
-docker/
+docker
 Dockerfile
 .dockerignore
 docker-compose.yml
@@ -31,7 +32,7 @@ docker-compose.config.yml
 docker-compose.config.example.yml
 
 # Tests
-coverage/
+coverage
 jest-setup.ts
 jest.config.js
 
@@ -44,7 +45,7 @@ tsconfig.eslint.json
 .tmp
 .github
 .git
-hasura/
+hasura
 .gitattributes
 .gitignore
 README.md
