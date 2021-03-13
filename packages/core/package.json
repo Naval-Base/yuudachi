@@ -23,7 +23,7 @@
 	"devDependencies": {
 		"@types/cookie": "^0.4.0",
 		"@types/jsonwebtoken": "^8.5.0",
-		"@types/node": "^14.14.31",
+		"@types/node": "^14.14.34",
 		"@types/supertest": "^2.0.10",
 		"@types/trouter": "^3.1.0",
 		"discord-api-types": "^0.12.1",
