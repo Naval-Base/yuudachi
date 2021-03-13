@@ -4,8 +4,9 @@ node_modules
 
 # Build artifacts
 dist
-src/website/dist
+**/dist
 typings
+**/typings
 tsconfig.tsbuildinfo
 
 # Log files
@@ -24,7 +25,6 @@ pids
 # Docker (experimental)
 docker
 Dockerfile
-.dockerignore
 docker-compose.yml
 docker-compose.local.yml
 docker-compose.prod.yml
@@ -37,17 +37,19 @@ jest-setup.ts
 jest.config.js
 
 # Linting
-.eslingignore
+.eslintignore
 .eslintrc.json
 tsconfig.eslint.json
 
 # Miscellaneous
 .tmp
 .github
+.vscode
 .git
 hasura
 .gitattributes
 .gitignore
+.npmrc
 README.md
 y.ps1
 y.sh

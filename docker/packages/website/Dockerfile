@@ -4,6 +4,7 @@ WORKDIR /usr/yuudachi
 
 COPY . .
 
-RUN npm ci
+RUN yarn install --immutable --immutable-cache --check-cache
+RUN yarn build
 
-CMD cd /usr/yuudachi/src/website && npm run start
+CMD cd /usr/yuudachi/src/website && yarn start

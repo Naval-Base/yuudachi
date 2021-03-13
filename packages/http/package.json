@@ -12,6 +12,7 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@hapi/boom": "^9.1.1",
+		"@yuudachi/core": "workspace:^2.0.0",
 		"cookie": "^0.4.1",
 		"cors": "^2.8.5",
 		"form-data": "^4.0.0",
@@ -22,15 +23,17 @@
 		"readdirp": "^3.5.0",
 		"reflect-metadata": "^0.1.13",
 		"sirv": "^1.0.11",
-		"tslib": "^2.1.0"
+		"tslib": "^2.1.0",
+		"tsyringe": "^4.4.0"
 	},
 	"devDependencies": {
 		"@types/cookie": "^0.4.0",
 		"@types/cors": "^2.8.10",
-		"@types/node": "^14.14.31",
+		"@types/node": "^14.14.34",
 		"@types/node-fetch": "^2.5.8",
 		"@types/supertest": "^2.0.10",
 		"@types/trouter": "^3.1.0",
+		"@yuudachi/types": "workspace:^2.0.0",
 		"cpy-cli": "^3.1.1",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",

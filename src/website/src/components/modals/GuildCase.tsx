@@ -46,7 +46,7 @@ import { useQueryGuildRoles } from '~/hooks/useQueryGuildRoles';
 import { useQueryUser } from '~/hooks/useQueryUser';
 import { useMutationUpdateGuildCase } from '~/hooks/useMutationUpdateGuildCase';
 
-import { DATE_FORMAT_WITH_SECONDS } from 'src/Constants';
+import { DATE_FORMAT_WITH_SECONDS } from '../../Constants';
 
 const GuildCase = ({
 	caseId,

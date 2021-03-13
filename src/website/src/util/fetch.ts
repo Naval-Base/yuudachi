@@ -5,10 +5,12 @@ import { useUserStore } from '~/store/user';
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
+
 class ResponseError extends Error {
 	public readonly name = 'ResponseError';
 
-	public constructor(public status: number, public response: Response, public body: any) {
+	public constructor(public status: number, public response: Awaited<ReturnType<typeof fetch>>, public body: any) {
 		super();
 	}
 }
@@ -18,7 +20,7 @@ export default async function refreshFetch(
 	options: Record<string, any> = { headers: {} },
 	attempt = 0,
 	cookie?: string,
-): Promise<{ response: Response; body: any }> {
+): Promise<{ response: Awaited<ReturnType<typeof fetch>>; body: any }> {
 	const cookies = new Cookies(cookie);
 	const token = cookies.get<string>('access_token');
 

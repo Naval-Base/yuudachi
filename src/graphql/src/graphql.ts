@@ -105,7 +105,6 @@ export type Case = {
 };
 
 export type GuildActionInput = {
-  __typename?: 'GuildActionInput';
   guild_id: Scalars['String'];
   action: Scalars['Int'];
   reason?: Maybe<Scalars['String']>;
@@ -239,7 +238,7 @@ export type ResolversTypes = {
   GuildRole: ResolverTypeWrapper<GuildRole>;
   User: ResolverTypeWrapper<User>;
   Case: ResolverTypeWrapper<Case>;
-  GuildActionInput: ResolverTypeWrapper<GuildActionInput>;
+  GuildActionInput: GuildActionInput;
   Query: ResolverTypeWrapper<{}>;
 };
 
@@ -348,17 +347,6 @@ export type CaseResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GuildActionInputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['GuildActionInput'] = ResolversParentTypes['GuildActionInput']> = {
-  guild_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  action?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  moderatorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  targetId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  contextMessageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  referenceId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   guild?: Resolver<Maybe<ResolversTypes['PartialGuild']>, ParentType, ContextType, RequireFields<QueryGuildArgs, 'guild_id'>>;
   guild_action?: Resolver<Array<Maybe<ResolversTypes['Case']>>, ParentType, ContextType, RequireFields<QueryGuild_ActionArgs, never>>;
@@ -377,7 +365,6 @@ export type Resolvers<ContextType = Context> = {
   GuildRole?: GuildRoleResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   Case?: CaseResolvers<ContextType>;
-  GuildActionInput?: GuildActionInputResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 
