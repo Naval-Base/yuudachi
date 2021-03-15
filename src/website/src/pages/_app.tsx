@@ -5,8 +5,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import '~/styles/main.scss';
 
-import Layout from '~/components/Layout';
-
 const queryCache = new QueryClient({
 	defaultOptions: {
 		queries: {
@@ -33,9 +31,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 			</Head>
 			<QueryClientProvider client={queryCache}>
 				<ChakraProvider>
-					<Layout>
-						<Component {...pageProps} />
-					</Layout>
+					<Component {...pageProps} />
 				</ChakraProvider>
 			</QueryClientProvider>
 		</>

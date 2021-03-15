@@ -12,7 +12,12 @@ const Navbar = () => {
 		user.loggedIn ? (
 			<>
 				<Link href="/dashboard">
-					<Button variant="solid" justifyContent={{ base: 'start', md: 'unset' }} mr={2}>
+					<Button
+						variant="solid"
+						justifyContent={{ base: 'start', md: 'unset' }}
+						mr={{ base: 0, md: 2 }}
+						mb={{ base: 2, md: 0 }}
+					>
 						Dashboard
 					</Button>
 				</Link>
@@ -53,6 +58,7 @@ const Navbar = () => {
 				d={{ base: isOpen ? 'flex' : 'none', md: 'block' }}
 				flexDirection={{ base: 'column', md: 'unset' }}
 				width={{ base: 'full', md: 'auto' }}
+				mt={{ base: 2, md: 0 }}
 			>
 				<LoginButton />
 			</Box>

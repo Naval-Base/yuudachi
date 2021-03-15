@@ -43,7 +43,7 @@ export function useQueryMe() {
 				id: connection.id,
 				username: data.data.me[0].username,
 				avatar: connection.avatar,
-				guilds: data.data.me[0].guild_moderators,
+				guilds: data.data.me[0].guild_moderators.map((guild) => guild.guild_id),
 			});
 		}
 	}, [data?.errors, data?.data?.me, user]);

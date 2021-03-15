@@ -22,7 +22,7 @@ const GuildPage = () => {
 
 	return (
 		<GuildLayout>
-			<Box mt={10} px={{ base: 50, md: 100, xl: 150 }}>
+			<Box my={{ base: 12 }} px={{ base: 50, xl: 150 }}>
 				<Heading mb={8} size="md">
 					Guild Settings
 				</Heading>

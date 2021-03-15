@@ -16,12 +16,14 @@ const GuildDisplay = ({
 	guild?.guild ?? fallbackGuild?.guilds.length ? (
 		<Grid
 			templateColumns={{ base: 'auto', md: '300px' }}
-			gap={{ base: '16px', md: '8px' }}
+			gap={{ base: '16px' }}
 			justifyItems="center"
 			justifyContent="center"
 			alignItems="center"
 			textAlign="center"
-			my={12}
+			mt={4}
+			mb={8}
+			color="white"
 		>
 			<GuildIcon guild={guild?.guild ?? fallbackGuild?.guilds.find((guild) => guild.id === id)} />
 			<Heading fontSize="2xl">

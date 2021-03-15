@@ -13,15 +13,17 @@ const GuildNavbar = () => {
 	const { id } = router.query;
 
 	return (
-		<Flex as="nav" align="center" justify="space-around" wrap="wrap">
-			<Flex d={{ base: 'block', lg: 'none' }} mb={{ base: 2, lg: 0 }}>
-				<Heading size="md">Dashboard Navigation</Heading>
+		<Flex as="nav" align="center" justifyContent="space-between" wrap="wrap" px={{ base: 50, lg: 4 }}>
+			<Flex d={{ base: 'block', lg: 'none' }} mb={{ base: 4, lg: 0 }}>
+				<Heading size="md" color="white">
+					Navigation
+				</Heading>
 			</Flex>
 
 			<Flex align="center">
 				<IconButton
 					d={{ base: 'flex', lg: 'none' }}
-					mb={{ base: 2, lg: 0 }}
+					mb={{ base: 4, lg: 0 }}
 					aria-label="Open menu"
 					variant="ghost"
 					icon={isOpen ? <FiX /> : <FiMenu />}
@@ -33,10 +35,15 @@ const GuildNavbar = () => {
 				d={{ base: isOpen ? 'flex' : 'none', lg: 'block' }}
 				flexDirection={{ base: 'column' }}
 				width={{ base: 'full' }}
+				mb={{ base: 4, lg: 0 }}
 			>
 				<VStack px={2}>
 					<Link href={`/guilds/${id as string}`}>
-						<Button w="100%" variant="ghost">
+						<Button
+							w="100%"
+							variant={router.route === '/guilds/[id]' ? 'solid' : 'ghost'}
+							color={router.route === '/guilds/[id]' ? 'blue.200' : 'white'}
+						>
 							Dashboard
 						</Button>
 					</Link>
@@ -45,16 +52,31 @@ const GuildNavbar = () => {
 					</Button>
 					<Box d={{ base: isOpenModules ? 'block' : 'none' }} w="100%">
 						<Link href={`/guilds/${id as string}/modules/moderation`}>
-							<Button w="100%">Moderation</Button>
+							<Button
+								variant="ghost"
+								color={router.route === '/guilds/[id]/modules/moderation' ? 'blue.200' : 'white'}
+								bg="gray.700"
+								w="100%"
+							>
+								Moderation
+							</Button>
 						</Link>
 					</Box>
 					<Link href={`/guilds/${id as string}/cases`}>
-						<Button w="100%" variant="ghost">
+						<Button
+							w="100%"
+							variant={router.route === '/guilds/[id]/cases' ? 'solid' : 'ghost'}
+							color={router.route === '/guilds/[id]/cases' ? 'blue.200' : 'white'}
+						>
 							Cases
 						</Button>
 					</Link>
 					<Link href={`/guilds/${id as string}/tags`}>
-						<Button w="100%" variant="ghost">
+						<Button
+							w="100%"
+							variant={router.route === '/guilds/[id]/tags' ? 'solid' : 'ghost'}
+							color={router.route === '/guilds/[id]/tags' ? 'blue.200' : 'white'}
+						>
 							Tags
 						</Button>
 					</Link>

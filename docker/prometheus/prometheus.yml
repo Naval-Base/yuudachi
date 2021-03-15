@@ -1,6 +1,6 @@
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 5s
+  evaluation_interval: 5s
   # scrape_timeout is set to the global default (10s).
 
 alerting:
@@ -16,7 +16,8 @@ rule_files:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets:
+          - 'localhost:9090'
 
   - job_name: 'rabbitmq'
     static_configs:

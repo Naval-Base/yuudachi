@@ -3,7 +3,8 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Box, Text, Button, Grid, Center } from '@chakra-ui/react';
+import { DarkMode, Box, Text, Button, Grid, Center } from '@chakra-ui/react';
+import { FiCornerUpLeft } from 'react-icons/fi';
 
 const GuildNavbar = dynamic(() => import('~/components/GuildNavbar'));
 const Loading = dynamic(() => import('~/components/Loading'));
@@ -11,10 +12,12 @@ const GuildDisplay = dynamic(() => import('~/components/GuildDisplay'));
 
 import { useUserStore } from '~/store/index';
 
+import { useQueryMe } from '~/hooks/useQueryMe';
 import { useQueryOAuthGuilds } from '~/hooks/useQueryOAuthGuilds';
 import { useQueryGuild } from '~/hooks/useQueryGuild';
 
 const GuildLayout = ({ children }: { children: React.ReactNode }) => {
+	useQueryMe();
 	const user = useUserStore();
 	const router = useRouter();
 
@@ -53,16 +56,25 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 				<title>{guildData?.guild?.name} | Yuudachi Dashboard</title>
 			</Head>
 			<Grid
-				templateColumns={{ base: 'auto', md: 'auto', lg: '250px auto' }}
-				templateRows={{ base: 'max-content', lg: 'unset' }}
+				templateColumns={{ base: 'auto', lg: '300px auto' }}
+				templateRows={{ base: 'auto', lg: 'unset' }}
 				h="100%"
 				w="100%"
 			>
-				<Box>
-					<GuildDisplay id={id as string} guild={guildData} fallbackGuild={guildFallbackData} />
-					<GuildNavbar />
-				</Box>
-				<Box>{children}</Box>
+				<DarkMode>
+					<Box bg="gray.800">
+						<Box mt={4} px={{ base: 50, lg: 6 }}>
+							<Link href="/dashboard">
+								<Button variant="link" leftIcon={<FiCornerUpLeft />}>
+									Go back
+								</Button>
+							</Link>
+						</Box>
+						<GuildDisplay id={id as string} guild={guildData} fallbackGuild={guildFallbackData} />
+						<GuildNavbar />
+					</Box>
+				</DarkMode>
+				{children}
 			</Grid>
 		</>
 	);

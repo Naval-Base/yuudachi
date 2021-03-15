@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Box, Grid, Img, Text, Heading } from '@chakra-ui/react';
 
+import Layout from '~/components/Layout';
+
 const Guilds = dynamic(() => import('~/components/Guilds'));
 
 import { useUserStore } from '~/store/index';
@@ -26,7 +28,7 @@ const Dashboard = () => {
 		) : null;
 
 	return (
-		<>
+		<Layout>
 			<Grid
 				templateColumns={{ base: 'auto', md: '150px' }}
 				gap={{ base: '32px', md: '8px' }}
@@ -47,7 +49,7 @@ const Dashboard = () => {
 				</Box>
 				<Guilds />
 			</Box>
-		</>
+		</Layout>
 	);
 };
 

@@ -5,7 +5,7 @@ export interface GraphQLMe {
 		me: {
 			username: string;
 			connections: Connection[];
-			guild_moderators: string[];
+			guild_moderators: { guild_id: string }[];
 		}[];
 	};
 }

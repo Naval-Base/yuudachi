@@ -28,10 +28,10 @@ const Guilds = () => {
 	}
 
 	return (
-		<Grid templateColumns="repeat(auto-fit, 150px)" gap="32px 0px" justifyContent="center">
+		<Grid templateColumns="repeat(auto-fit, 150px)" gap="32px 0px" placeContent="center">
 			{oAuthGuildsData?.map((guild, i) => (
 				<Link href={`/guilds/${guild.id as string}`} key={i}>
-					<Grid gap="8px 0px" sx={{ 'place-items': 'center' }}>
+					<Grid gap="8px 0px" placeItems="center">
 						<GuildIcon guild={guild} />
 						<Text textAlign="center">{guild.name}</Text>
 					</Grid>
