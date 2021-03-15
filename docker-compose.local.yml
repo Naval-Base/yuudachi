@@ -58,8 +58,6 @@ services:
       GF_SECURITY_ADMIN_USER: 'admin'
       GF_SECURITY_ADMIN_PASSWORD: 'admin'
       GF_AUTH_ANONYMOUS_ENABLED: 'true'
-      GF_ANALYTICS_REPORTING_ENABLED: 'false'
-      GF_INSTALL_PLUGINS: 'flant-statusmap-panel,grafana-piechart-panel'
     volumes:
       - grafana-data:/var/lib/grafana
 
