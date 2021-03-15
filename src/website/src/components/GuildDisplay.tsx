@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { Grid, Heading } from '@chakra-ui/react';
-import { RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult } from 'discord-api-types/v8';
+import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildResult } from 'discord-api-types/v8';
 
 const GuildIcon = dynamic(() => import('~/components/GuildIcon'));
 
@@ -10,7 +10,7 @@ const GuildDisplay = ({
 	fallbackGuild,
 }: {
 	id: string;
-	guild?: { guild: RESTAPIPartialCurrentUserGuild | null };
+	guild?: { guild: RESTGetAPIGuildResult | null };
 	fallbackGuild?: { guilds: RESTGetAPICurrentUserGuildsResult };
 }) =>
 	guild?.guild ?? fallbackGuild?.guilds.length ? (

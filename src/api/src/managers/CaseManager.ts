@@ -1,4 +1,4 @@
-import { APIUser, Routes } from 'discord-api-types/v8';
+import { RESTGetAPIUserResult, Routes } from 'discord-api-types/v8';
 import { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
@@ -39,9 +39,9 @@ export default class CaseManager {
 	) {}
 
 	public async create(case_: Case) {
-		const [target, mod]: [APIUser, APIUser] = await Promise.all([
-			this.rest.get<APIUser>(Routes.user(case_.targetId)),
-			this.rest.get<APIUser>(Routes.user(case_.moderatorId)),
+		const [target, mod]: [RESTGetAPIUserResult, RESTGetAPIUserResult] = await Promise.all([
+			this.rest.get<RESTGetAPIUserResult>(Routes.user(case_.targetId)),
+			this.rest.get<RESTGetAPIUserResult>(Routes.user(case_.moderatorId)),
 		]);
 
 		const requestOptions = {

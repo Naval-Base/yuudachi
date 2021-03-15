@@ -9,7 +9,6 @@ const Loading = dynamic(() => import('./Loading'));
 import { useUserStore } from '~/store/index';
 
 import { useQueryGuild } from '~/hooks/useQueryGuild';
-import { useQueryGuildRoles } from '~/hooks/useQueryGuildRoles';
 import { useQueryGuildChannels } from '~/hooks/useQueryGuildChannels';
 import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
 import { useMutationInsertGuildSettings } from '~/hooks/useMutationInsertGuildSettings';
@@ -25,10 +24,6 @@ const GuildModerationSettings = () => {
 	const { id } = router.query;
 
 	const { data: gqlGuildData, isLoading: isLoadingGuild } = useQueryGuild(id as string);
-	const { data: gqlGuildRolesData, isLoading: isLoadingGuildRoles } = useQueryGuildRoles(
-		id as string,
-		Boolean(gqlGuildData?.guild),
-	);
 	const { data: gqlGuildChannelsData, isLoading: isLoadingGuildChannels } = useQueryGuildChannels(
 		id as string,
 		Boolean(gqlGuildData?.guild),
@@ -39,7 +34,7 @@ const GuildModerationSettings = () => {
 	);
 
 	const guildModerationSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
-	const guildRolesData = useMemo(() => gqlGuildRolesData?.roles?.filter((r) => r.id !== id), [gqlGuildRolesData, id]);
+	const guildRolesData = useMemo(() => gqlGuildData?.guild?.roles?.filter((r) => r.id !== id), [gqlGuildData, id]);
 	const guildChannelsData = useMemo(() => gqlGuildChannelsData?.channels?.filter((c) => c.type === 0), [
 		gqlGuildChannelsData,
 	]);
@@ -86,7 +81,7 @@ const GuildModerationSettings = () => {
 		return <Text textAlign="center">You need to be a moderator to see the guilds moderation settings.</Text>;
 	}
 
-	if (!user.loggedIn || isLoadingGuild || isLoadingGuildRoles || isLoadingGuildChannels || isLoadingGuildSettings) {
+	if (!user.loggedIn || isLoadingGuild || isLoadingGuildChannels || isLoadingGuildSettings) {
 		return (
 			<Center h="100%">
 				<Loading />

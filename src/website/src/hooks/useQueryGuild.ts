@@ -17,9 +17,10 @@ export function useQueryGuild(id: string) {
 						id
 						name
 						icon
-						owner
-						features
-						permissions
+						roles {
+							id
+							name
+						}
 					}
 				}`,
 				{ guild_id: id },

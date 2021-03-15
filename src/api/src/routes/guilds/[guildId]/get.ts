@@ -2,19 +2,19 @@ import { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import Rest, { HttpException } from '@yuudachi/rest';
 import { Route } from '@yuudachi/http';
-import { RESTGetAPIUserResult } from 'discord-api-types';
+import { RESTGetAPIGuildResult } from 'discord-api-types';
 import { forbidden, notFound } from '@hapi/boom';
 
 @injectable()
-export default class GetUserRoute extends Route {
+export default class GetGuildRoute extends Route {
 	public constructor(private readonly rest: Rest) {
 		super();
 	}
 
 	public async handle(req: Request, res: Response) {
-		let user: RESTGetAPIUserResult;
+		let guild: RESTGetAPIGuildResult;
 		try {
-			user = await this.rest.get(`/users/${req.params.userId}`);
+			guild = await this.rest.get(`/guilds/${req.params.guildId}`, { query: { with_counts: true } });
 		} catch (e) {
 			if (e instanceof HttpException) {
 				switch (e.status) {
@@ -30,6 +30,6 @@ export default class GetUserRoute extends Route {
 
 		req.statusCode = 200;
 		res.setHeader('content-type', 'application/json; charset=utf-8');
-		res.end(JSON.stringify(user));
+		res.end(JSON.stringify(guild));
 	}
 }

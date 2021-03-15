@@ -4,6 +4,7 @@ import FormData from 'form-data';
 import HttpException from './HttpException';
 
 interface RequestOptions {
+	query?: Record<string, string | number | boolean>;
 	reason?: string;
 	files?: {
 		name: string;

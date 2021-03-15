@@ -3,6 +3,7 @@ import { Constants } from '@yuudachi/core';
 import {
 	RESTGetAPICurrentUserGuildsResult,
 	RESTGetAPIGuildChannelsResult,
+	RESTGetAPIGuildResult,
 	RESTGetAPIGuildRolesResult,
 } from 'discord-api-types/v8';
 import API from '..';
@@ -14,6 +15,10 @@ export default class Guilds {
 
 	public get() {
 		return this.api.make<RESTGetAPICurrentUserGuildsResult>('get', '/guilds');
+	}
+
+	public getGuild(guildId: `${bigint}`) {
+		return this.api.make<RESTGetAPIGuildResult>('get', `/guilds/${guildId}`);
 	}
 
 	public getOAuth(userId: string) {

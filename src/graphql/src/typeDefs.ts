@@ -1,6 +1,43 @@
 import { gql } from 'apollo-server-express';
 
 export default gql`
+	type Guild {
+		id: String!
+		name: String!
+		icon: String
+		icon_hash: String
+		splash: String
+		owner_id: String
+		region: String!
+		afk_channel_id: String
+		afk_timeout: Int!
+		widget_enabled: Boolean
+		widget_channel_id: String
+		verification_level: Int!
+		default_message_notifications: Int!
+		explicit_content_filter: Int!
+		roles: [GuildRole]!
+		emojis: [GuildEmoji]!
+		features: [String]!
+		mfa_level: Int!
+		application_id: String
+		system_channel_id: String
+		system_channel_flags: Int!
+		rules_channel_id: String
+		max_presences: Int
+		max_members: Int!
+		vanity_url_code: String
+		description: String
+		banner: String
+		premium_tier: Int!
+		premium_subscription_count: Int
+		preferred_locale: String!
+		public_updates_channel_id: String
+		max_video_channel_users: String
+		approximate_member_count: Int
+		approximate_presence_count: Int
+	}
+
 	type PartialGuild {
 		id: String!
 		name: String!
@@ -53,6 +90,17 @@ export default gql`
 		tags: [GuildRoleTag]
 	}
 
+	type GuildEmoji {
+		id: String
+		name: String
+		roles: [String]
+		user: User
+		require_colons: Boolean
+		managed: Boolean
+		animated: Boolean
+		available: Boolean
+	}
+
 	type User {
 		id: String!
 		username: String!
@@ -94,10 +142,10 @@ export default gql`
 	}
 
 	type Query {
-		guild(guild_id: String!): PartialGuild
-		guild_action(action: GuildActionInput): [Case]!
-		guilds: [PartialGuild]!
-		guilds_oauth: [PartialGuild]!
+		guild(guild_id: String!): Guild
+		guild_action(action: GuildActionInput): [Case]
+		guilds: [PartialGuild]
+		guilds_oauth: [PartialGuild]
 		guild_channels(guild_id: String!): [GuildChannel]
 		guild_roles(guild_id: String!): [GuildRole]
 		user(user_id: String!): User

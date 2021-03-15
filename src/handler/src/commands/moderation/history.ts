@@ -1,4 +1,10 @@
-import { APIMessage, APIEmbed, APIGuildMember, APIUser, APIInteraction } from 'discord-api-types/v8';
+import {
+	APIMessage,
+	APIEmbed,
+	APIInteraction,
+	RESTGetAPIGuildMemberResult,
+	RESTGetAPIUserResult,
+} from 'discord-api-types/v8';
 import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import { Args } from 'lexure';
@@ -65,8 +71,8 @@ export default class implements Command {
 		}
 
 		const [targetUser, targetMember] = await Promise.allSettled([
-			this.rest.get<APIUser>(`/users/${maybeMember.value}`),
-			this.rest.get<APIGuildMember>(`/guilds/${message.guild_id}/members/${maybeMember.value}`),
+			this.rest.get<RESTGetAPIUserResult>(`/users/${maybeMember.value}`),
+			this.rest.get<RESTGetAPIGuildMemberResult>(`/guilds/${message.guild_id}/members/${maybeMember.value}`),
 		]);
 		if (targetUser.status === 'rejected') {
 			throw new Error(i18next.t('command.common.errors.no_user_found', { lng: locale }));

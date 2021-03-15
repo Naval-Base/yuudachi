@@ -1,4 +1,4 @@
-import { RESTGetAPIGuildRolesResult, APIMessage, APIUser, APIEmbed, Routes } from 'discord-api-types/v8';
+import { RESTGetAPIGuildRolesResult, APIMessage, APIEmbed, Routes, RESTGetAPIUserResult } from 'discord-api-types/v8';
 import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
 import { inject, injectable } from 'tsyringe';
@@ -33,7 +33,7 @@ export default class CaseLogManager {
 			return;
 		}
 
-		const mod = await this.rest.get<APIUser>(`/users/${item.mod_id}`);
+		const mod = await this.rest.get<RESTGetAPIUserResult>(`/users/${item.mod_id}`);
 		const avatar = mod.avatar
 			? `http://cdn.discordapp.com/avatars/${mod.id}/${mod.avatar}.${mod.avatar.startsWith('a_') ? 'gif' : 'png'}`
 			: `http://cdn.discordapp.com/embed/avatars/${Number(mod.discriminator) % 5}.png`;

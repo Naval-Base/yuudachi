@@ -3,7 +3,14 @@ import Rest from '@yuudachi/rest';
 import { Lockdown } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
-import { APIChannel, APIOverwrite, APIUser, OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types/v8';
+import {
+	APIChannel,
+	APIOverwrite,
+	RESTGetAPIUserResult,
+	OverwriteType,
+	PermissionFlagsBits,
+	Routes,
+} from 'discord-api-types/v8';
 
 const { kSQL } = Tokens;
 
@@ -24,7 +31,7 @@ export default class LockdownManager {
 	) {}
 
 	public async create(lockdown: Lockdown) {
-		const mod: APIUser = await this.rest.get<APIUser>(Routes.user(lockdown.moderatorId));
+		const mod = await this.rest.get<RESTGetAPIUserResult>(Routes.user(lockdown.moderatorId));
 		const channel: APIChannel = await this.rest.get(Routes.channel(lockdown.channelId));
 
 		await this.rest.put(Routes.channelPermission(lockdown.channelId, lockdown.guildId), {
