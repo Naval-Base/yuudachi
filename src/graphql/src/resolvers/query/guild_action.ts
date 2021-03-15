@@ -2,6 +2,8 @@ import { container } from 'tsyringe';
 import API from '@yuudachi/api';
 import { CaseAction } from '@yuudachi/types';
 
+import { checkAuth } from '../../util/checkAuth';
+
 export default async (
 	_: any,
 	args: {
@@ -15,6 +17,11 @@ export default async (
 	},
 ) => {
 	const api = container.resolve(API);
+
+	if (!(await checkAuth(args.guild_id))) {
+		return [];
+	}
+
 	const cases = await api.guilds.createCase(args.guild_id, {
 		action: CaseAction.UNBAN,
 		reason: args.reason,

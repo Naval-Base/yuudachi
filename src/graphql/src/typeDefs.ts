@@ -143,11 +143,11 @@ export default gql`
 
 	type Query {
 		guild(guild_id: String!): Guild
-		guild_action(action: GuildActionInput): [Case]
+		guild_action(action: GuildActionInput): [Case]!
 		guilds: [PartialGuild]
 		guilds_oauth: [PartialGuild]
-		guild_channels(guild_id: String!): [GuildChannel]
-		guild_roles(guild_id: String!): [GuildRole]
+		guild_channels(guild_id: String!): [GuildChannel]!
+		guild_roles(guild_id: String!): [GuildRole]!
 		user(user_id: String!): User
 	}
 `;
