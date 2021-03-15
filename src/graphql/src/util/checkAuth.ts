@@ -7,14 +7,15 @@ const { kSQL } = Tokens;
 export async function checkAuth(guild_id: `${bigint}`) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const [{ user_id }] = await sql`
+	const [user] = await sql<{ user_id: string }[]>`
 		select user_id
 		from guild_moderators
 		where guild_id = ${guild_id}`;
 
-	if (!user_id) {
-		return false;
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (user?.user_id) {
+		return true;
 	}
 
-	return true;
+	return false;
 }

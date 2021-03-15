@@ -3,7 +3,7 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { DarkMode, Box, Text, Button, Grid, Center } from '@chakra-ui/react';
+import { DarkMode, Box, Heading, Button, Grid, Center } from '@chakra-ui/react';
 import { FiCornerUpLeft } from 'react-icons/fi';
 
 const GuildNavbar = dynamic(() => import('~/components/GuildNavbar'));
@@ -36,24 +36,13 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 		);
 	}
 
-	if (guildData && !guildData.guild) {
-		return (
-			<>
-				<GuildDisplay id={id as string} guild={guildData} fallbackGuild={guildFallbackData} />
-				<Box textAlign="center">
-					<Text mb={6}>Yuudachi is not in this guild yet.</Text>
-					<Link href={''}>
-						<Button>Invite</Button>
-					</Link>
-				</Box>
-			</>
-		);
-	}
-
 	return (
 		<>
 			<Head>
-				<title>{guildData?.guild?.name} | Yuudachi Dashboard</title>
+				<title>
+					{guildData?.guild?.name ?? gqlFallbackGuildData?.guilds?.find((guild) => guild.id === id)?.name} | Yuudachi
+					Dashboard
+				</title>
 			</Head>
 			<Grid
 				templateColumns={{ base: 'auto', lg: '300px auto' }}
@@ -71,10 +60,23 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 							</Link>
 						</Box>
 						<GuildDisplay id={id as string} guild={guildData} fallbackGuild={guildFallbackData} />
-						<GuildNavbar />
+						{guildData && !guildData.guild ? null : <GuildNavbar />}
 					</Box>
 				</DarkMode>
-				{children}
+				{guildData && !guildData.guild ? (
+					<Center>
+						<Box textAlign="center">
+							<Heading fontSize="xl" mb={6}>
+								Yuudachi is not in this guild yet.
+							</Heading>
+							<Link href={''}>
+								<Button>Invite</Button>
+							</Link>
+						</Box>
+					</Center>
+				) : (
+					children
+				)}
 			</Grid>
 		</>
 	);
