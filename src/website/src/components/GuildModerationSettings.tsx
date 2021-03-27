@@ -22,6 +22,9 @@ const GuildModerationSettings = () => {
 	const toast = useToast();
 	const { handleSubmit, control, formState } = useForm<GuildModerationSettingsPayload>();
 	const { id } = router.query;
+	const moderator = user.guilds?.find((moderators) => moderators.guild_id === (id as string));
+	const isModerator = Boolean(moderator);
+	const canManage = moderator?.manage;
 
 	const { data: gqlGuildData, isLoading: isLoadingGuild } = useQueryGuild(id as string);
 	const { data: gqlGuildChannelsData, isLoading: isLoadingGuildChannels } = useQueryGuildChannels(
@@ -30,7 +33,7 @@ const GuildModerationSettings = () => {
 	);
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
-		Boolean(gqlGuildData?.guild) && user.guilds?.includes(id as string),
+		Boolean(gqlGuildData?.guild) && isModerator,
 	);
 
 	const guildModerationSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
@@ -77,7 +80,7 @@ const GuildModerationSettings = () => {
 		})(event);
 	};
 
-	if (!user.guilds?.includes(id as string)) {
+	if (!isModerator) {
 		return <Text textAlign="center">You need to be a moderator to see the guilds moderation settings.</Text>;
 	}
 
@@ -95,7 +98,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Moderation role</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -114,7 +117,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Moderation log channel</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildChannelsData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									#{option.name}
@@ -133,7 +136,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Guild log channel</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildChannelsData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									#{option.name}
@@ -152,7 +155,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Member log channel</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildChannelsData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									#{option.name}
@@ -171,7 +174,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Mute restriction role</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -190,7 +193,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Embed restriction role</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -209,7 +212,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Emoji restriction role</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -228,7 +231,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Reaction restriction role</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -247,7 +250,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Tag restriction role</FormLabel>
 				<Controller
 					as={
-						<Select>
+						<Select isDisabled={!canManage}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -268,7 +271,7 @@ const GuildModerationSettings = () => {
 					colorScheme="green"
 					isLoading={formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
 					loadingText="Submitting"
-					isDisabled={isLoadingGuildSettingsUpdateMutate}
+					isDisabled={!canManage || formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
 				>
 					Submit
 				</Button>
@@ -285,7 +288,7 @@ const GuildModerationSettings = () => {
 					onClick={handleOnInitialize}
 					isLoading={isLoadingGuildSettingsInsertMutate}
 					loadingText="Initializing"
-					isDisabled={isLoadingGuildSettingsInsertMutate}
+					isDisabled={!canManage || isLoadingGuildSettingsInsertMutate}
 				>
 					Initialize
 				</Button>

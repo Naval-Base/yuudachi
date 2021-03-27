@@ -2,7 +2,7 @@ import cookie from 'cookie';
 import { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import fetch from 'node-fetch';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { badRequest } from '@hapi/boom';
 import { Route, discordOAuth2, State } from '@yuudachi/http';
 import { AuthManager, session, Tokens } from '@yuudachi/core';
@@ -47,13 +47,13 @@ export default class DiscordLoginCallbackRoute extends Route {
 			},
 		}).then((r) => r.json());
 
-		let [user] = await this.sql<{ id: string }[]>`
+		let [user] = await this.sql<[{ id: string }?]>`
 			select users.id
 			from users
 			join connections
 			on connections.user_id = users.id
 			where connections.id = ${me.id}`;
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
 		if (user) {
 			await this.sql`
 				update connections
@@ -63,11 +63,12 @@ export default class DiscordLoginCallbackRoute extends Route {
 					expires_at = ${new Date(Date.now() + response.expires_in * 1000).toISOString()}
 				where id = ${me.id}`;
 		} else {
-			[user] = await this.sql<{ id: string }[]>`
+			[user] = await this.sql<[{ id: string }]>`
 				insert into users (email, username)
 				values (${me.email}, ${me.username})
 				returning id;
 			`;
+
 			const avatar = me.avatar
 				? `http://cdn.discordapp.com/avatars/${me.id}/${me.avatar}.${me.avatar.startsWith('a_') ? 'gif' : 'png'}`
 				: `http://cdn.discordapp.com/embed/avatars/${Number(me.discriminator) % 5}.png`;

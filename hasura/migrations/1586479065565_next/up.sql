@@ -53,7 +53,8 @@ comment on column connections.expires_at is 'The expiration of this connections 
 
 create table guild_moderators (
 	guild_id text not null,
-	user_id uuid not null
+	user_id uuid not null,
+	manage boolean default false
 );
 
 alter table guild_moderators add constraint guild_moderators_pkey primary key (guild_id, user_id);
@@ -61,6 +62,7 @@ alter table guild_moderators add constraint guild_moderators_user_id_fkey foreig
 
 comment on column guild_moderators.guild_id is 'The id of the guild this moderator belongs to';
 comment on column guild_moderators.user_id is 'The id of the moderator';
+comment on column guild_moderators.manage is 'Whether this moderator can manage the guild';
 
 -- MESSAGES
 

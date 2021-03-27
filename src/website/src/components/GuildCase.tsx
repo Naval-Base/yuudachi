@@ -14,10 +14,11 @@ const GuildCase = ({ caseId }: { caseId: number }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [readOnly, setReadOnly] = useState(false);
 	const { id } = router.query;
+	const isModerator = user.guilds?.some((moderators) => moderators.guild_id === (id as string));
 
 	return (
 		<>
-			{user.guilds?.includes(id as string) ? (
+			{isModerator ? (
 				<ButtonGroup>
 					<IconButton
 						size="sm"

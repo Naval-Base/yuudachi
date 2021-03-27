@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { advanceTo, clear } from 'jest-date-mock';
 import { container } from 'tsyringe';
 import { Config } from '@yuudachi/types';

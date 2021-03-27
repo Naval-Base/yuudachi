@@ -1,5 +1,5 @@
 import { Request, Response, NextHandler } from 'polka';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import cookie from 'cookie';
 import jwt from 'jsonwebtoken';
@@ -20,14 +20,16 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 			};
 
 			const [existingUser] = await sql<
-				{
-					id: string;
-					user_id: string;
-					avatar: string;
-					email: string;
-					username: string;
-					expires_at: string;
-				}[]
+				[
+					{
+						id: string;
+						user_id: string;
+						avatar: string;
+						email: string;
+						username: string;
+						expires_at: string;
+					}?,
+				]
 			>`
 				select connections.id, user_id, avatar, email, username, expires_at
 				from connections
@@ -35,7 +37,7 @@ export default async (req: Request, res: Response, next?: NextHandler) => {
 				on connections.user_id = users.id
 				where access_token = ${decoded.access_token};
 			`;
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
 			if (existingUser) {
 				res.redirect(config.publicFrontendDomain);
 				return res.end(

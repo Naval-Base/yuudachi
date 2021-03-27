@@ -37,11 +37,14 @@ const GuildSettings = () => {
 		},
 	});
 	const { id } = router.query;
+	const moderator = user.guilds?.find((moderators) => moderators.guild_id === (id as string));
+	const isModerator = Boolean(moderator);
+	const canManage = moderator?.manage;
 
 	const { data: gqlDataGuild, isLoading: isLoadingGuild } = useQueryGuild(id as string);
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
-		Boolean(gqlDataGuild?.guild) && user.guilds?.includes(id as string),
+		Boolean(gqlDataGuild?.guild) && isModerator,
 	);
 
 	const guildSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
@@ -84,7 +87,7 @@ const GuildSettings = () => {
 		})(event);
 	};
 
-	if (!user.guilds?.includes(id as string)) {
+	if (!isModerator) {
 		return <Text textAlign="center">You need to be a moderator to see the guild settings.</Text>;
 	}
 
@@ -108,6 +111,7 @@ const GuildSettings = () => {
 						maxLength: { value: 5, message: 'Max length of 5 exceeded' },
 					})}
 					defaultValue={guildSettingsData.prefix}
+					isDisabled={!canManage}
 				/>
 				<FormErrorMessage>
 					<FormErrorIcon />
@@ -121,7 +125,7 @@ const GuildSettings = () => {
 					colorScheme="green"
 					isLoading={formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
 					loadingText="Submitting"
-					isDisabled={isLoadingGuildSettingsUpdateMutate}
+					isDisabled={!canManage || formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
 				>
 					Submit
 				</Button>
@@ -138,7 +142,7 @@ const GuildSettings = () => {
 					onClick={handleOnInitialize}
 					isLoading={isLoadingGuildSettingsInsertMutate}
 					loadingText="Initializing"
-					isDisabled={isLoadingGuildSettingsInsertMutate}
+					isDisabled={!canManage || isLoadingGuildSettingsInsertMutate}
 				>
 					Initialize
 				</Button>

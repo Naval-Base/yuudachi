@@ -2,7 +2,7 @@ import { Request, Response } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { Tokens } from '@yuudachi/core';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 
 const { kSQL } = Tokens;
 
@@ -15,7 +15,7 @@ export default class HasuraModLockdownTimersCron extends Route {
 	}
 
 	public async handle(_: Request, res: Response) {
-		const currentLockdowns = await this.sql<{ channel_id: `${bigint}`; expiration: string }[]>`
+		const currentLockdowns = await this.sql<[{ channel_id: `${bigint}`; expiration: string }]>`
 			select channel_id, expiration
 			from lockdowns`;
 

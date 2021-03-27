@@ -65,6 +65,7 @@ const GuildCase = ({
 	const { handleSubmit, register, control, errors, formState } = useForm<GuildCasePayload>();
 	const [expirationTime, setExpirationTime] = useState<string | null>(null);
 	const { id } = router.query;
+	const isModerator = user.guilds?.some((moderators) => moderators.guild_id === (id as string));
 
 	const { data: gqlGuildCaseData, isLoading: isLoadingGuildCase } = useQueryGuildCase(
 		id as string,
@@ -147,7 +148,7 @@ const GuildCase = ({
 									</Text>
 								</Box>
 
-								<FormControl id="reference" mb={4} isReadOnly={readOnly || !user.guilds?.includes(id as string)}>
+								<FormControl id="reference" mb={4} isReadOnly={readOnly || !isModerator}>
 									<FormLabel>Reference</FormLabel>
 									<Box d="flex">
 										<NumberInput
@@ -155,7 +156,7 @@ const GuildCase = ({
 											mr={2}
 											w={guildCaseData?.case.ref_id ? '80%' : '100%'}
 											defaultValue={guildCaseData?.case.ref_id ?? undefined}
-											isReadOnly={readOnly || !user.guilds?.includes(id as string)}
+											isReadOnly={readOnly || !isModerator}
 										>
 											<NumberInputField name="reference" ref={register} />
 											<NumberInputStepper>
@@ -216,7 +217,7 @@ const GuildCase = ({
 															}
 															return false;
 														}}
-														isReadOnly={readOnly || !user.guilds?.includes(id as string)}
+														isReadOnly={readOnly || !isModerator}
 														isDisabled={guildCaseData.case.action_processed}
 													/>
 												)}
@@ -247,7 +248,7 @@ const GuildCase = ({
 								<FormControl
 									id="reason"
 									mb={4}
-									isReadOnly={readOnly || !user.guilds?.includes(id as string)}
+									isReadOnly={readOnly || !isModerator}
 									isInvalid={Boolean(errors.reason)}
 								>
 									<FormLabel>Reason</FormLabel>
@@ -276,7 +277,7 @@ const GuildCase = ({
 									colorScheme="green"
 									isLoading={formState.isSubmitting || isLoadingGuildCaseUpdateMutate}
 									loadingText="Submitting"
-									isDisabled={readOnly || !user.guilds?.includes(id as string)}
+									isDisabled={readOnly || !isModerator || formState.isSubmitting || isLoadingGuildCaseUpdateMutate}
 								>
 									Submit
 								</Button>

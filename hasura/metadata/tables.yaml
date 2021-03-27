@@ -126,6 +126,7 @@
       columns:
       - guild_id
       - user_id
+      - manage
       filter:
         user_id:
           _eq: X-Hasura-User-Id
@@ -148,8 +149,11 @@
     permission:
       check:
         moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
+          _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - manage:
+              _eq: true
       columns:
       - guild_id
       - prefix
@@ -208,12 +212,18 @@
       - repository_aliases
       filter:
         moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
+          _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - manage:
+              _eq: true
       check:
         moderators:
-          user_id:
-            _eq: X-Hasura-User-Id
+          _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - manage:
+              _eq: true
 - table:
     schema: public
     name: lockdowns

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 import ms from '@naval-base/ms';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { Response } from 'polka';
 import { Config } from '@yuudachi/types';
 import cookie from 'cookie';
@@ -83,10 +83,9 @@ export class AuthManager {
 		const data = jwt.verify(token, this.config.secretKey, { ignoreExpiration }) as AccessTokenData;
 
 		const [user] = await this.sql<
-			{ token_reset_at: string }[]
+			[{ token_reset_at: string }?]
 		>`select token_reset_at from users where id = ${data.sub}`;
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!user) throw new Error('invalid user');
 		// Intentionally date back iat by 2 seconds
 		const reset = Math.ceil(new Date(user.token_reset_at).getTime() / 1000 - 2);
@@ -96,13 +95,14 @@ export class AuthManager {
 	}
 
 	public async create(userId: string): Promise<AuthCredentials> {
-		const [{ token_reset_at }] = await this.sql<{ token_reset_at: string }[]>`
+		const [user] = await this.sql<[{ token_reset_at: string }?]>`
 			update users set token_reset_at = now()
 			where id = ${userId}
 			returning token_reset_at`;
 
+		if (!user) throw new Error('invalid user');
 		// Intentionally date back iat by 2 seconds
-		const iat = Math.ceil(new Date(token_reset_at).getTime() / 1000 - 2);
+		const iat = Math.ceil(new Date(user.token_reset_at).getTime() / 1000 - 2);
 
 		const tokenData: AccessTokenData = {
 			sub: userId,

@@ -1,6 +1,6 @@
 import { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import fetch from 'node-fetch';
 import { Route } from '@yuudachi/http';
 import { Constants, Tokens } from '@yuudachi/core';
@@ -22,10 +22,11 @@ export default class GetOAuthGuildsRoute extends Route {
 			return next(unauthorized());
 		}
 
-		const [connection] = await this.sql<{ access_token: string }[]>`
+		const [connection] = await this.sql<[{ access_token: string }]>`
 			select access_token
 			from connections
 			where user_id = ${userId}`;
+
 		const guilds: RESTGetAPICurrentUserGuildsResult = await fetch('https://discord.com/api/users/@me/guilds', {
 			headers: {
 				authorization: `Bearer ${connection.access_token}`,

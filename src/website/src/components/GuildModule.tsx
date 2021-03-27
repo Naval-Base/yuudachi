@@ -12,12 +12,14 @@ const GuildModule = ({
 	gqlGuildSettingsData,
 	handleOnSubmit,
 	isLoading,
+	isDisabled,
 }: {
 	guildModule: { name: string; perm: CommandModules; description: string; settings?: string };
 	control: UseFormMethods['control'];
 	gqlGuildSettingsData: GraphQLGuildSettings['data'];
 	handleOnSubmit: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
 	isLoading: boolean;
+	isDisabled: boolean;
 }) => (
 	<Box p={5} minH="145px" maxH="145px" maxW="350px" borderWidth="1px">
 		<FormControl id="moderation">
@@ -35,7 +37,7 @@ const GuildModule = ({
 								void handleOnSubmit(e);
 							}}
 							defaultChecked={Boolean((gqlGuildSettingsData?.guild?.modules ?? 2) & guildModule.perm)}
-							isDisabled={isLoading}
+							isDisabled={isDisabled || isLoading}
 						/>
 					)}
 				/>

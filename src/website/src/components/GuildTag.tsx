@@ -15,6 +15,7 @@ const GuildTag = ({ name }: { name: string }) => {
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { id } = router.query;
+	const isModerator = user.guilds?.some((moderators) => moderators.guild_id === (id as string));
 
 	const { mutateAsync: guildTagDeleteMutate, isLoading: isLoadingGuildTagDeleteMutate } = useMutationDeleteGuildTag(
 		id as string,
@@ -34,7 +35,7 @@ const GuildTag = ({ name }: { name: string }) => {
 
 	return (
 		<>
-			{user.guilds?.includes(id as string) ? (
+			{isModerator ? (
 				<ButtonGroup>
 					<IconButton
 						size="sm"

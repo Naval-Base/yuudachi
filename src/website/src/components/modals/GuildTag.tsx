@@ -53,6 +53,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 	const { handleSubmit, register, control, watch, errors, formState } = useForm<GuildTagPayload>();
 	const { fields, append, remove } = useFieldArray({ control, name: 'aliases' });
 	const { id } = router.query;
+	const isModerator = user.guilds?.some((moderators) => moderators.guild_id === (id as string));
 
 	const { data: gqlGuildTagData, isLoading: isLoadingGuildTag } = useQueryGuildTag(
 		id as string,
@@ -159,12 +160,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 					<>
 						<ModalBody>
 							<form id="guild-tag-modal" onSubmit={handleOnSubmit}>
-								<FormControl
-									id="name"
-									mb={4}
-									isReadOnly={!user.guilds?.includes(id as string)}
-									isInvalid={Boolean(errors.name)}
-								>
+								<FormControl id="name" mb={4} isReadOnly={!isModerator} isInvalid={Boolean(errors.name)}>
 									<FormLabel>Name</FormLabel>
 									<Input
 										name="name"
@@ -193,7 +189,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 												<Box key={item.id}>
 													<FormControl
 														mb={4}
-														isReadOnly={!user.guilds?.includes(id as string)}
+														isReadOnly={!isModerator}
 														isInvalid={Boolean((errors.aliases as FieldErrors | undefined)?.[i]?.value)}
 													>
 														<InputGroup>
@@ -212,7 +208,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 																	aria-label="Delete alias"
 																	icon={<FiX />}
 																	onClick={() => remove(i)}
-																	isDisabled={!user.guilds?.includes(id as string)}
+																	isDisabled={!isModerator}
 																/>
 															</InputRightElement>
 														</InputGroup>
@@ -230,19 +226,14 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 													aria-label="Delete alias"
 													icon={<FiPlus />}
 													onClick={() => append({ value: '' })}
-													isDisabled={!user.guilds?.includes(id as string)}
+													isDisabled={!isModerator}
 												/>
 											</ButtonGroup>
 										</AccordionPanel>
 									</AccordionItem>
 								</Accordion>
 
-								<FormControl
-									id="content"
-									mb={4}
-									isReadOnly={!user.guilds?.includes(id as string)}
-									isInvalid={Boolean(errors.content)}
-								>
+								<FormControl id="content" mb={4} isReadOnly={!isModerator} isInvalid={Boolean(errors.content)}>
 									<FormLabel>Content</FormLabel>
 									<Textarea
 										minH="unset"
@@ -284,7 +275,12 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 									colorScheme="green"
 									isLoading={formState.isSubmitting || isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
 									loadingText="Submitting"
-									isDisabled={!user.guilds?.includes(id as string)}
+									isDisabled={
+										!isModerator ||
+										formState.isSubmitting ||
+										isLoadingGuildTagUpdateMutate ||
+										isLoadingGuildTagInsertMutate
+									}
 								>
 									Submit
 								</Button>

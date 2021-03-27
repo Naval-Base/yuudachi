@@ -21,6 +21,9 @@ const GuildModules = () => {
 	const toast = useToast();
 	const { handleSubmit, control, formState } = useForm<GuildModulesPayload>();
 	const { id } = router.query;
+	const moderator = user.guilds?.find((moderators) => moderators.guild_id === (id as string));
+	const isModerator = Boolean(moderator);
+	const canManage = moderator?.manage;
 
 	const CommandModulesInfo = useMemo(
 		() => [
@@ -51,7 +54,7 @@ const GuildModules = () => {
 
 	const { data: gqlGuildSettingsData, isLoading: isLoadingGuildSettings } = useQueryGuildSettings(
 		id as string,
-		user.guilds?.includes(id as string),
+		isModerator,
 	);
 
 	const guildSettingsData = useMemo(() => gqlGuildSettingsData, [gqlGuildSettingsData]);
@@ -85,7 +88,7 @@ const GuildModules = () => {
 		})(event);
 	};
 
-	if (!user.guilds?.includes(id as string)) {
+	if (!isModerator) {
 		return <Text textAlign="center">You need to be a moderator to see the guild modules.</Text>;
 	}
 
@@ -107,6 +110,9 @@ const GuildModules = () => {
 						gqlGuildSettingsData={guildSettingsData}
 						handleOnSubmit={handleOnSubmit}
 						isLoading={formState.isSubmitting || isLoadingGuildSettings || isLoadingGuildSettingsUpdateMutate}
+						isDisabled={
+							!canManage || formState.isSubmitting || isLoadingGuildSettings || isLoadingGuildSettingsUpdateMutate
+						}
 					/>
 				</Box>
 			))}

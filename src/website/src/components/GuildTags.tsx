@@ -22,13 +22,14 @@ const GuildTagsPage = () => {
 	const cache = useQueryClient();
 	const table = useTableStore();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { id } = router.query;
+	const isModerator = user.guilds?.some((moderators) => moderators.guild_id === (id as string));
 
 	useEffect(() => {
 		return () => table.reset();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const { id } = router.query;
 	const { data: gqlData, isLoading } = useQueryGuildTags(
 		id as string,
 		[{ created_at: 'desc' }],
@@ -72,7 +73,7 @@ const GuildTagsPage = () => {
 	return (
 		<>
 			<ButtonGroup mb={4} mr={2} d="flex" justifyContent="flex-end">
-				<Button colorScheme="green" onClick={onOpen} isDisabled={isOpen || !user.guilds?.includes(id as string)}>
+				<Button colorScheme="green" onClick={onOpen} isDisabled={isOpen || !isModerator}>
 					Add Tag
 				</Button>
 			</ButtonGroup>

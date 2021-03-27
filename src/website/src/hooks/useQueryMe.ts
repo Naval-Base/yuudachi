@@ -19,6 +19,7 @@ export function useQueryMe() {
 					}
 					guild_moderators {
 						guild_id
+						manage
 					}
 					username
 				}
@@ -43,7 +44,7 @@ export function useQueryMe() {
 				id: connection.id,
 				username: data.data.me[0].username,
 				avatar: connection.avatar,
-				guilds: data.data.me[0].guild_moderators.map((guild) => guild.guild_id),
+				guilds: data.data.me[0].guild_moderators,
 			});
 		}
 	}, [data?.errors, data?.data?.me, user]);

@@ -5,7 +5,7 @@ interface UserPayload {
 	id: string | null;
 	username: string | null;
 	avatar: string | null;
-	guilds: string[] | null;
+	guilds: { guild_id: string; manage: boolean }[] | null;
 }
 
 export interface UserState extends State {
@@ -13,7 +13,7 @@ export interface UserState extends State {
 	id: string | null;
 	username: string | null;
 	avatar: string | null;
-	guilds: string[] | null;
+	guilds: { guild_id: string; manage: boolean }[] | null;
 	login: () => void;
 	logout: () => void;
 	setUser: (payload: UserPayload) => void;

@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
 
 const { kSQL } = Tokens;

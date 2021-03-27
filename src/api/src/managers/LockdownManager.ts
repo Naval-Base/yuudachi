@@ -1,4 +1,4 @@
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Lockdown } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
@@ -40,7 +40,7 @@ export default class LockdownManager {
 			type: OverwriteType.Role,
 		});
 
-		const [newLockdown] = await this.sql<{ mod_tag: string; overwrites: APIOverwrite[] }[]>`
+		const [newLockdown] = await this.sql<[{ mod_tag: string; overwrites: APIOverwrite[] }]>`
 			insert into lockdowns (
 				guild_id,
 				channel_id,
@@ -65,7 +65,7 @@ export default class LockdownManager {
 	}
 
 	public async delete(channelId: `${bigint}`) {
-		const [channelOverwrites] = await this.sql<{ overwrites: APIOverwrite[] }[]>`
+		const [channelOverwrites] = await this.sql<[{ overwrites: APIOverwrite[] }]>`
 			select overwrites
 			from lockdowns
 			where channel_id = ${channelId}`;

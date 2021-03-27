@@ -1,5 +1,5 @@
 import { RESTGetAPIUserResult, Routes } from 'discord-api-types/v8';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
@@ -158,7 +158,7 @@ export default class CaseManager {
 	}
 
 	public async delete(guildId: `${bigint}`, caseId: number, manual = false) {
-		const [case_] = await this.sql<RawCase[]>`
+		const [case_] = await this.sql<[RawCase]>`
 			select *
 			from cases
 			where guild_id = ${guildId}
