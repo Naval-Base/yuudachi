@@ -71,6 +71,13 @@
 				},
 				"success": "Successfully unbanned {{- member}}"
 			},
+			"anti_raid_nuke": {
+				"errors": {
+					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
+					"parameters": "Parameters:\n• Current time: {{- now}}\n• Join date after: {{- join}}\n• Account creation after: {{- age}}"
+				},
+				"dry_run": "Anti-Raid-Nuke is projected to hit {{- members}} guild members. Run again with dry-mode disabled to execute."
+			},
 			"restrict": {
 				"mute": {
 					"errors": {
