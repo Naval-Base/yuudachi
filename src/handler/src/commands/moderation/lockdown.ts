@@ -2,7 +2,7 @@ import { APIInteraction, APIMessage } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import { Args, joinTokens, Ok, ok } from 'lexure';
 import { inject, injectable } from 'tsyringe';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
 
@@ -39,14 +39,13 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const [data] = await this.sql<{ mod_role_id: `${bigint}` | null }[]>`
+		const [data] = await this.sql<[{ mod_role_id: `${bigint}` | null }?]>`
 			select mod_role_id
 			from guild_settings
 			where guild_id = ${message.guild_id}`;
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
-			throw new Error(i18next.t('command.common.errors.no_mod_role'));
+			throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
 		}
 
 		let { sub, maybeChannel, duration, reason } = this.parse(args);
@@ -57,7 +56,7 @@ export default class implements Command {
 			maybeChannel = ok(message.channel_id);
 		}
 		if (!maybeChannel.success) {
-			throw new Error(i18next.t('command.common.errors.invalid_channel_id', { lng: locale, id: maybeChannel.error }));
+			throw new Error(i18next.t('command.common.errors.invalid_channel_id', { id: maybeChannel.error, lng: locale }));
 		}
 		if (reason && reason.length >= 1900) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));

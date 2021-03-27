@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { Args, joinTokens } from 'lexure';
 import { inject, injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
 
@@ -35,14 +35,13 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const [data] = await this.sql<{ mod_role_id: `${bigint}` | null }[]>`
+		const [data] = await this.sql<[{ mod_role_id: `${bigint}` | null }?]>`
 			select mod_role_id
 			from guild_settings
 			where guild_id = ${message.guild_id}`;
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
-			throw new Error(i18next.t('command.common.errors.no_mod_role'));
+			throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
 		}
 
 		const { caseId, duration, hide } = this.parse(args);
@@ -65,11 +64,11 @@ export default class implements Command {
 			});
 
 			void send(message, {
-				content: i18next.t('command.mod.duration.success', { lng: locale, case: caseId }),
+				content: i18next.t('command.mod.duration.success', { case: caseId, lng: locale }),
 				flags: hide ? 64 : undefined,
 			});
 		} catch (e) {
-			throw new Error(i18next.t('command.mod.duration.errors.failure', { lng: locale, case: caseId }));
+			throw new Error(i18next.t('command.mod.duration.errors.failure', { case: caseId, lng: locale }));
 		}
 	}
 }

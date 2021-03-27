@@ -1,12 +1,11 @@
-import { APIMessage, Routes } from 'discord-api-types/v8';
+import { APIMessage } from 'discord-api-types/v8';
 import { Args } from 'lexure';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import i18next from 'i18next';
-import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
 
-import { ellipsis, uniqueValidatedValues } from '../../../util';
+import { ellipsis, send, uniqueValidatedValues } from '../../../util';
 import { MESSAGE_CONTENT_LIMIT } from '../../../Constants';
 
 const { kSQL } = Tokens;
@@ -19,14 +18,13 @@ function argsFormat(locale: string) {
 }
 
 async function add(message: APIMessage, locale: string, current: string[], cleaned: string[]) {
-	const rest = container.resolve(Rest);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	if (!cleaned.length) {
 		throw new Error(
 			i18next.t('command.github.alias.add.errors.no_args', {
-				lng: locale,
 				format: argsFormat(locale),
+				lng: locale,
 			}),
 		);
 	}
@@ -52,20 +50,17 @@ async function add(message: APIMessage, locale: string, current: string[], clean
 		.map((r) => `• \`${r}\``)
 		.join('\n')}`;
 
-	void rest.post(Routes.channelMessages(message.channel_id), {
-		content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
-	});
+	void send(message, { content: ellipsis(content, MESSAGE_CONTENT_LIMIT) });
 }
 
 async function remove(message: APIMessage, locale: string, current: string[], cleaned: string[]) {
-	const rest = container.resolve(Rest);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	if (!cleaned.length) {
 		throw new Error(
 			i18next.t('command.github.alias.remove.errors.no_args', {
-				lng: locale,
 				format: argsFormat(locale),
+				lng: locale,
 			}),
 		);
 	}
@@ -98,14 +93,10 @@ async function remove(message: APIMessage, locale: string, current: string[], cl
 		.map((r) => `\`${r}\``)
 		.join(', ')}`;
 
-	void rest.post(Routes.channelMessages(message.channel_id), {
-		content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
-	});
+	void send(message, { content: ellipsis(content, MESSAGE_CONTENT_LIMIT) });
 }
 
 function list(message: APIMessage, locale: string, current: string[]) {
-	const rest = container.resolve(Rest);
-
 	if (!current.length) {
 		throw new Error(
 			i18next.t('command.github.alias.common.no_current', {
@@ -118,18 +109,15 @@ function list(message: APIMessage, locale: string, current: string[]) {
 		.map((r) => `• \`${r}\``)
 		.join('\n')}`;
 
-	void rest.post(Routes.channelMessages(message.channel_id), {
-		content: ellipsis(content, MESSAGE_CONTENT_LIMIT),
-	});
+	void send(message, { content: ellipsis(content, MESSAGE_CONTENT_LIMIT) });
 }
 
 async function fetchAliases(guild: string, sql: Sql<any>): Promise<string[]> {
-	const [result] = await sql<{ repository_aliases: string[] }[]>`
+	const [result] = await sql<[{ repository_aliases: string[] | null }?]>`
 		select repository_aliases
 		from guild_settings
 		where guild_id = ${guild};`;
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (!result?.repository_aliases?.length) {
 		return [];
 	}
@@ -168,8 +156,8 @@ export async function alias(message: APIMessage, args: Args, locale: string) {
 	if (!sub) {
 		throw new Error(
 			i18next.t('command.github.alias.common.errors.no_sub', {
-				lng: locale,
 				valid_commands: validSubCommands.join(', '),
+				lng: locale,
 			}),
 		);
 	}
@@ -199,9 +187,9 @@ export async function alias(message: APIMessage, args: Args, locale: string) {
 		case 'default': {
 			throw new Error(
 				i18next.t('command.github.alias.common.errors.invalid_sub', {
-					lng: locale,
 					command: sub,
 					valid_commands: validSubCommands.join(', '),
+					lng: locale,
 				}),
 			);
 		}

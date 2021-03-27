@@ -2,12 +2,13 @@ import { injectable, inject } from 'tsyringe';
 import { APIMessage } from 'discord-api-types/v8';
 import { Args, joinTokens } from 'lexure';
 import Rest from '@yuudachi/rest';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
+import { send } from '../../util';
 
 import { search } from './sub/search';
 
@@ -41,17 +42,18 @@ export default class implements Command {
 					throw new Error(i18next.t('command.tag.common.errors.no_name', { lng: locale }));
 				}
 
-				const [tag] = await this.sql<{ content: string }[]>`
+				const [tag] = await this.sql<[{ content: string }?]>`
 					select content
 					from tags
 					where name = ${name}
 						or ${name} = ANY(aliases)
 						and guild_id = ${message.guild_id};`;
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
 				if (!tag) {
 					throw new Error(i18next.t('command.tag.common.errors.not_found', { lng: locale }));
 				}
-				void this.rest.post(`/channels/${message.channel_id}/messages`, { content: tag.content });
+
+				void send(message, { content: tag.content });
 				break;
 			}
 		}

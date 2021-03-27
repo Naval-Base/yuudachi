@@ -10,7 +10,7 @@ import i18next from 'i18next';
 import { Args } from 'lexure';
 import { inject, injectable } from 'tsyringe';
 import { oneLine, stripIndents } from 'common-tags';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
 import dayjs from 'dayjs';
@@ -52,14 +52,13 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
 
-		const [data] = await this.sql<{ mod_role_id: `${bigint}` | null }[]>`
+		const [data] = await this.sql<[{ mod_role_id: `${bigint}` | null }?]>`
 			select mod_role_id
 			from guild_settings
 			where guild_id = ${message.guild_id}`;
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
-			throw new Error(i18next.t('command.common.errors.no_mod_role'));
+			throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
 		}
 
 		const maybeMember = this.parse(args);
@@ -67,7 +66,7 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_user_id', { lng: locale }));
 		}
 		if (!maybeMember.success) {
-			throw new Error(i18next.t('command.common.errors.invalid_user_id', { lng: locale, id: maybeMember.error }));
+			throw new Error(i18next.t('command.common.errors.invalid_user_id', { id: maybeMember.error, lng: locale }));
 		}
 
 		const [targetUser, targetMember] = await Promise.allSettled([
@@ -122,7 +121,7 @@ export default class implements Command {
 			});
 		}
 
-		const cases = await this.sql<{ case_id: number; action: number; reason: string; created_at: Date }[]>`
+		const cases = await this.sql<[{ case_id: number; action: number; reason: string; created_at: Date }]>`
 			select case_id, action, reason, created_at
 			from cases
 			where guild_id = ${message.guild_id}

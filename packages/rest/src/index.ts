@@ -1,7 +1,7 @@
 import { encode, decode } from '@msgpack/msgpack';
 import { Amqp, AmqpOptions } from '@spectacles/brokers';
 import HttpException from './HttpException';
-import Rest from './Rest';
+import Rest, { RequestOptions } from './Rest';
 
 export function createAmqpBroker(group: string, options: AmqpOptions = {}): Amqp {
 	return new Amqp(group, {
@@ -16,5 +16,5 @@ export function createAmqpBroker(group: string, options: AmqpOptions = {}): Amqp
 	});
 }
 
-export { Rest, HttpException };
+export { Rest, HttpException, RequestOptions };
 export default Rest;

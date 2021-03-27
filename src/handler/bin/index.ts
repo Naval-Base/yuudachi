@@ -19,7 +19,7 @@ import { CommandModules } from '@yuudachi/types';
 import Command, { commandInfo, ExecutionContext } from '../src/Command';
 import { has, send } from '../src/util';
 
-const { kSQL } = Tokens;
+const { kGateway, kSQL } = Tokens;
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) throw new Error('missing DISCORD_TOKEN');
@@ -30,11 +30,12 @@ if (!apiURL) throw new Error('missing API_URL');
 const api = new API(apiURL);
 const restBroker = createAmqpBroker('rest');
 const rest = new Rest(token, restBroker);
-const broker = new Amqp('gateway');
+const gatewayBroker = new Amqp('gateway');
 const sql = postgres();
 
 container.register(API, { useValue: api });
 container.register(Rest, { useValue: rest });
+container.register(kGateway, { useValue: gatewayBroker });
 container.register(kSQL, { useValue: sql });
 
 const commands = new Map<string, Command>();
@@ -45,25 +46,26 @@ const files = readdirp(resolve(__dirname, '..', 'src', 'commands'), {
 });
 
 const messageCreate = async () => {
-	for await (const [message, { ack }] of on(broker, GatewayDispatchEvents.MessageCreate) as AsyncIterableIterator<
-		[APIMessage, AmqpResponseOptions]
-	>) {
+	for await (const [message, { ack }] of on(
+		gatewayBroker,
+		GatewayDispatchEvents.MessageCreate,
+	) as AsyncIterableIterator<[APIMessage, AmqpResponseOptions]>) {
 		ack();
 
 		const [data] = await sql<
-			{
-				prefix: string | null;
-				locale: string | null;
-				modules: number | null;
-			}[]
+			[
+				{
+					prefix: string | null;
+					locale: string | null;
+					modules: number | null;
+				}?,
+			]
 		>`select prefix, locale, modules
 			from guild_settings
 			where guild_id = ${message.guild_id ?? null}`;
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
 		const prefix = data?.prefix ?? '?';
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const locale = data?.locale ?? 'en';
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const modules = data?.modules ?? CommandModules.Config;
 		const lexer = new Lexer(message.content).setQuotes([
 			['"', '"'],
@@ -124,23 +126,25 @@ const messageCreate = async () => {
 
 const interactionCreate = async () => {
 	for await (const [interaction, { ack }] of on(
-		broker,
+		gatewayBroker,
 		GatewayDispatchEvents.InteractionCreate,
 	) as AsyncIterableIterator<[APIInteraction, AmqpResponseOptions]>) {
 		ack();
+		console.log(interaction);
 
 		const out = parseInteraction(interaction.data?.options ?? []);
 		const [data] = await sql<
-			{
-				locale: string | null;
-				modules: number | null;
-			}[]
+			[
+				{
+					locale: string | null;
+					modules: number | null;
+				}?,
+			]
 		>`select locale, modules
 			from guild_settings
 			where guild_id = ${interaction.guild_id}`;
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
 		const locale = data?.locale ?? 'en';
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const modules = data?.modules ?? CommandModules.Config;
 
 		const command = commands.get(interaction.data?.name ?? '');
@@ -173,8 +177,12 @@ const interactionCreate = async () => {
 };
 
 void (async () => {
-	const conn = await broker.connect('rabbitmq');
-	await broker.subscribe([GatewayDispatchEvents.MessageCreate, GatewayDispatchEvents.InteractionCreate]);
+	const conn = await gatewayBroker.connect('rabbitmq');
+	await gatewayBroker.subscribe([
+		GatewayDispatchEvents.MessageCreate,
+		GatewayDispatchEvents.InteractionCreate,
+		GatewayDispatchEvents.GuildMembersChunk,
+	]);
 
 	await restBroker.connect(conn);
 

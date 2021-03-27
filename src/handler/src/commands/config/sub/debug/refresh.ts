@@ -18,19 +18,23 @@ export async function refresh(message: APIMessage | APIInteraction, args: Args, 
 
 	switch (sub) {
 		case 'commands': {
+			const commands: Record<string, any>[] = [];
+
 			const files = readdirp(resolve(__dirname, '..', '..', '..', '..', 'interactions'), {
 				fileFilter: '*.js',
 			});
 
 			for await (const dir of files) {
 				const structure = (await import(dir.fullPath)).default as Record<string, any>;
-				await rest.post(
-					Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as `${bigint}`, message.guild_id!),
-					structure,
-				);
+				commands.push(structure);
 			}
 
-			void send(message, { content: i18next.t('command.config.debug.refresh.success') });
+			await rest.put(
+				Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as `${bigint}`, message.guild_id!),
+				commands,
+			);
+
+			void send(message, { content: i18next.t('command.config.debug.refresh.success', { lng: locale }) });
 		}
 
 		default:

@@ -1,13 +1,11 @@
 import { APIMessage, APIEmbed } from 'discord-api-types/v8';
-import Rest from '@yuudachi/rest';
 import i18next from 'i18next';
 import fetch from 'node-fetch';
-import { container } from 'tsyringe';
 
 import { GitHubAPIResult } from '../../../interfaces/GitHub';
 import { GITHUB_BASE_URL, GITHUB_COLOR_COMMIT, GITHUB_ICON_COMMIT } from '../../../Constants';
+import { send, truncateEmbed } from '../../../util';
 import { GitHubAPIError } from '../github';
-import { truncateEmbed } from '../../../util';
 
 function buildQuery(owner: string, repository: string, expression: string) {
 	return `
@@ -43,8 +41,6 @@ export async function commit(
 	isPrefixed: boolean,
 	message: APIMessage,
 ) {
-	const rest = container.resolve(Rest);
-
 	try {
 		const query = buildQuery(owner, repository, expression);
 		const res: GitHubAPIResult = await fetch(GITHUB_BASE_URL, {
@@ -56,13 +52,13 @@ export async function commit(
 		}).then((res) => res.json());
 
 		if (!res.data) {
-			throw new Error(i18next.t('command.github.common.errors.fetch'));
+			throw new Error(i18next.t('command.github.common.errors.fetch', { lng: locale }));
 		}
 
 		if (res.errors?.some((e) => e.type === 'NOT_FOUND')) {
 			if (!isPrefixed) return;
 			throw new GitHubAPIError(
-				i18next.t('command.github.commit.errors.not_found', { lng: locale, expression, owner, repository }),
+				i18next.t('command.github.commit.errors.not_found', { expression, owner, repository, lng: locale }),
 			);
 		}
 
@@ -87,15 +83,13 @@ export async function commit(
 			title,
 			url: commit.commitUrl,
 			footer: {
-				text: i18next.t('command.github.commit.files_count', { lng: locale, count: commit.changedFiles }),
+				text: i18next.t('command.github.commit.files_count', { count: commit.changedFiles, lng: locale }),
 				icon_url: GITHUB_ICON_COMMIT,
 			},
 			timestamp: commit.pushedDate,
 		};
 
-		await rest.post(`/channels/${message.channel_id}/messages`, {
-			embed: truncateEmbed(embed),
-		});
+		await send(message, { embed: truncateEmbed(embed) });
 	} catch (error) {
 		if (!isPrefixed) return;
 

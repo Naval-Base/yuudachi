@@ -40,11 +40,12 @@ export async function lock(
 		await rest.post(Routes.channelMessages(maybeChannel.value), {
 			content: i18next.t('command.mod.lockdown.lock.message', {
 				duration: dayjs(duration.toISOString()).fromNow(true),
+				lng: locale,
 			}),
 		});
 
 		void send(message, {
-			content: i18next.t('command.mod.lockdown.lock.success', { lng: locale, channel: channelMention }),
+			content: i18next.t('command.mod.lockdown.lock.success', { channel: channelMention, lng: locale }),
 		});
 	} catch (e) {
 		if (e instanceof HttpException) {
@@ -55,6 +56,6 @@ export async function lock(
 					throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
 			}
 		}
-		throw new Error(i18next.t('command.mod.lockdown.lock.errors.failure', { lng: locale, channel: channelMention }));
+		throw new Error(i18next.t('command.mod.lockdown.lock.errors.failure', { channel: channelMention, lng: locale }));
 	}
 }

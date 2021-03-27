@@ -9,6 +9,7 @@ import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
 import { DOCUMENTATION_SOURCES } from '../../Constants';
+import { send } from '../../util';
 
 @injectable()
 export default class implements Command {
@@ -28,7 +29,7 @@ export default class implements Command {
 		const q = query.split(' ');
 
 		if (!DOCUMENTATION_SOURCES.includes(source)) {
-			throw new Error(i18next.t('command.docs.common.errors.no_matching_source'));
+			throw new Error(i18next.t('command.docs.common.errors.no_matching_source', { lng: locale }));
 		}
 		if (source === 'v11') {
 			source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
@@ -36,9 +37,9 @@ export default class implements Command {
 		const queryString = qs.stringify({ src: source, q: q.join(' '), force, includePrivate });
 		const embed = await fetch(`https://djsdocs.sorta.moe/v2/embed?${queryString}`).then((res) => res.json());
 		if (!embed) {
-			throw new Error(i18next.t('command.docs.common.errors.no_results'));
+			throw new Error(i18next.t('command.docs.common.errors.no_results', { lng: locale }));
 		}
 
-		void this.rest.post(`/channels/${message.channel_id}/messages`, { embed });
+		void send(message, { embed });
 	}
 }

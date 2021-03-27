@@ -17,7 +17,7 @@ export async function lift(message: APIMessage | APIInteraction, maybeChannel: O
 		});
 
 		void send(message, {
-			content: i18next.t('command.mod.lockdown.lift.success', { lng: locale, channel: channelMention }),
+			content: i18next.t('command.mod.lockdown.lift.success', { channel: channelMention, lng: locale }),
 		});
 	} catch (e) {
 		if (e instanceof HttpException) {
@@ -28,6 +28,6 @@ export async function lift(message: APIMessage | APIInteraction, maybeChannel: O
 					throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
 			}
 		}
-		throw new Error(i18next.t('command.mod.lockdown.lift.errors.failure', { lng: locale, channel: channelMention }));
+		throw new Error(i18next.t('command.mod.lockdown.lift.errors.failure', { channel: channelMention, lng: locale }));
 	}
 }

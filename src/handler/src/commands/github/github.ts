@@ -1,7 +1,7 @@
 import { Args } from 'lexure';
 import { injectable, inject } from 'tsyringe';
 import { APIMessage } from 'discord-api-types/v8';
-import { Sql } from 'postgres';
+import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
@@ -94,7 +94,7 @@ export default class GitHub implements Command {
 	}
 
 	private async fetchAliases(guild: string): Promise<Map<string, RepositoryEntry>> {
-		const [result] = await this.sql<{ repository_aliases: string[] }[]>`
+		const [result] = await this.sql<[{ repository_aliases: string[] | null }?]>`
 			select repository_aliases
 			from guild_settings
 			where guild_id = ${guild}
@@ -102,7 +102,6 @@ export default class GitHub implements Command {
 
 		const mapping: Map<string, RepositoryEntry> = new Map();
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!result?.repository_aliases?.length) {
 			return mapping;
 		}

@@ -1,10 +1,8 @@
 import { APIMessage, APIEmbed } from 'discord-api-types/v8';
 import fetch from 'node-fetch';
 import i18next from 'i18next';
-import Rest from '@yuudachi/rest';
-import { container } from 'tsyringe';
 
-import { addFields, truncateEmbed } from '../../../util';
+import { addFields, send, truncateEmbed } from '../../../util';
 import { isPR, GitHubReviewDecision, GitHubReviewState, GitHubAPIResult } from '../../../interfaces/GitHub';
 
 import {
@@ -135,8 +133,6 @@ export async function issuePR(
 	isPrefixed: boolean,
 	message: APIMessage,
 ) {
-	const rest = container.resolve(Rest);
-
 	try {
 		const query = buildQuery(owner, repository, num);
 		const res: GitHubAPIResult = await fetch(GITHUB_BASE_URL, {
@@ -148,13 +144,13 @@ export async function issuePR(
 		}).then((res) => res.json());
 
 		if (!res.data) {
-			throw new Error(i18next.t('command.github.common.errors.fetch'));
+			throw new Error(i18next.t('command.github.common.errors.fetch', { lng: locale }));
 		}
 
 		if (res.errors?.some((e) => e.type === 'NOT_FOUND')) {
 			if (!isPrefixed) return;
 			throw new GitHubAPIError(
-				i18next.t('command.github.issue-pr.errors.not_found', { lng: locale, issue: num, owner, repository }),
+				i18next.t('command.github.issue-pr.errors.not_found', { issue: num, owner, repository, lng: locale }),
 			);
 		}
 
@@ -192,7 +188,7 @@ export async function issuePR(
 
 		// footer text
 		const comments = issue.comments.totalCount
-			? `(${i18next.t('command.github.issue-pr.comment_count', { lng: locale, count: issue.comments.totalCount })})`
+			? `(${i18next.t('command.github.issue-pr.comment_count', { count: issue.comments.totalCount, lng: locale })})`
 			: '';
 
 		const isMerge = isPR(issue) && resultState === 'MERGED';
@@ -201,11 +197,11 @@ export async function issuePR(
 
 		const action = isMerge
 			? user && commit
-				? i18next.t('command.github.issue-pr.action.merge_by_in', { lng: locale, user, commit })
+				? i18next.t('command.github.issue-pr.action.merge_by_in', { user, commit, lng: locale })
 				: user
-				? i18next.t('command.github.issue-pr.action.merge_by', { lng: locale, user })
+				? i18next.t('command.github.issue-pr.action.merge_by', { user, lng: locale })
 				: commit
-				? i18next.t('command.github.issue-pr.action.merge_in', { lng: locale, commit })
+				? i18next.t('command.github.issue-pr.action.merge_in', { commit, lng: locale })
 				: i18next.t('command.github.issue-pr.action.merge', { lng: locale })
 			: resultState === 'CLOSED'
 			? i18next.t('command.github.issue-pr.action.close', { lng: locale })
@@ -285,9 +281,7 @@ export async function issuePR(
 
 		const e3: APIEmbed = reviews.length ? addFields(e2, { name: reviewTitle, value: reviewBody }) : e2;
 
-		await rest.post(`/channels/${message.channel_id}/messages`, {
-			embed: truncateEmbed(e3),
-		});
+		await send(message, { embed: truncateEmbed(e3) });
 	} catch (error) {
 		if (!isPrefixed) return;
 
