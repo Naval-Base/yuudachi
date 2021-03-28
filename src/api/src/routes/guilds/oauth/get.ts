@@ -27,11 +27,16 @@ export default class GetOAuthGuildsRoute extends Route {
 			from connections
 			where user_id = ${userId}`;
 
-		const guilds: RESTGetAPICurrentUserGuildsResult = await fetch('https://discord.com/api/users/@me/guilds', {
-			headers: {
-				authorization: `Bearer ${connection.access_token}`,
-			},
-		}).then((r) => r.json());
+		let guilds: RESTGetAPICurrentUserGuildsResult;
+		try {
+			guilds = await fetch('https://discord.com/api/users/@me/guilds', {
+				headers: {
+					authorization: `Bearer ${connection.access_token}`,
+				},
+			}).then((r) => r.json());
+		} catch (e) {
+			throw e;
+		}
 
 		req.statusCode = 200;
 		res.setHeader('content-type', 'application/json; charset=utf-8');
