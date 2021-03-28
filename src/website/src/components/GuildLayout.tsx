@@ -20,8 +20,10 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 	useQueryMe();
 	const user = useUserStore();
 	const router = useRouter();
-
 	const { id } = router.query;
+	const moderator = user.guilds?.find((moderators) => moderators.guild_id === (id as string));
+	const isModerator = Boolean(moderator);
+
 	const { data: gqlGuildData, isLoading: isLoadingGuild } = useQueryGuild(id as string);
 	const { data: gqlFallbackGuildData, isLoading: isLoadingFallbackGuild } = useQueryOAuthGuilds();
 
@@ -60,22 +62,24 @@ const GuildLayout = ({ children }: { children: React.ReactNode }) => {
 							</Link>
 						</Box>
 						<GuildDisplay id={id as string} guild={guildData} fallbackGuild={guildFallbackData} />
-						{guildData && !guildData.guild ? null : <GuildNavbar />}
+						{guildData?.guild ? <GuildNavbar /> : null}
 					</Box>
 				</DarkMode>
-				{guildData && !guildData.guild ? (
+				{guildData?.guild ? (
+					children
+				) : (
 					<Center>
 						<Box textAlign="center">
 							<Heading fontSize="xl" mb={6}>
-								Yuudachi is not in this guild yet.
+								{isModerator
+									? 'Yuudachi is not in this guild yet.'
+									: 'You need to be a moderator to see the guild settings.'}
 							</Heading>
-							<Link href={''}>
-								<Button>Invite</Button>
+							<Link href={isModerator ? '' : '/dashboard'}>
+								<Button>{isModerator ? 'Invite' : 'Go back'}</Button>
 							</Link>
 						</Box>
 					</Center>
-				) : (
-					children
 				)}
 			</Grid>
 		</>
