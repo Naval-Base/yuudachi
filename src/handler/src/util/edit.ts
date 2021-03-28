@@ -1,16 +1,17 @@
 import {
-	APIInteraction,
+	APIGuildInteraction,
 	APIInteractionResponse,
 	APIMessage,
 	APIInteractionApplicationCommandCallbackData,
 	RESTPostAPIChannelMessageJSONBody,
 	Routes,
+	Snowflake,
 } from 'discord-api-types/v8';
 import Rest from '@yuudachi/rest';
 import { container } from 'tsyringe';
 
 export function edit(
-	message: APIMessage | APIInteraction,
+	message: APIMessage | APIGuildInteraction,
 	payload: RESTPostAPIChannelMessageJSONBody | APIInteractionApplicationCommandCallbackData,
 	type: APIInteractionResponse['type'] = 4,
 ) {
@@ -20,7 +21,7 @@ export function edit(
 		const { embed, ...r } = payload as RESTPostAPIChannelMessageJSONBody;
 		const response = { ...r, embeds: embed ? [embed] : undefined };
 
-		return rest.patch(Routes.webhookMessage(process.env.DISCORD_CLIENT_ID as `${bigint}`, message.token), {
+		return rest.patch(Routes.webhookMessage(process.env.DISCORD_CLIENT_ID as Snowflake, message.token), {
 			type,
 			data: {
 				...response,

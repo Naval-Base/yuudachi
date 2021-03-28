@@ -115,6 +115,7 @@ services:
     labels:
       com.naval-base.description: 'Gateway Ingress'
     environment:
+      DISCORD_GATEWAY_VERSION: 8
       DISCORD_TOKEN: ''
       DISCORD_EVENTS: 'READY,MESSAGE_CREATE,INTERACTION_CREATE,GUILD_CREATE,GUILD_MEMBERS_CHUNK'
       DISCORD_INTENTS: 'GUILD_MESSAGES,GUILD_INTEGRATIONS,GUILD_MEMBERS,GUILD_BANS'
@@ -137,7 +138,7 @@ services:
     labels:
       com.naval-base.description: 'Discord proxy'
     environment:
-      RUST_LOG: info
+      RUST_LOG: debug
       TIMEOUT: ''
       DISCORD_API_VERSION: 8
       REDIS_URL: 'redis://redis:6379'

@@ -1,4 +1,4 @@
-import { RESTGetAPIUserResult, Routes } from 'discord-api-types/v8';
+import { RESTGetAPIUserResult, Routes, Snowflake } from 'discord-api-types/v8';
 import type { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
 import { Case, CaseAction } from '@yuudachi/types';
@@ -11,18 +11,18 @@ export interface RawCase {
 	action_expiration: string | null;
 	ref_id: number | null;
 	action_processed: boolean;
-	target_id: `${bigint}`;
+	target_id: Snowflake;
 	action: number;
-	role_id: `${bigint}` | null;
+	role_id: Snowflake | null;
 	case_id: number;
-	context_message_id: `${bigint}` | null;
-	mod_id: `${bigint}`;
+	context_message_id: Snowflake | null;
+	mod_id: Snowflake;
 	target_tag: string;
 	reason: string;
-	log_message_id: `${bigint}` | null;
+	log_message_id: Snowflake | null;
 	created_at: string;
 	mod_tag: string;
-	guild_id: `${bigint}`;
+	guild_id: Snowflake;
 }
 
 export type PatchCase = Pick<
@@ -157,7 +157,7 @@ export default class CaseManager {
 		return updatedCase as Case;
 	}
 
-	public async delete(guildId: `${bigint}`, caseId: number, manual = false) {
+	public async delete(guildId: Snowflake, caseId: number, manual = false) {
 		const [case_] = await this.sql<[RawCase]>`
 			select *
 			from cases

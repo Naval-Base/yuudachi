@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 import { Amqp } from '@spectacles/brokers';
-import { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
+import type { AmqpResponseOptions } from '@spectacles/brokers/typings/src/Amqp';
 import { on } from 'events';
 import postgres from 'postgres';
 import { Lexer, Parser, prefixedStrategy, Args, Token, ParserOutput } from 'lexure';
@@ -10,7 +10,7 @@ import readdirp from 'readdirp';
 import API from '@yuudachi/api';
 import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
-import { APIInteraction, APIMessage, GatewayDispatchEvents } from 'discord-api-types/v8';
+import { APIGuildInteraction, APIMessage, GatewayDispatchEvents } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import HttApi, { BackendOptions } from 'i18next-http-backend';
 import { Tokens, parseInteraction } from '@yuudachi/core';
@@ -128,9 +128,8 @@ const interactionCreate = async () => {
 	for await (const [interaction, { ack }] of on(
 		gatewayBroker,
 		GatewayDispatchEvents.InteractionCreate,
-	) as AsyncIterableIterator<[APIInteraction, AmqpResponseOptions]>) {
+	) as AsyncIterableIterator<[APIGuildInteraction, AmqpResponseOptions]>) {
 		ack();
-		console.log(interaction);
 
 		const out = parseInteraction(interaction.data?.options ?? []);
 		const [data] = await sql<

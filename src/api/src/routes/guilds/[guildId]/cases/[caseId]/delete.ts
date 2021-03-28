@@ -1,6 +1,7 @@
+import type { Snowflake } from 'discord-api-types/v8';
 import { Case } from '@yuudachi/types';
 import { forbidden, notFound } from '@hapi/boom';
-import { Request, Response } from 'polka';
+import type { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { HttpException } from '@yuudachi/rest';
@@ -16,7 +17,7 @@ export default class DeleteCaseRoute extends Route {
 	public async handle(req: Request, res: Response) {
 		let case_: Case;
 		try {
-			case_ = await this.caseManager.delete(req.params.guildId as `${bigint}`, Number(req.params.caseId), true);
+			case_ = await this.caseManager.delete(req.params.guildId as Snowflake, Number(req.params.caseId), true);
 		} catch (e) {
 			if (e instanceof HttpException) {
 				switch (e.status) {

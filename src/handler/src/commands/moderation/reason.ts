@@ -1,22 +1,18 @@
-import { APIInteraction, APIMessage } from 'discord-api-types/v8';
+import type { APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
 import i18next from 'i18next';
 import { Args, joinTokens } from 'lexure';
-import { inject, injectable } from 'tsyringe';
-import type { Sql } from 'postgres';
-import { Tokens } from '@yuudachi/core';
+import { injectable } from 'tsyringe';
 import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
-import { send } from '../../util';
-
-const { kSQL } = Tokens;
+import { checkMod, send } from '../../util';
 
 @injectable()
 export default class implements Command {
 	public readonly category = CommandModules.Moderation;
 
-	public constructor(@inject(kSQL) private readonly sql: Sql<any>, private readonly api: API) {}
+	public constructor(private readonly api: API) {}
 
 	private parse(args: Args) {
 		const caseId = args.option('case');
@@ -29,19 +25,11 @@ export default class implements Command {
 		};
 	}
 
-	public async execute(message: APIMessage | APIInteraction, args: Args, locale: string): Promise<void> {
+	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string): Promise<void> {
 		if (!message.guild_id) {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
-
-		const [data] = await this.sql<[{ mod_role_id: `${bigint}` | null }?]>`
-			select mod_role_id
-			from guild_settings
-			where guild_id = ${message.guild_id}`;
-
-		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
-			throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
-		}
+		await checkMod(message, locale);
 
 		const { caseId, reason, hide } = this.parse(args);
 		if (!caseId) {

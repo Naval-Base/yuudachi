@@ -1,7 +1,8 @@
+import type { Snowflake } from 'discord-api-types/v8';
 import { Case, CaseAction } from '@yuudachi/types';
 import { forbidden, notFound } from '@hapi/boom';
 import Joi from 'joi';
-import { Request, Response } from 'polka';
+import type { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { HttpException } from '@yuudachi/rest';
@@ -70,7 +71,7 @@ export default class CreateCaseRoute extends Route {
 		const body: CasesPostBody = req.body as any;
 
 		for (const case_ of body.cases) {
-			case_.guildId = req.params.guildId as `${bigint}`;
+			case_.guildId = req.params.guildId as Snowflake;
 			created.push(this.caseManager.create(case_));
 		}
 

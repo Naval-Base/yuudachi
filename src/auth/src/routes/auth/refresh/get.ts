@@ -1,6 +1,6 @@
 import cookie from 'cookie';
 import { badRequest, unauthorized } from '@hapi/boom';
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { AuthManager, AuthCredentials, authenticate } from '@yuudachi/core';

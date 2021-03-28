@@ -1,10 +1,11 @@
-import { Case, CreateCase, UpdateCase, Lockdown, CreateLockdown, DeleteLockdown } from '@yuudachi/types';
+import type { Case, CreateCase, UpdateCase, Lockdown, CreateLockdown, DeleteLockdown } from '@yuudachi/types';
 import { Constants } from '@yuudachi/core';
-import {
+import type {
 	RESTGetAPICurrentUserGuildsResult,
 	RESTGetAPIGuildChannelsResult,
 	RESTGetAPIGuildResult,
 	RESTGetAPIGuildRolesResult,
+	Snowflake,
 } from 'discord-api-types/v8';
 import API from '..';
 
@@ -17,7 +18,7 @@ export default class Guilds {
 		return this.api.make<RESTGetAPICurrentUserGuildsResult>('get', '/guilds');
 	}
 
-	public getGuild(guildId: `${bigint}`) {
+	public getGuild(guildId: Snowflake) {
 		return this.api.make<RESTGetAPIGuildResult>('get', `/guilds/${guildId}`);
 	}
 
@@ -27,31 +28,31 @@ export default class Guilds {
 		});
 	}
 
-	public getChannels(guildId: `${bigint}`) {
+	public getChannels(guildId: Snowflake) {
 		return this.api.make<RESTGetAPIGuildChannelsResult>('get', `/guilds/${guildId}/channels`);
 	}
 
-	public getRoles(guildId: `${bigint}`) {
+	public getRoles(guildId: Snowflake) {
 		return this.api.make<RESTGetAPIGuildRolesResult>('get', `/guilds/${guildId}/roles`);
 	}
 
-	public createCase(guildId: `${bigint}`, ...cases: CreateCase[]) {
+	public createCase(guildId: Snowflake, ...cases: CreateCase[]) {
 		return this.api.make<Case[]>('post', `/guilds/${guildId}/cases`, { cases });
 	}
 
-	public updateCase(guildId: `${bigint}`, ...cases: UpdateCase[]) {
+	public updateCase(guildId: Snowflake, ...cases: UpdateCase[]) {
 		return this.api.make<Case[]>('patch', `/guilds/${guildId}/cases`, { cases });
 	}
 
-	public deleteCase(guildId: `${bigint}`, caseId: number) {
+	public deleteCase(guildId: Snowflake, caseId: number) {
 		return this.api.make<Case[]>('delete', `/guilds/${guildId}/cases/${caseId}`);
 	}
 
-	public createLockdown(guildId: `${bigint}`, ...lockdowns: CreateLockdown[]) {
+	public createLockdown(guildId: Snowflake, ...lockdowns: CreateLockdown[]) {
 		return this.api.make<Lockdown[]>('post', `/guilds/${guildId}/lockdowns`, { lockdowns });
 	}
 
-	public deleteLockdown(guildId: `${bigint}`, ...lockdowns: DeleteLockdown[]) {
+	public deleteLockdown(guildId: Snowflake, ...lockdowns: DeleteLockdown[]) {
 		return this.api.make<Lockdown[]>('delete', `/guilds/${guildId}/lockdowns`, { lockdowns });
 	}
 }

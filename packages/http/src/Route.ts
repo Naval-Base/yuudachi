@@ -1,6 +1,6 @@
 import { basename, dirname } from 'path';
-import { Request, RequestHandler, Response, NextHandler, Polka } from 'polka';
-import { AuthInfo } from '@yuudachi/types';
+import type { Request, RequestHandler, Response, NextHandler, Polka } from 'polka';
+import type { AuthInfo } from '@yuudachi/types';
 
 declare module 'polka' {
 	export interface Request {

@@ -1,4 +1,5 @@
-import { Request, Response } from 'polka';
+import type { Snowflake } from 'discord-api-types/v8';
+import type { Request, Response } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { Tokens } from '@yuudachi/core';
@@ -15,7 +16,7 @@ export default class HasuraModActionTimersCron extends Route {
 	}
 
 	public async handle(_: Request, res: Response) {
-		const currentCases = await this.sql<[{ guild_id: `${bigint}`; case_id: number; action_expiration: string }]>`
+		const currentCases = await this.sql<[{ guild_id: Snowflake; case_id: number; action_expiration: string }]>`
 			select guild_id, case_id, action_expiration
 			from cases
 			where action_processed = false`;

@@ -1,7 +1,7 @@
-import { APIInteraction, APIMessage, APIApplicationCommandInteractionDataOption } from 'discord-api-types/v8';
-import { Args } from 'lexure';
+import type { APIGuildInteraction, APIMessage, APIApplicationCommandInteractionDataOption } from 'discord-api-types/v8';
+import type { Args } from 'lexure';
 import { basename, extname } from 'path';
-import { CommandModules } from '@yuudachi/types';
+import type { CommandModules } from '@yuudachi/types';
 
 export enum ExecutionContext {
 	PREFIXED,
@@ -18,7 +18,7 @@ export default interface Command {
 	userPermissions?: string[];
 	regExp?: RegExp;
 	execute(
-		message: APIMessage | APIInteraction,
+		message: APIMessage | APIGuildInteraction,
 		args: Args | APIApplicationCommandInteractionDataOption[],
 		locale: string,
 		executionContext: ExecutionContext,

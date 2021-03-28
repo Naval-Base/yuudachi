@@ -11,13 +11,13 @@
 	"author": "iCrawl <icrawltogo@outlook.com>",
 	"license": "UNLICENSED",
 	"dependencies": {
-		"@msgpack/msgpack": "^2.4.1",
+		"@msgpack/msgpack": "^2.5.1",
 		"form-data": "^4.0.0",
 		"tslib": "^2.1.0"
 	},
 	"devDependencies": {
 		"@spectacles/brokers": "^0.8.4",
-		"@types/node": "^14.14.34",
+		"@types/node": "^14.14.37",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.2.3"
 	}

@@ -1,4 +1,4 @@
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 import { badRequest, badData } from '@hapi/boom';
 
 export default async (req: Request, _: Response, next?: NextHandler) => {

@@ -1,8 +1,8 @@
-import { Request, Response } from 'polka';
+import type { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import Rest, { HttpException } from '@yuudachi/rest';
 import { Route } from '@yuudachi/http';
-import { RESTGetAPIUserResult } from 'discord-api-types';
+import type { RESTGetAPIUserResult } from 'discord-api-types';
 import { forbidden, notFound } from '@hapi/boom';
 
 @injectable()

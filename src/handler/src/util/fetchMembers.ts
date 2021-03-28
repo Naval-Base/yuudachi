@@ -1,5 +1,5 @@
 import {
-	APIInteraction,
+	APIGuildInteraction,
 	APIMessage,
 	APIGuildMember,
 	GatewayDispatchEvents,
@@ -11,7 +11,7 @@ import type { Amqp } from '@spectacles/brokers';
 
 const { kGateway } = Tokens;
 
-export function fetchMembers(message: APIMessage | APIInteraction): Promise<APIGuildMember[]> {
+export function fetchMembers(message: APIMessage | APIGuildInteraction): Promise<APIGuildMember[]> {
 	const gatewayBroker = container.resolve<Amqp>(kGateway);
 
 	return new Promise((resolve) => {

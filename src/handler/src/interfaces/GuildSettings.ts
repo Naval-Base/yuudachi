@@ -1,14 +1,16 @@
+import type { Snowflake } from 'discord-api-types/v8';
+
 export interface GuildSettings {
-	guild_id: `${bigint}`;
+	guild_id: Snowflake;
 	prefix: string;
-	mod_log_channel_id: `${bigint}`;
-	mod_role_id: `${bigint}`;
-	guild_log_channel_id: `${bigint}`;
-	member_log_channel_id: `${bigint}`;
-	mute_role_id: `${bigint}`;
-	tag_role_id: `${bigint}`;
-	embed_role_id: `${bigint}`;
-	reaction_role_id: `${bigint}`;
+	mod_log_channel_id: Snowflake;
+	mod_role_id: Snowflake;
+	guild_log_channel_id: Snowflake;
+	member_log_channel_id: Snowflake;
+	mute_role_id: Snowflake;
+	tag_role_id: Snowflake;
+	embed_role_id: Snowflake;
+	reaction_role_id: Snowflake;
 	locale: string;
 	modules: number;
 	repository_aliases: string[];

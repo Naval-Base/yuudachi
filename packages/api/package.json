@@ -12,12 +12,12 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@yuudachi/core": "workspace:^2.0.0",
-		"cross-fetch": "^3.1.0",
+		"cross-fetch": "^3.1.3-alpha.4",
 		"tslib": "^2.1.0"
 	},
 	"devDependencies": {
 		"@yuudachi/types": "workspace:^2.0.0",
-		"discord-api-types": "^0.12.1",
+		"discord-api-types": "^0.13.3",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.2.3"
 	}

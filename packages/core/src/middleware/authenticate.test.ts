@@ -6,9 +6,10 @@ import postgres, { Sql } from 'postgres';
 import { createApp } from '@yuudachi/http';
 import { Config } from '@yuudachi/types';
 
-import { kSQL, kConfig } from '../tokens';
 import authenticate from './authenticate';
 import { AuthManager } from '../managers';
+
+import { kSQL, kConfig } from '../tokens';
 
 const NOW = new Date();
 jest.spyOn(global, 'Date').mockImplementation((): any => NOW);

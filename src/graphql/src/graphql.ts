@@ -167,11 +167,11 @@ export type GuildActionInput = {
 export type Query = {
   __typename?: 'Query';
   guild?: Maybe<Guild>;
-  guild_action?: Maybe<Array<Maybe<Case>>>;
+  guild_action: Array<Maybe<Case>>;
   guilds?: Maybe<Array<Maybe<PartialGuild>>>;
   guilds_oauth?: Maybe<Array<Maybe<PartialGuild>>>;
-  guild_channels?: Maybe<Array<Maybe<GuildChannel>>>;
-  guild_roles?: Maybe<Array<Maybe<GuildRole>>>;
+  guild_channels: Array<Maybe<GuildChannel>>;
+  guild_roles: Array<Maybe<GuildRole>>;
   user?: Maybe<User>;
 };
 
@@ -453,11 +453,11 @@ export type CaseResolvers<ContextType = Context, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   guild?: Resolver<Maybe<ResolversTypes['Guild']>, ParentType, ContextType, RequireFields<QueryGuildArgs, 'guild_id'>>;
-  guild_action?: Resolver<Maybe<Array<Maybe<ResolversTypes['Case']>>>, ParentType, ContextType, RequireFields<QueryGuild_ActionArgs, never>>;
+  guild_action?: Resolver<Array<Maybe<ResolversTypes['Case']>>, ParentType, ContextType, RequireFields<QueryGuild_ActionArgs, never>>;
   guilds?: Resolver<Maybe<Array<Maybe<ResolversTypes['PartialGuild']>>>, ParentType, ContextType>;
   guilds_oauth?: Resolver<Maybe<Array<Maybe<ResolversTypes['PartialGuild']>>>, ParentType, ContextType>;
-  guild_channels?: Resolver<Maybe<Array<Maybe<ResolversTypes['GuildChannel']>>>, ParentType, ContextType, RequireFields<QueryGuild_ChannelsArgs, 'guild_id'>>;
-  guild_roles?: Resolver<Maybe<Array<Maybe<ResolversTypes['GuildRole']>>>, ParentType, ContextType, RequireFields<QueryGuild_RolesArgs, 'guild_id'>>;
+  guild_channels?: Resolver<Array<Maybe<ResolversTypes['GuildChannel']>>, ParentType, ContextType, RequireFields<QueryGuild_ChannelsArgs, 'guild_id'>>;
+  guild_roles?: Resolver<Array<Maybe<ResolversTypes['GuildRole']>>, ParentType, ContextType, RequireFields<QueryGuild_RolesArgs, 'guild_id'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'user_id'>>;
 };
 

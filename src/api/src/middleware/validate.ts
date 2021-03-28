@@ -1,6 +1,6 @@
 import { boomify } from '@hapi/boom';
-import { AnySchema } from 'joi';
-import { Request, Response, NextHandler } from 'polka';
+import type { AnySchema } from 'joi';
+import type { Request, Response, NextHandler } from 'polka';
 
 export default (schema: AnySchema, prop: keyof Request = 'body') => (req: Request, _: Response, next?: NextHandler) => {
 	const result = schema.validate(req[prop]);

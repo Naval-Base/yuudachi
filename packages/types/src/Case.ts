@@ -1,3 +1,5 @@
+import type { Snowflake } from 'discord-api-types/v8';
+
 export enum CaseAction {
 	ROLE,
 	UNROLE,
@@ -10,13 +12,13 @@ export enum CaseAction {
 
 export interface CreateCase {
 	action: CaseAction;
-	roleId?: `${bigint}`;
+	roleId?: Snowflake;
 	actionExpiration?: Date;
 	reason?: string | null;
-	moderatorId: `${bigint}`;
+	moderatorId: Snowflake;
 	targetId: string;
 	deleteMessageDays?: number;
-	contextMessageId?: `${bigint}`;
+	contextMessageId?: Snowflake;
 	referenceId?: number;
 }
 
@@ -24,20 +26,20 @@ export interface UpdateCase {
 	caseId: number | string;
 	actionExpiration?: Date;
 	reason?: string;
-	contextMessageId?: `${bigint}`;
+	contextMessageId?: Snowflake;
 	referenceId?: number | string;
 }
 
 export interface Case {
 	caseId: number;
-	guildId: `${bigint}`;
-	targetId: `${bigint}`;
-	moderatorId: `${bigint}`;
+	guildId: Snowflake;
+	targetId: Snowflake;
+	moderatorId: Snowflake;
 	action: CaseAction;
-	roleId?: `${bigint}`;
+	roleId?: Snowflake;
 	actionExpiration?: Date;
 	reason?: string;
 	deleteMessageDays?: number;
-	contextMessageId?: `${bigint}`;
+	contextMessageId?: Snowflake;
 	referenceId?: number;
 }

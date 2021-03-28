@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 import ms from '@naval-base/ms';
 import type { Sql } from 'postgres';
-import { Response } from 'polka';
+import type { Response } from 'polka';
 import { Config } from '@yuudachi/types';
 import cookie from 'cookie';
 

@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { FiSearch } from 'react-icons/fi';
 
-import { SearchQuery } from '~/interfaces/SearchQuery';
+import type { SearchQuery } from '~/interfaces/SearchQuery';
 
 const transformId = (id: string) => {
 	switch (id) {

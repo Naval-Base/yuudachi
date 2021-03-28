@@ -3,8 +3,8 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLGuildCases, GuildCase } from '~/interfaces/GuildCases';
-import { SearchQuery } from '~/interfaces/SearchQuery';
+import type { GraphQLGuildCases, GuildCase } from '~/interfaces/GuildCases';
+import type { SearchQuery } from '~/interfaces/SearchQuery';
 
 export function useQueryGuildCases(
 	id: string,

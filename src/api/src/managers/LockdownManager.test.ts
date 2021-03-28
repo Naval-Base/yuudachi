@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 
 import Rest from '@yuudachi/rest';
-import { Lockdown } from '@yuudachi/types';
+import type { Lockdown } from '@yuudachi/types';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
-import { OverwriteType, PermissionFlagsBits, Routes } from 'discord-api-types/v8';
+import { OverwriteType, PermissionFlagsBits, Routes, Snowflake } from 'discord-api-types/v8';
 
 import LockdownManager from './LockdownManager';
 
@@ -90,10 +90,10 @@ afterEach(() => {
 describe('creates a lockdown', () => {
 	test('with reason', async () => {
 		const lockdown = {
-			guildId: '3456',
-			channelId: '4567',
+			guildId: '3456' as Snowflake,
+			channelId: '4567' as Snowflake,
 			expiration: new Date(),
-			moderatorId: '1234',
+			moderatorId: '1234' as Snowflake,
 			reason: 'foo',
 		};
 
@@ -113,10 +113,10 @@ describe('creates a lockdown', () => {
 
 	test('without reason', async () => {
 		const lockdown = {
-			guildId: '3456',
-			channelId: '4567',
+			guildId: '3456' as Snowflake,
+			channelId: '4567' as Snowflake,
 			expiration: new Date(),
-			moderatorId: '1234',
+			moderatorId: '1234' as Snowflake,
 		};
 
 		const manager = container.resolve(LockdownManager);

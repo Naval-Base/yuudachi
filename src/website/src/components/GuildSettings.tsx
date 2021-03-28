@@ -20,12 +20,12 @@ const Loading = dynamic(() => import('./Loading'));
 
 import { useUserStore } from '~/store/index';
 
+import type { GuildSettingsPayload } from '~/interfaces/GuildSettings';
+
 import { useQueryGuild } from '~/hooks/useQueryGuild';
 import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
 import { useMutationInsertGuildSettings } from '~/hooks/useMutationInsertGuildSettings';
 import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSettings';
-
-import { GuildSettingsPayload } from '~/interfaces/GuildSettings';
 
 const GuildSettings = () => {
 	const user = useUserStore();

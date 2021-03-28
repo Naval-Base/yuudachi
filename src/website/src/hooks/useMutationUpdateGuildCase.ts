@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { GraphQLGuildCase, GuildCasePayload } from '~/interfaces/GuildCases';
+import type { GraphQLGuildCase, GuildCasePayload } from '~/interfaces/GuildCases';
 
 export function useMutationUpdateGuildCase(id: string, caseId: number) {
 	const cache = useQueryClient();

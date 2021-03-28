@@ -3,8 +3,8 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLGuildTags, GuildTag } from '~/interfaces/GuildTags';
-import { SearchQuery } from '~/interfaces/SearchQuery';
+import type { GraphQLGuildTags, GuildTag } from '~/interfaces/GuildTags';
+import type { SearchQuery } from '~/interfaces/SearchQuery';
 
 export function useQueryGuildTags(
 	id: string,

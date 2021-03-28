@@ -1,5 +1,6 @@
+import type { Snowflake } from 'discord-api-types/v8';
 import cookie from 'cookie';
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import fetch from 'node-fetch';
 import type { Sql } from 'postgres';
@@ -10,7 +11,7 @@ import { AuthManager, session, Tokens } from '@yuudachi/core';
 const { kSQL } = Tokens;
 
 interface DiscordUser {
-	id: `${bigint}`;
+	id: Snowflake;
 	email: string;
 	username: string;
 	discriminator: string;

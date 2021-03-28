@@ -39,7 +39,7 @@ const GuildCaseReference = dynamic(() => import('~/components/GuildCaseReference
 
 import { useUserStore } from '~/store/index';
 
-import { GuildCasePayload } from '~/interfaces/GuildCases';
+import type { GuildCasePayload } from '~/interfaces/GuildCases';
 
 import { useQueryGuildCase } from '~/hooks/useQueryGuildCase';
 import { useQueryGuildRoles } from '~/hooks/useQueryGuildRoles';

@@ -1,5 +1,5 @@
-import { APIInteraction, APIMessage, Routes } from 'discord-api-types/v8';
-import { Ok } from 'lexure';
+import { APIGuildInteraction, APIMessage, Routes, Snowflake } from 'discord-api-types/v8';
+import type { Ok } from 'lexure';
 import i18next from 'i18next';
 import ms from '@naval-base/ms';
 import API, { HttpException } from '@yuudachi/api';
@@ -12,8 +12,8 @@ dayjs.extend(relativeTime);
 import { send } from '../../../../util';
 
 export async function lock(
-	message: APIMessage | APIInteraction,
-	maybeChannel: Ok<`${bigint}`>,
+	message: APIMessage | APIGuildInteraction,
+	maybeChannel: Ok<Snowflake>,
 	duration: string,
 	reason: string,
 	locale: string,

@@ -1,4 +1,4 @@
-import { CommandModules } from '@yuudachi/types';
+import type { CommandModules } from '@yuudachi/types';
 
 export function add(root: CommandModules, perm: CommandModules) {
 	return root | perm;

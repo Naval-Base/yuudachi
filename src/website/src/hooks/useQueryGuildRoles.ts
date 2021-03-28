@@ -3,7 +3,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLGuildRoles } from '~/interfaces/GuildRole';
+import type { GraphQLGuildRoles } from '~/interfaces/GuildRole';
 
 export function useQueryGuildRoles(id: string, enabled = false) {
 	const user = useUserStore();

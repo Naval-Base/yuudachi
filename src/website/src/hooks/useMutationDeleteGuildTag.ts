@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
+import type { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
 
 export function useMutationDeleteGuildTag(id: string, name: string) {
 	const cache = useQueryClient();

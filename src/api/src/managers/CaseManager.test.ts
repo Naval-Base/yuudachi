@@ -5,7 +5,7 @@ import { Case, CaseAction } from '@yuudachi/types';
 import postgres, { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
-import { Routes } from 'discord-api-types/v8';
+import { Routes, Snowflake } from 'discord-api-types/v8';
 
 import CaseManager from './CaseManager';
 
@@ -138,11 +138,11 @@ describe('create', () => {
 		const case_ = {
 			action: CaseAction.ROLE,
 			caseId: 0,
-			guildId: '1234',
-			moderatorId: '2345',
+			guildId: '1234' as Snowflake,
+			moderatorId: '2345' as Snowflake,
 			reason: 'foo',
-			targetId: '3456',
-			roleId: '4567',
+			targetId: '3456' as Snowflake,
+			roleId: '4567' as Snowflake,
 		};
 
 		const manager = container.resolve(CaseManager);
@@ -284,7 +284,7 @@ describe('update ', () => {
 	test('expiration of a case', async () => {
 		const case_ = {
 			caseId: 0,
-			guildId: '1234',
+			guildId: '1234' as Snowflake,
 			actionExpiration: new Date(),
 		};
 
@@ -327,7 +327,7 @@ describe('update ', () => {
 	test('reason of a case', async () => {
 		const case_ = {
 			caseId: 0,
-			guildId: '1234',
+			guildId: '1234' as Snowflake,
 			reason: 'foo',
 		};
 
@@ -370,8 +370,8 @@ describe('update ', () => {
 	test('context of a case', async () => {
 		const case_ = {
 			caseId: 0,
-			guildId: '1234',
-			contextMessageId: '4567',
+			guildId: '1234' as Snowflake,
+			contextMessageId: '4567' as Snowflake,
 		};
 
 		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
@@ -413,7 +413,7 @@ describe('update ', () => {
 	test('reference of a case', async () => {
 		const case_ = {
 			caseId: 0,
-			guildId: '1234',
+			guildId: '1234' as Snowflake,
 			referenceId: 1,
 		};
 
@@ -459,11 +459,11 @@ describe('soft delete', () => {
 		const case_ = {
 			action: CaseAction.BAN,
 			case_id: 0,
-			guild_id: '1234',
-			mod_id: '2345',
+			guild_id: '1234' as Snowflake,
+			mod_id: '2345' as Snowflake,
 			reason: 'foo',
-			target_id: '3456',
-			context_message_id: '4567',
+			target_id: '3456' as Snowflake,
+			context_message_id: '4567' as Snowflake,
 		};
 
 		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
@@ -522,12 +522,12 @@ describe('soft delete', () => {
 		const case_ = {
 			action: CaseAction.ROLE,
 			case_id: 0,
-			guild_id: '1234',
-			mod_id: '2345',
+			guild_id: '1234' as Snowflake,
+			mod_id: '2345' as Snowflake,
 			reason: 'foo',
-			target_id: '3456',
-			context_message_id: '4567',
-			role_id: '5678',
+			target_id: '3456' as Snowflake,
+			context_message_id: '4567' as Snowflake,
+			role_id: '5678' as Snowflake,
 		};
 
 		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));

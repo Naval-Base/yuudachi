@@ -4,7 +4,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLMe } from '~/interfaces/User';
+import type { GraphQLMe } from '~/interfaces/User';
 
 export function useQueryMe() {
 	const user = useUserStore();

@@ -1,5 +1,5 @@
-import { Args } from 'lexure';
-import { APIMessage } from 'discord-api-types/v8';
+import type { Args } from 'lexure';
+import type { APIMessage } from 'discord-api-types/v8';
 import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { container } from 'tsyringe';

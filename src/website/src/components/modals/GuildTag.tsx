@@ -39,7 +39,7 @@ const Loading = dynamic(() => import('../Loading'));
 
 import { useUserStore } from '~/store/index';
 
-import { GuildTagPayload } from '~/interfaces/GuildTags';
+import type { GuildTagPayload } from '~/interfaces/GuildTags';
 
 import { useQueryGuildTag } from '~/hooks/useQueryGuildTag';
 import { useMutationUpdateGuildTag } from '~/hooks/useMutationUpdateGuildTag';

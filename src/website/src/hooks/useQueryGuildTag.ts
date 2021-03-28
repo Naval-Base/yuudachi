@@ -3,7 +3,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLGuildTag } from '~/interfaces/GuildTags';
+import type { GraphQLGuildTag } from '~/interfaces/GuildTags';
 
 export function useQueryGuildTag(id: string, name: string, enabled = false) {
 	const user = useUserStore();

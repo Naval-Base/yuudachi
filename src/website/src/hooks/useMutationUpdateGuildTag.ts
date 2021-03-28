@@ -3,7 +3,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLGuildTag, GuildTagPayload } from '~/interfaces/GuildTags';
+import type { GraphQLGuildTag, GuildTagPayload } from '~/interfaces/GuildTags';
 
 export function useMutationUpdateGuildTag(id: string, name: string) {
 	const user = useUserStore();

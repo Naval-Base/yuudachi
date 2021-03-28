@@ -4,7 +4,7 @@ import { Box, Flex, FormControl, FormLabel, Switch, Button, Text } from '@chakra
 import { UseFormMethods, Controller } from 'react-hook-form';
 import { CommandModules } from '@yuudachi/types';
 
-import { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
+import type { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
 
 const GuildModule = ({
 	guildModule,

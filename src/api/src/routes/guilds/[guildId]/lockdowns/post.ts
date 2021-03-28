@@ -1,7 +1,8 @@
-import { Lockdown } from '@yuudachi/types';
+import type { Snowflake } from 'discord-api-types/v8';
+import type { Lockdown } from '@yuudachi/types';
 import { forbidden, notFound } from '@hapi/boom';
 import Joi from 'joi';
-import { Request, Response } from 'polka';
+import type { Request, Response } from 'polka';
 import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { HttpException } from '@yuudachi/rest';
@@ -51,7 +52,7 @@ export default class CreateLockdownRoute extends Route {
 		const body: LockdownsPostBody = req.body as any;
 
 		for (const lockdown of body.lockdowns) {
-			lockdown.guildId = req.params.guildId as `${bigint}`;
+			lockdown.guildId = req.params.guildId as Snowflake;
 			created.push(this.lockdownManager.create(lockdown));
 		}
 

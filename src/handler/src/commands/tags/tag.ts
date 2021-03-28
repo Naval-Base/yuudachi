@@ -1,7 +1,6 @@
 import { injectable, inject } from 'tsyringe';
-import { APIMessage } from 'discord-api-types/v8';
+import type { APIMessage } from 'discord-api-types/v8';
 import { Args, joinTokens } from 'lexure';
-import Rest from '@yuudachi/rest';
 import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
@@ -18,7 +17,7 @@ const { kSQL } = Tokens;
 export default class implements Command {
 	public readonly category = CommandModules.Tags;
 
-	public constructor(private readonly rest: Rest, @inject(kSQL) private readonly sql: Sql<any>) {}
+	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
 	public async execute(message: APIMessage, args: Args, locale: string) {
 		if (!message.guild_id) {

@@ -1,19 +1,21 @@
+import type { Snowflake } from 'discord-api-types/v8';
+
 export interface CreateLockdown {
-	channelId: `${bigint}`;
+	channelId: Snowflake;
 	expiration: Date;
-	moderatorId: `${bigint}`;
+	moderatorId: Snowflake;
 	reason?: string;
 }
 
 export interface DeleteLockdown {
-	channelId: `${bigint}`;
+	channelId: Snowflake;
 }
 
 export interface Lockdown {
-	guildId: `${bigint}`;
-	channelId: `${bigint}`;
+	guildId: Snowflake;
+	channelId: Snowflake;
 	expiration: Date;
-	moderatorId: `${bigint}`;
+	moderatorId: Snowflake;
 	reason?: string;
-	overwrites?: Record<`${bigint}`, any>[];
+	overwrites?: Record<Snowflake, any>[];
 }

@@ -1,4 +1,5 @@
 import { CommandModules } from '@yuudachi/types';
+
 import { add, remove, has } from './modules';
 
 test('tags and moderation', () => {

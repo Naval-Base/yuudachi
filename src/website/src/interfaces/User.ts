@@ -1,4 +1,4 @@
-import { Connection } from './Connection';
+import type { Connection } from './Connection';
 
 export interface GraphQLMe {
 	data: {

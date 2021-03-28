@@ -1,26 +1,22 @@
-import { APIGuildMember, APIInteraction, APIMessage } from 'discord-api-types/v8';
+import type { APIGuildMember, APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
 import { CaseAction, CommandModules } from '@yuudachi/types';
 import i18next from 'i18next';
-import { Args } from 'lexure';
-import { inject, injectable } from 'tsyringe';
-import type { Sql } from 'postgres';
-import { Tokens } from '@yuudachi/core';
+import type { Args } from 'lexure';
+import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
 import dayjs from 'dayjs';
 
 import Command from '../../Command';
-import { fetchMembers, send } from '../../util';
+import { checkMod, fetchMembers, send } from '../../util';
 import { DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS, DISCORD_EPOCH } from '../../Constants';
-
-const { kSQL } = Tokens;
 
 @injectable()
 export default class implements Command {
 	public readonly aliases = ['arn', 'nuke'];
 	public readonly category = CommandModules.Moderation;
 
-	public constructor(@inject(kSQL) private readonly sql: Sql<any>, private readonly api: API) {}
+	public constructor(private readonly api: API) {}
 
 	private parse(args: Args) {
 		const join = args.option('join');
@@ -40,19 +36,11 @@ export default class implements Command {
 		};
 	}
 
-	public async execute(message: APIMessage | APIInteraction, args: Args, locale: string): Promise<void> {
+	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string): Promise<void> {
 		if (!message.guild_id) {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
-
-		const [data] = await this.sql<[{ mod_role_id: `${bigint}` | null }?]>`
-			select mod_role_id
-			from guild_settings
-			where guild_id = ${message.guild_id}`;
-
-		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
-			throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
-		}
+		await checkMod(message, locale);
 
 		const { join, age, report, noDry, days } = this.parse(args);
 		let parsedJoin;
@@ -86,7 +74,7 @@ export default class implements Command {
 		const members = fetchedMembers.filter(
 			(member) =>
 				dayjs(member.joined_at).valueOf() > joinCutoff &&
-				Number((BigInt(member.user!.id) >> BigInt(22)) + BigInt(DISCORD_EPOCH)) > ageCutoff,
+				Number((BigInt(member.user!.id) >> 22n) + BigInt(DISCORD_EPOCH)) > ageCutoff,
 		);
 
 		if (!members.length) {

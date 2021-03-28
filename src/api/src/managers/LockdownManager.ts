@@ -1,6 +1,6 @@
 import type { Sql } from 'postgres';
 import Rest from '@yuudachi/rest';
-import { Lockdown } from '@yuudachi/types';
+import type { Lockdown } from '@yuudachi/types';
 import { inject, injectable } from 'tsyringe';
 import { Tokens } from '@yuudachi/core';
 import {
@@ -10,14 +10,15 @@ import {
 	OverwriteType,
 	PermissionFlagsBits,
 	Routes,
+	Snowflake,
 } from 'discord-api-types/v8';
 
 const { kSQL } = Tokens;
 
 export interface RawLockdown {
 	expiration: string;
-	channel_id: `${bigint}`;
-	guild_id: `${bigint}`;
+	channel_id: Snowflake;
+	guild_id: Snowflake;
 }
 
 export type PatchLockdown = Exclude<Lockdown, 'guildId'>;
@@ -64,7 +65,7 @@ export default class LockdownManager {
 		return lockdown;
 	}
 
-	public async delete(channelId: `${bigint}`) {
+	public async delete(channelId: Snowflake) {
 		const [channelOverwrites] = await this.sql<[{ overwrites: APIOverwrite[] }]>`
 			select overwrites
 			from lockdowns

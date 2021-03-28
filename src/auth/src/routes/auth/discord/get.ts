@@ -1,4 +1,4 @@
-import { Request, Response } from 'polka';
+import type { Request, Response } from 'polka';
 import { injectable, inject } from 'tsyringe';
 import { URLSearchParams } from 'url';
 import { Config } from '@yuudachi/types';

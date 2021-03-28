@@ -3,7 +3,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLOAuthGuilds } from '~/interfaces/Guild';
+import type { GraphQLOAuthGuilds } from '~/interfaces/Guild';
 
 export function useQueryOAuthGuilds() {
 	const user = useUserStore();

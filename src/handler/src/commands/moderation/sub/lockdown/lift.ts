@@ -1,12 +1,12 @@
-import { APIInteraction, APIMessage } from 'discord-api-types/v8';
-import { Ok } from 'lexure';
+import type { APIGuildInteraction, APIMessage, Snowflake } from 'discord-api-types/v8';
+import type { Ok } from 'lexure';
 import i18next from 'i18next';
 import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
 
 import { send } from '../../../../util';
 
-export async function lift(message: APIMessage | APIInteraction, maybeChannel: Ok<`${bigint}`>, locale: string) {
+export async function lift(message: APIMessage | APIGuildInteraction, maybeChannel: Ok<Snowflake>, locale: string) {
 	const api = container.resolve(API);
 
 	const channelMention = `<#${maybeChannel.value}>`;

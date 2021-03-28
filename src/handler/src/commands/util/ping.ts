@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
-import { APIInteraction, APIMessage } from 'discord-api-types/v8';
-import { Args } from 'lexure';
+import type { APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
+import type { Args } from 'lexure';
 import i18next from 'i18next';
 import { CommandModules } from '@yuudachi/types';
 
@@ -15,7 +15,7 @@ export default class implements Command {
 		return args.flag('hide');
 	}
 
-	public execute(message: APIMessage | APIInteraction, args: Args, locale: string) {
+	public execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string) {
 		const hide = this.parse(args);
 
 		void send(message, {

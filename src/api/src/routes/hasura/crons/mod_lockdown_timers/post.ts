@@ -1,4 +1,5 @@
-import { Request, Response } from 'polka';
+import type { Snowflake } from 'discord-api-types/v8';
+import type { Request, Response } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { Tokens } from '@yuudachi/core';
@@ -15,7 +16,7 @@ export default class HasuraModLockdownTimersCron extends Route {
 	}
 
 	public async handle(_: Request, res: Response) {
-		const currentLockdowns = await this.sql<[{ channel_id: `${bigint}`; expiration: string }]>`
+		const currentLockdowns = await this.sql<[{ channel_id: Snowflake; expiration: string }]>`
 			select channel_id, expiration
 			from lockdowns`;
 

@@ -1,3 +1,4 @@
+import type { Snowflake } from 'discord-api-types/v8';
 import { CaseAction } from '@yuudachi/types';
 
 import { Context } from '../interfaces/Context';
@@ -10,23 +11,23 @@ import user from './query/user';
 
 export default {
 	Query: {
-		guild: (_: any, { guild_id }: { guild_id: `${bigint}` }) => guilds({}, { guild_id }),
+		guild: (_: any, { guild_id }: { guild_id: Snowflake }) => guilds({}, { guild_id }),
 		guild_action: (
 			_: any,
 			args: {
-				guild_id: `${bigint}`;
+				guild_id: Snowflake;
 				action: CaseAction;
 				reason?: string;
-				moderatorId: `${bigint}`;
-				targetId: `${bigint}`;
-				contextMessageId?: `${bigint}`;
+				moderatorId: Snowflake;
+				targetId: Snowflake;
+				contextMessageId?: Snowflake;
 				referenceId?: number;
 			},
 		) => guild_action({}, args),
 		guilds: () => guilds(),
 		guilds_oauth: (_: any, __: any, ctx: Context) => guilds_oauth({}, {}, ctx),
-		guild_channels: (_: any, { guild_id }: { guild_id: `${bigint}` }) => guild_channels({}, { guild_id }),
-		guild_roles: (_: any, { guild_id }: { guild_id: `${bigint}` }) => guild_roles({}, { guild_id }),
-		user: (_: any, { user_id }: { user_id: `${bigint}` }) => user({}, { user_id }),
+		guild_channels: (_: any, { guild_id }: { guild_id: Snowflake }) => guild_channels({}, { guild_id }),
+		guild_roles: (_: any, { guild_id }: { guild_id: Snowflake }) => guild_roles({}, { guild_id }),
+		user: (_: any, { user_id }: { user_id: Snowflake }) => user({}, { user_id }),
 	},
 };

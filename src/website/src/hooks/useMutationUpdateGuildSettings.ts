@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { fetchGraphQL } from '../util/fetchGraphQL';
 
-import {
+import type {
 	GuildSettingsPayload,
 	GraphQLGuildSettings,
 	GuildModulesPayload,

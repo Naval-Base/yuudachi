@@ -1,4 +1,4 @@
-import { APIInteraction, APIMessage } from 'discord-api-types/v8';
+import type { APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
@@ -9,7 +9,7 @@ import { send } from '../../../../util';
 
 const { kSQL } = Tokens;
 
-export async function unrole(message: APIMessage | APIInteraction, caseId: string, locale: string) {
+export async function unrole(message: APIMessage | APIGuildInteraction, caseId: string, locale: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const api = container.resolve(API);
 

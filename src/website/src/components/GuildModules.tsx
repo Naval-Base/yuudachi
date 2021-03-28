@@ -10,10 +10,10 @@ const GuildModule = dynamic(() => import('./GuildModule'));
 
 import { useUserStore } from '~/store/index';
 
+import type { GuildModulesPayload } from '~/interfaces/GuildSettings';
+
 import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
 import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSettings';
-
-import { GuildModulesPayload } from '~/interfaces/GuildSettings';
 
 const GuildModules = () => {
 	const user = useUserStore();

@@ -1,12 +1,12 @@
 import Joi from 'joi';
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 import { injectable } from 'tsyringe';
 import { Route } from '@yuudachi/http';
 import { bodyParser } from '@yuudachi/core';
 
 import { validate } from '../../../../middleware';
 import CaseLogManager from '../../../../managers/CaseLogManager';
-import { RawCase } from '../../../../managers/CaseManager';
+import type { RawCase } from '../../../../managers/CaseManager';
 
 enum HasuraAction {
 	INSERT = 'INSERT',

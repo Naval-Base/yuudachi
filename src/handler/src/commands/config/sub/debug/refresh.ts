@@ -1,5 +1,5 @@
-import { APIInteraction, APIMessage, Routes } from 'discord-api-types/v8';
-import { Args } from 'lexure';
+import { APIGuildInteraction, APIMessage, Routes, Snowflake } from 'discord-api-types/v8';
+import type { Args } from 'lexure';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
 import Rest from '@yuudachi/rest';
@@ -8,7 +8,7 @@ import { resolve } from 'path';
 
 import { send } from '../../../../util';
 
-export async function refresh(message: APIMessage | APIInteraction, args: Args, locale: string) {
+export async function refresh(message: APIMessage | APIGuildInteraction, args: Args, locale: string) {
 	const rest = container.resolve(Rest);
 
 	const sub = args.single();
@@ -30,7 +30,7 @@ export async function refresh(message: APIMessage | APIInteraction, args: Args, 
 			}
 
 			await rest.put(
-				Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as `${bigint}`, message.guild_id!),
+				Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as Snowflake, message.guild_id!),
 				commands,
 			);
 

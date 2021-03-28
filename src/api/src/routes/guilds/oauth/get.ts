@@ -1,10 +1,10 @@
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 import { inject, injectable } from 'tsyringe';
 import type { Sql } from 'postgres';
 import fetch from 'node-fetch';
 import { Route } from '@yuudachi/http';
 import { Constants, Tokens } from '@yuudachi/core';
-import { RESTGetAPICurrentUserGuildsResult } from 'discord-api-types/v8';
+import type { RESTGetAPICurrentUserGuildsResult } from 'discord-api-types/v8';
 import { unauthorized } from '@hapi/boom';
 
 const { kSQL } = Tokens;

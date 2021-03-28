@@ -1,5 +1,5 @@
 import { Img } from '@chakra-ui/react';
-import { RESTAPIPartialCurrentUserGuild, RESTGetAPIGuildResult } from 'discord-api-types/v8';
+import type { RESTAPIPartialCurrentUserGuild, RESTGetAPIGuildResult } from 'discord-api-types/v8';
 
 const GuildIcon = ({ guild }: { guild?: RESTGetAPIGuildResult | RESTAPIPartialCurrentUserGuild }) =>
 	guild?.icon ? (

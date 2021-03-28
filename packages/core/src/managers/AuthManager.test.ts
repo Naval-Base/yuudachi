@@ -6,6 +6,7 @@ import { container } from 'tsyringe';
 import { Config } from '@yuudachi/types';
 
 import { AuthManager } from './AuthManager';
+
 import { kConfig, kSQL } from '../tokens';
 
 const mockedPostgres: jest.MockedFunction<Sql<any>> = jest.fn() as any;

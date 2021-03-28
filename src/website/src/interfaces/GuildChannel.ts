@@ -1,4 +1,4 @@
-import { APIChannel } from 'discord-api-types/v8';
+import type { APIChannel } from 'discord-api-types/v8';
 
 export interface GraphQLGuildChannels {
 	data: {

@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { Grid, Heading } from '@chakra-ui/react';
-import { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildResult } from 'discord-api-types/v8';
+import type { RESTGetAPICurrentUserGuildsResult, RESTGetAPIGuildResult } from 'discord-api-types/v8';
 
 const GuildIcon = dynamic(() => import('~/components/GuildIcon'));
 

@@ -1,4 +1,4 @@
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import cookie from 'cookie';

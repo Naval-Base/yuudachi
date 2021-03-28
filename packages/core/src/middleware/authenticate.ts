@@ -1,8 +1,8 @@
 import { unauthorized } from '@hapi/boom';
 import cookie from 'cookie';
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 import { container } from 'tsyringe';
-import { AuthInfo } from '@yuudachi/types';
+import type { AuthInfo } from '@yuudachi/types';
 
 import { AuthManager } from '../managers';
 

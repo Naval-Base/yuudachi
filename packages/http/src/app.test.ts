@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import supertest from 'supertest';
 import { container } from 'tsyringe';
-import { Request, Response, NextHandler } from 'polka';
+import type { Request, Response, NextHandler } from 'polka';
 
 import { createApp } from './app';
 import { Route, RouteMethod } from './Route';

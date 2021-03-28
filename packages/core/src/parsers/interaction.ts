@@ -1,8 +1,8 @@
-import { APIApplicationCommandInteractionDataOption } from 'discord-api-types/v8';
-import { ParserOutput } from 'lexure';
+import type { APIApplicationCommandInteractionDataOption } from 'discord-api-types/v8';
+import type { ParserOutput } from 'lexure';
 
 function parseOptions(
-	options: APIApplicationCommandInteractionDataOption[],
+	options: /* APIApplicationCommandInteractionDataOption[] */ any[],
 	ordered: string[] = [],
 	flags: string[] = [],
 	opts: [string, string[]][] = [],

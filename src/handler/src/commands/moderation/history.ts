@@ -1,7 +1,7 @@
-import {
+import type {
 	APIMessage,
 	APIEmbed,
-	APIInteraction,
+	APIGuildInteraction,
 	RESTGetAPIGuildMemberResult,
 	RESTGetAPIUserResult,
 } from 'discord-api-types/v8';
@@ -20,7 +20,7 @@ dayjs.extend(relativeTime);
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
 import { DATE_FORMAT_DATE, DATE_FORMAT_WITH_SECONDS, DISCORD_EPOCH } from '../../Constants';
-import { addFields, send } from '../../util';
+import { addFields, checkMod, send } from '../../util';
 
 const { kSQL } = Tokens;
 
@@ -47,19 +47,11 @@ export default class implements Command {
 		return user ? parseMember(user) : args.singleParse(parseMember);
 	}
 
-	public async execute(message: APIMessage | APIInteraction, args: Args, locale: string): Promise<void> {
+	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string): Promise<void> {
 		if (!message.guild_id) {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
-
-		const [data] = await this.sql<[{ mod_role_id: `${bigint}` | null }?]>`
-			select mod_role_id
-			from guild_settings
-			where guild_id = ${message.guild_id}`;
-
-		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
-			throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
-		}
+		await checkMod(message, locale);
 
 		const maybeMember = this.parse(args);
 		if (!maybeMember) {
@@ -77,7 +69,7 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.no_user_found', { lng: locale }));
 		}
 
-		const createdTimestamp = Number((BigInt(targetUser.value.id) >> BigInt(22)) + BigInt(DISCORD_EPOCH));
+		const createdTimestamp = Number((BigInt(targetUser.value.id) >> 22n) + BigInt(DISCORD_EPOCH));
 		const sinceCreationFormatted = dayjs(createdTimestamp).fromNow();
 		const creationFormatted = dayjs(createdTimestamp).format(DATE_FORMAT_WITH_SECONDS);
 

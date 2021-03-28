@@ -1,3 +1,4 @@
+import type { Snowflake } from 'discord-api-types/v8';
 import { container } from 'tsyringe';
 import API from '@yuudachi/api';
 import { CaseAction } from '@yuudachi/types';
@@ -7,12 +8,12 @@ import { checkAuth } from '../../util/checkAuth';
 export default async (
 	_: any,
 	args: {
-		guild_id: `${bigint}`;
+		guild_id: Snowflake;
 		action: CaseAction;
 		reason?: string;
-		moderatorId: `${bigint}`;
-		targetId: `${bigint}`;
-		contextMessageId?: `${bigint}`;
+		moderatorId: Snowflake;
+		targetId: Snowflake;
+		contextMessageId?: Snowflake;
 		referenceId?: number;
 	},
 ) => {

@@ -1,5 +1,5 @@
-import { APIInteraction, APIMessage } from 'discord-api-types/v8';
-import { Ok } from 'lexure';
+import type { APIGuildInteraction, APIMessage, Snowflake } from 'discord-api-types/v8';
+import type { Ok } from 'lexure';
 import i18next from 'i18next';
 import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
@@ -13,8 +13,8 @@ import { send } from '../../../../util';
 const { kSQL } = Tokens;
 
 export async function mute(
-	message: APIMessage | APIInteraction,
-	maybeMember: Ok<`${bigint}`>,
+	message: APIMessage | APIGuildInteraction,
+	maybeMember: Ok<Snowflake>,
 	duration: string,
 	locale: string,
 	reason?: string,
@@ -23,7 +23,7 @@ export async function mute(
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const api = container.resolve(API);
 
-	const [roles] = await sql<[{ mute_role_id: `${bigint}` | '' | null }?]>`
+	const [roles] = await sql<[{ mute_role_id: Snowflake | '' | null }?]>`
 		select mute_role_id
 		from guild_settings
 		where guild_id = ${message.guild_id!}

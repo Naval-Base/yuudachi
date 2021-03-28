@@ -3,7 +3,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLUser } from '~/interfaces/User';
+import type { GraphQLUser } from '~/interfaces/User';
 
 export function useQueryUser(userId: string, enabled = false) {
 	const user = useUserStore();

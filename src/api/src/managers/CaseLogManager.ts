@@ -1,4 +1,11 @@
-import { RESTGetAPIGuildRolesResult, APIMessage, APIEmbed, Routes, RESTGetAPIUserResult } from 'discord-api-types/v8';
+import {
+	RESTGetAPIGuildRolesResult,
+	APIMessage,
+	APIEmbed,
+	Routes,
+	RESTGetAPIUserResult,
+	Snowflake,
+} from 'discord-api-types/v8';
 import { CaseAction } from '@yuudachi/types';
 import { stripIndents } from 'common-tags';
 import { inject, injectable } from 'tsyringe';
@@ -9,7 +16,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
-import { RawCase } from './CaseManager';
+import type { RawCase } from './CaseManager';
 import SettingsManager, { SettingsKeys } from './SettingsManager';
 
 const { kSQL } = Tokens;
@@ -50,9 +57,9 @@ export default class CaseLogManager {
 		};
 
 		if (item.log_message_id) {
-			await this.rest.patch(Routes.channelMessage(logChannelId as `${bigint}`, item.log_message_id), { embed });
+			await this.rest.patch(Routes.channelMessage(logChannelId as Snowflake, item.log_message_id), { embed });
 		} else {
-			const logMessage: APIMessage = await this.rest.post(Routes.channelMessages(logChannelId as `${bigint}`), {
+			const logMessage: APIMessage = await this.rest.post(Routes.channelMessages(logChannelId as Snowflake), {
 				embed,
 			});
 

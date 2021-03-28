@@ -8,13 +8,13 @@ const Loading = dynamic(() => import('./Loading'));
 
 import { useUserStore } from '~/store/index';
 
+import type { GuildModerationSettingsPayload } from '~/interfaces/GuildSettings';
+
 import { useQueryGuild } from '~/hooks/useQueryGuild';
 import { useQueryGuildChannels } from '~/hooks/useQueryGuildChannels';
 import { useQueryGuildSettings } from '~/hooks/useQueryGuildSettings';
 import { useMutationInsertGuildSettings } from '~/hooks/useMutationInsertGuildSettings';
 import { useMutationUpdateGuildSettings } from '~/hooks/useMutationUpdateGuildSettings';
-
-import { GuildModerationSettingsPayload } from '~/interfaces/GuildSettings';
 
 const GuildModerationSettings = () => {
 	const user = useUserStore();

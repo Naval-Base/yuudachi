@@ -1,6 +1,6 @@
 import create, { State } from 'zustand';
 
-import { SearchQuery } from '~/interfaces/SearchQuery';
+import type { SearchQuery } from '~/interfaces/SearchQuery';
 
 interface TableState extends State {
 	limit: number;

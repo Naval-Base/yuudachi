@@ -3,7 +3,7 @@ import { fetchGraphQL } from '../util/fetchGraphQL';
 
 import { useUserStore } from '~/store/index';
 
-import { GraphQLGuildCase } from '~/interfaces/GuildCases';
+import type { GraphQLGuildCase } from '~/interfaces/GuildCases';
 
 export function useQueryGuildCase(id: string, caseId: number, enabled = false) {
 	const user = useUserStore();

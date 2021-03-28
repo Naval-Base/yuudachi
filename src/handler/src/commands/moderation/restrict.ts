@@ -1,14 +1,12 @@
-import { APIInteraction, APIMessage } from 'discord-api-types/v8';
+import type { APIGuildInteraction, APIMessage, Snowflake } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import { Args, joinTokens, Ok } from 'lexure';
-import { inject, injectable } from 'tsyringe';
-import type { Sql } from 'postgres';
-import { Tokens } from '@yuudachi/core';
+import { injectable } from 'tsyringe';
 import { CommandModules } from '@yuudachi/types';
 
 import Command from '../../Command';
 import parseMember from '../../parsers/member';
-import { send } from '../../util';
+import { checkMod, send } from '../../util';
 
 import { mute } from './sub/restrict/mute';
 import { embed } from './sub/restrict/embed';
@@ -17,13 +15,9 @@ import { emoji } from './sub/restrict/emoji';
 import { tag } from './sub/restrict/tag';
 import { unrole } from './sub/restrict/unrole';
 
-const { kSQL } = Tokens;
-
 @injectable()
 export default class implements Command {
 	public readonly category = CommandModules.Moderation;
-
-	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
 	private parse(args: Args) {
 		const user = args.option('user');
@@ -49,19 +43,11 @@ export default class implements Command {
 		};
 	}
 
-	public async execute(message: APIMessage | APIInteraction, args: Args, locale: string) {
+	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string) {
 		if (!message.guild_id) {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}
-
-		const [data] = await this.sql<[{ mod_role_id: `${bigint}` | null }?]>`
-			select mod_role_id
-			from guild_settings
-			where guild_id = ${message.guild_id}`;
-
-		if (!message.member?.roles.includes(data?.mod_role_id ?? ('' as `${bigint}`))) {
-			throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
-		}
+		await checkMod(message, locale);
 
 		const { sub, maybeMember, duration, reason, refId, caseId } = this.parse(args);
 		if (!sub) {
@@ -88,23 +74,23 @@ export default class implements Command {
 
 		switch (sub) {
 			case 'mute': {
-				return mute(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
+				return mute(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
 			}
 
 			case 'embed': {
-				return embed(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
+				return embed(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
 			}
 
 			case 'react': {
-				return react(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
+				return react(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
 			}
 
 			case 'emoji': {
-				return emoji(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
+				return emoji(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
 			}
 
 			case 'tag': {
-				return tag(message, maybeMember as Ok<`${bigint}`>, duration as string, locale, reason, refId);
+				return tag(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
 			}
 
 			case 'unrole': {
