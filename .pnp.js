@@ -11293,7 +11293,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@yuudachi/api", "workspace:packages/api"],
             ["@yuudachi/core", "workspace:packages/core"],
             ["@yuudachi/types", "workspace:packages/types"],
-            ["cross-fetch", "npm:3.1.3-alpha.4"],
+            ["cross-fetch", "npm:3.1.2"],
             ["discord-api-types", "npm:0.13.3"],
             ["rimraf", "npm:3.0.2"],
             ["tslib", "npm:2.1.0"],
@@ -11566,7 +11566,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-loader", "virtual:d659336131537b2ec849910a76babb5636a2eb29b09436415d14baa9253cf1ccacff3d026873cba3005b165aba623cebbb14173d09aa6be194ef675330e79a8b#npm:8.2.2"],
             ["clsx", "npm:1.1.1"],
             ["core-js", "npm:3.9.1"],
-            ["cross-fetch", "npm:3.1.3-alpha.4"],
+            ["cross-fetch", "npm:3.1.2"],
             ["dayjs", "npm:1.10.4"],
             ["discord-api-types", "npm:0.13.3"],
             ["discord-markdown", "npm:2.4.2"],
@@ -15473,10 +15473,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:3.1.3-alpha.4", {
-          "packageLocation": "./.yarn/cache/cross-fetch-npm-3.1.3-alpha.4-66ec8fb6f1-4b5f647390.zip/node_modules/cross-fetch/",
+        ["npm:3.1.2", {
+          "packageLocation": "./.yarn/cache/cross-fetch-npm-3.1.2-e4f5b4e92e-22d0f09562.zip/node_modules/cross-fetch/",
           "packageDependencies": [
-            ["cross-fetch", "npm:3.1.3-alpha.4"],
+            ["cross-fetch", "npm:3.1.2"],
             ["node-fetch", "npm:2.6.1"]
           ],
           "linkType": "HARD",

@@ -23,7 +23,7 @@
 		"@skyra/discord-components-core": "^2.0.2",
 		"@skyra/discord-components-react": "^2.0.2",
 		"clsx": "^1.1.1",
-		"cross-fetch": "^3.1.3-alpha.4",
+		"cross-fetch": "^3.1.2",
 		"dayjs": "^1.10.4",
 		"discord-markdown": "^2.4.2",
 		"framer-motion": "^3.10.6",
