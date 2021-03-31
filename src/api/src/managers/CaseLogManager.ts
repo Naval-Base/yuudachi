@@ -30,15 +30,15 @@ export default class CaseLogManager {
 		public readonly settings: SettingsManager,
 	) {}
 
-	public async create(item: RawCase, old?: RawCase) {
+	public async create(item: RawCase /* , old?: RawCase */) {
 		const logChannelId = await this.settings.get(item.guild_id, SettingsKeys.MOD_LOG_CHANNEL_ID, 'guild_settings');
 		if (!logChannelId) {
 			throw new Error('no mod log channel configured');
 		}
 
-		if (item.action_processed && old && !old.action_processed) {
+		/* if (item.action_processed && old && !old.action_processed) {
 			return;
-		}
+		} */
 
 		const mod = await this.rest.get<RESTGetAPIUserResult>(`/users/${item.mod_id}`);
 		const avatar = mod.avatar
