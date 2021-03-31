@@ -13,7 +13,7 @@ export function useQueryGuildCase(id: string, caseId: number, enabled = false) {
 		() =>
 			fetchGraphQL(
 				`query GuildCase($guild_id: String!, $case_id: Int!) {
-					case: moderation_cases_by_pk(guild_id: $guild_id, case_id: $case_id) {
+					case: cases_by_pk(guild_id: $guild_id, case_id: $case_id) {
 						action
 						action_expiration
 						action_processed

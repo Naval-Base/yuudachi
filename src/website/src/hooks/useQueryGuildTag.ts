@@ -13,7 +13,7 @@ export function useQueryGuildTag(id: string, name: string, enabled = false) {
 		() =>
 			fetchGraphQL(
 				`query GuildTag($guild_id: String!, $name: String!) {
-					tag: organizational_tags_by_pk(guild_id: $guild_id, name: $name) {
+					tag: tags_by_pk(guild_id: $guild_id, name: $name) {
 						aliases
 						content
 						created_at

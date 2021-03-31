@@ -10,7 +10,7 @@ export function useMutationDeleteGuildTag(id: string, name: string) {
 		() =>
 			fetchGraphQL(
 				`mutation GuildTag($guild_id: String!, $name: String!) {
-					delete_organizational_tags_by_pk(guild_id: $guild_id, name: $name) {
+					delete_tags_by_pk(guild_id: $guild_id, name: $name) {
 						guild_id
 						name
 					}

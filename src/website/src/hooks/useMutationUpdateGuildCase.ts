@@ -9,8 +9,8 @@ export function useMutationUpdateGuildCase(id: string, caseId: number) {
 	return useMutation<GraphQLGuildCase, unknown, GuildCasePayload>(
 		(guildCase) =>
 			fetchGraphQL(
-				`mutation GuildCase($guild_id: String!, $case_id: Int!, $_set: moderation_cases_set_input!) {
-					case: update_moderation_cases_by_pk(pk_columns: {guild_id: $guild_id, case_id: $case_id}, _set: $_set) {
+				`mutation GuildCase($guild_id: String!, $case_id: Int!, $_set: cases_set_input!) {
+					case: update_cases_by_pk(pk_columns: {guild_id: $guild_id, case_id: $case_id}, _set: $_set) {
 						guild_id
 						case_id
 					}

@@ -24,14 +24,14 @@ export function useQueryGuildCases(
 		['guilds', id, 'cases', `?limit=${limit}&offset=${offset}${search ? `&search=${search.query as string}` : ''}`],
 		() =>
 			fetchGraphQL(
-				`query GuildCases($where: moderation_cases_bool_exp!, $order_by: [moderation_cases_order_by!], $limit: Int, $offset: Int) {
-					caseCount: moderation_cases_aggregate(where: $where) {
+				`query GuildCases($where: cases_bool_exp!, $order_by: [cases_order_by!], $limit: Int, $offset: Int) {
+					caseCount: cases_aggregate(where: $where) {
 						aggregate {
 							count
 						}
 					}
 
-					cases: moderation_cases(where: $where, order_by: $order_by, limit: $limit, offset: $offset) {
+					cases(where: $where, order_by: $order_by, limit: $limit, offset: $offset) {
 						action
 						action_expiration
 						action_processed

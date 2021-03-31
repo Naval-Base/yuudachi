@@ -24,14 +24,14 @@ export function useQueryGuildTags(
 		['guilds', id, 'tags', `?limit=${limit}&offset=${offset}${search ? `&search=${search.query as string}` : ''}`],
 		() =>
 			fetchGraphQL(
-				`query GuildTags($where: organizational_tags_bool_exp!, $order_by: [organizational_tags_order_by!], $limit: Int, $offset: Int) {
-					tagCount: organizational_tags_aggregate(where: $where) {
+				`query GuildTags($where: tags_bool_exp!, $order_by: [tags_order_by!], $limit: Int, $offset: Int) {
+					tagCount: tags_aggregate(where: $where) {
 						aggregate {
 							count
 						}
 					}
 					
-					tags: organizational_tags(where: $where, order_by: $order_by, limit: $limit, offset: $offset) {
+					tags: tags(where: $where, order_by: $order_by, limit: $limit, offset: $offset) {
 						aliases
 						content
 						created_at

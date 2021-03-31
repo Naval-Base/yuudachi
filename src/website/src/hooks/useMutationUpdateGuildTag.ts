@@ -12,8 +12,8 @@ export function useMutationUpdateGuildTag(id: string, name: string) {
 	return useMutation<GraphQLGuildTag, unknown, GuildTagPayload>(
 		(guildTag) =>
 			fetchGraphQL(
-				`mutation GuildTag($guild_id: String!, $name: String!, $_set: organizational_tags_set_input!) {
-					tag: update_organizational_tags_by_pk(pk_columns: {guild_id: $guild_id, name: $name}, _set: $_set) {
+				`mutation GuildTag($guild_id: String!, $name: String!, $_set: tags_set_input!) {
+					tag: update_tags_by_pk(pk_columns: {guild_id: $guild_id, name: $name}, _set: $_set) {
 						guild_id
 						name
 					}

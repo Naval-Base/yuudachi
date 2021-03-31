@@ -12,8 +12,8 @@ export function useMutationInsertGuildTag(id: string) {
 	return useMutation<GraphQLGuildTag, unknown, GuildTagPayload>(
 		(guildTag) =>
 			fetchGraphQL(
-				`mutation GuildTag($object: organizational_tags_insert_input!) {
-					tag: insert_organizational_tags_one(object: $object) {
+				`mutation GuildTag($object: tags_insert_input!) {
+					tag: insert_tags_one(object: $object) {
 						guild_id
 						name
 					}
