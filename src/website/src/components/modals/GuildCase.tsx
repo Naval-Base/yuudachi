@@ -92,11 +92,11 @@ const GuildCase = ({
 
 	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		await handleSubmit(async (values: { expiration: Date | null; reference: number; reason: string }) => {
+		await handleSubmit(async (values: { expiration: Date | null; reference: string; reason: string }) => {
 			const { reference, expiration, ...rest } = values;
 			let payload: GuildCasePayload = {
 				...rest,
-				ref_id: reference || null,
+				ref_id: reference ? Number(reference) : null,
 				action_expiration: expiration?.toISOString() ?? null,
 			};
 

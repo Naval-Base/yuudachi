@@ -67,7 +67,12 @@ const TableColumnSearch = ({
 	}
 
 	const onSubmit = ({ search }: { search: string }) => {
-		onSearchChange({ label: label!, key: transformId(id), op, query: op === '_ilike' ? `%${search}%` : search });
+		onSearchChange({
+			label: label!,
+			key: transformId(id),
+			op,
+			query: op === '_ilike' ? `%${search}%` : type === 'number' ? Number(search) : search,
+		});
 		onClose();
 	};
 
