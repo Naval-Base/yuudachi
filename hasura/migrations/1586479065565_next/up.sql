@@ -246,7 +246,8 @@ alter table tags
 	drop constraint tags_pkey,
 	drop id,
 	drop hoisted,
-	drop templated
+	drop templated,
+	add constraint tags_pkey primary key (guild_id, name)
 ;
 
 comment on column tags.guild_id is 'The id of the guild this tag belongs to';
