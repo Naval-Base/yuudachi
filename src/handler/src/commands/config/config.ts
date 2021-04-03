@@ -39,16 +39,16 @@ export default class implements Command {
 				value: has(settings.modules, CommandModules.Config) ? '`✅`' : '`❌`',
 			},
 			{
+				name: 'Utility',
+				value: has(settings.modules, CommandModules.Utility) ? '`✅`' : '`❌`',
+			},
+			{
 				name: 'Moderation',
 				value: has(settings.modules, CommandModules.Moderation) ? '`✅`' : '`❌`',
 			},
 			{
 				name: 'Tags',
 				value: has(settings.modules, CommandModules.Tags) ? '`✅`' : '`❌`',
-			},
-			{
-				name: 'Utility',
-				value: has(settings.modules, CommandModules.Utility) ? '`✅`' : '`❌`',
 			},
 		);
 
