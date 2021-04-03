@@ -1,5 +1,6 @@
 import { encode, decode } from '@msgpack/msgpack';
 import { Amqp, AmqpOptions } from '@spectacles/brokers';
+
 import HttpException from './HttpException';
 import Rest, { RequestOptions } from './Rest';
 

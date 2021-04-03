@@ -3,6 +3,5 @@ export enum CommandModules {
 	Utility = 1 << 1,
 	Moderation = 1 << 2,
 	Tags = 1 << 3,
-	GitHub = 1 << 4,
-	Documentation = 1 << 5,
+	Documentation = 1 << 4,
 }

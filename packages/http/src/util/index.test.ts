@@ -25,6 +25,7 @@ describe('send boom', () => {
 	test('with bad request', () => {
 		const err = badRequest();
 		const res = new MockedResponse();
+		// @ts-ignore
 		sendBoom(err, res);
 
 		expect(res.statusCode).toBe(400);
@@ -35,6 +36,7 @@ describe('send boom', () => {
 	test('with internal server error', () => {
 		const err = internal();
 		const res = new MockedResponse();
+		// @ts-ignore
 		sendBoom(err, res);
 
 		expect(res.statusCode).toBe(500);
@@ -47,6 +49,7 @@ describe('send boom', () => {
 	test('with headers', () => {
 		const err = unauthorized('foo', ['abc', 'def']);
 		const res = new MockedResponse();
+		// @ts-ignore
 		sendBoom(err, res);
 
 		expect(res.statusCode).toBe(401);

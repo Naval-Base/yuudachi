@@ -1,5 +1,5 @@
 import { basename, dirname } from 'path';
-import type { Request, RequestHandler, Response, NextHandler, Polka } from 'polka';
+import type { Request, Response, NextHandler, Polka, Middleware } from 'polka';
 import type { AuthInfo } from '@yuudachi/types';
 
 declare module 'polka' {
@@ -42,16 +42,21 @@ export function pathToRouteInfo(path: string): RouteInfo | null {
 }
 
 export abstract class Route {
-	public readonly middleware: RequestHandler<Request>[] = [];
+	public readonly middleware: Middleware[] = [];
 	public abstract handle(req: Request, res: Response, next: NextHandler): void | Promise<void>;
 
 	public register(info: RouteInfo, server: Polka) {
-		server[info.method](`/api${info.path}`, ...this.middleware, async (req, res, next) => {
-			try {
-				await this.handle(req, res, next!);
-			} catch (e) {
-				next?.(e);
-			}
-		});
+		// @ts-ignore
+		server[info.method](
+			`/api${info.path}`,
+			...this.middleware,
+			async (req: Request, res: Response, next: NextHandler) => {
+				try {
+					await this.handle(req, res, next);
+				} catch (e) {
+					next(e);
+				}
+			},
+		);
 	}
 }

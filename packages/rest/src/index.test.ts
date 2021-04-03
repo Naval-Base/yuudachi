@@ -1,5 +1,5 @@
 import { Amqp, AmqpOptions } from '@spectacles/brokers';
-import { createAmqpBroker } from './index';
+import { createAmqpBroker } from '.';
 
 jest.mock('@spectacles/brokers');
 

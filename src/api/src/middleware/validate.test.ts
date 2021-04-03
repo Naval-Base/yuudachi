@@ -13,6 +13,7 @@ class ValidationError extends Error {}
 
 test('invalid schema', () => {
 	const validator = validate(Joi.object().keys({ foo: Joi.string().required() }).required());
+	// @ts-ignore
 	validator({ body: { foo: 1 } }, {}, next);
 	expect(next).toHaveBeenCalledWith(boomify(new ValidationError('"foo" must be a string'), { statusCode: 422 }));
 });
@@ -24,6 +25,7 @@ test('valid schema', () => {
 			.required(),
 	);
 	const req = { body: { foo: 'bar' } };
+	// @ts-ignore
 	validator(req, {}, next);
 	expect(next).toHaveBeenCalledWith();
 	expect(req).toHaveProperty('body', { foo: 'bar', bar: 5 });

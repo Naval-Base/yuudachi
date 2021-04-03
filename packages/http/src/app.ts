@@ -1,6 +1,6 @@
 import { isBoom, Boom, notFound } from '@hapi/boom';
 import { createServer } from 'http';
-import polka from 'polka';
+import polka, { Request } from 'polka';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookie from 'cookie';
@@ -17,7 +17,7 @@ declare module 'http' {
 }
 
 export function createApp(publicFolder?: string) {
-	return polka<polka.Request>({
+	return polka<Request>({
 		onError(err, _, res) {
 			console.error(err); // TODO: better error logging
 			res.setHeader('content-type', 'application/json');
@@ -32,13 +32,14 @@ export function createApp(publicFolder?: string) {
 			res.setHeader('content-type', 'application/json');
 			sendBoom(notFound(), res);
 		},
+		// @ts-ignore
 		server: createServer(),
 	})
 		.use(
 			cors({
 				origin: process.env.CORS?.split(',') ?? '*',
 				credentials: true,
-			}) as any,
+			}),
 			helmet({
 				contentSecurityPolicy: process.env.NODE_ENV === 'production' ? /* istanbul ignore next */ undefined : false,
 			}) as any,

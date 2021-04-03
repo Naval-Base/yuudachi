@@ -27,7 +27,7 @@ test('register', () => {
 			method: RouteMethod.GET,
 			path: '/test',
 		},
-		mockServer,
+		mockServer as any,
 	);
 
 	expect(mockServer.get).toHaveBeenCalledWith('/api/test', expect.any(Function));
