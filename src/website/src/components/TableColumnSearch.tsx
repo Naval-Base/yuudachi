@@ -57,12 +57,12 @@ const TableColumnSearch = ({
 		case 'number':
 			CustomInput = () => (
 				<NumberInput size="sm">
-					<NumberInputField name="search" ref={register} />
+					<NumberInputField {...register('search')} />
 				</NumberInput>
 			);
 			break;
 		default:
-			CustomInput = () => <Input name="search" ref={register} size="sm" />;
+			CustomInput = () => <Input {...register('search')} size="sm" />;
 			break;
 	}
 

@@ -2235,7 +2235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chakra-ui/react-utils@npm:1.1.0":
+"@chakra-ui/react-utils@npm:*, @chakra-ui/react-utils@npm:1.1.0":
   version: 1.1.0
   resolution: "@chakra-ui/react-utils@npm:1.1.0"
   dependencies:
@@ -2479,7 +2479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chakra-ui/theme@npm:1.8.0":
+"@chakra-ui/theme@npm:*, @chakra-ui/theme@npm:1.8.0":
   version: 1.8.0
   resolution: "@chakra-ui/theme@npm:1.8.0"
   dependencies:
@@ -6959,14 +6959,14 @@ __metadata:
     dayjs: ^1.10.4
     discord-api-types: ^0.13.3
     discord-markdown: ^2.4.2
-    framer-motion: ^3.10.6
+    framer-motion: ^4.1.2
     next: ^10.1.3
     next-cookie: ^2.6.0
     react: ^17.0.2
     react-autosize-textarea: ^7.1.0
     react-datepicker: ^3.7.0
     react-dom: ^17.0.2
-    react-hook-form: ^6.15.5
+    react-hook-form: ^7.0.0
     react-icons: ^4.2.0
     react-query: ^3.13.4
     react-table: ^7.6.3
@@ -12011,37 +12011,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:3.6.7":
-  version: 3.6.7
-  resolution: "framer-motion@npm:3.6.7"
+"framer-motion@npm:>=4.0.0, framer-motion@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "framer-motion@npm:4.1.2"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
-    framesync: ^5.1.0
+    framesync: 5.3.0
     hey-listen: ^1.0.8
-    popmotion: 9.2.1
-    style-value-types: 4.0.3
-    tslib: ^1.10.0
+    popmotion: 9.3.5
+    style-value-types: 4.1.4
+    tslib: ^2.1.0
   peerDependencies:
-    react: ">=16.8"
-    react-dom: ">=16.8"
+    react: ">=16.8 || ^17.0.0"
+    react-dom: ">=16.8 || ^17.0.0"
   dependenciesMeta:
     "@emotion/is-prop-valid":
       optional: true
-  checksum: 0913aa73cc63191f37f0a69b3fe6ed5af856a801f77d4aa9e4aae238167fe1bf6f1a80fd8b21cb65a81ad285f6ceb323cbc01618d353f8708765e2898f9d8b39
+  checksum: 7eb54e3ebcdf66ed47bdeb2f2e1d8b2509e29c3ad70426853b5e941c356e014cc1df62971d7b79e232c3e43a4436c244d4ff9a1423263233e12dd204114cb947
   languageName: node
   linkType: hard
 
-"framesync@npm:5.1.0":
-  version: 5.1.0
-  resolution: "framesync@npm:5.1.0"
-  checksum: 9dfccf7bfcd166506b83ac9f188906bf9c8bbe8d943966e71e8b2e67c52ddf1a37dcc3e990f6489aa7903a12cdab440babc8642ee41c70803baf5498daa8434b
-  languageName: node
-  linkType: hard
-
-"framesync@npm:^5.1.0":
-  version: 5.2.0
-  resolution: "framesync@npm:5.2.0"
-  checksum: ef7c4d349bdcdd2c487ceb9e45570dfb49972a2a9660cebc372b4a129186b408502946e8953d73a4b951174a54425d22f6c7be0e8a9a7f051ba7be07e9188c8f
+"framesync@npm:5.3.0":
+  version: 5.3.0
+  resolution: "framesync@npm:5.3.0"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: 14a6ed7d2a3c3af8f5b8f5aac6117f8e6b20990002e10e9b41c663997390a107ea8d904e4700041103fee551141b3cbac9e1d314b0cd0a16129e27ededa09bf4
   languageName: node
   linkType: hard
 
@@ -17486,15 +17481,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"popmotion@npm:9.2.1":
-  version: 9.2.1
-  resolution: "popmotion@npm:9.2.1"
+"popmotion@npm:9.3.5":
+  version: 9.3.5
+  resolution: "popmotion@npm:9.3.5"
   dependencies:
-    framesync: 5.1.0
+    framesync: 5.3.0
     hey-listen: ^1.0.8
-    style-value-types: 4.0.3
-    tslib: ^1.10.0
-  checksum: f7908017156a0ad7ac23142f777e3118563c4ae56e0ece8b382e33b7f05c82ce639b8330d5be47994c5a6db056ae082c08c0fd96fd542af5f5a9a9010e9e7459
+    style-value-types: 4.1.4
+    tslib: ^2.1.0
+  checksum: b78d79a8eaf8614d3fe07544f400932447fc68c84c6fa91e67c1dd2d40dbf91b45034b4c067ead52b25eea5de4493dae3532e01dfc78fcb785f826cd8c8a6705
   languageName: node
   linkType: hard
 
@@ -18254,20 +18249,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-dom@npm:>=17.0.0":
-  version: 17.0.1
-  resolution: "react-dom@npm:17.0.1"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.1
-  peerDependencies:
-    react: 17.0.1
-  checksum: 6a70028fbe3c95e0056c5e8ce065b4a9b8d4ff3bffde9b016454072bde5e4b012af7668ca45b7235ace428267d5be5237b68ea87ce8c296e54e81a8d678a4355
-  languageName: node
-  linkType: hard
-
-"react-dom@npm:^17.0.2":
+"react-dom@npm:>=17.0.0, react-dom@npm:^17.0.2":
   version: 17.0.2
   resolution: "react-dom@npm:17.0.2"
   dependencies:
@@ -18349,12 +18331,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^6.15.5":
-  version: 6.15.5
-  resolution: "react-hook-form@npm:6.15.5"
+"react-hook-form@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "react-hook-form@npm:7.0.0"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: 296e5203bd11aae1f485def77027f316122cb6ca85590f00f94f021c53edc053096e770210f0ad904f9105df50e4e7741430f21026c21a8de57461ac36e8dc23
+  checksum: f137fe84a79f5f79bf52e97da485baa8486d01cefa94dd7c028a9fa629ef56221e23b2c705b5a45432f90f36774064c7916170c65e7337c35fc28f35bbb0b04f
   languageName: node
   linkType: hard
 
@@ -18588,16 +18570,6 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
   checksum: 1f38e0bcc8571819f026050f04d65e2d27f1f005349dd0b3b01034e3b4612f75dd30690946ca2a1a8f4ffcc10cef48fb1922ca73111bfe71c43951f1f75944f9
-  languageName: node
-  linkType: hard
-
-"react@npm:>=17.0.0":
-  version: 17.0.1
-  resolution: "react@npm:17.0.1"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: a76d86ec973eb4b25a46071ac7f974adfd66ed89ad1db63043be1d976ec25417520a210e6d724b0ad937422b706afcf9962cedda9e92125992a8c0e8a95f2051
   languageName: node
   linkType: hard
 
@@ -19435,16 +19407,6 @@ resolve@^2.0.0-next.3:
   dependencies:
     xmlchars: ^2.2.0
   checksum: 6ad14be68da9b84af0fa3de346fd78bd3a8e8a73a462e2852279a1fff1e2619988919294001abe3ecef3783f9498962a0619d960ccca4ec2ca914526fde1acc2
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.20.1":
-  version: 0.20.1
-  resolution: "scheduler@npm:0.20.1"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: 377b4ad0d8313c4548bac7374bc38409e9d142799979ce396787efa04d1bcabf2591540f243f2131e3df8e56e7f5b29c5415248523e88ecb60f13a32db2e076f
   languageName: node
   linkType: hard
 
@@ -20557,13 +20519,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"style-value-types@npm:4.0.3":
-  version: 4.0.3
-  resolution: "style-value-types@npm:4.0.3"
+"style-value-types@npm:4.1.4":
+  version: 4.1.4
+  resolution: "style-value-types@npm:4.1.4"
   dependencies:
     hey-listen: ^1.0.8
-    tslib: ^1.10.0
-  checksum: 1f1fc2fdc5465a2f70a6b5dd0d2e6a462552b9fbf866e3d916af4cea492e96cc3c53e9167b4a1e4577ec8b1e4c9b198dcb374c52293885ce6304d6ace8fa0c98
+    tslib: ^2.1.0
+  checksum: aca49c70e6dc3e222c1db50b58fb4f339373d6b2583fcffed414888bdfc7bbb77dbcdc7530c730f5286282583ee891d97a84fd76f6273d1c7c2338b19ab740a9
   languageName: node
   linkType: hard
 

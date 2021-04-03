@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import Link from 'next/link';
 import { Box, Flex, FormControl, FormLabel, Switch, Button, Text } from '@chakra-ui/react';
-import { UseFormMethods, Controller } from 'react-hook-form';
+import { UseFormReturn, Controller } from 'react-hook-form';
 import { CommandModules } from '@yuudachi/types';
 
 import type { GraphQLGuildSettings } from '~/interfaces/GuildSettings';
@@ -15,7 +15,7 @@ const GuildModule = ({
 	isDisabled,
 }: {
 	guildModule: { name: string; perm: CommandModules; description: string; settings?: string };
-	control: UseFormMethods['control'];
+	control: UseFormReturn<any>['control'];
 	gqlGuildSettingsData: GraphQLGuildSettings['data'];
 	handleOnSubmit: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
 	isLoading: boolean;
@@ -27,13 +27,13 @@ const GuildModule = ({
 				<FormLabel d="inline-block">{guildModule.name}</FormLabel>
 				<Controller
 					control={control}
-					id="moderation"
 					name={guildModule.perm.toString()}
 					defaultValue={Boolean((gqlGuildSettingsData?.guild?.modules ?? 2) & guildModule.perm)}
-					render={(props: any) => (
+					render={({ field }) => (
 						<Switch
+							id="moderation"
 							onChange={(e: any) => {
-								props.onChange(e.target.checked);
+								field.onChange(e.target.checked);
 								void handleOnSubmit(e);
 							}}
 							defaultChecked={Boolean((gqlGuildSettingsData?.guild?.modules ?? 2) & guildModule.perm)}

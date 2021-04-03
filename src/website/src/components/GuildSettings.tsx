@@ -31,11 +31,16 @@ const GuildSettings = () => {
 	const user = useUserStore();
 	const router = useRouter();
 	const toast = useToast();
-	const { handleSubmit, register, errors, formState } = useForm<GuildSettingsPayload>({
+	const {
+		handleSubmit,
+		register,
+		formState: { errors, isSubmitting },
+	} = useForm<GuildSettingsPayload>({
 		defaultValues: {
 			prefix: '?',
 		},
 	});
+
 	const { id } = router.query;
 	const moderator = user.guilds?.find((moderators) => moderators.guild_id === (id as string));
 	const isModerator = Boolean(moderator);
@@ -104,12 +109,11 @@ const GuildSettings = () => {
 			<FormControl id="prefix" mb={4} isInvalid={Boolean(errors.prefix)}>
 				<FormLabel>Prefix</FormLabel>
 				<Input
-					name="prefix"
-					placeholder="Guild prefix"
-					ref={register({
+					{...register('prefix', {
 						required: { value: true, message: 'No empty prefix allowed' },
 						maxLength: { value: 5, message: 'Max length of 5 exceeded' },
 					})}
+					placeholder="Guild prefix"
 					defaultValue={guildSettingsData.prefix}
 					isDisabled={!canManage}
 				/>
@@ -123,9 +127,9 @@ const GuildSettings = () => {
 				<Button
 					type="submit"
 					colorScheme="green"
-					isLoading={formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
+					isLoading={isSubmitting || isLoadingGuildSettingsUpdateMutate}
 					loadingText="Submitting"
-					isDisabled={!canManage || formState.isSubmitting || isLoadingGuildSettingsUpdateMutate}
+					isDisabled={!canManage || isSubmitting || isLoadingGuildSettingsUpdateMutate}
 				>
 					Submit
 				</Button>

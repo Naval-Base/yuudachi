@@ -50,7 +50,14 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 	const router = useRouter();
 	const toast = useToast();
 	const [content, setContent] = useState('');
-	const { handleSubmit, register, control, watch, errors, formState } = useForm<GuildTagPayload>();
+	const {
+		handleSubmit,
+		register,
+		control,
+		watch,
+		formState: { errors, isSubmitting },
+	} = useForm();
+
 	const { fields, append, remove } = useFieldArray({ control, name: 'aliases' });
 	const { id } = router.query;
 	const isModerator = user.guilds?.some((moderators) => moderators.guild_id === (id as string));
@@ -143,7 +150,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 
 	useEffect(() => {
 		remove();
-		guildTagData?.tag.aliases.map((alias) => append({ value: alias }));
+		append(guildTagData?.tag.aliases.map((alias) => ({ value: alias })) ?? []);
 	}, [remove, guildTagData?.tag.aliases, append]);
 
 	return (
@@ -163,8 +170,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 								<FormControl id="name" mb={4} isReadOnly={!isModerator} isInvalid={Boolean(errors.name)}>
 									<FormLabel>Name</FormLabel>
 									<Input
-										name="name"
-										ref={register({
+										{...register('name', {
 											required: { value: true, message: 'No empty tags allowed' },
 											maxLength: { value: 20, message: 'Max length of 20 exceeded' },
 										})}
@@ -194,12 +200,11 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 													>
 														<InputGroup>
 															<Input
-																name={`aliases[${i.toString()}].value`}
-																ref={register({
+																{...register(`aliases.${i.toString()}.value`, {
 																	required: { value: true, message: 'No empty aliases allowed' },
 																	maxLength: { value: 20, message: 'Max length of 20 exceeded' },
 																})}
-																defaultValue={item.value}
+																defaultValue={(item as any).value}
 															/>
 															<InputRightElement width="4rem" pr={0}>
 																<IconButton
@@ -223,7 +228,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 												<IconButton
 													colorScheme="green"
 													size="sm"
-													aria-label="Delete alias"
+													aria-label="Add alias"
 													icon={<FiPlus />}
 													onClick={() => append({ value: '' })}
 													isDisabled={!isModerator}
@@ -239,14 +244,13 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 										minH="unset"
 										overflow="hidden"
 										resize="none"
-										name="content"
-										transition="height none"
-										rows={5}
-										ref={register({
+										{...register('content', {
 											required: { value: true, message: 'No empty tags allowed' },
 											maxLength: { value: 1900, message: 'Max length of 1900 exceeded' },
 										})}
-										as={TextareaAutosize as any /* fuck ts */}
+										transition="height none"
+										rows={5}
+										as={TextareaAutosize}
 										defaultValue={guildTagData?.tag.content}
 									/>
 									<FormErrorMessage>
@@ -262,7 +266,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 										avatar="https://cdn.discordapp.com/app-icons/474807795183648809/9c72320c06dbaecac51fc1151aede1b6.png?size=256"
 										bot
 									>
-										<Box dangerouslySetInnerHTML={{ __html: toHTML(content) }}></Box>
+										<Box dangerouslySetInnerHTML={{ __html: toHTML(content || '') }}></Box>
 									</DiscordMessage>
 								</DiscordMessages>
 							</form>
@@ -273,13 +277,10 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 									type="submit"
 									form="guild-tag-modal"
 									colorScheme="green"
-									isLoading={formState.isSubmitting || isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
+									isLoading={isSubmitting || isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate}
 									loadingText="Submitting"
 									isDisabled={
-										!isModerator ||
-										formState.isSubmitting ||
-										isLoadingGuildTagUpdateMutate ||
-										isLoadingGuildTagInsertMutate
+										!isModerator || isSubmitting || isLoadingGuildTagUpdateMutate || isLoadingGuildTagInsertMutate
 									}
 								>
 									Submit

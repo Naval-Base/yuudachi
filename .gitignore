@@ -3,6 +3,7 @@ node_modules
 **/node_modules
 
 # Build artifacts
+.next/
 dist/
 typings/
 tsconfig.tsbuildinfo

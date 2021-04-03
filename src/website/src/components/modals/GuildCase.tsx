@@ -62,7 +62,13 @@ const GuildCase = ({
 	const user = useUserStore();
 	const router = useRouter();
 	const toast = useToast();
-	const { handleSubmit, register, control, errors, formState } = useForm<GuildCasePayload>();
+	const {
+		handleSubmit,
+		register,
+		control,
+		formState: { errors, isSubmitting },
+	} = useForm<GuildCasePayload>();
+
 	const [expirationTime, setExpirationTime] = useState<string | null>(null);
 	const { id } = router.query;
 	const isModerator = user.guilds?.some((moderators) => moderators.guild_id === (id as string));
@@ -92,12 +98,12 @@ const GuildCase = ({
 
 	const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		await handleSubmit(async (values: { expiration: Date | null; reference: string; reason: string }) => {
-			const { reference, expiration, ...rest } = values;
+		await handleSubmit(async (values: { action_expiration: Date | null; ref_id: string; reason: string }) => {
+			const { ref_id, action_expiration, ...rest } = values;
 			let payload: GuildCasePayload = {
 				...rest,
-				ref_id: reference ? Number(reference) : null,
-				action_expiration: expiration?.toISOString() ?? null,
+				ref_id: ref_id ? Number(ref_id) : null,
+				action_expiration: action_expiration?.toISOString() ?? null,
 			};
 
 			if (!guildCaseData?.case.mod_id) {
@@ -158,7 +164,7 @@ const GuildCase = ({
 											defaultValue={guildCaseData?.case.ref_id ?? undefined}
 											isReadOnly={readOnly || !isModerator}
 										>
-											<NumberInputField name="reference" ref={register} />
+											<NumberInputField {...register('ref_id')} />
 											<NumberInputStepper>
 												<NumberIncrementStepper />
 												<NumberDecrementStepper />
@@ -195,7 +201,7 @@ const GuildCase = ({
 										<Box mb={4}>
 											<FormLabel as="legend">Expiration</FormLabel>
 											<Controller
-												name="expiration"
+												name="action_expiration"
 												control={control}
 												defaultValue={dayjs(guildCaseData.case.action_expiration).toDate()}
 												render={(props: any) => (
@@ -256,10 +262,9 @@ const GuildCase = ({
 										minH="unset"
 										overflow="hidden"
 										resize="none"
-										name="reason"
+										{...register('reason', { maxLength: { value: 1900, message: 'Max length of 1900 exceeded' } })}
 										transition="height none"
 										rows={5}
-										ref={register({ maxLength: { value: 1900, message: 'Max length of 1900 exceeded' } })}
 										as={TextareaAutosize as any /* fuck ts */}
 										defaultValue={guildCaseData?.case.reason ?? undefined}
 									/>
@@ -275,9 +280,9 @@ const GuildCase = ({
 									type="submit"
 									form="guild-case-modal"
 									colorScheme="green"
-									isLoading={formState.isSubmitting || isLoadingGuildCaseUpdateMutate}
+									isLoading={isSubmitting || isLoadingGuildCaseUpdateMutate}
 									loadingText="Submitting"
-									isDisabled={readOnly || !isModerator || formState.isSubmitting || isLoadingGuildCaseUpdateMutate}
+									isDisabled={readOnly || !isModerator || isSubmitting || isLoadingGuildCaseUpdateMutate}
 								>
 									Submit
 								</Button>
