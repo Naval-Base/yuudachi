@@ -1,11 +1,9 @@
-import type { APIGuildInteraction, APIMessage, Snowflake } from 'discord-api-types/v8';
+import type { APIGuildInteraction } from 'discord-api-types/v8';
 import i18next from 'i18next';
-import { Args, joinTokens, Ok } from 'lexure';
 import { injectable } from 'tsyringe';
-import { CommandModules } from '@yuudachi/types';
+import { CommandModules, TransformedInteraction } from '@yuudachi/types';
 
 import Command from '../../Command';
-import parseMember from '../../parsers/member';
 import { checkMod, send } from '../../util';
 
 import { mute } from './sub/restrict/mute';
@@ -19,82 +17,32 @@ import { unrole } from './sub/restrict/unrole';
 export default class implements Command {
 	public readonly category = CommandModules.Moderation;
 
-	private parse(args: Args) {
-		const user = args.option('user');
-		const duration = args.option('duration');
-		const reason = args.option('reason');
-		const refId = args.option('reference', 'ref');
-
-		const sub = args.single();
-		if (sub === 'unrole') {
-			const caseId = args.option('case');
-			return {
-				sub,
-				caseId: caseId ?? args.single(),
-			};
-		}
-
-		return {
-			sub,
-			maybeMember: user ? parseMember(user) : args.singleParse(parseMember),
-			duration: duration ?? args.single(),
-			reason: reason ?? (joinTokens(args.many()) || undefined),
-			refId: refId ?? undefined,
-		};
-	}
-
-	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string) {
-		if (!message.guild_id) {
-			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
-		}
+	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string) {
 		await checkMod(message, locale);
 
-		const { sub, maybeMember, duration, reason, refId, caseId } = this.parse(args);
-		if (!sub) {
-			throw new Error(i18next.t('command.common.errors.no_sub_command', { lng: locale }));
-		}
-		if (sub === 'unrole') {
-			if (!caseId) {
-				throw new Error(i18next.t('command.mod.common.errors.no_case_id'));
-			}
-		} else {
-			if (!maybeMember) {
-				throw new Error(i18next.t('command.common.errors.no_user_id', { lng: locale }));
-			}
-			if (!maybeMember.success) {
-				throw new Error(i18next.t('command.common.errors.invalid_user_id', { id: maybeMember.error, lng: locale }));
-			}
-			if (!duration) {
-				throw new Error(i18next.t('command.mod.common.errors.no_duration', { lng: locale }));
-			}
-		}
-		if (reason && reason.length >= 1900) {
-			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
-		}
-
-		switch (sub) {
+		switch (Object.keys(args.restrict)[0]) {
 			case 'mute': {
-				return mute(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
+				return mute(message, args.restrict.mute, locale);
 			}
 
 			case 'embed': {
-				return embed(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
+				return embed(message, args.restrict.embed, locale);
 			}
 
 			case 'react': {
-				return react(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
+				return react(message, args.restrict.react, locale);
 			}
 
 			case 'emoji': {
-				return emoji(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
+				return emoji(message, args.restrict.emoji, locale);
 			}
 
 			case 'tag': {
-				return tag(message, maybeMember as Ok<Snowflake>, duration as string, locale, reason, refId);
+				return tag(message, args.restrict.tag, locale);
 			}
 
 			case 'unrole': {
-				return unrole(message, caseId!, locale);
+				return unrole(message, args.restrict.unrole, locale);
 			}
 
 			default: {

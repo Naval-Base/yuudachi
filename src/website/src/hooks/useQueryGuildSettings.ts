@@ -26,7 +26,6 @@ export function useQueryGuildSettings(id: string, enabled = false) {
 						tag_role_id
 						locale
 						modules
-						repository_aliases
 					}
 				}`,
 				{ guild_id: id },

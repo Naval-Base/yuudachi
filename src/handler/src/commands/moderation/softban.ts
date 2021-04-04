@@ -1,12 +1,10 @@
-import type { APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
+import type { APIGuildInteraction } from 'discord-api-types/v8';
 import API, { HttpException } from '@yuudachi/api';
-import { CaseAction, CommandModules } from '@yuudachi/types';
+import { CaseAction, CommandModules, TransformedInteraction } from '@yuudachi/types';
 import i18next from 'i18next';
-import { Args, joinTokens } from 'lexure';
 import { injectable } from 'tsyringe';
 
 import Command from '../../Command';
-import parseMember from '../../parsers/member';
 import { checkMod, send } from '../../util';
 
 @injectable()
@@ -15,45 +13,31 @@ export default class implements Command {
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: Args) {
-		const user = args.option('user');
-		const reason = args.option('reason');
-		const days = args.option('days', 'd');
-		const refId = args.option('reference', 'ref');
-
+	private parse(args: TransformedInteraction) {
 		return {
-			maybeMember: user ? parseMember(user) : args.singleParse(parseMember),
-			reason: reason ?? joinTokens(args.many()),
-			days,
-			refId: refId ? Number(refId) : undefined,
+			member: args.softban.user,
+			reason: args.softban.reason,
+			days: args.softban.days,
+			refId: args.softban.reference,
 		};
 	}
 
-	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string): Promise<void> {
-		if (!message.guild_id) {
-			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
-		}
+	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
 		await checkMod(message, locale);
 
-		const { maybeMember, reason, days, refId } = this.parse(args);
-		if (!maybeMember) {
-			throw new Error(i18next.t('command.common.errors.no_user_id', { lng: locale }));
-		}
-		if (!maybeMember.success) {
-			throw new Error(i18next.t('command.common.errors.invalid_user_id', { id: maybeMember.error, lng: locale }));
-		}
+		const { member, reason, days, refId } = this.parse(args);
 		if (reason && reason.length >= 1900) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 
-		const memberMention = `<@${maybeMember.value}>`;
+		const memberMention = `<@${member.user.id}>`;
 
 		try {
 			await this.api.guilds.createCase(message.guild_id, {
 				action: CaseAction.SOFTBAN,
 				reason: reason || undefined,
-				moderatorId: 'author' in message ? message.author.id : message.member.user.id,
-				targetId: maybeMember.value,
+				moderatorId: message.member.user.id,
+				targetId: member.user.id,
 				contextMessageId: message.id,
 				referenceId: refId ? Number(refId) : undefined,
 				deleteMessageDays: days ? Math.min(Math.max(Number(days), 0), 7) : 7,

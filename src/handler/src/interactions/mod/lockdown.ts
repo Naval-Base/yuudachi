@@ -25,7 +25,7 @@ export default {
 				{
 					name: 'channel',
 					description: 'The channel to lock',
-					type: 3,
+					type: 7,
 				},
 				{
 					name: 'reason',
@@ -42,7 +42,7 @@ export default {
 				{
 					name: 'channel',
 					description: 'The channel to lift the lock',
-					type: 3,
+					type: 7,
 				},
 			],
 		},

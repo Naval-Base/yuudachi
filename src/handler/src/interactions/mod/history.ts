@@ -5,7 +5,7 @@ export default {
 		{
 			name: 'user',
 			description: 'The user to look up',
-			type: 3,
+			type: 6,
 			required: true,
 		},
 	],

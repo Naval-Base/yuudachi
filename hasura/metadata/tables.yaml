@@ -168,7 +168,6 @@
       - reaction_role_id
       - locale
       - modules
-      - repository_aliases
       backend_only: false
   select_permissions:
   - role: user
@@ -187,7 +186,6 @@
       - reaction_role_id
       - locale
       - modules
-      - repository_aliases
       filter:
         moderators:
           user_id:
@@ -209,7 +207,6 @@
       - reaction_role_id
       - locale
       - modules
-      - repository_aliases
       filter:
         moderators:
           _and:

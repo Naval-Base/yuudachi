@@ -1,7 +1,5 @@
 import {
-	APIGuildInteraction,
 	APIInteractionResponse,
-	APIMessage,
 	APIInteractionApplicationCommandCallbackData,
 	RESTPostAPIChannelMessageJSONBody,
 	Routes,
@@ -10,7 +8,7 @@ import Rest, { RequestOptions } from '@yuudachi/rest';
 import { container } from 'tsyringe';
 
 export async function send(
-	message: APIMessage | APIGuildInteraction,
+	message: any,
 	payload: RESTPostAPIChannelMessageJSONBody | APIInteractionApplicationCommandCallbackData,
 	options: RequestOptions = {},
 	type: APIInteractionResponse['type'] = 4,

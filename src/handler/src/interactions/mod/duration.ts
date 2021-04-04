@@ -19,6 +19,7 @@ export default {
 				{ name: '1 day', value: '1d' },
 				{ name: '2 days', value: '2d' },
 				{ name: '3 days', value: '3d' },
+				{ name: '7 days', value: '7d' },
 			],
 			required: true,
 		},

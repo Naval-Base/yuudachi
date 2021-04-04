@@ -1,8 +1,7 @@
 import { injectable } from 'tsyringe';
-import type { APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
-import type { Args } from 'lexure';
+import type { APIGuildInteraction } from 'discord-api-types/v8';
 import i18next from 'i18next';
-import { CommandModules } from '@yuudachi/types';
+import { CommandModules, TransformedInteraction } from '@yuudachi/types';
 
 import Command from '../../Command';
 import { send } from '../../util';
@@ -11,16 +10,10 @@ import { send } from '../../util';
 export default class implements Command {
 	public readonly category = CommandModules.Utility;
 
-	private parse(args: Args) {
-		return args.flag('hide');
-	}
-
-	public execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string) {
-		const hide = this.parse(args);
-
+	public execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string) {
 		void send(message, {
 			content: i18next.t('command.utility.ping.success', { lng: locale }),
-			flags: hide ? 64 : undefined,
+			flags: args.ping.hide ? 64 : undefined,
 		});
 	}
 }

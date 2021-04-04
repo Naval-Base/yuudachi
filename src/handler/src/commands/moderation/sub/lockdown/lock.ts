@@ -1,5 +1,4 @@
-import { APIGuildInteraction, APIMessage, Routes, Snowflake } from 'discord-api-types/v8';
-import type { Ok } from 'lexure';
+import { APIGuildInteraction, Routes, Snowflake } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import ms from '@naval-base/ms';
 import API, { HttpException } from '@yuudachi/api';
@@ -12,8 +11,8 @@ dayjs.extend(relativeTime);
 import { send } from '../../../../util';
 
 export async function lock(
-	message: APIMessage | APIGuildInteraction,
-	maybeChannel: Ok<Snowflake>,
+	message: APIGuildInteraction,
+	channel: Snowflake,
 	duration: string,
 	reason: string,
 	locale: string,
@@ -26,18 +25,18 @@ export async function lock(
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
-	const channelMention = `<#${maybeChannel.value}>`;
+	const channelMention = `<#${channel}>`;
 
 	try {
 		const duration = new Date(Date.now() + parsedDuration);
-		await api.guilds.createLockdown(message.guild_id!, {
-			channelId: maybeChannel.value,
+		await api.guilds.createLockdown(message.guild_id, {
+			channelId: channel,
 			expiration: duration,
-			moderatorId: 'author' in message ? message.author.id : message.member.user.id,
+			moderatorId: message.member.user.id,
 			reason: reason || undefined,
 		});
 
-		await rest.post(Routes.channelMessages(maybeChannel.value), {
+		await rest.post(Routes.channelMessages(channel), {
 			content: i18next.t('command.mod.lockdown.lock.message', {
 				duration: dayjs(duration.toISOString()).fromNow(true),
 				lng: locale,

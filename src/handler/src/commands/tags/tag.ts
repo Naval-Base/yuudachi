@@ -1,5 +1,4 @@
 import { injectable, inject } from 'tsyringe';
-import type { APIMessage } from 'discord-api-types/v8';
 import { Args, joinTokens } from 'lexure';
 import type { Sql } from 'postgres';
 import i18next from 'i18next';
@@ -19,7 +18,7 @@ export default class implements Command {
 
 	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(message: APIMessage, args: Args, locale: string) {
+	public async execute(message: any, args: Args, locale: string) {
 		if (!message.guild_id) {
 			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
 		}

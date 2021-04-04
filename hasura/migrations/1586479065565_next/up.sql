@@ -195,8 +195,7 @@ create table guild_settings (
 	emoji_role_id text,
 	reaction_role_id text,
 	locale text default 'en',
-	modules integer default 2,
-	repository_aliases text[]
+	modules integer default 2
 );
 
 comment on column guild_settings.guild_id IS 'The id of the guild this setting belongs to';
@@ -212,7 +211,6 @@ comment on column guild_settings.emoji_role_id IS 'The id of the guilds emoji re
 comment on column guild_settings.reaction_role_id IS 'The id of the guilds reaction restriction role';
 comment on column guild_settings.locale IS 'The locale of the guild';
 comment on column guild_settings.modules IS 'The modules of the guild';
-comment on column guild_settings.repository_aliases IS 'The repository aliases of the guild';
 
 
 alter table guild_settings

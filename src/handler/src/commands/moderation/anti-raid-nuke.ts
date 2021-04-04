@@ -1,8 +1,7 @@
-import type { APIGuildMember, APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
+import type { APIGuildMember, APIGuildInteraction } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
-import { CaseAction, CommandModules } from '@yuudachi/types';
+import { CaseAction, CommandModules, TransformedInteraction } from '@yuudachi/types';
 import i18next from 'i18next';
-import type { Args } from 'lexure';
 import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
 import dayjs from 'dayjs';
@@ -13,53 +12,32 @@ import { DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS, DISCORD_EPOCH } from '..
 
 @injectable()
 export default class implements Command {
-	public readonly aliases = ['arn', 'nuke'];
 	public readonly category = CommandModules.Moderation;
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: Args) {
-		const join = args.option('join');
-		const age = args.option('age');
-		const report = args.flag('report');
-		const list = args.flag('list');
-		const noDry = args.flag('no-dry-run', 'no-dry');
-		const days = args.option('days', 'd');
-
+	private parse(args: TransformedInteraction) {
 		return {
-			join: join ?? args.single(),
-			age: age ?? args.single(),
-			report,
-			list,
-			noDry,
-			days,
+			join: args['anti-raid-nuke'].join,
+			age: args['anti-raid-nuke'].age,
+			report: args['anti-raid-nuke'].report,
+			list: args['anti-raid-nuke'].list,
+			noDry: args['anti-raid-nuke']['no-dry-run'],
+			days: args['anti-raid-nuke'].days,
 		};
 	}
 
-	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string): Promise<void> {
-		if (!message.guild_id) {
-			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
-		}
+	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
 		await checkMod(message, locale);
 
 		const { join, age, report, noDry, days } = this.parse(args);
-		let parsedJoin;
-		let parsedAge;
-		if (join) {
-			parsedJoin = ms(join);
-			if (parsedJoin < 6000 || parsedJoin > 120 * 60 * 1000 || isNaN(parsedJoin)) {
-				throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
-			}
-		} else {
+		const parsedJoin = ms(join);
+		if (parsedJoin < 6000 || parsedJoin > 120 * 60 * 1000 || isNaN(parsedJoin)) {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 		}
 
-		if (age) {
-			parsedAge = ms(age);
-			if (parsedAge < 6000 || isNaN(parsedAge)) {
-				throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
-			}
-		} else {
+		const parsedAge = ms(age);
+		if (parsedAge < 6000 || isNaN(parsedAge)) {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 		}
 
@@ -114,7 +92,7 @@ export default class implements Command {
 					.createCase(message.guild_id, {
 						action: CaseAction.BAN,
 						reason: `Anti-raid-nuke \`(${++idx}/${members.length})\``,
-						moderatorId: 'author' in message ? message.author.id : message.member.user.id,
+						moderatorId: message.member.user.id,
 						targetId: member.user!.id,
 						contextMessageId: message.id,
 						deleteMessageDays: days ? Math.min(Math.max(Number(days), 0), 7) : 0,

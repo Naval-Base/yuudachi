@@ -1,28 +1,16 @@
-import type { APIGuildInteraction, APIMessage, APIApplicationCommandInteractionDataOption } from 'discord-api-types/v8';
-import type { Args } from 'lexure';
+import type { APIGuildInteraction } from 'discord-api-types/v8';
 import { basename, extname } from 'path';
 import type { CommandModules } from '@yuudachi/types';
-
-export enum ExecutionContext {
-	PREFIXED,
-	INTERACTION,
-	REGEXP,
-}
+/* import type { TransformedInteraction } from '@yuudachi/core'; */
 
 export default interface Command {
 	name?: string;
-	aliases?: string[];
 	category: CommandModules;
 	description?: string;
 	clientPermissions?: string[];
 	userPermissions?: string[];
 	regExp?: RegExp;
-	execute(
-		message: APIMessage | APIGuildInteraction,
-		args: Args | APIApplicationCommandInteractionDataOption[],
-		locale: string,
-		executionContext: ExecutionContext,
-	): unknown | Promise<unknown>;
+	execute(message: APIGuildInteraction, args: any, locale: string): unknown | Promise<unknown>;
 }
 
 export interface CommandInfo {

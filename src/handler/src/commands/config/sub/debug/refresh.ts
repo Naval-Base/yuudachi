@@ -1,5 +1,4 @@
-import { APIGuildInteraction, APIMessage, Routes, Snowflake } from 'discord-api-types/v8';
-import type { Args } from 'lexure';
+import { APIGuildInteraction, Routes, Snowflake } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
 import Rest from '@yuudachi/rest';
@@ -7,16 +6,12 @@ import readdirp from 'readdirp';
 import { resolve } from 'path';
 
 import { send } from '../../../../util';
+import { TransformedInteraction } from '@yuudachi/types';
 
-export async function refresh(message: APIMessage | APIGuildInteraction, args: Args, locale: string) {
+export async function refresh(message: APIGuildInteraction, args: TransformedInteraction['debug'], locale: string) {
 	const rest = container.resolve(Rest);
 
-	const sub = args.single();
-	if (!sub) {
-		throw new Error(i18next.t('command.common.errors.no_sub_command', { lng: locale }));
-	}
-
-	switch (sub) {
+	switch (Object.keys(args.refresh)[0]) {
 		case 'commands': {
 			const commands: Record<string, any>[] = [];
 
@@ -30,7 +25,7 @@ export async function refresh(message: APIMessage | APIGuildInteraction, args: A
 			}
 
 			await rest.put(
-				Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as Snowflake, message.guild_id!),
+				Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as Snowflake, message.guild_id),
 				commands,
 			);
 

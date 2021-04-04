@@ -5,7 +5,7 @@ export default {
 		{
 			name: 'user',
 			description: 'The user to action',
-			type: 3,
+			type: 6,
 			required: true,
 		},
 		{
@@ -44,6 +44,7 @@ export default {
 				{ name: '1 day', value: '1d' },
 				{ name: '2 days', value: '2d' },
 				{ name: '3 days', value: '3d' },
+				{ name: '7 days', value: '7d' },
 			],
 		},
 	],

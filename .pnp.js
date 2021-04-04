@@ -11400,7 +11400,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["discord-api-types", "npm:0.13.3"],
             ["jest-date-mock", "npm:1.0.8"],
             ["jsonwebtoken", "npm:8.5.1"],
-            ["lexure", "npm:0.17.0"],
             ["polka", "npm:1.0.0-next.13"],
             ["postgres", "npm:2.0.0-beta.4"],
             ["readdirp", "npm:3.6.0"],

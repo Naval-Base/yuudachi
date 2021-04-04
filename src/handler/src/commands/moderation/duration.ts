@@ -1,10 +1,9 @@
-import type { APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
+import type { APIGuildInteraction } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
 import i18next from 'i18next';
-import { Args, joinTokens } from 'lexure';
 import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
-import { CommandModules } from '@yuudachi/types';
+import { CommandModules, TransformedInteraction } from '@yuudachi/types';
 
 import Command from '../../Command';
 import { checkMod, send } from '../../util';
@@ -15,21 +14,15 @@ export default class implements Command {
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: Args) {
-		const caseId = args.option('case');
-		const duration = args.option('duration');
-
+	private parse(args: TransformedInteraction) {
 		return {
-			caseId: caseId ?? args.single(),
-			duration: duration ?? joinTokens(args.many()),
-			hide: args.flag('hide'),
+			caseId: args.duration.case,
+			duration: args.duration.duration,
+			hide: args.duration.hide,
 		};
 	}
 
-	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string): Promise<void> {
-		if (!message.guild_id) {
-			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
-		}
+	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
 		await checkMod(message, locale);
 
 		const { caseId, duration, hide } = this.parse(args);

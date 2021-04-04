@@ -1,11 +1,10 @@
-import type { APIGuildInteraction, APIMessage, Snowflake } from 'discord-api-types/v8';
-import type { Ok } from 'lexure';
+import type { APIGuildInteraction, Snowflake } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
 import ms from '@naval-base/ms';
 import type { Sql } from 'postgres';
-import { CaseAction } from '@yuudachi/types';
+import { CaseAction, TransformedInteraction } from '@yuudachi/types';
 import { Tokens } from '@yuudachi/core';
 
 import { send } from '../../../../util';
@@ -13,20 +12,21 @@ import { send } from '../../../../util';
 const { kSQL } = Tokens;
 
 export async function embed(
-	message: APIMessage | APIGuildInteraction,
-	maybeMember: Ok<Snowflake>,
-	duration: string,
+	message: APIGuildInteraction,
+	args: TransformedInteraction['restrict']['embed'],
 	locale: string,
-	reason?: string,
-	refId?: string,
 ) {
+	if (args.reason && args.reason.length >= 1900) {
+		throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
+	}
+
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const api = container.resolve(API);
 
 	const [roles] = await sql<[{ embed_role_id: Snowflake | '' | null }?]>`
 		select embed_role_id
 		from guild_settings
-		where guild_id = ${message.guild_id!}
+		where guild_id = ${message.guild_id}
 	`;
 
 	if (!roles?.embed_role_id) {
@@ -36,8 +36,8 @@ export async function embed(
 	const [action] = await sql<[{ action_processed: boolean }?]>`
 		select action_processed
 		from cases
-		where guild_id = ${message.guild_id!}
-			and target_id = ${maybeMember.value}
+		where guild_id = ${message.guild_id}
+			and target_id = ${args.user.user.id}
 			and role_id = ${roles.embed_role_id}
 		order by created_at desc
 		limit 1`;
@@ -46,22 +46,22 @@ export async function embed(
 		throw new Error(i18next.t('command.mod.restrict.embed.errors.already_restricted', { lng: locale }));
 	}
 
-	const parsedDuration = ms(duration);
+	const parsedDuration = ms(args.duration);
 	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
-	const memberMention = `<@${maybeMember.value}>`;
+	const memberMention = `<@${args.user.user.id}>`;
 
 	try {
-		await api.guilds.createCase(message.guild_id!, {
+		await api.guilds.createCase(message.guild_id, {
 			action: CaseAction.ROLE,
-			reason,
-			moderatorId: 'author' in message ? message.author.id : message.member.user.id,
-			targetId: maybeMember.value,
+			reason: args.reason,
+			moderatorId: message.member.user.id,
+			targetId: args.user.user.id,
 			roleId: roles.embed_role_id,
 			contextMessageId: message.id,
-			referenceId: refId ? Number(refId) : undefined,
+			referenceId: args.reference ? Number(args.reference) : undefined,
 			actionExpiration: new Date(Date.now() + parsedDuration),
 		});
 

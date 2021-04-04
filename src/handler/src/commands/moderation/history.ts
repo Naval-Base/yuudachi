@@ -1,24 +1,14 @@
-import type {
-	APIMessage,
-	APIEmbed,
-	APIGuildInteraction,
-	RESTGetAPIGuildMemberResult,
-	RESTGetAPIUserResult,
-} from 'discord-api-types/v8';
-import Rest from '@yuudachi/rest';
-import i18next from 'i18next';
-import { Args } from 'lexure';
+import type { APIEmbed, APIGuildInteraction } from 'discord-api-types/v8';
 import { inject, injectable } from 'tsyringe';
 import { oneLine, stripIndents } from 'common-tags';
 import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
-import { CommandModules } from '@yuudachi/types';
+import { CommandModules, TransformedInteraction } from '@yuudachi/types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 import Command from '../../Command';
-import parseMember from '../../parsers/member';
 import { DATE_FORMAT_DATE, DATE_FORMAT_WITH_SECONDS, DISCORD_EPOCH } from '../../Constants';
 import { addFields, checkMod, send } from '../../util';
 
@@ -38,86 +28,63 @@ interface CaseFooter {
 @injectable()
 export default class implements Command {
 	public readonly category = CommandModules.Moderation;
-	public readonly aliases = ['user'];
 
-	public constructor(@inject(kSQL) private readonly sql: Sql<any>, private readonly rest: Rest) {}
+	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
-	private parse(args: Args) {
-		const user = args.option('user');
-		return user ? parseMember(user) : args.singleParse(parseMember);
+	private parse(args: TransformedInteraction) {
+		return args.history.user;
 	}
 
-	public async execute(message: APIMessage | APIGuildInteraction, args: Args, locale: string): Promise<void> {
-		if (!message.guild_id) {
-			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
-		}
+	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
 		await checkMod(message, locale);
 
-		const maybeMember = this.parse(args);
-		if (!maybeMember) {
-			throw new Error(i18next.t('command.common.errors.no_user_id', { lng: locale }));
-		}
-		if (!maybeMember.success) {
-			throw new Error(i18next.t('command.common.errors.invalid_user_id', { id: maybeMember.error, lng: locale }));
-		}
+		const member = this.parse(args);
 
-		const [targetUser, targetMember] = await Promise.allSettled([
-			this.rest.get<RESTGetAPIUserResult>(`/users/${maybeMember.value}`),
-			this.rest.get<RESTGetAPIGuildMemberResult>(`/guilds/${message.guild_id}/members/${maybeMember.value}`),
-		]);
-		if (targetUser.status === 'rejected') {
-			throw new Error(i18next.t('command.common.errors.no_user_found', { lng: locale }));
-		}
-
-		const createdTimestamp = Number((BigInt(targetUser.value.id) >> 22n) + BigInt(DISCORD_EPOCH));
+		const createdTimestamp = Number((BigInt(member.user.id) >> 22n) + BigInt(DISCORD_EPOCH));
 		const sinceCreationFormatted = dayjs(createdTimestamp).fromNow();
 		const creationFormatted = dayjs(createdTimestamp).format(DATE_FORMAT_WITH_SECONDS);
 
-		const avatar = targetUser.value.avatar
-			? `https://cdn.discordapp.com/avatars/${targetUser.value.id}/${targetUser.value.avatar}.${
-					targetUser.value.avatar.startsWith('_a') ? 'gif' : 'png'
+		const avatar = member.user.avatar
+			? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.${
+					member.user.avatar.startsWith('_a') ? 'gif' : 'png'
 			  }`
-			: `https://cdn.discordapp.com/embed/avatars/${Number(targetUser.value.discriminator) % 5}.png`;
+			: `https://cdn.discordapp.com/embed/avatars/${Number(member.user.discriminator) % 5}.png`;
 		let embed: APIEmbed = addFields(
 			{
 				author: {
-					name: `${targetUser.value.username}#${targetUser.value.discriminator} (${targetUser.value.id})`,
+					name: `${member.user.username}#${member.user.discriminator} (${member.user.id})`,
 					icon_url: avatar,
 				},
 			},
 			{
 				name: 'User Details',
 				value: stripIndents`
-					• Id: \`${targetUser.value.id}\`
-					• Username: \`${targetUser.value.username}#${targetUser.value.discriminator}\`
+					• Id: \`${member.user.id}\`
+					• Username: \`${member.user.username}#${member.user.discriminator}\`
 					• Created: \`${creationFormatted} (UTC)\` (${sinceCreationFormatted})
 				`,
 			},
 		);
 
-		if (targetMember.status === 'fulfilled') {
-			const sinceJoinFormatted = dayjs(targetMember.value.joined_at).fromNow();
-			const joinFormatted = dayjs(targetMember.value.joined_at).format(DATE_FORMAT_WITH_SECONDS);
+		if (member.joined_at) {
+			const sinceJoinFormatted = dayjs(member.joined_at).fromNow();
+			const joinFormatted = dayjs(member.joined_at).format(DATE_FORMAT_WITH_SECONDS);
 
 			embed = addFields(embed, {
 				name: 'Member Details',
 				value: stripIndents`
-						${targetMember.value.nick ? `• Nickname: \`${targetMember.value.nick}\`` : '• No nickname'}
-						• Roles: ${
-							targetMember.value.roles.length
-								? targetMember.value.roles.map((role) => `<@&${role}>`).join(', ')
-								: 'No roles'
-						}
-						• Joined: \`${joinFormatted} (UTC)\` (${sinceJoinFormatted})
-					`,
+					${member.nick ? `• Nickname: \`${member.nick}\`` : '• No nickname'}
+					• Roles: ${member.roles.length ? member.roles.map((role) => `<@&${role}>`).join(', ') : 'No roles'}
+					• Joined: \`${joinFormatted} (UTC)\` (${sinceJoinFormatted})
+				`,
 			});
 		}
 
-		const cases = await this.sql<[{ case_id: number; action: number; reason: string; created_at: Date }]>`
+		const cases = await this.sql<[{ case_id: number; action: number; reason: string | null; created_at: Date }]>`
 			select case_id, action, reason, created_at
 			from cases
 			where guild_id = ${message.guild_id}
-				and target_id = ${targetUser.value.id}
+				and target_id = ${member.user.id}
 			order by created_at desc`;
 
 		const footer = cases.reduce((count: CaseFooter, c) => {
@@ -150,9 +117,9 @@ export default class implements Command {
 
 		for (const c of cases) {
 			const dateFormatted = dayjs(c.created_at).format(DATE_FORMAT_DATE);
-			const caseString = `• \`${dateFormatted} ${ACTION_KEYS[c.action].toUpperCase()} #${
-				c.case_id
-			}\` ${c.reason.replace(/`/g, '').replace(/\*/g, '')}`;
+			const caseString = `• \`${dateFormatted} ${ACTION_KEYS[c.action].toUpperCase()} #${c.case_id}\` ${
+				c.reason?.replace(/`/g, '').replace(/\*/g, '') ?? ''
+			}`;
 			if (summary.join('\n').length + caseString.length + 1 < 2040) {
 				summary.push(caseString);
 				continue;

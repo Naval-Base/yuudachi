@@ -1,19 +1,18 @@
-import type { APIGuildInteraction, APIMessage, Snowflake } from 'discord-api-types/v8';
-import type { Ok } from 'lexure';
+import type { APIGuildInteraction, Snowflake } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
 
 import { send } from '../../../../util';
 
-export async function lift(message: APIMessage | APIGuildInteraction, maybeChannel: Ok<Snowflake>, locale: string) {
+export async function lift(message: APIGuildInteraction, channel: Snowflake, locale: string) {
 	const api = container.resolve(API);
 
-	const channelMention = `<#${maybeChannel.value}>`;
+	const channelMention = `<#${channel}>`;
 
 	try {
-		await api.guilds.deleteLockdown(message.guild_id!, {
-			channelId: maybeChannel.value,
+		await api.guilds.deleteLockdown(message.guild_id, {
+			channelId: channel,
 		});
 
 		void send(message, {

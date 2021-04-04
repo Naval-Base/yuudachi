@@ -1,5 +1,4 @@
 import type { Args } from 'lexure';
-import type { APIMessage } from 'discord-api-types/v8';
 import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
@@ -9,7 +8,7 @@ import { send } from '../../../util';
 
 const { kSQL } = Tokens;
 
-export async function search(message: APIMessage, args: Args, locale: string) {
+export async function search(message: any, args: Args, locale: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const query = args.single();

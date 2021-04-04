@@ -13,5 +13,4 @@ export interface GuildSettings {
 	reaction_role_id: Snowflake;
 	locale: string;
 	modules: number;
-	repository_aliases: string[];
 }

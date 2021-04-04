@@ -1,10 +1,9 @@
 import { injectable, inject } from 'tsyringe';
-import type { APIGuildInteraction, APIMessage } from 'discord-api-types/v8';
-import type { Args } from 'lexure';
+import type { APIGuildInteraction } from 'discord-api-types/v8';
 import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
-import { CommandModules } from '@yuudachi/types';
+import { CommandModules, TransformedInteraction } from '@yuudachi/types';
 
 import Command from '../../Command';
 import { addFields, has, send } from '../../util';
@@ -18,11 +17,7 @@ export default class implements Command {
 
 	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(message: APIMessage | APIGuildInteraction, _: Args, locale: string) {
-		if (!message.guild_id) {
-			throw new Error(i18next.t('command.common.errors.no_guild', { lng: locale }));
-		}
-
+	public async execute(message: APIGuildInteraction, _: TransformedInteraction, locale: string) {
 		const [settings] = await this.sql<[GuildSettings?]>`
 			select *
 			from guild_settings

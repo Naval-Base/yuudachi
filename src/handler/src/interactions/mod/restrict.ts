@@ -10,7 +10,7 @@ export default {
 				{
 					name: 'user',
 					description: 'The user to action',
-					type: 3,
+					type: 6,
 					required: true,
 				},
 				{
@@ -48,7 +48,7 @@ export default {
 				{
 					name: 'user',
 					description: 'The user to action',
-					type: 3,
+					type: 6,
 					required: true,
 				},
 				{
@@ -86,7 +86,7 @@ export default {
 				{
 					name: 'user',
 					description: 'The user to action',
-					type: 3,
+					type: 6,
 					required: true,
 				},
 				{
@@ -124,7 +124,7 @@ export default {
 				{
 					name: 'user',
 					description: 'The user to action',
-					type: 3,
+					type: 6,
 					required: true,
 				},
 				{
@@ -162,7 +162,7 @@ export default {
 				{
 					name: 'user',
 					description: 'The user to action',
-					type: 3,
+					type: 6,
 					required: true,
 				},
 				{
