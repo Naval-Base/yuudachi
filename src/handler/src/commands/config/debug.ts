@@ -1,6 +1,7 @@
 import { injectable } from 'tsyringe';
 import type { APIGuildInteraction } from 'discord-api-types/v8';
-import { CommandModules, TransformedInteraction } from '@yuudachi/types';
+import { CommandModules } from '@yuudachi/types';
+import { TransformedInteraction } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 
@@ -18,9 +19,6 @@ export default class implements Command {
 			case 'refresh': {
 				return refresh(message, args.debug, locale);
 			}
-
-			default:
-				break;
 		}
 	}
 }

@@ -1,10 +1,10 @@
 import type { APIGuildInteraction } from 'discord-api-types/v8';
-import i18next from 'i18next';
 import { injectable } from 'tsyringe';
-import { CommandModules, TransformedInteraction } from '@yuudachi/types';
+import { CommandModules } from '@yuudachi/types';
+import type { TransformedInteraction } from '@yuudachi/interactions';
 
 import Command from '../../Command';
-import { checkMod, send } from '../../util';
+import { checkMod } from '../../util';
 
 import { mute } from './sub/restrict/mute';
 import { embed } from './sub/restrict/embed';
@@ -43,14 +43,6 @@ export default class implements Command {
 
 			case 'unrole': {
 				return unrole(message, args.restrict.unrole, locale);
-			}
-
-			default: {
-				void send(message, {
-					content: i18next.t('command.common.errors.no_valid_sub_command', { lng: locale }),
-					flags: 64,
-				});
-				break;
 			}
 		}
 	}

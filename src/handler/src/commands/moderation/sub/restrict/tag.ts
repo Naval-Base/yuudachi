@@ -4,7 +4,8 @@ import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
 import ms from '@naval-base/ms';
 import type { Sql } from 'postgres';
-import { CaseAction, TransformedInteraction } from '@yuudachi/types';
+import { CaseAction } from '@yuudachi/types';
+import type { TransformedInteraction } from '@yuudachi/interactions';
 import { Tokens } from '@yuudachi/core';
 
 import { send } from '../../../../util';

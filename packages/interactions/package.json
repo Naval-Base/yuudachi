@@ -1,0 +1,21 @@
+{
+	"name": "@yuudachi/interactions",
+	"version": "2.0.0",
+	"description": "",
+	"main": "dist/index.js",
+	"typings": "typings/index.d.ts",
+	"scripts": {
+		"build": "rimraf dist typings && tsc"
+	},
+	"keywords": [],
+	"author": "iCrawl <icrawltogo@outlook.com>",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"tslib": "^2.1.0"
+	},
+	"devDependencies": {
+		"discord-api-types": "^0.13.3",
+		"rimraf": "^3.0.2",
+		"typescript": "^4.2.3"
+	}
+}

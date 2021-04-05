@@ -3,7 +3,8 @@ import API from '@yuudachi/api';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
-import { CommandModules, TransformedInteraction } from '@yuudachi/types';
+import { CommandModules } from '@yuudachi/types';
+import type { TransformedInteraction } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { checkMod, send } from '../../util';
@@ -26,12 +27,6 @@ export default class implements Command {
 		await checkMod(message, locale);
 
 		const { caseId, duration, hide } = this.parse(args);
-		if (!caseId) {
-			throw new Error(i18next.t('command.mod.common.errors.no_case_id', { lng: locale }));
-		}
-		if (!duration) {
-			throw new Error(i18next.t('command.mod.common.errors.no_duration', { lng: locale }));
-		}
 
 		const parsedDuration = ms(duration);
 		if (parsedDuration < 300000 || isNaN(parsedDuration)) {

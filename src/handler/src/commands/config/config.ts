@@ -3,7 +3,8 @@ import type { APIGuildInteraction } from 'discord-api-types/v8';
 import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
-import { CommandModules, TransformedInteraction } from '@yuudachi/types';
+import { CommandModules } from '@yuudachi/types';
+import { TransformedInteraction } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { addFields, has, send } from '../../util';

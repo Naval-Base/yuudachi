@@ -1,6 +1,7 @@
 import type { APIGuildMember, APIGuildInteraction } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
-import { CaseAction, CommandModules, TransformedInteraction } from '@yuudachi/types';
+import { CaseAction, CommandModules } from '@yuudachi/types';
+import type { TransformedInteraction } from '@yuudachi/interactions';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';

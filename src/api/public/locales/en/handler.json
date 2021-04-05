@@ -167,8 +167,6 @@
 		"tag": {
 			"common": {
 				"errors": {
-					"no_name": "No tag name provided.",
-					"no_query": "No query provided.",
 					"not_found": "No tag(s) found."
 				}
 			},

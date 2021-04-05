@@ -2,7 +2,8 @@ import type { APIGuildInteraction } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
-import { CommandModules, TransformedInteraction } from '@yuudachi/types';
+import { CommandModules } from '@yuudachi/types';
+import type { TransformedInteraction } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { checkMod, send } from '../../util';

@@ -4,9 +4,9 @@ import { container } from 'tsyringe';
 import Rest from '@yuudachi/rest';
 import readdirp from 'readdirp';
 import { resolve } from 'path';
+import { TransformedInteraction } from '@yuudachi/interactions';
 
 import { send } from '../../../../util';
-import { TransformedInteraction } from '@yuudachi/types';
 
 export async function refresh(message: APIGuildInteraction, args: TransformedInteraction['debug'], locale: string) {
 	const rest = container.resolve(Rest);
@@ -31,8 +31,5 @@ export async function refresh(message: APIGuildInteraction, args: TransformedInt
 
 			void send(message, { content: i18next.t('command.config.debug.refresh.success', { lng: locale }) });
 		}
-
-		default:
-			break;
 	}
 }

@@ -14,7 +14,7 @@ export async function lock(
 	message: APIGuildInteraction,
 	channel: Snowflake,
 	duration: string,
-	reason: string,
+	reason: string | undefined,
 	locale: string,
 ) {
 	const api = container.resolve(API);
@@ -33,7 +33,7 @@ export async function lock(
 			channelId: channel,
 			expiration: duration,
 			moderatorId: message.member.user.id,
-			reason: reason || undefined,
+			reason: reason ?? undefined,
 		});
 
 		await rest.post(Routes.channelMessages(channel), {

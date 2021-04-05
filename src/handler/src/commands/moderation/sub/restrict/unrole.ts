@@ -4,9 +4,9 @@ import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
 import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
+import type { TransformedInteraction } from '@yuudachi/interactions';
 
 import { send } from '../../../../util';
-import { TransformedInteraction } from '@yuudachi/types';
 
 const { kSQL } = Tokens;
 

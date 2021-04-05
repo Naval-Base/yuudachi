@@ -1,4 +1,3 @@
-import type { Args } from 'lexure';
 import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
@@ -8,13 +7,8 @@ import { send } from '../../../util';
 
 const { kSQL } = Tokens;
 
-export async function search(message: any, args: Args, locale: string) {
+export async function search(message: any, query: string, locale: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);
-
-	const query = args.single();
-	if (!query) {
-		throw new Error(i18next.t('command.tag.common.errors.no_query', { lng: locale }));
-	}
 
 	const tags = await sql<[{ name: string; aliases: string[] }]>`
 		select name, aliases
