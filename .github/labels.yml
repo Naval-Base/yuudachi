@@ -12,6 +12,8 @@
   color: 'fbca04'
 - name: 'dependencies'
   color: '276bd1'
+- name: 'translations'
+  color: '276bd1'
 - name: 'discussion'
   color: 'b6b1f9'
 - name: 'documentation'
