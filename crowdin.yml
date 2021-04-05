@@ -1,18 +1,5 @@
-'base_path': '.'
-
-#
-# Choose file structure in Crowdin
-# e.g. true or false
-#
-'preserve_hierarchy': true
-
-#
-# Files configuration
-#
+base_path: .
+preserve_hierarchy: true
 files:
-  [
-    {
-      'source': '/src/handler/locales/en-US/translation.json',
-      'translation': '/src/handler/locales/%locale%/%original_file_name%',
-    },
-  ]
+  - source: /src/handler/locales/en-US/translation.json
+    translation: /src/handler/locales/%locale%/%original_file_name%
