@@ -11,7 +11,8 @@ import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
 import { APIGuildInteraction, GatewayDispatchEvents } from 'discord-api-types/v8';
 import i18next from 'i18next';
-import HttApi, { BackendOptions } from 'i18next-http-backend';
+// @ts-ignore
+import Backend from 'i18next-fs-backend';
 import { Tokens, transformInteraction } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
 
@@ -111,18 +112,16 @@ void (async () => {
 
 	await restBroker.connect(conn);
 
-	await i18next.use(HttApi).init({
-		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+	await i18next.use(Backend).init({
 		backend: {
-			loadPath: `${apiURL}/locales/{{lng}}/{{ns}}.json`,
-			reloadInterval: 60000,
-		} as BackendOptions,
+			loadPath: resolve(__dirname, '..', 'locales', '{{lng}}', '{{ns}}.json'),
+		},
 		cleanCode: true,
 		fallbackLng: ['en'],
-		defaultNS: 'handler',
+		defaultNS: 'translation',
 		lng: 'en',
 		lowerCaseLng: true,
-		ns: ['handler'],
+		ns: ['translation'],
 	});
 
 	for await (const dir of files) {

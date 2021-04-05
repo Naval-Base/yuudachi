@@ -6404,11 +6404,12 @@ __metadata:
     "@yuudachi/rest": "workspace:^2.0.0"
     "@yuudachi/types": "workspace:^2.0.0"
     common-tags: ^1.8.0
+    cpy-cli: ^3.1.1
     dayjs: ^1.10.4
     discord-api-types: ^0.13.3
     env-cmd: ^10.1.0
     i18next: ^20.1.0
-    i18next-http-backend: ^1.2.1
+    i18next-fs-backend: ^1.1.1
     node-fetch: 2.6.1
     postgres: ^2.0.0-beta.4
     readdirp: ^3.6.0
@@ -12761,12 +12762,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"i18next-http-backend@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "i18next-http-backend@npm:1.2.1"
-  dependencies:
-    node-fetch: 2.6.1
-  checksum: 8624c9fe2a85071417b70e63f3870ecc1da4654e2ae27e5b8befc3a3df63128984b29cc9b5dcb2a51388fa77453cb0a6bd075ff2ada8baa381530560e2de7077
+"i18next-fs-backend@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "i18next-fs-backend@npm:1.1.1"
+  checksum: 47209c6e8aa5167abd48b4bd2a896a3f02e14ec338d26c4e8cf50d61683d35e603b6cc47bb264f53cf017760367fbe7e21907be4927d6b33f238ab5c3524c385
   languageName: node
   linkType: hard
 

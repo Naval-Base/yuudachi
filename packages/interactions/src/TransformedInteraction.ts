@@ -17,7 +17,7 @@ import {
 	TagCommand,
 	TagsCommand,
 	PingCommand,
-} from '.';
+} from './commands';
 
 type Command = Readonly<{
 	name: string;

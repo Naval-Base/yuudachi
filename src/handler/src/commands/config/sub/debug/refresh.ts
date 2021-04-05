@@ -2,9 +2,7 @@ import { APIGuildInteraction, Routes, Snowflake } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
 import Rest from '@yuudachi/rest';
-import readdirp from 'readdirp';
-import { resolve } from 'path';
-import { TransformedInteraction } from '@yuudachi/interactions';
+import { TransformedInteraction, Commands } from '@yuudachi/interactions';
 
 import { send } from '../../../../util';
 
@@ -13,20 +11,9 @@ export async function refresh(message: APIGuildInteraction, args: TransformedInt
 
 	switch (Object.keys(args.refresh)[0]) {
 		case 'commands': {
-			const commands: Record<string, any>[] = [];
-
-			const files = readdirp(resolve(__dirname, '..', '..', '..', '..', 'interactions'), {
-				fileFilter: '*.js',
-			});
-
-			for await (const dir of files) {
-				const structure = (await import(dir.fullPath)).default as Record<string, any>;
-				commands.push(structure);
-			}
-
 			await rest.put(
 				Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as Snowflake, message.guild_id),
-				commands,
+				Object.values(Commands),
 			);
 
 			void send(message, { content: i18next.t('command.config.debug.refresh.success', { lng: locale }) });

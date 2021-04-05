@@ -10436,11 +10436,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@yuudachi/rest", "workspace:packages/rest"],
             ["@yuudachi/types", "workspace:packages/types"],
             ["common-tags", "npm:1.8.0"],
+            ["cpy-cli", "npm:3.1.1"],
             ["dayjs", "npm:1.10.4"],
             ["discord-api-types", "npm:0.13.3"],
             ["env-cmd", "npm:10.1.0"],
             ["i18next", "npm:20.1.0"],
-            ["i18next-http-backend", "npm:1.2.1"],
+            ["i18next-fs-backend", "npm:1.1.1"],
             ["node-fetch", "npm:2.6.1"],
             ["postgres", "npm:2.0.0-beta.4"],
             ["readdirp", "npm:3.6.0"],
@@ -18198,12 +18199,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["i18next-http-backend", [
-        ["npm:1.2.1", {
-          "packageLocation": "./.yarn/cache/i18next-http-backend-npm-1.2.1-4357de2c5f-8624c9fe2a.zip/node_modules/i18next-http-backend/",
+      ["i18next-fs-backend", [
+        ["npm:1.1.1", {
+          "packageLocation": "./.yarn/cache/i18next-fs-backend-npm-1.1.1-eb9e85a0a1-47209c6e8a.zip/node_modules/i18next-fs-backend/",
           "packageDependencies": [
-            ["i18next-http-backend", "npm:1.2.1"],
-            ["node-fetch", "npm:2.6.1"]
+            ["i18next-fs-backend", "npm:1.1.1"]
           ],
           "linkType": "HARD",
         }]

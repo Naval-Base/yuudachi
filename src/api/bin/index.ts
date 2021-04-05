@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 import postgres from 'postgres';
 import readdirp from 'readdirp';
 import Rest, { createAmqpBroker } from '@yuudachi/rest';
@@ -26,7 +26,7 @@ container.register<Pick<Config, 'secretKey'>>(kConfig, {
 	},
 });
 
-const app = createApp(join(__dirname, '..', 'public'));
+const app = createApp();
 
 const files = readdirp(resolve(__dirname, '..', 'src', 'routes'), {
 	fileFilter: '*.js',
