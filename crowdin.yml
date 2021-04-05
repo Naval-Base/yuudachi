@@ -1,3 +1,6 @@
+project_id: '449484'
+commit_message: 'chore(i18n): new translations for %original_file_name% (%language%)'
+append_commit_message: false
 base_path: .
 preserve_hierarchy: true
 files:
