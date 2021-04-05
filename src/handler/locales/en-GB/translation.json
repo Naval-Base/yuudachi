@@ -1,0 +1,180 @@
+{
+	"command": {
+		"common": {
+			"errors": {
+				"generic": "",
+				"no_enabled_module": "",
+				"target_not_found": "",
+				"duration_format": "",
+				"no_mod_role": ""
+			}
+		},
+		"config": {
+			"common": {
+				"errors": {
+					"no_settings": ""
+				}
+			},
+			"debug": {
+				"refresh": {
+					"success": ""
+				}
+			}
+		},
+		"mod": {
+			"common": {
+				"errors": {
+					"max_length_reason": ""
+				}
+			},
+			"warn": {
+				"errors": {
+					"failure": ""
+				},
+				"success": ""
+			},
+			"kick": {
+				"errors": {
+					"missing_permissions": "",
+					"failure": ""
+				},
+				"success": ""
+			},
+			"softban": {
+				"errors": {
+					"missing_permissions": "",
+					"failure": ""
+				},
+				"success": ""
+			},
+			"ban": {
+				"errors": {
+					"missing_permissions": "",
+					"failure": ""
+				},
+				"success": ""
+			},
+			"unban": {
+				"errors": {
+					"missing_permissions": "",
+					"failure": ""
+				},
+				"success": ""
+			},
+			"anti_raid_nuke": {
+				"errors": {
+					"no_hits": "",
+					"parameters": ""
+				},
+				"dry_run": ""
+			},
+			"restrict": {
+				"mute": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"failure": "",
+						"already_restricted": ""
+					},
+					"success": ""
+				},
+				"embed": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"failure": "",
+						"already_restricted": ""
+					},
+					"success": ""
+				},
+				"react": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"failure": "",
+						"already_restricted": ""
+					},
+					"success": ""
+				},
+				"emoji": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"failure": "",
+						"already_restricted": ""
+					},
+					"success": ""
+				},
+				"tag": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"failure": "",
+						"already_restricted": ""
+					},
+					"success": ""
+				},
+				"unrole": {
+					"errors": {
+						"missing_permissions": "",
+						"failure": "",
+						"already_processed": ""
+					},
+					"success": ""
+				}
+			},
+			"lockdown": {
+				"lock": {
+					"errors": {
+						"missing_permissions": "",
+						"failure": ""
+					},
+					"message": "",
+					"success": ""
+				},
+				"lift": {
+					"errors": {
+						"missing_permissions": "",
+						"failure": ""
+					},
+					"success": ""
+				}
+			},
+			"reason": {
+				"errors": {
+					"failure": ""
+				},
+				"success": ""
+			},
+			"reference": {
+				"errors": {
+					"failure": ""
+				},
+				"success": ""
+			},
+			"duration": {
+				"errors": {
+					"failure": ""
+				},
+				"success": ""
+			}
+		},
+		"utility": {
+			"ping": {
+				"success": ""
+			}
+		},
+		"tag": {
+			"common": {
+				"errors": {
+					"not_found": ""
+				}
+			},
+			"search": {
+				"errors": {
+					"too_long": ""
+				}
+			}
+		}
+	}
+}
