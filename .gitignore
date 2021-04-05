@@ -29,3 +29,4 @@ coverage/
 dump.sql
 init.sql.bak
 hasura/hasura.exe
+crowdin_credentials.yml

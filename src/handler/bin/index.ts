@@ -117,10 +117,9 @@ void (async () => {
 			loadPath: resolve(__dirname, '..', 'locales', '{{lng}}', '{{ns}}.json'),
 		},
 		cleanCode: true,
-		fallbackLng: ['en'],
+		fallbackLng: ['en-US'],
 		defaultNS: 'translation',
-		lng: 'en',
-		lowerCaseLng: true,
+		lng: 'en-US',
 		ns: ['translation'],
 	});
 
