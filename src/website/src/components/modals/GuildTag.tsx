@@ -266,7 +266,7 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 										avatar="https://cdn.discordapp.com/app-icons/474807795183648809/9c72320c06dbaecac51fc1151aede1b6.png?size=256"
 										bot
 									>
-										<Box dangerouslySetInnerHTML={{ __html: toHTML(content || '') }}></Box>
+										<Box dangerouslySetInnerHTML={{ __html: toHTML(content || '', { embed: true }) }}></Box>
 									</DiscordMessage>
 								</DiscordMessages>
 							</form>

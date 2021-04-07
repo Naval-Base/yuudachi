@@ -5,6 +5,7 @@ import { Box, Grid, Img, Text, Heading } from '@chakra-ui/react';
 
 import Layout from '~/components/Layout';
 
+const MotionBox = dynamic(() => import('~/components/MotionBox'));
 const Guilds = dynamic(() => import('~/components/Guilds'));
 
 import { useUserStore } from '~/store/index';
@@ -22,7 +23,13 @@ const Dashboard = () => {
 	const UserDisplay = () =>
 		user.loggedIn ? (
 			<>
-				<Img rounded="full" boxSize="100px" src={user.avatar ?? ''} alt={user.username!} />
+				<MotionBox
+					whileHover={{ scale: 1.05, rotate: 360 }}
+					transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+				>
+					<Img rounded="full" boxSize="100px" src={user.avatar ?? ''} alt={user.username!} />
+				</MotionBox>
+
 				<Heading>{user.username}</Heading>
 			</>
 		) : null;

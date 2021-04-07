@@ -1,5 +1,5 @@
 /* eslint-disable */
 
 declare module 'discord-markdown' {
-	export function toHTML(content: string): any;
+	export function toHTML(content: string, { embed: boolean }): any;
 }
