@@ -151,7 +151,8 @@ const GuildTag = ({ name, isOpen, onClose }: { name?: string; isOpen: boolean; o
 	useEffect(() => {
 		remove();
 		append(guildTagData?.tag.aliases.map((alias) => ({ value: alias })) ?? []);
-	}, [remove, guildTagData?.tag.aliases, append]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [guildTagData?.tag.aliases]);
 
 	return (
 		<Modal size="xl" isOpen={isOpen} onClose={onClose}>

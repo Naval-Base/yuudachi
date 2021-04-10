@@ -18,7 +18,8 @@ const Dashboard = () => {
 		if (user.loggedIn === false) {
 			void router.push('/');
 		}
-	}, [user.loggedIn, router]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user.loggedIn]);
 
 	const UserDisplay = () =>
 		user.loggedIn ? (

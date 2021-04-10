@@ -47,7 +47,8 @@ export function useQueryMe() {
 				guilds: data.data.me[0].guild_moderators,
 			});
 		}
-	}, [data?.errors, data?.data?.me, user]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data?.errors, data?.data?.me]);
 
 	return { data: data?.data, isLoading };
 }
