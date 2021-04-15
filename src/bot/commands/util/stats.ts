@@ -44,7 +44,7 @@ export default class StatsCommand extends Command {
 				true,
 			)
 			.setThumbnail(this.client.user?.displayAvatarURL() ?? '')
-			.setFooter(`© 2018-2019 ${this.client.users.cache.get(this.client.config.owner ?? '')?.tag}`);
+			.setFooter(`© 2018-2021 ${this.client.users.cache.get(this.client.config.owner ?? '')?.tag}`);
 
 		return message.util?.send(embed);
 	}
