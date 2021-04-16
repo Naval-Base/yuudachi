@@ -1,0 +1,97 @@
+table:
+  name: cases
+  schema: public
+object_relationships:
+- name: target
+  using:
+    manual_configuration:
+      column_mapping:
+        target_id: id
+      insertion_order: null
+      remote_table:
+        name: connections
+        schema: public
+array_relationships:
+- name: guild_moderators
+  using:
+    manual_configuration:
+      column_mapping:
+        guild_id: guild_id
+      insertion_order: null
+      remote_table:
+        name: guild_moderators
+        schema: public
+select_permissions:
+- permission:
+    allow_aggregations: true
+    columns:
+    - action
+    - action_expiration
+    - action_processed
+    - case_id
+    - context_message_id
+    - created_at
+    - guild_id
+    - log_message_id
+    - mod_id
+    - mod_tag
+    - reason
+    - ref_id
+    - role_id
+    - target_id
+    - target_tag
+    filter:
+      _or:
+      - target:
+          user_id:
+            _eq: X-Hasura-User-Id
+      - guild_moderators:
+          user_id:
+            _eq: X-Hasura-User-Id
+  role: user
+update_permissions:
+- permission:
+    check:
+      guild_moderators:
+        user_id:
+          _eq: X-Hasura-User-Id
+    columns:
+    - action_expiration
+    - context_message_id
+    - mod_id
+    - mod_tag
+    - reason
+    - ref_id
+    filter:
+      guild_moderators:
+        user_id:
+          _eq: X-Hasura-User-Id
+  role: user
+event_triggers:
+- definition:
+    enable_manual: false
+    insert:
+      columns: "*"
+    update:
+      columns:
+      - role_id
+      - created_at
+      - action
+      - case_id
+      - action_expiration
+      - ref_id
+      - guild_id
+      - context_message_id
+      - log_message_id
+      - mod_id
+      - target_id
+      - reason
+      - mod_tag
+      - target_tag
+      - action_processed
+  name: mod_log
+  retry_conf:
+    interval_sec: 10
+    num_retries: 0
+    timeout_sec: 60
+  webhook: http://api:3500/api/hasura/hooks/mod_log

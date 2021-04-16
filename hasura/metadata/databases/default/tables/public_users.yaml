@@ -1,0 +1,28 @@
+table:
+  name: users
+  schema: public
+array_relationships:
+- name: connections
+  using:
+    foreign_key_constraint_on:
+      column: user_id
+      table:
+        name: connections
+        schema: public
+- name: guild_moderators
+  using:
+    foreign_key_constraint_on:
+      column: user_id
+      table:
+        name: guild_moderators
+        schema: public
+select_permissions:
+- permission:
+    columns:
+    - email
+    - id
+    - username
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
+  role: user

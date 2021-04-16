@@ -1,0 +1,29 @@
+table:
+  name: lockdowns
+  schema: public
+array_relationships:
+- name: guild_moderators
+  using:
+    manual_configuration:
+      column_mapping:
+        guild_id: guild_id
+      insertion_order: null
+      remote_table:
+        name: guild_moderators
+        schema: public
+select_permissions:
+- permission:
+    allow_aggregations: true
+    columns:
+    - guild_id
+    - channel_id
+    - expiration
+    - mod_id
+    - mod_tag
+    - reason
+    - overwrites
+    filter:
+      guild_moderators:
+        user_id:
+          _eq: X-Hasura-User-Id
+  role: user

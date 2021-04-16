@@ -1,0 +1,33 @@
+table:
+  name: messages
+  schema: public
+array_relationships:
+- name: guild_moderators
+  using:
+    manual_configuration:
+      column_mapping:
+        guild_id: guild_id
+      insertion_order: null
+      remote_table:
+        name: guild_moderators
+        schema: public
+select_permissions:
+- permission:
+    allow_aggregations: true
+    columns:
+    - id
+    - channel_id
+    - guild_id
+    - author_id
+    - content
+    - type
+    - flags
+    - embeds
+    - attachments
+    - created_at
+    - updated_at
+    filter:
+      guild_moderators:
+        user_id:
+          _eq: X-Hasura-User-Id
+  role: user
