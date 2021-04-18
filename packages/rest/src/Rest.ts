@@ -97,11 +97,9 @@ export default class Rest {
 				try {
 					return JSON.parse(httpRes.body.toString()) as T;
 				} catch {
-					/* istanbul ignore next */
 					return (body as unknown) as T;
 				}
 			} else {
-				/* istanbul ignore next */
 				throw new HttpException(httpRes.status, httpRes.body.toString());
 			}
 		}

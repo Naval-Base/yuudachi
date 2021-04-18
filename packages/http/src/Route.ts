@@ -46,7 +46,6 @@ export abstract class Route {
 	public abstract handle(req: Request, res: Response, next: NextHandler): void | Promise<void>;
 
 	public register(info: RouteInfo, server: Polka) {
-		// @ts-ignore
 		server[info.method](
 			`/api${info.path}`,
 			...this.middleware,
@@ -54,7 +53,7 @@ export abstract class Route {
 				try {
 					await this.handle(req, res, next);
 				} catch (e) {
-					next(e);
+					void next(e);
 				}
 			},
 		);

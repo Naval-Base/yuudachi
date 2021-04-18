@@ -82,7 +82,7 @@ export default class HasuraModLogEventHook extends Route {
 			return next(new Error('uh oh, something broke'));
 		}
 
-		const body: HasuraMogLogEventPayload = req.body as any;
+		const body: HasuraMogLogEventPayload = req.body;
 		switch (body.event.op) {
 			case 'UPDATE':
 			case 'MANUAL':

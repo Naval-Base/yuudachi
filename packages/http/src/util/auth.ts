@@ -37,8 +37,7 @@ export async function oauth2({
 	form.append('client_secret', clientSecret);
 	form.append('redirect_uri', redirectUri);
 	form.append('scope', scope);
-	/* istanbul ignore else */
-	// https://github.com/gotwarlost/istanbul/issues/781
+
 	if (code) {
 		form.append('grant_type', 'authorization_code');
 		form.append('code', code);

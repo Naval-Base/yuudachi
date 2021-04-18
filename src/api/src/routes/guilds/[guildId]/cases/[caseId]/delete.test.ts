@@ -19,6 +19,7 @@ afterEach(() => {
 
 const app = createApp();
 const route = container.resolve(DeleteCaseRoute);
+// @ts-ignore
 route.register({ path: '/test/:guildId/cases/:caseId', method: RouteMethod.DELETE }, app);
 app.listen(0);
 

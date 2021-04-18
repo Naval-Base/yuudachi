@@ -49,7 +49,7 @@ export default class CreateLockdownRoute extends Route {
 
 	public async handle(req: Request, res: Response) {
 		const created: Promise<Lockdown>[] = [];
-		const body: LockdownsPostBody = req.body as any;
+		const body: LockdownsPostBody = req.body;
 
 		for (const lockdown of body.lockdowns) {
 			lockdown.guildId = req.params.guildId as Snowflake;

@@ -46,7 +46,7 @@ export default class UpdateCaseRoute extends Route {
 
 	public async handle(req: Request, res: Response) {
 		const created: Promise<Case>[] = [];
-		const body: CasesPatchBody = req.body as any;
+		const body: CasesPatchBody = req.body;
 
 		for (const case_ of body.cases) {
 			case_.guildId = req.params.guildId as Snowflake;

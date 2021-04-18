@@ -291,6 +291,7 @@ describe('update ', () => {
 		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
 
 		const manager = container.resolve(CaseManager);
+		// @ts-ignore
 		await manager.update(case_);
 
 		expect(mockedPostgres).toHaveBeenCalledTimes(2);
@@ -334,6 +335,7 @@ describe('update ', () => {
 		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
 
 		const manager = container.resolve(CaseManager);
+		// @ts-ignore
 		await manager.update(case_);
 
 		expect(mockedPostgres).toHaveBeenCalledTimes(2);
@@ -377,6 +379,7 @@ describe('update ', () => {
 		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
 
 		const manager = container.resolve(CaseManager);
+		// @ts-ignore
 		await manager.update(case_);
 
 		expect(mockedPostgres).toHaveBeenCalledTimes(2);
@@ -420,6 +423,7 @@ describe('update ', () => {
 		mockedPostgres.mockImplementation((): any => Promise.resolve([case_]));
 
 		const manager = container.resolve(CaseManager);
+		// @ts-ignore
 		await manager.update(case_);
 
 		expect(mockedPostgres).toHaveBeenCalledTimes(2);

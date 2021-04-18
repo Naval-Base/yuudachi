@@ -19,6 +19,7 @@ afterEach(() => {
 
 const app = createApp();
 const route = container.resolve(UpdateCaseRoute);
+// @ts-ignore
 route.register({ path: '/test/:guildId', method: RouteMethod.PATCH }, app);
 app.listen(0);
 

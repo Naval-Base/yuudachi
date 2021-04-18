@@ -27,7 +27,6 @@ route2.register({ path: '/test2', method: RouteMethod.GET }, app);
 app.listen(0);
 
 afterAll(() => {
-	// @ts-ignore
 	app.server.close();
 });
 
