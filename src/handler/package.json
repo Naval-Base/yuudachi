@@ -5,8 +5,8 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "rimraf dist && tsc && cpy 'locales/**/*.*' 'dist/' --parents",
-		"start": "npm run build && node dist/bin/index.js",
-		"dev": "npm run build && env-cmd npm run start"
+		"start": "yarn node dist/bin/index.js",
+		"dev": "yarn build && env-cmd yarn start"
 	},
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@outlook.com>",
@@ -21,24 +21,24 @@
 		"@yuudachi/rest": "workspace:^2.0.0",
 		"common-tags": "^1.8.0",
 		"dayjs": "^1.10.4",
-		"i18next": "^20.1.0",
+		"i18next": "^20.2.1",
 		"i18next-fs-backend": "^1.1.1",
 		"node-fetch": "2.6.1",
-		"postgres": "^2.0.0-beta.4",
+		"postgres": "^2.0.0-beta.5",
 		"readdirp": "^3.6.0",
 		"reflect-metadata": "^0.1.13",
-		"tslib": "^2.1.0",
+		"tslib": "^2.2.0",
 		"tsyringe": "^4.5.0"
 	},
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
-		"@types/node": "^14.14.37",
-		"@types/node-fetch": "^2.5.9",
+		"@types/node": "^14.14.41",
+		"@types/node-fetch": "^2.5.10",
 		"@yuudachi/types": "workspace:^2.0.0",
 		"cpy-cli": "^3.1.1",
-		"discord-api-types": "^0.13.3",
+		"discord-api-types": "^0.18.0",
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.2.3"
+		"typescript": "^4.2.4"
 	}
 }

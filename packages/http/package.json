@@ -16,21 +16,21 @@
 		"cookie": "^0.4.1",
 		"cors": "^2.8.5",
 		"form-data": "^4.0.0",
-		"helmet": "^4.4.1",
+		"helmet": "^4.5.0",
 		"node-fetch": "^2.6.1",
-		"polka": "^1.0.0-next.13",
-		"postgres": "^2.0.0-beta.4",
+		"polka": "^1.0.0-next.14",
+		"postgres": "^2.0.0-beta.5",
 		"readdirp": "^3.6.0",
 		"reflect-metadata": "^0.1.13",
 		"sirv": "^1.0.11",
-		"tslib": "^2.1.0",
+		"tslib": "^2.2.0",
 		"tsyringe": "^4.5.0"
 	},
 	"devDependencies": {
 		"@types/cookie": "^0.4.0",
 		"@types/cors": "^2.8.10",
-		"@types/node": "^14.14.37",
-		"@types/node-fetch": "^2.5.9",
+		"@types/node": "^14.14.41",
+		"@types/node-fetch": "^2.5.10",
 		"@types/supertest": "^2.0.11",
 		"@types/trouter": "^3.1.0",
 		"@yuudachi/types": "workspace:^2.0.0",
@@ -38,6 +38,6 @@
 		"env-cmd": "^10.1.0",
 		"rimraf": "^3.0.2",
 		"supertest": "^6.1.3",
-		"typescript": "^4.2.3"
+		"typescript": "^4.2.4"
 	}
 }

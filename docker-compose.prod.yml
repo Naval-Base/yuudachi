@@ -15,7 +15,7 @@ services:
 
   postgres-exporter:
     environment:
-      DATA_SOURCE_NAME: 'postgresql://yuudachi:admin@postgres:5432/yuudachi?sslmode=disable'
+      DATA_SOURCE_NAME: 'postgresql://yuudachi:admin@postgres:5432/yuudachi'
 
   hasura:
     environment:

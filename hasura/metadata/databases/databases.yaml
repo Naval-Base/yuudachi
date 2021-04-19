@@ -2,7 +2,8 @@
   kind: postgres
   configuration:
     connection_info:
-      database_url: postgresql://yuudachi:admin@postgres:5432/yuudachi
+      database_url:
+        from_env: HASURA_GRAPHQL_DATABASE_URL
       pool_settings:
         idle_timeout: 180
         max_connections: 50

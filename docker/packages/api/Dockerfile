@@ -7,4 +7,7 @@ COPY . .
 RUN yarn install --immutable --immutable-cache
 RUN yarn build
 
-CMD cd /usr/yuudachi/src/api && yarn start
+WORKDIR /usr/yuudachi/src/api
+RUN yarn build
+
+CMD yarn start

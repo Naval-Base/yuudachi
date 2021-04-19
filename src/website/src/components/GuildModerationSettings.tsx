@@ -98,7 +98,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Moderation role</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord role id for moderators" isDisabled={!canManage} {...field}>
+						<Select placeholder="The discord role id for moderators" isDisabled={!canManage} {...(field as any)}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -116,7 +116,11 @@ const GuildModerationSettings = () => {
 				<FormLabel>Moderation log channel</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord channel id for moderation logs" isDisabled={!canManage} {...field}>
+						<Select
+							placeholder="The discord channel id for moderation logs"
+							isDisabled={!canManage}
+							{...(field as any)}
+						>
 							{guildChannelsData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									#{option.name}
@@ -134,7 +138,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Guild log channel</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord channel id for guild logs" isDisabled={!canManage} {...field}>
+						<Select placeholder="The discord channel id for guild logs" isDisabled={!canManage} {...(field as any)}>
 							{guildChannelsData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									#{option.name}
@@ -152,7 +156,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Member log channel</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord channel id for member logs" isDisabled={!canManage} {...field}>
+						<Select placeholder="The discord channel id for member logs" isDisabled={!canManage} {...(field as any)}>
 							{guildChannelsData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									#{option.name}
@@ -170,7 +174,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Mute restriction role</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord role id for mutes" isDisabled={!canManage} {...field}>
+						<Select placeholder="The discord role id for mutes" isDisabled={!canManage} {...(field as any)}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -188,7 +192,11 @@ const GuildModerationSettings = () => {
 				<FormLabel>Embed restriction role</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord role id for embed restrictions" isDisabled={!canManage} {...field}>
+						<Select
+							placeholder="The discord role id for embed restrictions"
+							isDisabled={!canManage}
+							{...(field as any)}
+						>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -206,7 +214,11 @@ const GuildModerationSettings = () => {
 				<FormLabel>Emoji restriction role</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord role id for emoji restrictions" isDisabled={!canManage} {...field}>
+						<Select
+							placeholder="The discord role id for emoji restrictions"
+							isDisabled={!canManage}
+							{...(field as any)}
+						>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -224,7 +236,11 @@ const GuildModerationSettings = () => {
 				<FormLabel>Reaction restriction role</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord role id for reaction restrictions" isDisabled={!canManage} {...field}>
+						<Select
+							placeholder="The discord role id for reaction restrictions"
+							isDisabled={!canManage}
+							{...(field as any)}
+						>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
@@ -242,7 +258,7 @@ const GuildModerationSettings = () => {
 				<FormLabel>Tag restriction role</FormLabel>
 				<Controller
 					render={({ field }) => (
-						<Select placeholder="The discord role id for tag restrictions" isDisabled={!canManage} {...field}>
+						<Select placeholder="The discord role id for tag restrictions" isDisabled={!canManage} {...(field as any)}>
 							{guildRolesData?.map((option, i) => (
 								<option key={i} value={option.id}>
 									&{option.name}
