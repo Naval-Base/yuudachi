@@ -2,14 +2,18 @@ import { APIGuildInteraction, Routes, Snowflake } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
 import Rest from '@yuudachi/rest';
-import { TransformedInteraction, Commands } from '@yuudachi/interactions';
+import { ArgumentsOf, DebugCommand, Commands } from '@yuudachi/interactions';
 
 import { send } from '../../../../util';
 
-export async function refresh(message: APIGuildInteraction, args: TransformedInteraction['debug'], locale: string) {
+export async function refresh(
+	message: APIGuildInteraction,
+	args: ArgumentsOf<typeof DebugCommand>['refresh'],
+	locale: string,
+) {
 	const rest = container.resolve(Rest);
 
-	switch (Object.keys(args.refresh)[0]) {
+	switch (Object.keys(args)[0]) {
 		case 'commands': {
 			await rest.put(
 				Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as Snowflake, message.guild_id),

@@ -1,7 +1,7 @@
 import type { APIGuildInteraction } from 'discord-api-types/v8';
 import API, { HttpException } from '@yuudachi/api';
 import { CaseAction, CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, BanCommand } from '@yuudachi/interactions';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
@@ -15,17 +15,21 @@ export default class implements Command {
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: TransformedInteraction) {
+	private parse(args: ArgumentsOf<typeof BanCommand>) {
 		return {
-			member: args.ban.user,
-			reason: args.ban.reason,
-			days: args.ban.days,
-			refId: args.ban.reference,
-			duration: args.ban.duration,
+			member: args.user,
+			reason: args.reason,
+			days: args.days,
+			refId: args.reference,
+			duration: args.duration,
 		};
 	}
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
+	public async execute(
+		message: APIGuildInteraction,
+		args: ArgumentsOf<typeof BanCommand>,
+		locale: string,
+	): Promise<void> {
 		await checkMod(message, locale);
 
 		const { member, reason, days, refId, duration } = this.parse(args);

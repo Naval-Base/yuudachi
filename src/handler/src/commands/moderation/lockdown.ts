@@ -2,7 +2,7 @@ import type { APIGuildInteraction } from 'discord-api-types/v8';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 import { CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, LockdownCommand } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { checkMod } from '../../util';
@@ -14,26 +14,20 @@ import { lift } from './sub/lockdown/lift';
 export default class implements Command {
 	public readonly category = CommandModules.Moderation;
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string) {
+	public async execute(message: APIGuildInteraction, args: ArgumentsOf<typeof LockdownCommand>, locale: string) {
 		await checkMod(message, locale);
 
-		switch (Object.keys(args.lockdown)[0]) {
+		switch (Object.keys(args)[0]) {
 			case 'lock': {
-				const reason = args.lockdown.lock.reason;
+				const reason = args.lock.reason;
 				if (reason && reason.length >= 1900) {
 					throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 				}
-				return lock(
-					message,
-					args.lockdown.lock.channel?.id ?? message.channel_id,
-					args.lockdown.lock.duration,
-					reason,
-					locale,
-				);
+				return lock(message, args.lock.channel?.id ?? message.channel_id, args.lock.duration, reason, locale);
 			}
 
 			case 'lift': {
-				return lift(message, args.lockdown.lock.channel?.id ?? message.channel_id, locale);
+				return lift(message, args.lock.channel?.id ?? message.channel_id, locale);
 			}
 		}
 	}

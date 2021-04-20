@@ -136,7 +136,7 @@ const GuildCase = ({
 		<Modal size="xl" isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Case {guildCaseData ? `#${guildCaseData.case.case_id.toString() as string}` : ''}</ModalHeader>
+				<ModalHeader>Case {guildCaseData ? `#${guildCaseData.case.case_id.toString()}` : ''}</ModalHeader>
 				<ModalCloseButton />
 				{isLoadingGuildCase ? (
 					<Center h="100%">
@@ -160,7 +160,7 @@ const GuildCase = ({
 										<NumberInput
 											d="inline-block"
 											mr={2}
-											w={guildCaseData?.case.ref_id ? '80%' : '100%'}
+											w={'100%'}
 											defaultValue={guildCaseData?.case.ref_id ?? undefined}
 											isReadOnly={readOnly || !isModerator}
 										>
@@ -265,7 +265,7 @@ const GuildCase = ({
 										{...register('reason', { maxLength: { value: 1900, message: 'Max length of 1900 exceeded' } })}
 										transition="height none"
 										rows={5}
-										as={TextareaAutosize as any /* fuck ts */}
+										as={TextareaAutosize}
 										defaultValue={guildCaseData?.case.reason ?? undefined}
 									/>
 									<FormErrorMessage>

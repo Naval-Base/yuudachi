@@ -1,7 +1,7 @@
 import type { APIGuildMember, APIGuildInteraction } from 'discord-api-types/v8';
 import API from '@yuudachi/api';
 import { CaseAction, CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { AntiRaidNuke, ArgumentsOf } from '@yuudachi/interactions';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
@@ -17,18 +17,22 @@ export default class implements Command {
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: TransformedInteraction) {
+	private parse(args: ArgumentsOf<typeof AntiRaidNuke>) {
 		return {
-			join: args['anti-raid-nuke'].join,
-			age: args['anti-raid-nuke'].age,
-			report: args['anti-raid-nuke'].report,
-			list: args['anti-raid-nuke'].list,
-			noDry: args['anti-raid-nuke']['no-dry-run'],
-			days: args['anti-raid-nuke'].days,
+			join: args.join,
+			age: args.age,
+			report: args.report,
+			list: args.list,
+			noDry: args['no-dry-run'],
+			days: args.days,
 		};
 	}
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
+	public async execute(
+		message: APIGuildInteraction,
+		args: ArgumentsOf<typeof AntiRaidNuke>,
+		locale: string,
+	): Promise<void> {
 		await checkMod(message, locale);
 
 		const { join, age, report, noDry, days } = this.parse(args);

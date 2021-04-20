@@ -1,23 +1,4 @@
 import { APIGuildMember, APIPartialChannel, APIRole, APIUser, Permissions } from 'discord-api-types/v8';
-import {
-	ConfigCommand,
-	DebugCommand,
-	AntiRaidNuke,
-	BanCommand,
-	DurationCommand,
-	HistoryCommand,
-	KickCommand,
-	LockdownCommand,
-	ReasonCommand,
-	ReferenceCommand,
-	RestrictCommand,
-	SoftbanCommand,
-	UnbanCommand,
-	WarnCommand,
-	TagCommand,
-	TagsCommand,
-	PingCommand,
-} from './commands';
 
 type Command = Readonly<{
 	name: string;
@@ -94,28 +75,6 @@ type OptionToObject<O> = O extends {
 
 type ArgumentsOfRaw<O> = O extends readonly any[] ? UnionToIntersection<OptionToObject<O[number]>> : never;
 
-type ArgumentsOf<C extends Command> = C extends { options: readonly Option[] }
+export type ArgumentsOf<C extends Command> = C extends { options: readonly Option[] }
 	? Simplify<UnionToIntersection<OptionToObject<C['options'][number]>>>
 	: unknown;
-
-export type PingArguments = ArgumentsOf<typeof DebugCommand>;
-
-export interface TransformedInteraction {
-	config: ArgumentsOf<typeof ConfigCommand>;
-	debug: ArgumentsOf<typeof DebugCommand>;
-	'anti-raid-nuke': ArgumentsOf<typeof AntiRaidNuke>;
-	ban: ArgumentsOf<typeof BanCommand>;
-	duration: ArgumentsOf<typeof DurationCommand>;
-	history: ArgumentsOf<typeof HistoryCommand>;
-	kick: ArgumentsOf<typeof KickCommand>;
-	lockdown: ArgumentsOf<typeof LockdownCommand>;
-	reason: ArgumentsOf<typeof ReasonCommand>;
-	reference: ArgumentsOf<typeof ReferenceCommand>;
-	restrict: ArgumentsOf<typeof RestrictCommand>;
-	softban: ArgumentsOf<typeof SoftbanCommand>;
-	unban: ArgumentsOf<typeof UnbanCommand>;
-	warn: ArgumentsOf<typeof WarnCommand>;
-	tag: ArgumentsOf<typeof TagCommand>;
-	tags: ArgumentsOf<typeof TagsCommand>;
-	ping: ArgumentsOf<typeof PingCommand>;
-}

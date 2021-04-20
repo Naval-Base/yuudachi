@@ -3,7 +3,7 @@ import API from '@yuudachi/api';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 import { CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, ReferenceCommand } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { checkMod, send } from '../../util';
@@ -14,15 +14,19 @@ export default class implements Command {
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: TransformedInteraction) {
+	private parse(args: ArgumentsOf<typeof ReferenceCommand>) {
 		return {
-			caseId: args.reference.case,
-			refId: args.reference.reference,
-			hide: args.reference.hide,
+			caseId: args.case,
+			refId: args.reference,
+			hide: args.hide,
 		};
 	}
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
+	public async execute(
+		message: APIGuildInteraction,
+		args: ArgumentsOf<typeof ReferenceCommand>,
+		locale: string,
+	): Promise<void> {
 		await checkMod(message, locale);
 
 		const { caseId, refId, hide } = this.parse(args);

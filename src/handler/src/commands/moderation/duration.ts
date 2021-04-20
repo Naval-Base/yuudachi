@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 import ms from '@naval-base/ms';
 import { CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, DurationCommand } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { checkMod, send } from '../../util';
@@ -15,15 +15,19 @@ export default class implements Command {
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: TransformedInteraction) {
+	private parse(args: ArgumentsOf<typeof DurationCommand>) {
 		return {
-			caseId: args.duration.case,
-			duration: args.duration.duration,
-			hide: args.duration.hide,
+			caseId: args.case,
+			duration: args.duration,
+			hide: args.hide,
 		};
 	}
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
+	public async execute(
+		message: APIGuildInteraction,
+		args: ArgumentsOf<typeof DurationCommand>,
+		locale: string,
+	): Promise<void> {
 		await checkMod(message, locale);
 
 		const { caseId, duration, hide } = this.parse(args);

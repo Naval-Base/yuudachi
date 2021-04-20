@@ -4,7 +4,7 @@ import { oneLine, stripIndents } from 'common-tags';
 import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, HistoryCommand } from '@yuudachi/interactions';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -32,11 +32,15 @@ export default class implements Command {
 
 	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
-	private parse(args: TransformedInteraction) {
-		return args.history.user;
+	private parse(args: ArgumentsOf<typeof HistoryCommand>) {
+		return args.user;
 	}
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
+	public async execute(
+		message: APIGuildInteraction,
+		args: ArgumentsOf<typeof HistoryCommand>,
+		locale: string,
+	): Promise<void> {
 		await checkMod(message, locale);
 
 		const member = this.parse(args);

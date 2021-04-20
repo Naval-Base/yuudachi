@@ -5,7 +5,7 @@ import { container } from 'tsyringe';
 import ms from '@naval-base/ms';
 import type { Sql } from 'postgres';
 import { CaseAction } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, RestrictCommand } from '@yuudachi/interactions';
 import { Tokens } from '@yuudachi/core';
 
 import { send } from '../../../../util';
@@ -14,7 +14,7 @@ const { kSQL } = Tokens;
 
 export async function embed(
 	message: APIGuildInteraction,
-	args: TransformedInteraction['restrict']['embed'],
+	args: ArgumentsOf<typeof RestrictCommand>['embed'],
 	locale: string,
 ) {
 	if (args.reason && args.reason.length >= 1900) {

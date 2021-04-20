@@ -4,7 +4,6 @@ import type { Sql } from 'postgres';
 import i18next from 'i18next';
 import { Tokens } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';
-import { TransformedInteraction } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { addFields, has, send } from '../../util';
@@ -18,7 +17,7 @@ export default class implements Command {
 
 	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
-	public async execute(message: APIGuildInteraction, _: TransformedInteraction, locale: string) {
+	public async execute(message: APIGuildInteraction, _: unknown, locale: string) {
 		const [settings] = await this.sql<[GuildSettings?]>`
 			select *
 			from guild_settings

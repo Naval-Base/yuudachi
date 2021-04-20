@@ -1,7 +1,7 @@
 import type { APIGuildInteraction } from 'discord-api-types/v8';
 import { injectable } from 'tsyringe';
 import { CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, RestrictCommand } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 import { checkMod } from '../../util';
@@ -17,32 +17,32 @@ import { unrole } from './sub/restrict/unrole';
 export default class implements Command {
 	public readonly category = CommandModules.Moderation;
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string) {
+	public async execute(message: APIGuildInteraction, args: ArgumentsOf<typeof RestrictCommand>, locale: string) {
 		await checkMod(message, locale);
 
-		switch (Object.keys(args.restrict)[0]) {
+		switch (Object.keys(args)[0]) {
 			case 'mute': {
-				return mute(message, args.restrict.mute, locale);
+				return mute(message, args.mute, locale);
 			}
 
 			case 'embed': {
-				return embed(message, args.restrict.embed, locale);
+				return embed(message, args.embed, locale);
 			}
 
 			case 'react': {
-				return react(message, args.restrict.react, locale);
+				return react(message, args.react, locale);
 			}
 
 			case 'emoji': {
-				return emoji(message, args.restrict.emoji, locale);
+				return emoji(message, args.emoji, locale);
 			}
 
 			case 'tag': {
-				return tag(message, args.restrict.tag, locale);
+				return tag(message, args.tag, locale);
 			}
 
 			case 'unrole': {
-				return unrole(message, args.restrict.unrole, locale);
+				return unrole(message, args.unrole, locale);
 			}
 		}
 	}

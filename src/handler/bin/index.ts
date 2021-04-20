@@ -78,9 +78,7 @@ const interactionCreate = async () => {
 			try {
 				await command.execute(
 					interaction,
-					{
-						[interaction.data.name]: transformInteraction(interaction.data.options ?? [], interaction.data.resolved),
-					},
+					transformInteraction(interaction.data.options ?? [], interaction.data.resolved),
 					locale,
 				);
 			} catch (error) {

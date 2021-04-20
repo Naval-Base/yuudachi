@@ -1,28 +1,36 @@
 import type { APIGuildInteraction } from 'discord-api-types/v8';
 import API, { HttpException } from '@yuudachi/api';
 import { CaseAction, CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, UnbanCommand } from '@yuudachi/interactions';
 import i18next from 'i18next';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
+import type { Sql } from 'postgres';
+import { Tokens } from '@yuudachi/core';
 
 import Command from '../../Command';
 import { checkMod, send } from '../../util';
+
+const { kSQL } = Tokens;
 
 @injectable()
 export default class implements Command {
 	public readonly category = CommandModules.Moderation;
 
-	public constructor(private readonly api: API) {}
+	public constructor(private readonly api: API, @inject(kSQL) private readonly sql: Sql<any>) {}
 
-	private parse(args: TransformedInteraction) {
+	private parse(args: ArgumentsOf<typeof UnbanCommand>) {
 		return {
-			member: args.unban.user,
-			reason: args.unban.reason,
-			refId: args.unban.reference,
+			member: args.user,
+			reason: args.reason,
+			refId: args.reference,
 		};
 	}
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
+	public async execute(
+		message: APIGuildInteraction,
+		args: ArgumentsOf<typeof UnbanCommand>,
+		locale: string,
+	): Promise<void> {
 		await checkMod(message, locale);
 
 		const { member, reason, refId } = this.parse(args);
@@ -33,13 +41,22 @@ export default class implements Command {
 		const memberMention = `<@${member.user.id}>`;
 
 		try {
+			const [ref_id] = await this.sql<[{ ref_id: number }?]>`
+				select ref_id
+				from cases
+				where guild_id = ${message.guild_id}
+					and target_id = ${member.user.id}
+					and action = ${CaseAction.BAN}
+				order by created_at desc
+				limit 1`;
+
 			await this.api.guilds.createCase(message.guild_id, {
 				action: CaseAction.UNBAN,
 				reason: reason ?? undefined,
 				moderatorId: message.member.user.id,
 				targetId: member.user.id,
 				contextMessageId: message.id,
-				referenceId: refId ? Number(refId) : undefined,
+				referenceId: refId ? Number(refId) : ref_id ? Number(ref_id) : undefined,
 			});
 
 			void send(message, {

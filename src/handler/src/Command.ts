@@ -1,7 +1,6 @@
 import type { APIGuildInteraction } from 'discord-api-types/v8';
 import { basename, extname } from 'path';
 import type { CommandModules } from '@yuudachi/types';
-/* import type { TransformedInteraction } from '@yuudachi/core'; */
 
 export default interface Command {
 	name?: string;
@@ -10,7 +9,7 @@ export default interface Command {
 	clientPermissions?: string[];
 	userPermissions?: string[];
 	regExp?: RegExp;
-	execute(message: APIGuildInteraction, args: any, locale: string): unknown | Promise<unknown>;
+	execute(message: APIGuildInteraction, args: unknown, locale: string): unknown | Promise<unknown>;
 }
 
 export interface CommandInfo {

@@ -4,7 +4,7 @@ import API, { HttpException } from '@yuudachi/api';
 import { container } from 'tsyringe';
 import type { Sql } from 'postgres';
 import { Tokens } from '@yuudachi/core';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, RestrictCommand } from '@yuudachi/interactions';
 
 import { send } from '../../../../util';
 
@@ -12,7 +12,7 @@ const { kSQL } = Tokens;
 
 export async function unrole(
 	message: APIGuildInteraction,
-	args: TransformedInteraction['restrict']['unrole'],
+	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
 	locale: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);

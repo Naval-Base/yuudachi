@@ -5,7 +5,7 @@ import { container } from 'tsyringe';
 import ms from '@naval-base/ms';
 import type { Sql } from 'postgres';
 import { CaseAction } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, RestrictCommand } from '@yuudachi/interactions';
 import { Tokens } from '@yuudachi/core';
 
 import { send } from '../../../../util';
@@ -14,7 +14,7 @@ const { kSQL } = Tokens;
 
 export async function mute(
 	message: APIGuildInteraction,
-	args: TransformedInteraction['restrict']['mute'],
+	args: ArgumentsOf<typeof RestrictCommand>['mute'],
 	locale: string,
 ) {
 	if (args.reason && args.reason.length >= 1900) {

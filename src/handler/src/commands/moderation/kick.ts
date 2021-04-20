@@ -1,7 +1,7 @@
 import type { APIGuildInteraction } from 'discord-api-types/v8';
 import API, { HttpException } from '@yuudachi/api';
 import { CaseAction, CommandModules } from '@yuudachi/types';
-import type { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, KickCommand } from '@yuudachi/interactions';
 import i18next from 'i18next';
 import { injectable } from 'tsyringe';
 
@@ -14,15 +14,19 @@ export default class implements Command {
 
 	public constructor(private readonly api: API) {}
 
-	private parse(args: TransformedInteraction) {
+	private parse(args: ArgumentsOf<typeof KickCommand>) {
 		return {
-			member: args.kick.user,
-			reason: args.kick.reason,
-			refId: args.kick.reference,
+			member: args.user,
+			reason: args.reason,
+			refId: args.reference,
 		};
 	}
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string): Promise<void> {
+	public async execute(
+		message: APIGuildInteraction,
+		args: ArgumentsOf<typeof KickCommand>,
+		locale: string,
+	): Promise<void> {
 		await checkMod(message, locale);
 
 		const { member, reason, refId } = this.parse(args);

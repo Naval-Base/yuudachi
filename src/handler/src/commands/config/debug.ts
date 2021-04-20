@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe';
 import type { APIGuildInteraction } from 'discord-api-types/v8';
 import { CommandModules } from '@yuudachi/types';
-import { TransformedInteraction } from '@yuudachi/interactions';
+import type { ArgumentsOf, DebugCommand } from '@yuudachi/interactions';
 
 import Command from '../../Command';
 
@@ -12,12 +12,12 @@ import { checkMod } from '../../util';
 export default class implements Command {
 	public readonly category = CommandModules.Config;
 
-	public async execute(message: APIGuildInteraction, args: TransformedInteraction, locale: string) {
+	public async execute(message: APIGuildInteraction, args: ArgumentsOf<typeof DebugCommand>, locale: string) {
 		await checkMod(message, locale);
 
-		switch (Object.keys(args.debug)[0]) {
+		switch (Object.keys(args)[0]) {
 			case 'refresh': {
-				return refresh(message, args.debug, locale);
+				return refresh(message, args.refresh, locale);
 			}
 		}
 	}
