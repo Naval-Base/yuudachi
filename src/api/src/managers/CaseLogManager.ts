@@ -110,18 +110,21 @@ export default class CaseLogManager {
 		}
 
 		if (case_.ref_id) {
-			const [reference] = await this.sql<[{ log_message_id: string }?]>`
+			const [reference] = await this.sql<[{ log_message_id: string | null }?]>`
 				select log_message_id
 				from cases
 				where guild_id = ${case_.guild_id}
 					and case_id = ${case_.ref_id}`;
 
 			if (Reflect.has(reference ?? {}, 'log_message_id')) {
-				msg += `\n**Ref case:** [${case_.ref_id}](https://discordapp.com/channels/${case_.guild_id}/${logChannelId}/${
-					reference!.log_message_id
-				})`;
+				if (reference!.log_message_id) {
+					msg += `\n**Ref case:** [${case_.ref_id}](https://discordapp.com/channels/${case_.guild_id}/${logChannelId}/${
+						reference!.log_message_id
+					})`;
+				}
 			}
 		}
+
 		return msg;
 	}
 }

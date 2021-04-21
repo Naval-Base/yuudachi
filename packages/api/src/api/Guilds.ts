@@ -37,22 +37,22 @@ export default class Guilds {
 	}
 
 	public createCase(guildId: Snowflake, ...cases: CreateCase[]) {
-		return this.api.make<Case[]>('post', `/guilds/${guildId}/cases`, { cases });
+		return this.api.make<{ cases: Case[] }>('post', `/guilds/${guildId}/cases`, { cases });
 	}
 
 	public updateCase(guildId: Snowflake, ...cases: UpdateCase[]) {
-		return this.api.make<Case[]>('patch', `/guilds/${guildId}/cases`, { cases });
+		return this.api.make<{ cases: Case[] }>('patch', `/guilds/${guildId}/cases`, { cases });
 	}
 
 	public deleteCase(guildId: Snowflake, caseId: number) {
-		return this.api.make<Case[]>('delete', `/guilds/${guildId}/cases/${caseId}`);
+		return this.api.make<{ case: Case }>('delete', `/guilds/${guildId}/cases/${caseId}`);
 	}
 
 	public createLockdown(guildId: Snowflake, ...lockdowns: CreateLockdown[]) {
-		return this.api.make<Lockdown[]>('post', `/guilds/${guildId}/lockdowns`, { lockdowns });
+		return this.api.make<{ lockdowns: Lockdown[] }>('post', `/guilds/${guildId}/lockdowns`, { lockdowns });
 	}
 
 	public deleteLockdown(guildId: Snowflake, ...lockdowns: DeleteLockdown[]) {
-		return this.api.make<Lockdown[]>('delete', `/guilds/${guildId}/lockdowns`, { lockdowns });
+		return this.api.make<{ lockdown: Lockdown }>('delete', `/guilds/${guildId}/lockdowns`, { lockdowns });
 	}
 }

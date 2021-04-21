@@ -41,8 +41,8 @@ export default class implements Command {
 		const memberMention = `<@${member.user.id}>`;
 
 		try {
-			const [ref_id] = await this.sql<[{ ref_id: number }?]>`
-				select ref_id
+			const [case_] = await this.sql<[{ case_id: number }?]>`
+				select case_id
 				from cases
 				where guild_id = ${message.guild_id}
 					and target_id = ${member.user.id}
@@ -56,7 +56,7 @@ export default class implements Command {
 				moderatorId: message.member.user.id,
 				targetId: member.user.id,
 				contextMessageId: message.id,
-				referenceId: refId ? Number(refId) : ref_id ? Number(ref_id) : undefined,
+				referenceId: refId ? Number(refId) : case_?.case_id ? Number(case_.case_id) : undefined,
 			});
 
 			void send(message, {

@@ -68,7 +68,7 @@ export default class CreateCaseRoute extends Route {
 
 	public async handle(req: Request, res: Response) {
 		const created: Promise<Case>[] = [];
-		const body: CasesPostBody = req.body as any;
+		const body: CasesPostBody = req.body;
 
 		for (const case_ of body.cases) {
 			case_.guildId = req.params.guildId as Snowflake;
