@@ -13,28 +13,25 @@ declare module 'polka' {
 	}
 }
 
-export default (ignoreExpiration = false, fallthrough = false) => async (
-	req: Request,
-	_: Response,
-	next?: NextHandler,
-) => {
-	const authManager = container.resolve(AuthManager);
+export default (ignoreExpiration = false, fallthrough = false) =>
+	async (req: Request, _: Response, next?: NextHandler) => {
+		const authManager = container.resolve(AuthManager);
 
-	let token: string | undefined;
-	if (req.headers.authorization?.startsWith('Bearer ')) {
-		token = req.headers.authorization.substr('Bearer '.length);
-	} else if (req.headers.cookie) {
-		token = cookie.parse(req.headers.cookie).access_token;
-	}
-	if (!token) return next?.(fallthrough ? undefined : unauthorized('Malformed or missing JWT'));
+		let token: string | undefined;
+		if (req.headers.authorization?.startsWith('Bearer ')) {
+			token = req.headers.authorization.substr('Bearer '.length);
+		} else if (req.headers.cookie) {
+			token = cookie.parse(req.headers.cookie).access_token;
+		}
+		if (!token) return next?.(fallthrough ? undefined : unauthorized('Malformed or missing JWT'));
 
-	try {
-		const userId = await authManager.verify(token, ignoreExpiration);
+		try {
+			const userId = await authManager.verify(token, ignoreExpiration);
 
-		req.auth = { userId, token };
-		return next?.();
-	} catch (error) {
-		console.log(error);
-		return next?.(fallthrough ? undefined : unauthorized());
-	}
-};
+			req.auth = { userId, token };
+			return next?.();
+		} catch (error) {
+			console.log(error);
+			return next?.(fallthrough ? undefined : unauthorized());
+		}
+	};

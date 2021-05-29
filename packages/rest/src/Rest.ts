@@ -97,7 +97,7 @@ export default class Rest {
 				try {
 					return JSON.parse(httpRes.body.toString()) as T;
 				} catch {
-					return (body as unknown) as T;
+					return body as unknown as T;
 				}
 			} else {
 				throw new HttpException(httpRes.status, httpRes.body.toString());

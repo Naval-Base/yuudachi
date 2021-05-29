@@ -10,7 +10,7 @@ const { kConfig } = Tokens;
 
 jest.mock('node-fetch');
 const { Response } = jest.requireActual('node-fetch');
-const mockFetch = (fetch as unknown) as jest.Mock;
+const mockFetch = fetch as unknown as jest.Mock;
 
 container.register<Config>(kConfig, {
 	useValue: {

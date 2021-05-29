@@ -3,7 +3,6 @@
  */
 module.exports = {
 	testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
-	testEnvironment: 'node',
 	collectCoverage: true,
 	coverageDirectory: 'coverage',
 	coverageReporters: ['text', 'lcov', 'clover'],

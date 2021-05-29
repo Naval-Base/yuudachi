@@ -54,14 +54,10 @@ const GuildSettings = () => {
 
 	const guildSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
 
-	const {
-		mutateAsync: guildSettingsInsertMutate,
-		isLoading: isLoadingGuildSettingsInsertMutate,
-	} = useMutationInsertGuildSettings(id as string);
-	const {
-		mutateAsync: guildSettingsUpdateMutate,
-		isLoading: isLoadingGuildSettingsUpdateMutate,
-	} = useMutationUpdateGuildSettings(id as string);
+	const { mutateAsync: guildSettingsInsertMutate, isLoading: isLoadingGuildSettingsInsertMutate } =
+		useMutationInsertGuildSettings(id as string);
+	const { mutateAsync: guildSettingsUpdateMutate, isLoading: isLoadingGuildSettingsUpdateMutate } =
+		useMutationUpdateGuildSettings(id as string);
 
 	const handleOnInitialize = async () => {
 		await guildSettingsInsertMutate();

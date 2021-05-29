@@ -7,7 +7,7 @@ jest.mock('http2');
 jest.mock('node-fetch');
 jest.mock('form-data');
 
-const MockedResponse = (Http2ServerResponse as unknown) as jest.Mock<Http2ServerResponse>;
+const MockedResponse = Http2ServerResponse as unknown as jest.Mock<Http2ServerResponse>;
 
 beforeEach(() => {
 	process.env.DISCORD_CLIENT_ID = 'SuperSecret';

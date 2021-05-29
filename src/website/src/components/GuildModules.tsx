@@ -59,10 +59,8 @@ const GuildModules = () => {
 
 	const guildSettingsData = useMemo(() => gqlGuildSettingsData, [gqlGuildSettingsData]);
 
-	const {
-		mutateAsync: guildSettingsUpdateMutate,
-		isLoading: isLoadingGuildSettingsUpdateMutate,
-	} = useMutationUpdateGuildSettings(id as string);
+	const { mutateAsync: guildSettingsUpdateMutate, isLoading: isLoadingGuildSettingsUpdateMutate } =
+		useMutationUpdateGuildSettings(id as string);
 
 	const handleOnSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();

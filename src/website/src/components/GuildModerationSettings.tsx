@@ -38,18 +38,15 @@ const GuildModerationSettings = () => {
 
 	const guildModerationSettingsData = useMemo(() => gqlGuildSettingsData?.guild, [gqlGuildSettingsData]);
 	const guildRolesData = useMemo(() => gqlGuildData?.guild?.roles?.filter((r) => r.id !== id), [gqlGuildData, id]);
-	const guildChannelsData = useMemo(() => gqlGuildChannelsData?.channels?.filter((c) => c.type === 0), [
-		gqlGuildChannelsData,
-	]);
+	const guildChannelsData = useMemo(
+		() => gqlGuildChannelsData?.channels?.filter((c) => c.type === 0),
+		[gqlGuildChannelsData],
+	);
 
-	const {
-		mutateAsync: guildSettingsInsertMutate,
-		isLoading: isLoadingGuildSettingsInsertMutate,
-	} = useMutationInsertGuildSettings(id as string);
-	const {
-		mutateAsync: guildSettingsUpdateMutate,
-		isLoading: isLoadingGuildSettingsUpdateMutate,
-	} = useMutationUpdateGuildSettings(id as string);
+	const { mutateAsync: guildSettingsInsertMutate, isLoading: isLoadingGuildSettingsInsertMutate } =
+		useMutationInsertGuildSettings(id as string);
+	const { mutateAsync: guildSettingsUpdateMutate, isLoading: isLoadingGuildSettingsUpdateMutate } =
+		useMutationUpdateGuildSettings(id as string);
 
 	const handleOnInitialize = async () => {
 		await guildSettingsInsertMutate();
