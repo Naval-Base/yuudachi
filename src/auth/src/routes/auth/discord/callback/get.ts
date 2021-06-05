@@ -31,7 +31,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 	}
 
 	public async handle(req: Request, res: Response, next: NextHandler) {
-		if (!req.query || typeof req.query === 'string') {
+		if (typeof req.query === 'string') {
 			return next(badRequest('missing oauth response data'));
 		}
 
@@ -41,7 +41,7 @@ export default class DiscordLoginCallbackRoute extends Route {
 		const state = State.from(req.query.state);
 		// maybe expire the state here
 
-		const response = await discordOAuth2({ code: req.query.code as string });
+		const response = await discordOAuth2({ code: req.query.code });
 		const me: DiscordUser = await fetch('https://discord.com/api/users/@me', {
 			headers: {
 				authorization: `Bearer ${response.access_token}`,

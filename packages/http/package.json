@@ -18,7 +18,7 @@
 		"form-data": "^4.0.0",
 		"helmet": "^4.6.0",
 		"node-fetch": "^2.6.1",
-		"polka": "^1.0.0-next.14",
+		"polka": "^1.0.0-next.15",
 		"postgres": "^2.0.0-beta.5",
 		"readdirp": "^3.6.0",
 		"reflect-metadata": "^0.1.13",
@@ -29,7 +29,7 @@
 	"devDependencies": {
 		"@types/cookie": "^0.4.0",
 		"@types/cors": "^2.8.10",
-		"@types/node": "^15.6.1",
+		"@types/node": "^15.12.1",
 		"@types/node-fetch": "^2.5.10",
 		"@types/supertest": "^2.0.11",
 		"@types/trouter": "^3.1.0",

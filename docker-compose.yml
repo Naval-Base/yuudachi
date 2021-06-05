@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   hasura:
-    image: hasura/graphql-engine:v2.0.0-alpha.7.cli-migrations-v3
+    image: hasura/graphql-engine:v2.0.0-beta.1.cli-migrations-v3
     labels:
       com.naval-base.description: 'Hasura GraphQL Engine'
     environment:
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:5-alpine
+    image: redis:6-alpine
     labels:
       com.naval-base.description: 'Redis'
     expose:

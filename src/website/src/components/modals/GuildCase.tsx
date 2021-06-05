@@ -203,7 +203,7 @@ const GuildCase = ({
 											<Controller
 												name="action_expiration"
 												control={control}
-												defaultValue={dayjs(guildCaseData.case.action_expiration).toDate()}
+												defaultValue={dayjs(guildCaseData.case.action_expiration).toDate() as unknown as string}
 												render={(props: any) => (
 													<DatePicker
 														selectedDate={props.value}

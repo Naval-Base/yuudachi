@@ -32,7 +32,7 @@
 	},
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
-		"@types/node": "^15.6.1",
+		"@types/node": "^15.12.1",
 		"@types/node-fetch": "^2.5.10",
 		"@yuudachi/types": "workspace:^2.0.0",
 		"cpy-cli": "^3.1.1",
