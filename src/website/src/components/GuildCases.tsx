@@ -128,7 +128,7 @@ const GuildCasesPage = () => {
 
 	return (
 		<Table
-			// @ts-ignore
+			// @ts-expect-error
 			columns={columns}
 			hiddenColumns={hiddenColumns ?? []}
 			data={data}

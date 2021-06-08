@@ -11,7 +11,7 @@ import Rest, { createAmqpBroker } from '@yuudachi/rest';
 import { container } from 'tsyringe';
 import { APIGuildInteraction, GatewayDispatchEvents } from 'discord-api-types/v8';
 import i18next from 'i18next';
-// @ts-ignore
+// @ts-expect-error
 import Backend from 'i18next-fs-backend';
 import { Tokens, transformInteraction } from '@yuudachi/core';
 import { CommandModules } from '@yuudachi/types';

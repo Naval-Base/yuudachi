@@ -22,7 +22,6 @@ const DatePicker = ({
 			selected={selectedDate}
 			onChange={onChange}
 			filterDate={filterDate}
-			// @ts-ignore
 			filterTime={filterTime}
 			showTimeSelect
 			showPopperArrow={showPopperArrow}

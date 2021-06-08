@@ -20,7 +20,6 @@ afterEach(() => {
 
 const app = createApp();
 const route = container.resolve(CreateCaseRoute);
-// @ts-ignore
 route.register({ path: '/test/:guildId', method: RouteMethod.POST }, app);
 app.listen(0);
 

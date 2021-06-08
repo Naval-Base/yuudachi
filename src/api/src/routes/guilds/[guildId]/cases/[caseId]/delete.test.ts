@@ -19,7 +19,6 @@ afterEach(() => {
 
 const app = createApp();
 const route = container.resolve(DeleteCaseRoute);
-// @ts-ignore
 route.register({ path: '/test/:guildId/cases/:caseId', method: RouteMethod.DELETE }, app);
 app.listen(0);
 
@@ -35,7 +34,7 @@ test('delete case', async () => {
 	expect(res.status).toBe(201);
 });
 
-test('handles 404 HttpException while creating cases', async () => {
+test('handles 404 HttpException while deleting cases', async () => {
 	mockedCaseManager.delete.mockRejectedValue(new HttpException(404, 'not found'));
 
 	const res = await supertest(app.server).delete('/api/test/7890/cases/1234');
@@ -43,7 +42,7 @@ test('handles 404 HttpException while creating cases', async () => {
 	expect(res.status).toBe(404);
 });
 
-test('handles generic exception while creating cases', async () => {
+test('handles generic exception while deleting cases', async () => {
 	mockedCaseManager.delete.mockRejectedValue(new Error('oops'));
 
 	const res = await supertest(app.server).delete('/api/test/7890/cases/1234');

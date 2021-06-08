@@ -45,7 +45,7 @@ test('sends response', () => {
 				token: 'hijklmn',
 			},
 		},
-		// @ts-ignore
+		// @ts-expect-error
 		{ cookie: cookieSetter },
 	);
 

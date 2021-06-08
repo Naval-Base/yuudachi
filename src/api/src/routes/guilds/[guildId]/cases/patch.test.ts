@@ -19,7 +19,6 @@ afterEach(() => {
 
 const app = createApp();
 const route = container.resolve(UpdateCaseRoute);
-// @ts-ignore
 route.register({ path: '/test/:guildId', method: RouteMethod.PATCH }, app);
 app.listen(0);
 
@@ -106,7 +105,7 @@ test('reason patch', async () => {
 	});
 });
 
-test('handles 404 HttpException while creating cases', async () => {
+test('handles 404 HttpException while patching cases', async () => {
 	mockedCaseManager.update.mockRejectedValue(new HttpException(404, 'not found'));
 
 	const res = await supertest(app.server)
@@ -124,7 +123,7 @@ test('handles 404 HttpException while creating cases', async () => {
 	expect(res.status).toBe(404);
 });
 
-test('handles generic exception while creating cases', async () => {
+test('handles generic exception while patching cases', async () => {
 	mockedCaseManager.update.mockRejectedValue(new Error('oops'));
 
 	const res = await supertest(app.server)

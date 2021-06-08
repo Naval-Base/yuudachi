@@ -78,7 +78,7 @@ const GuildTagsPage = () => {
 				</Button>
 			</ButtonGroup>
 			<Table
-				// @ts-ignore
+				// @ts-expect-error
 				columns={columns}
 				data={data}
 				count={gqlData?.tagCount.aggregate.count ?? 0}

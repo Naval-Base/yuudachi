@@ -14,7 +14,7 @@ export async function checkMod(message: APIGuildInteraction, locale: string): Pr
 		from guild_settings
 		where guild_id = ${message.guild_id}`;
 
-	if (!message.member.roles.includes(data?.mod_role_id ?? ('' as Snowflake))) {
+	if (data?.mod_role_id && !message.member.roles.includes(data.mod_role_id)) {
 		throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
 	}
 }
