@@ -1,12 +1,17 @@
 {
+	"common": {
+		"errors": {
+			"no_mod_role": "",
+			"target_not_found": ""
+		}
+	},
 	"command": {
 		"common": {
 			"errors": {
 				"generic": "",
 				"no_enabled_module": "",
 				"target_not_found": "",
-				"duration_format": "",
-				"no_mod_role": ""
+				"duration_format": ""
 			}
 		},
 		"config": {
@@ -49,10 +54,9 @@
 			},
 			"ban": {
 				"errors": {
-					"missing_permissions": "",
 					"failure": ""
 				},
-				"success": ""
+				"pending": ""
 			},
 			"unban": {
 				"errors": {
@@ -174,6 +178,23 @@
 				"errors": {
 					"too_long": ""
 				}
+			}
+		}
+	},
+	"component": {
+		"common": {
+			"errors": {
+				"no_same_mod": ""
+			}
+		},
+		"mod": {
+			"ban": {
+				"errors": {
+					"missing_permissions": "",
+					"failure": ""
+				},
+				"cancel": "",
+				"success": ""
 			}
 		}
 	}
