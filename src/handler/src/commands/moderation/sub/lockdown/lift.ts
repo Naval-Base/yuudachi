@@ -24,7 +24,7 @@ export async function lift(message: APIGuildInteraction, channel: Snowflake, loc
 				case 403:
 					throw new Error(i18next.t('command.mod.lockdown.lift.errors.missing_permissions', { lng: locale }));
 				case 404:
-					throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
+					throw new Error(i18next.t('common.errors.target_not_found', { lng: locale }));
 			}
 		}
 		throw new Error(i18next.t('command.mod.lockdown.lift.errors.failure', { channel: channelMention, lng: locale }));

@@ -1,0 +1,31 @@
+table:
+  name: cases
+  schema: public
+event_triggers:
+- definition:
+    enable_manual: false
+    insert:
+      columns: "*"
+    update:
+      columns:
+      - created_at
+      - log_message_id
+      - target_tag
+      - mod_tag
+      - case_id
+      - role_id
+      - target_id
+      - mod_id
+      - context_message_id
+      - ref_id
+      - action_processed
+      - reason
+      - guild_id
+      - action
+      - action_expiration
+  name: mod_log
+  retry_conf:
+    interval_sec: 10
+    num_retries: 0
+    timeout_sec: 60
+  webhook: http://api:3500/api/hasura/hooks/mod_log

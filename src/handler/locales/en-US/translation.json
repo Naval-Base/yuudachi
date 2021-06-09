@@ -1,12 +1,17 @@
 {
+	"common": {
+		"errors": {
+			"no_mod_role": "This command can only be used by moderators.",
+			"target_not_found": "The given member is not in this guild."
+		}
+	},
 	"command": {
 		"common": {
 			"errors": {
 				"generic": "Something went wrong.",
 				"no_enabled_module": "The {{ module }} is not enabled on this guild.",
 				"target_not_found": "The given member is not in this guild.",
-				"duration_format": "Wrong duration format.",
-				"no_mod_role": "This command can only be used by moderators."
+				"duration_format": "Wrong duration format."
 			}
 		},
 		"config": {
@@ -49,10 +54,9 @@
 			},
 			"ban": {
 				"errors": {
-					"missing_permissions": "Missing permissions to ban this member.",
 					"failure": "Unable to ban {{- member}}"
 				},
-				"success": "Successfully banned {{- member}}"
+				"pending": "Do you really want to ban {{- member}}?"
 			},
 			"unban": {
 				"errors": {
@@ -174,6 +178,23 @@
 				"errors": {
 					"too_long": "Query too broad, too many results."
 				}
+			}
+		}
+	},
+	"component": {
+		"common": {
+			"errors": {
+				"no_same_mod": "This button can only be used by the moderator who executed the command."
+			}
+		},
+		"mod": {
+			"ban": {
+				"errors": {
+					"missing_permissions": "Missing permissions to ban this member.",
+					"failure": "Unable to ban {{- member}}"
+				},
+				"cancel": "Cancelled ban.",
+				"success": "Successfully banned {{- member}}"
 			}
 		}
 	}

@@ -6089,6 +6089,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ioredis@npm:^4.26.4":
+  version: 4.26.4
+  resolution: "@types/ioredis@npm:4.26.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: 0138b8c3c290b4917529d797380a31f365756ac9056525dc19a6eb91e9f8484e1116fc249b91001ac3bf1ddcfbd68f1b685d83f63b4e4751022bb000dd7347ea
+  languageName: node
+  linkType: hard
+
 "@types/is-function@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/is-function@npm:1.0.0"
@@ -7330,6 +7339,7 @@ __metadata:
     "@naval-base/ms": ^3.1.0
     "@spectacles/brokers": ^0.8.4
     "@types/common-tags": ^1.8.0
+    "@types/ioredis": ^4.26.4
     "@types/node": ^15.12.2
     "@types/node-fetch": ^2.5.10
     "@yuudachi/api": "workspace:^2.0.0"
@@ -7344,6 +7354,8 @@ __metadata:
     env-cmd: ^10.1.0
     i18next: ^20.3.1
     i18next-fs-backend: ^1.1.1
+    ioredis: ^4.27.5
+    nanoid: ^3.1.23
     node-fetch: 2.6.1
     postgres: ^2.0.0-beta.5
     readdirp: ^3.6.0
@@ -14014,6 +14026,24 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"ioredis@npm:^4.27.5":
+  version: 4.27.5
+  resolution: "ioredis@npm:4.27.5"
+  dependencies:
+    cluster-key-slot: ^1.1.0
+    debug: ^4.3.1
+    denque: ^1.1.0
+    lodash.defaults: ^4.2.0
+    lodash.flatten: ^4.4.0
+    p-map: ^2.1.0
+    redis-commands: 1.7.0
+    redis-errors: ^1.2.0
+    redis-parser: ^3.0.0
+    standard-as-callback: ^2.1.0
+  checksum: ee5924ccf4e04643ebc644312d1105a6da70e009badaf845618dd0d408f82690098892d2c648b02b0e3612d548b0fd162af12f3e18aec71edd8c983f59357509
+  languageName: node
+  linkType: hard
+
 "ip@npm:^1.1.5":
   version: 1.1.5
   resolution: "ip@npm:1.1.5"
@@ -16918,7 +16948,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.1.22":
+"nanoid@npm:^3.1.22, nanoid@npm:^3.1.23":
   version: 3.1.23
   resolution: "nanoid@npm:3.1.23"
   bin:

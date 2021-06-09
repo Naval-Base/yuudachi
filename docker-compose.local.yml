@@ -109,8 +109,8 @@ services:
       DISCORD_CLIENT_ID: ''
       DISCORD_CLIENT_SECRET: ''
 
-  #website:
-    #environment: []
+  website:
+    environment: []
 
 volumes:
   rabbitmq-data:

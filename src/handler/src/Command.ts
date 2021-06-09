@@ -5,10 +5,6 @@ import type { CommandModules } from '@yuudachi/types';
 export default interface Command {
 	name?: string;
 	category: CommandModules;
-	description?: string;
-	clientPermissions?: string[];
-	userPermissions?: string[];
-	regExp?: RegExp;
 	execute(message: APIGuildInteraction, args: unknown, locale: string): unknown | Promise<unknown>;
 }
 

@@ -33,7 +33,10 @@ export default class implements Command {
 	public constructor(@inject(kSQL) private readonly sql: Sql<any>) {}
 
 	private parse(args: ArgumentsOf<typeof HistoryCommand>) {
-		return args.user;
+		return {
+			member: args.user,
+			hide: args.hide,
+		};
 	}
 
 	public async execute(
@@ -43,7 +46,7 @@ export default class implements Command {
 	): Promise<void> {
 		await checkMod(message, locale);
 
-		const member = this.parse(args);
+		const { member, hide } = this.parse(args);
 
 		const createdTimestamp = Number((BigInt(member.user.id) >> 22n) + BigInt(DISCORD_EPOCH));
 		const sinceCreationFormatted = dayjs(createdTimestamp).fromNow();
@@ -139,6 +142,6 @@ export default class implements Command {
 			embed = { description: summary.join('\n'), ...embed };
 		}
 
-		void send(message, { embed });
+		void send(message, { embed, flags: hide ? 64 : undefined });
 	}
 }

@@ -11602,6 +11602,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/ioredis", [
+        ["npm:4.26.4", {
+          "packageLocation": "./.yarn/cache/@types-ioredis-npm-4.26.4-eeb37feb17-0138b8c3c2.zip/node_modules/@types/ioredis/",
+          "packageDependencies": [
+            ["@types/ioredis", "npm:4.26.4"],
+            ["@types/node", "npm:14.14.37"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/is-function", [
         ["npm:1.0.0", {
           "packageLocation": "./.yarn/cache/@types-is-function-npm-1.0.0-1339ca8d44-6cfa84eac8.zip/node_modules/@types/is-function/",
@@ -13075,6 +13085,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@naval-base/ms", "npm:3.1.0"],
             ["@spectacles/brokers", "npm:0.8.4"],
             ["@types/common-tags", "npm:1.8.0"],
+            ["@types/ioredis", "npm:4.26.4"],
             ["@types/node", "npm:15.12.2"],
             ["@types/node-fetch", "npm:2.5.10"],
             ["@yuudachi/api", "workspace:packages/api"],
@@ -13089,6 +13100,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["env-cmd", "npm:10.1.0"],
             ["i18next", "npm:20.3.1"],
             ["i18next-fs-backend", "npm:1.1.1"],
+            ["ioredis", "npm:4.27.5"],
+            ["nanoid", "npm:3.1.23"],
             ["node-fetch", "npm:2.6.1"],
             ["postgres", "npm:2.0.0-beta.5"],
             ["readdirp", "npm:3.6.0"],
@@ -21347,6 +21360,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/ioredis-npm-4.25.0-6f7f6814fa-5356c31b8a.zip/node_modules/ioredis/",
           "packageDependencies": [
             ["ioredis", "npm:4.25.0"],
+            ["cluster-key-slot", "npm:1.1.0"],
+            ["debug", "virtual:877b553b60b9c0a2b06217c487c6ff09d68792cf3fe025beb7fec8d1d55e0ad216174b2def4118ba748692c39f0eb896f93b6cfa8141804d933268746165cf68#npm:4.3.2"],
+            ["denque", "npm:1.5.0"],
+            ["lodash.defaults", "npm:4.2.0"],
+            ["lodash.flatten", "npm:4.4.0"],
+            ["p-map", "npm:2.1.0"],
+            ["redis-commands", "npm:1.7.0"],
+            ["redis-errors", "npm:1.2.0"],
+            ["redis-parser", "npm:3.0.0"],
+            ["standard-as-callback", "npm:2.1.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:4.27.5", {
+          "packageLocation": "./.yarn/cache/ioredis-npm-4.27.5-120c88fd6e-ee5924ccf4.zip/node_modules/ioredis/",
+          "packageDependencies": [
+            ["ioredis", "npm:4.27.5"],
             ["cluster-key-slot", "npm:1.1.0"],
             ["debug", "virtual:877b553b60b9c0a2b06217c487c6ff09d68792cf3fe025beb7fec8d1d55e0ad216174b2def4118ba748692c39f0eb896f93b6cfa8141804d933268746165cf68#npm:4.3.2"],
             ["denque", "npm:1.5.0"],

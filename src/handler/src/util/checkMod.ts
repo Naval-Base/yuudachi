@@ -6,7 +6,7 @@ import type { Sql } from 'postgres';
 
 const { kSQL } = Tokens;
 
-export async function checkMod(message: APIGuildInteraction, locale: string): Promise<void> {
+export async function checkMod(message: APIGuildInteraction, locale: string, component = false): Promise<void> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const [data] = await sql<[{ mod_role_id: Snowflake | null }?]>`
@@ -15,6 +15,11 @@ export async function checkMod(message: APIGuildInteraction, locale: string): Pr
 		where guild_id = ${message.guild_id}`;
 
 	if (data?.mod_role_id && !message.member.roles.includes(data.mod_role_id)) {
-		throw new Error(i18next.t('command.common.errors.no_mod_role', { lng: locale }));
+		throw new Error(i18next.t('common.errors.no_mod_role', { lng: locale }));
+	}
+
+	// @ts-expect-error
+	if (component && message.message.interaction.user.id !== message.member.user.id) {
+		throw new Error(i18next.t('component.common.errors.no_same_mod'));
 	}
 }

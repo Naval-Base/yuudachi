@@ -75,7 +75,7 @@ export async function mute(
 				case 403:
 					throw new Error(i18next.t('command.mod.restrict.mute.errors.missing_permissions', { lng: locale }));
 				case 404:
-					throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
+					throw new Error(i18next.t('common.errors.target_not_found', { lng: locale }));
 			}
 		}
 		throw new Error(i18next.t('command.mod.restrict.mute.errors.failure', { member: memberMention, lng: locale }));

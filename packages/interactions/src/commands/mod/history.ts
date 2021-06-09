@@ -8,5 +8,10 @@ export const HistoryCommand = {
 			type: 6,
 			required: true,
 		},
+		{
+			name: 'hide',
+			description: 'Hides the output',
+			type: 5,
+		},
 	],
 } as const;

@@ -53,7 +53,7 @@ export default class implements Command {
 			if (e instanceof HttpException) {
 				switch (e.status) {
 					case 404:
-						throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
+						throw new Error(i18next.t('common.errors.target_not_found', { lng: locale }));
 				}
 			}
 			throw new Error(i18next.t('command.mod.warn.errors.failure', { member: memberMention, lng: locale }));
