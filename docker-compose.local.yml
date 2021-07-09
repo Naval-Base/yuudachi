@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  postgres:
+    environment:
+      POSTGRES_USER: 'yuudachi'
+      POSTGRES_PASSWORD: 'admin'
+      POSTGRES_DB: 'yuudachi'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '127.0.0.1:5432:5432'
+
+  postgres-exporter:
+    environment:
+      DATA_SOURCE_NAME: 'postgresql://yuudachi:admin@postgres:5432/yuudachi?sslmode=disable'
+
+  redis:
+    volumes:
+      - redis-data:/data
+    ports:
+      - '127.0.0.1:6379:6379'
+
+  redis-exporter:
+    environment:
+      REDIS_ADDR: 'redis://redis:6379'
+
+  prometheus:
+    volumes:
+      - prometheus-data:/prometheus
+    ports:
+      - '127.0.0.1:9090:9090'
+
+  grafana:
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: 'yuudachi'
+      GF_SECURITY_ADMIN_USER: 'admin'
+      GF_SECURITY_ADMIN_PASSWORD: 'admin'
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+volumes:
+  postgres-data:
+    name: 'postgres-data'
+  redis-data:
+    name: 'redis-data'
+  prometheus-data:
+    name: 'prometheus-data'
+  grafana-data:
+    name: 'grafana-data'

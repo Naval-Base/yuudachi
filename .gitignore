@@ -1,8 +1,14 @@
 # Packages
-node_modules/
+node_modules
+**/node_modules
+
+# Build artifacts
+dist/
+typings/
+tsconfig.tsbuildinfo
 
 # Log files
-logs/
+logs
 *.log
 npm-debug.log*
 
@@ -11,14 +17,15 @@ pids
 *.pid
 *.seed
 
-# Env
-.env
-config.yaml
-codegen.yml
+# Docker (experimental)
+docker-compose.config.yml
 
-# Dist
-dist/
-typings/
+# Tests
+coverage/
 
 # Miscellaneous
 .tmp/
+dump.sql
+init.sql.bak
+crowdin_credentials.yml
+.env

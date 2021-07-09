@@ -1,30 +1,79 @@
-version: "3.7"
+version: '3.7'
 
 services:
   postgres:
-    image: postgres:12-alpine
+    build: ./docker/postgresql
+    labels:
+      com.naval-base.description: 'PostgreSQL'
     environment:
-      POSTGRES_USER: "yukikaze"
-      POSTGRES_PASSWORD: "commander"
-      POSTGRES_DB: "yukikaze_bot"
-    volumes:
-      - postgres-data-v1:/var/lib/postgresql/data
+      POSTGRES_USER: ''
+      POSTGRES_PASSWORD: ''
+      POSTGRES_DB: ''
     expose:
-      - "5432"
+      - '5432'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U yuudachi']
+      interval: 10s
+      timeout: 5s
+
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:latest
+    labels:
+      com.naval-base.description: 'PostgreSQL Exporter'
+    environment:
+      DATA_SOURCE_NAME: ''
+    expose:
+      - '9187'
     restart: unless-stopped
 
-  hasura:
-      image: hasura/graphql-engine:v1.3.2.cli-migrations-v2
-      expose:
-        - "8080"
-      ports:
-        - "8080:8080"
-      env_file:
-        - ./.env
-      restart: unless-stopped
-      volumes:
-        - ./migrations:/hasura-migrations
+  redis:
+    image: redis:6-alpine
+    labels:
+      com.naval-base.description: 'Redis'
+    expose:
+      - '6379'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli ping']
+      interval: 10s
+      timeout: 5s
 
-volumes:
-  postgres-data-v1:
-    name: "postgres-data-v1"
+  redis-exporter:
+    image: oliver006/redis_exporter:alpine
+    labels:
+      com.naval-base.description: 'Redis Exporter'
+    environment:
+      REDIS_ADDR: 'redis://redis:6379'
+    expose:
+      - '9121'
+    restart: unless-stopped
+
+  prometheus:
+    build: ./docker/prometheus
+    labels:
+      com.naval-base.description: 'Prometheus'
+    expose:
+      - '9090'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- localhost:9090/-/healthy']
+      interval: 30s
+      timeout: 5s
+
+  grafana:
+    build: ./docker/grafana
+    labels:
+      com.naval-base.description: 'Grafana'
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: ''
+      GF_SECURITY_ADMIN_USER: ''
+      GF_SECURITY_ADMIN_PASSWORD: ''
+      GF_AUTH_ANONYMOUS_ENABLED: ''
+      GF_ANALYTICS_REPORTING_ENABLED: 'false'
+      GF_INSTALL_PLUGINS: 'grafana-clock-panel,grafana-piechart-panel,flant-statusmap-panel,grafana-github-datasource'
+    expose:
+      - '3000'
+    ports:
+      - '127.0.0.1:3000:3000'
+    restart: unless-stopped
