@@ -16,7 +16,7 @@
 		// "useUnknownInCatchVariables": true,
 
 		// Modules
-		"module": "ES2020",
+		"module": "ESNext",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 

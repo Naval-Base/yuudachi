@@ -10,9 +10,9 @@ import postgres from 'postgres';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
-import { Command, commandInfo } from './Command.js';
-import { /* kRedis, */ kSQL } from './tokens.js';
-import { transformInteraction } from './InteractionOptions.js';
+import { Command, commandInfo } from './Command';
+import { /* kRedis, */ kSQL } from './tokens';
+import { transformInteraction } from './interactions/InteractionOptions';
 
 const sql = postgres();
 /* const redis = new Redis('redis://redis:6379'); */
@@ -60,7 +60,7 @@ const interactionCreate = async () => {
 	}
 };
 
-void (async () => {
+try {
 	await i18next.use(Backend).init({
 		backend: {
 			loadPath: fileURLToPath(new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)),
@@ -83,4 +83,6 @@ void (async () => {
 	void interactionCreate();
 
 	await client.login();
-})();
+} catch (e) {
+	console.error(e);
+}
