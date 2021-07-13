@@ -13,6 +13,7 @@ import Backend from 'i18next-fs-backend';
 import { Command, commandInfo } from './Command';
 import { /* kRedis, */ kSQL } from './tokens';
 import { transformInteraction } from './interactions/InteractionOptions';
+import { logger } from './logger';
 
 const sql = postgres();
 /* const redis = new Redis('redis://redis:6379'); */
@@ -51,8 +52,8 @@ const interactionCreate = async () => {
 				const args = [...interaction.options.values()];
 				await command.execute(interaction, transformInteraction(args), 'en');
 			} catch (error) {
-				console.error(error);
-				await interaction.editReply({ content: error.message });
+				logger.error(error);
+				await interaction.editReply({ content: error.message, components: [] });
 			}
 		}
 
@@ -84,5 +85,5 @@ try {
 
 	await client.login();
 } catch (e) {
-	console.error(e);
+	logger.error(e);
 }

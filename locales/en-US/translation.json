@@ -1,0 +1,221 @@
+{
+	"common": {
+		"errors": {
+			"no_mod_role": "This command can only be used by moderators.",
+			"target_not_found": "The given member is not in this guild.",
+			"timed_out": "Action timer ran out."
+		}
+	},
+	"command": {
+		"common": {
+			"errors": {
+				"generic": "Something went wrong.",
+				"no_enabled_module": "The {{ module }} is not enabled on this guild.",
+				"target_not_found": "The given member is not in this guild.",
+				"duration_format": "Wrong duration format."
+			}
+		},
+		"config": {
+			"common": {
+				"errors": {
+					"no_settings": "No guild settings have been initialized yet."
+				}
+			}
+		},
+		"mod": {
+			"common": {
+				"errors": {
+					"max_length_reason": "Max length of 1900 for reason exceeded.",
+					"not_a_text_channel": "{{- channel}} is not a text channel."
+				}
+			},
+			"warn": {
+				"errors": {
+					"failure": "Unable to warn {{- user}}"
+				},
+				"pending": "Do you really want to warn {{- user}}?",
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Warn"
+				},
+				"cancel": "Cancelled warn on {{- user}}",
+				"success": "Successfully warned {{- user}}"
+			},
+			"kick": {
+				"errors": {
+					"missing_permissions": "Missing permissions to kick {{- user}}",
+					"failure": "Unable to kick {{- user}}"
+				},
+				"pending": "Do you really want to kick {{- user}}?",
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Kick"
+				},
+				"cancel": "Cancelled kick on {{- user}}",
+				"success": "Successfully kicked {{- user}}"
+			},
+			"softban": {
+				"errors": {
+					"missing_permissions": "Missing permissions to softban {{- user}}",
+					"failure": "Unable to softban {{- user}}"
+				},
+				"pending": "Do you really want to softban {{- user}}?",
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Softban"
+				},
+				"cancel": "Cancelled softban on {{- user}}",
+				"success": "Successfully softbanned {{- user}}"
+			},
+			"ban": {
+				"errors": {
+					"missing_permissions": "Missing permissions to ban {{- user}}",
+					"failure": "Unable to ban {{- user}}",
+					"already_banned": "{{- user}} is already banned."
+				},
+				"pending": "Do you really want to ban {{- user}}?",
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Ban"
+				},
+				"cancel": "Cancelled ban on {{- user}}",
+				"success": "Successfully banned {{- user}}"
+			},
+			"unban": {
+				"errors": {
+					"missing_permissions": "Missing permissions to unban {{- user}}",
+					"failure": "Unable to unban {{- user}}",
+					"no_ban": "{{- user}} is not banned."
+				},
+				"pending": "Do you really want to unban {{- user}}?",
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Unban"
+				},
+				"cancel": "Cancelled unban on {{- user}}",
+				"success": "Successfully unbanned {{- user}}"
+			},
+			"anti_raid_nuke": {
+				"errors": {
+					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
+					"parameters": "Parameters:\n• Current time: {{- now}}\n• Join date after: {{- join}}\n• Account creation after: {{- age}}",
+					"failure": "Unable to lauch Anti-Raid-Nuke."
+				},
+				"pending": "Anti-Raid-Nuke is projected to hit {{- members}} guild members.",
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Launch"
+				},
+				"cancel": "Cancelled Anti-Raid-Nuke.",
+				"success": "Anti-Raid-Nuke hit {{- members}} guild members. Report attached."
+			},
+			"restrict": {
+				"mute": {
+					"errors": {
+						"no_role": "No role for mutes has been configured.",
+						"missing_permissions": "Missing permissions to mute this member.",
+						"failure": "Unable to mute {{- member}}",
+						"already_restricted": "This member is already muted."
+					},
+					"success": "Successfully muted {{- member}}"
+				},
+				"embed": {
+					"errors": {
+						"no_role": "No role for embed restrictions has been configured.",
+						"missing_permissions": "Missing permissions to embed restrict this member.",
+						"failure": "Unable to embed restrict {{- member}}",
+						"already_restricted": "This member is already embed restricted."
+					},
+					"success": "Successfully embed restricted {{- member}}"
+				},
+				"react": {
+					"errors": {
+						"no_role": "No role for reaction restrictions has been configured.",
+						"missing_permissions": "Missing permissions to react restrict this member.",
+						"failure": "Unable to react restrict {{- member}}",
+						"already_restricted": "This member is already reaction restricted."
+					},
+					"success": "Successfully react restricted {{- member}}"
+				},
+				"emoji": {
+					"errors": {
+						"no_role": "No role for emoji restrictions has been configured.",
+						"missing_permissions": "Missing permissions to emoji restrict this member.",
+						"failure": "Unable to emoji restrict {{- member}}",
+						"already_restricted": "This member is already emoji restricted."
+					},
+					"success": "Successfully emoji restricted {{- member}}"
+				},
+				"tag": {
+					"errors": {
+						"no_role": "No role for tag restrictions has been configured.",
+						"missing_permissions": "Missing permissions to tag restrict this member.",
+						"failure": "Unable to tag restrict {{- member}}",
+						"already_restricted": "This member is already tag restricted."
+					},
+					"success": "Successfully tag restricted {{- member}}"
+				},
+				"unrole": {
+					"errors": {
+						"missing_permissions": "Missing permissions to unrole this case.",
+						"failure": "Unable to unrole case #{{case}}",
+						"already_processed": "This case has no running restrictions."
+					},
+					"success": "Successfully unroled case #{{case}}"
+				}
+			},
+			"lockdown": {
+				"lock": {
+					"errors": {
+						"missing_permissions": "Missing permissions to lock this channel.",
+						"failure": "Unable to lock {{- channel}}"
+					},
+					"pending": "Do you really want to lock {{- channel}}?",
+					"buttons": {
+						"cancel": "Cancel",
+						"execute": "Lock"
+					},
+					"message": "This channel has been locked due to moderation, it will be unlocked in **{{- duration}}**.",
+					"cancel": "Cancelled locking of {{- channel}}",
+					"success": "Successfully locked {{- channel}}"
+				},
+				"lift": {
+					"errors": {
+						"missing_permissions": "Missing permissions to lift the lock on this channel.",
+						"failure": "Unable to lift the lock on {{- channel}}"
+					},
+					"pending": "Do you really want to lift the lock on {{- channel}}?",
+					"buttons": {
+						"cancel": "Cancel",
+						"execute": "Unlock"
+					},
+					"cancel": "Cancelled lifting lock of {{- channel}}",
+					"success": "Successfully lifted lock on {{- channel}}"
+				}
+			},
+			"reason": {
+				"errors": {
+					"failure": "Unable to to set reason for case #{{case}}"
+				},
+				"success": "Successfully set reason for case #{{case}}"
+			},
+			"reference": {
+				"errors": {
+					"failure": "Unable to to set reference for case #{{case}} to #{{ref}}"
+				},
+				"success": "Successfully set reference for case #{{case}} to #{{ref}}"
+			},
+			"duration": {
+				"errors": {
+					"failure": "Unable to to set duration for case #{{case}}"
+				},
+				"success": "Successfully set duration for case #{{case}}"
+			}
+		},
+		"utility": {
+			"ping": {
+				"success": "ok"
+			}
+		}
+	}
+}

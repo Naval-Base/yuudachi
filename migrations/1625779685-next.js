@@ -132,7 +132,6 @@ export async function up(sql) {
 			guild_log_channel_id text,
 			member_log_channel_id text,
 			mute_role_id text,
-			tag_role_id text,
 			embed_role_id text,
 			emoji_role_id text,
 			reaction_role_id text,
@@ -145,7 +144,6 @@ export async function up(sql) {
 		comment on column guild_settings.member_log_channel_id IS 'The id of the guilds member log channel';
 		comment on column guild_settings.guild_log_channel_id IS 'The id of the guilds log channel';
 		comment on column guild_settings.mute_role_id IS 'The id of the guilds mute role';
-		comment on column guild_settings.tag_role_id IS 'The id of the guilds tag restriction role';
 		comment on column guild_settings.embed_role_id IS 'The id of the guilds embed restriction role';
 		comment on column guild_settings.emoji_role_id IS 'The id of the guilds emoji restriction role';
 		comment on column guild_settings.reaction_role_id IS 'The id of the guilds reaction restriction role';
@@ -163,7 +161,6 @@ export async function up(sql) {
 				(settings ->> 'GUILD_LOG')::text as guild_log_channel_id,
 				(settings -> 'MEMBER_LOG' ->> 'ID')::text as member_log_channel_id,
 				(settings ->> 'MUTE_ROLE')::text as mute_role_id,
-				(settings -> 'RESTRICT_ROLES' ->> 'TAG')::text as tag_role_id,
 				(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::text as embed_role_id,
 				(settings -> 'RESTRICT_ROLES' ->> 'EMOJI')::text as emoji_role_id,
 				(settings -> 'RESTRICT_ROLES' ->> 'REACTION')::text as reaction_role_id

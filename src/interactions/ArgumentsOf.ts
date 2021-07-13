@@ -48,7 +48,7 @@ type TypeIdToType<T, O, C> = T extends 1
 	: T extends 5
 	? boolean
 	: T extends 6
-	? { user: User; member: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
+	? { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
 	: T extends 7
 	? GuildChannel /* | (APIPartialChannel & { permissions: Permissions }) */
 	: T extends 8
