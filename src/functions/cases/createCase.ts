@@ -1,10 +1,10 @@
 import type { ButtonInteraction, CommandInteraction, GuildMember, SelectMenuInteraction, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { logger } from '../logger';
 
-import { kSQL } from '../tokens';
+import { kSQL } from '../../tokens';
 import { RawCase, transformCase } from './transformCase';
+import { logger } from '../../logger';
 
 export enum CaseAction {
 	Role,

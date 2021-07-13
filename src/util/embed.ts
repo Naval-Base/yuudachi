@@ -1,4 +1,5 @@
 import type { APIEmbed, APIEmbedField } from 'discord-api-types/v8';
+
 import {
 	EMBED_AUTHOR_NAME_LIMIT,
 	EMBED_DESCRIPTION_LIMIT,

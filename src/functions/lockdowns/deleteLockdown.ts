@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
-import { kSQL } from '../tokens';
+import { kSQL } from '../../tokens';
 
 export async function deleteLockdown(channel: GuildChannel, locale: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);

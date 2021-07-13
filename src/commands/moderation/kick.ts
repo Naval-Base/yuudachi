@@ -5,11 +5,11 @@ import { nanoid } from 'nanoid';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { KickCommand } from '../../interactions';
-import { checkModRole } from '../../util/checkModRole';
-import { upsertCaseLog } from '../../util/upsertCaseLog';
+import { checkModRole } from '../../functions/permissions/checkModRole';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { generateHistory } from '../../util/generateHistory';
-import { createCase, CaseAction } from '../../util/createCase';
-import { generateCasePayload } from '../../util/generateCasePayload';
+import { createCase, CaseAction } from '../../functions/cases/createCase';
+import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { logger } from '../../logger';
 
 export default class implements Command {

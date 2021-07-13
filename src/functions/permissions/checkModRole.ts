@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 
-import { kSQL } from '../tokens';
+import { kSQL } from '../../tokens';
 
 export async function checkModRole(
 	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,

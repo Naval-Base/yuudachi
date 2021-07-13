@@ -2,10 +2,10 @@ import type { ButtonInteraction, CommandInteraction, SelectMenuInteraction } fro
 import { container } from 'tsyringe';
 import type { Sql } from 'postgres';
 
-import { kSQL } from '../tokens';
+import { kSQL } from '../../tokens';
 import type { RawCase } from './transformCase';
 import { CaseAction, createCase } from './createCase';
-import { generateCasePayload } from './generateCasePayload';
+import { generateCasePayload } from '../logs/generateCasePayload';
 
 export async function deleteCase(
 	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,

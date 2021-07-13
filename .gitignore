@@ -9,6 +9,7 @@ tsconfig.tsbuildinfo
 
 # Log files
 logs
+!src/functions/logs
 *.log
 npm-debug.log*
 

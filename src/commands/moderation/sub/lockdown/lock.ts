@@ -11,7 +11,7 @@ import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
 
-import { createLockdown } from '../../../../util/createLockdown';
+import { createLockdown } from '../../../../functions/lockdowns/createLockdown';
 import { logger } from '../../../../logger';
 
 export async function lock(

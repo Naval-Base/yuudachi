@@ -113,54 +113,75 @@
 				"mute": {
 					"errors": {
 						"no_role": "No role for mutes has been configured.",
-						"missing_permissions": "Missing permissions to mute this member.",
-						"failure": "Unable to mute {{- member}}",
-						"already_restricted": "This member is already muted."
+						"missing_permissions": "Missing permissions to mute {{- user}}",
+						"failure": "Unable to mute {{- user}}",
+						"already_restricted": "{{- user}} is already muted."
 					},
-					"success": "Successfully muted {{- member}}"
+					"pending": "Do you really want to mute {{- user}}?",
+					"buttons": {
+						"cancel": "Cancel",
+						"execute": "Mute"
+					},
+					"cancel": "Cancelled mute on {{- user}}",
+					"success": "Successfully muted {{- user}}"
 				},
 				"embed": {
 					"errors": {
 						"no_role": "No role for embed restrictions has been configured.",
-						"missing_permissions": "Missing permissions to embed restrict this member.",
-						"failure": "Unable to embed restrict {{- member}}",
-						"already_restricted": "This member is already embed restricted."
+						"missing_permissions": "Missing permissions to embed restrict {{- user}}",
+						"failure": "Unable to embed restrict {{- user}}",
+						"already_restricted": "{{- user}} is already embed restricted."
 					},
-					"success": "Successfully embed restricted {{- member}}"
+					"pending": "Do you really want to embed restrict {{- user}}?",
+					"buttons": {
+						"cancel": "Cancel",
+						"execute": "Restrict"
+					},
+					"cancel": "Cancelled embed restriction on {{- user}}",
+					"success": "Successfully embed restricted {{- user}}"
 				},
 				"react": {
 					"errors": {
 						"no_role": "No role for reaction restrictions has been configured.",
-						"missing_permissions": "Missing permissions to react restrict this member.",
+						"missing_permissions": "Missing permissions to react restrict {{- user}}",
 						"failure": "Unable to react restrict {{- member}}",
-						"already_restricted": "This member is already reaction restricted."
+						"already_restricted": "{{- user}} is already reaction restricted."
 					},
-					"success": "Successfully react restricted {{- member}}"
+					"pending": "Do you really want to react restrict {{- user}}?",
+					"buttons": {
+						"cancel": "Cancel",
+						"execute": "Restrict"
+					},
+					"cancel": "Cancelled react restriction on {{- user}}",
+					"success": "Successfully react restricted {{- user}}"
 				},
 				"emoji": {
 					"errors": {
 						"no_role": "No role for emoji restrictions has been configured.",
-						"missing_permissions": "Missing permissions to emoji restrict this member.",
-						"failure": "Unable to emoji restrict {{- member}}",
-						"already_restricted": "This member is already emoji restricted."
+						"missing_permissions": "Missing permissions to emoji restrict {{- user}}",
+						"failure": "Unable to emoji restrict {{- user}}",
+						"already_restricted": "{{- user}} is already emoji restricted."
 					},
-					"success": "Successfully emoji restricted {{- member}}"
-				},
-				"tag": {
-					"errors": {
-						"no_role": "No role for tag restrictions has been configured.",
-						"missing_permissions": "Missing permissions to tag restrict this member.",
-						"failure": "Unable to tag restrict {{- member}}",
-						"already_restricted": "This member is already tag restricted."
+					"pending": "Do you really want to emoji restrict {{- user}}?",
+					"buttons": {
+						"cancel": "Cancel",
+						"execute": "Restrict"
 					},
-					"success": "Successfully tag restricted {{- member}}"
+					"cancel": "Cancelled emoji restriction on {{- user}}",
+					"success": "Successfully emoji restricted {{- user}}"
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "Missing permissions to unrole this case.",
+						"missing_permissions": "Missing permissions to unrole #{{case}}",
 						"failure": "Unable to unrole case #{{case}}",
-						"already_processed": "This case has no running restrictions."
+						"already_processed": "Case #{{case}} has no running restrictions."
 					},
+					"pending": "Do you really want to unrole case #{{case}}?",
+					"buttons": {
+						"cancel": "Cancel",
+						"execute": "Unrole"
+					},
+					"cancel": "Cancelled unrole on case #{{case}}",
 					"success": "Successfully unroled case #{{case}}"
 				}
 			},

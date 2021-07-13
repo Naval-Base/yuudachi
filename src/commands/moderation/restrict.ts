@@ -3,8 +3,12 @@ import type { CommandInteraction } from 'discord.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { RestrictCommand } from '../../interactions';
-import { checkModRole } from '../../util/checkModRole';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 
+import { mute } from './sub/restrict/mute';
+import { embed } from './sub/restrict/embed';
+import { react } from './sub/restrict/react';
+import { emoji } from './sub/restrict/emoji';
 import { unrole } from './sub/restrict/unrole';
 
 export default class implements Command {
@@ -17,25 +21,21 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		switch (Object.keys(args)[0]) {
-			/* case 'mute': {
-				return mute(message, args.mute, locale);
+			case 'mute': {
+				return mute(interaction, args.mute, locale);
 			}
 
 			case 'embed': {
-				return embed(message, args.embed, locale);
+				return embed(interaction, args.embed, locale);
 			}
 
 			case 'react': {
-				return react(message, args.react, locale);
+				return react(interaction, args.react, locale);
 			}
 
 			case 'emoji': {
-				return emoji(message, args.emoji, locale);
+				return emoji(interaction, args.emoji, locale);
 			}
-
-			case 'tag': {
-				return tag(message, args.tag, locale);
-			} */
 
 			case 'unrole': {
 				return unrole(interaction, args.unrole, locale);

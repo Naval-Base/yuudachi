@@ -5,9 +5,9 @@ import { ms } from '@naval-base/ms';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { DurationCommand } from '../../interactions';
-import { checkModRole } from '../../util/checkModRole';
-import { updateCase } from '../../util/updateCase';
-import { upsertCaseLog } from '../../util/upsertCaseLog';
+import { checkModRole } from '../../functions/permissions/checkModRole';
+import { updateCase } from '../../functions/cases/updateCase';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { logger } from '../../logger';
 
 export default class implements Command {

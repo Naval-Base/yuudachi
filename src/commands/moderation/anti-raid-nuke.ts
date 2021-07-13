@@ -14,10 +14,10 @@ import dayjs from 'dayjs';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { AntiRaidNukeCommand } from '../../interactions';
-import { CaseAction, createCase } from '../../util/createCase';
-import { upsertCaseLog } from '../../util/upsertCaseLog';
-import { generateCasePayload } from '../../util/generateCasePayload';
-import { checkModRole } from '../../util/checkModRole';
+import { CaseAction, createCase } from '../../functions/cases/createCase';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { generateCasePayload } from '../../functions/logs/generateCasePayload';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 import { DATE_FORMAT_LOGFILE } from '../../Constants';
 import { logger } from '../../logger';
 

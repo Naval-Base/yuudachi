@@ -4,8 +4,8 @@ import type { ButtonInteraction, CommandInteraction, SelectMenuInteraction, Snow
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
-import { kSQL } from '../tokens';
-import { Case, CaseAction } from './createCase';
+import { kSQL } from '../../tokens';
+import { Case, CaseAction } from '../cases/createCase';
 
 export async function generateCaseLog(
 	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,

@@ -3,10 +3,10 @@ import type { ButtonInteraction, CommandInteraction, SelectMenuInteraction, Snow
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
-import { kSQL } from '../tokens';
-import type { Case } from './createCase';
+import { kSQL } from '../../tokens';
+import type { Case } from '../cases/createCase';
 import { generateCaseLog } from './generateCaseLog';
-import { getGuildSetting, SettingsKeys } from './getGuildSetting';
+import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting';
 
 export async function upsertCaseLog(
 	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,

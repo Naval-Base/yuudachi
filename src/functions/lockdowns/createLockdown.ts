@@ -3,7 +3,7 @@ import type { GuildChannel, PermissionOverwrites, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
-import { kSQL } from '../tokens';
+import { kSQL } from '../../tokens';
 import { RawLockdown, transformLockdown } from './transformLockdown';
 
 export interface Lockdown {

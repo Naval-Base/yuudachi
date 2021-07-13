@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { LockdownCommand } from '../../interactions';
-import { checkModRole } from '../../util/checkModRole';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 
 import { lock } from './sub/lockdown/lock';
 import { lift } from './sub/lockdown/lift';

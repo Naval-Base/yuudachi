@@ -2,7 +2,7 @@ import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton,
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 
-import { deleteLockdown } from '../../../../util/deleteLockdown';
+import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
 import { logger } from '../../../../logger';
 
 export async function lift(interaction: CommandInteraction, channel: TextChannel, locale: string): Promise<void> {

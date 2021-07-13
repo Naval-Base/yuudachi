@@ -1,7 +1,7 @@
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
-import { kSQL } from '../tokens';
+import { kSQL } from '../../tokens';
 import type { Case } from './createCase';
 import { RawCase, transformCase } from './transformCase';
 

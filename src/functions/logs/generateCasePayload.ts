@@ -1,6 +1,6 @@
 import type { ButtonInteraction, CommandInteraction, GuildMember, SelectMenuInteraction, User } from 'discord.js';
 
-import type { CaseAction } from './createCase';
+import type { CaseAction } from '../cases/createCase';
 
 interface CasePayloadArgs {
 	reason?: string;

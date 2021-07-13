@@ -7,11 +7,11 @@ import type { Sql } from 'postgres';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { UnbanCommand } from '../../interactions';
-import { CaseAction, createCase } from '../../util/createCase';
+import { CaseAction, createCase } from '../../functions/cases/createCase';
 import { generateHistory } from '../../util/generateHistory';
-import { upsertCaseLog } from '../../util/upsertCaseLog';
-import { generateCasePayload } from '../../util/generateCasePayload';
-import { checkModRole } from '../../util/checkModRole';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { generateCasePayload } from '../../functions/logs/generateCasePayload';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 import { kSQL } from '../../tokens';
 import { logger } from '../../logger';
 

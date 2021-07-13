@@ -28,7 +28,7 @@
 		"common-tags": "^1.8.0",
 		"dayjs": "^1.10.6",
 		"diff": "^5.0.0",
-		"discord.js": "^13.0.0-dev.9cd5e7e.1625745789",
+		"discord.js": "^13.0.0-dev.1dcad05.1626178061",
 		"dotenv": "^10.0.0",
 		"env-cmd": "^10.1.0",
 		"i18next": "^20.3.2",
