@@ -12,12 +12,24 @@ import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
 
 import { createLockdown } from '../../../../functions/lockdowns/createLockdown';
+import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 
 export async function lock(
 	interaction: CommandInteraction,
 	args: { channel: TextChannel; duration: string; reason?: string },
 	locale: string,
 ): Promise<void> {
+	const lockdown = await getLockdown(interaction.guildId!, args.channel.id);
+	if (lockdown) {
+		throw new Error(
+			i18next.t('command.mod.lockdown.lock.already_locked', {
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
+				lng: locale,
+			}),
+		);
+	}
+
 	const parsedDuration = ms(args.duration);
 	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));

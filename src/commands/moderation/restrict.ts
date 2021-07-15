@@ -1,9 +1,12 @@
 import type { CommandInteraction } from 'discord.js';
+import i18next from 'i18next';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { RestrictCommand } from '../../interactions';
 import { checkModRole } from '../../functions/permissions/checkModRole';
+import { checkModLogChannel } from '../../functions/settings/checkModLogChannel';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 
 import { mute } from './sub/restrict/mute';
 import { embed } from './sub/restrict/embed';
@@ -20,25 +23,33 @@ export default class implements Command {
 		await interaction.defer({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
+		const logChannel = await checkModLogChannel(
+			interaction.guild!,
+			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+		);
+		if (!logChannel) {
+			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+		}
+
 		switch (Object.keys(args)[0]) {
 			case 'mute': {
-				return mute(interaction, args.mute, locale);
+				return mute(interaction, args.mute, logChannel, locale);
 			}
 
 			case 'embed': {
-				return embed(interaction, args.embed, locale);
+				return embed(interaction, args.embed, logChannel, locale);
 			}
 
 			case 'react': {
-				return react(interaction, args.react, locale);
+				return react(interaction, args.react, logChannel, locale);
 			}
 
 			case 'emoji': {
-				return emoji(interaction, args.emoji, locale);
+				return emoji(interaction, args.emoji, logChannel, locale);
 			}
 
 			case 'unrole': {
-				return unrole(interaction, args.unrole, locale);
+				return unrole(interaction, args.unrole, logChannel, locale);
 			}
 		}
 	}

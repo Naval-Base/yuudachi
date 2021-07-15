@@ -1,11 +1,10 @@
 import type { GuildChannel, PermissionOverwrites } from 'discord.js';
-import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
 import { kSQL } from '../../tokens';
 
-export async function deleteLockdown(channel: GuildChannel, locale: string) {
+export async function deleteLockdown(channel: GuildChannel) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const [channelOverwrites] = await sql<[{ overwrites: PermissionOverwrites[] }?]>`
@@ -14,13 +13,7 @@ export async function deleteLockdown(channel: GuildChannel, locale: string) {
 		where channel_id = ${channel.id}`;
 
 	if (!channelOverwrites) {
-		throw new Error(
-			i18next.t('command.mod.lockdown.lift.errors.failure', {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
-				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
-				lng: locale,
-			}),
-		);
+		return null;
 	}
 
 	await channel.permissionOverwrites.set(channelOverwrites.overwrites);

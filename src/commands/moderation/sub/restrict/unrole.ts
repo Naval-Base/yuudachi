@@ -1,4 +1,11 @@
-import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import {
+	ButtonInteraction,
+	CommandInteraction,
+	MessageActionRow,
+	MessageButton,
+	Snowflake,
+	TextChannel,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -9,20 +16,13 @@ import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
 import { kSQL } from '../../../../tokens';
 import { deleteCase } from '../../../../functions/cases/deleteCase';
 import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
-import { checkModLogChannel } from '../../../../functions/settings/checkModLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../../../functions/settings/getGuildSetting';
 
 export async function unrole(
 	interaction: CommandInteraction,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
+	logChannel: TextChannel,
 	locale: string,
 ): Promise<void> {
-	const logChannel = await checkModLogChannel(
-		interaction.guild!,
-		await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
-		locale,
-	);
-
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const [action] = await sql<[{ action_processed: boolean; target_id: Snowflake; role_id: Snowflake | null }?]>`

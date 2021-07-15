@@ -1,4 +1,11 @@
-import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import {
+	ButtonInteraction,
+	CommandInteraction,
+	MessageActionRow,
+	MessageButton,
+	Snowflake,
+	TextChannel,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -12,20 +19,13 @@ import { CaseAction, createCase } from '../../../../functions/cases/createCase';
 import { generateCasePayload } from '../../../../functions/logs/generateCasePayload';
 import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import { generateHistory } from '../../../../util/generateHistory';
-import { checkModLogChannel } from '../../../../functions/settings/checkModLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../../../functions/settings/getGuildSetting';
 
 export async function react(
 	interaction: CommandInteraction,
 	args: ArgumentsOf<typeof RestrictCommand>['react'],
+	logChannel: TextChannel,
 	locale: string,
 ): Promise<void> {
-	const logChannel = await checkModLogChannel(
-		interaction.guild!,
-		await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
-		locale,
-	);
-
 	if (args.reason && args.reason.length >= 1900) {
 		throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 	}

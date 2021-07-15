@@ -34,8 +34,10 @@ export default class implements Command {
 		const logChannel = await checkModLogChannel(
 			interaction.guild!,
 			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
-			locale,
 		);
+		if (!logChannel) {
+			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+		}
 
 		const parsedJoin = ms(args.join);
 		if (parsedJoin < 6000 || parsedJoin > 120 * 60 * 1000 || isNaN(parsedJoin)) {

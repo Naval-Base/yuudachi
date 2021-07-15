@@ -25,8 +25,10 @@ export default class implements Command {
 		const logChannel = await checkModLogChannel(
 			interaction.guild!,
 			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
-			locale,
 		);
+		if (!logChannel) {
+			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+		}
 
 		if (args.reason && args.reason.length >= 1900) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));

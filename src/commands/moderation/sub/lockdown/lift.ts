@@ -3,8 +3,20 @@ import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 
 import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
+import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 
 export async function lift(interaction: CommandInteraction, channel: TextChannel, locale: string): Promise<void> {
+	const lockdown = await getLockdown(interaction.guildId!, channel.id);
+	if (!lockdown) {
+		throw new Error(
+			i18next.t('command.mod.lockdown.lock.not_locked', {
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
+				lng: locale,
+			}),
+		);
+	}
+
 	const unlockKey = nanoid();
 	const cancelKey = nanoid();
 
@@ -53,7 +65,16 @@ export async function lift(interaction: CommandInteraction, channel: TextChannel
 	} else if (collectedInteraction?.customId === unlockKey) {
 		await collectedInteraction.deferUpdate();
 
-		await deleteLockdown(channel, locale);
+		const lockdown = await deleteLockdown(channel);
+		if (!lockdown) {
+			throw new Error(
+				i18next.t('command.mod.lockdown.lift.errors.failure', {
+					// eslint-disable-next-line @typescript-eslint/no-base-to-string
+					channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
+					lng: locale,
+				}),
+			);
+		}
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.lockdown.lift.success', {

@@ -17,9 +17,9 @@ dayjs.extend(relativeTime);
 
 import type { RawCase } from '../functions/cases/transformCase';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
-
 import { kSQL } from '../tokens';
 import { addFields } from './embed';
+import { generateMessageLink } from './generateMessageLink';
 
 const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban'];
 
@@ -103,16 +103,16 @@ export async function generateHistory(
 		count[action] = (count[action] ?? 0) + 1;
 		return count;
 	}, {});
-	const colors = [8450847, 10870283, 13091073, 14917123, 16152591, 16667430, 16462404, 8319775];
+	const colors = [8319775, 8450847, 10870283, 13091073, 14917123, 16152591, 16667430, 16462404];
 	const values = [
+		footer.unban ?? 0,
 		footer.warn ?? 0,
 		footer.restriction ?? 0,
 		footer.kick ?? 0,
 		footer.softban ?? 0,
 		footer.ban ?? 0,
-		footer.unban ?? 0,
 	];
-	const [warn, restriction, kick, softban, ban, unban] = values;
+	const [unban, warn, restriction, kick, softban, ban] = values;
 	const colorIndex = Math.min(
 		values.reduce((a, b) => a + b),
 		colors.length - 1,
@@ -136,12 +136,11 @@ export async function generateHistory(
 
 	for (const c of cases) {
 		const dateFormatted = Formatters.time(dayjs(c.created_at).unix(), Formatters.TimestampStyles.ShortDate);
-		const caseString = `${dateFormatted} ${Formatters.inlineCode(
-			`${ACTION_KEYS[c.action].toUpperCase()}`,
-		)} ${Formatters.hyperlink(
-			`#${c.case_id}`,
-			`https://discord.com/channels/${c.guild_id}/${logChannelId}/${c.log_message_id!}`,
-		)} ${c.reason?.replace(/`/g, '').replace(/\*/g, '') ?? ''}`;
+		const caseString = `${dateFormatted} ${Formatters.inlineCode(`${ACTION_KEYS[c.action].toUpperCase()}`)} ${
+			c.log_message_id
+				? Formatters.hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, logChannelId, c.log_message_id))
+				: `#${c.case_id}`
+		} ${c.reason?.replace(/`/g, '').replace(/\*/g, '') ?? ''}`;
 		if (summary.join('\n').length + caseString.length + 1 < 4060) {
 			summary.push(caseString);
 			continue;
