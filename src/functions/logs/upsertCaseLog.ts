@@ -1,28 +1,21 @@
 import type { APIEmbed } from 'discord-api-types/v8';
-import type { ButtonInteraction, CommandInteraction, SelectMenuInteraction, Snowflake, TextChannel } from 'discord.js';
+import type { Guild, TextChannel, User } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
 import { kSQL } from '../../tokens';
 import type { Case } from '../cases/createCase';
 import { generateCaseLog } from './generateCaseLog';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting';
 
-export async function upsertCaseLog(
-	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
-	case_: Case,
-) {
+export async function upsertCaseLog(guild: Guild, user: User, logChannel: TextChannel, case_: Case) {
 	const sql = container.resolve<Sql<any>>(kSQL);
-
-	const logChannelId: Snowflake = await getGuildSetting(case_.guildId, SettingsKeys.ModLogChannelId)!;
-	const logChannel = interaction.client.channels.cache.get(logChannelId) as TextChannel;
 
 	const embed: APIEmbed = {
 		author: {
-			name: `${interaction.user.tag} (${interaction.user.id})`,
-			icon_url: interaction.user.displayAvatarURL(),
+			name: `${user.tag} (${user.id})`,
+			icon_url: user.displayAvatarURL(),
 		},
-		description: await generateCaseLog(interaction, case_, logChannelId),
+		description: await generateCaseLog(guild.client, case_, logChannel.id),
 		footer: {
 			text: `Case ${case_.caseId}`,
 		},

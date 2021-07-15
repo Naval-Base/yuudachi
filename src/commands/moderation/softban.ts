@@ -10,7 +10,8 @@ import { generateHistory } from '../../util/generateHistory';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { checkModRole } from '../../functions/permissions/checkModRole';
-import { logger } from '../../logger';
+import { checkModLogChannel } from '../../functions/settings/checkModLogChannel';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 
 export default class implements Command {
 	public async execute(
@@ -20,6 +21,12 @@ export default class implements Command {
 	): Promise<void> {
 		await interaction.defer({ ephemeral: true });
 		await checkModRole(interaction, locale);
+
+		const logChannel = await checkModLogChannel(
+			interaction.guild!,
+			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			locale,
+		);
 
 		if (!args.user.member?.bannable) {
 			throw new Error(
@@ -34,79 +41,74 @@ export default class implements Command {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 
-		try {
-			const softbanKey = nanoid();
-			const cancelKey = nanoid();
+		const softbanKey = nanoid();
+		const cancelKey = nanoid();
 
-			const embed = await generateHistory(interaction, args.user);
+		const embed = await generateHistory(interaction, args.user);
 
-			const softbanButton = new MessageButton()
-				.setCustomId(softbanKey)
-				.setLabel(i18next.t('command.mod.softban.buttons.execute', { lng: locale }))
-				.setStyle('DANGER');
-			const cancelButton = new MessageButton()
-				.setCustomId(cancelKey)
-				.setLabel(i18next.t('command.mod.softban.buttons.cancel', { lng: locale }))
-				.setStyle('SECONDARY');
+		const softbanButton = new MessageButton()
+			.setCustomId(softbanKey)
+			.setLabel(i18next.t('command.mod.softban.buttons.execute', { lng: locale }))
+			.setStyle('DANGER');
+		const cancelButton = new MessageButton()
+			.setCustomId(cancelKey)
+			.setLabel(i18next.t('command.mod.softban.buttons.cancel', { lng: locale }))
+			.setStyle('SECONDARY');
 
-			await interaction.editReply({
-				content: i18next.t('command.mod.softban.pending', {
+		await interaction.editReply({
+			content: i18next.t('command.mod.softban.pending', {
+				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+				lng: locale,
+			}),
+			// @ts-expect-error
+			embeds: [embed],
+			components: [new MessageActionRow().addComponents([cancelButton, softbanButton])],
+		});
+
+		const collectedInteraction = await interaction.channel
+			?.awaitMessageComponent<ButtonInteraction>({
+				filter: (collected) => collected.user.id === interaction.user.id,
+				componentType: 'BUTTON',
+				time: 15000,
+			})
+			.catch(async () => {
+				try {
+					await interaction.editReply({
+						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						components: [],
+					});
+				} catch {}
+			});
+
+		if (collectedInteraction?.customId === cancelKey) {
+			await collectedInteraction.update({
+				content: i18next.t('command.mod.softban.cancel', {
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 					lng: locale,
 				}),
-				// @ts-expect-error
-				embeds: [embed],
-				components: [new MessageActionRow().addComponents([cancelButton, softbanButton])],
+				components: [],
 			});
+		} else if (collectedInteraction?.customId === softbanKey) {
+			await collectedInteraction.deferUpdate();
 
-			const collectedInteraction = await interaction.channel
-				?.awaitMessageComponent<ButtonInteraction>({
-					filter: (collected) => collected.user.id === interaction.user.id,
-					componentType: 'BUTTON',
-					time: 15000,
-				})
-				.catch(async () => {
-					try {
-						await interaction.editReply({
-							content: i18next.t('command.common.errors.timed_out', { lng: locale }),
-							components: [],
-						});
-					} catch {}
-				});
-
-			if (collectedInteraction?.customId === cancelKey) {
-				await collectedInteraction.update({
-					content: i18next.t('command.mod.softban.cancel', {
-						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-						lng: locale,
-					}),
-					components: [],
-				});
-			} else if (collectedInteraction?.customId === softbanKey) {
-				await collectedInteraction.deferUpdate();
-
-				const case_ = await createCase(
-					collectedInteraction,
-					generateCasePayload(collectedInteraction, args, CaseAction.Softban),
-				);
-				void upsertCaseLog(collectedInteraction, case_);
-
-				await collectedInteraction.editReply({
-					content: i18next.t('command.mod.softban.success', {
-						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-						lng: locale,
-					}),
-					components: [],
-				});
-			}
-		} catch (e) {
-			logger.error(e);
-			throw new Error(
-				i18next.t('command.mod.softban.errors.failure', {
-					member: `${args.user.member.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-					lng: locale,
+			const case_ = await createCase(
+				collectedInteraction.guild!,
+				generateCasePayload({
+					guildId: collectedInteraction.guildId!,
+					user: collectedInteraction.user,
+					args,
+					action: CaseAction.Softban,
 				}),
 			);
+			await upsertCaseLog(collectedInteraction.guild!, collectedInteraction.user, logChannel, case_);
+
+			await collectedInteraction.editReply({
+				content: i18next.t('command.mod.softban.success', {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
+				}),
+				components: [],
+			});
 		}
 	}
 }

@@ -16,7 +16,7 @@ export async function checkModRole(
 		from guild_settings
 		where guild_id = ${interaction.guildId}`;
 
-	if (data?.mod_role_id && !(interaction.member as GuildMember).roles.cache.has(data.mod_role_id)) {
+	if (!data?.mod_role_id || !(interaction.member as GuildMember).roles.cache.has(data.mod_role_id)) {
 		throw new Error(i18next.t('common.errors.no_mod_role', { lng: locale }));
 	}
 }

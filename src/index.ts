@@ -6,20 +6,20 @@ import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
 import postgres from 'postgres';
-/* import Redis from 'ioredis'; */
+import Redis from 'ioredis';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
 import { Command, commandInfo } from './Command';
-import { /* kRedis, */ kSQL } from './tokens';
+import { kRedis, kSQL } from './tokens';
 import { transformInteraction } from './interactions/InteractionOptions';
 import { logger } from './logger';
 
 const sql = postgres();
-/* const redis = new Redis('redis://redis:6379'); */
+const redis = new Redis(process.env.REDISHOST);
 
 container.register(kSQL, { useValue: sql });
-/* container.register(kRedis, { useValue: redis }); */
+container.register(kRedis, { useValue: redis });
 
 const client = new Client({
 	intents: [

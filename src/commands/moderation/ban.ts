@@ -1,6 +1,8 @@
 import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import { inject, injectable } from 'tsyringe';
+import type { Redis } from 'ioredis';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
@@ -10,9 +12,14 @@ import { generateHistory } from '../../util/generateHistory';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { checkModRole } from '../../functions/permissions/checkModRole';
-import { logger } from '../../logger';
+import { kRedis } from '../../tokens';
+import { checkModLogChannel } from '../../functions/settings/checkModLogChannel';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 
+@injectable()
 export default class implements Command {
+	public constructor(@inject(kRedis) public redis: Redis) {}
+
 	public async execute(
 		interaction: CommandInteraction,
 		args: ArgumentsOf<typeof BanCommand>,
@@ -20,6 +27,12 @@ export default class implements Command {
 	): Promise<void> {
 		await interaction.defer({ ephemeral: true });
 		await checkModRole(interaction, locale);
+
+		const logChannel = await checkModLogChannel(
+			interaction.guild!,
+			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			locale,
+		);
 
 		await interaction.guild?.bans
 			.fetch(args.user.user.id)
@@ -46,79 +59,75 @@ export default class implements Command {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 
-		try {
-			const banKey = nanoid();
-			const cancelKey = nanoid();
+		const banKey = nanoid();
+		const cancelKey = nanoid();
 
-			const embed = await generateHistory(interaction, args.user);
+		const embed = await generateHistory(interaction, args.user);
 
-			const banButton = new MessageButton()
-				.setCustomId(banKey)
-				.setLabel(i18next.t('command.mod.ban.buttons.execute', { lng: locale }))
-				.setStyle('DANGER');
-			const cancelButton = new MessageButton()
-				.setCustomId(cancelKey)
-				.setLabel(i18next.t('command.mod.ban.buttons.cancel', { lng: locale }))
-				.setStyle('SECONDARY');
+		const banButton = new MessageButton()
+			.setCustomId(banKey)
+			.setLabel(i18next.t('command.mod.ban.buttons.execute', { lng: locale }))
+			.setStyle('DANGER');
+		const cancelButton = new MessageButton()
+			.setCustomId(cancelKey)
+			.setLabel(i18next.t('command.mod.ban.buttons.cancel', { lng: locale }))
+			.setStyle('SECONDARY');
 
-			await interaction.editReply({
-				content: i18next.t('command.mod.ban.pending', {
-					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-					lng: locale,
-				}),
-				// @ts-expect-error
-				embeds: [embed],
-				components: [new MessageActionRow().addComponents([cancelButton, banButton])],
+		await interaction.editReply({
+			content: i18next.t('command.mod.ban.pending', {
+				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+				lng: locale,
+			}),
+			// @ts-expect-error
+			embeds: [embed],
+			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
+		});
+
+		const collectedInteraction = await interaction.channel
+			?.awaitMessageComponent<ButtonInteraction>({
+				filter: (collected) => collected.user.id === interaction.user.id,
+				componentType: 'BUTTON',
+				time: 15000,
+			})
+			.catch(async () => {
+				try {
+					await interaction.editReply({
+						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						components: [],
+					});
+				} catch {}
 			});
 
-			const collectedInteraction = await interaction.channel
-				?.awaitMessageComponent<ButtonInteraction>({
-					filter: (collected) => collected.user.id === interaction.user.id,
-					componentType: 'BUTTON',
-					time: 15000,
-				})
-				.catch(async () => {
-					try {
-						await interaction.editReply({
-							content: i18next.t('command.common.errors.timed_out', { lng: locale }),
-							components: [],
-						});
-					} catch {}
-				});
-
-			if (collectedInteraction?.customId === cancelKey) {
-				await collectedInteraction.update({
-					content: i18next.t('command.mod.ban.cancel', {
-						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-						lng: locale,
-					}),
-					components: [],
-				});
-			} else if (collectedInteraction?.customId === banKey) {
-				await collectedInteraction.deferUpdate();
-
-				const case_ = await createCase(
-					collectedInteraction,
-					generateCasePayload(collectedInteraction, args, CaseAction.Ban),
-				);
-				void upsertCaseLog(collectedInteraction, case_);
-
-				await collectedInteraction.editReply({
-					content: i18next.t('command.mod.ban.success', {
-						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-						lng: locale,
-					}),
-					components: [],
-				});
-			}
-		} catch (e) {
-			logger.error(e);
-			throw new Error(
-				i18next.t('command.mod.ban.errors.failure', {
+		if (collectedInteraction?.customId === cancelKey) {
+			await collectedInteraction.update({
+				content: i18next.t('command.mod.ban.cancel', {
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 					lng: locale,
 				}),
+				components: [],
+			});
+		} else if (collectedInteraction?.customId === banKey) {
+			await collectedInteraction.deferUpdate();
+
+			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:ban`, 30, '');
+			const case_ = await createCase(
+				collectedInteraction.guild!,
+				generateCasePayload({
+					guildId: collectedInteraction.guildId!,
+					user: collectedInteraction.user,
+					args,
+					action: CaseAction.Ban,
+				}),
 			);
+			await upsertCaseLog(collectedInteraction.guild!, collectedInteraction.user, logChannel, case_);
+
+			await collectedInteraction.editReply({
+				content: i18next.t('command.mod.ban.success', {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
+				}),
+				components: [],
+			});
 		}
 	}
 }

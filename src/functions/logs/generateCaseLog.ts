@@ -1,22 +1,18 @@
 import { stripIndents } from 'common-tags';
 import dayjs from 'dayjs';
-import type { ButtonInteraction, CommandInteraction, SelectMenuInteraction, Snowflake } from 'discord.js';
+import type { Client, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
 import { kSQL } from '../../tokens';
 import { Case, CaseAction } from '../cases/createCase';
 
-export async function generateCaseLog(
-	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
-	case_: Case,
-	logChannelId: Snowflake,
-) {
+export async function generateCaseLog(client: Client, case_: Case, logChannelId: Snowflake) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let action = CaseAction[case_.action];
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
-		const role = interaction.client.guilds.cache
+		const role = client.guilds.cache
 			.get(case_.guildId)
 			?.members.cache.get(case_.targetId)
 			?.roles.cache.get(case_.roleId);
@@ -41,7 +37,7 @@ export async function generateCaseLog(
 			where id = ${case_.contextMessageId}`;
 
 		if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
-			msg += `\n**Context:** [Beam me up, Yuu](https://discordapp.com/channels/${case_.guildId}/${
+			msg += `\n**Context:** [Beam me up, Yuu](https://discord.com/channels/${case_.guildId}/${
 				contextMessage!.channel_id
 			}/${case_.contextMessageId})`;
 		}
@@ -61,7 +57,7 @@ export async function generateCaseLog(
 				and case_id = ${case_.referenceId}`;
 
 		if (Reflect.has(reference ?? {}, 'log_message_id')) {
-			msg += `\n**Ref case:** [${case_.referenceId}](https://discordapp.com/channels/${
+			msg += `\n**Ref case:** [${case_.referenceId}](https://discord.com/channels/${
 				case_.guildId
 			}/${logChannelId}/${reference!.log_message_id!})`;
 		}

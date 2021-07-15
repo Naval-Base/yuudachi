@@ -7,7 +7,8 @@ import type { ReferenceCommand } from '../../interactions';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { updateCase } from '../../functions/cases/updateCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { logger } from '../../logger';
+import { checkModLogChannel } from '../../functions/settings/checkModLogChannel';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 
 export default class implements Command {
 	public async execute(
@@ -18,22 +19,21 @@ export default class implements Command {
 		await interaction.defer({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
-		try {
-			const case_ = await updateCase({
-				caseId: args.case,
-				guildId: interaction.guildId!,
-				referenceId: args.reference,
-			});
-			await upsertCaseLog(interaction, case_);
+		const logChannel = await checkModLogChannel(
+			interaction.guild!,
+			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			locale,
+		);
 
-			await interaction.editReply({
-				content: i18next.t('command.mod.reference.success', { case: args.case, ref: args.reference, lng: locale }),
-			});
-		} catch (e) {
-			logger.error(e);
-			throw new Error(
-				i18next.t('command.mod.reference.errors.failure', { case: args.case, ref: args.reference, lng: locale }),
-			);
-		}
+		const case_ = await updateCase({
+			caseId: args.case,
+			guildId: interaction.guildId!,
+			referenceId: args.reference,
+		});
+		await upsertCaseLog(interaction.guild!, interaction.user, logChannel, case_);
+
+		await interaction.editReply({
+			content: i18next.t('command.mod.reference.success', { case: args.case, ref: args.reference, lng: locale }),
+		});
 	}
 }

@@ -1,4 +1,4 @@
-import type { ButtonInteraction, CommandInteraction, GuildMember, SelectMenuInteraction, Snowflake } from 'discord.js';
+import type { Guild, GuildMember, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
@@ -41,8 +41,8 @@ export interface CreateCase {
 	roleId?: Snowflake | null;
 	actionExpiration?: Date | null;
 	reason?: string | null;
-	moderatorId: Snowflake;
-	moderatorTag: string;
+	moderatorId?: Snowflake;
+	moderatorTag?: string;
 	targetId: Snowflake;
 	targetTag: string;
 	deleteMessageDays?: number;
@@ -51,37 +51,43 @@ export interface CreateCase {
 }
 
 export async function createCase(
-	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
-	case_: CreateCase & { target?: GuildMember },
+	guild: Guild,
+	case_: CreateCase & { target?: GuildMember | null },
+	skipAction = false,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const reason = `Mod: ${case_.moderatorTag}${case_.reason ? ` | ${case_.reason}` : ''}`;
+	let reason;
+	if (case_.moderatorTag) {
+		reason = `Mod: ${case_.moderatorTag}${case_.reason ? ` | ${case_.reason}` : ''}`;
+	}
 	try {
-		switch (case_.action) {
-			case CaseAction.Role:
-				await case_.target!.roles.add(case_.roleId!, reason);
-				break;
-			case CaseAction.Unrole:
-				await case_.target!.roles.remove(case_.roleId!, reason);
-				break;
-			case CaseAction.Warn:
-				break;
-			case CaseAction.Kick:
-				await case_.target!.kick(reason);
-				break;
-			case CaseAction.Softban: {
-				await interaction.guild!.bans.create(case_.targetId, { days: case_.deleteMessageDays ?? 1, reason });
-				await interaction.guild!.bans.remove(case_.targetId, reason);
-				break;
+		if (!skipAction) {
+			switch (case_.action) {
+				case CaseAction.Role:
+					await case_.target!.roles.add(case_.roleId!, reason);
+					break;
+				case CaseAction.Unrole:
+					await case_.target!.roles.remove(case_.roleId!, reason);
+					break;
+				case CaseAction.Warn:
+					break;
+				case CaseAction.Kick:
+					await case_.target!.kick(reason);
+					break;
+				case CaseAction.Softban: {
+					await guild.bans.create(case_.targetId, { days: case_.deleteMessageDays ?? 1, reason });
+					await guild.bans.remove(case_.targetId, reason);
+					break;
+				}
+				case CaseAction.Ban: {
+					await guild.bans.create(case_.targetId, { days: case_.deleteMessageDays ?? 0, reason });
+					break;
+				}
+				case CaseAction.Unban:
+					await guild.bans.remove(case_.targetId, reason);
+					break;
 			}
-			case CaseAction.Ban: {
-				await interaction.guild!.bans.create(case_.targetId, { days: case_.deleteMessageDays ?? 0, reason });
-				break;
-			}
-			case CaseAction.Unban:
-				await interaction.guild!.bans.remove(case_.targetId, reason);
-				break;
 		}
 	} catch (e) {
 		logger.error(e);
@@ -105,10 +111,10 @@ export async function createCase(
 		) values (
 			next_case(${case_.guildId}),
 			${case_.guildId},
-			${case_.moderatorId},
-			${`${case_.moderatorTag}`},
+			${case_.moderatorId ?? null},
+			${case_.moderatorTag ?? null},
 			${case_.targetId},
-			${`${case_.targetTag}`},
+			${case_.targetTag},
 			${case_.action},
 			${case_.roleId ?? null},
 			${case_.actionExpiration?.toISOString() ?? null},

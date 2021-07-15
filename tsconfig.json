@@ -31,7 +31,6 @@
 		"preserveConstEnums": false,
 		"removeComments": false,
 		"sourceMap": true,
-		"sourceRoot": "/",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 

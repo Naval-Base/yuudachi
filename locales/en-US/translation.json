@@ -3,7 +3,8 @@
 		"errors": {
 			"no_mod_role": "This command can only be used by moderators.",
 			"target_not_found": "The given member is not in this guild.",
-			"timed_out": "Action timer ran out."
+			"timed_out": "Action timer ran out.",
+			"no_mod_log_channel": "No mod log channel has been initialized yet."
 		}
 	},
 	"command": {
@@ -26,13 +27,11 @@
 			"common": {
 				"errors": {
 					"max_length_reason": "Max length of 1900 for reason exceeded.",
-					"not_a_text_channel": "{{- channel}} is not a text channel."
+					"not_a_text_channel": "{{- channel}} is not a text channel.",
+					"no_case": "Cannot find case #{{case}}"
 				}
 			},
 			"warn": {
-				"errors": {
-					"failure": "Unable to warn {{- user}}"
-				},
 				"pending": "Do you really want to warn {{- user}}?",
 				"buttons": {
 					"cancel": "Cancel",
@@ -43,8 +42,7 @@
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "Missing permissions to kick {{- user}}",
-					"failure": "Unable to kick {{- user}}"
+					"missing_permissions": "Missing permissions to kick {{- user}}"
 				},
 				"pending": "Do you really want to kick {{- user}}?",
 				"buttons": {
@@ -56,8 +54,7 @@
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": "Missing permissions to softban {{- user}}",
-					"failure": "Unable to softban {{- user}}"
+					"missing_permissions": "Missing permissions to softban {{- user}}"
 				},
 				"pending": "Do you really want to softban {{- user}}?",
 				"buttons": {
@@ -70,7 +67,6 @@
 			"ban": {
 				"errors": {
 					"missing_permissions": "Missing permissions to ban {{- user}}",
-					"failure": "Unable to ban {{- user}}",
 					"already_banned": "{{- user}} is already banned."
 				},
 				"pending": "Do you really want to ban {{- user}}?",
@@ -84,7 +80,6 @@
 			"unban": {
 				"errors": {
 					"missing_permissions": "Missing permissions to unban {{- user}}",
-					"failure": "Unable to unban {{- user}}",
 					"no_ban": "{{- user}} is not banned."
 				},
 				"pending": "Do you really want to unban {{- user}}?",
@@ -98,8 +93,7 @@
 			"anti_raid_nuke": {
 				"errors": {
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
-					"parameters": "Parameters:\n• Current time: {{- now}}\n• Join date after: {{- join}}\n• Account creation after: {{- age}}",
-					"failure": "Unable to lauch Anti-Raid-Nuke."
+					"parameters": "Parameters:\n• Current time: {{- now}}\n• Join date after: {{- join}}\n• Account creation after: {{- age}}"
 				},
 				"pending": "Anti-Raid-Nuke is projected to hit {{- members}} guild members.",
 				"buttons": {
@@ -114,7 +108,6 @@
 					"errors": {
 						"no_role": "No role for mutes has been configured.",
 						"missing_permissions": "Missing permissions to mute {{- user}}",
-						"failure": "Unable to mute {{- user}}",
 						"already_restricted": "{{- user}} is already muted."
 					},
 					"pending": "Do you really want to mute {{- user}}?",
@@ -129,7 +122,6 @@
 					"errors": {
 						"no_role": "No role for embed restrictions has been configured.",
 						"missing_permissions": "Missing permissions to embed restrict {{- user}}",
-						"failure": "Unable to embed restrict {{- user}}",
 						"already_restricted": "{{- user}} is already embed restricted."
 					},
 					"pending": "Do you really want to embed restrict {{- user}}?",
@@ -144,7 +136,6 @@
 					"errors": {
 						"no_role": "No role for reaction restrictions has been configured.",
 						"missing_permissions": "Missing permissions to react restrict {{- user}}",
-						"failure": "Unable to react restrict {{- member}}",
 						"already_restricted": "{{- user}} is already reaction restricted."
 					},
 					"pending": "Do you really want to react restrict {{- user}}?",
@@ -159,7 +150,6 @@
 					"errors": {
 						"no_role": "No role for emoji restrictions has been configured.",
 						"missing_permissions": "Missing permissions to emoji restrict {{- user}}",
-						"failure": "Unable to emoji restrict {{- user}}",
 						"already_restricted": "{{- user}} is already emoji restricted."
 					},
 					"pending": "Do you really want to emoji restrict {{- user}}?",
@@ -173,37 +163,34 @@
 				"unrole": {
 					"errors": {
 						"missing_permissions": "Missing permissions to unrole #{{case}}",
-						"failure": "Unable to unrole case #{{case}}",
-						"already_processed": "Case #{{case}} has no running restrictions."
+						"already_processed": "{{- user}} with case #{{case}} has no running restrictions."
 					},
-					"pending": "Do you really want to unrole case #{{case}}?",
+					"pending": "Do you really want to unrole {{- user}} from {{- role}} with case #{{case}}?",
 					"buttons": {
 						"cancel": "Cancel",
 						"execute": "Unrole"
 					},
-					"cancel": "Cancelled unrole on case #{{case}}",
-					"success": "Successfully unroled case #{{case}}"
+					"cancel": "Cancelled unrole on {{- user}} from {{- role}} on case #{{case}}",
+					"success": "Successfully unroled {{- user}} from {{- role}} with case #{{case}}"
 				}
 			},
 			"lockdown": {
 				"lock": {
 					"errors": {
-						"missing_permissions": "Missing permissions to lock this channel.",
-						"failure": "Unable to lock {{- channel}}"
+						"missing_permissions": "Missing permissions to lock this channel."
 					},
 					"pending": "Do you really want to lock {{- channel}}?",
 					"buttons": {
 						"cancel": "Cancel",
 						"execute": "Lock"
 					},
-					"message": "This channel has been locked due to moderation, it will be unlocked in **{{- duration}}**.",
+					"message": "This channel has been locked due to moderation, it will be unlocked in {{- duration}}",
 					"cancel": "Cancelled locking of {{- channel}}",
 					"success": "Successfully locked {{- channel}}"
 				},
 				"lift": {
 					"errors": {
-						"missing_permissions": "Missing permissions to lift the lock on this channel.",
-						"failure": "Unable to lift the lock on {{- channel}}"
+						"missing_permissions": "Missing permissions to lift the lock on this channel."
 					},
 					"pending": "Do you really want to lift the lock on {{- channel}}?",
 					"buttons": {
@@ -215,21 +202,12 @@
 				}
 			},
 			"reason": {
-				"errors": {
-					"failure": "Unable to to set reason for case #{{case}}"
-				},
 				"success": "Successfully set reason for case #{{case}}"
 			},
 			"reference": {
-				"errors": {
-					"failure": "Unable to to set reference for case #{{case}} to #{{ref}}"
-				},
 				"success": "Successfully set reference for case #{{case}} to #{{ref}}"
 			},
 			"duration": {
-				"errors": {
-					"failure": "Unable to to set duration for case #{{case}}"
-				},
 				"success": "Successfully set duration for case #{{case}}"
 			}
 		},

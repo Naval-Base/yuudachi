@@ -2,18 +2,21 @@ import { REST } from '@discordjs/rest';
 import { Routes, Snowflake } from 'discord-api-types/v8';
 
 import {
+	// Moderation
 	AntiRaidNukeCommand,
 	BanCommand,
 	DurationCommand,
 	HistoryCommand,
 	KickCommand,
 	LockdownCommand,
-	PingCommand,
 	ReasonCommand,
 	ReferenceCommand,
+	RestrictCommand,
 	SoftbanCommand,
 	UnbanCommand,
 	WarnCommand,
+	// Utility
+	PingCommand,
 } from './interactions';
 
 const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
@@ -27,6 +30,7 @@ try {
 		),
 		{
 			body: [
+				// Moderation
 				AntiRaidNukeCommand,
 				BanCommand,
 				DurationCommand,
@@ -34,11 +38,13 @@ try {
 				KickCommand,
 				ReasonCommand,
 				ReferenceCommand,
+				RestrictCommand,
 				SoftbanCommand,
 				UnbanCommand,
 				WarnCommand,
-				PingCommand,
 				LockdownCommand,
+				// Utility
+				PingCommand,
 			],
 		},
 	);

@@ -7,7 +7,8 @@ import type { ReasonCommand } from '../../interactions';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { updateCase } from '../../functions/cases/updateCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { logger } from '../../logger';
+import { checkModLogChannel } from '../../functions/settings/checkModLogChannel';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 
 export default class implements Command {
 	public async execute(
@@ -18,24 +19,25 @@ export default class implements Command {
 		await interaction.defer({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
+		const logChannel = await checkModLogChannel(
+			interaction.guild!,
+			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			locale,
+		);
+
 		if (args.reason.length >= 1900) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 
-		try {
-			const case_ = await updateCase({
-				caseId: args.case,
-				guildId: interaction.guildId!,
-				reason: args.reason,
-			});
-			await upsertCaseLog(interaction, case_);
+		const case_ = await updateCase({
+			caseId: args.case,
+			guildId: interaction.guildId!,
+			reason: args.reason,
+		});
+		await upsertCaseLog(interaction.guild!, interaction.user, logChannel, case_);
 
-			await interaction.editReply({
-				content: i18next.t('command.mod.reason.success', { case: args.case, lng: locale }),
-			});
-		} catch (e) {
-			logger.error(e);
-			throw new Error(i18next.t('command.mod.reason.errors.failure', { case: args.case, lng: locale }));
-		}
+		await interaction.editReply({
+			content: i18next.t('command.mod.reason.success', { case: args.case, lng: locale }),
+		});
 	}
 }
