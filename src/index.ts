@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
-import { Client, Constants, Intents, Interaction } from 'discord.js';
-import { on } from 'node:events';
+import { Client, Intents } from 'discord.js';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
@@ -11,15 +10,12 @@ import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
 import { Command, commandInfo } from './Command';
-import { kRedis, kSQL } from './tokens';
-import { transformInteraction } from './interactions/InteractionOptions';
+import { kCommands, kRedis, kSQL } from './tokens';
 import { logger } from './logger';
+import type { Event } from './Event';
 
 const sql = postgres();
 const redis = new Redis(process.env.REDISHOST);
-
-container.register(kSQL, { useValue: sql });
-container.register(kRedis, { useValue: redis });
 
 const client = new Client({
 	intents: [
@@ -33,33 +29,19 @@ const client = new Client({
 
 const commands = new Map<string, Command>();
 
+container.register(Client, { useValue: client });
+container.register(kSQL, { useValue: sql });
+container.register(kRedis, { useValue: redis });
+container.register(kCommands, { useValue: commands });
+
 const commandFiles = readdirp(fileURLToPath(new URL('./commands', import.meta.url)), {
 	fileFilter: '*.js',
 	directoryFilter: '!sub',
 });
 
-const interactionCreate = async () => {
-	for await (const [interaction] of on(client, Constants.Events.INTERACTION_CREATE) as AsyncIterableIterator<
-		[Interaction]
-	>) {
-		if (!interaction.isCommand()) {
-			continue;
-		}
-
-		const command = commands.get(interaction.commandName);
-		if (command) {
-			try {
-				const args = [...interaction.options.values()];
-				await command.execute(interaction, transformInteraction(args), 'en');
-			} catch (error) {
-				logger.error(error);
-				await interaction.editReply({ content: error.message, components: [] });
-			}
-		}
-
-		continue;
-	}
-};
+const eventFiles = readdirp(fileURLToPath(new URL('./events', import.meta.url)), {
+	fileFilter: '*.js',
+});
 
 try {
 	await i18next.use(Backend).init({
@@ -81,7 +63,10 @@ try {
 		commands.set(command.name ?? cmdInfo.name, command);
 	}
 
-	void interactionCreate();
+	for await (const dir of eventFiles) {
+		const event_ = container.resolve<Event>((await import(pathToFileURL(dir.fullPath).href)).default);
+		event_.execute();
+	}
 
 	await client.login();
 } catch (e) {

@@ -28,7 +28,8 @@
 				"errors": {
 					"max_length_reason": "Max length of 1900 for reason exceeded.",
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
-					"no_case": "Cannot find case #{{case}}"
+					"no_case": "Cannot find case #{{case}}",
+					"no_ref_case": "Cannot find reference case #{{case}}"
 				}
 			},
 			"warn": {
@@ -177,7 +178,8 @@
 			"lockdown": {
 				"lock": {
 					"errors": {
-						"missing_permissions": "Missing permissions to lock this channel."
+						"missing_permissions": "Missing permissions to lock {{- channel}}",
+						"already_locked": "{{- channel}} is already locked."
 					},
 					"pending": "Do you really want to lock {{- channel}}?",
 					"buttons": {
@@ -190,7 +192,8 @@
 				},
 				"lift": {
 					"errors": {
-						"missing_permissions": "Missing permissions to lift the lock on this channel."
+						"missing_permissions": "Missing permissions to lift the lock on {{- channel}}",
+						"not_locked": "{{- channel}} is not locked."
 					},
 					"pending": "Do you really want to lift the lock on {{- channel}}?",
 					"buttons": {
@@ -202,13 +205,13 @@
 				}
 			},
 			"reason": {
-				"success": "Successfully set reason for case #{{case}}"
+				"success": "Successfully set reason for case {{- case}}"
 			},
 			"reference": {
-				"success": "Successfully set reference for case #{{case}} to #{{ref}}"
+				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
 			},
 			"duration": {
-				"success": "Successfully set duration for case #{{case}}"
+				"success": "Successfully set duration for case {{- case}}"
 			}
 		},
 		"utility": {
