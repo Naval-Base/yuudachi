@@ -1,6 +1,6 @@
 import type { Guild, Snowflake, TextChannel } from 'discord.js';
 
-export async function checkModLogChannel(guild: Guild, logChannelId: Snowflake) {
+export async function checkLogChannel(guild: Guild, logChannelId: Snowflake) {
 	try {
 		const logChannel = (await guild.client.channels.fetch(logChannelId)) as TextChannel;
 		return logChannel;

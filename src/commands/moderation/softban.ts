@@ -10,7 +10,7 @@ import { generateHistory } from '../../util/generateHistory';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { checkModRole } from '../../functions/permissions/checkModRole';
-import { checkModLogChannel } from '../../functions/settings/checkModLogChannel';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 
 export default class implements Command {
@@ -22,7 +22,7 @@ export default class implements Command {
 		await interaction.defer({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
-		const logChannel = await checkModLogChannel(
+		const logChannel = await checkLogChannel(
 			interaction.guild!,
 			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
 		);

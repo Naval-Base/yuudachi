@@ -1,33 +1,34 @@
 import { Client, Constants, GuildBan, User } from 'discord.js';
-import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
 import { inject, injectable } from 'tsyringe';
 
-import type { Event } from '../Event';
-import { deleteCase } from '../functions/cases/deleteCase';
-import { upsertCaseLog } from '../functions/logs/upsertCaseLog';
-import { checkModLogChannel } from '../functions/settings/checkModLogChannel';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
-import { logger } from '../logger';
-import { kRedis } from '../tokens';
+import type { Event } from '../../Event';
+import { deleteCase } from '../../functions/cases/deleteCase';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import { logger } from '../../logger';
+import { kRedis } from '../../tokens';
 
 @injectable()
 export default class implements Event {
-	public name = Constants.Events.GUILD_BAN_REMOVE;
+	public name = 'Manual unban handling';
+
+	public event = Constants.Events.GUILD_BAN_REMOVE;
 
 	public constructor(public readonly client: Client, @inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(): Promise<void> {
-		for await (const [guildBan] of on(this.client, this.name) as AsyncIterableIterator<[GuildBan]>) {
+		for await (const [guildBan] of on(this.client, this.event) as AsyncIterableIterator<[GuildBan]>) {
 			try {
-				const logChannel = await checkModLogChannel(
+				const logChannel = await checkLogChannel(
 					guildBan.guild,
 					await getGuildSetting(guildBan.guild.id, SettingsKeys.ModLogChannelId),
 				);
 				if (!logChannel) {
-					throw new Error(i18next.t('common.errors.no_mod_log_channel'));
+					continue;
 				}
 
 				const deleted = await this.redis.del(`guild:${guildBan.guild.id}:user:${guildBan.user.id}:unban`);

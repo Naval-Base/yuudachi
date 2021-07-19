@@ -7,6 +7,7 @@ import { kSQL } from '../../tokens';
 export enum SettingsKeys {
 	ModLogChannelId = 'mod_log_channel_id',
 	ModRoleId = 'mod_role_id',
+	MemberLogChannelId = 'member_log_channel_id',
 }
 
 export async function getGuildSetting(guildId: Snowflake, prop: SettingsKeys, table = 'guild_settings') {

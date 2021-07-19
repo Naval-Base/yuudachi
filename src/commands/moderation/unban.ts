@@ -12,7 +12,7 @@ import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { deleteCase } from '../../functions/cases/deleteCase';
 import { kRedis } from '../../tokens';
-import { checkModLogChannel } from '../../functions/settings/checkModLogChannel';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 
 @injectable()
@@ -27,7 +27,7 @@ export default class implements Command {
 		await interaction.defer({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
-		const logChannel = await checkModLogChannel(
+		const logChannel = await checkLogChannel(
 			interaction.guild!,
 			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
 		);

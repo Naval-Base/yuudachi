@@ -10,7 +10,9 @@ import { kCommands } from '../tokens';
 
 @injectable()
 export default class implements Event {
-	public name = Constants.Events.INTERACTION_CREATE;
+	public name = 'Interaction handling';
+
+	public event = Constants.Events.INTERACTION_CREATE;
 
 	public constructor(
 		public readonly client: Client,
@@ -18,7 +20,7 @@ export default class implements Event {
 	) {}
 
 	public async execute(): Promise<void> {
-		for await (const [interaction] of on(this.client, this.name) as AsyncIterableIterator<[Interaction]>) {
+		for await (const [interaction] of on(this.client, this.event) as AsyncIterableIterator<[Interaction]>) {
 			if (!interaction.isCommand()) {
 				continue;
 			}
