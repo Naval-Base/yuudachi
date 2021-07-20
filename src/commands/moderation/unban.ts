@@ -100,7 +100,7 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === unbanKey) {
 			await collectedInteraction.deferUpdate();
 
-			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:unban`, 30, '');
+			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:unban`, 15, '');
 			const case_ = await deleteCase({
 				guild: collectedInteraction.guild!,
 				user: collectedInteraction.user,

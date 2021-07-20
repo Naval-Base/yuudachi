@@ -75,7 +75,7 @@ export function generateMemberLog(member: GuildMember, join = true) {
 		color: join ? colorFromDuration(Date.now() - member.user.createdTimestamp) : 3092790,
 		description: description,
 		footer: {
-			text: i18next.t(join ? 'memberLog.footer' : 'memberLog.footer'),
+			text: i18next.t(join ? 'log.member_log.joined' : 'log.member_log.left'),
 		},
 		timestamp: new Date().toISOString(),
 	});

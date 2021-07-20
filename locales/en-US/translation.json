@@ -219,5 +219,11 @@
 				"success": "ok"
 			}
 		}
+	},
+	"log": {
+		"member_log": {
+			"joined": "User joined",
+			"left": "User left"
+		}
 	}
 }

@@ -34,7 +34,7 @@ export async function createLockdown(lockdown: CreateLockdown & { channel?: Guil
 		{
 			id: lockdown.guildId,
 			allow: 0n,
-			deny: PermissionFlagsBits.SEND_MESSAGES | PermissionFlagsBits.ADD_REACTIONS,
+			deny: PermissionFlagsBits.SendMessages | PermissionFlagsBits.AddReactions,
 			type: 'role',
 		},
 	]);

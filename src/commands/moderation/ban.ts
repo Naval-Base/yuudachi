@@ -111,7 +111,7 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === banKey) {
 			await collectedInteraction.deferUpdate();
 
-			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:ban`, 30, '');
+			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:ban`, 15, '');
 			const case_ = await createCase(
 				collectedInteraction.guild!,
 				generateCasePayload({

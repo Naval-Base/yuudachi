@@ -1,6 +1,8 @@
 import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import type { Redis } from 'ioredis';
+import { inject, injectable } from 'tsyringe';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
@@ -12,8 +14,12 @@ import { createCase, CaseAction } from '../../functions/cases/createCase';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import { kRedis } from '../../tokens';
 
+@injectable()
 export default class implements Command {
+	public constructor(@inject(kRedis) public redis: Redis) {}
+
 	public async execute(
 		interaction: CommandInteraction,
 		args: ArgumentsOf<typeof KickCommand>,
@@ -93,6 +99,7 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === kickKey) {
 			await collectedInteraction.deferUpdate();
 
+			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:kick`, 15, '');
 			const case_ = await createCase(
 				collectedInteraction.guild!,
 				generateCasePayload({
