@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, Webhook } from 'discord.js';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
@@ -10,7 +10,7 @@ import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
 import { Command, commandInfo } from './Command';
-import { kCommands, kRedis, kSQL } from './tokens';
+import { kCommands, kRedis, kSQL, kWebhooks } from './tokens';
 import { logger } from './logger';
 import type { Event } from './Event';
 
@@ -28,11 +28,13 @@ const client = new Client({
 });
 
 const commands = new Map<string, Command>();
+const webhooks = new Map<string, Webhook>();
 
 container.register(Client, { useValue: client });
 container.register(kSQL, { useValue: sql });
 container.register(kRedis, { useValue: redis });
 container.register(kCommands, { useValue: commands });
+container.register(kWebhooks, { useValue: webhooks });
 
 const commandFiles = readdirp(fileURLToPath(new URL('./commands', import.meta.url)), {
 	fileFilter: '*.js',
@@ -65,6 +67,9 @@ try {
 
 	for await (const dir of eventFiles) {
 		const event_ = container.resolve<Event>((await import(pathToFileURL(dir.fullPath).href)).default);
+		if (event_.disabled) {
+			continue;
+		}
 		event_.execute();
 	}
 

@@ -129,8 +129,8 @@ export async function up(sql) {
 			guild_id text,
 			mod_log_channel_id text,
 			mod_role_id text,
-			guild_log_channel_id text,
-			member_log_channel_id text,
+			guild_log_webhook_id text,
+			member_log_webhook_id text,
 			mute_role_id text,
 			embed_role_id text,
 			emoji_role_id text,
@@ -141,8 +141,8 @@ export async function up(sql) {
 		comment on column guild_settings.guild_id IS 'The id of the guild this setting belongs to';
 		comment on column guild_settings.mod_log_channel_id IS 'The id of the guilds mod log channel';
 		comment on column guild_settings.mod_role_id IS 'The id of the guilds mod role';
-		comment on column guild_settings.member_log_channel_id IS 'The id of the guilds member log channel';
-		comment on column guild_settings.guild_log_channel_id IS 'The id of the guilds log channel';
+		comment on column guild_settings.member_log_webhook_id IS 'The id of the guilds member log webhook';
+		comment on column guild_settings.guild_log_webhook_id IS 'The id of the guilds log webhook';
 		comment on column guild_settings.mute_role_id IS 'The id of the guilds mute role';
 		comment on column guild_settings.embed_role_id IS 'The id of the guilds embed restriction role';
 		comment on column guild_settings.emoji_role_id IS 'The id of the guilds emoji restriction role';
@@ -158,8 +158,8 @@ export async function up(sql) {
 			select guild as guild_id,
 				(settings ->> 'MOD_LOG')::text as mod_log_channel_id,
 				(settings ->> 'MOD_ROLE')::text as mod_role_id,
-				(settings ->> 'GUILD_LOG')::text as guild_log_channel_id,
-				(settings -> 'MEMBER_LOG' ->> 'ID')::text as member_log_channel_id,
+				(settings ->> 'GUILD_LOG')::text as guild_log_webhook_id,
+				(settings -> 'MEMBER_LOG' ->> 'ID')::text as member_log_webhook_id,
 				(settings ->> 'MUTE_ROLE')::text as mute_role_id,
 				(settings -> 'RESTRICT_ROLES' ->> 'EMBED')::text as embed_role_id,
 				(settings -> 'RESTRICT_ROLES' ->> 'EMOJI')::text as emoji_role_id,

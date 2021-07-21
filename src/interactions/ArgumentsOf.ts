@@ -1,4 +1,4 @@
-/* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions } from 'discord-api-types/v8'; */
+/* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions } from 'discord-api-types/v9'; */
 import type { GuildChannel, GuildMember, Role, User } from 'discord.js';
 
 export type Command = Readonly<{

@@ -1,5 +1,5 @@
 import { REST } from '@discordjs/rest';
-import { Routes, Snowflake } from 'discord-api-types/v8';
+import { Routes, Snowflake } from 'discord-api-types/v9';
 
 import {
 	// Moderation

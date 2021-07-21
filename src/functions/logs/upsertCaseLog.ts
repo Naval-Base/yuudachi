@@ -1,4 +1,4 @@
-import type { APIEmbed } from 'discord-api-types/v8';
+import type { APIEmbed } from 'discord-api-types/v9';
 import type { Guild, TextChannel, User } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';

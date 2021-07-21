@@ -1,4 +1,4 @@
-import { PermissionFlagsBits } from 'discord-api-types/v8';
+import { PermissionFlagsBits } from 'discord-api-types/v9';
 import type { GuildChannel, PermissionOverwrites, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';

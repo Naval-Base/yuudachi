@@ -1,3 +1,4 @@
+import { AuditLogEvent } from 'discord-api-types/v9';
 import { Client, Constants, GuildMember, User } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { on } from 'node:events';
@@ -19,6 +20,8 @@ export default class implements Event {
 
 	public event = Constants.Events.GUILD_MEMBER_REMOVE;
 
+	public disabled = true;
+
 	public constructor(public readonly client: Client, @inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(): Promise<void> {
@@ -36,8 +39,8 @@ export default class implements Event {
 				if (deleted) {
 					continue;
 				}
-				await pSetTimeout(1000);
-				const auditLogs = await guildMember.guild.fetchAuditLogs({ limit: 5, type: 20 });
+				await pSetTimeout(750);
+				const auditLogs = await guildMember.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberKick });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildMember.user.id);
 
 				if (logs) {

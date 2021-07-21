@@ -1,3 +1,4 @@
+import { AuditLogEvent } from 'discord-api-types/v9';
 import { Client, Constants, GuildBan, User } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { on } from 'node:events';
@@ -35,8 +36,8 @@ export default class implements Event {
 				if (deleted) {
 					continue;
 				}
-				await pSetTimeout(1000);
-				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 5, type: 23 });
+				await pSetTimeout(750);
+				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanRemove });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildBan.user.id);
 
 				if (logs) {
