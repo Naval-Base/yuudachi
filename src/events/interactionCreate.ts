@@ -28,8 +28,7 @@ export default class implements Event {
 			const command = this.commands.get(interaction.commandName);
 			if (command) {
 				try {
-					// eslint-disable-next-line @typescript-eslint/dot-notation
-					const args = [...interaction.options['_options']];
+					const args = [...interaction.options.data];
 					await command.execute(interaction, transformInteraction(args), 'en');
 				} catch (error) {
 					logger.error(error);

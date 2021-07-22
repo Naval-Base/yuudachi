@@ -2,15 +2,12 @@ import type { CommandInteractionOption } from 'discord.js';
 
 import type { ArgumentsOf, Command } from './ArgumentsOf';
 
-export function transformInteraction<T extends Command>(options: CommandInteractionOption[]): ArgumentsOf<T> {
+export function transformInteraction<T extends Command>(options: readonly CommandInteractionOption[]): ArgumentsOf<T> {
 	const opts: any = {};
 
-	console.log(options);
 	for (const top of options) {
 		if (top.type === 'SUB_COMMAND' || top.type === 'SUB_COMMAND_GROUP') {
-			// @ts-ignore
-			// eslint-disable-next-line @typescript-eslint/dot-notation
-			opts[top.name] = transformInteraction(top.options?.length ? [...top.options['_options']] : []);
+			opts[top.name] = transformInteraction(top.options ? [...top.options] : []);
 		} else if (top.type === 'USER') {
 			opts[top.name] = { user: top.user, member: top.member };
 		} else if (top.type === 'CHANNEL') {
