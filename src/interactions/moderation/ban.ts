@@ -1,3 +1,5 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+
 export const BanCommand = {
 	name: 'ban',
 	description: 'Ban a member of(f) this guild',
@@ -5,18 +7,18 @@ export const BanCommand = {
 		{
 			name: 'user',
 			description: 'The user to action',
-			type: 6,
+			type: ApplicationCommandOptionType.User,
 			required: true,
 		},
 		{
 			name: 'reason',
 			description: 'The reason of this action',
-			type: 3,
+			type: ApplicationCommandOptionType.String,
 		},
 		{
 			name: 'days',
 			description: 'The amount of days to deleted messages from',
-			type: 4,
+			type: ApplicationCommandOptionType.Integer,
 			choices: [
 				{ name: '0 days (default)', value: 0 },
 				{ name: '1 day', value: 1 },
@@ -31,7 +33,7 @@ export const BanCommand = {
 		{
 			name: 'reference',
 			description: 'The reference case',
-			type: 4,
+			type: ApplicationCommandOptionType.Integer,
 		},
 	],
 } as const;

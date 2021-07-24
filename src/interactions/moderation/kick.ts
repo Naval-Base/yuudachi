@@ -1,3 +1,5 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+
 export const KickCommand = {
 	name: 'kick',
 	description: 'Kick a member of(f) this guild',
@@ -5,18 +7,18 @@ export const KickCommand = {
 		{
 			name: 'user',
 			description: 'The user to action',
-			type: 6,
+			type: ApplicationCommandOptionType.User,
 			required: true,
 		},
 		{
 			name: 'reason',
 			description: 'The reason of this action',
-			type: 3,
+			type: ApplicationCommandOptionType.String,
 		},
 		{
 			name: 'reference',
 			description: 'The reference case',
-			type: 4,
+			type: ApplicationCommandOptionType.Integer,
 		},
 	],
 } as const;

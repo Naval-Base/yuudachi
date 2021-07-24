@@ -1,3 +1,5 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+
 export const PingCommand = {
 	name: 'ping',
 	description: 'Health check',
@@ -5,7 +7,7 @@ export const PingCommand = {
 		{
 			name: 'hide',
 			description: 'Hides the output',
-			type: 5,
+			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
 } as const;

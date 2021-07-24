@@ -15,6 +15,7 @@ import {
 	SoftbanCommand,
 	UnbanCommand,
 	WarnCommand,
+
 	// Utility
 	PingCommand,
 } from './interactions';
@@ -23,6 +24,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
 
 try {
 	console.log('Start refreshing interaction (/) commands');
+
 	await rest.put(
 		Routes.applicationGuildCommands(
 			process.env.DISCORD_CLIENT_ID as Snowflake,
@@ -43,11 +45,13 @@ try {
 				UnbanCommand,
 				WarnCommand,
 				LockdownCommand,
+
 				// Utility
 				PingCommand,
 			],
 		},
 	);
+
 	console.log('Sucessfully reloaded interaction (/) commands.');
 } catch (e) {
 	console.error(e);

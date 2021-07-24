@@ -1,3 +1,5 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+
 export const HistoryCommand = {
 	name: 'history',
 	description: 'Look up a users moderative history',
@@ -5,13 +7,13 @@ export const HistoryCommand = {
 		{
 			name: 'user',
 			description: 'The user to look up',
-			type: 6,
+			type: ApplicationCommandOptionType.User,
 			required: true,
 		},
 		{
 			name: 'hide',
 			description: 'Hides the output',
-			type: 5,
+			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
 } as const;

@@ -1,3 +1,5 @@
+import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+
 export const LockdownCommand = {
 	name: 'lockdown',
 	description: 'Execute or lift a lockdown on a text channel',
@@ -5,12 +7,12 @@ export const LockdownCommand = {
 		{
 			name: 'lock',
 			description: 'Execute a lockdown on a text channel',
-			type: 1,
+			type: ApplicationCommandOptionType.SubCommand,
 			options: [
 				{
 					name: 'duration',
 					description: 'The duration',
-					type: 3,
+					type: ApplicationCommandOptionType.String,
 					choices: [
 						{ name: '1 hour', value: '1h' },
 						{ name: '3 hours', value: '3h' },
@@ -25,24 +27,24 @@ export const LockdownCommand = {
 				{
 					name: 'channel',
 					description: 'The channel to lock',
-					type: 7,
+					type: ApplicationCommandOptionType.Channel,
 				},
 				{
 					name: 'reason',
 					description: 'The reason of this lockdown',
-					type: 3,
+					type: ApplicationCommandOptionType.String,
 				},
 			],
 		},
 		{
 			name: 'lift',
 			description: 'Lift a lockdown on a text channel',
-			type: 1,
+			type: ApplicationCommandOptionType.SubCommand,
 			options: [
 				{
 					name: 'channel',
 					description: 'The channel to lift the lock',
-					type: 7,
+					type: ApplicationCommandOptionType.Channel,
 				},
 			],
 		},

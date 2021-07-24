@@ -1,4 +1,5 @@
 /* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions } from 'discord-api-types/v9'; */
+import type { ApplicationCommandOptionType } from 'discord-api-types/v9';
 import type { GuildChannel, GuildMember, Role, User } from 'discord.js';
 
 export type Command = Readonly<{
@@ -14,48 +15,57 @@ type Option = Readonly<
 		required?: boolean;
 	} & (
 		| {
-				type: 1 | 2;
+				type: ApplicationCommandOptionType.SubCommand | ApplicationCommandOptionType.SubCommandGroup;
 				options?: readonly Option[];
 		  }
 		| {
-				type: 3;
+				type: ApplicationCommandOptionType.String;
 				choices?: readonly Readonly<{ name: string; value: string }>[];
 		  }
 		| {
-				type: 4;
+				type: ApplicationCommandOptionType.Integer | /* ApplicationCommandOptionType.Number */ 10;
 				choices?: readonly Readonly<{ name: string; value: number }>[];
 		  }
 		| {
-				type: 5 | 6 | 7 | 8;
+				type:
+					| ApplicationCommandOptionType.Boolean
+					| ApplicationCommandOptionType.User
+					| ApplicationCommandOptionType.Channel
+					| ApplicationCommandOptionType.Role
+					| ApplicationCommandOptionType.Mentionable;
 		  }
 	)
 >;
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
-type TypeIdToType<T, O, C> = T extends 1
+type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.SubCommand
 	? ArgumentsOfRaw<O>
-	: T extends 2
+	: T extends ApplicationCommandOptionType.SubCommandGroup
 	? ArgumentsOfRaw<O>
-	: T extends 3
+	: T extends ApplicationCommandOptionType.String
 	? C extends readonly { value: string }[]
 		? C[number]['value']
 		: string
-	: T extends 4
+	: T extends ApplicationCommandOptionType.Integer | /* ApplicationCommandOptionType.Number */ 10
 	? C extends readonly { value: number }[]
 		? C[number]['value']
 		: number
-	: T extends 5
+	: T extends ApplicationCommandOptionType.Boolean
 	? boolean
-	: T extends 6
+	: T extends ApplicationCommandOptionType.User
 	? { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
-	: T extends 7
+	: T extends ApplicationCommandOptionType.Channel
 	? GuildChannel /* | (APIPartialChannel & { permissions: Permissions }) */
-	: T extends 8
+	: T extends ApplicationCommandOptionType.Role
 	? Role /* | APIRole */
+	: T extends ApplicationCommandOptionType.Mentionable
+	?
+			| { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
+			| GuildChannel /* | (APIPartialChannel & { permissions: Permissions }) */
+			| Role /* | APIRole */
 	: never;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type OptionToObject<O> = O extends {
 	name: infer K;
 	type: infer T;
@@ -66,7 +76,7 @@ type OptionToObject<O> = O extends {
 	? K extends string
 		? R extends true
 			? { [k in K]: TypeIdToType<T, O, C> }
-			: T extends 1 | 2 | 5
+			: T extends ApplicationCommandOptionType.SubCommand | ApplicationCommandOptionType.SubCommandGroup
 			? { [k in K]: TypeIdToType<T, O, C> }
 			: { [k in K]?: TypeIdToType<T, O, C> }
 		: never

@@ -28,8 +28,7 @@ export default class implements Event {
 			const command = this.commands.get(interaction.commandName);
 			if (command) {
 				try {
-					const args = [...interaction.options.data];
-					await command.execute(interaction, transformInteraction(args), 'en');
+					await command.execute(interaction, transformInteraction(interaction.options.data), 'en');
 				} catch (error) {
 					logger.error(error);
 					await interaction.editReply({ content: error.message, components: [] });
