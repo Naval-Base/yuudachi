@@ -28,10 +28,6 @@ export function ellipsis(text: string, total: number): string {
 	return `${text.slice(0, keep)}...`;
 }
 
-export function uniqueValidatedValues<T>(input: T[]): T[] {
-	return Array.from(new Set(input)).filter((element) => element);
-}
-
 export function truncateEmbed(embed: APIEmbed): APIEmbed {
 	return {
 		...embed,

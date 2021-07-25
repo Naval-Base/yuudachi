@@ -7,7 +7,7 @@ import i18next from 'i18next';
 dayjs.extend(relativeTime);
 
 import { MAX_TRUST_ACCOUNT_AGE } from '../Constants';
-import { addFields } from './embed';
+import { addFields, truncateEmbed } from './embed';
 
 function colorFromDuration(duration: number) {
 	const percent = Math.min(duration / (MAX_TRUST_ACCOUNT_AGE / 100), 100);
@@ -80,5 +80,5 @@ export function generateMemberLog(member: GuildMember, join = true) {
 		timestamp: new Date().toISOString(),
 	});
 
-	return embed;
+	return truncateEmbed(embed);
 }

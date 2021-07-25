@@ -18,7 +18,7 @@ dayjs.extend(relativeTime);
 import type { RawCase } from '../functions/cases/transformCase';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
 import { kSQL } from '../tokens';
-import { addFields } from './embed';
+import { addFields, truncateEmbed } from './embed';
 import { generateMessageLink } from './generateMessageLink';
 
 const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban'];
@@ -155,5 +155,5 @@ export async function generateHistory(
 		embed = { description: summary.join('\n'), ...embed };
 	}
 
-	return embed;
+	return truncateEmbed(embed);
 }

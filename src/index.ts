@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { Client, Intents, Webhook } from 'discord.js';
+import { Client, Intents, Options, Webhook } from 'discord.js';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
@@ -25,6 +25,14 @@ const client = new Client({
 		Intents.FLAGS.GUILD_MESSAGES,
 		Intents.FLAGS.GUILD_VOICE_STATES,
 	],
+	makeCache: Options.cacheWithLimits({
+		GuildMemberManager: 10,
+		MessageManager: 100,
+		StageInstanceManager: 10,
+		ThreadMemberManager: 10,
+		UserManager: 10,
+		VoiceStateManager: 10,
+	}),
 });
 
 const commands = new Map<string, Command>();

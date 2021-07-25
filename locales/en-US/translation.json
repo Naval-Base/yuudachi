@@ -224,6 +224,31 @@
 		"member_log": {
 			"joined": "User joined",
 			"left": "User left"
+		},
+		"guild_log": {
+			"message_updated": {
+				"title": "Message updated",
+				"info": "\u200b",
+				"jump_to": "• [Jump to]({{- link}})"
+			},
+			"message_deleted": {
+				"title": "Message deleted",
+				"no_content": "No content",
+				"info": "\u200b",
+				"channel": "• Channel: {{- channel}}",
+				"embeds": "• Embeds: {{- embeds}}",
+				"jump_to": "• [Jump to]({{- link}})"
+			},
+			"message_bulk_deleted": {
+				"title": "Message deleted bulk",
+				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)"
+			},
+			"voice_state_update": {
+				"title": "Voice state update",
+				"joined": "Joined {{- channel}}",
+				"moved": "Moved from {{- fromChannel}} to {{- toChannel}}",
+				"left": "Left {{- channel}}"
+			}
 		}
 	}
 }
