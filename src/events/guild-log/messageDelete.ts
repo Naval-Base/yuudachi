@@ -28,6 +28,9 @@ export default class implements Event {
 			if (!message.guild) {
 				continue;
 			}
+			if (!message.content && !message.embeds.length) {
+				continue;
+			}
 
 			try {
 				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
