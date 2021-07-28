@@ -1,13 +1,13 @@
-import { stripIndents } from 'common-tags';
-import dayjs from 'dayjs';
-import type { Client, Snowflake } from 'discord.js';
+import { Client, Formatters, Snowflake } from 'discord.js';
+import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
 import { kSQL } from '../../tokens';
+import { generateMessageLink } from '../../util/generateMessageLink';
 import { Case, CaseAction } from '../cases/createCase';
 
-export async function generateCaseLog(client: Client, case_: Case, logChannelId: Snowflake) {
+export async function generateCaseLog(client: Client, case_: Case, logChannelId: Snowflake, locale: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let action = CaseAction[case_.action];
@@ -21,45 +21,58 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 		}
 	}
 
-	let msg = stripIndents`
-		**Member:** \`${case_.targetTag}\` (${case_.targetId})
-		**Action:** ${action[0].toUpperCase() + action.substr(1).toLowerCase()}
-	`;
+	let msg = i18next.t('log.mod_log.case_log.description', {
+		targetTag: case_.targetTag,
+		targetId: case_.targetId,
+		action,
+		lng: locale,
+	});
 
 	if (case_.actionExpiration) {
-		msg += `\n**Expiration:** ${dayjs(case_.actionExpiration).from(case_.createdAt, true)}`;
+		msg += i18next.t('log.mod_log.case_log.expiration', {
+			time: Formatters.time(new Date(case_.actionExpiration), Formatters.TimestampStyles.RelativeTime),
+			lng: locale,
+		});
 	}
 
 	if (case_.contextMessageId) {
-		const [contextMessage] = await sql<[{ channel_id: string }?]>`
+		const [contextMessage] = await sql<[{ channel_id: Snowflake | null }?]>`
 			select channel_id
 			from messages
 			where id = ${case_.contextMessageId}`;
 
 		if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
-			msg += `\n**Context:** [Beam me up, Yuu](https://discord.com/channels/${case_.guildId}/${
-				contextMessage!.channel_id
-			}/${case_.contextMessageId})`;
+			msg += i18next.t('log.mod_log.case_log.context', {
+				link: Formatters.hyperlink(
+					i18next.t('log.mod_log.case_log.context_sub', { lng: locale }),
+					generateMessageLink(case_.guildId, contextMessage!.channel_id!, case_.contextMessageId),
+				),
+				lng: locale,
+			});
 		}
 	}
 
 	if (case_.reason) {
-		msg += `\n**Reason:** ${case_.reason}`;
+		msg += i18next.t('log.mod_log.case_log.reason', { reason: case_.reason, lng: locale });
 	} else {
-		msg += `\n**Reason:** Use \`/reason ${case_.caseId} <...reason>\` to set a reason for this case`;
+		msg += i18next.t('log.mod_log.case_log.reason_fallback', { caseId: case_.caseId, lng: locale });
 	}
 
 	if (case_.referenceId) {
-		const [reference] = await sql<[{ log_message_id: string | null }?]>`
+		const [reference] = await sql<[{ log_message_id: Snowflake | null }?]>`
 			select log_message_id
 			from cases
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.referenceId}`;
 
 		if (Reflect.has(reference ?? {}, 'log_message_id')) {
-			msg += `\n**Ref case:** [${case_.referenceId}](https://discord.com/channels/${
-				case_.guildId
-			}/${logChannelId}/${reference!.log_message_id!})`;
+			msg += i18next.t('log.mod_log.case_log.reference', {
+				ref: Formatters.hyperlink(
+					`#${case_.referenceId}`,
+					generateMessageLink(case_.guildId, logChannelId, reference!.log_message_id!),
+				),
+				lng: locale,
+			});
 		}
 	}
 

@@ -43,6 +43,7 @@ export default class implements Event {
 			}
 
 			try {
+				const locale = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.GuildLogWebhookId);
 				if (!logChannelId) {
 					continue;
@@ -70,10 +71,11 @@ export default class implements Event {
 						icon_url: messages.first()!.author.displayAvatarURL(),
 					},
 					color: 3092790,
-					title: i18next.t('log.guild_log.message_bulk_deleted.title'),
+					title: i18next.t('log.guild_log.message_bulk_deleted.title', { lng: locale }),
 					description: i18next.t('log.guild_log.message_bulk_deleted.description', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: messages.first()!.channel.toString(),
+						lng: locale,
 					}),
 					timestamp: new Date().toISOString(),
 				});

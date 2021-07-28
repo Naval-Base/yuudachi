@@ -36,6 +36,7 @@ export default class implements Event {
 			}
 
 			try {
+				const locale = await getGuildSetting(newMessage.guild.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
 				if (!logChannelId) {
 					continue;
@@ -85,6 +86,11 @@ export default class implements Event {
 					description = `${description.substring(0, 3900)}` || '\u200b';
 				}
 
+				const info = `${i18next.t('log.guild_log.message_updated.channel', {
+					// eslint-disable-next-line @typescript-eslint/no-base-to-string
+					channel: newMessage.channel.toString(),
+					lng: locale,
+				})}\n${i18next.t('log.guild_log.message_updated.jump_to', { link: newMessage.url, lng: locale })}`;
 				const embed = addFields(
 					{
 						author: {
@@ -92,13 +98,13 @@ export default class implements Event {
 							icon_url: newMessage.author.displayAvatarURL(),
 						},
 						color: 3092790,
-						title: i18next.t('log.guild_log.message_updated.title'),
+						title: i18next.t('log.guild_log.message_updated.title', { lng: locale }),
 						description,
 						timestamp: new Date().toISOString(),
 					},
 					{
-						name: i18next.t('log.guild_log.message_updated.info'),
-						value: i18next.t('log.guild_log.message_updated.jump_to', { link: newMessage.url }),
+						name: i18next.t('log.guild_log.message_updated.info', { lng: locale }),
+						value: info,
 					},
 				);
 

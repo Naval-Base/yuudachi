@@ -26,7 +26,7 @@ export async function react(
 	logChannel: TextChannel,
 	locale: string,
 ): Promise<void> {
-	if (args.reason && args.reason.length >= 1900) {
+	if (args.reason && args.reason.length >= 500) {
 		throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 	}
 

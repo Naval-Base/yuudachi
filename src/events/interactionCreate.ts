@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command';
 
 import type { Event } from '../Event';
+import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
 import { transformInteraction } from '../interactions/InteractionOptions';
 import { logger } from '../logger';
 import { kCommands } from '../tokens';
@@ -28,7 +29,8 @@ export default class implements Event {
 			const command = this.commands.get(interaction.commandName);
 			if (command) {
 				try {
-					await command.execute(interaction, transformInteraction(interaction.options.data), 'en');
+					const locale = await getGuildSetting(interaction.guildId!, SettingsKeys.Locale);
+					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
 				} catch (error) {
 					logger.error(error);
 					await interaction.editReply({ content: error.message, components: [] });

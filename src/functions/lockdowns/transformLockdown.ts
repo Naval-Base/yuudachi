@@ -5,7 +5,7 @@ import type { Lockdown } from './createLockdown';
 export interface RawLockdown {
 	guild_id: Snowflake;
 	channel_id: Snowflake;
-	expiration: Date;
+	expiration: string;
 	mod_id: Snowflake;
 	mod_tag: string;
 	reason?: string | null;

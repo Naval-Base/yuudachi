@@ -9,7 +9,9 @@ interface CasePayloadArgs {
 		member?: GuildMember | null;
 	};
 	days?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
-	reference?: number;
+	reference?: number | null;
+	joinCutoff?: Date | null;
+	accountCutoff?: Date | null;
 }
 
 interface GenerateCasePayloadOptions {
@@ -19,7 +21,8 @@ interface GenerateCasePayloadOptions {
 	args: CasePayloadArgs;
 	action: CaseAction;
 	messageId?: Snowflake | null;
-	duration?: number;
+	duration?: number | null;
+	multi?: boolean | null;
 }
 
 export function generateCasePayload({
@@ -30,6 +33,7 @@ export function generateCasePayload({
 	action,
 	messageId = null,
 	duration,
+	multi = false,
 }: GenerateCasePayloadOptions) {
 	return {
 		guildId,
@@ -45,5 +49,8 @@ export function generateCasePayload({
 		deleteMessageDays: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
 		contextMessageId: messageId,
 		referenceId: args.reference ? Number(args.reference) : undefined,
+		multi,
+		joinCutoff: args.joinCutoff,
+		accountCutoff: args.accountCutoff,
 	} as const;
 }

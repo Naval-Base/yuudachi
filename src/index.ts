@@ -14,7 +14,16 @@ import { kCommands, kRedis, kSQL, kWebhooks } from './tokens';
 import { logger } from './logger';
 import type { Event } from './Event';
 
-const sql = postgres();
+const sql = postgres({
+	types: {
+		date: {
+			to: 1184,
+			from: [1082, 1083, 1114, 1184],
+			serialize: (date: Date) => date.toISOString(),
+			parse: (isoString) => isoString,
+		},
+	},
+});
 const redis = new Redis(process.env.REDISHOST);
 
 const client = new Client({

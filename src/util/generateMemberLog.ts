@@ -1,4 +1,3 @@
-import { stripIndents } from 'common-tags';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Formatters, GuildMember } from 'discord.js';
@@ -32,7 +31,7 @@ function colorFromDuration(duration: number) {
 	return (r << 16) + (g << 8) + b;
 }
 
-export function generateMemberLog(member: GuildMember, join = true) {
+export function generateMemberLog(member: GuildMember, locale: string, join = true) {
 	const sinceCreationFormatted = Formatters.time(
 		dayjs(member.user.createdTimestamp).unix(),
 		Formatters.TimestampStyles.RelativeTime,
@@ -42,10 +41,14 @@ export function generateMemberLog(member: GuildMember, join = true) {
 		Formatters.TimestampStyles.ShortDateTime,
 	);
 
-	let description = stripIndents`
-		• Username: ${member.user.toString()} - \`${member.user.tag}\` (${member.user.id})
-		• Created: ${creationFormatted} (${sinceCreationFormatted})
-	`;
+	let description = i18next.t('log.member_log.description', {
+		userMention: member.user.toString(),
+		userTag: member.user.tag,
+		userId: member.user.id,
+		created_at: creationFormatted,
+		created_at_since: sinceCreationFormatted,
+		lng: locale,
+	});
 
 	if (member.joinedTimestamp) {
 		const sinceJoinFormatted = Formatters.time(
@@ -57,14 +60,22 @@ export function generateMemberLog(member: GuildMember, join = true) {
 			Formatters.TimestampStyles.ShortDateTime,
 		);
 
-		description += `\n• Joined: ${joinFormatted} (${sinceJoinFormatted})`;
+		description += i18next.t('log.member_log.joined_at', {
+			joined_at: joinFormatted,
+			joined_at_since: sinceJoinFormatted,
+			lng: locale,
+		});
 	}
 
 	if (!join) {
 		const sinceleaveFormatted = Formatters.time(dayjs().unix(), Formatters.TimestampStyles.RelativeTime);
 		const leaveFormatted = Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime);
 
-		description += `\n• Left: ${leaveFormatted} (${sinceleaveFormatted})`;
+		description += i18next.t('log.member_log.left_at', {
+			left_at: leaveFormatted,
+			left_at_since: sinceleaveFormatted,
+			lng: locale,
+		});
 	}
 
 	const embed = addFields({
@@ -75,7 +86,7 @@ export function generateMemberLog(member: GuildMember, join = true) {
 		color: join ? colorFromDuration(Date.now() - member.user.createdTimestamp) : 3092790,
 		description: description,
 		footer: {
-			text: i18next.t(join ? 'log.member_log.joined' : 'log.member_log.left'),
+			text: i18next.t(join ? 'log.member_log.footer.joined' : 'log.member_log.footer.left', { lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
 	});

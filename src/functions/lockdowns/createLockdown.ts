@@ -9,7 +9,7 @@ import { RawLockdown, transformLockdown } from './transformLockdown';
 export interface Lockdown {
 	guildId: Snowflake;
 	channelId: Snowflake;
-	expiration: Date;
+	expiration: string;
 	reason?: string | null;
 	moderatorId: Snowflake;
 	moderatorTag: string;
@@ -51,7 +51,7 @@ export async function createLockdown(lockdown: CreateLockdown & { channel?: Guil
 		) values (
 			${lockdown.guildId},
 			${lockdown.channelId},
-			${lockdown.expiration.toISOString()},
+			${lockdown.expiration},
 			${lockdown.moderatorId},
 			${lockdown.moderatorTag},
 			${lockdown.reason ?? null},

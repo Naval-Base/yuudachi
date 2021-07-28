@@ -22,6 +22,7 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
+				const locale = await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(guildMember.guild.id, SettingsKeys.MemberLogWebhookId);
 				if (!logChannelId) {
 					continue;
@@ -33,7 +34,7 @@ export default class implements Event {
 
 				await webhook.send({
 					// @ts-ignore
-					embeds: [generateMemberLog(guildMember)],
+					embeds: [generateMemberLog(guildMember, locale)],
 					username: this.client.user?.username,
 					avatarURL: this.client.user?.displayAvatarURL(),
 				});

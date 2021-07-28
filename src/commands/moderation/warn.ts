@@ -30,7 +30,7 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
-		if (args.reason && args.reason.length >= 1900) {
+		if (args.reason && args.reason.length >= 500) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 

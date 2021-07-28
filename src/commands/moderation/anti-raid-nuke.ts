@@ -10,19 +10,25 @@ import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
+import { inject, injectable } from 'tsyringe';
+import type { Redis } from 'ioredis';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
 import type { AntiRaidNukeCommand } from '../../interactions';
-import { CaseAction, createCase } from '../../functions/cases/createCase';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { DATE_FORMAT_LOGFILE } from '../../Constants';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import { kRedis } from '../../tokens';
+import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
 
+@injectable()
 export default class implements Command {
+	public constructor(@inject(kRedis) public readonly redis: Redis) {}
+
 	public async execute(
 		interaction: CommandInteraction,
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
@@ -40,7 +46,7 @@ export default class implements Command {
 		}
 
 		const parsedJoin = ms(args.join);
-		if (parsedJoin < 6000 || parsedJoin > 120 * 60 * 1000 || isNaN(parsedJoin)) {
+		if (parsedJoin < 6000 || isNaN(parsedJoin)) {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 		}
 
@@ -49,12 +55,16 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 		}
 
+		if (args.reason && args.reason.length >= 500) {
+			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
+		}
+
 		const joinCutoff = Date.now() - parsedJoin;
-		const ageCutoff = Date.now() - parsedAge;
+		const accountCutoff = Date.now() - parsedAge;
 
 		const fetchedMembers = await interaction.guild?.members.fetch({ force: true });
 		const members = fetchedMembers?.filter(
-			(member) => member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > ageCutoff,
+			(member) => member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff,
 		);
 
 		if (!members?.size) {
@@ -64,7 +74,7 @@ export default class implements Command {
 				})}\n\n${i18next.t('command.mod.anti_raid_nuke.errors.parameters', {
 					now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
 					join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-					age: Formatters.time(dayjs(ageCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
+					age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
 					lng: locale,
 				})}`,
 			});
@@ -93,7 +103,7 @@ export default class implements Command {
 			})}\n\n${i18next.t('command.mod.anti_raid_nuke.errors.parameters', {
 				now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
 				join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-				age: Formatters.time(dayjs(ageCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
+				age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
 				lng: locale,
 			})}`,
 			files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
@@ -121,12 +131,12 @@ export default class implements Command {
 					lng: locale,
 				}),
 				components: [],
-				// @ts-expect-error
 				attachments: [],
 			});
 		} else if (collectedInteraction?.customId === banKey) {
 			await collectedInteraction.deferUpdate();
 
+			await this.redis.setex(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15, 'true');
 			let idx = 0;
 			const promises = [];
 			const fatalities: GuildMember[] = [];
@@ -139,26 +149,46 @@ export default class implements Command {
 							guildId: collectedInteraction.guildId!,
 							user: collectedInteraction.user,
 							args: {
-								reason: `Anti-raid-nuke \`(${++idx}/${members.size})\``,
+								reason: i18next.t('command.mod.anti_raid_nuke.reason', {
+									current: ++idx,
+									size: members.size,
+									lng: locale,
+								}),
 								user: {
 									member: member,
 									user: member.user,
 								},
 								// @ts-expect-error
 								days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
+								joinCutoff: dayjs(joinCutoff).toDate(),
+								accountCutoff: dayjs(accountCutoff).toDate(),
 							},
 							action: CaseAction.Ban,
+							multi: true,
 						}),
 					)
-						.then((case_) => upsertCaseLog(collectedInteraction.guild!, collectedInteraction.user, logChannel, case_))
-						.then(() => fatalities.push(member))
-						.catch(() => survivors.push(member)),
+						.then((case_) => {
+							fatalities.push(member);
+							return case_;
+						})
+						.catch(() => {
+							survivors.push(member);
+						})
+						.finally(() => void this.redis.expire(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15)),
 				);
 			}
 
-			for (const promise of promises) {
-				await promise;
-			}
+			const resolvedCases = await Promise.all(promises);
+			const cases = resolvedCases.filter((resolvedCase) => resolvedCase) as Case[];
+			await this.redis.expire(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 5);
+
+			await insertAntiRaidNukeCaseLog(
+				collectedInteraction.guild!,
+				collectedInteraction.user,
+				logChannel,
+				cases,
+				args.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale }),
+			);
 
 			const membersHit = Buffer.from(fatalities.map((member) => member.user.id).join('\r\n'));
 			const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);

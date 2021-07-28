@@ -32,6 +32,7 @@ export default class implements Event {
 			}
 
 			try {
+				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId);
 				if (!logChannelId) {
 					continue;
@@ -43,15 +44,20 @@ export default class implements Event {
 
 				let description = '';
 				if ((!oldState || !oldState.channel) && newState.channel) {
-					description = i18next.t('log.guild_log.voice_state_update.joined', { channel: newState.channel.toString() });
+					description = i18next.t('log.guild_log.voice_state_update.joined', {
+						channel: newState.channel.toString(),
+						lng: locale,
+					});
 				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
 					description = i18next.t('log.guild_log.voice_state_update.moved', {
 						fromChannel: oldState.channel.toString(),
 						toChannel: newState.channel.toString(),
+						lng: locale,
 					});
 				} else if (oldState?.channel && !newState.channel) {
 					description = i18next.t('log.guild_log.voice_state_update.left', {
 						channel: oldState.channel.toString(),
+						lng: locale,
 					});
 				} else {
 					continue;
@@ -63,7 +69,7 @@ export default class implements Event {
 						icon_url: newState.member.user.displayAvatarURL(),
 					},
 					color: 3092790,
-					title: i18next.t('log.guild_log.voice_state_update.title'),
+					title: i18next.t('log.guild_log.voice_state_update.title', { lng: locale }),
 					description,
 					timestamp: new Date().toISOString(),
 				});

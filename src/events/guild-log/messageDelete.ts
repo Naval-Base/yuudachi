@@ -33,6 +33,7 @@ export default class implements Event {
 			}
 
 			try {
+				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
 				if (!logChannelId) {
 					continue;
@@ -42,8 +43,11 @@ export default class implements Event {
 					continue;
 				}
 
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
-				let info = `${i18next.t('log.guild_log.message_deleted.channel', { channel: message.channel.toString() })}`;
+				let info = i18next.t('log.guild_log.message_deleted.channel', {
+					// eslint-disable-next-line @typescript-eslint/no-base-to-string
+					channel: message.channel.toString(),
+					lng: locale,
+				});
 				let embed = addFields({
 					author: {
 						name: `${message.author.tag} (${message.author.id})`,
@@ -52,17 +56,20 @@ export default class implements Event {
 					color: 3092790,
 					title: i18next.t('log.guild_log.message_deleted.title'),
 					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-					description: `${message.content ?? i18next.t('log.guild_log.message_deleted.no_content')}`,
+					description: `${message.content ?? i18next.t('log.guild_log.message_deleted.no_content', { lng: locale })}`,
 					timestamp: new Date().toISOString(),
 				});
 
 				if (!message.content && message.embeds.length) {
-					info += `\n${i18next.t('log.guild_log.message_deleted.embeds', { embeds: message.embeds.length })}`;
+					info += `\n${i18next.t('log.guild_log.message_deleted.embeds', {
+						embeds: message.embeds.length,
+						lng: locale,
+					})}`;
 				}
-				info += `\n${i18next.t('log.guild_log.message_deleted.jump_to', { link: message.url })}`;
+				info += `\n${i18next.t('log.guild_log.message_deleted.jump_to', { link: message.url, lng: locale })}`;
 
 				embed = addFields(embed, {
-					name: i18next.t('log.guild_log.message_deleted.info'),
+					name: i18next.t('log.guild_log.message_deleted.info', { lng: locale }),
 					value: info,
 				});
 

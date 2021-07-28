@@ -34,9 +34,11 @@ export default class implements Event {
 				}
 
 				const deleted = await this.redis.del(`guild:${guildBan.guild.id}:user:${guildBan.user.id}:ban`);
-				if (deleted) {
+				const antiRaidNuke = await this.redis.get(`guild:${guildBan.guild.id}:anti_raid_nuke`);
+				if (deleted || antiRaidNuke) {
 					continue;
 				}
+
 				await pSetTimeout(750);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanAdd });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildBan.user.id);

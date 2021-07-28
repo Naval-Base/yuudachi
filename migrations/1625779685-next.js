@@ -49,6 +49,9 @@ export async function up(sql) {
 		
 		alter table cases
 			add role_id text,
+			add multi boolean default false,
+			add join_cutoff timestamp with time zone,
+			add account_cutoff timestamp with time zone,
 			drop constraint cases_pkey,
 			drop id,
 			add constraint cases_pkey primary key (guild_id, case_id)
@@ -56,6 +59,7 @@ export async function up(sql) {
 		
 		comment on column cases.guild_id is 'The id of the guild this case belongs to';
 		comment on column cases.log_message_id is 'The id of the message this case belongs to';
+		comment on column cases.role_id is 'The id of the role this case has assigned';
 		comment on column cases.case_id is 'The case id';
 		comment on column cases.ref_id is 'The id of the case this case references';
 		comment on column cases.target_id is 'The id of the target this case belongs to';
@@ -66,6 +70,9 @@ export async function up(sql) {
 		comment on column cases.reason is 'The reason of this case';
 		comment on column cases.action_expiration is 'The expiration of this case';
 		comment on column cases.action_processed is 'Whether this case has been processed or not';
+		comment on column cases.multi is 'Whether this case is a multi-case or not';
+		comment on column cases.join_cutoff is 'The join cutoff of this case';
+		comment on column cases.account_cutoff is 'The account creation cutoff of this case';
 		comment on column cases.context_message_id is 'The id of the message around this mute';
 		
 		update cases set

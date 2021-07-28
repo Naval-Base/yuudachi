@@ -18,7 +18,7 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 
 @injectable()
 export default class implements Command {
-	public constructor(@inject(kRedis) public redis: Redis) {}
+	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
 		interaction: CommandInteraction,
@@ -57,7 +57,7 @@ export default class implements Command {
 			);
 		}
 
-		if (args.reason && args.reason.length >= 1900) {
+		if (args.reason && args.reason.length >= 500) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 

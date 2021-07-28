@@ -21,7 +21,7 @@ export interface Case {
 	guildId: Snowflake;
 	action: CaseAction;
 	roleId?: Snowflake | null;
-	actionExpiration?: Date | null;
+	actionExpiration?: string | null;
 	reason?: string | null;
 	moderatorId: Snowflake;
 	moderatorTag: string;
@@ -32,10 +32,14 @@ export interface Case {
 	referenceId?: number | null;
 	logMessageId?: Snowflake | null;
 	actionProcessed: boolean;
-	createdAt?: string;
+	multi: boolean;
+	joinCutoff?: string | null;
+	accountCutoff?: string | null;
+	createdAt: string;
 }
 
 export interface CreateCase {
+	caseId?: number;
 	guildId: Snowflake;
 	action: CaseAction;
 	roleId?: Snowflake | null;
@@ -48,6 +52,9 @@ export interface CreateCase {
 	deleteMessageDays?: number;
 	contextMessageId?: Snowflake | null;
 	referenceId?: number | null;
+	multi?: boolean | null;
+	joinCutoff?: Date | null;
+	accountCutoff?: Date | null;
 }
 
 export async function createCase(
@@ -59,7 +66,7 @@ export async function createCase(
 
 	let reason;
 	if (case_.moderatorTag) {
-		reason = `Mod: ${case_.moderatorTag}${case_.reason ? ` | ${case_.reason}` : ''}`;
+		reason = `Mod: ${case_.moderatorTag}${case_.reason ? ` | ${case_.reason.replace(/`/g, '')}` : ''}`;
 	}
 	try {
 		if (!skipAction) {
@@ -107,7 +114,10 @@ export async function createCase(
 			action_processed,
 			reason,
 			context_message_id,
-			ref_id
+			ref_id,
+			multi,
+			join_cutoff,
+			account_cutoff
 		) values (
 			next_case(${case_.guildId}),
 			${case_.guildId},
@@ -117,11 +127,14 @@ export async function createCase(
 			${case_.targetTag},
 			${case_.action},
 			${case_.roleId ?? null},
-			${case_.actionExpiration?.toISOString() ?? null},
+			${case_.actionExpiration ?? null},
 			${case_.actionExpiration ? false : true},
 			${case_.reason ?? null},
 			${case_.contextMessageId ?? null},
-			${case_.referenceId ?? null}
+			${case_.referenceId ?? null},
+			${case_.multi ?? false},
+			${case_.joinCutoff ?? null},
+			${case_.accountCutoff ?? null}
 		)
 		returning *`;
 

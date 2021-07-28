@@ -140,7 +140,7 @@ export async function generateHistory(
 			c.log_message_id
 				? Formatters.hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, logChannelId, c.log_message_id))
 				: `#${c.case_id}`
-		} ${c.reason?.replace(/`/g, '').replace(/\*/g, '') ?? ''}`;
+		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
 		if (summary.join('\n').length + caseString.length + 1 < 4060) {
 			summary.push(caseString);
 			continue;

@@ -9,6 +9,7 @@ export enum SettingsKeys {
 	ModRoleId = 'mod_role_id',
 	GuildLogWebhookId = 'guild_log_webhook_id',
 	MemberLogWebhookId = 'member_log_webhook_id',
+	Locale = 'locale',
 }
 
 export async function getGuildSetting(guildId: Snowflake, prop: SettingsKeys, table = 'guild_settings') {

@@ -12,7 +12,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof HistoryCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.defer({ ephemeral: args.hide });
+		await interaction.defer({ ephemeral: args.hide ?? true });
 		await checkModRole(interaction, locale);
 
 		const embed = await generateHistory(interaction, args.user);

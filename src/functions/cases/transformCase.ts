@@ -7,7 +7,7 @@ export interface RawCase {
 	guild_id: Snowflake;
 	action: number;
 	role_id: Snowflake | null;
-	action_expiration: Date | null;
+	action_expiration: string | null;
 	reason: string | null;
 	mod_id: Snowflake;
 	mod_tag: string;
@@ -17,7 +17,10 @@ export interface RawCase {
 	ref_id: number | null;
 	log_message_id: Snowflake | null;
 	action_processed: boolean;
+	multi: boolean;
 	created_at: string;
+	join_cutoff: string | null;
+	account_cutoff: string | null;
 }
 
 export function transformCase(case_: RawCase): Case {
@@ -36,6 +39,9 @@ export function transformCase(case_: RawCase): Case {
 		referenceId: case_.ref_id,
 		logMessageId: case_.log_message_id,
 		actionProcessed: case_.action_processed,
+		multi: case_.multi,
 		createdAt: case_.created_at,
+		joinCutoff: case_.join_cutoff,
+		accountCutoff: case_.account_cutoff,
 	} as const;
 }

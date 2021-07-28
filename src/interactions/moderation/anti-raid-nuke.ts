@@ -17,6 +17,11 @@ export const AntiRaidNukeCommand = {
 			required: true,
 		},
 		{
+			name: 'reason',
+			description: 'The reason of this action',
+			type: ApplicationCommandOptionType.String,
+		},
+		{
 			name: 'days',
 			description: 'The amount of days to deleted messages from',
 			type: ApplicationCommandOptionType.Integer,
