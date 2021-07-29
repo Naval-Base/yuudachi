@@ -15,7 +15,7 @@ export default class implements Event {
 	public event = Constants.Events.GUILD_MEMBER_REMOVE;
 
 	public constructor(
-		public readonly client: Client,
+		public readonly client: Client<true>,
 		@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>,
 	) {}
 
@@ -35,8 +35,8 @@ export default class implements Event {
 				await webhook.send({
 					// @ts-ignore
 					embeds: [generateMemberLog(guildMember, locale, false)],
-					username: this.client.user?.username,
-					avatarURL: this.client.user?.displayAvatarURL(),
+					username: this.client.user.username,
+					avatarURL: this.client.user.displayAvatarURL(),
 				});
 			} catch (e) {
 				logger.error(e);

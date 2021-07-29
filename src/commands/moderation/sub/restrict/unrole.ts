@@ -1,11 +1,4 @@
-import {
-	ButtonInteraction,
-	CommandInteraction,
-	MessageActionRow,
-	MessageButton,
-	Snowflake,
-	TextChannel,
-} from 'discord.js';
+import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -20,7 +13,6 @@ import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 export async function unrole(
 	interaction: CommandInteraction,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
-	logChannel: TextChannel,
 	locale: string,
 ): Promise<void> {
 	const sql = container.resolve<Sql<any>>(kSQL);
@@ -106,7 +98,7 @@ export async function unrole(
 			caseId: args.case,
 			manual: true,
 		});
-		await upsertCaseLog(collectedInteraction.guild!, collectedInteraction.user, logChannel, case_);
+		await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.unrole.success', {

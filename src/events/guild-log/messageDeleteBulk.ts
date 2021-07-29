@@ -24,7 +24,7 @@ export default class implements Event {
 	public event = Constants.Events.MESSAGE_BULK_DELETE;
 
 	public constructor(
-		public readonly client: Client,
+		public readonly client: Client<true>,
 		@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>,
 	) {}
 
@@ -84,8 +84,8 @@ export default class implements Event {
 					// @ts-ignore
 					embeds: [truncateEmbed(embed)],
 					files: [{ attachment: Buffer.from(output, 'utf-8'), name: 'logs.txt' }],
-					username: this.client.user?.username,
-					avatarURL: this.client.user?.displayAvatarURL(),
+					username: this.client.user.username,
+					avatarURL: this.client.user.displayAvatarURL(),
 				});
 			} catch (e) {
 				logger.error(e);

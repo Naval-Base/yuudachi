@@ -20,7 +20,7 @@ export default class implements Event {
 
 	public event = Constants.Events.GUILD_BAN_ADD;
 
-	public constructor(public readonly client: Client, @inject(kRedis) public readonly redis: Redis) {}
+	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(): Promise<void> {
 		for await (const [guildBan] of on(this.client, this.event) as AsyncIterableIterator<[GuildBan]>) {

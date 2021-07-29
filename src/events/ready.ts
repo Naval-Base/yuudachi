@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { Event } from '../Event';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
+import { registerJobs, startJobs } from '../jobs';
 import { kWebhooks } from '../tokens';
 
 @injectable()
@@ -14,7 +15,7 @@ export default class implements Event {
 	public event = Constants.Events.CLIENT_READY;
 
 	public constructor(
-		public readonly client: Client,
+		public readonly client: Client<true>,
 		@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>,
 	) {}
 
@@ -47,6 +48,9 @@ export default class implements Event {
 					this.webhooks.set(webhook.id, webhook);
 				}
 			}
+
+			registerJobs();
+			startJobs();
 
 			continue;
 		}

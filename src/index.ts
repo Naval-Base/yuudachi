@@ -8,9 +8,10 @@ import postgres from 'postgres';
 import Redis from 'ioredis';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
+import Bree from 'bree';
 
 import { Command, commandInfo } from './Command';
-import { kCommands, kRedis, kSQL, kWebhooks } from './tokens';
+import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens';
 import { logger } from './logger';
 import type { Event } from './Event';
 
@@ -25,6 +26,7 @@ const sql = postgres({
 	},
 });
 const redis = new Redis(process.env.REDISHOST);
+const bree = new Bree({ root: false, logger });
 
 const client = new Client({
 	intents: [
@@ -50,6 +52,7 @@ const webhooks = new Map<string, Webhook>();
 container.register(Client, { useValue: client });
 container.register(kSQL, { useValue: sql });
 container.register(kRedis, { useValue: redis });
+container.register(kBree, { useValue: bree });
 container.register(kCommands, { useValue: commands });
 container.register(kWebhooks, { useValue: webhooks });
 

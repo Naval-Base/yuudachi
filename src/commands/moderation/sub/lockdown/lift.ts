@@ -65,7 +65,7 @@ export async function lift(interaction: CommandInteraction, channel: TextChannel
 	} else if (collectedInteraction?.customId === unlockKey) {
 		await collectedInteraction.deferUpdate();
 
-		const lockdown = await deleteLockdown(channel);
+		const lockdown = await deleteLockdown(channel.id);
 		if (!lockdown) {
 			throw new Error(
 				i18next.t('command.mod.lockdown.lift.errors.failure', {

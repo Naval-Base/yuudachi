@@ -49,7 +49,7 @@ export default class implements Command {
 			}
 
 			case 'unrole': {
-				return unrole(interaction, args.unrole, logChannel, locale);
+				return unrole(interaction, args.unrole, locale);
 			}
 		}
 	}

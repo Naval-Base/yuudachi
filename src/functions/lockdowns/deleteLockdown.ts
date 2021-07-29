@@ -1,11 +1,14 @@
-import type { GuildChannel, PermissionOverwrites } from 'discord.js';
+import { Client, GuildChannel, PermissionOverwrites, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
 import { kSQL } from '../../tokens';
 
-export async function deleteLockdown(channel: GuildChannel) {
+export async function deleteLockdown(channelId: Snowflake) {
+	const client = container.resolve<Client<true>>(Client);
 	const sql = container.resolve<Sql<any>>(kSQL);
+
+	const channel = (await client.channels.fetch(channelId)) as GuildChannel;
 
 	const [channelOverwrites] = await sql<[{ overwrites: PermissionOverwrites[] }?]>`
 		select overwrites

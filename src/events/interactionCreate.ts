@@ -16,7 +16,7 @@ export default class implements Event {
 	public event = Constants.Events.INTERACTION_CREATE;
 
 	public constructor(
-		public readonly client: Client,
+		public readonly client: Client<true>,
 		@inject(kCommands) public readonly commands: Map<string, Command>,
 	) {}
 
