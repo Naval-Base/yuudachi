@@ -102,7 +102,7 @@ export default class implements Command {
 					action: CaseAction.Softban,
 				}),
 			);
-			await upsertCaseLog(collectedInteraction.guild!, collectedInteraction.user, logChannel, case_);
+			await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.softban.success', {

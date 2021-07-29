@@ -45,7 +45,7 @@ export default class implements Command {
 			guildId: interaction.guildId!,
 			actionExpiration: new Date(Date.now() + parsedDuration),
 		});
-		await upsertCaseLog(interaction.guild!, interaction.user, logChannel, case_);
+		await upsertCaseLog(interaction.guildId!, interaction.user, case_);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.duration.success', {

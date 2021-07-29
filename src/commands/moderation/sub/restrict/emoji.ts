@@ -1,11 +1,4 @@
-import {
-	ButtonInteraction,
-	CommandInteraction,
-	MessageActionRow,
-	MessageButton,
-	Snowflake,
-	TextChannel,
-} from 'discord.js';
+import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -23,7 +16,6 @@ import { generateHistory } from '../../../../util/generateHistory';
 export async function emoji(
 	interaction: CommandInteraction,
 	args: ArgumentsOf<typeof RestrictCommand>['emoji'],
-	logChannel: TextChannel,
 	locale: string,
 ): Promise<void> {
 	if (args.reason && args.reason.length >= 500) {
@@ -125,7 +117,7 @@ export async function emoji(
 				duration: parsedDuration,
 			}),
 		);
-		void upsertCaseLog(collectedInteraction.guild!, collectedInteraction.user, logChannel, case_);
+		void upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.emoji.success', {

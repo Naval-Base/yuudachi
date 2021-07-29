@@ -33,19 +33,19 @@ export default class implements Command {
 
 		switch (Object.keys(args)[0]) {
 			case 'mute': {
-				return mute(interaction, args.mute, logChannel, locale);
+				return mute(interaction, args.mute, locale);
 			}
 
 			case 'embed': {
-				return embed(interaction, args.embed, logChannel, locale);
+				return embed(interaction, args.embed, locale);
 			}
 
 			case 'react': {
-				return react(interaction, args.react, logChannel, locale);
+				return react(interaction, args.react, locale);
 			}
 
 			case 'emoji': {
-				return emoji(interaction, args.emoji, logChannel, locale);
+				return emoji(interaction, args.emoji, locale);
 			}
 
 			case 'unrole': {
