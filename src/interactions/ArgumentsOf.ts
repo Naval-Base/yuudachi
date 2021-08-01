@@ -15,7 +15,7 @@ type Option = Readonly<
 		required?: boolean;
 	} & (
 		| {
-				type: ApplicationCommandOptionType.SubCommand | ApplicationCommandOptionType.SubCommandGroup;
+				type: ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup;
 				options?: readonly Option[];
 		  }
 		| {
@@ -39,9 +39,9 @@ type Option = Readonly<
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
-type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.SubCommand
+type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	? ArgumentsOfRaw<O>
-	: T extends ApplicationCommandOptionType.SubCommandGroup
+	: T extends ApplicationCommandOptionType.SubcommandGroup
 	? ArgumentsOfRaw<O>
 	: T extends ApplicationCommandOptionType.String
 	? C extends readonly { value: string }[]
@@ -76,7 +76,7 @@ type OptionToObject<O> = O extends {
 	? K extends string
 		? R extends true
 			? { [k in K]: TypeIdToType<T, O, C> }
-			: T extends ApplicationCommandOptionType.SubCommand | ApplicationCommandOptionType.SubCommandGroup
+			: T extends ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup
 			? { [k in K]: TypeIdToType<T, O, C> }
 			: { [k in K]?: TypeIdToType<T, O, C> }
 		: never

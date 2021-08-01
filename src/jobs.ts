@@ -34,8 +34,11 @@ export function startJobs() {
 			if (message !== 'done') {
 				switch (message.op) {
 					case JobType.Case: {
-						const case_ = await deleteCase({ guild: message.d.guildId, user: client.user, caseId: message.d.caseId });
-						void upsertCaseLog(message.d.guildId, client.user, case_);
+						try {
+							const guild = await client.guilds.fetch(message.d.guildId);
+							const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
+							void upsertCaseLog(message.d.guildId, client.user, case_);
+						} catch {}
 						break;
 					}
 

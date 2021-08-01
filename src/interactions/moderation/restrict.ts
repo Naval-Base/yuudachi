@@ -7,7 +7,7 @@ export const RestrictCommand = {
 		{
 			name: 'mute',
 			description: 'Mute a member of(f) this guild',
-			type: ApplicationCommandOptionType.SubCommand,
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'user',
@@ -45,7 +45,7 @@ export const RestrictCommand = {
 		{
 			name: 'embed',
 			description: 'Embed restrict a member of(f) this guild',
-			type: ApplicationCommandOptionType.SubCommand,
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'user',
@@ -83,7 +83,7 @@ export const RestrictCommand = {
 		{
 			name: 'react',
 			description: 'Reaction restrict a member of(f) this guild',
-			type: ApplicationCommandOptionType.SubCommand,
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'user',
@@ -121,7 +121,7 @@ export const RestrictCommand = {
 		{
 			name: 'emoji',
 			description: 'Emoji restrict a member of(f) this guild',
-			type: ApplicationCommandOptionType.SubCommand,
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'user',
@@ -159,7 +159,7 @@ export const RestrictCommand = {
 		{
 			name: 'unrole',
 			description: 'Unrole a specific case',
-			type: ApplicationCommandOptionType.SubCommand,
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'case',

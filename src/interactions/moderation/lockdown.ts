@@ -7,7 +7,7 @@ export const LockdownCommand = {
 		{
 			name: 'lock',
 			description: 'Execute a lockdown on a text channel',
-			type: ApplicationCommandOptionType.SubCommand,
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'duration',
@@ -39,7 +39,7 @@ export const LockdownCommand = {
 		{
 			name: 'lift',
 			description: 'Lift a lockdown on a text channel',
-			type: ApplicationCommandOptionType.SubCommand,
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'channel',

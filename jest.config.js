@@ -3,9 +3,6 @@
  */
 export default {
 	testMatch: ['<rootDir>/src/**/*.test.ts'],
-	transform: {
-		'^.+\\.ts$': '@swc/jest',
-	},
 	testEnvironment: 'node',
 	collectCoverage: true,
 	collectCoverageFrom: ['src/**/*.ts'],
