@@ -31,9 +31,9 @@ export default class implements Event {
 				try {
 					const locale = await getGuildSetting(interaction.guildId!, SettingsKeys.Locale);
 					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
-				} catch (error) {
-					logger.error(error);
-					await interaction.editReply({ content: error.message, components: [] });
+				} catch (e) {
+					logger.error(e, e.message);
+					await interaction.editReply({ content: e.message, components: [] });
 				}
 			}
 

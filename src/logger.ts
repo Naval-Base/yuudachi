@@ -17,6 +17,6 @@ const streamToElastic = pinoElastic({
 });
 
 export const logger = pino(
-	{ ...ecsFormat() },
+	{ ...ecsFormat(), name: 'yuudachi-bot-v3-dev' },
 	pinoMultistream.multistream([{ stream: process.stdout }, { stream: streamToElastic }]),
 );

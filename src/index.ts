@@ -37,8 +37,6 @@ const client = new Client({
 		Intents.FLAGS.GUILD_VOICE_STATES,
 	],
 	makeCache: Options.cacheWithLimits({
-		BaseGuildEmojiManager: 10,
-		GuildInviteManager: 10,
 		GuildMemberManager: {
 			maxSize: 10,
 			keepOverLimit: (v) => v.id === v.client.user!.id,
@@ -100,11 +98,15 @@ try {
 		if (!cmdInfo) continue;
 
 		const command = container.resolve<Command>((await import(pathToFileURL(dir.fullPath).href)).default);
+		logger.info({ command: { name: cmdInfo.name } }, `Registering command: ${cmdInfo.name}`);
+
 		commands.set(command.name ?? cmdInfo.name, command);
 	}
 
 	for await (const dir of eventFiles) {
 		const event_ = container.resolve<Event>((await import(pathToFileURL(dir.fullPath).href)).default);
+		logger.info({ event: { name: event_.name, event: event_.event } }, `Registering event: ${event_.name}`);
+
 		if (event_.disabled) {
 			continue;
 		}
@@ -113,5 +115,5 @@ try {
 
 	await client.login();
 } catch (e) {
-	logger.error(e);
+	logger.error(e, e.message);
 }

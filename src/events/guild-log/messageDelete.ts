@@ -80,7 +80,7 @@ export default class implements Event {
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
 			} catch (e) {
-				logger.error(e);
+				logger.error(e, e.message);
 			}
 
 			continue;
