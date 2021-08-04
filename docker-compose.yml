@@ -1,30 +1,30 @@
-version: "3.7"
+version: '3.7'
 
 services:
   postgres:
-    image: postgres:12-alpine
+    build: ./docker/postgresql
+    labels:
+      com.naval-base.description: 'PostgreSQL'
     environment:
-      POSTGRES_USER: "yukikaze"
-      POSTGRES_PASSWORD: "commander"
-      POSTGRES_DB: "yukikaze_bot"
-    volumes:
-      - postgres-data-v1:/var/lib/postgresql/data
+      POSTGRES_USER: ''
+      POSTGRES_PASSWORD: ''
+      POSTGRES_DB: ''
     expose:
-      - "5432"
+      - '5432'
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U yuudachi']
+      interval: 10s
+      timeout: 5s
 
-  hasura:
-      image: hasura/graphql-engine:v1.3.2.cli-migrations-v2
-      expose:
-        - "8080"
-      ports:
-        - "8080:8080"
-      env_file:
-        - ./.env
-      restart: unless-stopped
-      volumes:
-        - ./migrations:/hasura-migrations
-
-volumes:
-  postgres-data-v1:
-    name: "postgres-data-v1"
+  redis:
+    image: redis:6-alpine
+    labels:
+      com.naval-base.description: 'Redis'
+    expose:
+      - '6379'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli ping']
+      interval: 10s
+      timeout: 5s

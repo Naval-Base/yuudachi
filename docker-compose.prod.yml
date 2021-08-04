@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  postgres:
+    environment:
+      POSTGRES_USER: 'yuudachi'
+      POSTGRES_PASSWORD: 'admin'
+      POSTGRES_DB: 'yuudachi'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  redis:
+    volumes:
+      - ./redis-data:/data
