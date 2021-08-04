@@ -7,16 +7,20 @@ import { JobType } from './Constants';
 import { deleteCase } from './functions/cases/deleteCase';
 import { deleteLockdown } from './functions/lockdowns/deleteLockdown';
 import { upsertCaseLog } from './functions/logs/upsertCaseLog';
+import { logger } from './logger';
 import { kBree } from './tokens';
 
 export function registerJobs() {
 	const bree = container.resolve<Bree>(kBree);
 
+	logger.info({ job: { name: 'modActionTimers' } }, `Registering job: modActionTimers`);
 	bree.add({
 		name: 'modActionTimers',
 		interval: '1m',
 		path: fileURLToPath(new URL('./jobs/modActionTimers.js', import.meta.url)),
 	});
+
+	logger.info({ job: { name: 'modLockdownTimers' } }, `Registering job: modLockdownTimers`);
 	bree.add({
 		name: 'modLockdownTimers',
 		interval: '1m',
@@ -37,13 +41,19 @@ export function startJobs() {
 						try {
 							const guild = await client.guilds.fetch(message.d.guildId);
 							const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
-							void upsertCaseLog(message.d.guildId, client.user, case_);
-						} catch {}
+							await upsertCaseLog(message.d.guildId, client.user, case_);
+						} catch (e) {
+							logger.error(e, e.message);
+						}
 						break;
 					}
 
 					case JobType.Lockdown: {
-						void deleteLockdown(message.d.channelId);
+						try {
+							await deleteLockdown(message.d.channelId);
+						} catch (e) {
+							logger.error(e, e.message);
+						}
 						break;
 					}
 				}

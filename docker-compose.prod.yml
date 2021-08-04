@@ -9,27 +9,6 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
 
-  postgres-exporter:
-    environment:
-      DATA_SOURCE_NAME: 'postgresql://yuudachi:admin@postgres:5432/yuudachi'
-
   redis:
     volumes:
       - ./redis-data:/data
-
-  redis-exporter:
-    environment:
-      REDIS_ADDR: 'redis://redis:6379'
-
-  prometheus:
-    volumes:
-      - ./prometheus-data:/prometheus
-
-  grafana:
-    environment:
-      GF_DEFAULT_INSTANCE_NAME: 'yuudachi'
-      GF_SECURITY_ADMIN_USER: 'admin'
-      GF_SECURITY_ADMIN_PASSWORD: 'admin'
-      GF_AUTH_ANONYMOUS_ENABLED: 'true'
-    volumes:
-      - ./grafana-data:/var/lib/grafana

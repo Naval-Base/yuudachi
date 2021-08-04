@@ -1,4 +1,4 @@
-import { oneLine, stripIndents } from 'common-tags';
+import { oneLine } from 'common-tags';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {
@@ -10,6 +10,7 @@ import {
 	Snowflake,
 	User,
 } from 'discord.js';
+import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 
@@ -35,6 +36,7 @@ interface CaseFooter {
 export async function generateHistory(
 	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
 	target: { member?: GuildMember; user: User },
+	locale: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
@@ -55,14 +57,18 @@ export async function generateHistory(
 				name: `${target.user.tag} (${target.user.id})`,
 				icon_url: target.user.displayAvatarURL(),
 			},
-			title: 'Cases',
+			title: i18next.t('log.history.title', { lng: locale }),
 		},
 		{
-			name: 'User Details',
-			value: stripIndents`
-					• Username: \`${target.user.tag}\` (${target.user.id})
-					• Created: ${creationFormatted} (${sinceCreationFormatted})
-				`,
+			name: i18next.t('log.history.user_details', { lng: locale }),
+			value: i18next.t('log.history.user_details_description', {
+				userMention: target.user.toString(),
+				userTag: target.user.tag,
+				userId: target.user.id,
+				created_at: creationFormatted,
+				created_at_since: sinceCreationFormatted,
+				lng: locale,
+			}),
 		},
 	);
 
@@ -77,16 +83,13 @@ export async function generateHistory(
 		);
 
 		embed = addFields(embed, {
-			name: 'Member Details',
-			value: stripIndents`
-					${target.member.nickname ? `• Nickname: \`${target.member.nickname}\`` : '• No nickname'}
-					• Roles: ${
-						target.member.roles.cache.size
-							? target.member.roles.cache.map((role) => role.toString()).join(', ')
-							: 'No roles'
-					}
-					• Joined: ${joinFormatted} (${sinceJoinFormatted})
-				`,
+			name: i18next.t('log.history.member_details', { lng: locale }),
+			value: i18next.t('log.history.member_details_description', {
+				memberNickname: target.member.nickname ?? 'No nickname',
+				joined_at: joinFormatted,
+				joined_at_since: sinceJoinFormatted,
+				lng: locale,
+			}),
 		});
 	}
 
@@ -150,7 +153,10 @@ export async function generateHistory(
 		break;
 	}
 	if (truncated) {
-		embed = { description: `${summary.join('\n')}\nand more...`, ...embed };
+		embed = {
+			description: i18next.t('log.history.summary_truncated', { summary_truncated: summary.join('\n'), lng: locale }),
+			...embed,
+		};
 	} else {
 		embed = { description: summary.join('\n'), ...embed };
 	}

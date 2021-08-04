@@ -64,7 +64,7 @@ export default class implements Command {
 		const banKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user);
+		const embed = await generateHistory(interaction, args.user, locale);
 
 		const banButton = new MessageButton()
 			.setCustomId(banKey)

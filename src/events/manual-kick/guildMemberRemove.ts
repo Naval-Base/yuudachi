@@ -27,6 +27,11 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
+				logger.info(
+					{ event: { name: this.name, event: this.event }, guildId: guildMember.guild.id, memberId: guildMember.id },
+					`Member ${guildMember.id} kicked`,
+				);
+
 				const logChannel = await checkLogChannel(
 					guildMember.guild,
 					await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId),

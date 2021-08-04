@@ -223,6 +223,14 @@
 		}
 	},
 	"log": {
+		"history": {
+			"title": "Case History",
+			"user_details": "User details",
+			"user_details_description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"member_details": "Member details",
+			"member_details_description": "• Nickname: {{- memberNickname}}\n• Roles: {{- memberRoles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"summary_truncated": "{{- summary}}\nand more..."
+		},
 		"mod_log": {
 			"case_log": {
 				"description": "**Member**: `{{- targetTag}}` ({{targetId}})\n**Action**: {{- action}}",

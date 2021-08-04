@@ -34,8 +34,28 @@ export default class implements Event {
 
 				const deleted = await this.redis.del(`guild:${guildBan.guild.id}:user:${guildBan.user.id}:unban`);
 				if (deleted) {
+					logger.info(
+						{
+							event: { name: this.name, event: this.event },
+							guildId: guildBan.guild.id,
+							memberId: guildBan.user.id,
+							manual: false,
+						},
+						`Member ${guildBan.user.id} unbanned`,
+					);
 					continue;
 				}
+
+				logger.info(
+					{
+						event: { name: this.name, event: this.event },
+						guildId: guildBan.guild.id,
+						memberId: guildBan.user.id,
+						manual: true,
+					},
+					`Member ${guildBan.user.id} unbanned`,
+				);
+
 				await pSetTimeout(750);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanRemove });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildBan.user.id);

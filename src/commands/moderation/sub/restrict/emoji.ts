@@ -59,7 +59,7 @@ export async function emoji(
 	const roleKey = nanoid();
 	const cancelKey = nanoid();
 
-	const embed = await generateHistory(interaction, args.user);
+	const embed = await generateHistory(interaction, args.user, locale);
 
 	const roleButton = new MessageButton()
 		.setCustomId(roleKey)

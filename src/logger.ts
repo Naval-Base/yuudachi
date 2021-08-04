@@ -6,7 +6,7 @@ import ecsFormat from '@elastic/ecs-pino-format';
 import pinoMultistream from 'pino-multi-stream';
 
 const streamToElastic = pinoElastic({
-	index: 'yuudachi-bot-v3-dev',
+	index: process.env.ELASTIC_INDEX,
 	consistency: 'one',
 	node: process.env.ELASTIC_URL,
 	auth: {
@@ -17,6 +17,6 @@ const streamToElastic = pinoElastic({
 });
 
 export const logger = pino(
-	{ ...ecsFormat(), name: 'yuudachi-bot-v3-dev' },
+	{ ...ecsFormat(), name: process.env.LOGGER_NAME },
 	pinoMultistream.multistream([{ stream: process.stdout }, { stream: streamToElastic }]),
 );

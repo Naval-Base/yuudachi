@@ -46,7 +46,7 @@ export default class implements Command {
 		const softbanKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user);
+		const embed = await generateHistory(interaction, args.user, locale);
 
 		const softbanButton = new MessageButton()
 			.setCustomId(softbanKey)

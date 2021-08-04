@@ -36,4 +36,5 @@ export const BanCommand = {
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],
+	default_permission: false,
 } as const;

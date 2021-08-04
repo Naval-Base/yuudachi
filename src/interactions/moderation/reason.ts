@@ -17,4 +17,5 @@ export const ReasonCommand = {
 			required: true,
 		},
 	],
+	default_permission: false,
 } as const;

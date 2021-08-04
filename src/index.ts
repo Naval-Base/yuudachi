@@ -61,6 +61,7 @@ const client = new Client({
 		VoiceStateManager: 10,
 	}),
 });
+client.setMaxListeners(20);
 
 const commands = new Map<string, Command>();
 const webhooks = new Map<string, Webhook>();

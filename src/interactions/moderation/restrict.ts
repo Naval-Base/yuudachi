@@ -170,4 +170,5 @@ export const RestrictCommand = {
 			],
 		},
 	],
+	default_permission: false,
 } as const;

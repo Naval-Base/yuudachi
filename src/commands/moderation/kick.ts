@@ -52,7 +52,7 @@ export default class implements Command {
 		const kickKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user);
+		const embed = await generateHistory(interaction, args.user, locale);
 
 		const kickButton = new MessageButton()
 			.setCustomId(kickKey)

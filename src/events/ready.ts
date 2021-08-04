@@ -6,6 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import type { Event } from '../Event';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
 import { registerJobs, startJobs } from '../jobs';
+import { logger } from '../logger';
 import { kWebhooks } from '../tokens';
 
 @injectable()
@@ -22,8 +23,13 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		for await (const _ of on(this.client, this.event) as AsyncIterableIterator<[void]>) {
+			logger.info({ event: { name: this.name, event: this.event } }, 'Caching webhooks');
 			for (const guild of this.client.guilds.cache.values()) {
 				if (!guild.me?.permissions.has(PermissionFlagsBits.ManageWebhooks, true)) {
+					logger.info(
+						{ event: { name: this.name, event: this.event }, guildId: guild.id },
+						'No permission to fetch webhooks',
+					);
 					continue;
 				}
 
@@ -49,7 +55,9 @@ export default class implements Event {
 				}
 			}
 
+			logger.info({ event: { name: this.name, event: this.event } }, 'Registering jobs');
 			registerJobs();
+			logger.info({ event: { name: this.name, event: this.event } }, 'Starting jobs');
 			startJobs();
 
 			continue;

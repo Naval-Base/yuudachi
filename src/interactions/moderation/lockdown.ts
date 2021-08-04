@@ -49,4 +49,5 @@ export const LockdownCommand = {
 			],
 		},
 	],
+	default_permission: false,
 } as const;

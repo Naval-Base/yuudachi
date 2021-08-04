@@ -21,4 +21,5 @@ export const KickCommand = {
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],
+	default_permission: false,
 } as const;

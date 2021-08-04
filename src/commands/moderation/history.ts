@@ -15,7 +15,7 @@ export default class implements Command {
 		await interaction.defer({ ephemeral: args.hide ?? true });
 		await checkModRole(interaction, locale);
 
-		const embed = await generateHistory(interaction, args.user);
+		const embed = await generateHistory(interaction, args.user, locale);
 
 		await interaction.editReply({
 			// @ts-expect-error

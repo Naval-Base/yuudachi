@@ -37,4 +37,5 @@ export const AntiRaidNukeCommand = {
 			],
 		},
 	],
+	default_permission: false,
 } as const;

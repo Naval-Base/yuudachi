@@ -29,6 +29,11 @@ export default class implements Event {
 			const command = this.commands.get(interaction.commandName);
 			if (command) {
 				try {
+					logger.info(
+						{ command: { name: interaction.commandName }, userId: interaction.user.id },
+						`Executing command ${interaction.commandName}`,
+					);
+
 					const locale = await getGuildSetting(interaction.guildId!, SettingsKeys.Locale);
 					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
 				} catch (e) {

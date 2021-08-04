@@ -19,5 +19,6 @@ jobs:
       - name: Build packages
         run: npm run build
 
-      - name: Run Tests
-        run: npm test:ci
+      # Uncomment when actual tests are present
+      #- name: Run Tests
+      #  run: npm test:ci

@@ -36,4 +36,5 @@ export const SoftbanCommand = {
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],
+	default_permission: false,
 } as const;

@@ -26,4 +26,5 @@ export const DurationCommand = {
 			required: true,
 		},
 	],
+	default_permission: false,
 } as const;

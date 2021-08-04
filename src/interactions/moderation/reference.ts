@@ -17,4 +17,5 @@ export const ReferenceCommand = {
 			required: true,
 		},
 	],
+	default_permission: false,
 } as const;
