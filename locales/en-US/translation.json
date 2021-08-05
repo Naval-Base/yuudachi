@@ -229,6 +229,7 @@
 			"user_details_description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
 			"member_details": "Member details",
 			"member_details_description": "• Nickname: {{- memberNickname}}\n• Roles: {{- memberRoles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"member_details_no_nickname": "No nickname",
 			"summary_truncated": "{{- summary}}\nand more..."
 		},
 		"mod_log": {

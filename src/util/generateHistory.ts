@@ -85,7 +85,8 @@ export async function generateHistory(
 		embed = addFields(embed, {
 			name: i18next.t('log.history.member_details', { lng: locale }),
 			value: i18next.t('log.history.member_details_description', {
-				memberNickname: target.member.nickname ?? 'No nickname',
+				memberNickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
+				memberRoles: target.member.roles.cache.map((role) => role.name).join(', '),
 				joined_at: joinFormatted,
 				joined_at_since: sinceJoinFormatted,
 				lng: locale,

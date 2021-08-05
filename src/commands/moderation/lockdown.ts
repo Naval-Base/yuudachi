@@ -15,7 +15,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof LockdownCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.defer({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
 		switch (Object.keys(args)[0]) {

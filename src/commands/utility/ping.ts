@@ -11,7 +11,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof PingCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.defer({ ephemeral: args.hide });
+		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 		await interaction.editReply({
 			content: i18next.t('command.utility.ping.success', { lng: locale }),

@@ -34,7 +34,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.defer();
+		await interaction.deferReply();
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(

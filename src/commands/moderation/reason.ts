@@ -18,7 +18,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof ReasonCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.defer({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
