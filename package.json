@@ -12,6 +12,7 @@
 		"test:ci": "jest --no-stack-trace --verbose --passWithNoTests",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --ext .ts --fix",
+		"start": "env-cmd env-cmd node --enable-source-maps --es-module-specifier-resolution=node dist/index.js",
 		"dev": "env-cmd node --enable-source-maps --es-module-specifier-resolution=node dist/index.js",
 		"deploy:commands": "env-cmd node --enable-source-maps --es-module-specifier-resolution=node dist/deploy.js",
 		"migrate": "env-cmd ley"
