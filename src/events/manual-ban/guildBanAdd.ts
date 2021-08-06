@@ -42,7 +42,7 @@ export default class implements Event {
 							guildId: guildBan.guild.id,
 							memberId: guildBan.user.id,
 							manual: false,
-							antiRaidNuke: true,
+							antiRaidNuke: Boolean(antiRaidNuke),
 						},
 						`Member ${guildBan.user.id} banned`,
 					);

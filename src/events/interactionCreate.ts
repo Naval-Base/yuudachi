@@ -38,7 +38,18 @@ export default class implements Event {
 					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
 				} catch (e) {
 					logger.error(e, e.message);
-					await interaction.editReply({ content: e.message, components: [] });
+					try {
+						if (!interaction.deferred && !interaction.replied) {
+							logger.warn(
+								{ command: { name: interaction.commandName }, userId: interaction.user.id },
+								'Comannd interaction has not been deferred before throwing',
+							);
+							await interaction.deferReply();
+						}
+						await interaction.editReply({ content: e.message, components: [] });
+					} catch (error) {
+						logger.error(e, e.message);
+					}
 				}
 			}
 
