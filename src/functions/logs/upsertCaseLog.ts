@@ -10,7 +10,7 @@ import { checkLogChannel } from '../settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting';
 import { generateCaseLog } from './generateCaseLog';
 
-export async function upsertCaseLog(guildId: Snowflake, user: User, case_: Case) {
+export async function upsertCaseLog(guildId: Snowflake, user: User | undefined | null, case_: Case) {
 	const client = container.resolve<Client<true>>(Client);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
@@ -19,17 +19,23 @@ export async function upsertCaseLog(guildId: Snowflake, user: User, case_: Case)
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
-	const embed: APIEmbed = {
-		author: {
-			name: `${user.tag} (${user.id})`,
-			icon_url: user.displayAvatarURL(),
-		},
+	let embed: APIEmbed = {
 		description: await generateCaseLog(guild.client, case_, logChannel!.id, locale),
 		footer: {
 			text: i18next.t('log.mod_log.case_log.footer', { caseId: case_.caseId, lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
 	};
+
+	if (user) {
+		embed = {
+			...embed,
+			author: {
+				name: `${user.tag} (${user.id})`,
+				icon_url: user.displayAvatarURL(),
+			},
+		};
+	}
 
 	if (case_.logMessageId) {
 		const message = await logChannel!.messages.fetch(case_.logMessageId);

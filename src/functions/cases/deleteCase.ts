@@ -9,7 +9,7 @@ import { generateCasePayload } from '../logs/generateCasePayload';
 
 interface DeleteCaseOptions {
 	guild: Guild;
-	user: User;
+	user?: User | null;
 	messageId?: Snowflake;
 	target?: User;
 	caseId?: number;
@@ -20,7 +20,7 @@ interface DeleteCaseOptions {
 
 export async function deleteCase({
 	guild,
-	user,
+	user = null,
 	target,
 	caseId,
 	reason,
@@ -65,7 +65,7 @@ export async function deleteCase({
 		guild,
 		generateCasePayload({
 			guildId: guild.id,
-			user: user,
+			user,
 			roleId: case_.role_id,
 			args: {
 				reason,

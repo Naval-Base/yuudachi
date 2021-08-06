@@ -74,19 +74,17 @@ export default class implements Event {
 					`Fetched logs for ban ${guildBan.user.id}`,
 				);
 
-				if (logs) {
-					const case_ = await createCase(
-						guildBan.guild,
-						generateCasePayload({
-							guildId: guildBan.guild.id,
-							user: logs.executor!,
-							args: { user: { user: guildBan.user }, reason: logs.reason },
-							action: CaseAction.Ban,
-						}),
-						true,
-					);
-					await upsertCaseLog(guildBan.guild.id, logs.executor!, case_);
-				}
+				const case_ = await createCase(
+					guildBan.guild,
+					generateCasePayload({
+						guildId: guildBan.guild.id,
+						user: logs?.executor,
+						args: { user: { user: guildBan.user }, reason: logs?.reason },
+						action: CaseAction.Ban,
+					}),
+					true,
+				);
+				await upsertCaseLog(guildBan.guild.id, logs?.executor, case_);
 			} catch (e) {
 				logger.error(e, e.message);
 			}

@@ -16,7 +16,7 @@ interface CasePayloadArgs {
 
 interface GenerateCasePayloadOptions {
 	guildId: Snowflake;
-	user: User;
+	user?: User | null;
 	roleId?: Snowflake | null;
 	args: CasePayloadArgs;
 	action: CaseAction;
@@ -27,7 +27,7 @@ interface GenerateCasePayloadOptions {
 
 export function generateCasePayload({
 	guildId,
-	user,
+	user = null,
 	roleId,
 	args,
 	action,
@@ -41,8 +41,8 @@ export function generateCasePayload({
 		roleId,
 		actionExpiration: duration ? new Date(Date.now() + duration) : undefined,
 		reason: args.reason,
-		moderatorId: user.id,
-		moderatorTag: user.tag,
+		moderatorId: user?.id,
+		moderatorTag: user?.tag,
 		target: args.user.member,
 		targetId: args.user.user.id,
 		targetTag: args.user.user.tag,

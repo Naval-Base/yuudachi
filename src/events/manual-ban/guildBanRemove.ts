@@ -70,16 +70,14 @@ export default class implements Event {
 					`Fetched logs for unban ${guildBan.user.id}`,
 				);
 
-				if (logs) {
-					const case_ = await deleteCase({
-						guild: guildBan.guild,
-						user: logs.executor!,
-						target: guildBan.user,
-						manual: true,
-						skipAction: true,
-					});
-					await upsertCaseLog(guildBan.guild.id, logs.executor!, case_);
-				}
+				const case_ = await deleteCase({
+					guild: guildBan.guild,
+					user: logs?.executor,
+					target: guildBan.user,
+					manual: true,
+					skipAction: true,
+				});
+				await upsertCaseLog(guildBan.guild.id, logs?.executor, case_);
 			} catch (e) {
 				logger.error(e, e.message);
 			}
