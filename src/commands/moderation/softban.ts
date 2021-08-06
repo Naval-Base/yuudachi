@@ -1,6 +1,8 @@
 import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import { inject, injectable } from 'tsyringe';
+import type { Redis } from 'ioredis';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
@@ -12,8 +14,12 @@ import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import { kRedis } from '../../tokens';
 
+@injectable()
 export default class implements Command {
+	public constructor(@inject(kRedis) public readonly redis: Redis) {}
+
 	public async execute(
 		interaction: CommandInteraction,
 		args: ArgumentsOf<typeof SoftbanCommand>,
@@ -93,6 +99,8 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === softbanKey) {
 			await collectedInteraction.deferUpdate();
 
+			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:ban`, 15, '');
+			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:unban`, 15, '');
 			const case_ = await createCase(
 				collectedInteraction.guild!,
 				generateCasePayload({
