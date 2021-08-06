@@ -6,13 +6,13 @@ export const AntiRaidNukeCommand = {
 	options: [
 		{
 			name: 'join',
-			description: 'How old (in minutes) should a member be for the cybernuke to ignore them (server join date)?',
+			description: 'How old should a member be for the cybernuke to ignore them (server join date)?',
 			type: ApplicationCommandOptionType.String,
 			required: true,
 		},
 		{
 			name: 'age',
-			description: "How old (in minutes) should a member's account be for the cybernuke to ignore them (account age)?",
+			description: "How old should a member's account be for the cybernuke to ignore them (account age)?",
 			type: ApplicationCommandOptionType.String,
 			required: true,
 		},

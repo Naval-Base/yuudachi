@@ -104,7 +104,7 @@
 					"execute": "Launch"
 				},
 				"cancel": "Cancelled Anti-Raid-Nuke.",
-				"success": "Anti-Raid-Nuke hit {{- members}} guild members. Report attached."
+				"success": "Anti-Raid-Nuke hit {{- members}} guild members."
 			},
 			"restrict": {
 				"mute": {

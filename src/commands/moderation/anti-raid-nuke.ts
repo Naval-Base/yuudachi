@@ -62,12 +62,12 @@ export default class implements Command {
 		const joinCutoff = Date.now() - parsedJoin;
 		const accountCutoff = Date.now() - parsedAge;
 
-		const fetchedMembers = await interaction.guild?.members.fetch({ force: true });
-		const members = fetchedMembers?.filter(
+		const fetchedMembers = await interaction.guild!.members.fetch({ force: true });
+		const members = fetchedMembers.filter(
 			(member) => member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff,
 		);
 
-		if (!members?.size) {
+		if (!members.size) {
 			await interaction.editReply({
 				content: `${i18next.t('command.mod.anti_raid_nuke.errors.no_hits', {
 					lng: locale,
@@ -134,7 +134,9 @@ export default class implements Command {
 				attachments: [],
 			});
 		} else if (collectedInteraction?.customId === banKey) {
-			await collectedInteraction.deferUpdate();
+			await collectedInteraction.update({
+				components: [],
+			});
 
 			await this.redis.setex(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15, 'true');
 			let idx = 0;
@@ -151,7 +153,7 @@ export default class implements Command {
 							args: {
 								reason: i18next.t('command.mod.anti_raid_nuke.reason', {
 									current: ++idx,
-									size: members.size,
+									members: members.size,
 									lng: locale,
 								}),
 								user: {

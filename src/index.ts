@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { Client, Intents, LimitedCollection, Options, Webhook } from 'discord.js';
+import { Client, Intents, Options, Util, Webhook } from 'discord.js';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
@@ -37,26 +37,20 @@ const client = new Client({
 		Intents.FLAGS.GUILD_VOICE_STATES,
 	],
 	makeCache: Options.cacheWithLimits({
-		GuildMemberManager: {
-			maxSize: 10,
-			keepOverLimit: (v) => v.id === v.client.user!.id,
+		// @ts-expect-error
+		ChannelManager: {
+			sweepInterval: 3600,
+			sweepFilter: Util.archivedThreadSweepFilter(),
+		},
+		GuildChannelManager: {
+			sweepInterval: 3600,
+			sweepFilter: Util.archivedThreadSweepFilter(),
 		},
 		MessageManager: 100,
 		StageInstanceManager: 10,
 		ThreadManager: {
 			sweepInterval: 3600,
-			sweepFilter: LimitedCollection.filterByLifetime({
-				getComparisonTimestamp: (thread) => thread.archiveTimestamp!,
-				excludeFromSweep: (thread) => !thread.archived,
-			}),
-		},
-		ThreadMemberManager: {
-			maxSize: 10,
-			keepOverLimit: (v) => v.id === v.client.user!.id,
-		},
-		UserManager: {
-			maxSize: 10,
-			keepOverLimit: (v) => v.id === v.client.user!.id,
+			sweepFilter: Util.archivedThreadSweepFilter(),
 		},
 		VoiceStateManager: 10,
 	}),
