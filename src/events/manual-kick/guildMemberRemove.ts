@@ -44,8 +44,8 @@ export default class implements Event {
 				if (deleted) {
 					continue;
 				}
-				await pSetTimeout(750);
-				const auditLogs = await guildMember.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberKick });
+				await pSetTimeout(1500);
+				const auditLogs = await guildMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberKick });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildMember.user.id);
 
 				if (logs) {
