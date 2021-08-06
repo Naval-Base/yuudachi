@@ -37,17 +37,20 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
-		await interaction.guild?.bans
-			.fetch(args.user.user.id)
-			.then(() => {
-				throw new Error(
-					i18next.t('command.mod.ban.errors.already_banned', {
-						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-						lng: locale,
-					}),
-				);
-			})
-			.catch(() => null);
+		let alreadyBanned = false;
+		try {
+			await interaction.guild!.bans.fetch(args.user.user.id);
+			alreadyBanned = true;
+		} catch {}
+
+		if (alreadyBanned) {
+			throw new Error(
+				i18next.t('command.mod.ban.errors.already_banned', {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
+				}),
+			);
+		}
 
 		if (args.user.member && !args.user.member.bannable) {
 			throw new Error(
