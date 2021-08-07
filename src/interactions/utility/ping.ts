@@ -1,13 +1,6 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const PingCommand = {
-	name: 'ping',
-	description: 'Health check',
-	options: [
-		{
-			name: 'hide',
-			description: 'Hides the output',
-			type: ApplicationCommandOptionType.Boolean,
-		},
-	],
-} as const;
+export const PingCommand = new SlashCommandBuilder()
+	.setName('ping')
+	.setDescription('Health check')
+	.addBooleanOption((opt) => opt.setName('hide').setDescription('Hides the output'));

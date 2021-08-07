@@ -30,30 +30,30 @@ const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
 try {
 	console.log('Start refreshing interaction (/) commands.');
 
+	const moderationCommands = [
+		AntiRaidNukeCommand,
+		BanCommand,
+		DurationCommand,
+		HistoryCommand,
+		KickCommand,
+		ReasonCommand,
+		ReferenceCommand,
+		RestrictCommand,
+		SoftbanCommand,
+		UnbanCommand,
+		WarnCommand,
+		LockdownCommand,
+	].map((cmd) => ({ ...cmd.toJSON(), default_permission: false }));
+
+	const utilityCommands = [PingCommand].map((cmd) => cmd.toJSON());
+
 	const commands = (await rest.put(
 		Routes.applicationGuildCommands(
 			process.env.DISCORD_CLIENT_ID as Snowflake,
 			process.env.DISCORD_GUILD_ID as Snowflake,
 		),
 		{
-			body: [
-				// Moderation
-				AntiRaidNukeCommand,
-				BanCommand,
-				DurationCommand,
-				HistoryCommand,
-				KickCommand,
-				ReasonCommand,
-				ReferenceCommand,
-				RestrictCommand,
-				SoftbanCommand,
-				UnbanCommand,
-				WarnCommand,
-				LockdownCommand,
-
-				// Utility
-				PingCommand,
-			],
+			body: [...utilityCommands, ...moderationCommands],
 		},
 	)) as RESTGetAPIApplicationGuildCommandsResult;
 

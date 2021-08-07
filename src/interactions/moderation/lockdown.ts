@@ -1,53 +1,35 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const LockdownCommand = {
-	name: 'lockdown',
-	description: 'Execute or lift a lockdown on a text channel',
-	options: [
-		{
-			name: 'lock',
-			description: 'Execute a lockdown on a text channel',
-			type: ApplicationCommandOptionType.Subcommand,
-			options: [
-				{
-					name: 'duration',
-					description: 'The duration',
-					type: ApplicationCommandOptionType.String,
-					choices: [
-						{ name: '1 hour', value: '1h' },
-						{ name: '3 hours', value: '3h' },
-						{ name: '6 hours', value: '6h' },
-						{ name: '12 hours', value: '12h' },
-						{ name: '1 day', value: '1d' },
-						{ name: '2 days', value: '2d' },
-						{ name: '3 days', value: '3d' },
-					],
-					required: true,
-				},
-				{
-					name: 'channel',
-					description: 'The channel to lock',
-					type: ApplicationCommandOptionType.Channel,
-				},
-				{
-					name: 'reason',
-					description: 'The reason of this lockdown',
-					type: ApplicationCommandOptionType.String,
-				},
-			],
-		},
-		{
-			name: 'lift',
-			description: 'Lift a lockdown on a text channel',
-			type: ApplicationCommandOptionType.Subcommand,
-			options: [
-				{
-					name: 'channel',
-					description: 'The channel to lift the lock',
-					type: ApplicationCommandOptionType.Channel,
-				},
-			],
-		},
-	],
-	default_permission: false,
-} as const;
+export const LockdownCommand = new SlashCommandBuilder()
+	.setName('lockdown')
+	.setDescription('Execute or lift a lockdown on a text channel')
+	.addSubcommand((sub) =>
+		sub
+			.setName('lock')
+			.setDescription('Execute a lockdown on a text channel')
+			.addStringOption((opt) =>
+				opt
+					.setName('duration')
+					.setDescription('The duration')
+					.setRequired(true)
+					.addChoices([
+						['1 hour', '1h'],
+						['3 hours', '3h'],
+						['6 hours', '6h'],
+						['12 hours', '12h'],
+						['1 day', '1d'],
+						['2 days', '2d'],
+						['3 days', '3d'],
+					]),
+			)
+			.addChannelOption((opt) => opt.setName('channel').setDescription('The channel to lock').setRequired(false))
+			.addStringOption((opt) => opt.setName('reason').setDescription('The reason of this lockdown').setRequired(false)),
+	)
+	.addSubcommand((sub) =>
+		sub
+			.setName('lift')
+			.setDescription('Lift a lockdown on a text channel')
+			.addChannelOption((opt) =>
+				opt.setName('channel').setDescription('The channel to lift the lock').setRequired(false),
+			),
+	);

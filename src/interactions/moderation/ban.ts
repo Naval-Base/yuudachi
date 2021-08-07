@@ -1,40 +1,24 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const BanCommand = {
-	name: 'ban',
-	description: 'Ban a member of(f) this guild',
-	options: [
-		{
-			name: 'user',
-			description: 'The user to action',
-			type: ApplicationCommandOptionType.User,
-			required: true,
-		},
-		{
-			name: 'reason',
-			description: 'The reason of this action',
-			type: ApplicationCommandOptionType.String,
-		},
-		{
-			name: 'days',
-			description: 'The amount of days to deleted messages from',
-			type: ApplicationCommandOptionType.Integer,
-			choices: [
-				{ name: '0 days (default)', value: 0 },
-				{ name: '1 day', value: 1 },
-				{ name: '2 days', value: 2 },
-				{ name: '3 days', value: 3 },
-				{ name: '4 days', value: 4 },
-				{ name: '5 days', value: 5 },
-				{ name: '6 days', value: 6 },
-				{ name: '7 days', value: 7 },
-			],
-		},
-		{
-			name: 'reference',
-			description: 'The reference case',
-			type: ApplicationCommandOptionType.Integer,
-		},
-	],
-	default_permission: false,
-} as const;
+export const BanCommand = new SlashCommandBuilder()
+	.setName('ban')
+	.setDescription('Ban a member of(f) this guild')
+	.addUserOption((opt) => opt.setName('user').setDescription('The user to action').setRequired(true))
+	.addStringOption((opt) => opt.setName('reason').setDescription('The reason of this action').setRequired(false))
+	.addIntegerOption((opt) =>
+		opt
+			.setName('days')
+			.setDescription('The amount of days to deleted messages from')
+			.setRequired(false)
+			.addChoices([
+				['0 days (default)', 0],
+				['1 day', 1],
+				['2 days', 2],
+				['3 days', 3],
+				['4 days', 4],
+				['5 days', 5],
+				['6 days', 6],
+				['7 days', 7],
+			]),
+	)
+	.addIntegerOption((opt) => opt.setName('reference').setDescription('The reference case').setRequired(false));

@@ -1,174 +1,103 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const RestrictCommand = {
-	name: 'restrict',
-	description: 'Restrict a members access to write/tags/embed/react/emoji',
-	options: [
-		{
-			name: 'mute',
-			description: 'Mute a member of(f) this guild',
-			type: ApplicationCommandOptionType.Subcommand,
-			options: [
-				{
-					name: 'user',
-					description: 'The user to action',
-					type: ApplicationCommandOptionType.User,
-					required: true,
-				},
-				{
-					name: 'duration',
-					description: 'The duration',
-					type: ApplicationCommandOptionType.String,
-					choices: [
-						{ name: '3 hours', value: '3h' },
-						{ name: '6 hours', value: '6h' },
-						{ name: '12 hours', value: '12h' },
-						{ name: '1 day', value: '1d' },
-						{ name: '2 days', value: '2d' },
-						{ name: '3 days', value: '3d' },
-						{ name: '7 days', value: '7d' },
-					],
-					required: true,
-				},
-				{
-					name: 'reason',
-					description: 'The reason of this action',
-					type: ApplicationCommandOptionType.String,
-				},
-				{
-					name: 'reference',
-					description: 'The reference case',
-					type: ApplicationCommandOptionType.Integer,
-				},
-			],
-		},
-		{
-			name: 'embed',
-			description: 'Embed restrict a member of(f) this guild',
-			type: ApplicationCommandOptionType.Subcommand,
-			options: [
-				{
-					name: 'user',
-					description: 'The user to action',
-					type: ApplicationCommandOptionType.User,
-					required: true,
-				},
-				{
-					name: 'duration',
-					description: 'The duration',
-					type: ApplicationCommandOptionType.String,
-					choices: [
-						{ name: '3 hours', value: '3h' },
-						{ name: '6 hours', value: '6h' },
-						{ name: '12 hours', value: '12h' },
-						{ name: '1 day', value: '1d' },
-						{ name: '2 days', value: '2d' },
-						{ name: '3 days', value: '3d' },
-						{ name: '7 days', value: '7d' },
-					],
-					required: true,
-				},
-				{
-					name: 'reason',
-					description: 'The reason of this action',
-					type: ApplicationCommandOptionType.String,
-				},
-				{
-					name: 'reference',
-					description: 'The reference case',
-					type: ApplicationCommandOptionType.Integer,
-				},
-			],
-		},
-		{
-			name: 'react',
-			description: 'Reaction restrict a member of(f) this guild',
-			type: ApplicationCommandOptionType.Subcommand,
-			options: [
-				{
-					name: 'user',
-					description: 'The user to action',
-					type: ApplicationCommandOptionType.User,
-					required: true,
-				},
-				{
-					name: 'duration',
-					description: 'The duration',
-					type: ApplicationCommandOptionType.String,
-					choices: [
-						{ name: '3 hours', value: '3h' },
-						{ name: '6 hours', value: '6h' },
-						{ name: '12 hours', value: '12h' },
-						{ name: '1 day', value: '1d' },
-						{ name: '2 days', value: '2d' },
-						{ name: '3 days', value: '3d' },
-						{ name: '7 days', value: '7d' },
-					],
-					required: true,
-				},
-				{
-					name: 'reason',
-					description: 'The reason of this action',
-					type: ApplicationCommandOptionType.String,
-				},
-				{
-					name: 'reference',
-					description: 'The reference case',
-					type: ApplicationCommandOptionType.Integer,
-				},
-			],
-		},
-		{
-			name: 'emoji',
-			description: 'Emoji restrict a member of(f) this guild',
-			type: ApplicationCommandOptionType.Subcommand,
-			options: [
-				{
-					name: 'user',
-					description: 'The user to action',
-					type: ApplicationCommandOptionType.User,
-					required: true,
-				},
-				{
-					name: 'duration',
-					description: 'The duration',
-					type: ApplicationCommandOptionType.String,
-					choices: [
-						{ name: '3 hours', value: '3h' },
-						{ name: '6 hours', value: '6h' },
-						{ name: '12 hours', value: '12h' },
-						{ name: '1 day', value: '1d' },
-						{ name: '2 days', value: '2d' },
-						{ name: '3 days', value: '3d' },
-						{ name: '7 days', value: '7d' },
-					],
-					required: true,
-				},
-				{
-					name: 'reason',
-					description: 'The reason of this action',
-					type: ApplicationCommandOptionType.String,
-				},
-				{
-					name: 'reference',
-					description: 'The reference case',
-					type: ApplicationCommandOptionType.Integer,
-				},
-			],
-		},
-		{
-			name: 'unrole',
-			description: 'Unrole a specific case',
-			type: ApplicationCommandOptionType.Subcommand,
-			options: [
-				{
-					name: 'case',
-					description: 'The case to unrole',
-					type: ApplicationCommandOptionType.Integer,
-					required: true,
-				},
-			],
-		},
-	],
-	default_permission: false,
-} as const;
+export const RestrictCommand = new SlashCommandBuilder()
+	.setName('restrict')
+	.setDescription('Restrict a members access to write/tags/embed/react/emoji')
+	.addSubcommand((sub) =>
+		sub
+			.setName('mute')
+			.setDescription('Mute a member of(f) this guild')
+			.addUserOption((opt) => opt.setName('user').setDescription('The user to action').setRequired(true))
+			.addStringOption((opt) =>
+				opt
+					.setName('duration')
+					.setDescription('The duration')
+					.setRequired(true)
+					.addChoices([
+						['3 hours', '3h'],
+						['6 hours', '6h'],
+						['12 hours', '12h'],
+						['1 day', '1d'],
+						['2 days', '2d'],
+						['3 days', '3d'],
+						['7 days', '7d'],
+					]),
+			)
+			.addStringOption((opt) => opt.setName('reason').setDescription('The reason of this action').setRequired(false))
+			.addIntegerOption((opt) => opt.setName('reference').setDescription('The reference case').setRequired(false)),
+	)
+	.addSubcommand((sub) =>
+		sub
+			.setName('embed')
+			.setDescription('Embed restrict a member of(f) this guild')
+			.addUserOption((opt) => opt.setName('user').setDescription('The user to action').setRequired(true))
+			.addStringOption((opt) =>
+				opt
+					.setName('duration')
+					.setDescription('The duration')
+					.setRequired(true)
+					.addChoices([
+						['3 hours', '3h'],
+						['6 hours', '6h'],
+						['12 hours', '12h'],
+						['1 day', '1d'],
+						['2 days', '2d'],
+						['3 days', '3d'],
+						['7 days', '7d'],
+					]),
+			)
+			.addStringOption((opt) => opt.setName('reason').setDescription('The reason of this action').setRequired(false))
+			.addIntegerOption((opt) => opt.setName('reference').setDescription('The reference case').setRequired(false)),
+	)
+	.addSubcommand((sub) =>
+		sub
+			.setName('react')
+			.setDescription('Reaction restrict a member of(f) this guild')
+			.addUserOption((opt) => opt.setName('user').setDescription('The user to action').setRequired(true))
+			.addStringOption((opt) =>
+				opt
+					.setName('duration')
+					.setDescription('The duration')
+					.setRequired(true)
+					.addChoices([
+						['3 hours', '3h'],
+						['6 hours', '6h'],
+						['12 hours', '12h'],
+						['1 day', '1d'],
+						['2 days', '2d'],
+						['3 days', '3d'],
+						['7 days', '7d'],
+					]),
+			)
+			.addStringOption((opt) => opt.setName('reason').setDescription('The reason of this action').setRequired(false))
+			.addIntegerOption((opt) => opt.setName('reference').setDescription('The reference case').setRequired(false)),
+	)
+	.addSubcommand((sub) =>
+		sub
+			.setName('emoji')
+			.setDescription('Emoji restrict a member of(f) this guild')
+			.addUserOption((opt) => opt.setName('user').setDescription('The user to action').setRequired(true))
+			.addStringOption((opt) =>
+				opt
+					.setName('duration')
+					.setDescription('The duration')
+					.setRequired(true)
+					.addChoices([
+						['3 hours', '3h'],
+						['6 hours', '6h'],
+						['12 hours', '12h'],
+						['1 day', '1d'],
+						['2 days', '2d'],
+						['3 days', '3d'],
+						['7 days', '7d'],
+					]),
+			)
+			.addStringOption((opt) => opt.setName('reason').setDescription('The reason of this action').setRequired(false))
+			.addIntegerOption((opt) => opt.setName('reference').setDescription('The reference case').setRequired(false)),
+	)
+	.addSubcommand((sub) =>
+		sub
+			.setName('unrole')
+			.setDescription('Unrole a specific case')
+			.addIntegerOption((opt) => opt.setName('case').setDescription('The case to unrole').setRequired(true)),
+	);

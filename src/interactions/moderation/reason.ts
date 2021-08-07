@@ -1,21 +1,7 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const ReasonCommand = {
-	name: 'reason',
-	description: 'Change the reason of an action',
-	options: [
-		{
-			name: 'case',
-			description: 'The case to look up',
-			type: ApplicationCommandOptionType.Integer,
-			required: true,
-		},
-		{
-			name: 'reason',
-			description: 'The reason',
-			type: ApplicationCommandOptionType.String,
-			required: true,
-		},
-	],
-	default_permission: false,
-} as const;
+export const ReasonCommand = new SlashCommandBuilder()
+	.setName('reason')
+	.setDescription('Change the reason of an action')
+	.addIntegerOption((opt) => opt.setName('case').setDescription('The case to look up').setRequired(true))
+	.addStringOption((opt) => opt.setName('reason').setDescription('The reason').setRequired(true));

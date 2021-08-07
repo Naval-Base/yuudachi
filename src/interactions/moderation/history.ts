@@ -1,20 +1,7 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const HistoryCommand = {
-	name: 'history',
-	description: 'Look up a users moderative history',
-	options: [
-		{
-			name: 'user',
-			description: 'The user to look up',
-			type: ApplicationCommandOptionType.User,
-			required: true,
-		},
-		{
-			name: 'hide',
-			description: 'Hides the output',
-			type: ApplicationCommandOptionType.Boolean,
-		},
-	],
-	default_permission: false,
-} as const;
+export const HistoryCommand = new SlashCommandBuilder()
+	.setName('history')
+	.setDescription('Look up a users moderative history')
+	.addUserOption((opt) => opt.setName('user').setDescription('The user to look up').setRequired(true))
+	.addBooleanOption((opt) => opt.setName('hide').setDescription('Hides the output').setRequired(false));

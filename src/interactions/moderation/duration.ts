@@ -1,30 +1,21 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const DurationCommand = {
-	name: 'duration',
-	description: 'Change the duration of a timed action',
-	options: [
-		{
-			name: 'case',
-			description: 'The case to look up',
-			type: ApplicationCommandOptionType.Integer,
-			required: true,
-		},
-		{
-			name: 'duration',
-			description: 'The duration',
-			type: ApplicationCommandOptionType.String,
-			choices: [
-				{ name: '3 hours', value: '3h' },
-				{ name: '6 hours', value: '6h' },
-				{ name: '12 hours', value: '12h' },
-				{ name: '1 day', value: '1d' },
-				{ name: '2 days', value: '2d' },
-				{ name: '3 days', value: '3d' },
-				{ name: '7 days', value: '7d' },
-			],
-			required: true,
-		},
-	],
-	default_permission: false,
-} as const;
+export const DurationCommand = new SlashCommandBuilder()
+	.setName('duration')
+	.setDescription('Change the duration of a timed action')
+	.addIntegerOption((opt) => opt.setName('case').setDescription('The case to look up').setRequired(true))
+	.addStringOption((opt) =>
+		opt
+			.setName('duration')
+			.setDescription('The duration')
+			.setRequired(true)
+			.addChoices([
+				['3 hours', '3h'],
+				['6 hours', '6h'],
+				['12 hours', '12h'],
+				['1 day', '1d'],
+				['2 days', '2d'],
+				['3 days', '3d'],
+				['7 days', '7d'],
+			]),
+	);

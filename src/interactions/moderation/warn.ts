@@ -1,25 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const WarnCommand = {
-	name: 'warn',
-	description: 'Warn a user',
-	options: [
-		{
-			name: 'user',
-			description: 'The user to action',
-			type: ApplicationCommandOptionType.User,
-			required: true,
-		},
-		{
-			name: 'reason',
-			description: 'The reason of this action',
-			type: ApplicationCommandOptionType.String,
-		},
-		{
-			name: 'reference',
-			description: 'The reference case',
-			type: ApplicationCommandOptionType.Integer,
-		},
-	],
-	default_permission: false,
-} as const;
+export const WarnCommand = new SlashCommandBuilder()
+	.setName('warn')
+	.setDescription('Warn a user')
+	.addUserOption((opt) => opt.setName('user').setDescription('The user to action').setRequired(true))
+	.addStringOption((opt) => opt.setName('reason').setDescription('The reason of this action').setRequired(false))
+	.addIntegerOption((opt) => opt.setName('reference').setDescription('The reference case').setRequired(false));

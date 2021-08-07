@@ -1,21 +1,7 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const ReferenceCommand = {
-	name: 'reference',
-	description: 'Change the reference of an action',
-	options: [
-		{
-			name: 'case',
-			description: 'The case to look up',
-			type: ApplicationCommandOptionType.Integer,
-			required: true,
-		},
-		{
-			name: 'reference',
-			description: 'The reference case',
-			type: ApplicationCommandOptionType.Integer,
-			required: true,
-		},
-	],
-	default_permission: false,
-} as const;
+export const ReferenceCommand = new SlashCommandBuilder()
+	.setName('reference')
+	.setDescription('Change the reference of an action')
+	.addIntegerOption((opt) => opt.setName('case').setDescription('The case to look up').setRequired(true))
+	.addIntegerOption((opt) => opt.setName('reference').setDescription('The reference case').setRequired(true));
