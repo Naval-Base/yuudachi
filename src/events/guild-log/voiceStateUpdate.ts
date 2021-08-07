@@ -50,6 +50,7 @@ export default class implements Event {
 							guildId: newState.guild.id,
 							memberId: newState.member.id,
 							channelId: newState.channel.id,
+							joined: true,
 						},
 						`Member ${newState.member.id} joined a voice channel`,
 					);
@@ -71,6 +72,7 @@ export default class implements Event {
 							guildId: newState.guild.id,
 							memberId: newState.member.id,
 							channelId: oldState.channel.id,
+							joined: false,
 						},
 						`Member ${newState.member.id} left a voice channel`,
 					);
