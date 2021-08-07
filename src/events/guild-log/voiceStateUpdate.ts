@@ -44,6 +44,16 @@ export default class implements Event {
 
 				let description = '';
 				if ((!oldState || !oldState.channel) && newState.channel) {
+					logger.info(
+						{
+							event: { name: this.name, event: this.event },
+							guildId: newState.guild.id,
+							memberId: newState.member.id,
+							channelId: newState.channel.id,
+						},
+						`Member ${newState.member.id} joined a voice channel`,
+					);
+
 					description = i18next.t('log.guild_log.voice_state_update.joined', {
 						channel: newState.channel.toString(),
 						lng: locale,
@@ -55,6 +65,16 @@ export default class implements Event {
 						lng: locale,
 					});
 				} else if (oldState?.channel && !newState.channel) {
+					logger.info(
+						{
+							event: { name: this.name, event: this.event },
+							guildId: newState.guild.id,
+							memberId: newState.member.id,
+							channelId: oldState.channel.id,
+						},
+						`Member ${newState.member.id} left a voice channel`,
+					);
+
 					description = i18next.t('log.guild_log.voice_state_update.left', {
 						channel: oldState.channel.toString(),
 						lng: locale,

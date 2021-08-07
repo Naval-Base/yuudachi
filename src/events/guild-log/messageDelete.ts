@@ -33,6 +33,15 @@ export default class implements Event {
 			}
 
 			try {
+				logger.info(
+					{
+						event: { name: this.name, event: this.event },
+						guildId: message.guild.id,
+						memberId: message.author.id,
+					},
+					`Member ${message.author.id} deleted a message`,
+				);
+
 				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
 				if (!logChannelId) {

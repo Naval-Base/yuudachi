@@ -36,6 +36,15 @@ export default class implements Event {
 			}
 
 			try {
+				logger.info(
+					{
+						event: { name: this.name, event: this.event },
+						guildId: newMessage.guild.id,
+						memberId: newMessage.author.id,
+					},
+					`Member ${newMessage.author.id} updated a message`,
+				);
+
 				const locale = await getGuildSetting(newMessage.guild.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
 				if (!logChannelId) {

@@ -63,6 +63,7 @@ export default class implements Event {
 				await pSetTimeout(1500);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberBanAdd });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildBan.user.id);
+
 				logger.info(
 					{
 						event: { name: this.name, event: this.event },
