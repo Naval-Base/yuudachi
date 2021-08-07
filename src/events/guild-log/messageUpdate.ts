@@ -97,7 +97,7 @@ export default class implements Event {
 							name: `${newMessage.author.tag} (${newMessage.author.id})`,
 							icon_url: newMessage.author.displayAvatarURL(),
 						},
-						color: 3092790,
+						color: 6057215,
 						title: i18next.t('log.guild_log.message_updated.title', { lng: locale }),
 						description,
 						timestamp: new Date().toISOString(),

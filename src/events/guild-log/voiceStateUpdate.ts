@@ -68,7 +68,7 @@ export default class implements Event {
 						name: `${newState.member.user.tag} (${newState.member.id})`,
 						icon_url: newState.member.user.displayAvatarURL(),
 					},
-					color: 3092790,
+					color: 3407871,
 					title: i18next.t('log.guild_log.voice_state_update.title', { lng: locale }),
 					description,
 					timestamp: new Date().toISOString(),

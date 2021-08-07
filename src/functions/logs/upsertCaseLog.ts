@@ -8,7 +8,7 @@ import { kSQL } from '../../tokens';
 import type { Case } from '../cases/createCase';
 import { checkLogChannel } from '../settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting';
-import { generateCaseLog } from './generateCaseLog';
+import { generateCaseLog, generateCaseColor } from './generateCaseLog';
 
 export async function upsertCaseLog(guildId: Snowflake, user: User | undefined | null, case_: Case) {
 	const client = container.resolve<Client<true>>(Client);
@@ -20,6 +20,7 @@ export async function upsertCaseLog(guildId: Snowflake, user: User | undefined |
 	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
 	let embed: APIEmbed = {
+		color: generateCaseColor(case_),
 		description: await generateCaseLog(guild.client, case_, logChannel!.id, locale),
 		footer: {
 			text: i18next.t('log.mod_log.case_log.footer', { caseId: case_.caseId, lng: locale }),
