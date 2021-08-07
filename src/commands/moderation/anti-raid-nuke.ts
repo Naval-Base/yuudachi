@@ -135,7 +135,7 @@ export default class implements Command {
 			});
 		} else if (collectedInteraction?.customId === banKey) {
 			await collectedInteraction.update({
-				components: [],
+				components: [new MessageActionRow().addComponents([cancelButton.setDisabled(), banButton.setDisabled()])],
 			});
 
 			await this.redis.setex(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15, 'true');
