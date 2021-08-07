@@ -50,16 +50,6 @@ export default class implements Event {
 					continue;
 				}
 
-				logger.info(
-					{
-						event: { name: this.name, event: this.event },
-						guildId: guildBan.guild.id,
-						memberId: guildBan.user.id,
-						manual: true,
-					},
-					`Member ${guildBan.user.id} banned`,
-				);
-
 				await pSetTimeout(1500);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberBanAdd });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildBan.user.id);
@@ -68,6 +58,17 @@ export default class implements Event {
 					{
 						event: { name: this.name, event: this.event },
 						guildId: guildBan.guild.id,
+						userId: logs?.executor?.id,
+						memberId: guildBan.user.id,
+						manual: true,
+					},
+					`Member ${guildBan.user.id} banned`,
+				);
+				logger.info(
+					{
+						event: { name: this.name, event: this.event },
+						guildId: guildBan.guild.id,
+						userId: logs?.executor?.id,
 						memberId: guildBan.user.id,
 						manual: true,
 						logs,
