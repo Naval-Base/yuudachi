@@ -53,7 +53,7 @@ export default class implements Event {
 						name: `${message.author.tag} (${message.author.id})`,
 						icon_url: message.author.displayAvatarURL(),
 					},
-					color: 3092790,
+					color: 12016895,
 					title: i18next.t('log.guild_log.message_deleted.title'),
 					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 					description: `${message.content ?? i18next.t('log.guild_log.message_deleted.no_content', { lng: locale })}`,

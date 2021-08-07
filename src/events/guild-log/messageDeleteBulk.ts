@@ -70,7 +70,7 @@ export default class implements Event {
 						name: `${messages.first()!.author.tag} (${messages.first()!.author.id})`,
 						icon_url: messages.first()!.author.displayAvatarURL(),
 					},
-					color: 3092790,
+					color: 12016895,
 					title: i18next.t('log.guild_log.message_bulk_deleted.title', { lng: locale }),
 					description: i18next.t('log.guild_log.message_bulk_deleted.description', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
