@@ -160,7 +160,6 @@ export default class implements Command {
 									member: member,
 									user: member.user,
 								},
-								// @ts-expect-error
 								days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
 								joinCutoff: dayjs(joinCutoff).toDate(),
 								accountCutoff: dayjs(accountCutoff).toDate(),

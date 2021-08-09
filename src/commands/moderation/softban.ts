@@ -106,7 +106,10 @@ export default class implements Command {
 				generateCasePayload({
 					guildId: collectedInteraction.guildId!,
 					user: collectedInteraction.user,
-					args,
+					args: {
+						...args,
+						days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+					},
 					action: CaseAction.Softban,
 				}),
 			);

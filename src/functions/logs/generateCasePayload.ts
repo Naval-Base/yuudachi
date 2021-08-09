@@ -8,7 +8,7 @@ interface CasePayloadArgs {
 		user: User;
 		member?: GuildMember | null;
 	};
-	days?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+	days?: number;
 	reference?: number | null;
 	joinCutoff?: Date | null;
 	accountCutoff?: Date | null;
@@ -46,7 +46,7 @@ export function generateCasePayload({
 		target: args.user.member,
 		targetId: args.user.user.id,
 		targetTag: args.user.user.tag,
-		deleteMessageDays: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
+		deleteMessageDays: args.days,
 		contextMessageId: messageId,
 		referenceId: args.reference ? Number(args.reference) : undefined,
 		multi,
