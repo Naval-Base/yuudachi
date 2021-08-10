@@ -56,7 +56,7 @@ export default class implements Event {
 					`Member ${guildBan.user.id} unbanned`,
 				);
 
-				await pSetTimeout(1500);
+				await pSetTimeout(5000);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberBanRemove });
 				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildBan.user.id);
 				logger.info(
