@@ -29,7 +29,7 @@ export async function deleteCase({
 }: DeleteCaseOptions) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	let case_: RawCase;
+	let case_: RawCase | undefined;
 	if (target) {
 		[case_] = await sql<[RawCase]>`
 			select *
@@ -39,7 +39,9 @@ export async function deleteCase({
 				and action = ${CaseAction.Ban}
 			order by created_at desc
 			limit 1`;
-	} else {
+	}
+
+	if (!target || case_) {
 		[case_] = await sql<[RawCase]>`
 			select *
 			from cases
@@ -51,13 +53,13 @@ export async function deleteCase({
 		update cases
 		set action_processed = true
 		where guild_id = ${guild.id}
-			and case_id = ${case_.case_id}`;
+			and case_id = ${case_!.case_id}`;
 
 	if (manual) {
-		if (case_.action === CaseAction.Role) {
+		if (case_!.action === CaseAction.Role) {
 			reason = 'Manual unrole';
 		}
-	} else if (case_.action === CaseAction.Role) {
+	} else if (case_!.action === CaseAction.Role) {
 		reason = 'Automatic unrole based on duration';
 	}
 
@@ -66,16 +68,16 @@ export async function deleteCase({
 		generateCasePayload({
 			guildId: guild.id,
 			user,
-			roleId: case_.role_id,
+			roleId: case_!.role_id,
 			args: {
 				reason,
 				user: {
-					user: await guild.client.users.fetch(case_.target_id),
-					member: await guild.members.fetch(case_.target_id).catch(() => null),
+					user: await guild.client.users.fetch(case_!.target_id),
+					member: await guild.members.fetch(case_!.target_id).catch(() => null),
 				},
-				reference: case_.case_id,
+				reference: case_!.case_id,
 			},
-			action: case_.action === CaseAction.Ban ? CaseAction.Unban : CaseAction.Unrole,
+			action: case_!.action === CaseAction.Ban ? CaseAction.Unban : CaseAction.Unrole,
 		}),
 		skipAction,
 	);

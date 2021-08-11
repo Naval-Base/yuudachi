@@ -24,6 +24,7 @@ import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import { kRedis } from '../../tokens';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
+import { logger } from '../../logger';
 
 @injectable()
 export default class implements Command {
@@ -122,7 +123,9 @@ export default class implements Command {
 						content: i18next.t('common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
-				} catch {}
+				} catch (e) {
+					logger.error(e, e.message);
+				}
 			});
 
 		if (collectedInteraction?.customId === cancelKey) {

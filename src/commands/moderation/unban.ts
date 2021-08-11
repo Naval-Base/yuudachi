@@ -14,6 +14,7 @@ import { deleteCase } from '../../functions/cases/deleteCase';
 import { kRedis } from '../../tokens';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import { logger } from '../../logger';
 
 @injectable()
 export default class implements Command {
@@ -36,7 +37,7 @@ export default class implements Command {
 		}
 
 		try {
-			await interaction.guild?.bans.fetch(args.user.user.id);
+			await interaction.guild!.bans.fetch(args.user.user.id);
 		} catch {
 			throw new Error(
 				i18next.t('command.mod.unban.errors.no_ban', {
@@ -86,7 +87,9 @@ export default class implements Command {
 						content: i18next.t('common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
-				} catch {}
+				} catch (e) {
+					logger.error(e, e.message);
+				}
 			});
 
 		if (collectedInteraction?.customId === cancelKey) {

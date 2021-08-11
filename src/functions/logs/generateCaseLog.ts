@@ -6,18 +6,24 @@ import { container } from 'tsyringe';
 import { kSQL } from '../../tokens';
 import { generateMessageLink } from '../../util/generateMessageLink';
 import { Case, CaseAction } from '../cases/createCase';
+import { logger } from '../../logger';
 
 export async function generateCaseLog(client: Client, case_: Case, logChannelId: Snowflake, locale: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let action = CaseAction[case_.action];
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
-		const role = client.guilds.cache
-			.get(case_.guildId)
-			?.members.cache.get(case_.targetId)
-			?.roles.cache.get(case_.roleId);
-		if (role) {
-			action += ` \`${role.name}\` (${case_.roleId})`;
+		try {
+			const guild = client.guilds.cache.get(case_.guildId)!;
+			const member = await guild.members.fetch(case_.targetId);
+			const role = member.roles.cache.get(case_.roleId);
+			if (role) {
+				action += ` \`${role.name}\` (${role.id})`;
+			} else {
+				action += ` \`Unknown\` (${case_.roleId})`;
+			}
+		} catch (e) {
+			logger.error(e, e.message);
 		}
 	}
 

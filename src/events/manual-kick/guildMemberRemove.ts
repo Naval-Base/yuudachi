@@ -53,13 +53,13 @@ export default class implements Event {
 						guildMember.guild,
 						generateCasePayload({
 							guildId: guildMember.guild.id,
-							user: logs.executor!,
+							user: logs.executor,
 							args: { user: { user: guildMember.user }, reason: logs.reason },
 							action: CaseAction.Kick,
 						}),
 						true,
 					);
-					await upsertCaseLog(guildMember.guild.id, logs.executor!, case_);
+					await upsertCaseLog(guildMember.guild.id, logs.executor, case_);
 				}
 			} catch (e) {
 				logger.error(e, e.message);

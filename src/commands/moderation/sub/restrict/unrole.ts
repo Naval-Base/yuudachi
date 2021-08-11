@@ -41,7 +41,7 @@ export async function unrole(
 	const user = await interaction.client.users.fetch(action.target_id);
 	let role = null;
 	try {
-		role = await interaction.guild?.roles.fetch(action.role_id!);
+		role = await interaction.guild!.roles.fetch(action.role_id!, { force: true });
 	} catch {}
 
 	const unroleKey = nanoid();

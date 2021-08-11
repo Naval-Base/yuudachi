@@ -12,6 +12,7 @@ import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import { logger } from '../../logger';
 
 export default class implements Command {
 	public async execute(
@@ -70,7 +71,9 @@ export default class implements Command {
 						content: i18next.t('common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
-				} catch {}
+				} catch (e) {
+					logger.error(e, e.message);
+				}
 			});
 
 		if (collectedInteraction?.customId === cancelKey) {
