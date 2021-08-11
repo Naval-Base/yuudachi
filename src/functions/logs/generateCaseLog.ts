@@ -15,8 +15,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
 		try {
 			const guild = client.guilds.cache.get(case_.guildId)!;
-			const member = await guild.members.fetch(case_.targetId);
-			const role = member.roles.cache.get(case_.roleId);
+			const role = guild.roles.cache.get(case_.roleId);
 			if (role) {
 				action += ` \`${role.name}\` (${role.id})`;
 			} else {
