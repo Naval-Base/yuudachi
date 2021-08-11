@@ -51,10 +51,10 @@ export async function deleteCase({
 
 	if (case_?.action === CaseAction.Role) {
 		await sql`
-		update cases
-		set action_processed = true
-		where guild_id = ${guild.id}
-			and case_id = ${case_.case_id}`;
+			update cases
+			set action_processed = true
+			where guild_id = ${guild.id}
+				and case_id = ${case_.case_id}`;
 
 		if (manual) {
 			reason = 'Manual unrole';
