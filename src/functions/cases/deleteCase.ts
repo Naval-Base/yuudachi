@@ -41,7 +41,7 @@ export async function deleteCase({
 			limit 1`;
 	}
 
-	if (!target || case_) {
+	if (!target) {
 		[case_] = await sql<[RawCase]>`
 			select *
 			from cases
@@ -49,18 +49,18 @@ export async function deleteCase({
 				and case_id = ${caseId!}`;
 	}
 
-	await sql`
+	if (case_?.action === CaseAction.Role) {
+		await sql`
 		update cases
 		set action_processed = true
 		where guild_id = ${guild.id}
-			and case_id = ${case_!.case_id}`;
+			and case_id = ${case_.case_id}`;
 
-	if (manual) {
-		if (case_!.action === CaseAction.Role) {
+		if (manual) {
 			reason = 'Manual unrole';
+		} else {
+			reason = 'Automatic unrole based on duration';
 		}
-	} else if (case_!.action === CaseAction.Role) {
-		reason = 'Automatic unrole based on duration';
 	}
 
 	return createCase(
@@ -68,16 +68,16 @@ export async function deleteCase({
 		generateCasePayload({
 			guildId: guild.id,
 			user,
-			roleId: case_!.role_id,
+			roleId: case_?.role_id,
 			args: {
 				reason,
 				user: {
-					user: await guild.client.users.fetch(case_!.target_id),
-					member: await guild.members.fetch(case_!.target_id).catch(() => null),
+					user: await guild.client.users.fetch(case_?.target_id ?? target!.id),
+					member: await guild.members.fetch(case_?.target_id ?? target!.id).catch(() => null),
 				},
-				reference: case_!.case_id,
+				reference: case_?.case_id,
 			},
-			action: case_!.action === CaseAction.Ban ? CaseAction.Unban : CaseAction.Unrole,
+			action: (case_?.action ?? CaseAction.Ban) === CaseAction.Ban ? CaseAction.Unban : CaseAction.Unrole,
 		}),
 		skipAction,
 	);
