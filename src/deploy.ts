@@ -23,7 +23,18 @@ import {
 
 	// Utility
 	PingCommand,
+
+	// Context Menu
+	HistoryContextMenuCommand,
 } from './interactions';
+
+// TODO: Remove after discord-api-types update
+// Monkey patch type into APIApplicationCommand
+declare module 'discord-api-types/v9' {
+	export interface APIApplicationCommand {
+		type: number;
+	}
+}
 
 const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
 
@@ -53,6 +64,9 @@ try {
 
 				// Utility
 				PingCommand,
+
+				// Context Menu
+				HistoryContextMenuCommand,
 			],
 		},
 	)) as RESTGetAPIApplicationGuildCommandsResult;

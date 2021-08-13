@@ -11,3 +11,5 @@ export * from './moderation/softban';
 export * from './moderation/unban';
 export * from './moderation/warn';
 export * from './utility/ping';
+
+export * from './context-menu/history';

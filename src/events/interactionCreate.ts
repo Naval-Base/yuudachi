@@ -22,15 +22,15 @@ export default class implements Event {
 
 	public async execute(): Promise<void> {
 		for await (const [interaction] of on(this.client, this.event) as AsyncIterableIterator<[Interaction]>) {
-			if (!interaction.isCommand()) {
+			if (!interaction.isCommand() && !interaction.isContextMenu()) {
 				continue;
 			}
 
-			const command = this.commands.get(interaction.commandName);
+			const command = this.commands.get(interaction.commandName.toLowerCase());
 			if (command) {
 				try {
 					logger.info(
-						{ command: { name: interaction.commandName }, userId: interaction.user.id },
+						{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 						`Executing command ${interaction.commandName}`,
 					);
 
@@ -41,11 +41,12 @@ export default class implements Event {
 					try {
 						if (!interaction.deferred && !interaction.replied) {
 							logger.warn(
-								{ command: { name: interaction.commandName }, userId: interaction.user.id },
+								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 								'Comannd interaction has not been deferred before throwing',
 							);
 							await interaction.deferReply();
 						}
+
 						await interaction.editReply({ content: e.message, components: [] });
 					} catch (error) {
 						logger.error(e, e.message);
