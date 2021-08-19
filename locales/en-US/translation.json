@@ -98,7 +98,7 @@
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{size}})`",
 				"reason_fallback": "Anti-Raid-Nuke",
-				"pending": "Anti-Raid-Nuke is projected to hit {{- members}} guild members.",
+				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.",
 				"buttons": {
 					"cancel": "Cancel",
 					"execute": "Launch"
@@ -244,7 +244,7 @@
 				"footer": "Case {{caseId}}"
 			},
 			"anti_raid_nuke": {
-				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{hit_count}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
+				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
 				"footer": "Cases {{from}}-{{to}}"
 			}
 		},

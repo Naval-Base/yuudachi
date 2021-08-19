@@ -93,9 +93,12 @@ try {
 		if (!cmdInfo) continue;
 
 		const command = container.resolve<Command>((await import(pathToFileURL(dir.fullPath).href)).default);
-		logger.info({ command: { name: cmdInfo.name } }, `Registering command: ${cmdInfo.name}`);
+		logger.info(
+			{ command: { name: command.name ?? cmdInfo.name } },
+			`Registering command: ${command.name ?? cmdInfo.name}`,
+		);
 
-		commands.set(command.name ?? cmdInfo.name, command);
+		commands.set((command.name ?? cmdInfo.name).toLowerCase(), command);
 	}
 
 	for await (const dir of eventFiles) {
