@@ -96,7 +96,7 @@
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
 					"parameters": "Parameters:\n• Current time: {{- now}}\n• Join date after: {{- join}}\n• Account creation after: {{- age}}"
 				},
-				"reason": "Anti-Raid-Nuke `({{current}}/{{size}})`",
+				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
 				"reason_fallback": "Anti-Raid-Nuke",
 				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.",
 				"buttons": {
