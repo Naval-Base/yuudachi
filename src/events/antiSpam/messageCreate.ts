@@ -11,7 +11,7 @@ import { CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import i18next from 'i18next';
-import { SPAM_EXPIRE_SECONDS, SPAM_THRESHOLD } from '../../Constants';
+import { SPAM_EXPIRE_SECONDS, SPAM_SCAM_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
 
 @injectable()
 export default class implements Event {
@@ -37,36 +37,61 @@ export default class implements Event {
 					parseInt(s, 10),
 				);
 				const total = Object.values(channelMessageCounts).reduce((acc, curr) => curr + acc, 0);
-
-				if (total < SPAM_THRESHOLD) continue;
-
 				const hitScams = scamDomains.filter((domain) => message.content.toLowerCase().includes(domain));
-				if (!hitScams.length || !message.member?.bannable) continue;
 
-				logger.info(
-					{
-						event: { name: this.name, event: this.event },
-						guildId: message.guild.id,
-						userId: message.client.user!.id,
-						memberId: message.author.id,
-						domains: hitScams,
-					},
-					`Member ${message.author.id} banned (scam)`,
-				);
-
-				await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
+				if (!message.member?.bannable) continue;
 
 				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
-				const scamCase = await createCase(message.guild, {
-					targetId: message.author.id,
-					guildId: message.guild.id,
-					action: CaseAction.Ban,
-					targetTag: message.author.tag,
-					reason: i18next.t('log.mod_log.scam.reason', { lng: locale }),
-					deleteMessageDays: 1,
-				});
+				if (hitScams.length && total >= SPAM_SCAM_THRESHOLD) {
+					logger.info(
+						{
+							event: { name: this.name, event: this.event },
+							guildId: message.guild.id,
+							userId: message.client.user!.id,
+							memberId: message.author.id,
+							domains: hitScams,
+						},
+						`Member ${message.author.id} banned (scam)`,
+					);
 
-				await upsertCaseLog(message.guild.id, this.client.user, scamCase);
+					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
+
+					const case_ = await createCase(message.guild, {
+						targetId: message.author.id,
+						guildId: message.guild.id,
+						action: CaseAction.Ban,
+						targetTag: message.author.tag,
+						reason: i18next.t('log.mod_log.scam.reason', { lng: locale }),
+						deleteMessageDays: 1,
+					});
+
+					await upsertCaseLog(message.guild.id, this.client.user, case_);
+				} else if (total >= SPAM_THRESHOLD) {
+					logger.info(
+						{
+							event: { name: this.name, event: this.event },
+							guildId: message.guild.id,
+							userId: message.client.user!.id,
+							memberId: message.author.id,
+							channelMessageCounts,
+						},
+						`Member ${message.author.id} softbanned (spam)`,
+					);
+
+					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
+					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:unban`, 15, '');
+
+					const case_ = await createCase(message.guild, {
+						targetId: message.author.id,
+						guildId: message.guild.id,
+						action: CaseAction.Softban,
+						targetTag: message.author.tag,
+						reason: i18next.t('log.mod_log.spam.reason', { lng: locale }),
+						deleteMessageDays: 1,
+					});
+
+					await upsertCaseLog(message.guild.id, this.client.user, case_);
+				}
 			} catch (e) {
 				logger.error(e, e.message);
 			}

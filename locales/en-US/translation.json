@@ -249,6 +249,9 @@
 			},
 			"scam": {
 				"reason": "Scam detection"
+			},
+			"spam": {
+				"reason": "Spam detection"
 			}
 		},
 		"member_log": {
