@@ -4,7 +4,13 @@ import { parentPort } from 'node:worker_threads';
 import Redis from 'ioredis';
 
 const redis = new Redis(process.env.REDISHOST);
-const list = await fetch(process.env.SCAM_DOMAIN_URL!).then((r) => r.json());
+
+if (!process.env.SCAM_DOMAIN_URL) {
+	logger.warn('Missing environment variable: SCAM_DOMAIN_URL');
+	process.exit(1);
+}
+
+const list = await fetch(process.env.SCAM_DOMAIN_URL).then((r) => r.json());
 const before = await redis.scard('scamdomains');
 
 await redis.sadd('scamdomains', ...list);
