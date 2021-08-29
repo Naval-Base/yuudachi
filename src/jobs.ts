@@ -26,6 +26,14 @@ export function registerJobs() {
 		interval: '1m',
 		path: fileURLToPath(new URL('./jobs/modLockdownTimers.js', import.meta.url)),
 	});
+
+	logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
+	bree.add({
+		name: 'scamDomainUpdateTimers',
+		interval: '5m',
+		timeout: 0,
+		path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
+	});
 }
 
 export function startJobs() {

@@ -246,6 +246,9 @@
 			"anti_raid_nuke": {
 				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
 				"footer": "Cases {{from}}-{{to}}"
+			},
+			"scam": {
+				"reason": "Scam detection"
 			}
 		},
 		"member_log": {
