@@ -26,7 +26,8 @@ export default class implements Event {
 			try {
 				if (!message.guild || !message.content.length) continue;
 
-				const contentHash = createHash('md5').update(message.content).digest('hex');
+				// TODO: fuzzy hashing to combat spam bots that slightly vary content
+				const contentHash = createHash('md5').update(message.content.toLowerCase()).digest('hex');
 				const channelSpamKey = `guild:${message.guild.id}:user:${message.author.id}:contenthash:${contentHash}:channels`;
 				await this.redis.hincrby(channelSpamKey, message.channelId, 1);
 				await this.redis.expire(channelSpamKey, SPAM_EXPIRE_SECONDS);
