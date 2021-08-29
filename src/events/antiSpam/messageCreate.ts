@@ -5,7 +5,6 @@ import { kRedis } from '../../tokens';
 import { on } from 'node:events';
 import { createHash } from 'node:crypto';
 import type { Redis } from 'ioredis';
-import { transformHashset } from '../../util/redisData';
 import { logger } from '../../logger';
 import { CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
@@ -28,22 +27,19 @@ export default class implements Event {
 
 				// TODO: fuzzy hashing to combat spam bots that slightly vary content
 				const contentHash = createHash('md5').update(message.content.toLowerCase()).digest('hex');
-				const channelSpamKey = `guild:${message.guild.id}:user:${message.author.id}:contenthash:${contentHash}:channels`;
-				await this.redis.hincrby(channelSpamKey, message.channelId, 1);
+				const channelSpamKey = `guild:${message.guild.id}:user:${message.author.id}:contenthash:${contentHash}`;
+				await this.redis.incr(channelSpamKey);
 				await this.redis.expire(channelSpamKey, SPAM_EXPIRE_SECONDS);
 
 				const scamDomains = await this.redis.smembers('scamdomains');
 
-				const channelMessageCounts = transformHashset(await this.redis.hgetall(channelSpamKey), (s: string) =>
-					parseInt(s, 10),
-				);
-				const total = Object.values(channelMessageCounts).reduce((acc, curr) => curr + acc, 0);
+				const spamAmount = parseInt((await this.redis.get(channelSpamKey)) ?? '0', 10);
 				const hitScams = scamDomains.filter((domain) => message.content.toLowerCase().includes(domain));
 
 				if (!message.member?.bannable) continue;
 
 				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
-				if (hitScams.length && total >= SPAM_SCAM_THRESHOLD) {
+				if (hitScams.length && spamAmount >= SPAM_SCAM_THRESHOLD) {
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
@@ -67,14 +63,14 @@ export default class implements Event {
 					});
 
 					await upsertCaseLog(message.guild.id, this.client.user, case_);
-				} else if (total >= SPAM_THRESHOLD) {
+				} else if (spamAmount >= SPAM_THRESHOLD) {
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
 							guildId: message.guild.id,
 							userId: message.client.user!.id,
 							memberId: message.author.id,
-							channelMessageCounts,
+							spamAmount,
 						},
 						`Member ${message.author.id} softbanned (spam)`,
 					);
