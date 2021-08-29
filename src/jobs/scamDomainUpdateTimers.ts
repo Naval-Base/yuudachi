@@ -1,16 +1,24 @@
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 import { logger } from '../logger';
 import { parentPort } from 'node:worker_threads';
 import Redis from 'ioredis';
 
-const redis = new Redis(process.env.REDISHOST);
-
-if (!process.env.SCAM_DOMAIN_URL) {
-	logger.warn('Missing environment variable: SCAM_DOMAIN_URL');
+function checkResponse(response: Response) {
+	if (response.ok) return response;
+	logger.warn({ response }, 'Fetching scam domains returned a non 2xx response code.');
 	process.exit(1);
 }
 
-const list = await fetch(process.env.SCAM_DOMAIN_URL).then((r) => r.json());
+const redis = new Redis(process.env.REDISHOST);
+
+if (!process.env.SCAM_DOMAIN_URL) {
+	logger.warn('Missing environment variable: SCAM_DOMAIN_URL.');
+	process.exit(1);
+}
+
+const list = await fetch(process.env.SCAM_DOMAIN_URL)
+	.then(checkResponse)
+	.then((r) => r.json());
 const before = await redis.scard('scamdomains');
 
 await redis.sadd('scamdomains', ...list);
