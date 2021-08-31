@@ -23,7 +23,7 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
-				if (!message.guild || !message.content.length) continue;
+				if (message.author.bot || !message.guild || !message.content.length) continue;
 
 				// TODO: fuzzy hashing to combat spam bots that slightly vary content
 				const contentHash = createHash('md5').update(message.content.toLowerCase()).digest('hex');
