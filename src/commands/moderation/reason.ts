@@ -115,6 +115,8 @@ export default class implements Command {
 					components: [],
 				});
 				return;
+			} else if (!collectedInteraction) {
+				return;
 			}
 		} else {
 			originalCaseLower = await getCase(interaction.guildId!, lower);
