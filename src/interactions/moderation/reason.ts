@@ -2,11 +2,11 @@ import { ApplicationCommandOptionType } from 'discord-api-types/v9';
 
 export const ReasonCommand = {
 	name: 'reason',
-	description: 'Change the reason of an action',
+	description: 'Change the reason of actions',
 	options: [
 		{
 			name: 'case',
-			description: 'The case to look up',
+			description: 'The first case to change',
 			type: ApplicationCommandOptionType.Integer,
 			required: true,
 		},
@@ -15,6 +15,12 @@ export const ReasonCommand = {
 			description: 'The reason',
 			type: ApplicationCommandOptionType.String,
 			required: true,
+		},
+		{
+			name: 'lastcase',
+			description: 'The last case to change',
+			type: ApplicationCommandOptionType.Integer,
+			required: false,
 		},
 	],
 	default_permission: false,
