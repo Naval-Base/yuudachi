@@ -17,6 +17,7 @@ import {
 	SPAM_SCAM_THRESHOLD,
 	SPAM_THRESHOLD,
 } from '../../Constants';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 
 @injectable()
 export default class implements Event {
@@ -45,6 +46,13 @@ export default class implements Event {
 					}
 
 					if (total >= MENTION_THRESHOLD) {
+						const logChannel = await checkLogChannel(
+							message.guild,
+							await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
+						);
+						if (!logChannel) {
+							continue;
+						}
 						const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 
 						logger.info(
@@ -86,6 +94,13 @@ export default class implements Event {
 
 				if (!message.member?.bannable) continue;
 				if (hitScams.length && spamAmount >= SPAM_SCAM_THRESHOLD) {
+					const logChannel = await checkLogChannel(
+						message.guild,
+						await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
+					);
+					if (!logChannel) {
+						continue;
+					}
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
@@ -111,6 +126,14 @@ export default class implements Event {
 
 					await upsertCaseLog(message.guild.id, this.client.user, case_);
 				} else if (spamAmount >= SPAM_THRESHOLD) {
+					const logChannel = await checkLogChannel(
+						message.guild,
+						await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
+					);
+					if (!logChannel) {
+						continue;
+					}
+
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
