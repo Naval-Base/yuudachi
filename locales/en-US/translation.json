@@ -251,7 +251,8 @@
 				"reason": "Scam detection"
 			},
 			"spam": {
-				"reason": "Spam detection"
+				"reason": "Spam detection",
+				"reason_mentions": "Mention spam detection"
 			}
 		},
 		"member_log": {

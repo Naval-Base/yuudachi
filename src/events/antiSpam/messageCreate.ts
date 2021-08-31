@@ -10,7 +10,13 @@ import { CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import i18next from 'i18next';
-import { SPAM_EXPIRE_SECONDS, SPAM_SCAM_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
+import {
+	MENTION_EXPIRE_SECONDS,
+	MENTION_THRESHOLD,
+	SPAM_EXPIRE_SECONDS,
+	SPAM_SCAM_THRESHOLD,
+	SPAM_THRESHOLD,
+} from '../../Constants';
 
 @injectable()
 export default class implements Event {
@@ -24,6 +30,48 @@ export default class implements Event {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
 				if (message.author.bot || !message.guild || !message.content.length) continue;
+
+				const attemptAtEveryoneOrHere = ['@everyone', '@here'].some((pattern) => message.content.includes(pattern));
+				if (message.mentions.users.size || attemptAtEveryoneOrHere) {
+					const mentionCountKey = `guild:${message.guild.id}:user:${message.author.id}:mentions`;
+
+					const increment = message.mentions.users.size + (attemptAtEveryoneOrHere ? 1 : 0);
+					let total;
+					if (await this.redis.exists(mentionCountKey)) {
+						total = await this.redis.incrby(mentionCountKey, increment);
+					} else {
+						await this.redis.setex(mentionCountKey, MENTION_EXPIRE_SECONDS, increment);
+						total = increment;
+					}
+
+					if (total >= MENTION_THRESHOLD) {
+						const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
+
+						logger.info(
+							{
+								event: { name: this.name, event: this.event },
+								guildId: message.guild.id,
+								userId: message.client.user!.id,
+								memberId: message.author.id,
+								total,
+							},
+							`Member ${message.author.id} banned (mentionspam)`,
+						);
+
+						await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
+
+						const case_ = await createCase(message.guild, {
+							targetId: message.author.id,
+							guildId: message.guild.id,
+							action: CaseAction.Ban,
+							targetTag: message.author.tag,
+							reason: i18next.t('log.mod_log.spam.reason_mentions', { lng: locale }),
+							deleteMessageDays: 1,
+						});
+
+						await upsertCaseLog(message.guild.id, this.client.user, case_);
+					}
+				}
 
 				// TODO: fuzzy hashing to combat spam bots that slightly vary content
 				const contentHash = createHash('md5').update(message.content.toLowerCase()).digest('hex');
