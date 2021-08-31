@@ -37,8 +37,6 @@ export default class implements Event {
 				const hitScams = scamDomains.filter((domain) => message.content.toLowerCase().includes(domain));
 
 				if (!message.member?.bannable) continue;
-
-				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 				if (hitScams.length && spamAmount >= SPAM_SCAM_THRESHOLD) {
 					logger.info(
 						{
@@ -53,6 +51,7 @@ export default class implements Event {
 
 					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
 
+					const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 					const case_ = await createCase(message.guild, {
 						targetId: message.author.id,
 						guildId: message.guild.id,
@@ -78,6 +77,7 @@ export default class implements Event {
 					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
 					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:unban`, 15, '');
 
+					const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 					const case_ = await createCase(message.guild, {
 						targetId: message.author.id,
 						guildId: message.guild.id,
