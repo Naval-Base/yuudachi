@@ -3,21 +3,17 @@ import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
 import { kRedis } from '../../tokens';
 import { on } from 'node:events';
-import { createHash } from 'node:crypto';
 import type { Redis } from 'ioredis';
 import { logger } from '../../logger';
-import { CaseAction, createCase } from '../../functions/cases/createCase';
+import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import i18next from 'i18next';
-import {
-	MENTION_EXPIRE_SECONDS,
-	MENTION_THRESHOLD,
-	SPAM_EXPIRE_SECONDS,
-	SPAM_SCAM_THRESHOLD,
-	SPAM_THRESHOLD,
-} from '../../Constants';
+import { MENTION_THRESHOLD, SPAM_SCAM_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
+import { totalMentions } from '../../functions/anti-spam/totalMentions';
+import { totalContent } from '../../functions/anti-spam/totalContents';
+import { checkScam } from '../../functions/anti-scam/checkScam';
 
 @injectable()
 export default class implements Event {
@@ -32,133 +28,77 @@ export default class implements Event {
 			try {
 				if (message.author.bot || !message.guild || !message.content.length) continue;
 
-				const attemptAtEveryoneOrHere = ['@everyone', '@here'].some((pattern) => message.content.includes(pattern));
-				if (message.mentions.users.size || attemptAtEveryoneOrHere) {
-					const mentionCountKey = `guild:${message.guild.id}:user:${message.author.id}:mentions`;
+				const totalMentionCount = await totalMentions(message);
+				const totalContentCount = await totalContent(message.content, message.guild.id, message.author.id);
 
-					const increment = message.mentions.users.size + (attemptAtEveryoneOrHere ? 1 : 0);
-					let total;
-					if (await this.redis.exists(mentionCountKey)) {
-						total = await this.redis.incrby(mentionCountKey, increment);
-					} else {
-						await this.redis.setex(mentionCountKey, MENTION_EXPIRE_SECONDS, increment);
-						total = increment;
+				const mentionExceeded = totalMentionCount >= MENTION_THRESHOLD;
+				const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
+				const scamContentExceeded = totalContentCount >= SPAM_SCAM_THRESHOLD;
+
+				const scamDomains = await checkScam(message.content);
+
+				if ((scamContentExceeded && scamDomains.length) || mentionExceeded || contentExceeded) {
+					if (!message.member?.bannable) continue;
+
+					const logChannel = await checkLogChannel(
+						message.guild,
+						await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
+					);
+					if (!logChannel) {
+						continue;
 					}
 
-					if (total >= MENTION_THRESHOLD) {
-						const logChannel = await checkLogChannel(
-							message.guild,
-							await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
-						);
-						if (!logChannel) {
-							continue;
-						}
-						const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
+					const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 
+					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
+					let case_: Case | null = null;
+
+					if ((scamContentExceeded && scamDomains.length) || mentionExceeded) {
 						logger.info(
 							{
 								event: { name: this.name, event: this.event },
 								guildId: message.guild.id,
 								userId: message.client.user!.id,
 								memberId: message.author.id,
-								total,
+								mentionExceeded,
+								scamDomains,
 							},
-							`Member ${message.author.id} banned (mentionspam)`,
+							`Member ${message.author.id} banned (spam/scam)`,
 						);
 
-						await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
-
-						const case_ = await createCase(message.guild, {
+						case_ = await createCase(message.guild, {
 							targetId: message.author.id,
 							guildId: message.guild.id,
 							action: CaseAction.Ban,
 							targetTag: message.author.tag,
-							reason: i18next.t('log.mod_log.spam.reason_mentions', { lng: locale }),
+							reason: i18next.t(scamDomains.length ? 'log.mod_log.scam.reason' : 'log.mod_log.spam.reason_mentions', {
+								lng: locale,
+							}),
 							deleteMessageDays: 1,
 						});
+					} else if (contentExceeded) {
+						logger.info(
+							{
+								event: { name: this.name, event: this.event },
+								guildId: message.guild.id,
+								userId: message.client.user!.id,
+								memberId: message.author.id,
+							},
+							`Member ${message.author.id} softbanned (spam)`,
+						);
 
-						await upsertCaseLog(message.guild.id, this.client.user, case_);
-					}
-				}
-
-				// TODO: fuzzy hashing to combat spam bots that slightly vary content
-				const contentHash = createHash('md5').update(message.content.toLowerCase()).digest('hex');
-				const channelSpamKey = `guild:${message.guild.id}:user:${message.author.id}:contenthash:${contentHash}`;
-				await this.redis.incr(channelSpamKey);
-				await this.redis.expire(channelSpamKey, SPAM_EXPIRE_SECONDS);
-
-				const scamDomains = await this.redis.smembers('scamdomains');
-
-				const spamAmount = parseInt((await this.redis.get(channelSpamKey)) ?? '0', 10);
-				const hitScams = scamDomains.filter((domain) => message.content.toLowerCase().includes(domain));
-
-				if (!message.member?.bannable) continue;
-				if (hitScams.length && spamAmount >= SPAM_SCAM_THRESHOLD) {
-					const logChannel = await checkLogChannel(
-						message.guild,
-						await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
-					);
-					if (!logChannel) {
-						continue;
-					}
-					logger.info(
-						{
-							event: { name: this.name, event: this.event },
+						await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:unban`, 15, '');
+						case_ = await createCase(message.guild, {
+							targetId: message.author.id,
 							guildId: message.guild.id,
-							userId: message.client.user!.id,
-							memberId: message.author.id,
-							domains: hitScams,
-						},
-						`Member ${message.author.id} banned (scam)`,
-					);
-
-					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
-
-					const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
-					const case_ = await createCase(message.guild, {
-						targetId: message.author.id,
-						guildId: message.guild.id,
-						action: CaseAction.Ban,
-						targetTag: message.author.tag,
-						reason: i18next.t('log.mod_log.scam.reason', { lng: locale }),
-						deleteMessageDays: 1,
-					});
-
-					await upsertCaseLog(message.guild.id, this.client.user, case_);
-				} else if (spamAmount >= SPAM_THRESHOLD) {
-					const logChannel = await checkLogChannel(
-						message.guild,
-						await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
-					);
-					if (!logChannel) {
-						continue;
+							action: CaseAction.Softban,
+							targetTag: message.author.tag,
+							reason: i18next.t('log.mod_log.spam.reason', { lng: locale }),
+							deleteMessageDays: 1,
+						});
 					}
 
-					logger.info(
-						{
-							event: { name: this.name, event: this.event },
-							guildId: message.guild.id,
-							userId: message.client.user!.id,
-							memberId: message.author.id,
-							spamAmount,
-						},
-						`Member ${message.author.id} softbanned (spam)`,
-					);
-
-					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
-					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:unban`, 15, '');
-
-					const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
-					const case_ = await createCase(message.guild, {
-						targetId: message.author.id,
-						guildId: message.guild.id,
-						action: CaseAction.Softban,
-						targetTag: message.author.tag,
-						reason: i18next.t('log.mod_log.spam.reason', { lng: locale }),
-						deleteMessageDays: 1,
-					});
-
-					await upsertCaseLog(message.guild.id, this.client.user, case_);
+					await upsertCaseLog(message.guild.id, this.client.user, case_!);
 				}
 			} catch (e) {
 				logger.error(e, e.message);
