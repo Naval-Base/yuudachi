@@ -13,7 +13,7 @@ interface DeleteCaseOptions {
 	messageId?: Snowflake;
 	target?: User;
 	caseId?: number;
-	reason?: string;
+	reason?: string | null;
 	manual?: boolean;
 	skipAction?: boolean;
 }

@@ -76,6 +76,7 @@ export default class implements Event {
 					target: guildBan.user,
 					manual: true,
 					skipAction: true,
+					reason: logs?.reason,
 				});
 				await upsertCaseLog(guildBan.guild.id, logs?.executor, case_);
 			} catch (e) {
