@@ -45,7 +45,6 @@ export default class implements Command {
 				content: i18next.t('command.mod.common.errors.case_lower_one', {
 					lng: locale,
 				}),
-				components: [],
 			});
 			return;
 		}
