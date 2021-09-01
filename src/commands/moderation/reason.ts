@@ -40,6 +40,16 @@ export default class implements Command {
 		const lower = Math.min(args.case, args.lastcase ?? args.case);
 		const upper = Math.max(args.case, args.lastcase ?? args.case);
 
+		if (lower < 1 || upper < 1) {
+			await interaction.editReply({
+				content: i18next.t('command.mod.common.errors.case_lower_one', {
+					lng: locale,
+				}),
+				components: [],
+			});
+			return;
+		}
+
 		let originalCaseLower: Case | null;
 		let originalCaseUpper: Case | null;
 
