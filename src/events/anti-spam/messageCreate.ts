@@ -4,7 +4,7 @@ import { on } from 'node:events';
 import type { Redis } from 'ioredis';
 import i18next from 'i18next';
 
-import { logger } from '../logger';
+import type { Event } from '../../Event';
 import { logger } from '../../logger';
 import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
@@ -14,6 +14,7 @@ import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { totalMentions } from '../../functions/anti-spam/totalMentions';
 import { totalContent } from '../../functions/anti-spam/totalContents';
 import { checkScam } from '../../functions/anti-scam/checkScam';
+import { kRedis } from '../../tokens';
 
 @injectable()
 export default class implements Event {
