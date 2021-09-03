@@ -1,4 +1,5 @@
 import { ButtonInteraction, CommandInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
+import { nanoid } from 'nanoid';
 import i18next from 'i18next';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
@@ -11,7 +12,6 @@ import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import { getCase } from '../../functions/cases/getCase';
 import { generateMessageLink } from '../../util/generateMessageLink';
-import { nanoid } from 'nanoid';
 import { logger } from '../../logger';
 import { truncate } from '../../util/embed';
 import type { Case } from '../../functions/cases/createCase';
