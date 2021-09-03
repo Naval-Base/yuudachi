@@ -29,6 +29,8 @@
 					"max_length_reason": "Max length of 1900 for reason exceeded.",
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
 					"no_case": "Cannot find case #{{case}}",
+					"no_case_range": "Invalid case range #{{lower_case}} to #{{upper_case}}",
+					"case_lower_one": "Case ids have to be above 0",
 					"no_ref_case": "Cannot find reference case #{{case}}"
 				}
 			},
@@ -207,7 +209,14 @@
 				}
 			},
 			"reason": {
-				"success": "Successfully set reason for case {{- case}}"
+				"success": "Successfully set reason for case {{- case}}",
+				"success_multiple": "Successfully set reason for case range {{- lower_case}} to {{- upper_case}} ({{amount}}/{{target}} cases)",
+				"pending_multiple": "Do you really want to set a reason for case range {{- lower_case}} to {{- upper_case}} ({{amount}} cases)?",
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Set Reason"
+				},
+				"cancel": "Cancelled setting reason"
 			},
 			"reference": {
 				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
