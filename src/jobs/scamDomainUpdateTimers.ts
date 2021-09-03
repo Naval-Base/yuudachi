@@ -1,7 +1,8 @@
 import fetch, { Response } from 'node-fetch';
-import { logger } from '../logger';
 import { parentPort } from 'node:worker_threads';
 import Redis from 'ioredis';
+
+import { logger } from '../logger';
 
 function checkResponse(response: Response) {
 	if (response.ok) return response;

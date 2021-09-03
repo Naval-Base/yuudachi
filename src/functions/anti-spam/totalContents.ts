@@ -1,7 +1,8 @@
 import type { Redis } from 'ioredis';
-import { kRedis } from '../../tokens';
 import { container } from 'tsyringe';
 import { createHash } from 'crypto';
+
+import { kRedis } from '../../tokens';
 import { SPAM_EXPIRE_SECONDS } from '../../Constants';
 
 export async function totalContent(content: string, guildId: string, userId: string): Promise<number> {

@@ -1,6 +1,7 @@
 import type { Redis } from 'ioredis';
-import { kRedis } from '../../tokens';
 import { container } from 'tsyringe';
+
+import { kRedis } from '../../tokens';
 
 export async function checkScam(content: string): Promise<string[]> {
 	const redis = container.resolve<Redis>(kRedis);

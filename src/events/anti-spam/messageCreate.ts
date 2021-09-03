@@ -1,14 +1,14 @@
 import { Client, Constants, Message } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event';
-import { kRedis } from '../../tokens';
 import { on } from 'node:events';
 import type { Redis } from 'ioredis';
+import i18next from 'i18next';
+
+import { logger } from '../logger';
 import { logger } from '../../logger';
 import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import i18next from 'i18next';
 import { MENTION_THRESHOLD, SPAM_SCAM_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { totalMentions } from '../../functions/anti-spam/totalMentions';
