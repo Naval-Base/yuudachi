@@ -20,7 +20,6 @@ export const ReasonCommand = {
 			name: 'lastcase',
 			description: 'The last case to change',
 			type: ApplicationCommandOptionType.Integer,
-			required: false,
 		},
 	],
 	default_permission: false,
