@@ -64,10 +64,10 @@ export async function createCase(
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	let reason;
-	if (case_.moderatorTag) {
-		reason = `Mod: ${case_.moderatorTag}${case_.reason ? ` | ${case_.reason.replace(/`/g, '')}` : ''}`;
-	}
+	const reason = case_.moderatorTag
+		? `Mod: ${case_.moderatorTag}${case_.reason ? ` | ${case_.reason.replace(/`/g, '')}` : ''}`
+		: case_.reason ?? undefined;
+
 	try {
 		if (!skipAction) {
 			switch (case_.action) {
