@@ -30,7 +30,7 @@
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
 					"no_case": "Cannot find case #{{case}}",
 					"no_case_range": "Invalid case range #{{lower_case}} to #{{upper_case}}",
-					"case_lower_one": "Case IDs have to be above 0",
+					"case_lower_one": "Case ids have to be above 0",
 					"no_ref_case": "Cannot find reference case #{{case}}"
 				}
 			},
