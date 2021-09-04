@@ -191,7 +191,7 @@ export default class implements Command {
 				collectedInteraction.user,
 				logChannel,
 				cases,
-				args.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale }),
+				args.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: fatalities.length }),
 			);
 
 			const membersHit = Buffer.from(fatalities.map((member) => member.user.id).join('\r\n'));
