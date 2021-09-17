@@ -101,7 +101,7 @@ export default class implements Event {
 
 					await upsertCaseLog(message.guild.id, this.client.user, case_!);
 				}
-			} catch (e) {
+			} catch (e: any) {
 				logger.error(e, e.message);
 			}
 

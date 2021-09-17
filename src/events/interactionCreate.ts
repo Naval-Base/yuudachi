@@ -36,7 +36,7 @@ export default class implements Event {
 
 					const locale = await getGuildSetting(interaction.guildId!, SettingsKeys.Locale);
 					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
-				} catch (e) {
+				} catch (e: any) {
 					logger.error(e, e.message);
 					try {
 						if (!interaction.deferred && !interaction.replied) {

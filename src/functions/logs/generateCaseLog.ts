@@ -21,7 +21,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 			} else {
 				action += ` \`Unknown\` (${case_.roleId})`;
 			}
-		} catch (e) {
+		} catch (e: any) {
 			logger.error(e, e.message);
 		}
 	}

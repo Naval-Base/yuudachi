@@ -112,6 +112,6 @@ try {
 	}
 
 	await client.login();
-} catch (e) {
+} catch (e: any) {
 	logger.error(e, e.message);
 }

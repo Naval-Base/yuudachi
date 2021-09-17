@@ -87,7 +87,7 @@ export default class implements Event {
 					true,
 				);
 				await upsertCaseLog(guildBan.guild.id, logs?.executor, case_);
-			} catch (e) {
+			} catch (e: any) {
 				logger.error(e, e.message);
 			}
 

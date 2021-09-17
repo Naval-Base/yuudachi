@@ -43,7 +43,7 @@ export default class implements Event {
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (e) {
+			} catch (e: any) {
 				logger.error(e, e.message);
 			}
 

@@ -79,7 +79,7 @@ export default class implements Event {
 					reason: logs?.reason,
 				});
 				await upsertCaseLog(guildBan.guild.id, logs?.executor, case_);
-			} catch (e) {
+			} catch (e: any) {
 				logger.error(e, e.message);
 			}
 

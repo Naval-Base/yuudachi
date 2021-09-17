@@ -87,7 +87,7 @@ export default class implements Command {
 						content: i18next.t('common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
-				} catch (e) {
+				} catch (e: any) {
 					logger.error(e, e.message);
 				}
 			});
