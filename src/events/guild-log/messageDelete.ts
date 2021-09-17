@@ -28,7 +28,7 @@ export default class implements Event {
 			if (!message.guild) {
 				continue;
 			}
-			if (!message.content && !message.embeds.length) {
+			if (!message.content && !message.embeds.length && !message.attachments.size) {
 				continue;
 			}
 
@@ -65,7 +65,11 @@ export default class implements Event {
 					color: 12016895,
 					title: i18next.t('log.guild_log.message_deleted.title'),
 					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-					description: `${message.content ?? i18next.t('log.guild_log.message_deleted.no_content', { lng: locale })}`,
+					description: `${
+						message.content.length
+							? message.content
+							: i18next.t('log.guild_log.message_deleted.no_content', { lng: locale })
+					}`,
 					timestamp: new Date().toISOString(),
 				});
 
@@ -75,6 +79,20 @@ export default class implements Event {
 						lng: locale,
 					})}`;
 				}
+
+				if (message.attachments.size) {
+					const attachmentParts = [];
+					let counter = 1;
+					for (const attachment of message.attachments.values()) {
+						attachmentParts.push(`[${counter}](${attachment.proxyURL})`);
+						counter++;
+					}
+					info += `\n${i18next.t('log.guild_log.message_deleted.attachments', {
+						attachments: attachmentParts.join(' '),
+						lng: locale,
+					})}`;
+				}
+
 				info += `\n${i18next.t('log.guild_log.message_deleted.jump_to', { link: message.url, lng: locale })}`;
 
 				embed = addFields(embed, {

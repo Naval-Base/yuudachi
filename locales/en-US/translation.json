@@ -286,6 +286,7 @@
 				"info": "\u200b",
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
+				"attachments": "• Attachments: {{- attachments}}",
 				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_bulk_deleted": {

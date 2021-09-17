@@ -59,7 +59,7 @@ export default class implements Event {
 						msg.author.id
 					}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${
 						attachments.size
-							? `\r\n${attachments.map((attachment) => `❯ Attachment: ${attachment.proxyURL}`).join('\r\n')}`
+							? `\r\n${attachments.map((attachment) => `↳ Attachment: ${attachment.proxyURL}`).join('\r\n')}`
 							: ''
 					}\r\n`;
 					return out;
