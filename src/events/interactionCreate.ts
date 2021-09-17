@@ -48,8 +48,8 @@ export default class implements Event {
 						}
 
 						await interaction.editReply({ content: e.message, components: [] });
-					} catch (error) {
-						logger.error(e, e.message);
+					} catch (error: any) {
+						logger.error(error, error.message);
 					}
 				}
 			}
