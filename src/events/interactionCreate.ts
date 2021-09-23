@@ -42,7 +42,7 @@ export default class implements Event {
 						if (!interaction.deferred && !interaction.replied) {
 							logger.warn(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-								'Comannd interaction has not been deferred before throwing',
+								'Command interaction has not been deferred before throwing',
 							);
 							await interaction.deferReply();
 						}
