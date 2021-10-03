@@ -96,8 +96,9 @@ export async function createCase(
 					break;
 			}
 		}
-	} catch (e: any) {
-		logger.error(e, e.message);
+	} catch (e) {
+		const error = e as Error;
+		logger.error(error, error.message);
 	}
 
 	const [newCase] = await sql<[RawCase]>`

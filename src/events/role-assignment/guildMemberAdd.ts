@@ -49,8 +49,9 @@ export default class implements Event {
 					);
 					await guildMember.roles.add(case_.role_id!, case_.reason!);
 				}
-			} catch (e: any) {
-				logger.error(e, e.message);
+			} catch (e) {
+				const error = e as Error;
+				logger.error(error, error.message);
 			}
 
 			continue;
