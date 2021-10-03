@@ -48,7 +48,7 @@ export default class implements Event {
 							await interaction.deferReply();
 						}
 
-						await interaction.editReply({ content: e.message, components: [] });
+						await interaction.editReply({ content: error.message, components: [] });
 					} catch (err) {
 						const error = err as Error;
 						logger.error(error, error.message);
