@@ -105,6 +105,22 @@ export default class implements Command {
 			);
 		}
 
+		const deletionDays = args.days === undefined ? 1 : Math.min(Math.max(Number(args.days), 0), 7);
+		if (deletionDays) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.errors.parameters.days', {
+					lng: locale,
+					count: deletionDays,
+				}),
+			);
+		} else {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.errors.parameters.days_none', {
+					lng: locale,
+				}),
+			);
+		}
+
 		if (!members.size) {
 			await interaction.editReply({
 				content: `${i18next.t('command.mod.anti_raid_nuke.errors.no_hits', {
@@ -209,7 +225,7 @@ export default class implements Command {
 									member: member,
 									user: member.user,
 								},
-								days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
+								days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
 								joinCutoff: dayjs(joinCutoff).toDate(),
 								accountCutoff: dayjs(accountCutoff).toDate(),
 							},

@@ -101,7 +101,10 @@
 						"current_time": "• Current time: {{- now}}",
 						"join_after": "• Join date after: {{- join}}",
 						"created_after": "• Account creation after: {{- age}}",
-						"pattern": "• Username matching pattern:"
+						"pattern": "• Username matching pattern:",
+						"days": "• Deleting messages sent in the last {{count}} day",
+						"days_plural": "• Deleting messages sent in the last {{count}} days",
+						"days_none": "• Not deleting any messages"
 					}
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
