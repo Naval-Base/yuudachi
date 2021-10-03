@@ -29,9 +29,6 @@ export async function createLockdown(lockdown: CreateLockdown & { channel: Guild
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const overwrites = [...lockdown.channel.permissionOverwrites.cache.values()];
-	const {
-		client: { user: clientUser },
-	} = lockdown.channel;
 
 	await lockdown.channel.permissionOverwrites.set([
 		{
@@ -46,7 +43,7 @@ export async function createLockdown(lockdown: CreateLockdown & { channel: Guild
 			type: 'role',
 		},
 		{
-			id: clientUser!.id,
+			id: lockdown.channel.client.user!.id,
 			allow: PermissionFlagsBits.SendMessages | PermissionFlagsBits.ManageChannels | PermissionFlagsBits.ManageRoles,
 			type: 'member',
 		},

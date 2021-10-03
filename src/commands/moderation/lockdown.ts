@@ -19,10 +19,6 @@ export default class implements Command {
 		await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
-		const {
-			client: { user: clientUser },
-		} = interaction;
-
 		switch (Object.keys(args)[0]) {
 			case 'lock': {
 				if (args.lock.channel && !args.lock.channel.isText()) {
@@ -40,7 +36,7 @@ export default class implements Command {
 				}
 
 				const targetChannel = (args.lock.channel ?? interaction.channel) as TextChannel;
-				const targetChannelClientPermissions = targetChannel.permissionsFor(clientUser!);
+				const targetChannelClientPermissions = targetChannel.permissionsFor(interaction.client.user!);
 
 				if (
 					!targetChannelClientPermissions?.has([PermissionFlagsBits.ManageRoles | PermissionFlagsBits.ManageChannels])
