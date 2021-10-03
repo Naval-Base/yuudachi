@@ -22,7 +22,7 @@ export async function lock(
 	const lockdown = await getLockdown(interaction.guildId!, args.channel.id);
 	if (lockdown) {
 		throw new Error(
-			i18next.t('command.mod.lockdown.lock.already_locked', {
+			i18next.t('command.mod.lockdown.lock.errors.already_locked', {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 				lng: locale,
