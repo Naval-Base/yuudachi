@@ -65,8 +65,8 @@
 		"@types/pino": "^6.3.11",
 		"@types/pino-multi-stream": "^5.1.2",
 		"@types/ws": "^7.4.7",
-		"@typescript-eslint/eslint-plugin": "^4.29.2",
-		"@typescript-eslint/parser": "^4.29.2",
+		"@typescript-eslint/eslint-plugin": "^4.32.0",
+		"@typescript-eslint/parser": "^4.32.0",
 		"babel-plugin-transform-typescript-metadata": "^0.3.2",
 		"cpy-cli": "^3.1.1",
 		"discord-api-types": "^0.22.0",
@@ -78,7 +78,7 @@
 		"ley": "^0.7.1",
 		"prettier": "^2.3.2",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.3.5"
+		"typescript": "^4.4.3"
 	},
 	"engines": {
 		"node": ">=16.0.0",

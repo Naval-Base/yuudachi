@@ -51,7 +51,8 @@ export function startJobs() {
 							const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
 							await upsertCaseLog(message.d.guildId, client.user, case_);
 						} catch (e) {
-							logger.error(e, e.message);
+							const error = e as Error;
+							logger.error(error, error.message);
 						}
 						break;
 					}
@@ -60,7 +61,8 @@ export function startJobs() {
 						try {
 							await deleteLockdown(message.d.channelId);
 						} catch (e) {
-							logger.error(e, e.message);
+							const error = e as Error;
+							logger.error(error, error.message);
 						}
 						break;
 					}

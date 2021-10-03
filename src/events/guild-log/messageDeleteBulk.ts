@@ -88,7 +88,8 @@ export default class implements Event {
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
 			} catch (e) {
-				logger.error(e, e.message);
+				const error = e as Error;
+				logger.error(error, error.message);
 			}
 
 			continue;

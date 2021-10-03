@@ -102,7 +102,8 @@ export default class implements Event {
 					await upsertCaseLog(message.guild.id, this.client.user, case_!);
 				}
 			} catch (e) {
-				logger.error(e, e.message);
+				const error = e as Error;
+				logger.error(error, error.message);
 			}
 
 			continue;

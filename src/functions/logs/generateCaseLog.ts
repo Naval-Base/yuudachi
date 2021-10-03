@@ -22,7 +22,8 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 				action += ` \`Unknown\` (${case_.roleId})`;
 			}
 		} catch (e) {
-			logger.error(e, e.message);
+			const error = e as Error;
+			logger.error(error, error.message);
 		}
 	}
 

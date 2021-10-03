@@ -37,7 +37,8 @@ export default class implements Event {
 					const locale = await getGuildSetting(interaction.guildId!, SettingsKeys.Locale);
 					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
 				} catch (e) {
-					logger.error(e, e.message);
+					const error = e as Error;
+					logger.error(error, error.message);
 					try {
 						if (!interaction.deferred && !interaction.replied) {
 							logger.warn(
@@ -47,9 +48,10 @@ export default class implements Event {
 							await interaction.deferReply();
 						}
 
-						await interaction.editReply({ content: e.message, components: [] });
-					} catch (error) {
-						logger.error(e, e.message);
+						await interaction.editReply({ content: error.message, components: [] });
+					} catch (err) {
+						const error = err as Error;
+						logger.error(error, error.message);
 					}
 				}
 			}
