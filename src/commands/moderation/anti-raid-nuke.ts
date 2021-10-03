@@ -26,6 +26,7 @@ import { kRedis } from '../../tokens';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
 import { logger } from '../../logger';
 import { generateTargetInformation } from '../../util/generateTargetInofrmation';
+import RE2 from 're2';
 
 @injectable()
 export default class implements Command {
@@ -65,20 +66,50 @@ export default class implements Command {
 		const accountCutoff = Date.now() - parsedAge;
 
 		const fetchedMembers = await interaction.guild!.members.fetch({ force: true });
-		const members = fetchedMembers.filter(
-			(member) => member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff,
-		);
+		const members = fetchedMembers.filter((member) => {
+			if (args.pattern) {
+				try {
+					const re = new RE2(`^${args.pattern}$`, 'i');
+					if (!re.test(member.user.username)) {
+						return false;
+					}
+				} catch {}
+			}
+			return member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff;
+		});
+
+		const parameterStrings = [
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.heading', {
+				lng: locale,
+			}),
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.current_time', {
+				lng: locale,
+				now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
+			}),
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.join_after', {
+				lng: locale,
+				join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
+			}),
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.created_after', {
+				lng: locale,
+				age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
+			}),
+		];
+
+		if (args.pattern) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.errors.parameters.pattern', {
+					lng: locale,
+				}),
+				Formatters.codeBlock(`^${args.pattern}$`),
+			);
+		}
 
 		if (!members.size) {
 			await interaction.editReply({
 				content: `${i18next.t('command.mod.anti_raid_nuke.errors.no_hits', {
 					lng: locale,
-				})}\n\n${i18next.t('command.mod.anti_raid_nuke.errors.parameters', {
-					now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
-					join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-					age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-					lng: locale,
-				})}`,
+				})}\n\n${parameterStrings.join('\n')}`,
 			});
 			return;
 		}
@@ -121,12 +152,7 @@ export default class implements Command {
 				creationrange,
 				joinrange,
 				lng: locale,
-			})}\n\n${i18next.t('command.mod.anti_raid_nuke.errors.parameters', {
-				now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
-				join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-				age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-				lng: locale,
-			})}`,
+			})}\n\n${parameterStrings.join('\n')}`,
 			files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
 			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
 		});

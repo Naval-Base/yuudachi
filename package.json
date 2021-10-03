@@ -44,6 +44,7 @@
 		"pino-multi-stream": "^5.3.0",
 		"postgres": "^2.0.0-beta.6",
 		"prom-client": "^13.2.0",
+		"re2": "^1.16.0",
 		"readdirp": "^3.6.0",
 		"reflect-metadata": "^0.1.13",
 		"tslib": "^2.3.1",

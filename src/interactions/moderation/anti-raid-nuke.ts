@@ -17,6 +17,11 @@ export const AntiRaidNukeCommand = {
 			required: true,
 		},
 		{
+			name: 'pattern',
+			description: "A pattern the member's username should match (case insensitive, full match)",
+			type: ApplicationCommandOptionType.String,
+		},
+		{
 			name: 'reason',
 			description: 'The reason of this action',
 			type: ApplicationCommandOptionType.String,
