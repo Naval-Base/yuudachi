@@ -95,12 +95,31 @@ export default class implements Command {
 			.setLabel(i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }))
 			.setStyle('SECONDARY');
 
-		const potentialHits = Buffer.from(members.map((member) => `${member.user.tag} (${member.user.id})`).join('\r\n'));
+		const potentialHits = Buffer.from(members.map((member) => generateTargetInformation(member)).join('\r\n'));
 		const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
+
+		let creationLower = Number.POSITIVE_INFINITY;
+		let creationUpper = Number.NEGATIVE_INFINITY;
+		let joinLower = Number.POSITIVE_INFINITY;
+		let joinUpper = Number.NEGATIVE_INFINITY;
+
+		for (const member of members.values()) {
+			if (member.joinedTimestamp) {
+				joinLower = Math.min(member.joinedTimestamp, joinLower);
+				joinUpper = Math.max(member.joinedTimestamp, joinUpper);
+			}
+			creationLower = Math.min(member.user.createdTimestamp, creationLower);
+			creationUpper = Math.max(member.user.createdTimestamp, creationUpper);
+		}
+
+		const creationrange = ms(creationUpper - creationLower, true);
+		const joinrange = ms(joinUpper - joinLower, true);
 
 		await interaction.editReply({
 			content: `${i18next.t('command.mod.anti_raid_nuke.pending', {
 				members: members.size,
+				creationrange,
+				joinrange,
 				lng: locale,
 			})}\n\n${i18next.t('command.mod.anti_raid_nuke.errors.parameters', {
 				now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
