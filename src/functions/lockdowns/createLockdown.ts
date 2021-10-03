@@ -25,17 +25,30 @@ export interface CreateLockdown {
 	moderatorTag: string;
 }
 
-export async function createLockdown(lockdown: CreateLockdown & { channel?: GuildChannel }) {
+export async function createLockdown(lockdown: CreateLockdown & { channel: GuildChannel }) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const overwrites = [...(lockdown.channel?.permissionOverwrites.cache.values() ?? [])];
+	const overwrites = [...lockdown.channel.permissionOverwrites.cache.values()];
+	const {
+		client: { user: clientUser },
+	} = lockdown.channel;
 
-	await lockdown.channel?.permissionOverwrites.set([
+	await lockdown.channel.permissionOverwrites.set([
 		{
 			id: lockdown.guildId,
 			allow: 0n,
-			deny: PermissionFlagsBits.SendMessages | PermissionFlagsBits.AddReactions,
+			deny:
+				PermissionFlagsBits.SendMessages |
+				PermissionFlagsBits.AddReactions |
+				PermissionFlagsBits.UsePublicThreads | // CREATE_PUBLIC_THREADS
+				PermissionFlagsBits.UsePrivateThreads | // CREATE_PRIVATE_THREADS
+				(1n << 38n), // SEND_MESSAGES_IN_THREADS
 			type: 'role',
+		},
+		{
+			id: clientUser!.id,
+			allow: PermissionFlagsBits.SendMessages | PermissionFlagsBits.ManageChannels | PermissionFlagsBits.ManageRoles,
+			type: 'member',
 		},
 	]);
 
