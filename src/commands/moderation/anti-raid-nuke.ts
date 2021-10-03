@@ -12,6 +12,7 @@ import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import { inject, injectable } from 'tsyringe';
 import type { Redis } from 'ioredis';
+import RE2 from 're2';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
@@ -26,7 +27,6 @@ import { kRedis } from '../../tokens';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
 import { logger } from '../../logger';
 import { generateTargetInformation } from '../../util/generateTargetInofrmation';
-import RE2 from 're2';
 
 @injectable()
 export default class implements Command {
