@@ -1,5 +1,4 @@
-import { Client, Constants, Interaction } from 'discord.js';
-import { on } from 'node:events';
+import { Client, Constants } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command';
 
@@ -20,10 +19,10 @@ export default class implements Event {
 		@inject(kCommands) public readonly commands: Map<string, Command>,
 	) {}
 
-	public async execute(): Promise<void> {
-		for await (const [interaction] of on(this.client, this.event) as AsyncIterableIterator<[Interaction]>) {
+	public execute(): void {
+		this.client.on(this.event, async (interaction) => {
 			if (!interaction.isCommand() && !interaction.isContextMenu()) {
-				continue;
+				return;
 			}
 
 			const command = this.commands.get(interaction.commandName.toLowerCase());
@@ -53,8 +52,6 @@ export default class implements Event {
 					}
 				}
 			}
-
-			continue;
-		}
+		});
 	}
 }
