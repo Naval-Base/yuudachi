@@ -1,4 +1,5 @@
 import type { CommandInteraction, TextChannel } from 'discord.js';
+import { PermissionFlagsBits } from 'discord-api-types/v9';
 import i18next from 'i18next';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
@@ -32,6 +33,21 @@ export default class implements Command {
 				const reason = args.lock.reason;
 				if (reason && reason.length >= 1900) {
 					throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
+				}
+
+				const targetChannel = (args.lock.channel ?? interaction.channel) as TextChannel;
+				const targetChannelClientPermissions = targetChannel.permissionsFor(interaction.client.user!);
+
+				if (
+					!targetChannelClientPermissions?.has([PermissionFlagsBits.ManageRoles | PermissionFlagsBits.ManageChannels])
+				) {
+					throw new Error(
+						i18next.t('command.mod.lockdown.lock.errors.missing_permissions', {
+							// eslint-disable-next-line @typescript-eslint/no-base-to-string
+							channel: targetChannel.toString(),
+							lng: locale,
+						}),
+					);
 				}
 
 				return lock(

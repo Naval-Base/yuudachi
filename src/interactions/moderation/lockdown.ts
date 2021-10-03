@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v9';
+import { ApplicationCommandOptionType, ChannelType } from 'discord-api-types/v9';
 
 export const LockdownCommand = {
 	name: 'lockdown',
@@ -28,6 +28,7 @@ export const LockdownCommand = {
 					name: 'channel',
 					description: 'The channel to lock',
 					type: ApplicationCommandOptionType.Channel,
+					channel_types: ChannelType.GuildText,
 				},
 				{
 					name: 'reason',
@@ -45,6 +46,7 @@ export const LockdownCommand = {
 					name: 'channel',
 					description: 'The channel to lift the lock',
 					type: ApplicationCommandOptionType.Channel,
+					channel_types: ChannelType.GuildText,
 				},
 			],
 		},
