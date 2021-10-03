@@ -12,6 +12,7 @@ import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import { inject, injectable } from 'tsyringe';
 import type { Redis } from 'ioredis';
+import RE2 from 're2';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
@@ -25,6 +26,7 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 import { kRedis } from '../../tokens';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
 import { logger } from '../../logger';
+import { generateTargetInformation } from '../../util/generateTargetInofrmation';
 
 @injectable()
 export default class implements Command {
@@ -64,20 +66,66 @@ export default class implements Command {
 		const accountCutoff = Date.now() - parsedAge;
 
 		const fetchedMembers = await interaction.guild!.members.fetch({ force: true });
-		const members = fetchedMembers.filter(
-			(member) => member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff,
-		);
+		const members = fetchedMembers.filter((member) => {
+			if (args.pattern) {
+				try {
+					const re = new RE2(`^${args.pattern}$`, 'i');
+					if (!re.test(member.user.username)) {
+						return false;
+					}
+				} catch {}
+			}
+			return member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff;
+		});
+
+		const parameterStrings = [
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.heading', {
+				lng: locale,
+			}),
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.current_time', {
+				lng: locale,
+				now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
+			}),
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.join_after', {
+				lng: locale,
+				join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
+			}),
+			i18next.t('command.mod.anti_raid_nuke.errors.parameters.created_after', {
+				lng: locale,
+				age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
+			}),
+		];
+
+		if (args.pattern) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.errors.parameters.pattern', {
+					lng: locale,
+				}),
+				Formatters.codeBlock(`^${args.pattern}$`),
+			);
+		}
+
+		const deletionDays = args.days === undefined ? 1 : Math.min(Math.max(Number(args.days), 0), 7);
+		if (deletionDays) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.errors.parameters.days', {
+					lng: locale,
+					count: deletionDays,
+				}),
+			);
+		} else {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.errors.parameters.days_none', {
+					lng: locale,
+				}),
+			);
+		}
 
 		if (!members.size) {
 			await interaction.editReply({
 				content: `${i18next.t('command.mod.anti_raid_nuke.errors.no_hits', {
 					lng: locale,
-				})}\n\n${i18next.t('command.mod.anti_raid_nuke.errors.parameters', {
-					now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
-					join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-					age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-					lng: locale,
-				})}`,
+				})}\n\n${parameterStrings.join('\n')}`,
 			});
 			return;
 		}
@@ -94,19 +142,33 @@ export default class implements Command {
 			.setLabel(i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }))
 			.setStyle('SECONDARY');
 
-		const potentialHits = Buffer.from(members.map((member) => `${member.user.tag} (${member.user.id})`).join('\r\n'));
+		const potentialHits = Buffer.from(members.map((member) => generateTargetInformation(member)).join('\r\n'));
 		const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
+
+		let creationLower = Number.POSITIVE_INFINITY;
+		let creationUpper = Number.NEGATIVE_INFINITY;
+		let joinLower = Number.POSITIVE_INFINITY;
+		let joinUpper = Number.NEGATIVE_INFINITY;
+
+		for (const member of members.values()) {
+			if (member.joinedTimestamp) {
+				joinLower = Math.min(member.joinedTimestamp, joinLower);
+				joinUpper = Math.max(member.joinedTimestamp, joinUpper);
+			}
+			creationLower = Math.min(member.user.createdTimestamp, creationLower);
+			creationUpper = Math.max(member.user.createdTimestamp, creationUpper);
+		}
+
+		const creationrange = ms(creationUpper - creationLower, true);
+		const joinrange = ms(joinUpper - joinLower, true);
 
 		await interaction.editReply({
 			content: `${i18next.t('command.mod.anti_raid_nuke.pending', {
 				members: members.size,
+				creationrange,
+				joinrange,
 				lng: locale,
-			})}\n\n${i18next.t('command.mod.anti_raid_nuke.errors.parameters', {
-				now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
-				join: Formatters.time(dayjs(joinCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-				age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
-				lng: locale,
-			})}`,
+			})}\n\n${parameterStrings.join('\n')}`,
 			files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
 			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
 		});
@@ -164,7 +226,7 @@ export default class implements Command {
 									member: member,
 									user: member.user,
 								},
-								days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
+								days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
 								joinCutoff: dayjs(joinCutoff).toDate(),
 								accountCutoff: dayjs(accountCutoff).toDate(),
 							},
@@ -195,7 +257,7 @@ export default class implements Command {
 				args.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: fatalities.length }),
 			);
 
-			const membersHit = Buffer.from(fatalities.map((member) => member.user.id).join('\r\n'));
+			const membersHit = Buffer.from(fatalities.map((member) => generateTargetInformation(member)).join('\r\n'));
 			const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
 			await collectedInteraction.editReply({

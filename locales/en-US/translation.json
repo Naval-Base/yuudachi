@@ -96,11 +96,20 @@
 			"anti_raid_nuke": {
 				"errors": {
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
-					"parameters": "Parameters:\n• Current time: {{- now}}\n• Join date after: {{- join}}\n• Account creation after: {{- age}}"
+					"parameters": {
+						"heading": "Parameters:",
+						"current_time": "• Current time: {{- now}}",
+						"join_after": "• Join date after: {{- join}}",
+						"created_after": "• Account creation after: {{- age}}",
+						"pattern": "• Username matching pattern:",
+						"days": "• Deleting messages sent in the last {{count}} day",
+						"days_plural": "• Deleting messages sent in the last {{count}} days",
+						"days_none": "• Not deleting any messages"
+					}
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
 				"reason_fallback": "Anti-Raid-Nuke",
-				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.",
+				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.\n• Created within {{creationrange}}\n• Joined within {{joinrange}}",
 				"buttons": {
 					"cancel": "Cancel",
 					"execute": "Launch"
