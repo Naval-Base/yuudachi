@@ -26,7 +26,7 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 import { kRedis } from '../../tokens';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
 import { logger } from '../../logger';
-import { generateTargetInformation } from '../../util/generateTargetInofrmation';
+import { generateTargetInformation } from '../../util/generateTargetInformation';
 
 @injectable()
 export default class implements Command {
@@ -257,7 +257,7 @@ export default class implements Command {
 				args.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: fatalities.length }),
 			);
 
-			const membersHit = Buffer.from(fatalities.map((member) => generateTargetInformation(member)).join('\r\n'));
+			const membersHit = Buffer.from(fatalities.map((member) => member.id).join('\r\n'));
 			const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
 			await collectedInteraction.editReply({
