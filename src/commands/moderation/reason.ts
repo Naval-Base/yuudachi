@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
+import { CommandInteraction, Formatters, Message, MessageActionRow, MessageButton } from 'discord.js';
 import { nanoid } from 'nanoid';
 import i18next from 'i18next';
 
@@ -22,7 +22,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof ReasonCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: true });
+		const reply = (await interaction.deferReply({ ephemeral: true, fetchReply: true })) as Message;
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
@@ -96,8 +96,8 @@ export default class implements Command {
 				components: [new MessageActionRow().addComponents([cancelButton, changeButton])],
 			});
 
-			const collectedInteraction = await interaction.channel
-				?.awaitMessageComponent({
+			const collectedInteraction = await reply
+				.awaitMessageComponent({
 					filter: (collected) => collected.user.id === interaction.user.id,
 					componentType: 'BUTTON',
 					time: 15000,
@@ -112,6 +112,7 @@ export default class implements Command {
 						const error = e as Error;
 						logger.error(error, error.message);
 					}
+					return undefined;
 				});
 
 			if (

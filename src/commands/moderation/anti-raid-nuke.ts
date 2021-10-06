@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters, GuildMember, MessageActionRow, MessageButton } from 'discord.js';
+import { CommandInteraction, Formatters, GuildMember, Message, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
@@ -30,7 +30,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.deferReply();
+		const reply = (await interaction.deferReply({ fetchReply: true })) as Message;
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
@@ -166,8 +166,8 @@ export default class implements Command {
 			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
 		});
 
-		const collectedInteraction = await interaction.channel
-			?.awaitMessageComponent({
+		const collectedInteraction = await reply
+			.awaitMessageComponent({
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: 'BUTTON',
 				time: 60000,
@@ -182,6 +182,7 @@ export default class implements Command {
 					const error = e as Error;
 					logger.error(error, error.message);
 				}
+				return undefined;
 			});
 
 		if (collectedInteraction?.customId === cancelKey) {

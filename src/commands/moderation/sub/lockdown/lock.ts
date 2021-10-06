@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
+import { CommandInteraction, Formatters, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
 import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
@@ -9,6 +9,7 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 
 export async function lock(
 	interaction: CommandInteraction,
+	reply: Message,
 	args: { channel: TextChannel; duration: string; reason?: string },
 	locale: string,
 ): Promise<void> {
@@ -49,8 +50,8 @@ export async function lock(
 		components: [new MessageActionRow().addComponents([cancelButton, lockButton])],
 	});
 
-	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent({
+	const collectedInteraction = await reply
+		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,
@@ -62,6 +63,7 @@ export async function lock(
 					components: [],
 				});
 			} catch {}
+			return undefined;
 		});
 
 	if (collectedInteraction?.customId === cancelKey) {

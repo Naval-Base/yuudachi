@@ -1,11 +1,16 @@
-import { CommandInteraction, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
+import { CommandInteraction, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 
 import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 
-export async function lift(interaction: CommandInteraction, channel: TextChannel, locale: string): Promise<void> {
+export async function lift(
+	interaction: CommandInteraction,
+	reply: Message,
+	channel: TextChannel,
+	locale: string,
+): Promise<void> {
 	const lockdown = await getLockdown(interaction.guildId!, channel.id);
 	if (!lockdown) {
 		throw new Error(
@@ -38,8 +43,8 @@ export async function lift(interaction: CommandInteraction, channel: TextChannel
 		components: [new MessageActionRow().addComponents([cancelButton, unlockButton])],
 	});
 
-	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent({
+	const collectedInteraction = await reply
+		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,
@@ -51,6 +56,7 @@ export async function lift(interaction: CommandInteraction, channel: TextChannel
 					components: [],
 				});
 			} catch {}
+			return undefined;
 		});
 
 	if (collectedInteraction?.customId === cancelKey) {

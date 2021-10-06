@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import { CommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -15,6 +15,7 @@ import { generateHistory } from '../../../../util/generateHistory';
 
 export async function emoji(
 	interaction: CommandInteraction,
+	reply: Message,
 	args: ArgumentsOf<typeof RestrictCommand>['emoji'],
 	locale: string,
 ): Promise<void> {
@@ -80,8 +81,8 @@ export async function emoji(
 		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
 	});
 
-	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent({
+	const collectedInteraction = await reply
+		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,
@@ -93,6 +94,7 @@ export async function emoji(
 					components: [],
 				});
 			} catch {}
+			return undefined;
 		});
 
 	if (collectedInteraction?.customId === cancelKey) {
