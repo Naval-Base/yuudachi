@@ -26,7 +26,7 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 import { kRedis } from '../../tokens';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
 import { logger } from '../../logger';
-import { generateTargetInformation } from '../../util/generateTargetInofrmation';
+import { generateTargetInformation } from '../../util/generateTargetInformation';
 
 @injectable()
 export default class implements Command {
