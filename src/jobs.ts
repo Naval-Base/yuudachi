@@ -42,7 +42,7 @@ export function startJobs() {
 
 	bree.on('worker created', (name) => {
 		// @ts-expect-error
-		bree.workers[name].on('message', async (message) => {
+		bree.workers[name]?.on('message', async (message) => {
 			if (message !== 'done') {
 				switch (message.op) {
 					case JobType.Case: {
@@ -73,7 +73,7 @@ export function startJobs() {
 
 	bree.on('worker deleted', (name) => {
 		// @ts-expect-error
-		bree.workers[name].removeAllListeners();
+		bree.workers[name]?.removeAllListeners();
 	});
 
 	bree.start();
