@@ -1,4 +1,4 @@
-import type { CommandInteraction, Message, TextChannel } from 'discord.js';
+import type { CommandInteraction, TextChannel } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import i18next from 'i18next';
 
@@ -16,7 +16,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof LockdownCommand>,
 		locale: string,
 	): Promise<void> {
-		const reply = (await interaction.deferReply({ ephemeral: true, fetchReply: true })) as Message;
+		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 		await checkModRole(interaction, locale);
 
 		switch (Object.keys(args)[0]) {

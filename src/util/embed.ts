@@ -33,6 +33,7 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 		...embed,
 		description: embed.description ? ellipsis(embed.description, EMBED_DESCRIPTION_LIMIT) : undefined,
 		title: embed.title ? ellipsis(embed.title, EMBED_TITLE_LIMIT) : undefined,
+		// @ts-expect-error
 		author: embed.author
 			? {
 					...embed.author,

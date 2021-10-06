@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters, Message, MessageActionRow, MessageButton } from 'discord.js';
+import { CommandInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
 import { nanoid } from 'nanoid';
 import i18next from 'i18next';
 
@@ -15,6 +15,7 @@ import { generateMessageLink } from '../../util/generateMessageLink';
 import { logger } from '../../logger';
 import { truncate } from '../../util/embed';
 import type { Case } from '../../functions/cases/createCase';
+import { awaitComponent } from '../../util/awaitComponent';
 
 export default class implements Command {
 	public async execute(
@@ -22,7 +23,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof ReasonCommand>,
 		locale: string,
 	): Promise<void> {
-		const reply = (await interaction.deferReply({ ephemeral: true, fetchReply: true })) as Message;
+		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
@@ -96,24 +97,22 @@ export default class implements Command {
 				components: [new MessageActionRow().addComponents([cancelButton, changeButton])],
 			});
 
-			const collectedInteraction = await reply
-				.awaitMessageComponent({
-					filter: (collected) => collected.user.id === interaction.user.id,
-					componentType: 'BUTTON',
-					time: 15000,
-				})
-				.catch(async () => {
-					try {
-						await interaction.editReply({
-							content: i18next.t('common.errors.timed_out', { lng: locale }),
-							components: [],
-						});
-					} catch (e) {
-						const error = e as Error;
-						logger.error(error, error.message);
-					}
-					return undefined;
-				});
+			const collectedInteraction = await awaitComponent(interaction.client, reply, {
+				filter: (collected) => collected.user.id === interaction.user.id,
+				componentType: 'BUTTON',
+				time: 15000,
+			}).catch(async () => {
+				try {
+					await interaction.editReply({
+						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						components: [],
+					});
+				} catch (e) {
+					const error = e as Error;
+					logger.error(error, error.message);
+				}
+				return undefined;
+			});
 
 			if (
 				collectedInteraction &&

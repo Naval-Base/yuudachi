@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters, GuildMember, Message, MessageActionRow, MessageButton } from 'discord.js';
+import { CommandInteraction, Formatters, GuildMember, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
@@ -20,6 +20,7 @@ import { kRedis } from '../../tokens';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
 import { logger } from '../../logger';
 import { generateTargetInformation } from '../../util/generateTargetInformation';
+import { awaitComponent } from '../../util/awaitComponent';
 
 @injectable()
 export default class implements Command {
@@ -30,7 +31,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {
-		const reply = (await interaction.deferReply({ fetchReply: true })) as Message;
+		const reply = await interaction.deferReply({ fetchReply: true });
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
@@ -166,24 +167,22 @@ export default class implements Command {
 			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
 		});
 
-		const collectedInteraction = await reply
-			.awaitMessageComponent({
-				filter: (collected) => collected.user.id === interaction.user.id,
-				componentType: 'BUTTON',
-				time: 60000,
-			})
-			.catch(async () => {
-				try {
-					await interaction.editReply({
-						content: i18next.t('common.errors.timed_out', { lng: locale }),
-						components: [],
-					});
-				} catch (e) {
-					const error = e as Error;
-					logger.error(error, error.message);
-				}
-				return undefined;
-			});
+		const collectedInteraction = await awaitComponent(interaction.client, reply, {
+			filter: (collected) => collected.user.id === interaction.user.id,
+			componentType: 'BUTTON',
+			time: 60000,
+		}).catch(async () => {
+			try {
+				await interaction.editReply({
+					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					components: [],
+				});
+			} catch (e) {
+				const error = e as Error;
+				logger.error(error, error.message);
+			}
+			return undefined;
+		});
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({

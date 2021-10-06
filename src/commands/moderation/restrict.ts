@@ -1,4 +1,4 @@
-import type { CommandInteraction, Message } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
@@ -20,7 +20,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof RestrictCommand>,
 		locale: string,
 	): Promise<void> {
-		const reply = (await interaction.deferReply({ ephemeral: true, fetchReply: true })) as Message;
+		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
