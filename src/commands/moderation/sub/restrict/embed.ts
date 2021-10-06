@@ -1,9 +1,10 @@
-import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import { CommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
+import type { APIMessage } from 'discord-api-types';
 
 import type { RestrictCommand } from '../../../../interactions';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
@@ -12,9 +13,11 @@ import { CaseAction, createCase } from '../../../../functions/cases/createCase';
 import { generateCasePayload } from '../../../../functions/logs/generateCasePayload';
 import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import { generateHistory } from '../../../../util/generateHistory';
+import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function embed(
 	interaction: CommandInteraction,
+	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['embed'],
 	locale: string,
 ): Promise<void> {
@@ -75,25 +78,23 @@ export async function embed(
 			user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 			lng: locale,
 		}),
-		// @ts-expect-error
 		embeds: [embed],
 		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
 	});
 
-	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent<ButtonInteraction>({
-			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: 'BUTTON',
-			time: 15000,
-		})
-		.catch(async () => {
-			try {
-				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
-					components: [],
-				});
-			} catch {}
-		});
+	const collectedInteraction = await awaitComponent(interaction.client, reply, {
+		filter: (collected) => collected.user.id === interaction.user.id,
+		componentType: 'BUTTON',
+		time: 15000,
+	}).catch(async () => {
+		try {
+			await interaction.editReply({
+				content: i18next.t('common.errors.timed_out', { lng: locale }),
+				components: [],
+			});
+		} catch {}
+		return undefined;
+	});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({

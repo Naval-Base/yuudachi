@@ -1,21 +1,17 @@
-import {
-	ButtonInteraction,
-	CommandInteraction,
-	Formatters,
-	MessageActionRow,
-	MessageButton,
-	TextChannel,
-} from 'discord.js';
+import { CommandInteraction, Formatters, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
 import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
+import type { APIMessage } from 'discord-api-types';
 
 import { createLockdown } from '../../../../functions/lockdowns/createLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
+import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function lock(
 	interaction: CommandInteraction,
+	reply: Message | APIMessage,
 	args: { channel: TextChannel; duration: string; reason?: string },
 	locale: string,
 ): Promise<void> {
@@ -56,20 +52,19 @@ export async function lock(
 		components: [new MessageActionRow().addComponents([cancelButton, lockButton])],
 	});
 
-	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent<ButtonInteraction>({
-			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: 'BUTTON',
-			time: 15000,
-		})
-		.catch(async () => {
-			try {
-				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
-					components: [],
-				});
-			} catch {}
-		});
+	const collectedInteraction = await awaitComponent(interaction.client, reply, {
+		filter: (collected) => collected.user.id === interaction.user.id,
+		componentType: 'BUTTON',
+		time: 15000,
+	}).catch(async () => {
+		try {
+			await interaction.editReply({
+				content: i18next.t('common.errors.timed_out', { lng: locale }),
+				components: [],
+			});
+		} catch {}
+		return undefined;
+	});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({

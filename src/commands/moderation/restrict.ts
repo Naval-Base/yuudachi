@@ -20,7 +20,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof RestrictCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: true });
+		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
@@ -33,23 +33,23 @@ export default class implements Command {
 
 		switch (Object.keys(args)[0]) {
 			case 'mute': {
-				return mute(interaction, args.mute, locale);
+				return mute(interaction, reply, args.mute, locale);
 			}
 
 			case 'embed': {
-				return embed(interaction, args.embed, locale);
+				return embed(interaction, reply, args.embed, locale);
 			}
 
 			case 'react': {
-				return react(interaction, args.react, locale);
+				return react(interaction, reply, args.react, locale);
 			}
 
 			case 'emoji': {
-				return emoji(interaction, args.emoji, locale);
+				return emoji(interaction, reply, args.emoji, locale);
 			}
 
 			case 'unrole': {
-				return unrole(interaction, args.unrole, locale);
+				return unrole(interaction, reply, args.unrole, locale);
 			}
 		}
 	}

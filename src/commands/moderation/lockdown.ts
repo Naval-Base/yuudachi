@@ -16,7 +16,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof LockdownCommand>,
 		locale: string,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: true });
+		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 		await checkModRole(interaction, locale);
 
 		switch (Object.keys(args)[0]) {
@@ -52,6 +52,7 @@ export default class implements Command {
 
 				return lock(
 					interaction,
+					reply,
 					{ channel: (args.lock.channel ?? interaction.channel) as TextChannel, duration: args.lock.duration, reason },
 					locale,
 				);
@@ -67,7 +68,7 @@ export default class implements Command {
 					);
 				}
 
-				return lift(interaction, (args.lift.channel ?? interaction.channel) as TextChannel, locale);
+				return lift(interaction, reply, (args.lift.channel ?? interaction.channel) as TextChannel, locale);
 			}
 		}
 	}

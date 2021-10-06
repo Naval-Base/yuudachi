@@ -18,7 +18,6 @@ export default class implements Command {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		await interaction.editReply({
-			// @ts-expect-error
 			embeds: [embed],
 		});
 	}
