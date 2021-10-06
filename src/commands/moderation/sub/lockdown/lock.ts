@@ -1,11 +1,4 @@
-import {
-	ButtonInteraction,
-	CommandInteraction,
-	Formatters,
-	MessageActionRow,
-	MessageButton,
-	TextChannel,
-} from 'discord.js';
+import { CommandInteraction, Formatters, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
 import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
@@ -57,7 +50,7 @@ export async function lock(
 	});
 
 	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent<ButtonInteraction>({
+		?.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,

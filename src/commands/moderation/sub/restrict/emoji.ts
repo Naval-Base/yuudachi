@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import { CommandInteraction, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -81,7 +81,7 @@ export async function emoji(
 	});
 
 	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent<ButtonInteraction>({
+		?.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,

@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
+import { CommandInteraction, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 
@@ -39,7 +39,7 @@ export async function lift(interaction: CommandInteraction, channel: TextChannel
 	});
 
 	const collectedInteraction = await interaction.channel
-		?.awaitMessageComponent<ButtonInteraction>({
+		?.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,

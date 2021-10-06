@@ -1,11 +1,4 @@
-import {
-	ButtonInteraction,
-	CommandInteraction,
-	Formatters,
-	GuildMember,
-	MessageActionRow,
-	MessageButton,
-} from 'discord.js';
+import { CommandInteraction, Formatters, GuildMember, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
@@ -174,7 +167,7 @@ export default class implements Command {
 		});
 
 		const collectedInteraction = await interaction.channel
-			?.awaitMessageComponent<ButtonInteraction>({
+			?.awaitMessageComponent({
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: 'BUTTON',
 				time: 60000,
