@@ -109,7 +109,7 @@ export default class implements Event {
 						color: 6057215,
 						title: i18next.t('log.guild_log.message_updated.title', { lng: locale }),
 						description,
-						footer: i18next.t('log.guild_log.message_updated.footer', { id: newMessage.id, lng: locale }),
+						footer: { text: newMessage.id },
 						timestamp: new Date().toISOString(),
 					},
 					{
