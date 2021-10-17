@@ -70,7 +70,7 @@ export default class implements Event {
 							? message.content
 							: i18next.t('log.guild_log.message_deleted.no_content', { lng: locale })
 					}`,
-					footer: i18next.t('log.guild_log.message_deleted.footer', { id: message.id }),
+					footer: i18next.t('log.guild_log.message_deleted.footer', { id: message.id, lng: locale }),
 					timestamp: new Date().toISOString(),
 				});
 
