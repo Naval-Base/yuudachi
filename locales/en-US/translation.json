@@ -287,7 +287,8 @@
 				"title": "Message updated",
 				"info": "\u200b",
 				"channel": "• Channel: {{- channel}}",
-				"jump_to": "• [Jump to]({{- link}})"
+				"jump_to": "• [Jump to]({{- link}})",
+				"footer": "Id {{- id}}"
 			},
 			"message_deleted": {
 				"title": "Message deleted",
@@ -296,7 +297,8 @@
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",
-				"jump_to": "• [Jump to]({{- link}})"
+				"jump_to": "• [Jump to]({{- link}})",
+				"footer": "Id {{- id}}"
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
