@@ -9,12 +9,11 @@ import { logger } from '../../logger';
 import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { MENTION_THRESHOLD, SCAM_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
+import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { totalMentions } from '../../functions/anti-spam/totalMentions';
 import { totalContent } from '../../functions/anti-spam/totalContents';
 import { kRedis } from '../../tokens';
-import { totalScams } from '../../functions/anti-scam/totalScam';
 
 @injectable()
 export default class implements Event {
@@ -31,13 +30,11 @@ export default class implements Event {
 
 				const totalMentionCount = await totalMentions(message);
 				const totalContentCount = await totalContent(message.content, message.guildId, message.author.id);
-				const totalScamCount = await totalScams(message.content, message.guildId, message.author.id);
 
 				const mentionExceeded = totalMentionCount >= MENTION_THRESHOLD;
 				const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
-				const scamExceeded = totalScamCount >= SCAM_THRESHOLD;
 
-				if (scamExceeded || mentionExceeded || contentExceeded) {
+				if (mentionExceeded || contentExceeded) {
 					if (!message.member?.bannable) continue;
 
 					const logChannel = await checkLogChannel(
@@ -53,7 +50,7 @@ export default class implements Event {
 					await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:ban`, 15, '');
 					let case_: Case | null = null;
 
-					if (scamExceeded || mentionExceeded) {
+					if (mentionExceeded) {
 						logger.info(
 							{
 								event: { name: this.name, event: this.event },
@@ -61,9 +58,8 @@ export default class implements Event {
 								userId: message.client.user!.id,
 								memberId: message.author.id,
 								mentionExceeded,
-								scamExceeded,
 							},
-							`Member ${message.author.id} banned (spam/scam)`,
+							`Member ${message.author.id} banned (mention spam)`,
 						);
 
 						case_ = await createCase(message.guild, {
@@ -71,7 +67,7 @@ export default class implements Event {
 							guildId: message.guildId,
 							action: CaseAction.Ban,
 							targetTag: message.author.tag,
-							reason: i18next.t(scamExceeded ? 'log.mod_log.scam.reason' : 'log.mod_log.spam.reason_mentions', {
+							reason: i18next.t('log.mod_log.spam.reason_mentions', {
 								lng: locale,
 							}),
 							deleteMessageDays: 1,
