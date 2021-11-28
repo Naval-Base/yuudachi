@@ -2,8 +2,8 @@ import { oneLine } from 'common-tags';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {
+	BaseCommandInteraction,
 	ButtonInteraction,
-	CommandInteraction,
 	Formatters,
 	GuildMember,
 	SelectMenuInteraction,
@@ -34,7 +34,7 @@ interface CaseFooter {
 }
 
 export async function generateHistory(
-	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
+	interaction: BaseCommandInteraction | ButtonInteraction | SelectMenuInteraction,
 	target: { member?: GuildMember; user: User },
 	locale: string,
 ) {

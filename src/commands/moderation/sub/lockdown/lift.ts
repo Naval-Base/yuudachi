@@ -1,4 +1,4 @@
-import { CommandInteraction, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
+import { BaseCommandInteraction, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { APIMessage } from 'discord-api-types';
@@ -8,7 +8,7 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function lift(
-	interaction: CommandInteraction,
+	interaction: BaseCommandInteraction,
 	reply: Message | APIMessage,
 	channel: TextChannel,
 	locale: string,

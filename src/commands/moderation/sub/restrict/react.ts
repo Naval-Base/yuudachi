@@ -1,4 +1,4 @@
-import { CommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import { BaseCommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -16,7 +16,7 @@ import { generateHistory } from '../../../../util/generateHistory';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function react(
-	interaction: CommandInteraction,
+	interaction: BaseCommandInteraction,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['react'],
 	locale: string,

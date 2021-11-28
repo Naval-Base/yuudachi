@@ -1,9 +1,9 @@
-import type { CommandInteraction } from 'discord.js';
+import type { BaseCommandInteraction } from 'discord.js';
 import { basename, extname } from 'node:path';
 
 export interface Command {
 	name?: string;
-	execute(interaction: CommandInteraction, args: unknown, locale: string): unknown | Promise<unknown>;
+	execute(interaction: BaseCommandInteraction<'cached'>, args: unknown, locale: string): unknown | Promise<unknown>;
 }
 
 export interface CommandInfo {

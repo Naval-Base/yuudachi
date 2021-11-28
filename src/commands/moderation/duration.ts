@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters } from 'discord.js';
+import { BaseCommandInteraction, Formatters } from 'discord.js';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 
@@ -15,7 +15,7 @@ import { generateMessageLink } from '../../util/generateMessageLink';
 
 export default class implements Command {
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof DurationCommand>,
 		locale: string,
 	): Promise<void> {

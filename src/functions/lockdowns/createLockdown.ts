@@ -37,8 +37,8 @@ export async function createLockdown(lockdown: CreateLockdown & { channel: Guild
 			deny:
 				PermissionFlagsBits.SendMessages |
 				PermissionFlagsBits.AddReactions |
-				PermissionFlagsBits.UsePublicThreads | // CREATE_PUBLIC_THREADS
-				PermissionFlagsBits.UsePrivateThreads | // CREATE_PRIVATE_THREADS
+				PermissionFlagsBits.CreatePublicThreads | // CREATE_PUBLIC_THREADS
+				PermissionFlagsBits.CreatePrivateThreads | // CREATE_PRIVATE_THREADS
 				(1n << 38n), // SEND_MESSAGES_IN_THREADS
 			type: 'role',
 		},

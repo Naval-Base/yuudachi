@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
@@ -22,7 +22,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof UnbanCommand>,
 		locale: string,
 	): Promise<void> {
@@ -103,6 +103,7 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === unbanKey) {
 			await collectedInteraction.deferUpdate();
 
+			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:unban`, 15, '');
 			const case_ = await deleteCase({
 				guild: collectedInteraction.guild!,

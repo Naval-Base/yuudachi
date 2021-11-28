@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters, GuildMember, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, Formatters, GuildMember, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
@@ -27,7 +27,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {
@@ -197,6 +197,7 @@ export default class implements Command {
 				components: [new MessageActionRow().addComponents([cancelButton.setDisabled(), banButton.setDisabled()])],
 			});
 
+			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.setex(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15, 'true');
 			let idx = 0;
 			const promises = [];
@@ -234,12 +235,14 @@ export default class implements Command {
 						.catch(() => {
 							survivors.push(member);
 						})
+						// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 						.finally(() => void this.redis.expire(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15)),
 				);
 			}
 
 			const resolvedCases = await Promise.all(promises);
 			const cases = resolvedCases.filter((resolvedCase) => resolvedCase) as Case[];
+			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.expire(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 5);
 
 			await insertAntiRaidNukeCaseLog(

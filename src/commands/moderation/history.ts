@@ -1,4 +1,4 @@
-import type { CommandInteraction } from 'discord.js';
+import type { BaseCommandInteraction } from 'discord.js';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
@@ -8,7 +8,7 @@ import { generateHistory } from '../../util/generateHistory';
 
 export default class implements Command {
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof HistoryCommand>,
 		locale: string,
 	): Promise<void> {
