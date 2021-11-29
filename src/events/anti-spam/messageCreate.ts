@@ -9,11 +9,10 @@ import { logger } from '../../logger';
 import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { MENTION_THRESHOLD, SPAM_SCAM_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
+import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { totalMentions } from '../../functions/anti-spam/totalMentions';
 import { totalContent } from '../../functions/anti-spam/totalContents';
-import { checkScam } from '../../functions/anti-scam/checkScam';
 import { kRedis } from '../../tokens';
 
 @injectable()
@@ -27,34 +26,31 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
-				if (message.author.bot || !message.guild || !message.content.length) continue;
+				if (message.author.bot || !message.guild || !message.guildId || !message.content.length) continue;
 
 				const totalMentionCount = await totalMentions(message);
-				const totalContentCount = await totalContent(message.content, message.guild.id, message.author.id);
+				const totalContentCount = await totalContent(message.content, message.guildId, message.author.id);
 
 				const mentionExceeded = totalMentionCount >= MENTION_THRESHOLD;
 				const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
-				const scamContentExceeded = totalContentCount >= SPAM_SCAM_THRESHOLD;
 
-				const scamDomains = await checkScam(message.content);
-
-				if ((scamContentExceeded && scamDomains.length) || mentionExceeded || contentExceeded) {
+				if (mentionExceeded || contentExceeded) {
 					if (!message.member?.bannable) continue;
 
 					const logChannel = await checkLogChannel(
 						message.guild,
-						await getGuildSetting(message.guild.id, SettingsKeys.ModLogChannelId),
+						await getGuildSetting(message.guildId, SettingsKeys.ModLogChannelId),
 					);
 					if (!logChannel) {
 						continue;
 					}
 
-					const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
+					const locale = await getGuildSetting(message.guildId, SettingsKeys.Locale);
 
-					await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:ban`, 15, '');
+					await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:ban`, 15, '');
 					let case_: Case | null = null;
 
-					if ((scamContentExceeded && scamDomains.length) || mentionExceeded) {
+					if (mentionExceeded) {
 						logger.info(
 							{
 								event: { name: this.name, event: this.event },
@@ -62,17 +58,16 @@ export default class implements Event {
 								userId: message.client.user!.id,
 								memberId: message.author.id,
 								mentionExceeded,
-								scamDomains,
 							},
-							`Member ${message.author.id} banned (spam/scam)`,
+							`Member ${message.author.id} banned (mention spam)`,
 						);
 
 						case_ = await createCase(message.guild, {
 							targetId: message.author.id,
-							guildId: message.guild.id,
+							guildId: message.guildId,
 							action: CaseAction.Ban,
 							targetTag: message.author.tag,
-							reason: i18next.t(scamDomains.length ? 'log.mod_log.scam.reason' : 'log.mod_log.spam.reason_mentions', {
+							reason: i18next.t('log.mod_log.spam.reason_mentions', {
 								lng: locale,
 							}),
 							deleteMessageDays: 1,
@@ -81,14 +76,14 @@ export default class implements Event {
 						logger.info(
 							{
 								event: { name: this.name, event: this.event },
-								guildId: message.guild.id,
+								guildId: message.guildId,
 								userId: message.client.user!.id,
 								memberId: message.author.id,
 							},
 							`Member ${message.author.id} softbanned (spam)`,
 						);
 
-						await this.redis.setex(`guild:${message.guild.id}:user:${message.author.id}:unban`, 15, '');
+						await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:unban`, 15, '');
 						case_ = await createCase(message.guild, {
 							targetId: message.author.id,
 							guildId: message.guild.id,
@@ -99,7 +94,7 @@ export default class implements Event {
 						});
 					}
 
-					await upsertCaseLog(message.guild.id, this.client.user, case_!);
+					await upsertCaseLog(message.guildId, this.client.user, case_!);
 				}
 			} catch (e) {
 				const error = e as Error;

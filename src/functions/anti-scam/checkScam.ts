@@ -16,7 +16,8 @@ export async function checkScam(content: string): Promise<string[]> {
 	let matches: any[] | null = [];
 	while ((matches = urlRegex.exec(content)) !== null) {
 		const url = matches[0];
-		const hit = scamDomains.find((d) => url.toLowerCase().includes(d));
+		const urlLower = url.toLowerCase();
+		const hit = scamDomains.find((d) => urlLower.includes(d.toLowerCase()));
 
 		if (hit) {
 			trippedDomains.push(hit);
@@ -25,7 +26,8 @@ export async function checkScam(content: string): Promise<string[]> {
 
 		try {
 			const resolved = await resolveRedirect(url);
-			const hit = scamDomains.find((domain) => resolved.toLowerCase().includes(domain));
+			const resolvedLower = resolved.toLowerCase();
+			const hit = scamDomains.find((domain) => resolvedLower.includes(domain));
 			if (hit) {
 				trippedDomains.push(hit);
 			}
