@@ -1,4 +1,10 @@
-import type { ButtonInteraction, CommandInteraction, GuildMember, SelectMenuInteraction, Snowflake } from 'discord.js';
+import type {
+	BaseCommandInteraction,
+	ButtonInteraction,
+	GuildMember,
+	SelectMenuInteraction,
+	Snowflake,
+} from 'discord.js';
 import { container } from 'tsyringe';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
@@ -6,7 +12,7 @@ import type { Sql } from 'postgres';
 import { kSQL } from '../../tokens';
 
 export async function checkModRole(
-	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
+	interaction: BaseCommandInteraction | ButtonInteraction | SelectMenuInteraction,
 	locale: string,
 ): Promise<void> {
 	const sql = container.resolve<Sql<any>>(kSQL);

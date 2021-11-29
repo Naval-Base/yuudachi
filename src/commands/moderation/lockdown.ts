@@ -1,4 +1,4 @@
-import type { CommandInteraction, TextChannel } from 'discord.js';
+import type { BaseCommandInteraction, TextChannel } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import i18next from 'i18next';
 
@@ -12,7 +12,7 @@ import { lift } from './sub/lockdown/lift';
 
 export default class implements Command {
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof LockdownCommand>,
 		locale: string,
 	): Promise<void> {

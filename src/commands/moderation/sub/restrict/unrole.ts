@@ -1,4 +1,4 @@
-import { CommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import { BaseCommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -13,7 +13,7 @@ import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function unrole(
-	interaction: CommandInteraction,
+	interaction: BaseCommandInteraction,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
 	locale: string,

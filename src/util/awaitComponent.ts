@@ -1,50 +1,18 @@
 import {
-	AwaitMessageComponentOptions,
 	Client,
 	CollectorFilter,
 	Interaction,
 	InteractionCollector,
-	InteractionCollectorOptions,
-	InteractionCollectorOptionsResolvable,
 	Message,
-	MessageComponentInteraction,
 	MessageComponentType,
 	Constants,
+	AwaitMessageCollectorOptionsParams,
+	InteractionExtractor,
 } from 'discord.js';
 import type { APIMessage } from 'discord-api-types/v9';
 
 // TODO: remove once exported from discord.js typings
 // Monkey-patch types
-
-type InteractionExtractor<T extends MessageComponentType | keyof typeof Constants['MessageComponentTypes']> = T extends
-	| MessageComponentType
-	| typeof Constants['MessageComponentTypes']
-	? MappedInteractionCollectorOptions[T] extends InteractionCollectorOptions<infer Item>
-		? Item
-		: never
-	: MessageComponentInteraction;
-
-type MappedInteractionCollectorOptions = CollectorOptionsTypeResolver<InteractionCollectorOptionsResolvable>;
-
-type CollectorOptionsTypeResolver<U extends InteractionCollectorOptionsResolvable> = {
-	readonly [T in U['componentType']]: TaggedUnion<InteractionCollectorOptionsResolvable, 'componentType', T>;
-};
-
-type TaggedUnion<T, K extends keyof T, V extends T[K]> = T extends Record<K, V>
-	? T
-	: T extends Record<K, infer U>
-	? V extends U
-		? T
-		: never
-	: never;
-
-type AwaitMessageCollectorOptionsParams<
-	T extends MessageComponentType | keyof typeof Constants['MessageComponentTypes'],
-> =
-	| { componentType?: T } & Pick<
-			InteractionCollectorOptions<InteractionExtractor<T>>,
-			keyof AwaitMessageComponentOptions<any>
-	  >;
 
 export function awaitComponent<
 	T extends MessageComponentType | keyof typeof Constants['MessageComponentTypes'] = 'ACTION_ROW',

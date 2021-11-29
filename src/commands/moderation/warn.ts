@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 
@@ -17,7 +17,7 @@ import { awaitComponent } from '../../util/awaitComponent';
 
 export default class implements Command {
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof WarnCommand>,
 		locale: string,
 	): Promise<void> {

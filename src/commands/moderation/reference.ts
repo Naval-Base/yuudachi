@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters } from 'discord.js';
+import { BaseCommandInteraction, Formatters } from 'discord.js';
 import i18next from 'i18next';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
@@ -14,7 +14,7 @@ import { generateMessageLink } from '../../util/generateMessageLink';
 
 export default class implements Command {
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof ReferenceCommand>,
 		locale: string,
 	): Promise<void> {

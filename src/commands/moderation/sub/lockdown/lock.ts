@@ -1,4 +1,4 @@
-import { CommandInteraction, Formatters, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
+import { BaseCommandInteraction, Formatters, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
 import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
@@ -10,7 +10,7 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function lock(
-	interaction: CommandInteraction,
+	interaction: BaseCommandInteraction,
 	reply: Message | APIMessage,
 	args: { channel: TextChannel; duration: string; reason?: string },
 	locale: string,

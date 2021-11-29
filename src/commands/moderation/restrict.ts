@@ -1,4 +1,4 @@
-import type { CommandInteraction } from 'discord.js';
+import type { BaseCommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
@@ -16,7 +16,7 @@ import { unrole } from './sub/restrict/unrole';
 
 export default class implements Command {
 	public async execute(
-		interaction: CommandInteraction,
+		interaction: BaseCommandInteraction,
 		args: ArgumentsOf<typeof RestrictCommand>,
 		locale: string,
 	): Promise<void> {

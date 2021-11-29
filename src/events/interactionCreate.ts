@@ -25,6 +25,10 @@ export default class implements Event {
 				return;
 			}
 
+			if (!interaction.inCachedGuild()) {
+				return;
+			}
+
 			const command = this.commands.get(interaction.commandName.toLowerCase());
 			if (command) {
 				try {
@@ -33,7 +37,7 @@ export default class implements Event {
 						`Executing command ${interaction.commandName}`,
 					);
 
-					const locale = await getGuildSetting(interaction.guildId!, SettingsKeys.Locale);
+					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
 					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
 				} catch (e) {
 					const error = e as Error;
