@@ -11,9 +11,6 @@ import {
 } from 'discord.js';
 import type { APIMessage } from 'discord-api-types/v9';
 
-// TODO: remove once exported from discord.js typings
-// Monkey-patch types
-
 export function awaitComponent<
 	T extends MessageComponentType | keyof typeof Constants['MessageComponentTypes'] = 'ACTION_ROW',
 >(
