@@ -23,6 +23,7 @@ import {
 
 	// Utility
 	PingCommand,
+	CheckScamCommand,
 
 	// Context Menu
 	HistoryContextMenuCommand,
@@ -56,6 +57,7 @@ try {
 
 				// Utility
 				PingCommand,
+				CheckScamCommand,
 
 				// Context Menu
 				HistoryContextMenuCommand,

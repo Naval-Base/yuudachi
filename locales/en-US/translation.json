@@ -237,6 +237,12 @@
 		"utility": {
 			"ping": {
 				"success": "ok"
+			},
+			"check_scam": {
+				"found_plural": "Detected domains ({{count}})",
+				"cache": "Checked against {{count}} scam domains",
+				"found": "Detected domains ({{count}})"
+			},
 			}
 		}
 	},

@@ -11,5 +11,6 @@ export * from './moderation/softban';
 export * from './moderation/unban';
 export * from './moderation/warn';
 export * from './utility/ping';
+export * from './utility/checkScam';
 
 export * from './context-menu/history';
