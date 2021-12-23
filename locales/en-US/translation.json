@@ -239,10 +239,20 @@
 				"success": "ok"
 			},
 			"check_scam": {
-				"found_plural": "Detected domains ({{count}})",
-				"cache": "Checked against {{count}} scam domains",
-				"found": "Detected domains ({{count}})"
+				"found": "Detected scam domain ({{count}})",
+				"found_plural": "Detected scam domains ({{count}})",
+				"debug": {
+					"title": "Debug information",
+					"domains": "• Domains: `{{count}}`",
+					"last_update": "• Last update: {{- refresh}}",
+					"refresh_never": "`never`"
+				}
 			},
+			"refresh_scamlist": {
+				"missing_env": "Missing environment variable to fetch scam domains from.",
+				"success": "Success! Refreshed scam domains. before: `{{before}}` after: `{{after}}` last update: {{- refresh}}",
+				"success_replace": "Success! Replaced scam domains (deleted old before fetching). before: `{{before}}` after: `{{after}}` last update: {{- refresh}}",
+				"refresh_never": "`never`"
 			}
 		}
 	},

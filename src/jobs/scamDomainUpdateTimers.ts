@@ -31,6 +31,9 @@ logger.info(
 	},
 	'Scam domains updated',
 );
+
+await redis.set('scamdomains:refresh', Date.now());
+
 if (parentPort) {
 	parentPort.postMessage('done');
 } else {
