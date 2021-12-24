@@ -16,7 +16,7 @@ import { generateHistory } from '../../../../util/generateHistory';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function react(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['react'],
 	locale: string,
@@ -78,6 +78,7 @@ export async function react(
 			user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 			lng: locale,
 		}),
+		// @ts-ignore
 		embeds: [embed],
 		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
 	});
@@ -110,7 +111,7 @@ export async function react(
 		const case_ = await createCase(
 			collectedInteraction.guild!,
 			generateCasePayload({
-				guildId: collectedInteraction.guildId!,
+				guildId: collectedInteraction.guildId,
 				user: collectedInteraction.user,
 				roleId: roles.reaction_role_id,
 				args,
@@ -118,7 +119,7 @@ export async function react(
 				duration: parsedDuration,
 			}),
 		);
-		await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+		await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.react.success', {

@@ -23,7 +23,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof BanCommand>,
 		locale: string,
 	): Promise<void> {
@@ -31,8 +31,8 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
-			interaction.guild!,
-			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			interaction.guild,
+			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
@@ -40,7 +40,7 @@ export default class implements Command {
 
 		let alreadyBanned = false;
 		try {
-			await interaction.guild!.bans.fetch(args.user.user.id);
+			await interaction.guild.bans.fetch(args.user.user.id);
 			alreadyBanned = true;
 		} catch {}
 
@@ -85,6 +85,7 @@ export default class implements Command {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
+			// @ts-ignore
 			embeds: [embed],
 			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
 		});
@@ -118,11 +119,11 @@ export default class implements Command {
 			await collectedInteraction.deferUpdate();
 
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:ban`, 15, '');
+			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:ban`, 15, '');
 			const case_ = await createCase(
 				collectedInteraction.guild!,
 				generateCasePayload({
-					guildId: collectedInteraction.guildId!,
+					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,
 					args: {
 						...args,
@@ -131,7 +132,7 @@ export default class implements Command {
 					action: CaseAction.Ban,
 				}),
 			);
-			await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.ban.success', {

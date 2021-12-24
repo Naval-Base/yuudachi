@@ -16,7 +16,7 @@ import { generateHistory } from '../../../../util/generateHistory';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function emoji(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['emoji'],
 	locale: string,
@@ -78,6 +78,7 @@ export async function emoji(
 			user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 			lng: locale,
 		}),
+		// @ts-ignore
 		embeds: [embed],
 		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
 	});
@@ -110,7 +111,7 @@ export async function emoji(
 		const case_ = await createCase(
 			collectedInteraction.guild!,
 			generateCasePayload({
-				guildId: collectedInteraction.guildId!,
+				guildId: collectedInteraction.guildId,
 				user: collectedInteraction.user,
 				roleId: roles.emoji_role_id,
 				args,
@@ -118,7 +119,7 @@ export async function emoji(
 				duration: parsedDuration,
 			}),
 		);
-		void upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+		void upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.emoji.success', {

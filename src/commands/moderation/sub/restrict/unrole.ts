@@ -13,7 +13,7 @@ import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function unrole(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
 	locale: string,
@@ -44,7 +44,7 @@ export async function unrole(
 	const user = await interaction.client.users.fetch(action.target_id);
 	let role = null;
 	try {
-		role = await interaction.guild!.roles.fetch(action.role_id!, { force: true });
+		role = await interaction.guild.roles.fetch(action.role_id!, { force: true });
 	} catch {}
 
 	const unroleKey = nanoid();
@@ -100,7 +100,7 @@ export async function unrole(
 			caseId: args.case,
 			manual: true,
 		});
-		await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+		await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.unrole.success', {

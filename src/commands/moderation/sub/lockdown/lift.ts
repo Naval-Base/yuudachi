@@ -8,12 +8,12 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function lift(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	channel: TextChannel,
 	locale: string,
 ): Promise<void> {
-	const lockdown = await getLockdown(interaction.guildId!, channel.id);
+	const lockdown = await getLockdown(interaction.guildId, channel.id);
 	if (!lockdown) {
 		throw new Error(
 			i18next.t('command.mod.lockdown.lock.errors.not_locked', {

@@ -10,12 +10,12 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function lock(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: { channel: TextChannel; duration: string; reason?: string },
 	locale: string,
 ): Promise<void> {
-	const lockdown = await getLockdown(interaction.guildId!, args.channel.id);
+	const lockdown = await getLockdown(interaction.guildId, args.channel.id);
 	if (lockdown) {
 		throw new Error(
 			i18next.t('command.mod.lockdown.lock.errors.already_locked', {

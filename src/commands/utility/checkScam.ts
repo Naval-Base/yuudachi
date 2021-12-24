@@ -47,6 +47,7 @@ export default class implements Command {
 
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
-		await interaction.editReply({ embeds: [truncateEmbed(embed.toJSON())] });
+		// @ts-ignore
+		await interaction.editReply({ embeds: [truncateEmbed(embed)] });
 	}
 }

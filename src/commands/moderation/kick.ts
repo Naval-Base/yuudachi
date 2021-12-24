@@ -23,7 +23,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof KickCommand>,
 		locale: string,
 	): Promise<void> {
@@ -31,8 +31,8 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
-			interaction.guild!,
-			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			interaction.guild,
+			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
@@ -70,6 +70,7 @@ export default class implements Command {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
+			// @ts-ignore
 			embeds: [embed],
 			components: [new MessageActionRow().addComponents([cancelButton, kickButton])],
 		});
@@ -103,17 +104,17 @@ export default class implements Command {
 			await collectedInteraction.deferUpdate();
 
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:kick`, 15, '');
+			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:kick`, 15, '');
 			const case_ = await createCase(
 				collectedInteraction.guild!,
 				generateCasePayload({
-					guildId: collectedInteraction.guildId!,
+					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,
 					args,
 					action: CaseAction.Kick,
 				}),
 			);
-			await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.kick.success', {

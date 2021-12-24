@@ -17,7 +17,7 @@ import { awaitComponent } from '../../util/awaitComponent';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof WarnCommand>,
 		locale: string,
 	): Promise<void> {
@@ -25,8 +25,8 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
-			interaction.guild!,
-			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			interaction.guild,
+			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
@@ -55,6 +55,7 @@ export default class implements Command {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
+			// @ts-ignore
 			embeds: [embed],
 			components: [new MessageActionRow().addComponents([cancelButton, warnButton])],
 		});
@@ -90,13 +91,13 @@ export default class implements Command {
 			const case_ = await createCase(
 				collectedInteraction.guild!,
 				generateCasePayload({
-					guildId: collectedInteraction.guildId!,
+					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,
 					args,
 					action: CaseAction.Warn,
 				}),
 			);
-			await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.warn.success', {

@@ -8,7 +8,7 @@ import { generateHistory } from '../../util/generateHistory';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof HistoryCommand>,
 		locale: string,
 	): Promise<void> {
@@ -18,6 +18,7 @@ export default class implements Command {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		await interaction.editReply({
+			// @ts-ignore
 			embeds: [embed],
 		});
 	}

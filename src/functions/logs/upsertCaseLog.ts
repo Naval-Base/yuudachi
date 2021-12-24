@@ -41,10 +41,12 @@ export async function upsertCaseLog(guildId: Snowflake, user: User | undefined |
 	if (case_.logMessageId) {
 		const message = await logChannel!.messages.fetch(case_.logMessageId);
 		await message.edit({
+			// @ts-ignore
 			embeds: [embed],
 		});
 	} else {
 		const logMessage = await logChannel!.send({
+			// @ts-ignore
 			embeds: [embed],
 		});
 

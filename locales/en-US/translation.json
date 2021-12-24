@@ -118,20 +118,6 @@
 				"success": "Anti-Raid-Nuke hit {{- members}} guild members."
 			},
 			"restrict": {
-				"mute": {
-					"errors": {
-						"no_role": "No role for mutes has been configured.",
-						"missing_permissions": "Missing permissions to mute {{- user}}",
-						"already_restricted": "{{- user}} is already muted."
-					},
-					"pending": "Do you really want to mute {{- user}}?",
-					"buttons": {
-						"cancel": "Cancel",
-						"execute": "Mute"
-					},
-					"cancel": "Cancelled mute on {{- user}}",
-					"success": "Successfully muted {{- user}}"
-				},
 				"embed": {
 					"errors": {
 						"no_role": "No role for embed restrictions has been configured.",

@@ -27,7 +27,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {
@@ -35,8 +35,8 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
-			interaction.guild!,
-			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			interaction.guild,
+			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
@@ -59,7 +59,7 @@ export default class implements Command {
 		const joinCutoff = Date.now() - parsedJoin;
 		const accountCutoff = Date.now() - parsedAge;
 
-		const fetchedMembers = await interaction.guild!.members.fetch({ force: true });
+		const fetchedMembers = await interaction.guild.members.fetch({ force: true });
 		const members = fetchedMembers.filter((member) => {
 			if (args.pattern) {
 				try {
@@ -198,7 +198,7 @@ export default class implements Command {
 			});
 
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			await this.redis.setex(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15, 'true');
+			await this.redis.setex(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15, 'true');
 			let idx = 0;
 			const promises = [];
 			const fatalities: GuildMember[] = [];
@@ -208,7 +208,7 @@ export default class implements Command {
 					createCase(
 						collectedInteraction.guild!,
 						generateCasePayload({
-							guildId: collectedInteraction.guildId!,
+							guildId: collectedInteraction.guildId,
 							user: collectedInteraction.user,
 							args: {
 								reason: i18next.t('command.mod.anti_raid_nuke.reason', {
@@ -236,14 +236,14 @@ export default class implements Command {
 							survivors.push(member);
 						})
 						// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-						.finally(() => void this.redis.expire(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 15)),
+						.finally(() => void this.redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15)),
 				);
 			}
 
 			const resolvedCases = await Promise.all(promises);
 			const cases = resolvedCases.filter((resolvedCase) => resolvedCase) as Case[];
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			await this.redis.expire(`guild:${collectedInteraction.guildId!}:anti_raid_nuke`, 5);
+			await this.redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 5);
 
 			await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guild!,

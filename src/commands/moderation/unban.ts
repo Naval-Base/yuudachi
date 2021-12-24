@@ -22,7 +22,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof UnbanCommand>,
 		locale: string,
 	): Promise<void> {
@@ -30,15 +30,15 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
-			interaction.guild!,
-			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			interaction.guild,
+			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
 		try {
-			await interaction.guild!.bans.fetch(args.user.user.id);
+			await interaction.guild.bans.fetch(args.user.user.id);
 		} catch {
 			throw new Error(
 				i18next.t('command.mod.unban.errors.no_ban', {
@@ -71,6 +71,7 @@ export default class implements Command {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
+			// @ts-ignore
 			embeds: [embed],
 			components: [new MessageActionRow().addComponents([cancelButton, unbanButton])],
 		});
@@ -104,7 +105,7 @@ export default class implements Command {
 			await collectedInteraction.deferUpdate();
 
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			await this.redis.setex(`guild:${collectedInteraction.guildId!}:user:${args.user.user.id}:unban`, 15, '');
+			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, '');
 			const case_ = await deleteCase({
 				guild: collectedInteraction.guild!,
 				user: collectedInteraction.user,
@@ -112,7 +113,7 @@ export default class implements Command {
 				reason: args.reason,
 				manual: true,
 			});
-			await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.unban.success', {
