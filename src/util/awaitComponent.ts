@@ -15,7 +15,7 @@ export function awaitComponent<T extends MessageComponentTypeResolvable = 'ACTIO
 	client: Client,
 	message: Message | APIMessage,
 	options: AwaitMessageCollectorOptionsParams<T> = {},
-): Promise<MappedInteractionTypes<true>[T]> {
+): Promise<MappedInteractionTypes[T]> {
 	const _options = { ...options, max: 1 };
 	return new Promise((resolve, reject) => {
 		const collector = new InteractionCollector(client, {
@@ -27,7 +27,7 @@ export function awaitComponent<T extends MessageComponentTypeResolvable = 'ACTIO
 
 		collector.once('end', (interactions, reason) => {
 			const interaction = interactions.first();
-			if (interaction) resolve(interaction as unknown as MappedInteractionTypes<true>[T]);
+			if (interaction) resolve(interaction as MappedInteractionTypes[T]);
 			else reject(new Error(reason));
 		});
 	});
