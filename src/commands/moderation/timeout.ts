@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, ButtonInteraction, MessageActionRow, MessageButton, Permissions } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
@@ -57,7 +57,7 @@ export default class implements Command {
 			);
 		}
 
-		if (!args.user.member.moderatable) {
+		if (!args.user.member.moderatable || !interaction.guild.me?.permissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
 			throw new Error(
 				i18next.t('command.mod.timeout.errors.missing_permissions', {
 					lng: locale,
