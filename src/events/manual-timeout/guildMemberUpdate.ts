@@ -99,6 +99,7 @@ export default class implements Event {
 						user: logs.executor,
 						args: { user: { user: oldMember.user }, reason: logs.reason },
 						action: CaseAction.Timeout,
+						duration: newMember.communicationDisabledUntilTimestamp - Date.now(),
 					}),
 					true,
 				);
