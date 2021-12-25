@@ -26,7 +26,6 @@ export default class implements Event {
 		for await (const [oldMember, newMember] of on(this.client, this.event) as AsyncIterableIterator<
 			[GuildMember, GuildMember]
 		>) {
-			console.log('hi');
 			try {
 				const logChannel = await checkLogChannel(
 					oldMember.guild,
