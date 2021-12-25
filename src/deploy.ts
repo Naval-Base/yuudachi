@@ -20,6 +20,7 @@ import {
 	SoftbanCommand,
 	UnbanCommand,
 	WarnCommand,
+	TimeoutCommand,
 
 	// Utility
 	PingCommand,
@@ -55,6 +56,7 @@ try {
 				UnbanCommand,
 				WarnCommand,
 				LockdownCommand,
+				TimeoutCommand,
 
 				// Utility
 				PingCommand,

@@ -14,6 +14,7 @@ export enum CaseAction {
 	Softban,
 	Ban,
 	Unban,
+	Timeout,
 }
 
 export interface Case {
@@ -93,6 +94,9 @@ export async function createCase(
 				}
 				case CaseAction.Unban:
 					await guild.bans.remove(case_.targetId, reason);
+					break;
+				case CaseAction.Timeout:
+					await case_.target!.disableCommunicationUntil(case_.actionExpiration!, reason);
 					break;
 			}
 		}

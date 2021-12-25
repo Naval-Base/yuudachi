@@ -22,7 +22,7 @@ import { kSQL } from '../tokens';
 import { addFields, truncateEmbed } from './embed';
 import { generateMessageLink } from './generateMessageLink';
 
-const ACTION_KEYS = ['restriction', '', 'warn', 'timeout', 'kick', 'softban', 'ban', 'unban'];
+const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban', 'timeout'];
 
 interface CaseFooter {
 	warn?: number;

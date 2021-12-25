@@ -89,6 +89,7 @@ export function generateCaseColor(case_: Case) {
 	switch (case_.action) {
 		case CaseAction.Role:
 		case CaseAction.Warn:
+		case CaseAction.Timeout:
 			return 16767836;
 		case CaseAction.Kick:
 		case CaseAction.Softban:

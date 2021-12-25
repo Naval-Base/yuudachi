@@ -43,6 +43,20 @@
 				"cancel": "Cancelled warn on {{- user}}",
 				"success": "Successfully warned {{- user}}"
 			},
+			"timeout": {
+				"errors": {
+					"missing_permissions": "Missing permissions to time out {{- user}}",
+					"not_member": "{{- user}} needs to be a member of this guild to be timed out",
+					"already_timed_out": "{{- user}} is already in timeout"
+				},
+				"buttons": {
+					"cancel": "Cancel",
+					"execute": "Timeout"
+				},
+				"pending": "Do you really want to time out {{- user}}?",
+				"cancel": "Cancelled timeout for user {{- user}}",
+				"success": "Successfully timed out {{- user}}"
+			},
 			"kick": {
 				"errors": {
 					"missing_permissions": "Missing permissions to kick {{- user}}"
