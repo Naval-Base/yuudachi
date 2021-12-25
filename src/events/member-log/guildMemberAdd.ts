@@ -38,7 +38,6 @@ export default class implements Event {
 				}
 
 				await webhook.send({
-					// @ts-ignore
 					embeds: [generateMemberLog(guildMember, locale)],
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),

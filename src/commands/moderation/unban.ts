@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
@@ -71,12 +71,11 @@ export default class implements Command {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			// @ts-ignore
 			embeds: [embed],
 			components: [new MessageActionRow().addComponents([cancelButton, unbanButton])],
 		});
 
-		const collectedInteraction = await awaitComponent(interaction.client, reply, {
+		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,
@@ -91,7 +90,7 @@ export default class implements Command {
 				logger.error(error, error.message);
 			}
 			return undefined;
-		});
+		})) as ButtonInteraction<'cached'> | undefined;
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
@@ -107,7 +106,7 @@ export default class implements Command {
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, '');
 			const case_ = await deleteCase({
-				guild: collectedInteraction.guild!,
+				guild: collectedInteraction.guild,
 				user: collectedInteraction.user,
 				target: args.user.user,
 				reason: args.reason,

@@ -21,7 +21,6 @@ export function awaitComponent<T extends MessageComponentTypeResolvable = 'ACTIO
 		const collector = new InteractionCollector(client, {
 			...(_options as unknown as CollectorFilter<[Interaction]>),
 			interactionType: Constants.InteractionTypes.MESSAGE_COMPONENT,
-			// @ts-ignore
 			message,
 		});
 

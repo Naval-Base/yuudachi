@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 
@@ -55,12 +55,11 @@ export default class implements Command {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			// @ts-ignore
 			embeds: [embed],
 			components: [new MessageActionRow().addComponents([cancelButton, warnButton])],
 		});
 
-		const collectedInteraction = await awaitComponent(interaction.client, reply, {
+		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,
@@ -75,7 +74,7 @@ export default class implements Command {
 				logger.error(error, error.message);
 			}
 			return undefined;
-		});
+		})) as ButtonInteraction<'cached'> | undefined;
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
@@ -89,7 +88,7 @@ export default class implements Command {
 			await collectedInteraction.deferUpdate();
 
 			const case_ = await createCase(
-				collectedInteraction.guild!,
+				collectedInteraction.guild,
 				generateCasePayload({
 					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,

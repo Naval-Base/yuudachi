@@ -1,4 +1,12 @@
-import { BaseCommandInteraction, Formatters, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
+import {
+	BaseCommandInteraction,
+	ButtonInteraction,
+	Formatters,
+	Message,
+	MessageActionRow,
+	MessageButton,
+	TextChannel,
+} from 'discord.js';
 import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
@@ -52,7 +60,7 @@ export async function lock(
 		components: [new MessageActionRow().addComponents([cancelButton, lockButton])],
 	});
 
-	const collectedInteraction = await awaitComponent(interaction.client, reply, {
+	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
 		componentType: 'BUTTON',
 		time: 15000,
@@ -64,7 +72,7 @@ export async function lock(
 			});
 		} catch {}
 		return undefined;
-	});
+	})) as ButtonInteraction<'cached'> | undefined;
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({

@@ -1,4 +1,11 @@
-import { BaseCommandInteraction, Formatters, GuildMember, MessageActionRow, MessageButton } from 'discord.js';
+import {
+	BaseCommandInteraction,
+	ButtonInteraction,
+	Formatters,
+	GuildMember,
+	MessageActionRow,
+	MessageButton,
+} from 'discord.js';
 import i18next from 'i18next';
 import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
@@ -167,7 +174,7 @@ export default class implements Command {
 			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
 		});
 
-		const collectedInteraction = await awaitComponent(interaction.client, reply, {
+		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 60000,
@@ -182,7 +189,7 @@ export default class implements Command {
 				logger.error(error, error.message);
 			}
 			return undefined;
-		});
+		})) as ButtonInteraction<'cached'> | undefined;
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
@@ -206,7 +213,7 @@ export default class implements Command {
 			for (const member of members.values()) {
 				promises.push(
 					createCase(
-						collectedInteraction.guild!,
+						collectedInteraction.guild,
 						generateCasePayload({
 							guildId: collectedInteraction.guildId,
 							user: collectedInteraction.user,
@@ -246,7 +253,7 @@ export default class implements Command {
 			await this.redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 5);
 
 			await insertAntiRaidNukeCaseLog(
-				collectedInteraction.guild!,
+				collectedInteraction.guild,
 				collectedInteraction.user,
 				logChannel,
 				cases,

@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, ButtonInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
 import { nanoid } from 'nanoid';
 import i18next from 'i18next';
 
@@ -97,7 +97,7 @@ export default class implements Command {
 				components: [new MessageActionRow().addComponents([cancelButton, changeButton])],
 			});
 
-			const collectedInteraction = await awaitComponent(interaction.client, reply, {
+			const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: 'BUTTON',
 				time: 15000,
@@ -112,7 +112,7 @@ export default class implements Command {
 					logger.error(error, error.message);
 				}
 				return undefined;
-			});
+			})) as ButtonInteraction<'cached'> | undefined;
 
 			if (
 				collectedInteraction &&

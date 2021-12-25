@@ -1,4 +1,11 @@
-import { BaseCommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import {
+	BaseCommandInteraction,
+	ButtonInteraction,
+	Message,
+	MessageActionRow,
+	MessageButton,
+	Snowflake,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -67,7 +74,7 @@ export async function unrole(
 		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
 	});
 
-	const collectedInteraction = await awaitComponent(interaction.client, reply, {
+	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
 		componentType: 'BUTTON',
 		time: 15000,
@@ -79,7 +86,7 @@ export async function unrole(
 			});
 		} catch {}
 		return undefined;
-	});
+	})) as ButtonInteraction<'cached'> | undefined;
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
@@ -95,7 +102,7 @@ export async function unrole(
 		await collectedInteraction.deferUpdate();
 
 		const case_ = await deleteCase({
-			guild: collectedInteraction.guild!,
+			guild: collectedInteraction.guild,
 			user: collectedInteraction.user,
 			caseId: args.case,
 			manual: true,

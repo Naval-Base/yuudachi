@@ -89,7 +89,6 @@ export default class implements Command {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			// @ts-ignore
 			embeds: [embed],
 			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
 		});
@@ -109,9 +108,9 @@ export default class implements Command {
 				logger.error(error, error.message);
 			}
 			return undefined;
-		})) as ButtonInteraction<'cached'>;
+		})) as ButtonInteraction<'cached'> | undefined;
 
-		if (collectedInteraction.customId === cancelKey) {
+		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
 				content: i18next.t('command.mod.timeout.cancel', {
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
@@ -119,7 +118,7 @@ export default class implements Command {
 				}),
 				components: [],
 			});
-		} else if (collectedInteraction.customId === timeoutKey) {
+		} else if (collectedInteraction?.customId === timeoutKey) {
 			await collectedInteraction.deferUpdate();
 
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions

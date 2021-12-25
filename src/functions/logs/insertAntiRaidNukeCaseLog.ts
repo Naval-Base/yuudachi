@@ -36,7 +36,6 @@ export async function insertAntiRaidNukeCaseLog(
 	};
 
 	const logMessage = await logChannel.send({
-		// @ts-ignore
 		embeds: [embed],
 	});
 
