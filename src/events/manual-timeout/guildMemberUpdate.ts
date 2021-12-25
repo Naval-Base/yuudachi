@@ -73,8 +73,20 @@ export default class implements Event {
 					continue;
 				}
 
-				// @ts-ignore
-				const timeoutChange = logs.changes.find((c) => c.key === 'communication_disabled_until' && c.new && !c.old);
+				const timeoutChange = logs.changes.find((c) => {
+					// @ts-ignore
+					if (c.key !== 'communication_disabled_until' || !c.new) {
+						return false;
+					}
+
+					if (c.old) {
+						const oldDate = new Date(c.old as string);
+						if (oldDate > new Date()) {
+							return false;
+						}
+					}
+					return true;
+				});
 
 				if (!timeoutChange) {
 					continue;
