@@ -7,6 +7,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { Event } from '../../Event';
 import { createCase, CaseAction } from '../../functions/cases/createCase';
+import { deleteCase } from '../../functions/cases/deleteCase';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
@@ -32,14 +33,10 @@ export default class implements Event {
 					await getGuildSetting(oldMember.guild.id, SettingsKeys.ModLogChannelId),
 				);
 
-				if (!logChannel) {
-					continue;
-				}
-
 				if (
-					(oldMember.communicationDisabledUntilTimestamp &&
-						oldMember.communicationDisabledUntilTimestamp > Date.now()) ||
-					!newMember.communicationDisabledUntilTimestamp
+					!logChannel ||
+					oldMember.communicationDisabledUntilTimestamp === newMember.communicationDisabledUntilTimestamp ||
+					(newMember.communicationDisabledUntilTimestamp ?? Infinity) < Date.now()
 				) {
 					continue;
 				}
@@ -74,25 +71,14 @@ export default class implements Event {
 					continue;
 				}
 
-				const timeoutChange = logs.changes.find((c) => {
-					// @ts-ignore
-					if (c.key !== 'communication_disabled_until' || !c.new) {
-						return false;
-					}
-
-					if (c.old) {
-						const oldDate = new Date(c.old as string);
-						if (oldDate > new Date()) {
-							return false;
-						}
-					}
-					return true;
-				});
+				// @ts-ignore
+				const timeoutChange = logs.changes.find((c) => c.key === 'communication_disabled_until');
 
 				if (!timeoutChange) {
 					continue;
 				}
 
+				const timeoutEnded = Boolean(timeoutChange.old && !timeoutChange.new);
 				logger.info(
 					{
 						event: { name: this.name, event: this.event },
@@ -102,20 +88,31 @@ export default class implements Event {
 						manual: true,
 						logs,
 					},
-					`Fetched logs for timeout ${oldMember.id}`,
+					`Fetched logs for timeout ${timeoutEnded ? 'end' : ''} ${oldMember.id}`,
 				);
 
-				const case_ = await createCase(
-					oldMember.guild,
-					generateCasePayload({
-						guildId: oldMember.guild.id,
-						user: logs.executor,
-						args: { user: { user: oldMember.user }, reason: logs.reason },
-						action: CaseAction.Timeout,
-						duration: newMember.communicationDisabledUntilTimestamp - Date.now(),
-					}),
-					true,
-				);
+				const case_ = await (timeoutEnded
+					? deleteCase({
+							guild: oldMember.guild,
+							user: logs.executor,
+							target: oldMember.user,
+							manual: true,
+							skipAction: true,
+							reason: logs.reason,
+							action: CaseAction.Timeout,
+					  })
+					: createCase(
+							oldMember.guild,
+							generateCasePayload({
+								guildId: oldMember.guild.id,
+								user: logs.executor,
+								args: { user: { user: oldMember.user }, reason: logs.reason },
+								action: CaseAction.Timeout,
+								duration: (newMember.communicationDisabledUntilTimestamp ?? Date.now()) - Date.now(),
+							}),
+							true,
+					  ));
+
 				await upsertCaseLog(oldMember.guild.id, logs.executor, case_);
 			} catch (e) {
 				const error = e as Error;

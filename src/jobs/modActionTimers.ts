@@ -18,7 +18,7 @@ const sql = postgres({
 const currentCases = await sql<[{ guild_id: Snowflake; case_id: number; action_expiration: string }]>`
 	select guild_id, case_id, action_expiration
 	from cases
-	where action_processed = false and action != 7`;
+	where action_processed = false`;
 
 for (const case_ of currentCases) {
 	if (Date.parse(case_.action_expiration) <= Date.now()) {

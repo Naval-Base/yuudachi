@@ -15,6 +15,7 @@ export enum CaseAction {
 	Ban,
 	Unban,
 	Timeout,
+	TimeoutEnd,
 }
 
 export interface Case {
@@ -78,6 +79,7 @@ export async function createCase(
 				case CaseAction.Unrole:
 					await case_.target!.roles.remove(case_.roleId!, reason);
 					break;
+				case CaseAction.TimeoutEnd:
 				case CaseAction.Warn:
 					break;
 				case CaseAction.Kick:
