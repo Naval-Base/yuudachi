@@ -75,7 +75,7 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const banButton = new MessageButton()
+		const timeoutButton = new MessageButton()
 			.setCustomId(timeoutKey)
 			.setLabel(i18next.t('command.mod.timeout.buttons.execute', { lng: locale }))
 			.setStyle('DANGER');
@@ -90,7 +90,7 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
+			components: [new MessageActionRow().addComponents([cancelButton, timeoutButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
