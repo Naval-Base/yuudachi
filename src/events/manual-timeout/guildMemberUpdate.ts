@@ -63,9 +63,10 @@ export default class implements Event {
 				const auditLogs = await oldMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberUpdate });
 				const logs = auditLogs.entries.find((log) => {
 					return (
-						(log.target as User).id === oldMember.user.id &&
-						// @ts-ignore
-						Boolean(log.changes?.some((c) => c.key === 'communication_disabled_until'))
+						((log.target as User).id === oldMember.user.id &&
+							// @ts-ignore
+							log.changes?.some((c) => c.key === 'communication_disabled_until')) ??
+						false
 					);
 				});
 
