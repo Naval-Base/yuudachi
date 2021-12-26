@@ -3,6 +3,7 @@ import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
 import type { Redis } from 'ioredis';
+import { ms } from '@naval-base/ms';
 
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
@@ -17,7 +18,6 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 import { logger } from '../../logger';
 import { awaitComponent } from '../../util/awaitComponent';
 import type { TimeoutCommand } from '../../interactions/moderation/timeout';
-import { ms } from '@naval-base/ms';
 
 @injectable()
 export default class implements Command {
