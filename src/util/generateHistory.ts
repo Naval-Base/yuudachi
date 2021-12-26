@@ -155,7 +155,7 @@ export async function generateHistory(
 	}
 	if (truncated) {
 		embed = {
-			description: i18next.t('log.history.summary_truncated', { summary_truncated: summary.join('\n'), lng: locale }),
+			description: i18next.t('log.history.summary_truncated', { summary: summary.join('\n'), lng: locale }),
 			...embed,
 		};
 	} else {
