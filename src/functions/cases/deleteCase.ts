@@ -16,6 +16,7 @@ interface DeleteCaseOptions {
 	reason?: string | null;
 	manual?: boolean;
 	skipAction?: boolean;
+	action?: CaseAction;
 }
 
 export async function deleteCase({
@@ -26,6 +27,7 @@ export async function deleteCase({
 	reason,
 	manual = false,
 	skipAction = false,
+	action = undefined,
 }: DeleteCaseOptions) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
@@ -36,7 +38,7 @@ export async function deleteCase({
 			from cases
 			where guild_id = ${guild.id}
 				and target_id = ${target.id}
-				and action = ${CaseAction.Ban}
+				and action = ${action ?? CaseAction.Ban}
 			order by created_at desc
 			limit 1`;
 	}
@@ -63,6 +65,22 @@ export async function deleteCase({
 		}
 	}
 
+	if (case_?.action === CaseAction.Timeout) {
+		await sql`
+			update cases
+			set action_processed = true
+			where guild_id = ${guild.id}
+				and case_id = ${case_.case_id}`;
+
+		if (manual) {
+			reason = 'Manually ended timeout';
+		} else {
+			reason = 'Timeout expired based on duration';
+		}
+	}
+
+	const case_action = case_?.action ?? CaseAction.Ban;
+
 	return createCase(
 		guild,
 		generateCasePayload({
@@ -77,7 +95,12 @@ export async function deleteCase({
 				},
 				reference: case_?.case_id,
 			},
-			action: (case_?.action ?? CaseAction.Ban) === CaseAction.Ban ? CaseAction.Unban : CaseAction.Unrole,
+			action:
+				case_action === CaseAction.Ban
+					? CaseAction.Unban
+					: case_action === CaseAction.Role
+					? CaseAction.Unrole
+					: CaseAction.TimeoutEnd,
 		}),
 		skipAction,
 	);

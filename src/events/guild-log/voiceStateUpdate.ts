@@ -97,7 +97,6 @@ export default class implements Event {
 				});
 
 				await webhook.send({
-					// @ts-ignore
 					embeds: [truncateEmbed(embed)],
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),

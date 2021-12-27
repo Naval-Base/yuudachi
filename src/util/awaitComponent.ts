@@ -4,20 +4,18 @@ import {
 	Interaction,
 	InteractionCollector,
 	Message,
-	MessageComponentType,
 	Constants,
 	AwaitMessageCollectorOptionsParams,
-	InteractionExtractor,
+	MessageComponentTypeResolvable,
+	MappedInteractionTypes,
 } from 'discord.js';
 import type { APIMessage } from 'discord-api-types/v9';
 
-export function awaitComponent<
-	T extends MessageComponentType | keyof typeof Constants['MessageComponentTypes'] = 'ACTION_ROW',
->(
+export function awaitComponent<T extends MessageComponentTypeResolvable = 'ACTION_ROW'>(
 	client: Client,
 	message: Message | APIMessage,
 	options: AwaitMessageCollectorOptionsParams<T> = {},
-): Promise<InteractionExtractor<T>> {
+): Promise<MappedInteractionTypes[T]> {
 	const _options = { ...options, max: 1 };
 	return new Promise((resolve, reject) => {
 		const collector = new InteractionCollector(client, {
@@ -28,7 +26,7 @@ export function awaitComponent<
 
 		collector.once('end', (interactions, reason) => {
 			const interaction = interactions.first();
-			if (interaction) resolve(interaction as InteractionExtractor<T>);
+			if (interaction) resolve(interaction as MappedInteractionTypes[T]);
 			else reject(new Error(reason));
 		});
 	});

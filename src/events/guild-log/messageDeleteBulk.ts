@@ -81,7 +81,6 @@ export default class implements Event {
 				});
 
 				await webhook.send({
-					// @ts-ignore
 					embeds: [truncateEmbed(embed)],
 					files: [{ attachment: Buffer.from(output, 'utf-8'), name: 'logs.txt' }],
 					username: this.client.user.username,

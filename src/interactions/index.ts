@@ -10,6 +10,7 @@ export * from './moderation/restrict';
 export * from './moderation/softban';
 export * from './moderation/unban';
 export * from './moderation/warn';
+export * from './moderation/timeout';
 export * from './utility/ping';
 export * from './utility/checkScam';
 export * from './utility/refreshscams';

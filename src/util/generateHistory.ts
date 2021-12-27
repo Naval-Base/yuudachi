@@ -22,7 +22,7 @@ import { kSQL } from '../tokens';
 import { addFields, truncateEmbed } from './embed';
 import { generateMessageLink } from './generateMessageLink';
 
-const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban'];
+const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban', 'timeout'];
 
 interface CaseFooter {
 	warn?: number;
@@ -30,17 +30,18 @@ interface CaseFooter {
 	mute?: number;
 	kick?: number;
 	ban?: number;
+	timeout?: number;
 	[key: string]: number | undefined;
 }
 
 export async function generateHistory(
-	interaction: BaseCommandInteraction | ButtonInteraction | SelectMenuInteraction,
+	interaction: BaseCommandInteraction<'cached'> | ButtonInteraction<'cached'> | SelectMenuInteraction<'cached'>,
 	target: { member?: GuildMember; user: User },
 	locale: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const logChannelId: Snowflake = await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId)!;
+	const logChannelId: Snowflake = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)!;
 
 	const sinceCreationFormatted = Formatters.time(
 		dayjs(target.user.createdTimestamp).unix(),
@@ -115,8 +116,9 @@ export async function generateHistory(
 		footer.kick ?? 0,
 		footer.softban ?? 0,
 		footer.ban ?? 0,
+		footer.timeout ?? 0,
 	];
-	const [unban, warn, restriction, kick, softban, ban] = values;
+	const [unban, warn, restriction, kick, softban, ban, timeout] = values;
 	const colorIndex = Math.min(
 		values.reduce((a, b) => a + b),
 		colors.length - 1,
@@ -127,6 +129,7 @@ export async function generateHistory(
 		footer: {
 			text: oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
 					${restriction} restriction${restriction > 1 || restriction === 0 ? 's' : ''},
+					${timeout} timeout${timeout > 1 || timeout === 0 ? 's' : ''},
 					${kick} kick${kick > 1 || kick === 0 ? 's' : ''},
 					${softban} softban${softban > 1 || softban === 0 ? 's' : ''},
 					${ban} ban${ban > 1 || ban === 0 ? 's' : ''},

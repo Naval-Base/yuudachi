@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, ButtonInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
 import { nanoid } from 'nanoid';
 import i18next from 'i18next';
 
@@ -19,7 +19,7 @@ import { awaitComponent } from '../../util/awaitComponent';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof ReasonCommand>,
 		locale: string,
 	): Promise<void> {
@@ -27,8 +27,8 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
-			interaction.guild!,
-			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			interaction.guild,
+			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
@@ -66,8 +66,8 @@ export default class implements Command {
 				.setLabel(i18next.t('command.mod.reason.buttons.cancel', { lng: locale }))
 				.setStyle('SECONDARY');
 
-			originalCaseLower = await getCase(interaction.guildId!, lower);
-			originalCaseUpper = await getCase(interaction.guildId!, upper);
+			originalCaseLower = await getCase(interaction.guildId, lower);
+			originalCaseUpper = await getCase(interaction.guildId, upper);
 
 			if (!originalCaseLower || !originalCaseUpper) {
 				await interaction.editReply({
@@ -85,11 +85,11 @@ export default class implements Command {
 				content: i18next.t('command.mod.reason.pending_multiple', {
 					lower_case: Formatters.hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId!, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
 					),
 					upper_case: Formatters.hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId!, logChannel.id, originalCaseUpper.logMessageId!),
+						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper.logMessageId!),
 					),
 					amount: upper - lower + 1,
 					lng: locale,
@@ -97,7 +97,7 @@ export default class implements Command {
 				components: [new MessageActionRow().addComponents([cancelButton, changeButton])],
 			});
 
-			const collectedInteraction = await awaitComponent(interaction.client, reply, {
+			const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: 'BUTTON',
 				time: 15000,
@@ -112,7 +112,7 @@ export default class implements Command {
 					logger.error(error, error.message);
 				}
 				return undefined;
-			});
+			})) as ButtonInteraction<'cached'> | undefined;
 
 			if (
 				collectedInteraction &&
@@ -129,7 +129,7 @@ export default class implements Command {
 				return;
 			}
 		} else {
-			originalCaseLower = await getCase(interaction.guildId!, lower);
+			originalCaseLower = await getCase(interaction.guildId, lower);
 			if (!originalCaseLower) {
 				await interaction.editReply({
 					content: i18next.t('command.mod.common.errors.no_case', {
@@ -145,18 +145,18 @@ export default class implements Command {
 		const success = [];
 
 		for (let caseId = lower; caseId <= upper; caseId++) {
-			const originalCase = await getCase(interaction.guildId!, caseId);
+			const originalCase = await getCase(interaction.guildId, caseId);
 			if (!originalCase) {
 				continue;
 			}
 
 			const case_ = await updateCase({
 				caseId: originalCase.caseId,
-				guildId: interaction.guildId!,
+				guildId: interaction.guildId,
 				reason: args.reason,
 			});
 
-			await upsertCaseLog(interaction.guildId!, interaction.user, case_);
+			await upsertCaseLog(interaction.guildId, interaction.user, case_);
 			success.push(caseId);
 		}
 
@@ -164,11 +164,11 @@ export default class implements Command {
 			? i18next.t('command.mod.reason.success_multiple', {
 					lower_case: Formatters.hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId!, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
 					),
 					upper_case: Formatters.hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId!, logChannel.id, originalCaseUpper!.logMessageId!),
+						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper!.logMessageId!),
 					),
 					amount: success.length,
 					target: upper - lower + 1,
@@ -177,7 +177,7 @@ export default class implements Command {
 			: i18next.t('command.mod.reason.success', {
 					case: Formatters.hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId!, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
 					),
 					lng: locale,
 			  });

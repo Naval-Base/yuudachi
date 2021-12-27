@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, MessageEmbed } from 'discord.js';
+import type { BaseCommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
@@ -8,7 +8,8 @@ import type { Command } from '../../Command';
 import type { CheckScamCommand } from '../../interactions';
 import { kRedis } from '../../tokens';
 import { checkScam } from '../../functions/anti-scam/checkScam';
-import { truncateEmbed } from '../../util/embed';
+import { addFields, truncateEmbed } from '../../util/embed';
+import type { APIEmbed } from 'discord-api-types';
 
 export default class implements Command {
 	public async execute(
@@ -33,20 +34,25 @@ export default class implements Command {
 			}),
 		];
 
-		const embed = new MessageEmbed()
-			.setColor(domains.length ? 16462404 : 3908957)
-			.setDescription(args.content)
-			.addField(i18next.t('command.utility.check_scam.debug.title', { lng: locale }), debugParts.join('\n'));
+		let embed: APIEmbed = {
+			color: domains.length ? 16462404 : 3908957,
+			description: args.content,
+		};
+
+		embed = addFields(embed, {
+			name: i18next.t('command.utility.check_scam.debug.title', { lng: locale }),
+			value: debugParts.join('\n'),
+		});
 
 		if (domains.length) {
-			embed.addField(
-				i18next.t('command.utility.check_scam.found', { lng: locale, count: domains.length }),
-				domains.map((domain) => `• \`${domain}\``).join('\n'),
-			);
+			embed = addFields(embed, {
+				name: i18next.t('command.utility.check_scam.found', { lng: locale, count: domains.length }),
+				value: domains.map((domain) => `• \`${domain}\``).join('\n'),
+			});
 		}
 
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
-		await interaction.editReply({ embeds: [truncateEmbed(embed.toJSON())] });
+		await interaction.editReply({ embeds: [truncateEmbed(embed)] });
 	}
 }

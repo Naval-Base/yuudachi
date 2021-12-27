@@ -1,4 +1,4 @@
-import { BaseCommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { BaseCommandInteraction, ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 
@@ -17,7 +17,7 @@ import { awaitComponent } from '../../util/awaitComponent';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof WarnCommand>,
 		locale: string,
 	): Promise<void> {
@@ -25,8 +25,8 @@ export default class implements Command {
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
-			interaction.guild!,
-			await getGuildSetting(interaction.guildId!, SettingsKeys.ModLogChannelId),
+			interaction.guild,
+			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
@@ -59,7 +59,7 @@ export default class implements Command {
 			components: [new MessageActionRow().addComponents([cancelButton, warnButton])],
 		});
 
-		const collectedInteraction = await awaitComponent(interaction.client, reply, {
+		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: 'BUTTON',
 			time: 15000,
@@ -74,7 +74,7 @@ export default class implements Command {
 				logger.error(error, error.message);
 			}
 			return undefined;
-		});
+		})) as ButtonInteraction<'cached'> | undefined;
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
@@ -88,15 +88,15 @@ export default class implements Command {
 			await collectedInteraction.deferUpdate();
 
 			const case_ = await createCase(
-				collectedInteraction.guild!,
+				collectedInteraction.guild,
 				generateCasePayload({
-					guildId: collectedInteraction.guildId!,
+					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,
 					args,
 					action: CaseAction.Warn,
 				}),
 			);
-			await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.warn.success', {

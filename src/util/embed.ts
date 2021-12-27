@@ -33,11 +33,10 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 		...embed,
 		description: embed.description ? ellipsis(embed.description, EMBED_DESCRIPTION_LIMIT) : undefined,
 		title: embed.title ? ellipsis(embed.title, EMBED_TITLE_LIMIT) : undefined,
-		// @ts-ignore
 		author: embed.author
 			? {
 					...embed.author,
-					name: embed.author.name ? ellipsis(embed.author.name, EMBED_AUTHOR_NAME_LIMIT) : undefined,
+					name: ellipsis(embed.author.name, EMBED_AUTHOR_NAME_LIMIT),
 			  }
 			: undefined,
 		footer: embed.footer

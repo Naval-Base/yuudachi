@@ -8,7 +8,7 @@ import { generateHistory } from '../../util/generateHistory';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof HistoryCommand>,
 		locale: string,
 	): Promise<void> {

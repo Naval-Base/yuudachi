@@ -36,6 +36,7 @@ const client = new Client({
 		Intents.FLAGS.GUILD_MESSAGES,
 		Intents.FLAGS.GUILD_VOICE_STATES,
 	],
+	partials: ['GUILD_MEMBER'],
 	makeCache: Options.cacheWithLimits({
 		// @ts-expect-error
 		ChannelManager: {

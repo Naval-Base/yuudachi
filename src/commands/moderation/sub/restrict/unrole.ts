@@ -1,4 +1,11 @@
-import { BaseCommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import {
+	BaseCommandInteraction,
+	ButtonInteraction,
+	Message,
+	MessageActionRow,
+	MessageButton,
+	Snowflake,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -13,7 +20,7 @@ import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function unrole(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
 	locale: string,
@@ -44,7 +51,7 @@ export async function unrole(
 	const user = await interaction.client.users.fetch(action.target_id);
 	let role = null;
 	try {
-		role = await interaction.guild!.roles.fetch(action.role_id!, { force: true });
+		role = await interaction.guild.roles.fetch(action.role_id!, { force: true });
 	} catch {}
 
 	const unroleKey = nanoid();
@@ -67,7 +74,7 @@ export async function unrole(
 		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
 	});
 
-	const collectedInteraction = await awaitComponent(interaction.client, reply, {
+	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
 		componentType: 'BUTTON',
 		time: 15000,
@@ -79,7 +86,7 @@ export async function unrole(
 			});
 		} catch {}
 		return undefined;
-	});
+	})) as ButtonInteraction<'cached'> | undefined;
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
@@ -95,12 +102,12 @@ export async function unrole(
 		await collectedInteraction.deferUpdate();
 
 		const case_ = await deleteCase({
-			guild: collectedInteraction.guild!,
+			guild: collectedInteraction.guild,
 			user: collectedInteraction.user,
 			caseId: args.case,
 			manual: true,
 		});
-		await upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+		await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.unrole.success', {

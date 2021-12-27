@@ -1,4 +1,11 @@
-import { BaseCommandInteraction, Message, MessageActionRow, MessageButton, TextChannel } from 'discord.js';
+import {
+	BaseCommandInteraction,
+	ButtonInteraction,
+	Message,
+	MessageActionRow,
+	MessageButton,
+	TextChannel,
+} from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { APIMessage } from 'discord-api-types';
@@ -8,12 +15,12 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function lift(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	channel: TextChannel,
 	locale: string,
 ): Promise<void> {
-	const lockdown = await getLockdown(interaction.guildId!, channel.id);
+	const lockdown = await getLockdown(interaction.guildId, channel.id);
 	if (!lockdown) {
 		throw new Error(
 			i18next.t('command.mod.lockdown.lock.errors.not_locked', {
@@ -45,7 +52,7 @@ export async function lift(
 		components: [new MessageActionRow().addComponents([cancelButton, unlockButton])],
 	});
 
-	const collectedInteraction = await awaitComponent(interaction.client, reply, {
+	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
 		componentType: 'BUTTON',
 		time: 15000,
@@ -57,7 +64,7 @@ export async function lift(
 			});
 		} catch {}
 		return undefined;
-	});
+	})) as ButtonInteraction<'cached'> | undefined;
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({

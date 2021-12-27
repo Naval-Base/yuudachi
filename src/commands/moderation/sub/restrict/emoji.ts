@@ -1,4 +1,11 @@
-import { BaseCommandInteraction, Message, MessageActionRow, MessageButton, Snowflake } from 'discord.js';
+import {
+	BaseCommandInteraction,
+	ButtonInteraction,
+	Message,
+	MessageActionRow,
+	MessageButton,
+	Snowflake,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -16,7 +23,7 @@ import { generateHistory } from '../../../../util/generateHistory';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function emoji(
-	interaction: BaseCommandInteraction,
+	interaction: BaseCommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['emoji'],
 	locale: string,
@@ -82,7 +89,7 @@ export async function emoji(
 		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
 	});
 
-	const collectedInteraction = await awaitComponent(interaction.client, reply, {
+	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
 		componentType: 'BUTTON',
 		time: 15000,
@@ -94,7 +101,7 @@ export async function emoji(
 			});
 		} catch {}
 		return undefined;
-	});
+	})) as ButtonInteraction<'cached'> | undefined;
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
@@ -108,9 +115,9 @@ export async function emoji(
 		await collectedInteraction.deferUpdate();
 
 		const case_ = await createCase(
-			collectedInteraction.guild!,
+			collectedInteraction.guild,
 			generateCasePayload({
-				guildId: collectedInteraction.guildId!,
+				guildId: collectedInteraction.guildId,
 				user: collectedInteraction.user,
 				roleId: roles.emoji_role_id,
 				args,
@@ -118,7 +125,7 @@ export async function emoji(
 				duration: parsedDuration,
 			}),
 		);
-		void upsertCaseLog(collectedInteraction.guildId!, collectedInteraction.user, case_);
+		void upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.emoji.success', {

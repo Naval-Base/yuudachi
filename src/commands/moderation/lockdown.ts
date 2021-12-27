@@ -12,7 +12,7 @@ import { lift } from './sub/lockdown/lift';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: BaseCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof LockdownCommand>,
 		locale: string,
 	): Promise<void> {
