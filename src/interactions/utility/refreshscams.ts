@@ -10,4 +10,5 @@ export const RefreshScamlistCommand = {
 			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
+	default_permission: false,
 } as const;

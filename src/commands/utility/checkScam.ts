@@ -10,6 +10,7 @@ import { kRedis } from '../../tokens';
 import { checkScam } from '../../functions/anti-scam/checkScam';
 import { addFields, truncateEmbed } from '../../util/embed';
 import type { APIEmbed } from 'discord-api-types';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 
 export default class implements Command {
 	public async execute(
@@ -18,6 +19,10 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		const redis = container.resolve<Redis>(kRedis);
+
+		await interaction.deferReply({ ephemeral: args.hide ?? true });
+		await checkModRole(interaction, locale);
+
 		const domains = await checkScam(args.content);
 		const cardinality = await redis.scard('scamdomains');
 		const lastRefresh = await redis.get('scamdomains:refresh');
@@ -50,8 +55,6 @@ export default class implements Command {
 				value: domains.map((domain) => `• \`${domain}\``).join('\n'),
 			});
 		}
-
-		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 		await interaction.editReply({ embeds: [truncateEmbed(embed)] });
 	}
