@@ -16,4 +16,5 @@ export const CheckScamCommand = {
 			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
+	default_permission: false,
 } as const;

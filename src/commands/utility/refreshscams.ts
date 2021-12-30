@@ -10,6 +10,7 @@ import fetch, { Response } from 'node-fetch';
 
 import { kRedis } from '../../tokens';
 import { logger } from '../../logger';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 
 export function checkResponse(response: Response) {
 	if (response.ok) return response;
@@ -24,7 +25,9 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		const redis = container.resolve<Redis>(kRedis);
+
 		await interaction.deferReply({ ephemeral: true });
+		await checkModRole(interaction, locale);
 
 		if (!process.env.SCAM_DOMAIN_URL) {
 			logger.warn('Missing environment variable: SCAM_DOMAIN_URL.');
