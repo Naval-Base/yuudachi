@@ -17,7 +17,7 @@ export const SoftbanCommand = {
 		},
 		{
 			name: 'days',
-			description: 'The amount of days to deleted messages from',
+			description: 'The amount of days to delete messages for',
 			type: ApplicationCommandOptionType.Integer,
 			choices: [
 				{ name: '0 days', value: 0 },
