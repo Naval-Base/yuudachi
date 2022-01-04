@@ -6,6 +6,14 @@ import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { resolveRedirect } from '../../util/resolveRedirect';
 
+function urlOption(url: string): URL | null {
+	try {
+		return new URL(url);
+	} catch {
+		return null;
+	}
+}
+
 export async function checkScam(content: string): Promise<string[]> {
 	const redis = container.resolve<Redis>(kRedis);
 
@@ -15,7 +23,11 @@ export async function checkScam(content: string): Promise<string[]> {
 
 	let matches: any[] | null = [];
 	while ((matches = linkRegex.exec(content)) !== null) {
-		const url = new URL(matches[0]);
+		const url = urlOption(matches[0]);
+		if (!url) {
+			continue;
+		}
+
 		const hit = scamDomains.find((d) => url.host.endsWith(d));
 
 		if (hit) {
@@ -25,7 +37,9 @@ export async function checkScam(content: string): Promise<string[]> {
 
 		try {
 			const r = await resolveRedirect(url.href);
-			const resolved = new URL(r);
+			const resolved = urlOption(r);
+			if (!resolved) continue;
+
 			const hit = scamDomains.find((domain) => resolved.host.endsWith(domain));
 
 			if (hit) {
