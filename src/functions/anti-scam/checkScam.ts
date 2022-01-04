@@ -24,7 +24,7 @@ export async function checkScam(content: string): Promise<string[]> {
 		}
 
 		try {
-			const r = await resolveRedirect(matches[0]);
+			const r = await resolveRedirect(url.href);
 			const resolved = new URL(r);
 			const hit = scamDomains.find((domain) => resolved.host.endsWith(domain));
 
