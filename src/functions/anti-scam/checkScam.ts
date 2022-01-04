@@ -1,5 +1,6 @@
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
+import { URL } from 'node:url';
 
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
@@ -8,16 +9,14 @@ import { resolveRedirect } from '../../util/resolveRedirect';
 export async function checkScam(content: string): Promise<string[]> {
 	const redis = container.resolve<Redis>(kRedis);
 
-	const urlRegex =
-		/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+	const linkRegex = /(?:https?:\/\/)(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b[-a-zA-Z0-9@:%_\+.~#?&//=]*/gi;
 	const scamDomains = await redis.smembers('scamdomains');
 	const trippedDomains = [];
 
 	let matches: any[] | null = [];
-	while ((matches = urlRegex.exec(content)) !== null) {
-		const url = matches[0];
-		const urlLower = url.toLowerCase();
-		const hit = scamDomains.find((d) => urlLower.includes(d.toLowerCase()));
+	while ((matches = linkRegex.exec(content)) !== null) {
+		const url = new URL(matches[0]);
+		const hit = scamDomains.find((d) => url.host.endsWith(d));
 
 		if (hit) {
 			trippedDomains.push(hit);
@@ -25,9 +24,10 @@ export async function checkScam(content: string): Promise<string[]> {
 		}
 
 		try {
-			const resolved = await resolveRedirect(url);
-			const resolvedLower = resolved.toLowerCase();
-			const hit = scamDomains.find((domain) => resolvedLower.includes(domain));
+			const r = await resolveRedirect(matches[0]);
+			const resolved = new URL(r);
+			const hit = scamDomains.find((domain) => resolved.host.endsWith(domain));
+
 			if (hit) {
 				trippedDomains.push(hit);
 			}
