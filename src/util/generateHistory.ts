@@ -22,7 +22,7 @@ import { kSQL } from '../tokens';
 import { addFields, truncateEmbed } from './embed';
 import { generateMessageLink } from './generateMessageLink';
 
-const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban', 'timeout'];
+const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban', 'timeout', ''];
 
 interface CaseFooter {
 	warn?: number;
@@ -100,7 +100,7 @@ export async function generateHistory(
 			from cases
 			where guild_id = ${interaction.guildId}
 				and target_id = ${target.user.id}
-				and action not in (1)
+				and action not in (1, 8)
 			order by created_at desc`;
 
 	const footer = cases.reduce((count: CaseFooter, c) => {
