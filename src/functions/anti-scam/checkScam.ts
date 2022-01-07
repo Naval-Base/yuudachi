@@ -14,6 +14,10 @@ function urlOption(url: string): URL | null {
 	}
 }
 
+function checkAgainst(url: URL, host: string) {
+	return `.${url.host}`.endsWith(`.${host}`);
+}
+
 export async function checkScam(content: string): Promise<string[]> {
 	const redis = container.resolve<Redis>(kRedis);
 
@@ -28,7 +32,7 @@ export async function checkScam(content: string): Promise<string[]> {
 			continue;
 		}
 
-		const hit = scamDomains.find((d) => url.host.endsWith(d));
+		const hit = scamDomains.find((d) => checkAgainst(url, d));
 
 		if (hit) {
 			trippedDomains.push(hit);
@@ -42,7 +46,7 @@ export async function checkScam(content: string): Promise<string[]> {
 				continue;
 			}
 
-			const hit = scamDomains.find((domain) => resolved.host.endsWith(domain));
+			const hit = scamDomains.find((d) => checkAgainst(resolved, d));
 
 			if (hit) {
 				trippedDomains.push(hit);
