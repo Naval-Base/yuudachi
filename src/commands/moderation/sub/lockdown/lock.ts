@@ -98,10 +98,16 @@ export async function lock(
 		});
 
 		await args.channel.send({
-			content: i18next.t('command.mod.lockdown.lock.message', {
-				duration: Formatters.time(dayjs(duration.toISOString()).unix(), Formatters.TimestampStyles.RelativeTime),
-				lng: locale,
-			}),
+			content: args.reason
+				? i18next.t('command.mod.lockdown.lock.message_reason', {
+						duration: Formatters.time(dayjs(duration.toISOString()).unix(), Formatters.TimestampStyles.RelativeTime),
+						reason: Formatters.inlineCode(args.reason),
+						lng: locale,
+				  })
+				: i18next.t('command.mod.lockdown.lock.message', {
+						duration: Formatters.time(dayjs(duration.toISOString()).unix(), Formatters.TimestampStyles.RelativeTime),
+						lng: locale,
+				  }),
 		});
 
 		await collectedInteraction.editReply({

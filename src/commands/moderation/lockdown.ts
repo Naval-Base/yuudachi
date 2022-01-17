@@ -19,6 +19,14 @@ export default class implements Command {
 		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 		await checkModRole(interaction, locale);
 
+		if (!interaction.guild.me?.permissions.has(PermissionFlagsBits.Administrator)) {
+			throw new Error(
+				i18next.t('command.mod.lockdown.lock.errors.bot_requires_admin', {
+					lng: locale,
+				}),
+			);
+		}
+
 		switch (Object.keys(args)[0]) {
 			case 'lock': {
 				if (args.lock.channel && !args.lock.channel.isText()) {

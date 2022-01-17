@@ -192,14 +192,16 @@
 				"lock": {
 					"errors": {
 						"missing_permissions": "Missing permissions to lock {{- channel}}",
-						"already_locked": "{{- channel}} is already locked."
+						"already_locked": "{{- channel}} is already locked.",
+						"bot_requires_admin": "The bot requires the `ADMINISTRATOR` permission to lock down channels as Discord does not allow setting all overwrites without it, potentially causing issues when locking or unlocking."
 					},
 					"pending": "Do you really want to lock {{- channel}}?",
 					"buttons": {
 						"cancel": "Cancel",
 						"execute": "Lock"
 					},
-					"message": "This channel has been locked due to moderation, it will be unlocked {{- duration}}",
+					"message": "🔒 This channel has been locked, it will be unlocked {{- duration}}",
+					"message_reason": "🔒 This channel has been locked with reason {{- reason}}, it will be unlocked {{- duration}}",
 					"cancel": "Cancelled locking of {{- channel}}",
 					"success": "Successfully locked {{- channel}}"
 				},

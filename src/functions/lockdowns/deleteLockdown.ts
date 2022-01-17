@@ -19,12 +19,14 @@ export async function deleteLockdown(channelId: Snowflake) {
 		return null;
 	}
 
-	await channel.permissionOverwrites.set(channelOverwrites.overwrites);
-
-	await sql`
-		delete
-		from lockdowns
-		where channel_id = ${channel.id}`;
+	try {
+		await channel.permissionOverwrites.set(channelOverwrites.overwrites);
+	} finally {
+		await sql`
+			delete
+			from lockdowns
+			where channel_id = ${channel.id}`;
+	}
 
 	return channel.id;
 }
