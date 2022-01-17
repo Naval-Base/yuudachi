@@ -22,7 +22,7 @@ const currentLockdowns = await sql<[{ channel_id: Snowflake; expiration: string 
 for (const lockdown of currentLockdowns) {
 	if (Date.parse(lockdown.expiration) <= Date.now()) {
 		if (parentPort) {
-			parentPort.postMessage({ op: JobType.Case, d: { channelId: lockdown.channel_id } });
+			parentPort.postMessage({ op: JobType.Lockdown, d: { channelId: lockdown.channel_id } });
 		}
 	}
 }
