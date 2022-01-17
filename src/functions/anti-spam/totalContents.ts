@@ -24,6 +24,7 @@ export async function totalContent(content: string, guildId: string, userId: str
 	};
 
 	const total = await redis.get(channelSpamKey) || 0;
+	
 	return total;
 
 }
