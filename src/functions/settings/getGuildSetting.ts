@@ -10,6 +10,7 @@ export enum SettingsKeys {
 	GuildLogWebhookId = 'guild_log_webhook_id',
 	MemberLogWebhookId = 'member_log_webhook_id',
 	Locale = 'locale',
+	LogIgnoreChannels = 'log_ignore_channels',
 }
 
 export async function getGuildSetting(guildId: Snowflake, prop: SettingsKeys, table = 'guild_settings') {

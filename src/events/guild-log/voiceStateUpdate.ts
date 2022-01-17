@@ -24,7 +24,7 @@ export default class implements Event {
 		for await (const [oldState, newState] of on(this.client, this.event) as AsyncIterableIterator<
 			[VoiceState | null, VoiceState]
 		>) {
-			if (!newState.member) {
+			if (!newState.member || !newState.channelId) {
 				continue;
 			}
 			if (oldState?.member?.user.bot || newState.member.user.bot) {
@@ -34,6 +34,8 @@ export default class implements Event {
 			try {
 				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(newState.guild.id, SettingsKeys.LogIgnoreChannels);
+
 				if (!logChannelId) {
 					continue;
 				}
@@ -43,7 +45,11 @@ export default class implements Event {
 				}
 
 				let description = '';
-				if ((!oldState || !oldState.channel) && newState.channel) {
+				if ((!oldState || !oldState.channel || ignoreChannels.includes(oldState.channelId)) && newState.channel) {
+					if (ignoreChannels.includes(newState.channelId)) {
+						continue;
+					}
+
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
@@ -59,13 +65,7 @@ export default class implements Event {
 						channel: newState.channel.toString(),
 						lng: locale,
 					});
-				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
-					description = i18next.t('log.guild_log.voice_state_update.moved', {
-						fromChannel: oldState.channel.toString(),
-						toChannel: newState.channel.toString(),
-						lng: locale,
-					});
-				} else if (oldState?.channel && !newState.channel) {
+				} else if (oldState?.channel && (!newState.channel || ignoreChannels.includes(newState.channelId))) {
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
@@ -79,6 +79,12 @@ export default class implements Event {
 
 					description = i18next.t('log.guild_log.voice_state_update.left', {
 						channel: oldState.channel.toString(),
+						lng: locale,
+					});
+				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
+					description = i18next.t('log.guild_log.voice_state_update.moved', {
+						fromChannel: oldState.channel.toString(),
+						toChannel: newState.channel.toString(),
 						lng: locale,
 					});
 				} else {

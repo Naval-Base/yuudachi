@@ -36,6 +36,20 @@ export default class implements Event {
 			}
 
 			try {
+				const locale = await getGuildSetting(newMessage.guild.id, SettingsKeys.Locale);
+				const logChannelId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(newMessage.guild.id, SettingsKeys.LogIgnoreChannels);
+
+				if (!logChannelId) {
+					continue;
+				}
+				if (
+					(newMessage.channel.isThread() && ignoreChannels.includes(newMessage.channel.parentId)) ||
+					ignoreChannels.includes(newMessage.channelId)
+				) {
+					continue;
+				}
+
 				logger.info(
 					{
 						event: { name: this.name, event: this.event },
@@ -45,11 +59,6 @@ export default class implements Event {
 					`Member ${newMessage.author.id} updated a message`,
 				);
 
-				const locale = await getGuildSetting(newMessage.guild.id, SettingsKeys.Locale);
-				const logChannelId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
-				if (!logChannelId) {
-					continue;
-				}
 				const webhook = this.webhooks.get(logChannelId);
 				if (!webhook) {
 					continue;
