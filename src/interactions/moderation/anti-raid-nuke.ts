@@ -22,6 +22,11 @@ export const AntiRaidNukeCommand = {
 			type: ApplicationCommandOptionType.String,
 		},
 		{
+			name: 'avatar',
+			description: 'The avatar hash the user or member should have (exact match)',
+			type: ApplicationCommandOptionType.String,
+		},
+		{
 			name: 'reason',
 			description: 'The reason of this action',
 			type: ApplicationCommandOptionType.String,
