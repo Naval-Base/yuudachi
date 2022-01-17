@@ -29,6 +29,7 @@
 		"bree": "^6.3.0",
 		"bufferutil": "^4.0.3",
 		"common-tags": "^1.8.0",
+		"ctph.js": "^0.0.5",
 		"dayjs": "^1.10.6",
 		"diff": "^5.0.0",
 		"discord.js": "^13.4.0",
