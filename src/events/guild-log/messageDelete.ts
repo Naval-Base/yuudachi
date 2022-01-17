@@ -39,6 +39,7 @@ export default class implements Event {
 				if (!logChannelId) {
 					continue;
 				}
+				// TODO: ignore based on parent category once .inGuild() is available
 				if (
 					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId)) ||
 					ignoreChannels.includes(message.channelId)

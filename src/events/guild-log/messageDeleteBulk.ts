@@ -47,7 +47,7 @@ export default class implements Event {
 				const locale = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(message.guild!.id, SettingsKeys.LogIgnoreChannels);
-
+				// TODO: ignore based on parent category once .inGuild() is available
 				if (
 					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId)) ||
 					ignoreChannels.includes(message.channelId)
