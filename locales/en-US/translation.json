@@ -199,7 +199,8 @@
 						"cancel": "Cancel",
 						"execute": "Lock"
 					},
-					"message": "This channel has been locked due to moderation, it will be unlocked {{- duration}}",
+					"message": "🔒 This channel has been locked, it will be unlocked {{- duration}}",
+					"message_reason": "🔒 This channel has been locked with reason {{- reason}}, it will be unlocked {{- duration}}",
 					"cancel": "Cancelled locking of {{- channel}}",
 					"success": "Successfully locked {{- channel}}"
 				},
