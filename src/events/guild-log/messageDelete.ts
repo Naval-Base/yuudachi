@@ -33,6 +33,20 @@ export default class implements Event {
 			}
 
 			try {
+				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
+				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels);
+				if (!logChannelId) {
+					continue;
+				}
+				// TODO: ignore based on parent category once .inGuild() is available
+				if (
+					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId)) ||
+					ignoreChannels.includes(message.channelId)
+				) {
+					continue;
+				}
+
 				logger.info(
 					{
 						event: { name: this.name, event: this.event },
@@ -42,11 +56,6 @@ export default class implements Event {
 					`Member ${message.author.id} deleted a message`,
 				);
 
-				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
-				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
-				if (!logChannelId) {
-					continue;
-				}
 				const webhook = this.webhooks.get(logChannelId);
 				if (!webhook) {
 					continue;

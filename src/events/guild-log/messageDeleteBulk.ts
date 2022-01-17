@@ -35,16 +35,26 @@ export default class implements Event {
 			if (!messages.size) {
 				continue;
 			}
-			if (messages.first()!.author.bot) {
+			const message = messages.first() as Message;
+			if (message.author.bot) {
 				continue;
 			}
-			if (!messages.first()!.guild) {
+			if (message.guild) {
 				continue;
 			}
 
 			try {
 				const locale = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.Locale);
 				const logChannelId = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(message.guild!.id, SettingsKeys.LogIgnoreChannels);
+				// TODO: ignore based on parent category once .inGuild() is available
+				if (
+					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId)) ||
+					ignoreChannels.includes(message.channelId)
+				) {
+					continue;
+				}
+
 				if (!logChannelId) {
 					continue;
 				}
