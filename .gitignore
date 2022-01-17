@@ -30,3 +30,4 @@ dump.sql
 init.sql.bak
 crowdin_credentials.yml
 .env
+.vscode
