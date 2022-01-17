@@ -7,6 +7,7 @@ export const enum JobType {
 export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 export const SPAM_THRESHOLD = 4;
 export const SPAM_EXPIRE_SECONDS = 30;
+export const SPAM_HASH_THRESHOLD = 70;
 export const MENTION_THRESHOLD = 10;
 export const MENTION_EXPIRE_SECONDS = 60;
 export const SCAM_THRESHOLD = 3;
