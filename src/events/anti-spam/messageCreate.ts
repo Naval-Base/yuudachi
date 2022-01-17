@@ -12,7 +12,7 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { totalMentions } from '../../functions/anti-spam/totalMentions';
-import { totalContent } from '../../functions/anti-spam/totalContents';
+import { createContentHash, totalContent } from '../../functions/anti-spam/totalContents';
 import { kRedis } from '../../tokens';
 
 @injectable()
@@ -72,6 +72,8 @@ export default class implements Event {
 							}),
 							deleteMessageDays: 1,
 						});
+						const mentionCountKey = `guild:${message.guild.id}:user:${message.author.id}:mentions`;
+						await this.redis.del(mentionCountKey);
 					} else if (contentExceeded) {
 						logger.info(
 							{
@@ -92,6 +94,10 @@ export default class implements Event {
 							reason: i18next.t('log.mod_log.spam.reason', { lng: locale }),
 							deleteMessageDays: 1,
 						});
+
+						const contentHash = createContentHash(message.content);
+						const channelSpamKey = `guild:${message.guild.id}:user:${message.author.id}:contenthash:${contentHash}`;
+						await this.redis.del(channelSpamKey);
 					}
 
 					await upsertCaseLog(message.guildId, this.client.user, case_!);

@@ -68,6 +68,8 @@ export default class implements Event {
 						deleteMessageDays: 1,
 					});
 
+					const scamKey = `guild:${message.guildId}:user:${message.author.id}:scams`;
+					await this.redis.del(scamKey);
 					await upsertCaseLog(message.guildId, this.client.user, case_);
 				}
 			} catch (e) {
