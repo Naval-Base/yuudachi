@@ -39,11 +39,15 @@ export default class implements Command {
 		}
 
 		if (!args.user.member?.kickable) {
+			const isStillMember = interaction.guild.members.resolve(args.user.user.id);
 			throw new Error(
-				i18next.t('command.mod.kick.errors.missing_permissions', {
-					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-					lng: locale,
-				}),
+				i18next.t(
+					isStillMember ? 'command.mod.kick.errors.missing_permissions' : 'command.mod.kick.errors.not_member',
+					{
+						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+						lng: locale,
+					},
+				),
 			);
 		}
 
