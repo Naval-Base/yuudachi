@@ -14,7 +14,6 @@ export async function totalContent(content: string, guildId: string, userId: str
 	const channelSpamKey = `guild:${guildId}:user:${userId}:spamCount`;
 
 	const lastHash = await redis.get(channelLasthashKey);
-
 	if (!lastHash) await redis.set(channelLasthashKey, contentHash, 'EX', SPAM_EXPIRE_SECONDS);
 
 	if (!lastHash || similarity(lastHash, contentHash) > SPAM_HASH_THRESHOLD) {
@@ -25,6 +24,7 @@ export async function totalContent(content: string, guildId: string, userId: str
 
 	// @ts-expect-error
 	const total = ~~(await redis.get(channelSpamKey));
+	await redis.set(channelLasthashKey, contentHash, 'EX', SPAM_EXPIRE_SECONDS);
 
 	return total;
 }
