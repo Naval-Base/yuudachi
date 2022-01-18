@@ -44,8 +44,8 @@ export default class implements Event {
 			}
 
 			try {
-				const locale = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.Locale);
-				const logChannelId = await getGuildSetting(messages.first()!.guild!.id, SettingsKeys.GuildLogWebhookId);
+				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
+				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels);
 				// TODO: ignore based on parent category once .inGuild() is available
 				if (
@@ -77,14 +77,14 @@ export default class implements Event {
 
 				const embed = addFields({
 					author: {
-						name: `${messages.first()!.author.tag} (${messages.first()!.author.id})`,
-						icon_url: messages.first()!.author.displayAvatarURL(),
+						name: `${message.author.tag} (${message.author.id})`,
+						icon_url: message.author.displayAvatarURL(),
 					},
 					color: 12016895,
 					title: i18next.t('log.guild_log.message_bulk_deleted.title', { lng: locale }),
 					description: i18next.t('log.guild_log.message_bulk_deleted.description', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: messages.first()!.channel.toString(),
+						channel: message.channel.toString(),
 						lng: locale,
 					}),
 					timestamp: new Date().toISOString(),
