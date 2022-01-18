@@ -38,7 +38,7 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
-		if (!args.user.member?.bannable) {
+		if (args.user.member && !args.user.member.bannable) {
 			throw new Error(
 				i18next.t('command.mod.softban.errors.missing_permissions', {
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
@@ -46,6 +46,8 @@ export default class implements Command {
 				}),
 			);
 		}
+
+		const isStillMember = interaction.guild.members.resolve(args.user.user.id);
 
 		if (args.reason && args.reason.length >= 500) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
@@ -66,11 +68,11 @@ export default class implements Command {
 			.setStyle('SECONDARY');
 
 		await interaction.editReply({
-			content: i18next.t('command.mod.softban.pending', {
+			content: i18next.t(isStillMember ? 'command.mod.softban.pending' : 'command.mod.softban.not_member', {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: [embed],
+			embeds: isStillMember ? [embed] : [],
 			components: [new MessageActionRow().addComponents([cancelButton, softbanButton])],
 		});
 
@@ -106,25 +108,42 @@ export default class implements Command {
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:ban`, 15, '');
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, '');
-			const case_ = await createCase(
-				collectedInteraction.guild,
-				generateCasePayload({
-					guildId: collectedInteraction.guildId,
-					user: collectedInteraction.user,
-					args: {
-						...args,
-						days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
-					},
-					action: CaseAction.Softban,
-				}),
-			);
-			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+
+			if (isStillMember) {
+				const case_ = await createCase(
+					collectedInteraction.guild,
+					generateCasePayload({
+						guildId: collectedInteraction.guildId,
+						user: collectedInteraction.user,
+						args: {
+							...args,
+							days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+						},
+						action: CaseAction.Softban,
+					}),
+				);
+				await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+			} else {
+				const reason = i18next.t('command.mod.softban.reasons.clear_messages', {
+					user: collectedInteraction.user.tag,
+					lng: locale,
+				});
+
+				await interaction.guild.bans.create(args.user.user, {
+					reason,
+					days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+				});
+				await interaction.guild.bans.remove(args.user.user, reason);
+			}
 
 			await collectedInteraction.editReply({
-				content: i18next.t('command.mod.softban.success', {
-					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-					lng: locale,
-				}),
+				content: i18next.t(
+					isStillMember ? 'command.mod.softban.success.regular' : 'command.mod.softban.success.clear_messages',
+					{
+						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+						lng: locale,
+					},
+				),
 				components: [],
 			});
 		}
