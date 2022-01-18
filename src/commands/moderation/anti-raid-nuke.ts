@@ -76,6 +76,13 @@ export default class implements Command {
 					}
 				} catch {}
 			}
+
+			if (args.avatar) {
+				if (member.avatar !== args.avatar && member.user.avatar !== args.avatar) {
+					return false;
+				}
+			}
+
 			return member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff;
 		});
 
@@ -96,6 +103,15 @@ export default class implements Command {
 				age: Formatters.time(dayjs(accountCutoff).unix(), Formatters.TimestampStyles.ShortDateTime),
 			}),
 		];
+
+		if (args.avatar) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.errors.parameters.avatar', {
+					avatar: Formatters.inlineCode(args.avatar),
+					lng: locale,
+				}),
+			);
+		}
 
 		if (args.pattern) {
 			parameterStrings.push(
