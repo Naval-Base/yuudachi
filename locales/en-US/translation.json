@@ -59,7 +59,8 @@
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "Missing permissions to kick {{- user}}"
+					"missing_permissions": "Missing permissions to kick {{- user}}",
+					"not_member": "User {{- user}} is not on this guild"
 				},
 				"pending": "Do you really want to kick {{- user}}?",
 				"buttons": {
