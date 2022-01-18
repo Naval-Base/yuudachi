@@ -23,5 +23,8 @@ export async function totalContent(content: string, guildId: string, userId: str
 		return total;
 	}
 
-	return (await redis.get(channelSpamKey)) ?? 0;
+	// @ts-expect-error
+	const total = ~~(await redis.get(channelSpamKey));
+
+	return total;
 }
