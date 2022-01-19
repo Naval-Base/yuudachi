@@ -8,9 +8,15 @@ import { kRedis } from '../../tokens';
 import { logger } from '../../logger';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { refreshScamDomains, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains';
+import type { RefreshScamlistCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 
 export default class implements Command {
-	public async execute(interaction: BaseCommandInteraction, locale: string): Promise<void> {
+	public async execute(
+		interaction: BaseCommandInteraction,
+		_: ArgumentsOf<typeof RefreshScamlistCommand>,
+		locale: string,
+	): Promise<void> {
 		const redis = container.resolve<Redis>(kRedis);
 
 		await interaction.deferReply({ ephemeral: true });
@@ -31,13 +37,20 @@ export default class implements Command {
 		const res = await refreshScamDomains(redis);
 		for (const result of res) {
 			const parts = [
-				`• Before: ${Formatters.inlineCode(String(result.before))}`,
-				`• After: ${Formatters.inlineCode(String(result.after))}`,
-				`• Last change: ${
-					result.lastRefresh
+				i18next.t('command.utility.refresh_scamlist.before', {
+					lng: locale,
+					amount: Formatters.inlineCode(String(result.before)),
+				}),
+				i18next.t('command.utility.refresh_scamlist.after', {
+					lng: locale,
+					amount: Formatters.inlineCode(String(result.after)),
+				}),
+				i18next.t('command.utility.refresh_scamlist.last_change', {
+					lng: locale,
+					timestamp: result.lastRefresh
 						? `<t:${Math.floor(result.lastRefresh / 1000)}:f> (<t:${Math.floor(result.lastRefresh / 1000)}:R>)`
-						: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale })
-				}`,
+						: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale }),
+				}),
 			];
 
 			embed.addField(result.envVar, parts.join('\n'), true).setColor(3092790);

@@ -261,7 +261,10 @@
 			},
 			"refresh_scamlist": {
 				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
-				"refresh_never": "`never`"
+				"refresh_never": "`never`",
+				"before": "• Before: {{- amount}}",
+				"after": "• After: {{- amount}}",
+				"last_change": "• Last change: {{- timestamp}}"
 			}
 		}
 	},
