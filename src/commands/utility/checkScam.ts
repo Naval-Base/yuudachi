@@ -52,7 +52,7 @@ export default class implements Command {
 		if (domains.length) {
 			embed = addFields(embed, {
 				name: i18next.t('command.utility.check_scam.found', { lng: locale, count: domains.length }),
-				value: domains.map((domain) => `• \`${domain}\``).join('\n'),
+				value: domains.map((domain) => `• \`${domain.host}\` on lists: \`[${domain.lists.join(',')}]\``).join('\n'),
 			});
 		}
 
