@@ -262,9 +262,18 @@
 			"refresh_scamlist": {
 				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
 				"refresh_never": "`never`",
+				"amount": "• Amount: {{- amount}}",
 				"before": "• Before: {{- amount}}",
 				"after": "• After: {{- amount}}",
-				"last_change": "• Last change: {{- timestamp}}"
+				"last_change": "• Last change: {{- timestamp}}",
+				"buttons": {
+					"execute": "Refresh",
+					"cancel": "Cancel"
+				},
+				"cancel": "Cancelled scam domain list refreshing",
+				"success": "Successfully refreshed scam domain lists",
+				"pending": "Current scam domain lists",
+				"error": "Something went wrong when refreshing scam domains"
 			}
 		}
 	},
