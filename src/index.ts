@@ -9,6 +9,7 @@ import Redis from 'ioredis';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 import Bree from 'bree';
+import { readFile } from 'node:fs/promises';
 
 import { Command, commandInfo } from './Command';
 import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens';
@@ -78,6 +79,10 @@ const eventFiles = readdirp(fileURLToPath(new URL('./events', import.meta.url)),
 });
 
 try {
+	const shorteners = JSON.parse(
+		(await readFile(fileURLToPath(new URL('../linkshorteners.json', import.meta.url).href))).toString(),
+	);
+	await redis.sadd('linkshorteners', ...shorteners);
 	await i18next.use(Backend).init({
 		backend: {
 			loadPath: fileURLToPath(new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)),
