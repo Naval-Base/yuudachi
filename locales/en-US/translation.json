@@ -260,9 +260,7 @@
 				}
 			},
 			"refresh_scamlist": {
-				"missing_env": "Missing environment variable to fetch scam domains from.",
-				"success": "Success! Refreshed scam domains. before: `{{before}}` after: `{{after}}` last update: {{- refresh}}",
-				"success_replace": "Success! Replaced scam domains (deleted old before fetching). before: `{{before}}` after: `{{after}}` last update: {{- refresh}}",
+				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
 				"refresh_never": "`never`"
 			}
 		}

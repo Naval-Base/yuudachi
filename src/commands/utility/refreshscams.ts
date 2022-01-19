@@ -1,79 +1,48 @@
-import type { BaseCommandInteraction } from 'discord.js';
+import { BaseCommandInteraction, Formatters, MessageEmbed } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
 
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
-import type { RefreshScamlistCommand } from '../../interactions';
-import fetch, { Response } from 'node-fetch';
-
 import { kRedis } from '../../tokens';
 import { logger } from '../../logger';
 import { checkModRole } from '../../functions/permissions/checkModRole';
-
-export function checkResponse(response: Response) {
-	if (response.ok) return response;
-	logger.warn({ response }, 'Fetching scam domains returned a non 2xx response code.');
-	return response;
-}
+import { refreshScamDomains, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains';
 
 export default class implements Command {
-	public async execute(
-		interaction: BaseCommandInteraction,
-		args: ArgumentsOf<typeof RefreshScamlistCommand>,
-		locale: string,
-	): Promise<void> {
+	public async execute(interaction: BaseCommandInteraction, locale: string): Promise<void> {
 		const redis = container.resolve<Redis>(kRedis);
 
 		await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
-		if (!process.env.SCAM_DOMAIN_URL) {
-			logger.warn('Missing environment variable: SCAM_DOMAIN_URL.');
-			await interaction.editReply(i18next.t('command.utility.refresh_scamlist.missing_env', { lng: locale }));
+		const missing = scamURLEnvs.filter((u) => !process.env[u]);
+
+		if (missing.length) {
+			logger.warn(`Missing environment variables: ${missing.join(', ')}.`);
+		}
+
+		if (missing.length === 2) {
+			await interaction.editReply(i18next.t('command.utility.refresh_scamlist.missing_env', { lng: locale, missing }));
 			return;
 		}
 
-		const list = await fetch(process.env.SCAM_DOMAIN_URL)
-			.then(checkResponse)
-			.then((r) => r.json());
+		const embed = new MessageEmbed();
+		const res = await refreshScamDomains(redis);
+		for (const result of res) {
+			const parts = [
+				`• Before: ${Formatters.inlineCode(String(result.before))}`,
+				`• After: ${Formatters.inlineCode(String(result.after))}`,
+				`• Last change: ${
+					result.lastRefresh
+						? `<t:${Math.floor(result.lastRefresh / 1000)}:f> (<t:${Math.floor(result.lastRefresh / 1000)}:R>)`
+						: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale })
+				}`,
+			];
 
-		const lastRefresh = await redis.get('scamdomains:refresh');
-		const before = await redis.scard('scamdomains');
-
-		if (args.replace) {
-			await redis.del('scamdomains');
+			embed.addField(result.envVar, parts.join('\n'), true).setColor(3092790);
 		}
 
-		await redis.sadd('scamdomains', ...list);
-		const after = await redis.scard('scamdomains');
-
-		logger.info(
-			{
-				before,
-				after,
-				replaced: args.replace ?? false,
-				manual: true,
-			},
-			'Scam domains updated',
-		);
-		await redis.set('scamdomains:refresh', Date.now());
-
-		await interaction.editReply(
-			i18next.t(
-				args.replace ? 'command.utility.refresh_scamlist.success_replace' : 'command.utility.refresh_scamlist.success',
-				{
-					lng: locale,
-					before,
-					after,
-					refresh: lastRefresh
-						? `<t:${Math.floor(parseInt(lastRefresh, 10) / 1000)}:f> (<t:${Math.floor(
-								parseInt(lastRefresh, 10) / 1000,
-						  )}:R>)`
-						: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale }),
-				},
-			),
-		);
+		await interaction.editReply({ embeds: [embed] });
 	}
 }
