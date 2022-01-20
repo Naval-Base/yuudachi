@@ -251,13 +251,7 @@
 			},
 			"check_scam": {
 				"found": "Detected scam domain ({{count}})",
-				"found_plural": "Detected scam domains ({{count}})",
-				"debug": {
-					"title": "Debug information",
-					"domains": "• Domains: `{{count}}`",
-					"last_update": "• Last update: {{- refresh}}",
-					"refresh_never": "`never`"
-				}
+				"found_plural": "Detected scam domains ({{count}})"
 			},
 			"refresh_scamlist": {
 				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
