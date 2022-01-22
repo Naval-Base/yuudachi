@@ -37,7 +37,7 @@
 		"i18next": "^20.4.0",
 		"i18next-fs-backend": "^1.1.1",
 		"ioredis": "^4.27.8",
-		"nanoid": "^3.1.25",
+		"nanoid": "^3.1.31",
 		"node-fetch": "^2.6.1",
 		"pino": "^6.13.1",
 		"pino-elasticsearch": "^6.1.0",
