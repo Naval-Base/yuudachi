@@ -34,14 +34,6 @@ export function registerJobs() {
 		timeout: 0,
 		path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
 	});
-
-	logger.info({ job: { name: 'discordScamDomainUpdateTimers' } }, 'Registering job: discordScamDomainUpdateTimers');
-	bree.add({
-		name: 'discordScamDomainUpdateTimers',
-		interval: '5m',
-		timeout: 0,
-		path: fileURLToPath(new URL('./jobs/discordScamDomainUpdateTimers.js', import.meta.url)),
-	});
 }
 
 export function startJobs() {

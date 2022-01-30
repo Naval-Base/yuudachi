@@ -14,5 +14,4 @@ export * from './moderation/timeout';
 export * from './utility/ping';
 export * from './utility/checkScam';
 export * from './utility/refreshscams';
-
 export * from './context-menu/history';

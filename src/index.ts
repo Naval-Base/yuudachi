@@ -9,11 +9,14 @@ import Redis from 'ioredis';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 import Bree from 'bree';
+import { readFile } from 'node:fs/promises';
 
 import { Command, commandInfo } from './Command';
 import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens';
 import { logger } from './logger';
 import type { Event } from './Event';
+import { WebSocketConnection } from './websocket/WebSocketConnection';
+import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains';
 
 const sql = postgres({
 	types: {
@@ -78,6 +81,10 @@ const eventFiles = readdirp(fileURLToPath(new URL('./events', import.meta.url)),
 });
 
 try {
+	const shorteners = JSON.parse(
+		(await readFile(fileURLToPath(new URL('../linkshorteners.json', import.meta.url).href))).toString(),
+	);
+	await redis.sadd('linkshorteners', ...shorteners);
 	await i18next.use(Backend).init({
 		backend: {
 			loadPath: fileURLToPath(new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)),
@@ -113,6 +120,13 @@ try {
 	}
 
 	await client.login();
+
+	const wsURL = process.env.SCAM_DOMAIN_WS;
+	if (wsURL) {
+		new WebSocketConnection(process.env.SCAM_DOMAIN_WS!, scamDomainRequestHeaders['SCAM_DOMAIN_URL'], redis);
+	} else {
+		logger.info(`Missing env var 'SCAM_DOMAIN_WS`);
+	}
 } catch (e) {
 	const error = e as Error;
 	logger.error(error, error.message);

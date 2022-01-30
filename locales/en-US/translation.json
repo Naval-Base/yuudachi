@@ -251,19 +251,23 @@
 			},
 			"check_scam": {
 				"found": "Detected scam domain ({{count}})",
-				"found_plural": "Detected scam domains ({{count}})",
-				"debug": {
-					"title": "Debug information",
-					"domains": "• Domains: `{{count}}`",
-					"last_update": "• Last update: {{- refresh}}",
-					"refresh_never": "`never`"
-				}
+				"found_plural": "Detected scam domains ({{count}})"
 			},
 			"refresh_scamlist": {
-				"missing_env": "Missing environment variable to fetch scam domains from.",
-				"success": "Success! Refreshed scam domains. before: `{{before}}` after: `{{after}}` last update: {{- refresh}}",
-				"success_replace": "Success! Replaced scam domains (deleted old before fetching). before: `{{before}}` after: `{{after}}` last update: {{- refresh}}",
-				"refresh_never": "`never`"
+				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
+				"refresh_never": "`never`",
+				"amount": "• Amount: {{- amount}}",
+				"before": "• Before: {{- amount}}",
+				"after": "• After: {{- amount}}",
+				"last_change": "• Last change: {{- timestamp}}",
+				"buttons": {
+					"execute": "Refresh",
+					"cancel": "Cancel"
+				},
+				"cancel": "Cancelled scam domain list refreshing",
+				"success": "Successfully refreshed scam domain lists",
+				"pending": "Current scam domain lists",
+				"error": "Something went wrong when refreshing scam domains"
 			}
 		}
 	},
