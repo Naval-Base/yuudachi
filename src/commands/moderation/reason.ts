@@ -1,9 +1,11 @@
 import {
-	type BaseCommandInteraction,
+	type CommandInteraction,
 	type ButtonInteraction,
 	Formatters,
-	MessageActionRow,
-	MessageButton,
+	ActionRow,
+	ComponentType,
+	ButtonComponent,
+	ButtonStyle,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -24,7 +26,7 @@ import { generateMessageLink } from '../../util/generateMessageLink';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof ReasonCommand>,
 		locale: string,
 	): Promise<void> {
@@ -62,14 +64,14 @@ export default class implements Command {
 			const changeKey = nanoid();
 			const cancelKey = nanoid();
 
-			const changeButton = new MessageButton()
+			const changeButton = new ButtonComponent()
 				.setCustomId(changeKey)
 				.setLabel(i18next.t('command.mod.reason.buttons.execute', { lng: locale }))
-				.setStyle('DANGER');
-			const cancelButton = new MessageButton()
+				.setStyle(ButtonStyle.Danger);
+			const cancelButton = new ButtonComponent()
 				.setCustomId(cancelKey)
 				.setLabel(i18next.t('command.mod.reason.buttons.cancel', { lng: locale }))
-				.setStyle('SECONDARY');
+				.setStyle(ButtonStyle.Secondary);
 
 			originalCaseLower = await getCase(interaction.guildId, lower);
 			originalCaseUpper = await getCase(interaction.guildId, upper);
@@ -99,12 +101,12 @@ export default class implements Command {
 					amount: upper - lower + 1,
 					lng: locale,
 				}),
-				components: [new MessageActionRow().addComponents([cancelButton, changeButton])],
+				components: [new ActionRow().addComponents(cancelButton, changeButton)],
 			});
 
 			const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 				filter: (collected) => collected.user.id === interaction.user.id,
-				componentType: 'BUTTON',
+				componentType: ComponentType.Button,
 				time: 15000,
 			}).catch(async () => {
 				try {

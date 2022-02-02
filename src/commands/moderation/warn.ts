@@ -1,4 +1,11 @@
-import { type BaseCommandInteraction, type ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import {
+	type CommandInteraction,
+	type ButtonInteraction,
+	ActionRow,
+	ButtonComponent,
+	ButtonStyle,
+	ComponentType,
+} from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command';
@@ -16,7 +23,7 @@ import { generateHistory } from '../../util/generateHistory';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof WarnCommand>,
 		locale: string,
 	): Promise<void> {
@@ -40,14 +47,14 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const warnButton = new MessageButton()
+		const warnButton = new ButtonComponent()
 			.setCustomId(warnKey)
 			.setLabel(i18next.t('command.mod.warn.buttons.execute', { lng: locale }))
-			.setStyle('DANGER');
-		const cancelButton = new MessageButton()
+			.setStyle(ButtonStyle.Danger);
+		const cancelButton = new ButtonComponent()
 			.setCustomId(cancelKey)
 			.setLabel(i18next.t('command.mod.warn.buttons.cancel', { lng: locale }))
-			.setStyle('SECONDARY');
+			.setStyle(ButtonStyle.Secondary);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.warn.pending', {
@@ -55,12 +62,12 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new MessageActionRow().addComponents([cancelButton, warnButton])],
+			components: [new ActionRow().addComponents(cancelButton, warnButton)],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: 'BUTTON',
+			componentType: ComponentType.Button,
 			time: 15000,
 		}).catch(async () => {
 			try {

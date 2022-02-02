@@ -1,11 +1,13 @@
 import type { APIMessage } from 'discord-api-types';
 import {
-	type BaseCommandInteraction,
+	type CommandInteraction,
 	type ButtonInteraction,
 	type Message,
-	MessageActionRow,
-	MessageButton,
+	ActionRow,
+	ButtonComponent,
 	type TextChannel,
+	ButtonStyle,
+	ComponentType,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -14,7 +16,7 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function lift(
-	interaction: BaseCommandInteraction<'cached'>,
+	interaction: CommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	channel: TextChannel,
 	locale: string,
@@ -33,14 +35,14 @@ export async function lift(
 	const unlockKey = nanoid();
 	const cancelKey = nanoid();
 
-	const unlockButton = new MessageButton()
+	const unlockButton = new ButtonComponent()
 		.setCustomId(unlockKey)
 		.setLabel(i18next.t('command.mod.lockdown.lift.buttons.execute', { lng: locale }))
-		.setStyle('DANGER');
-	const cancelButton = new MessageButton()
+		.setStyle(ButtonStyle.Danger);
+	const cancelButton = new ButtonComponent()
 		.setCustomId(cancelKey)
 		.setLabel(i18next.t('command.mod.lockdown.lift.buttons.cancel', { lng: locale }))
-		.setStyle('SECONDARY');
+		.setStyle(ButtonStyle.Secondary);
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.lockdown.lift.pending', {
@@ -48,12 +50,12 @@ export async function lift(
 			channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 			lng: locale,
 		}),
-		components: [new MessageActionRow().addComponents([cancelButton, unlockButton])],
+		components: [new ActionRow().addComponents(cancelButton, unlockButton)],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: 'BUTTON',
+		componentType: ComponentType.Button,
 		time: 15000,
 	}).catch(async () => {
 		try {

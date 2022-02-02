@@ -1,4 +1,11 @@
-import { type BaseCommandInteraction, type ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import {
+	type CommandInteraction,
+	type ButtonInteraction,
+	ActionRow,
+	ButtonComponent,
+	ButtonStyle,
+	ComponentType,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -22,7 +29,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof BanCommand>,
 		locale: string,
 	): Promise<void> {
@@ -70,14 +77,14 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const banButton = new MessageButton()
+		const banButton = new ButtonComponent()
 			.setCustomId(banKey)
 			.setLabel(i18next.t('command.mod.ban.buttons.execute', { lng: locale }))
-			.setStyle('DANGER');
-		const cancelButton = new MessageButton()
+			.setStyle(ButtonStyle.Danger);
+		const cancelButton = new ButtonComponent()
 			.setCustomId(cancelKey)
 			.setLabel(i18next.t('command.mod.ban.buttons.cancel', { lng: locale }))
-			.setStyle('SECONDARY');
+			.setStyle(ButtonStyle.Secondary);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.ban.pending', {
@@ -85,12 +92,12 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new MessageActionRow().addComponents([cancelButton, banButton])],
+			components: [new ActionRow().addComponents(cancelButton, banButton)],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: 'BUTTON',
+			componentType: ComponentType.Button,
 			time: 15000,
 		}).catch(async () => {
 			try {

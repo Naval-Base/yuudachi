@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { readFile } from 'node:fs/promises';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import Bree from 'bree';
-import { Client, Intents, Options, Util, type Webhook } from 'discord.js';
+import { Client, GatewayIntentBits, Options, Partials, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 import Redis from 'ioredis';
@@ -31,29 +31,16 @@ const bree = new Bree({ root: false, logger });
 
 const client = new Client({
 	intents: [
-		Intents.FLAGS.GUILDS,
-		Intents.FLAGS.GUILD_BANS,
-		Intents.FLAGS.GUILD_MEMBERS,
-		Intents.FLAGS.GUILD_MESSAGES,
-		Intents.FLAGS.GUILD_VOICE_STATES,
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildBans,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildVoiceStates,
 	],
-	partials: ['GUILD_MEMBER'],
+	partials: [Partials.GuildMember],
 	makeCache: Options.cacheWithLimits({
-		// @ts-expect-error
-		ChannelManager: {
-			sweepInterval: 3600,
-			sweepFilter: Util.archivedThreadSweepFilter(),
-		},
-		GuildChannelManager: {
-			sweepInterval: 3600,
-			sweepFilter: Util.archivedThreadSweepFilter(),
-		},
 		MessageManager: 100,
 		StageInstanceManager: 10,
-		ThreadManager: {
-			sweepInterval: 3600,
-			sweepFilter: Util.archivedThreadSweepFilter(),
-		},
 		VoiceStateManager: 10,
 	}),
 });

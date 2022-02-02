@@ -1,4 +1,4 @@
-import { PermissionFlagsBits } from 'discord-api-types/v9';
+import { OverwriteType, PermissionFlagsBits } from 'discord-api-types/v9';
 import type { GuildChannel, PermissionOverwrites, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -39,12 +39,12 @@ export async function createLockdown(lockdown: CreateLockdown & { channel: Guild
 				PermissionFlagsBits.CreatePublicThreads |
 				PermissionFlagsBits.CreatePrivateThreads |
 				PermissionFlagsBits.SendMessagesInThreads,
-			type: 'role',
+			type: OverwriteType.Role,
 		},
 		{
 			id: lockdown.channel.client.user!.id,
 			allow: PermissionFlagsBits.SendMessages | PermissionFlagsBits.ManageChannels | PermissionFlagsBits.ManageRoles,
-			type: 'member',
+			type: OverwriteType.Member,
 		},
 	]);
 

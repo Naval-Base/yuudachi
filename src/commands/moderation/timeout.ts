@@ -1,10 +1,12 @@
 import { ms } from '@naval-base/ms';
 import {
-	type BaseCommandInteraction,
+	type CommandInteraction,
 	type ButtonInteraction,
-	MessageActionRow,
-	MessageButton,
-	Permissions,
+	ActionRow,
+	ButtonComponent,
+	ButtonStyle,
+	ComponentType,
+	PermissionFlagsBits,
 } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
@@ -29,7 +31,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof TimeoutCommand>,
 		locale: string,
 	): Promise<void> {
@@ -62,7 +64,7 @@ export default class implements Command {
 			);
 		}
 
-		if (!args.user.member.moderatable || !interaction.guild.me?.permissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
+		if (!args.user.member.moderatable || !interaction.guild.me?.permissions.has(PermissionFlagsBits.ModerateMembers)) {
 			throw new Error(
 				i18next.t('command.mod.timeout.errors.missing_permissions', {
 					lng: locale,
@@ -80,14 +82,14 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const timeoutButton = new MessageButton()
+		const timeoutButton = new ButtonComponent()
 			.setCustomId(timeoutKey)
 			.setLabel(i18next.t('command.mod.timeout.buttons.execute', { lng: locale }))
-			.setStyle('DANGER');
-		const cancelButton = new MessageButton()
+			.setStyle(ButtonStyle.Danger);
+		const cancelButton = new ButtonComponent()
 			.setCustomId(cancelKey)
 			.setLabel(i18next.t('command.mod.timeout.buttons.cancel', { lng: locale }))
-			.setStyle('SECONDARY');
+			.setStyle(ButtonStyle.Secondary);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.timeout.pending', {
@@ -95,12 +97,12 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new MessageActionRow().addComponents([cancelButton, timeoutButton])],
+			components: [new ActionRow().addComponents(cancelButton, timeoutButton)],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: 'BUTTON',
+			componentType: ComponentType.Button,
 			time: 15000,
 		}).catch(async () => {
 			try {

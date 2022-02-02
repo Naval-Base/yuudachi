@@ -1,4 +1,11 @@
-import { type BaseCommandInteraction, type ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import {
+	type CommandInteraction,
+	type ButtonInteraction,
+	ActionRow,
+	ButtonComponent,
+	ButtonStyle,
+	ComponentType,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -22,7 +29,7 @@ export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof SoftbanCommand>,
 		locale: string,
 	): Promise<void> {
@@ -57,14 +64,14 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const softbanButton = new MessageButton()
+		const softbanButton = new ButtonComponent()
 			.setCustomId(softbanKey)
 			.setLabel(i18next.t('command.mod.softban.buttons.execute', { lng: locale }))
-			.setStyle('DANGER');
-		const cancelButton = new MessageButton()
+			.setStyle(ButtonStyle.Danger);
+		const cancelButton = new ButtonComponent()
 			.setCustomId(cancelKey)
 			.setLabel(i18next.t('command.mod.softban.buttons.cancel', { lng: locale }))
-			.setStyle('SECONDARY');
+			.setStyle(ButtonStyle.Secondary);
 
 		await interaction.editReply({
 			content: i18next.t(isStillMember ? 'command.mod.softban.pending' : 'command.mod.softban.not_member', {
@@ -72,12 +79,12 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: isStillMember ? [embed] : [],
-			components: [new MessageActionRow().addComponents([cancelButton, softbanButton])],
+			components: [new ActionRow().addComponents(cancelButton, softbanButton)],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: 'BUTTON',
+			componentType: ComponentType.Button,
 			time: 15000,
 		}).catch(async () => {
 			try {

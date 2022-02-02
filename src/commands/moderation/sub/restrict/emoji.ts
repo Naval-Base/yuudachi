@@ -1,12 +1,14 @@
 import { ms } from '@naval-base/ms';
 import type { APIMessage } from 'discord-api-types';
 import {
-	type BaseCommandInteraction,
+	type CommandInteraction,
 	type ButtonInteraction,
 	type Message,
-	MessageActionRow,
-	MessageButton,
+	ActionRow,
+	ButtonComponent,
 	type Snowflake,
+	ButtonStyle,
+	ComponentType,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -22,7 +24,7 @@ import { awaitComponent } from '../../../../util/awaitComponent';
 import { generateHistory } from '../../../../util/generateHistory';
 
 export async function emoji(
-	interaction: BaseCommandInteraction<'cached'>,
+	interaction: CommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['emoji'],
 	locale: string,
@@ -70,14 +72,14 @@ export async function emoji(
 
 	const embed = await generateHistory(interaction, args.user, locale);
 
-	const roleButton = new MessageButton()
+	const roleButton = new ButtonComponent()
 		.setCustomId(roleKey)
 		.setLabel(i18next.t('command.mod.restrict.emoji.buttons.execute', { lng: locale }))
-		.setStyle('DANGER');
-	const cancelButton = new MessageButton()
+		.setStyle(ButtonStyle.Danger);
+	const cancelButton = new ButtonComponent()
 		.setCustomId(cancelKey)
 		.setLabel(i18next.t('command.mod.restrict.emoji.buttons.cancel', { lng: locale }))
-		.setStyle('SECONDARY');
+		.setStyle(ButtonStyle.Secondary);
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.restrict.emoji.pending', {
@@ -85,12 +87,12 @@ export async function emoji(
 			lng: locale,
 		}),
 		embeds: [embed],
-		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
+		components: [new ActionRow().addComponents(cancelButton, roleButton)],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: 'BUTTON',
+		componentType: ComponentType.Button,
 		time: 15000,
 	}).catch(async () => {
 		try {

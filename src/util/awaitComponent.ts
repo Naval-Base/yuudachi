@@ -5,13 +5,13 @@ import {
 	type Interaction,
 	InteractionCollector,
 	type Message,
-	Constants,
 	type AwaitMessageCollectorOptionsParams,
-	type MessageComponentTypeResolvable,
 	type MappedInteractionTypes,
+	InteractionType,
+	ComponentType,
 } from 'discord.js';
 
-export function awaitComponent<T extends MessageComponentTypeResolvable = 'ACTION_ROW'>(
+export function awaitComponent<T extends ComponentType = ComponentType.ActionRow>(
 	client: Client,
 	message: Message | APIMessage,
 	options: AwaitMessageCollectorOptionsParams<T> = {},
@@ -20,7 +20,7 @@ export function awaitComponent<T extends MessageComponentTypeResolvable = 'ACTIO
 	return new Promise((resolve, reject) => {
 		const collector = new InteractionCollector(client, {
 			...(_options as unknown as CollectorFilter<[Interaction]>),
-			interactionType: Constants.InteractionTypes.MESSAGE_COMPONENT,
+			interactionType: InteractionType.MessageComponent,
 			message,
 		});
 

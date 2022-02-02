@@ -1,5 +1,5 @@
 import type {
-	BaseCommandInteraction,
+	CommandInteraction,
 	ButtonInteraction,
 	GuildMember,
 	SelectMenuInteraction,
@@ -11,7 +11,7 @@ import { container } from 'tsyringe';
 import { kSQL } from '../../tokens';
 
 export async function checkModRole(
-	interaction: BaseCommandInteraction | ButtonInteraction | SelectMenuInteraction,
+	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,
 	locale: string,
 ): Promise<void> {
 	const sql = container.resolve<Sql<any>>(kSQL);

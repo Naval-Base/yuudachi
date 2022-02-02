@@ -1,4 +1,4 @@
-import type { BaseCommandInteraction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import { embed } from './sub/restrict/embed';
 import { emoji } from './sub/restrict/emoji';
@@ -13,7 +13,7 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof RestrictCommand>,
 		locale: string,
 	): Promise<void> {

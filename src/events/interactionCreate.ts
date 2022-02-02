@@ -20,7 +20,7 @@ export default class implements Event {
 
 	public execute(): void {
 		this.client.on(this.event, async (interaction) => {
-			if (!interaction.isCommand() && !interaction.isContextMenu()) {
+			if (!interaction.isCommand() && !interaction.isUserContextMenuCommand()) {
 				return;
 			}
 
