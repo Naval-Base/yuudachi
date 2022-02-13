@@ -1,11 +1,9 @@
 import { ms } from '@naval-base/ms';
-import type { APIMessage } from 'discord-api-types';
+import type { APIMessage } from 'discord-api-types/v10';
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
 	type Message,
-	ActionRow,
-	ButtonComponent,
 	type Snowflake,
 	ButtonStyle,
 	ComponentType,
@@ -21,7 +19,9 @@ import type { RestrictCommand } from '../../../../interactions';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
 import { kSQL } from '../../../../tokens';
 import { awaitComponent } from '../../../../util/awaitComponent';
+import { createButton } from '../../../../util/button';
 import { generateHistory } from '../../../../util/generateHistory';
+import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function embed(
 	interaction: CommandInteraction<'cached'>,
@@ -72,14 +72,16 @@ export async function embed(
 
 	const embed = await generateHistory(interaction, args.user, locale);
 
-	const roleButton = new ButtonComponent()
-		.setCustomId(roleKey)
-		.setLabel(i18next.t('command.mod.restrict.embed.buttons.execute', { lng: locale }))
-		.setStyle(ButtonStyle.Danger);
-	const cancelButton = new ButtonComponent()
-		.setCustomId(cancelKey)
-		.setLabel(i18next.t('command.mod.restrict.embed.buttons.cancel', { lng: locale }))
-		.setStyle(ButtonStyle.Secondary);
+	const roleButton = createButton({
+		customId: roleKey,
+		label: i18next.t('command.mod.restrict.embed.buttons.execute', { lng: locale }),
+		style: ButtonStyle.Danger,
+	});
+	const cancelButton = createButton({
+		customId: cancelKey,
+		label: i18next.t('command.mod.restrict.embed.buttons.cancel', { lng: locale }),
+		style: ButtonStyle.Secondary,
+	});
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.restrict.embed.pending', {
@@ -87,7 +89,7 @@ export async function embed(
 			lng: locale,
 		}),
 		embeds: [embed],
-		components: [new ActionRow().addComponents(cancelButton, roleButton)],
+		components: [createMessageActionRow([cancelButton, roleButton])],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {

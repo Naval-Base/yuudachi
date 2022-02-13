@@ -1,4 +1,4 @@
-import type { APIEmbed } from 'discord-api-types';
+import type { APIEmbed } from 'discord-api-types/v10';
 import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command';

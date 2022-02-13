@@ -1,12 +1,4 @@
-import {
-	type CommandInteraction,
-	type ButtonInteraction,
-	Formatters,
-	ActionRow,
-	ComponentType,
-	ButtonComponent,
-	ButtonStyle,
-} from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, Formatters, ComponentType, ButtonStyle } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command';
@@ -21,8 +13,10 @@ import type { ReasonCommand } from '../../interactions';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { truncate } from '../../util/embed';
 import { generateMessageLink } from '../../util/generateMessageLink';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 export default class implements Command {
 	public async execute(
@@ -64,14 +58,16 @@ export default class implements Command {
 			const changeKey = nanoid();
 			const cancelKey = nanoid();
 
-			const changeButton = new ButtonComponent()
-				.setCustomId(changeKey)
-				.setLabel(i18next.t('command.mod.reason.buttons.execute', { lng: locale }))
-				.setStyle(ButtonStyle.Danger);
-			const cancelButton = new ButtonComponent()
-				.setCustomId(cancelKey)
-				.setLabel(i18next.t('command.mod.reason.buttons.cancel', { lng: locale }))
-				.setStyle(ButtonStyle.Secondary);
+			const changeButton = createButton({
+				customId: changeKey,
+				label: i18next.t('command.mod.reason.buttons.execute', { lng: locale }),
+				style: ButtonStyle.Danger,
+			});
+			const cancelButton = createButton({
+				customId: cancelKey,
+				label: i18next.t('command.mod.reason.buttons.cancel', { lng: locale }),
+				style: ButtonStyle.Secondary,
+			});
 
 			originalCaseLower = await getCase(interaction.guildId, lower);
 			originalCaseUpper = await getCase(interaction.guildId, upper);
@@ -101,7 +97,7 @@ export default class implements Command {
 					amount: upper - lower + 1,
 					lng: locale,
 				}),
-				components: [new ActionRow().addComponents(cancelButton, changeButton)],
+				components: [createMessageActionRow([cancelButton, changeButton])],
 			});
 
 			const collectedInteraction = (await awaitComponent(interaction.client, reply, {

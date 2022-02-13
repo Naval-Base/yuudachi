@@ -1,13 +1,4 @@
-import {
-	CommandInteraction,
-	ButtonInteraction,
-	Formatters,
-	ActionRow,
-	ButtonComponent,
-	Embed,
-	ButtonStyle,
-	ComponentType,
-} from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, Formatters, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -20,6 +11,9 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
+import { addFields } from '../../util/embed';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 export default class implements Command {
 	public async execute(
@@ -46,20 +40,23 @@ export default class implements Command {
 		const refreshKey = nanoid();
 		const cancelKey = nanoid();
 
-		const refreshButton = new ButtonComponent()
-			.setCustomId(refreshKey)
-			.setLabel(i18next.t('command.utility.refresh_scamlist.buttons.execute', { lng: locale }))
-			.setStyle(ButtonStyle.Primary);
-		const cancelButton = new ButtonComponent()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.utility.refresh_scamlist.buttons.cancel', { lng: locale }))
-			.setStyle(ButtonStyle.Secondary);
+		const refreshButton = createButton({
+			customId: refreshKey,
+			label: i18next.t('command.utility.refresh_scamlist.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.utility.refresh_scamlist.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
-		const embed = new Embed().setColor(3092790).setTitle(
-			i18next.t('command.utility.refresh_scamlist.pending', {
+		let embed = addFields({
+			color: 3092790,
+			title: i18next.t('command.utility.refresh_scamlist.pending', {
 				lng: locale,
 			}),
-		);
+		});
 
 		for (const urlEnv of scamURLEnvs) {
 			const key = ScamRedisKeys[urlEnv];
@@ -82,7 +79,7 @@ export default class implements Command {
 				}),
 			];
 
-			embed.addField({
+			embed = addFields(embed, {
 				name: urlEnv,
 				value: parts.join('\n'),
 				inline: true,
@@ -91,7 +88,7 @@ export default class implements Command {
 
 		await interaction.editReply({
 			embeds: [embed],
-			components: [new ActionRow().addComponents(cancelButton, refreshButton)],
+			components: [createMessageActionRow([cancelButton, refreshButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
@@ -121,7 +118,12 @@ export default class implements Command {
 		}
 
 		if (collectedInteraction?.customId === refreshKey) {
-			const embed = new Embed();
+			let embed = addFields({
+				color: 5763719,
+				title: i18next.t('command.utility.refresh_scamlist.success', {
+					lng: locale,
+				}),
+			});
 
 			try {
 				const res = await refreshScamDomains(redis);
@@ -143,26 +145,21 @@ export default class implements Command {
 						}),
 					];
 
-					embed.addField({
+					embed = addFields(embed, {
 						name: result.envVar,
 						value: parts.join('\n'),
 						inline: true,
 					});
 				}
-				embed.setColor(5763719);
-				embed.setTitle(
-					i18next.t('command.utility.refresh_scamlist.success', {
-						lng: locale,
-					}),
-				);
 			} catch (err) {
 				const error = err as Error;
 				logger.error(error, error.message);
-				embed.setColor(15548997).setTitle(
-					i18next.t('command.utility.refresh_scamlist.error', {
+				embed = addFields({
+					color: 15548997,
+					title: i18next.t('command.utility.refresh_scamlist.error', {
 						lng: locale,
 					}),
-				);
+				});
 			}
 
 			await collectedInteraction.update({ embeds: [embed], components: [] });

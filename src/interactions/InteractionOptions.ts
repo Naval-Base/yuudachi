@@ -34,6 +34,8 @@ export function transformInteraction<T extends Command>(options: readonly Comman
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 				opts[top.name] = top.value;
 				break;
+			default:
+				break;
 		}
 	}
 

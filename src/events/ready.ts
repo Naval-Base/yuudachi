@@ -1,6 +1,6 @@
 import { on } from 'node:events';
-import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { Client, Constants, type Webhook } from 'discord.js';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { Client, Events, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../Event';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
@@ -12,7 +12,7 @@ import { kWebhooks } from '../tokens';
 export default class implements Event {
 	public name = 'Client ready handling';
 
-	public event = Constants.Events.CLIENT_READY;
+	public event = Events.ClientReady;
 
 	public constructor(
 		public readonly client: Client<true>,

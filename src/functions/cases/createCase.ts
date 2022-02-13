@@ -85,12 +85,12 @@ export async function createCase(
 					await case_.target!.kick(reason);
 					break;
 				case CaseAction.Softban: {
-					await guild.bans.create(case_.targetId, { days: case_.deleteMessageDays ?? 1, reason });
+					await guild.bans.create(case_.targetId, { deleteMessageDays: case_.deleteMessageDays ?? 1, reason });
 					await guild.bans.remove(case_.targetId, reason);
 					break;
 				}
 				case CaseAction.Ban: {
-					await guild.bans.create(case_.targetId, { days: case_.deleteMessageDays ?? 0, reason });
+					await guild.bans.create(case_.targetId, { deleteMessageDays: case_.deleteMessageDays ?? 0, reason });
 					break;
 				}
 				case CaseAction.Unban:

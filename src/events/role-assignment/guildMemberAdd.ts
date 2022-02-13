@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Constants, type GuildMember } from 'discord.js';
+import { Client, Events, type GuildMember } from 'discord.js';
 import type { Sql } from 'postgres';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
@@ -12,7 +12,7 @@ import { kSQL } from '../../tokens';
 export default class implements Event {
 	public name = 'Role assignment';
 
-	public event = Constants.Events.GUILD_MEMBER_ADD;
+	public event = Events.GuildMemberAdd;
 
 	public constructor(public readonly client: Client<true>, @inject(kSQL) public readonly sql: Sql<any>) {}
 

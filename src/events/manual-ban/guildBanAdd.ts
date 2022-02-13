@@ -1,7 +1,7 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
-import { AuditLogEvent } from 'discord-api-types/v9';
-import { Client, Constants, type GuildBan, type User } from 'discord.js';
+import { AuditLogEvent } from 'discord-api-types/v10';
+import { Client, Events, type GuildBan, type User } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
@@ -17,7 +17,7 @@ import { kRedis } from '../../tokens';
 export default class implements Event {
 	public name = 'Manual ban handling';
 
-	public event = Constants.Events.GUILD_BAN_ADD;
+	public event = Events.GuildBanAdd;
 
 	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 

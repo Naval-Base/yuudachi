@@ -1,4 +1,4 @@
-import { ApplicationCommandType, type RESTPostAPIContextMenuApplicationCommandsJSONBody } from 'discord-api-types';
+import { ApplicationCommandType, type RESTPostAPIContextMenuApplicationCommandsJSONBody } from 'discord-api-types/v10';
 
 export const HistoryContextMenuCommand: RESTPostAPIContextMenuApplicationCommandsJSONBody = {
 	name: 'History',

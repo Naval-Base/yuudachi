@@ -1,10 +1,8 @@
-import type { APIMessage } from 'discord-api-types';
+import type { APIMessage } from 'discord-api-types/v10';
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
 	type Message,
-	ActionRow,
-	ButtonComponent,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
@@ -14,6 +12,8 @@ import { nanoid } from 'nanoid';
 import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
+import { createButton } from '../../../../util/button';
+import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function lift(
 	interaction: CommandInteraction<'cached'>,
@@ -35,14 +35,16 @@ export async function lift(
 	const unlockKey = nanoid();
 	const cancelKey = nanoid();
 
-	const unlockButton = new ButtonComponent()
-		.setCustomId(unlockKey)
-		.setLabel(i18next.t('command.mod.lockdown.lift.buttons.execute', { lng: locale }))
-		.setStyle(ButtonStyle.Danger);
-	const cancelButton = new ButtonComponent()
-		.setCustomId(cancelKey)
-		.setLabel(i18next.t('command.mod.lockdown.lift.buttons.cancel', { lng: locale }))
-		.setStyle(ButtonStyle.Secondary);
+	const unlockButton = createButton({
+		customId: unlockKey,
+		label: i18next.t('command.mod.lockdown.lift.buttons.execute', { lng: locale }),
+		style: ButtonStyle.Danger,
+	});
+	const cancelButton = createButton({
+		customId: cancelKey,
+		label: i18next.t('command.mod.lockdown.lift.buttons.cancel', { lng: locale }),
+		style: ButtonStyle.Secondary,
+	});
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.lockdown.lift.pending', {
@@ -50,7 +52,7 @@ export async function lift(
 			channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 			lng: locale,
 		}),
-		components: [new ActionRow().addComponents(cancelButton, unlockButton)],
+		components: [createMessageActionRow([cancelButton, unlockButton])],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {

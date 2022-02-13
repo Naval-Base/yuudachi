@@ -3,7 +3,7 @@ import type { CommandInteraction } from 'discord.js';
 
 export interface Command {
 	name?: string;
-	execute: (interaction: CommandInteraction<'cached'>, args: unknown, locale: string) => unknown | Promise<unknown>;
+	execute: (interaction: CommandInteraction<'cached'>, args: any, locale: string) => unknown | Promise<unknown>;
 }
 
 export interface CommandInfo {

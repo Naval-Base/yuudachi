@@ -1,11 +1,4 @@
-import {
-	type CommandInteraction,
-	type ButtonInteraction,
-	ActionRow,
-	ButtonComponent,
-	ButtonStyle,
-	ComponentType,
-} from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -22,7 +15,9 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { generateHistory } from '../../util/generateHistory';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 @injectable()
 export default class implements Command {
@@ -64,14 +59,16 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const softbanButton = new ButtonComponent()
-			.setCustomId(softbanKey)
-			.setLabel(i18next.t('command.mod.softban.buttons.execute', { lng: locale }))
-			.setStyle(ButtonStyle.Danger);
-		const cancelButton = new ButtonComponent()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.mod.softban.buttons.cancel', { lng: locale }))
-			.setStyle(ButtonStyle.Secondary);
+		const softbanButton = createButton({
+			customId: softbanKey,
+			label: i18next.t('command.mod.softban.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.mod.softban.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
 		await interaction.editReply({
 			content: i18next.t(isStillMember ? 'command.mod.softban.pending' : 'command.mod.softban.not_member', {
@@ -79,7 +76,7 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: isStillMember ? [embed] : [],
-			components: [new ActionRow().addComponents(cancelButton, softbanButton)],
+			components: [createMessageActionRow([cancelButton, softbanButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
@@ -137,7 +134,7 @@ export default class implements Command {
 
 				await interaction.guild.bans.create(args.user.user, {
 					reason,
-					days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+					deleteMessageDays: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
 				});
 				await interaction.guild.bans.remove(args.user.user, reason);
 			}

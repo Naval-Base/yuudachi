@@ -1,4 +1,4 @@
-import type { APIMessage } from 'discord-api-types/v9';
+import type { APIMessage } from 'discord-api-types/v10';
 import {
 	type Client,
 	type CollectorFilter,
@@ -8,10 +8,11 @@ import {
 	type AwaitMessageCollectorOptionsParams,
 	type MappedInteractionTypes,
 	InteractionType,
-	ComponentType,
+	type ComponentType,
+	type MessageComponentType,
 } from 'discord.js';
 
-export function awaitComponent<T extends ComponentType = ComponentType.ActionRow>(
+export function awaitComponent<T extends MessageComponentType = ComponentType.ActionRow>(
 	client: Client,
 	message: Message | APIMessage,
 	options: AwaitMessageCollectorOptionsParams<T> = {},

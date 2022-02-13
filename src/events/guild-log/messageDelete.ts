@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Constants, type Message, type Webhook } from 'discord.js';
+import { Client, Events, type Message, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
@@ -12,7 +12,7 @@ import { addFields, truncateEmbed } from '../../util/embed';
 export default class implements Event {
 	public name = 'Guild log message delete';
 
-	public event = Constants.Events.MESSAGE_DELETE;
+	public event = Events.MessageDelete;
 
 	public constructor(
 		public readonly client: Client<true>,

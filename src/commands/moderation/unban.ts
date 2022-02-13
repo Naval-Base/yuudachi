@@ -1,11 +1,4 @@
-import {
-	type CommandInteraction,
-	type ButtonInteraction,
-	ActionRow,
-	ButtonComponent,
-	ButtonStyle,
-	ComponentType,
-} from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -21,7 +14,9 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { generateHistory } from '../../util/generateHistory';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 @injectable()
 export default class implements Command {
@@ -63,14 +58,16 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const unbanButton = new ButtonComponent()
-			.setCustomId(unbanKey)
-			.setLabel(i18next.t('command.mod.unban.buttons.execute', { lng: locale }))
-			.setStyle(ButtonStyle.Danger);
-		const cancelButton = new ButtonComponent()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.mod.unban.buttons.cancel', { lng: locale }))
-			.setStyle(ButtonStyle.Secondary);
+		const unbanButton = createButton({
+			customId: unbanKey,
+			label: i18next.t('command.mod.unban.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.mod.unban.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.unban.pending', {
@@ -78,7 +75,7 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new ActionRow().addComponents(cancelButton, unbanButton)],
+			components: [createMessageActionRow([cancelButton, unbanButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {

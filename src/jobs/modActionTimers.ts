@@ -1,5 +1,5 @@
 import { parentPort } from 'node:worker_threads';
-import type { Snowflake } from 'discord-api-types/v9';
+import type { Snowflake } from 'discord-api-types/v10';
 import postgres from 'postgres';
 import { JobType } from '../Constants';
 

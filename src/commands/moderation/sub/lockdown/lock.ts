@@ -1,13 +1,11 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import type { APIMessage } from 'discord-api-types';
+import type { APIMessage } from 'discord-api-types/v10';
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
 	Formatters,
 	type Message,
-	ActionRow,
-	ButtonComponent,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
@@ -17,6 +15,8 @@ import { nanoid } from 'nanoid';
 import { createLockdown } from '../../../../functions/lockdowns/createLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
+import { createButton } from '../../../../util/button';
+import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function lock(
 	interaction: CommandInteraction<'cached'>,
@@ -43,14 +43,16 @@ export async function lock(
 	const lockKey = nanoid();
 	const cancelKey = nanoid();
 
-	const lockButton = new ButtonComponent()
-		.setCustomId(lockKey)
-		.setLabel(i18next.t('command.mod.lockdown.lock.buttons.execute', { lng: locale }))
-		.setStyle(ButtonStyle.Danger);
-	const cancelButton = new ButtonComponent()
-		.setCustomId(cancelKey)
-		.setLabel(i18next.t('command.mod.lockdown.lock.buttons.cancel', { lng: locale }))
-		.setStyle(ButtonStyle.Secondary);
+	const lockButton = createButton({
+		customId: lockKey,
+		label: i18next.t('command.mod.lockdown.lock.buttons.execute', { lng: locale }),
+		style: ButtonStyle.Danger,
+	});
+	const cancelButton = createButton({
+		customId: cancelKey,
+		label: i18next.t('command.mod.lockdown.lock.buttons.cancel', { lng: locale }),
+		style: ButtonStyle.Secondary,
+	});
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.lockdown.lock.pending', {
@@ -58,7 +60,7 @@ export async function lock(
 			channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 			lng: locale,
 		}),
-		components: [new ActionRow().addComponents(cancelButton, lockButton)],
+		components: [createMessageActionRow([cancelButton, lockButton])],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {

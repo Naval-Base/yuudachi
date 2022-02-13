@@ -1,11 +1,4 @@
-import {
-	type CommandInteraction,
-	type ButtonInteraction,
-	ActionRow,
-	ButtonComponent,
-	ComponentType,
-	ButtonStyle,
-} from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, ComponentType, ButtonStyle } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -22,7 +15,9 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { generateHistory } from '../../util/generateHistory';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 @injectable()
 export default class implements Command {
@@ -66,14 +61,16 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const kickButton = new ButtonComponent()
-			.setCustomId(kickKey)
-			.setLabel(i18next.t('command.mod.kick.buttons.execute', { lng: locale }))
-			.setStyle(ButtonStyle.Danger);
-		const cancelButton = new ButtonComponent()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.mod.kick.buttons.cancel', { lng: locale }))
-			.setStyle(ButtonStyle.Secondary);
+		const kickButton = createButton({
+			customId: kickKey,
+			label: i18next.t('command.mod.kick.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.mod.kick.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.kick.pending', {
@@ -81,7 +78,7 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new ActionRow().addComponents(cancelButton, kickButton)],
+			components: [createMessageActionRow([cancelButton, kickButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {

@@ -1,4 +1,4 @@
-import { PermissionFlagsBits } from 'discord-api-types/v9';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
 import type { CommandInteraction, TextChannel } from 'discord.js';
 import i18next from 'i18next';
 import { lift } from './sub/lockdown/lift';

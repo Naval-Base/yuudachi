@@ -1,10 +1,4 @@
-import type {
-	CommandInteraction,
-	ButtonInteraction,
-	GuildMember,
-	SelectMenuInteraction,
-	Snowflake,
-} from 'discord.js';
+import type { CommandInteraction, ButtonInteraction, GuildMember, SelectMenuInteraction, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';

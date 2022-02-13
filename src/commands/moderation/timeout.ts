@@ -2,8 +2,6 @@ import { ms } from '@naval-base/ms';
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
-	ActionRow,
-	ButtonComponent,
 	ButtonStyle,
 	ComponentType,
 	PermissionFlagsBits,
@@ -24,7 +22,9 @@ import type { TimeoutCommand } from '../../interactions/moderation/timeout';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { generateHistory } from '../../util/generateHistory';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 @injectable()
 export default class implements Command {
@@ -82,14 +82,16 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const timeoutButton = new ButtonComponent()
-			.setCustomId(timeoutKey)
-			.setLabel(i18next.t('command.mod.timeout.buttons.execute', { lng: locale }))
-			.setStyle(ButtonStyle.Danger);
-		const cancelButton = new ButtonComponent()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.mod.timeout.buttons.cancel', { lng: locale }))
-			.setStyle(ButtonStyle.Secondary);
+		const timeoutButton = createButton({
+			customId: timeoutKey,
+			label: i18next.t('command.mod.timeout.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.mod.timeout.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.timeout.pending', {
@@ -97,7 +99,7 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new ActionRow().addComponents(cancelButton, timeoutButton)],
+			components: [createMessageActionRow([cancelButton, timeoutButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {

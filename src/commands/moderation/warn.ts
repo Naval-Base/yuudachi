@@ -1,11 +1,4 @@
-import {
-	type CommandInteraction,
-	type ButtonInteraction,
-	ActionRow,
-	ButtonComponent,
-	ButtonStyle,
-	ComponentType,
-} from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command';
@@ -19,7 +12,9 @@ import type { WarnCommand } from '../../interactions';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { generateHistory } from '../../util/generateHistory';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 export default class implements Command {
 	public async execute(
@@ -47,14 +42,16 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const warnButton = new ButtonComponent()
-			.setCustomId(warnKey)
-			.setLabel(i18next.t('command.mod.warn.buttons.execute', { lng: locale }))
-			.setStyle(ButtonStyle.Danger);
-		const cancelButton = new ButtonComponent()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.mod.warn.buttons.cancel', { lng: locale }))
-			.setStyle(ButtonStyle.Secondary);
+		const warnButton = createButton({
+			customId: warnKey,
+			label: i18next.t('command.mod.warn.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.mod.warn.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.warn.pending', {
@@ -62,7 +59,7 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: [embed],
-			components: [new ActionRow().addComponents(cancelButton, warnButton)],
+			components: [createMessageActionRow([cancelButton, warnButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {

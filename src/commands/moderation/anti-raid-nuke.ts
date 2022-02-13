@@ -5,9 +5,7 @@ import {
 	type ButtonInteraction,
 	Formatters,
 	type GuildMember,
-	ButtonComponent,
 	ButtonStyle,
-	ActionRow,
 	ComponentType,
 } from 'discord.js';
 import i18next from 'i18next';
@@ -28,7 +26,9 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { generateTargetInformation } from '../../util/generateTargetInformation';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 @injectable()
 export default class implements Command {
@@ -151,14 +151,16 @@ export default class implements Command {
 		const banKey = nanoid();
 		const cancelKey = nanoid();
 
-		const banButton = new ButtonComponent()
-			.setCustomId(banKey)
-			.setLabel(i18next.t('command.mod.anti_raid_nuke.buttons.execute', { lng: locale }))
-			.setStyle(ButtonStyle.Danger);
-		const cancelButton = new ButtonComponent()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }))
-			.setStyle(ButtonStyle.Secondary);
+		const banButton = createButton({
+			customId: banKey,
+			label: i18next.t('command.mod.anti_raid_nuke.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
 		const potentialHits = Buffer.from(members.map((member) => generateTargetInformation(member)).join('\r\n'));
 		const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
@@ -188,7 +190,7 @@ export default class implements Command {
 				lng: locale,
 			})}\n\n${parameterStrings.join('\n')}`,
 			files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
-			components: [new ActionRow().addComponents(cancelButton, banButton)],
+			components: [createMessageActionRow([cancelButton, banButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
@@ -218,7 +220,12 @@ export default class implements Command {
 			});
 		} else if (collectedInteraction?.customId === banKey) {
 			await collectedInteraction.update({
-				components: [new ActionRow().addComponents(cancelButton.setDisabled(true), banButton.setDisabled(true))],
+				components: [
+					createMessageActionRow([
+						{ ...cancelButton, disabled: true },
+						{ ...banButton, disabled: true },
+					]),
+				],
 			});
 
 			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions

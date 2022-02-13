@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Constants, type Message } from 'discord.js';
+import { Client, Events, type Message } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
@@ -17,7 +17,7 @@ import { kRedis } from '../../tokens';
 export default class implements Event {
 	public name = 'Spam check';
 
-	public event = Constants.Events.MESSAGE_CREATE;
+	public event = Events.MessageCreate;
 
 	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 
