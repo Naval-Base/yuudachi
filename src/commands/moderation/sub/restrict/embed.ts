@@ -1,5 +1,5 @@
 import { ms } from '@naval-base/ms';
-import { type CommandInteraction, type Snowflake, ButtonStyle, ComponentType, InteractionResponse } from 'discord.js';
+import { type CommandInteraction, type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';

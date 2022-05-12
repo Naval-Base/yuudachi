@@ -6,7 +6,7 @@ import {
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
-	InteractionResponse,
+	type InteractionResponse,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';

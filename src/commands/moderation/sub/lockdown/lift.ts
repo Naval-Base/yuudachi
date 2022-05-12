@@ -1,4 +1,4 @@
-import { type CommandInteraction, type TextChannel, ButtonStyle, ComponentType, InteractionResponse } from 'discord.js';
+import { type CommandInteraction, type TextChannel, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
