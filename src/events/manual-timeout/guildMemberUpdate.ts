@@ -1,7 +1,7 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
-import { AuditLogEvent } from 'discord-api-types/v9';
-import { Client, Constants, type GuildMember, type User } from 'discord.js';
+import { AuditLogEvent } from 'discord-api-types/v10';
+import { Client, Events, type GuildMember, type User } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
@@ -18,7 +18,7 @@ import { kRedis } from '../../tokens';
 export default class implements Event {
 	public name = 'Manual timeout handling';
 
-	public event = Constants.Events.GUILD_MEMBER_UPDATE;
+	public event = Events.GuildMemberUpdate;
 
 	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 
@@ -59,9 +59,8 @@ export default class implements Event {
 				const auditLogs = await oldMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberUpdate });
 				const logs = auditLogs.entries.find(
 					(log) =>
-						((log.target as User).id === oldMember.user.id &&
-							log.changes?.some((c) => c.key === 'communication_disabled_until')) ??
-						false,
+						(log.target as User).id === oldMember.user.id &&
+						log.changes.some((c) => c.key === 'communication_disabled_until'),
 				);
 
 				if (!logs?.changes) {

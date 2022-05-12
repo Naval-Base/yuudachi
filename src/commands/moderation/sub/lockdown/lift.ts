@@ -1,20 +1,22 @@
-import type { APIMessage } from 'discord-api-types';
+import type { APIMessage } from 'discord-api-types/v10';
 import {
-	type BaseCommandInteraction,
+	type CommandInteraction,
 	type ButtonInteraction,
 	type Message,
-	MessageActionRow,
-	MessageButton,
 	type TextChannel,
+	ButtonStyle,
+	ComponentType,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';
+import { createButton } from '../../../../util/button';
+import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function lift(
-	interaction: BaseCommandInteraction<'cached'>,
+	interaction: CommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	channel: TextChannel,
 	locale: string,
@@ -33,14 +35,16 @@ export async function lift(
 	const unlockKey = nanoid();
 	const cancelKey = nanoid();
 
-	const unlockButton = new MessageButton()
-		.setCustomId(unlockKey)
-		.setLabel(i18next.t('command.mod.lockdown.lift.buttons.execute', { lng: locale }))
-		.setStyle('DANGER');
-	const cancelButton = new MessageButton()
-		.setCustomId(cancelKey)
-		.setLabel(i18next.t('command.mod.lockdown.lift.buttons.cancel', { lng: locale }))
-		.setStyle('SECONDARY');
+	const unlockButton = createButton({
+		customId: unlockKey,
+		label: i18next.t('command.mod.lockdown.lift.buttons.execute', { lng: locale }),
+		style: ButtonStyle.Danger,
+	});
+	const cancelButton = createButton({
+		customId: cancelKey,
+		label: i18next.t('command.mod.lockdown.lift.buttons.cancel', { lng: locale }),
+		style: ButtonStyle.Secondary,
+	});
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.lockdown.lift.pending', {
@@ -48,12 +52,12 @@ export async function lift(
 			channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 			lng: locale,
 		}),
-		components: [new MessageActionRow().addComponents([cancelButton, unlockButton])],
+		components: [createMessageActionRow([cancelButton, unlockButton])],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: 'BUTTON',
+		componentType: ComponentType.Button,
 		time: 15000,
 	}).catch(async () => {
 		try {

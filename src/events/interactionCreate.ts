@@ -1,4 +1,4 @@
-import { Client, Constants } from 'discord.js';
+import { Client, Events } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command';
 import type { Event } from '../Event';
@@ -11,7 +11,7 @@ import { kCommands } from '../tokens';
 export default class implements Event {
 	public name = 'Interaction handling';
 
-	public event = Constants.Events.INTERACTION_CREATE;
+	public event = Events.InteractionCreate;
 
 	public constructor(
 		public readonly client: Client<true>,
@@ -20,7 +20,7 @@ export default class implements Event {
 
 	public execute(): void {
 		this.client.on(this.event, async (interaction) => {
-			if (!interaction.isCommand() && !interaction.isContextMenu()) {
+			if (!interaction.isCommand() && !interaction.isUserContextMenuCommand()) {
 				return;
 			}
 

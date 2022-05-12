@@ -1,12 +1,12 @@
 import { ms } from '@naval-base/ms';
-import type { APIMessage } from 'discord-api-types';
+import type { APIMessage } from 'discord-api-types/v10';
 import {
-	type BaseCommandInteraction,
+	type CommandInteraction,
 	type ButtonInteraction,
 	type Message,
-	MessageActionRow,
-	MessageButton,
 	type Snowflake,
+	ButtonStyle,
+	ComponentType,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -19,10 +19,12 @@ import type { RestrictCommand } from '../../../../interactions';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
 import { kSQL } from '../../../../tokens';
 import { awaitComponent } from '../../../../util/awaitComponent';
+import { createButton } from '../../../../util/button';
 import { generateHistory } from '../../../../util/generateHistory';
+import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function react(
-	interaction: BaseCommandInteraction<'cached'>,
+	interaction: CommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['react'],
 	locale: string,
@@ -70,14 +72,16 @@ export async function react(
 
 	const embed = await generateHistory(interaction, args.user, locale);
 
-	const roleButton = new MessageButton()
-		.setCustomId(roleKey)
-		.setLabel(i18next.t('command.mod.restrict.react.buttons.execute', { lng: locale }))
-		.setStyle('DANGER');
-	const cancelButton = new MessageButton()
-		.setCustomId(cancelKey)
-		.setLabel(i18next.t('command.mod.restrict.react.buttons.cancel', { lng: locale }))
-		.setStyle('SECONDARY');
+	const roleButton = createButton({
+		customId: roleKey,
+		label: i18next.t('command.mod.restrict.react.buttons.execute', { lng: locale }),
+		style: ButtonStyle.Danger,
+	});
+	const cancelButton = createButton({
+		customId: cancelKey,
+		label: i18next.t('command.mod.restrict.react.buttons.cancel', { lng: locale }),
+		style: ButtonStyle.Secondary,
+	});
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.restrict.react.pending', {
@@ -85,12 +89,12 @@ export async function react(
 			lng: locale,
 		}),
 		embeds: [embed],
-		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
+		components: [createMessageActionRow([cancelButton, roleButton])],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: 'BUTTON',
+		componentType: ComponentType.Button,
 		time: 15000,
 	}).catch(async () => {
 		try {

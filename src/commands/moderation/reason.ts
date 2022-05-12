@@ -1,10 +1,4 @@
-import {
-	type BaseCommandInteraction,
-	type ButtonInteraction,
-	Formatters,
-	MessageActionRow,
-	MessageButton,
-} from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, Formatters, ComponentType, ButtonStyle } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command';
@@ -19,12 +13,14 @@ import type { ReasonCommand } from '../../interactions';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { truncate } from '../../util/embed';
 import { generateMessageLink } from '../../util/generateMessageLink';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof ReasonCommand>,
 		locale: string,
 	): Promise<void> {
@@ -62,14 +58,16 @@ export default class implements Command {
 			const changeKey = nanoid();
 			const cancelKey = nanoid();
 
-			const changeButton = new MessageButton()
-				.setCustomId(changeKey)
-				.setLabel(i18next.t('command.mod.reason.buttons.execute', { lng: locale }))
-				.setStyle('DANGER');
-			const cancelButton = new MessageButton()
-				.setCustomId(cancelKey)
-				.setLabel(i18next.t('command.mod.reason.buttons.cancel', { lng: locale }))
-				.setStyle('SECONDARY');
+			const changeButton = createButton({
+				customId: changeKey,
+				label: i18next.t('command.mod.reason.buttons.execute', { lng: locale }),
+				style: ButtonStyle.Danger,
+			});
+			const cancelButton = createButton({
+				customId: cancelKey,
+				label: i18next.t('command.mod.reason.buttons.cancel', { lng: locale }),
+				style: ButtonStyle.Secondary,
+			});
 
 			originalCaseLower = await getCase(interaction.guildId, lower);
 			originalCaseUpper = await getCase(interaction.guildId, upper);
@@ -99,12 +97,12 @@ export default class implements Command {
 					amount: upper - lower + 1,
 					lng: locale,
 				}),
-				components: [new MessageActionRow().addComponents([cancelButton, changeButton])],
+				components: [createMessageActionRow([cancelButton, changeButton])],
 			});
 
 			const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 				filter: (collected) => collected.user.id === interaction.user.id,
-				componentType: 'BUTTON',
+				componentType: ComponentType.Button,
 				time: 15000,
 			}).catch(async () => {
 				try {

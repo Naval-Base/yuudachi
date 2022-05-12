@@ -1,5 +1,5 @@
-import type { APIEmbed } from 'discord-api-types';
-import type { BaseCommandInteraction } from 'discord.js';
+import type { APIEmbed } from 'discord-api-types/v10';
+import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command';
 import { checkScam } from '../../functions/anti-scam/checkScam';
@@ -10,7 +10,7 @@ import { addFields, truncateEmbed } from '../../util/embed';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: CommandInteraction,
 		args: ArgumentsOf<typeof CheckScamCommand>,
 		locale: string,
 	): Promise<void> {

@@ -1,4 +1,4 @@
-import type { APIEmbed, APIEmbedField } from 'discord-api-types/v9';
+import type { APIEmbed, APIEmbedField } from 'discord-api-types/v10';
 import {
 	EMBED_AUTHOR_NAME_LIMIT,
 	EMBED_DESCRIPTION_LIMIT,

@@ -1,4 +1,4 @@
-import type { BaseCommandInteraction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command';
 import type { PingCommand } from '../../interactions';
@@ -6,7 +6,7 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction,
+		interaction: CommandInteraction,
 		args: ArgumentsOf<typeof PingCommand>,
 		locale: string,
 	): Promise<void> {

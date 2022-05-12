@@ -1,4 +1,4 @@
-import { type BaseCommandInteraction, type ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { type CommandInteraction, type ButtonInteraction, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -15,14 +15,16 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { createButton } from '../../util/button';
 import { generateHistory } from '../../util/generateHistory';
+import { createMessageActionRow } from '../../util/messageActionRow';
 
 @injectable()
 export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof SoftbanCommand>,
 		locale: string,
 	): Promise<void> {
@@ -57,14 +59,16 @@ export default class implements Command {
 
 		const embed = await generateHistory(interaction, args.user, locale);
 
-		const softbanButton = new MessageButton()
-			.setCustomId(softbanKey)
-			.setLabel(i18next.t('command.mod.softban.buttons.execute', { lng: locale }))
-			.setStyle('DANGER');
-		const cancelButton = new MessageButton()
-			.setCustomId(cancelKey)
-			.setLabel(i18next.t('command.mod.softban.buttons.cancel', { lng: locale }))
-			.setStyle('SECONDARY');
+		const softbanButton = createButton({
+			customId: softbanKey,
+			label: i18next.t('command.mod.softban.buttons.execute', { lng: locale }),
+			style: ButtonStyle.Danger,
+		});
+		const cancelButton = createButton({
+			customId: cancelKey,
+			label: i18next.t('command.mod.softban.buttons.cancel', { lng: locale }),
+			style: ButtonStyle.Secondary,
+		});
 
 		await interaction.editReply({
 			content: i18next.t(isStillMember ? 'command.mod.softban.pending' : 'command.mod.softban.not_member', {
@@ -72,12 +76,12 @@ export default class implements Command {
 				lng: locale,
 			}),
 			embeds: isStillMember ? [embed] : [],
-			components: [new MessageActionRow().addComponents([cancelButton, softbanButton])],
+			components: [createMessageActionRow([cancelButton, softbanButton])],
 		});
 
 		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: 'BUTTON',
+			componentType: ComponentType.Button,
 			time: 15000,
 		}).catch(async () => {
 			try {
@@ -130,7 +134,7 @@ export default class implements Command {
 
 				await interaction.guild.bans.create(args.user.user, {
 					reason,
-					days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+					deleteMessageDays: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
 				});
 				await interaction.guild.bans.remove(args.user.user, reason);
 			}

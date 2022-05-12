@@ -1,11 +1,11 @@
-import type { APIMessage } from 'discord-api-types';
+import type { APIMessage } from 'discord-api-types/v10';
 import {
-	type BaseCommandInteraction,
+	type CommandInteraction,
 	type ButtonInteraction,
 	type Message,
-	MessageActionRow,
-	MessageButton,
 	type Snowflake,
+	ButtonStyle,
+	ComponentType,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -17,9 +17,11 @@ import type { RestrictCommand } from '../../../../interactions';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
 import { kSQL } from '../../../../tokens';
 import { awaitComponent } from '../../../../util/awaitComponent';
+import { createButton } from '../../../../util/button';
+import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function unrole(
-	interaction: BaseCommandInteraction<'cached'>,
+	interaction: CommandInteraction<'cached'>,
 	reply: Message | APIMessage,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
 	locale: string,
@@ -56,26 +58,28 @@ export async function unrole(
 	const unroleKey = nanoid();
 	const cancelKey = nanoid();
 
-	const roleButton = new MessageButton()
-		.setCustomId(unroleKey)
-		.setLabel(i18next.t('command.mod.restrict.unrole.buttons.execute', { lng: locale }))
-		.setStyle('DANGER');
-	const cancelButton = new MessageButton()
-		.setCustomId(cancelKey)
-		.setLabel(i18next.t('command.mod.restrict.unrole.buttons.cancel', { lng: locale }))
-		.setStyle('SECONDARY');
+	const roleButton = createButton({
+		customId: unroleKey,
+		label: i18next.t('command.mod.restrict.unrole.buttons.execute', { lng: locale }),
+		style: ButtonStyle.Danger,
+	});
+	const cancelButton = createButton({
+		customId: cancelKey,
+		label: i18next.t('command.mod.restrict.unrole.buttons.cancel', { lng: locale }),
+		style: ButtonStyle.Secondary,
+	});
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.restrict.unrole.pending', {
 			case: args.case,
 			lng: locale,
 		}),
-		components: [new MessageActionRow().addComponents([cancelButton, roleButton])],
+		components: [createMessageActionRow([cancelButton, roleButton])],
 	});
 
 	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
 		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: 'BUTTON',
+		componentType: ComponentType.Button,
 		time: 15000,
 	}).catch(async () => {
 		try {

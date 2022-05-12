@@ -1,5 +1,5 @@
 import { ms } from '@naval-base/ms';
-import { type BaseCommandInteraction, Formatters } from 'discord.js';
+import { type CommandInteraction, Formatters } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command';
 import { getCase } from '../../functions/cases/getCase';
@@ -14,7 +14,7 @@ import { generateMessageLink } from '../../util/generateMessageLink';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof DurationCommand>,
 		locale: string,
 	): Promise<void> {

@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Constants, type VoiceState, type Webhook } from 'discord.js';
+import { Client, Events, type VoiceState, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
@@ -12,7 +12,7 @@ import { addFields, truncateEmbed } from '../../util/embed';
 export default class implements Event {
 	public name = 'Guild log voice state update';
 
-	public event = Constants.Events.VOICE_STATE_UPDATE;
+	public event = Events.VoiceStateUpdate;
 
 	public constructor(
 		public readonly client: Client<true>,
@@ -61,6 +61,7 @@ export default class implements Event {
 					);
 
 					description = i18next.t('log.guild_log.voice_state_update.joined', {
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: newState.channel.toString(),
 						lng: locale,
 					});
@@ -77,12 +78,15 @@ export default class implements Event {
 					);
 
 					description = i18next.t('log.guild_log.voice_state_update.left', {
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: oldState.channel.toString(),
 						lng: locale,
 					});
 				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
 					description = i18next.t('log.guild_log.voice_state_update.moved', {
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						fromChannel: oldState.channel.toString(),
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						toChannel: newState.channel.toString(),
 						lng: locale,
 					});

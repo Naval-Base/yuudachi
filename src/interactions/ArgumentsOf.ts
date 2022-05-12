@@ -1,5 +1,5 @@
-/* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions } from 'discord-api-types/v9'; */
-import type { ApplicationCommandOptionType } from 'discord-api-types/v9';
+/* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions } from 'discord-api-types/v10'; */
+import type { ApplicationCommandOptionType } from 'discord-api-types/v10';
 import type { GuildChannel, GuildMember, Role, User } from 'discord.js';
 
 export type Command = Readonly<{

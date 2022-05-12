@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Constants, type GuildMember, type Webhook } from 'discord.js';
+import { Client, Events, type GuildMember, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
@@ -11,7 +11,7 @@ import { generateMemberLog } from '../../util/generateMemberLog';
 export default class implements Event {
 	public name = 'Member log remove';
 
-	public event = Constants.Events.GUILD_MEMBER_REMOVE;
+	public event = Events.GuildMemberRemove;
 
 	public constructor(
 		public readonly client: Client<true>,

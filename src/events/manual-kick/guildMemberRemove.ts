@@ -1,7 +1,7 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
-import { AuditLogEvent } from 'discord-api-types/v9';
-import { Client, Constants, type GuildMember, type User } from 'discord.js';
+import { AuditLogEvent } from 'discord-api-types/v10';
+import { Client, Events, type GuildMember, type User } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
@@ -17,7 +17,7 @@ import { kRedis } from '../../tokens';
 export default class implements Event {
 	public name = 'Manual kick handling';
 
-	public event = Constants.Events.GUILD_MEMBER_REMOVE;
+	public event = Events.GuildMemberRemove;
 
 	public disabled = true;
 

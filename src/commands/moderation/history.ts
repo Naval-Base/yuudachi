@@ -1,4 +1,4 @@
-import type { BaseCommandInteraction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import type { Command } from '../../Command';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import type { HistoryCommand } from '../../interactions';
@@ -7,7 +7,7 @@ import { generateHistory } from '../../util/generateHistory';
 
 export default class implements Command {
 	public async execute(
-		interaction: BaseCommandInteraction<'cached'>,
+		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof HistoryCommand>,
 		locale: string,
 	): Promise<void> {
