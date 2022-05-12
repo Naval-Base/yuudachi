@@ -1,14 +1,12 @@
-import type { BaseCommandInteraction, TextChannel } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
+import type { BaseCommandInteraction, TextChannel } from 'discord.js';
 import i18next from 'i18next';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import type { Command } from '../../Command';
-import type { LockdownCommand } from '../../interactions';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-
-import { lock } from './sub/lockdown/lock';
 import { lift } from './sub/lockdown/lift';
+import { lock } from './sub/lockdown/lock';
+import type { Command } from '../../Command';
+import { checkModRole } from '../../functions/permissions/checkModRole';
+import type { LockdownCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 
 export default class implements Command {
 	public async execute(

@@ -1,15 +1,14 @@
+import type { APIMessage } from 'discord-api-types';
 import {
-	BaseCommandInteraction,
-	ButtonInteraction,
-	Message,
+	type BaseCommandInteraction,
+	type ButtonInteraction,
+	type Message,
 	MessageActionRow,
 	MessageButton,
-	TextChannel,
+	type TextChannel,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import type { APIMessage } from 'discord-api-types';
-
 import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';

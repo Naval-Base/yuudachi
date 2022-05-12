@@ -1,6 +1,5 @@
 import { Formatters } from 'discord.js';
 import i18next from 'i18next';
-
 import type { Case } from '../cases/createCase';
 
 export function generateAntiRaidNukeCaseLog(cases: Case[], reason: string, locale: string) {

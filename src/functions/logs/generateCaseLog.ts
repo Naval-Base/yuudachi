@@ -1,12 +1,11 @@
-import { Client, Formatters, Snowflake } from 'discord.js';
+import { type Client, Formatters, type Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-
+import { logger } from '../../logger';
 import { kSQL } from '../../tokens';
 import { generateMessageLink } from '../../util/generateMessageLink';
 import { Case, CaseAction } from '../cases/createCase';
-import { logger } from '../../logger';
 
 export async function generateCaseLog(client: Client, case_: Case, logChannelId: Snowflake, locale: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);

@@ -1,9 +1,8 @@
 import { REST } from '@discordjs/rest';
 import {
 	ApplicationCommandPermissionType,
-	RESTGetAPIApplicationGuildCommandsResult,
+	type RESTGetAPIApplicationGuildCommandsResult,
 	Routes,
-	Snowflake,
 } from 'discord-api-types/v9';
 
 import {
@@ -37,10 +36,7 @@ try {
 	console.log('Start refreshing interaction (/) commands.');
 
 	const commands = (await rest.put(
-		Routes.applicationGuildCommands(
-			process.env.DISCORD_CLIENT_ID as Snowflake,
-			process.env.DISCORD_GUILD_ID as Snowflake,
-		),
+		Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, process.env.DISCORD_GUILD_ID!),
 		{
 			body: [
 				// Moderation
@@ -70,21 +66,18 @@ try {
 	)) as RESTGetAPIApplicationGuildCommandsResult;
 
 	await rest.put(
-		Routes.guildApplicationCommandsPermissions(
-			process.env.DISCORD_CLIENT_ID as Snowflake,
-			process.env.DISCORD_GUILD_ID as Snowflake,
-		),
+		Routes.guildApplicationCommandsPermissions(process.env.DISCORD_CLIENT_ID!, process.env.DISCORD_GUILD_ID!),
 		{
 			body: commands.map((cmd) => ({
 				id: cmd.id,
 				permissions: [
 					{
-						id: process.env.DISCORD_USER_ID as Snowflake,
+						id: process.env.DISCORD_USER_ID!,
 						type: ApplicationCommandPermissionType.User,
 						permission: true,
 					},
 					{
-						id: process.env.DISCORD_MOD_ROLE_ID as Snowflake,
+						id: process.env.DISCORD_MOD_ROLE_ID!,
 						type: ApplicationCommandPermissionType.Role,
 						permission: true,
 					},

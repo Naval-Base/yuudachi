@@ -1,9 +1,8 @@
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-
-import { kSQL } from '../../tokens';
 import type { CreateCase } from './createCase';
-import { RawCase, transformCase } from './transformCase';
+import { type RawCase, transformCase } from './transformCase';
+import { kSQL } from '../../tokens';
 
 export type PatchCase = Pick<
 	CreateCase,

@@ -3,11 +3,10 @@ import type { Guild, TextChannel, User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-
+import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog';
 import { kSQL } from '../../tokens';
 import type { Case } from '../cases/createCase';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting';
-import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog';
 
 export async function insertAntiRaidNukeCaseLog(
 	guild: Guild,
@@ -17,7 +16,7 @@ export async function insertAntiRaidNukeCaseLog(
 	reason: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
-	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
+	const locale = (await getGuildSetting(guild.id, SettingsKeys.Locale)) as string;
 
 	const [nextCase] = await sql<[{ next_case: number }]>`select next_case(${guild.id});`;
 	const from = nextCase.next_case - cases.length;

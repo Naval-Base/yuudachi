@@ -1,18 +1,17 @@
-import { Client, Constants, Message } from 'discord.js';
-import { inject, injectable } from 'tsyringe';
 import { on } from 'node:events';
-import type { Redis } from 'ioredis';
+import { type Client, Constants, type Message } from 'discord.js';
 import i18next from 'i18next';
-
-import type { Event } from '../../Event';
-import { logger } from '../../logger';
-import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import type { Redis } from 'ioredis';
+import { inject, injectable } from 'tsyringe';
 import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { totalMentions } from '../../functions/anti-spam/totalMentions';
+import type { Event } from '../../Event';
 import { createContentHash, totalContent } from '../../functions/anti-spam/totalContents';
+import { totalMentions } from '../../functions/anti-spam/totalMentions';
+import { type Case, CaseAction, createCase } from '../../functions/cases/createCase';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
+import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 
 @injectable()
@@ -39,13 +38,13 @@ export default class implements Event {
 
 					const logChannel = await checkLogChannel(
 						message.guild,
-						await getGuildSetting(message.guildId, SettingsKeys.ModLogChannelId),
+						(await getGuildSetting(message.guildId, SettingsKeys.ModLogChannelId)) as string,
 					);
 					if (!logChannel) {
 						continue;
 					}
 
-					const locale = await getGuildSetting(message.guildId, SettingsKeys.Locale);
+					const locale = (await getGuildSetting(message.guildId, SettingsKeys.Locale)) as string;
 
 					await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:ban`, 15, '');
 					let case_: Case | null = null;

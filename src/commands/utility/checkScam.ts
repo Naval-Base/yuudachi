@@ -1,13 +1,12 @@
+import type { APIEmbed } from 'discord-api-types';
 import type { BaseCommandInteraction } from 'discord.js';
 import i18next from 'i18next';
-import type { APIEmbed } from 'discord-api-types';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
-import type { CheckScamCommand } from '../../interactions';
 import { checkScam } from '../../functions/anti-scam/checkScam';
-import { addFields, truncateEmbed } from '../../util/embed';
 import { checkModRole } from '../../functions/permissions/checkModRole';
+import type { CheckScamCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
+import { addFields, truncateEmbed } from '../../util/embed';
 
 export default class implements Command {
 	public async execute(

@@ -1,9 +1,8 @@
-import { Client, Constants, Message, Util, Webhook } from 'discord.js';
-import i18next from 'i18next';
 import { on } from 'node:events';
-import { inject, injectable } from 'tsyringe';
 import { diffLines, diffWords } from 'diff';
-
+import { type Client, Constants, type Message, Util, type Webhook } from 'discord.js';
+import i18next from 'i18next';
+import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import { logger } from '../../logger';
@@ -36,15 +35,15 @@ export default class implements Event {
 			}
 
 			try {
-				const locale = await getGuildSetting(newMessage.guild.id, SettingsKeys.Locale);
-				const logChannelId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
-				const ignoreChannels = await getGuildSetting(newMessage.guild.id, SettingsKeys.LogIgnoreChannels);
+				const locale = (await getGuildSetting(newMessage.guild.id, SettingsKeys.Locale)) as string;
+				const logChannelId = (await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId)) as string;
+				const ignoreChannels = (await getGuildSetting(newMessage.guild.id, SettingsKeys.LogIgnoreChannels)) as string;
 
 				if (!logChannelId) {
 					continue;
 				}
 				if (
-					(newMessage.channel.isThread() && ignoreChannels.includes(newMessage.channel.parentId)) ||
+					(newMessage.channel.isThread() && ignoreChannels.includes(newMessage.channel.parentId ?? '')) ||
 					ignoreChannels.includes(newMessage.channelId)
 				) {
 					continue;

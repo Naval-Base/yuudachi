@@ -1,22 +1,20 @@
 import 'reflect-metadata';
-
-import { Client, Intents, Options, Util, Webhook } from 'discord.js';
+import { readFile } from 'node:fs/promises';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
-import readdirp from 'readdirp';
-import { container } from 'tsyringe';
-import postgres from 'postgres';
-import Redis from 'ioredis';
+import Bree from 'bree';
+import { Client, Intents, Options, Util, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
-import Bree from 'bree';
-import { readFile } from 'node:fs/promises';
-
+import Redis from 'ioredis';
+import postgres from 'postgres';
+import readdirp from 'readdirp';
+import { container } from 'tsyringe';
 import { Command, commandInfo } from './Command';
-import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens';
-import { logger } from './logger';
 import type { Event } from './Event';
-import { WebSocketConnection } from './websocket/WebSocketConnection';
 import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains';
+import { logger } from './logger';
+import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens';
+import { WebSocketConnection } from './websocket/WebSocketConnection';
 
 const sql = postgres({
 	types: {
@@ -28,7 +26,7 @@ const sql = postgres({
 		},
 	},
 });
-const redis = new Redis(process.env.REDISHOST);
+const redis = new Redis(process.env.REDISHOST!);
 const bree = new Bree({ root: false, logger });
 
 const client = new Client({
@@ -81,9 +79,11 @@ const eventFiles = readdirp(fileURLToPath(new URL('./events', import.meta.url)),
 });
 
 try {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const shorteners = JSON.parse(
 		(await readFile(fileURLToPath(new URL('../linkshorteners.json', import.meta.url).href))).toString(),
 	);
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	await redis.sadd('linkshorteners', ...shorteners);
 	await i18next.use(Backend).init({
 		backend: {
@@ -100,6 +100,7 @@ try {
 		const cmdInfo = commandInfo(dir.path);
 		if (!cmdInfo) continue;
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
 		const command = container.resolve<Command>((await import(pathToFileURL(dir.fullPath).href)).default);
 		logger.info(
 			{ command: { name: command.name ?? cmdInfo.name } },
@@ -110,6 +111,7 @@ try {
 	}
 
 	for await (const dir of eventFiles) {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
 		const event_ = container.resolve<Event>((await import(pathToFileURL(dir.fullPath).href)).default);
 		logger.info({ event: { name: event_.name, event: event_.event } }, `Registering event: ${event_.name}`);
 

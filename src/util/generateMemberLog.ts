@@ -1,12 +1,11 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Formatters, GuildMember } from 'discord.js';
+import { Formatters, type GuildMember } from 'discord.js';
 import i18next from 'i18next';
+import { addFields, truncateEmbed } from './embed';
+import { MAX_TRUST_ACCOUNT_AGE } from '../Constants';
 
 dayjs.extend(relativeTime);
-
-import { MAX_TRUST_ACCOUNT_AGE } from '../Constants';
-import { addFields, truncateEmbed } from './embed';
 
 function colorFromDuration(duration: number) {
 	const percent = Math.min(duration / (MAX_TRUST_ACCOUNT_AGE / 100), 100);

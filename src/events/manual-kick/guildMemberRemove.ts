@@ -1,10 +1,9 @@
-import { AuditLogEvent } from 'discord-api-types/v9';
-import { Client, Constants, GuildMember, User } from 'discord.js';
-import type { Redis } from 'ioredis';
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
+import { AuditLogEvent } from 'discord-api-types/v9';
+import { type Client, Constants, type GuildMember, type User } from 'discord.js';
+import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
-
 import type { Event } from '../../Event';
 import { createCase, CaseAction } from '../../functions/cases/createCase';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
@@ -34,7 +33,7 @@ export default class implements Event {
 
 				const logChannel = await checkLogChannel(
 					guildMember.guild,
-					await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId),
+					(await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId)) as string,
 				);
 				if (!logChannel) {
 					continue;

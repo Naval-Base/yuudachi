@@ -1,22 +1,21 @@
+import type { APIMessage } from 'discord-api-types';
 import {
-	BaseCommandInteraction,
-	ButtonInteraction,
-	Message,
+	type BaseCommandInteraction,
+	type ButtonInteraction,
+	type Message,
 	MessageActionRow,
 	MessageButton,
-	Snowflake,
+	type Snowflake,
 } from 'discord.js';
 import i18next from 'i18next';
+import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { nanoid } from 'nanoid';
-import type { APIMessage } from 'discord-api-types';
-
+import { deleteCase } from '../../../../functions/cases/deleteCase';
+import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import type { RestrictCommand } from '../../../../interactions';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
 import { kSQL } from '../../../../tokens';
-import { deleteCase } from '../../../../functions/cases/deleteCase';
-import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import { awaitComponent } from '../../../../util/awaitComponent';
 
 export async function unrole(

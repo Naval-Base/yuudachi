@@ -1,7 +1,6 @@
-import { Client, GuildChannel, PermissionOverwrites, Snowflake } from 'discord.js';
+import { Client, type GuildChannel, PermissionOverwrites, type Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-
 import { kSQL } from '../../tokens';
 
 export async function deleteLockdown(channelId: Snowflake) {

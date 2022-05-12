@@ -1,7 +1,6 @@
-import type { Snowflake } from 'discord-api-types/v9';
 import { parentPort } from 'node:worker_threads';
+import type { Snowflake } from 'discord-api-types/v9';
 import postgres from 'postgres';
-
 import { JobType } from '../Constants';
 
 const sql = postgres({

@@ -8,16 +8,15 @@ import {
 } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
+import { nanoid } from 'nanoid';
 import { container } from 'tsyringe';
-
 import type { Command } from '../../Command';
-import { kRedis } from '../../tokens';
-import { logger } from '../../logger';
-import { checkModRole } from '../../functions/permissions/checkModRole';
 import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 import type { RefreshScamlistCommand } from '../../interactions';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { nanoid } from 'nanoid';
+import { logger } from '../../logger';
+import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
 
 export default class implements Command {

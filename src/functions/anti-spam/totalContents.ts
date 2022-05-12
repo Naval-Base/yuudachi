@@ -1,9 +1,8 @@
+import { createHash } from 'crypto';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
-import { createHash } from 'crypto';
-
-import { kRedis } from '../../tokens';
 import { SPAM_EXPIRE_SECONDS } from '../../Constants';
+import { kRedis } from '../../tokens';
 
 export function createContentHash(content: string) {
 	return createHash('md5').update(content.toLowerCase()).digest('hex');

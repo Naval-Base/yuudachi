@@ -1,12 +1,11 @@
+import { createHash } from 'node:crypto';
+import { URL } from 'node:url';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
-import { URL } from 'node:url';
-import { createHash } from 'node:crypto';
-
+import { ScamRedisKeys, scamURLEnvs } from './refreshScamDomains';
 import { logger } from '../../logger';
 import { kRedis } from '../../tokens';
 import { resolveRedirect } from '../../util/resolveRedirect';
-import { ScamRedisKeys, scamURLEnvs } from './refreshScamDomains';
 
 const scamDomainChecks = {
 	SCAM_DOMAIN_URL: (url: URL, host: string) => `.${url.host}`.endsWith(`.${host}`),
@@ -60,6 +59,7 @@ export async function checkScam(content: string): Promise<ScamDomainHit[]> {
 	const trippedDomains: ScamDomainHit[] = [];
 
 	while ((matches = linkRegex.exec(content)) !== null) {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const url = urlOption(matches[0]);
 		if (!url) {
 			continue;

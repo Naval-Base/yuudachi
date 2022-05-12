@@ -23,7 +23,7 @@ type Option = Readonly<
 				choices?: readonly Readonly<{ name: string; value: string }>[];
 		  }
 		| {
-				type: ApplicationCommandOptionType.Integer | /* ApplicationCommandOptionType.Number */ 10;
+				type: ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number;
 				choices?: readonly Readonly<{ name: string; value: number }>[];
 		  }
 		| {
@@ -47,7 +47,7 @@ type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	? C extends readonly { value: string }[]
 		? C[number]['value']
 		: string
-	: T extends ApplicationCommandOptionType.Integer | /* ApplicationCommandOptionType.Number */ 10
+	: T extends ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number
 	? C extends readonly { value: number }[]
 		? C[number]['value']
 		: number

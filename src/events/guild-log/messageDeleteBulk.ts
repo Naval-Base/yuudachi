@@ -1,19 +1,18 @@
+import { on } from 'node:events';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
-import { Client, Collection, Constants, Message, Snowflake, Webhook } from 'discord.js';
+import { type Client, type Collection, Constants, type Message, type Snowflake, type Webhook } from 'discord.js';
 import i18next from 'i18next';
-import { on } from 'node:events';
 import { inject, injectable } from 'tsyringe';
-
-dayjs.extend(relativeTime);
-dayjs.extend(utc);
-
 import type { Event } from '../../Event';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import { logger } from '../../logger';
 import { kWebhooks } from '../../tokens';
 import { addFields, truncateEmbed } from '../../util/embed';
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
 
@@ -35,7 +34,7 @@ export default class implements Event {
 			if (!messages.size) {
 				continue;
 			}
-			const message = messages.first() as Message;
+			const message = messages.first()!;
 			if (message.author.bot) {
 				continue;
 			}
@@ -44,12 +43,12 @@ export default class implements Event {
 			}
 
 			try {
-				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
-				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
-				const ignoreChannels = await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels);
+				const locale = (await getGuildSetting(message.guild.id, SettingsKeys.Locale)) as string;
+				const logChannelId = (await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId)) as string;
+				const ignoreChannels = (await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels)) as string;
 				// TODO: ignore based on parent category once .inGuild() is available
 				if (
-					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId)) ||
+					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId ?? '')) ||
 					ignoreChannels.includes(message.channelId)
 				) {
 					continue;

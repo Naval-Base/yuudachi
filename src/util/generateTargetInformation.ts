@@ -1,6 +1,6 @@
-import type { GuildMember } from 'discord.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import type { GuildMember } from 'discord.js';
 
 dayjs.extend(relativeTime);
 

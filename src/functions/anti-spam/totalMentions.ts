@@ -1,9 +1,8 @@
+import type { Message } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
-import type { Message } from 'discord.js';
-
-import { kRedis } from '../../tokens';
 import { MENTION_EXPIRE_SECONDS } from '../../Constants';
+import { kRedis } from '../../tokens';
 
 export async function totalMentions(message: Message): Promise<number> {
 	const redis = container.resolve<Redis>(kRedis);

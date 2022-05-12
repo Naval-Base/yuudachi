@@ -1,9 +1,8 @@
 import type { BaseCommandInteraction } from 'discord.js';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
-import type { HistoryCommand } from '../../interactions';
 import { checkModRole } from '../../functions/permissions/checkModRole';
+import type { HistoryCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { generateHistory } from '../../util/generateHistory';
 
 export default class implements Command {

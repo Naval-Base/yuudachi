@@ -1,8 +1,7 @@
-import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { Client, Constants, Webhook } from 'discord.js';
 import { on } from 'node:events';
+import { PermissionFlagsBits } from 'discord-api-types/v9';
+import { type Client, Constants, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
-
 import type { Event } from '../Event';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
 import { registerJobs, startJobs } from '../jobs';
@@ -21,7 +20,6 @@ export default class implements Event {
 	) {}
 
 	public async execute(): Promise<void> {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		for await (const _ of on(this.client, this.event) as AsyncIterableIterator<[void]>) {
 			logger.info({ event: { name: this.name, event: this.event } }, 'Caching webhooks');
 			for (const guild of this.client.guilds.cache.values()) {
@@ -33,8 +31,8 @@ export default class implements Event {
 					continue;
 				}
 
-				const memberLogWebhookId = await getGuildSetting(guild.id, SettingsKeys.MemberLogWebhookId);
-				const guildLogWebhookId = await getGuildSetting(guild.id, SettingsKeys.GuildLogWebhookId);
+				const memberLogWebhookId = (await getGuildSetting(guild.id, SettingsKeys.MemberLogWebhookId)) as string;
+				const guildLogWebhookId = (await getGuildSetting(guild.id, SettingsKeys.GuildLogWebhookId)) as string;
 
 				const webhooks = await guild.fetchWebhooks();
 

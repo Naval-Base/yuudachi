@@ -1,26 +1,25 @@
+import { ms } from '@naval-base/ms';
+import type { APIMessage } from 'discord-api-types';
 import {
-	BaseCommandInteraction,
-	ButtonInteraction,
-	Message,
+	type BaseCommandInteraction,
+	type ButtonInteraction,
+	type Message,
 	MessageActionRow,
 	MessageButton,
-	Snowflake,
+	type Snowflake,
 } from 'discord.js';
 import i18next from 'i18next';
+import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { ms } from '@naval-base/ms';
-import { nanoid } from 'nanoid';
-import type { APIMessage } from 'discord-api-types';
-
-import type { RestrictCommand } from '../../../../interactions';
-import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
-import { kSQL } from '../../../../tokens';
 import { CaseAction, createCase } from '../../../../functions/cases/createCase';
 import { generateCasePayload } from '../../../../functions/logs/generateCasePayload';
 import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
-import { generateHistory } from '../../../../util/generateHistory';
+import type { RestrictCommand } from '../../../../interactions';
+import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
+import { kSQL } from '../../../../tokens';
 import { awaitComponent } from '../../../../util/awaitComponent';
+import { generateHistory } from '../../../../util/generateHistory';
 
 export async function emoji(
 	interaction: BaseCommandInteraction<'cached'>,

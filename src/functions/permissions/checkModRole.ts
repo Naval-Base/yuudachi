@@ -5,10 +5,9 @@ import type {
 	SelectMenuInteraction,
 	Snowflake,
 } from 'discord.js';
-import { container } from 'tsyringe';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
-
+import { container } from 'tsyringe';
 import { kSQL } from '../../tokens';
 
 export async function checkModRole(

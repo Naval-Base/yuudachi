@@ -1,15 +1,14 @@
-import { BaseCommandInteraction, Formatters } from 'discord.js';
+import { type BaseCommandInteraction, Formatters } from 'discord.js';
 import i18next from 'i18next';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
-import type { ReferenceCommand } from '../../interactions';
-import { checkModRole } from '../../functions/permissions/checkModRole';
+import { getCase } from '../../functions/cases/getCase';
 import { updateCase } from '../../functions/cases/updateCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { getCase } from '../../functions/cases/getCase';
+import type { ReferenceCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { generateMessageLink } from '../../util/generateMessageLink';
 
 export default class implements Command {
@@ -23,7 +22,7 @@ export default class implements Command {
 
 		const logChannel = await checkLogChannel(
 			interaction.guild,
-			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
+			(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));

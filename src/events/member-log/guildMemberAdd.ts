@@ -1,7 +1,6 @@
-import { Client, Constants, GuildMember, Webhook } from 'discord.js';
 import { on } from 'node:events';
+import { type Client, Constants, type GuildMember, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
-
 import type { Event } from '../../Event';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import { logger } from '../../logger';
@@ -27,8 +26,8 @@ export default class implements Event {
 					`Member ${guildMember.id} joined`,
 				);
 
-				const locale = await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale);
-				const logChannelId = await getGuildSetting(guildMember.guild.id, SettingsKeys.MemberLogWebhookId);
+				const locale = (await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale)) as string;
+				const logChannelId = (await getGuildSetting(guildMember.guild.id, SettingsKeys.MemberLogWebhookId)) as string;
 				if (!logChannelId) {
 					continue;
 				}

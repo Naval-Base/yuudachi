@@ -1,5 +1,4 @@
 import type { APIEmbed, APIEmbedField } from 'discord-api-types/v9';
-
 import {
 	EMBED_AUTHOR_NAME_LIMIT,
 	EMBED_DESCRIPTION_LIMIT,
@@ -47,12 +46,10 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 			: undefined,
 		fields: embed.fields
 			? embed.fields
-					.map((field) => {
-						return {
-							name: ellipsis(field.name, EMBED_FIELD_NAME_LIMIT),
-							value: ellipsis(field.value, EMBED_FIELD_VALUE_LIMIT),
-						};
-					})
+					.map((field) => ({
+						name: ellipsis(field.name, EMBED_FIELD_NAME_LIMIT),
+						value: ellipsis(field.value, EMBED_FIELD_VALUE_LIMIT),
+					}))
 					.slice(0, EMBED_FIELD_LIMIT)
 			: [],
 	};

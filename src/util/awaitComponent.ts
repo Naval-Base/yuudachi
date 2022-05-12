@@ -1,15 +1,15 @@
-import {
-	Client,
-	CollectorFilter,
-	Interaction,
-	InteractionCollector,
-	Message,
-	Constants,
-	AwaitMessageCollectorOptionsParams,
-	MessageComponentTypeResolvable,
-	MappedInteractionTypes,
-} from 'discord.js';
 import type { APIMessage } from 'discord-api-types/v9';
+import {
+	type Client,
+	type CollectorFilter,
+	type Interaction,
+	InteractionCollector,
+	type Message,
+	Constants,
+	type AwaitMessageCollectorOptionsParams,
+	type MessageComponentTypeResolvable,
+	type MappedInteractionTypes,
+} from 'discord.js';
 
 export function awaitComponent<T extends MessageComponentTypeResolvable = 'ACTION_ROW'>(
 	client: Client,

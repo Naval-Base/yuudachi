@@ -1,17 +1,15 @@
 import type { BaseCommandInteraction } from 'discord.js';
 import i18next from 'i18next';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
+import { embed } from './sub/restrict/embed';
+import { emoji } from './sub/restrict/emoji';
+import { react } from './sub/restrict/react';
+import { unrole } from './sub/restrict/unrole';
 import type { Command } from '../../Command';
-import type { RestrictCommand } from '../../interactions';
 import { checkModRole } from '../../functions/permissions/checkModRole';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-
-import { embed } from './sub/restrict/embed';
-import { react } from './sub/restrict/react';
-import { emoji } from './sub/restrict/emoji';
-import { unrole } from './sub/restrict/unrole';
+import type { RestrictCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 
 export default class implements Command {
 	public async execute(
@@ -24,7 +22,7 @@ export default class implements Command {
 
 		const logChannel = await checkLogChannel(
 			interaction.guild,
-			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
+			(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));

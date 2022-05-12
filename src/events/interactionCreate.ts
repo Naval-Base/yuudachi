@@ -1,7 +1,6 @@
-import { Client, Constants } from 'discord.js';
+import { type Client, Constants } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command';
-
 import type { Event } from '../Event';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
 import { transformInteraction } from '../interactions/InteractionOptions';
@@ -37,7 +36,7 @@ export default class implements Event {
 						`Executing command ${interaction.commandName}`,
 					);
 
-					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
+					const locale = (await getGuildSetting(interaction.guildId, SettingsKeys.Locale)) as string | undefined;
 					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
 				} catch (e) {
 					const error = e as Error;

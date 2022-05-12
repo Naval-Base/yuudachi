@@ -1,21 +1,26 @@
-import { BaseCommandInteraction, ButtonInteraction, Formatters, MessageActionRow, MessageButton } from 'discord.js';
-import { nanoid } from 'nanoid';
+import {
+	type BaseCommandInteraction,
+	type ButtonInteraction,
+	Formatters,
+	MessageActionRow,
+	MessageButton,
+} from 'discord.js';
 import i18next from 'i18next';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
+import { nanoid } from 'nanoid';
 import type { Command } from '../../Command';
-import type { ReasonCommand } from '../../interactions';
-import { checkModRole } from '../../functions/permissions/checkModRole';
+import type { Case } from '../../functions/cases/createCase';
+import { getCase } from '../../functions/cases/getCase';
 import { updateCase } from '../../functions/cases/updateCase';
 import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { getCase } from '../../functions/cases/getCase';
-import { generateMessageLink } from '../../util/generateMessageLink';
+import type { ReasonCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
-import { truncate } from '../../util/embed';
-import type { Case } from '../../functions/cases/createCase';
 import { awaitComponent } from '../../util/awaitComponent';
+import { truncate } from '../../util/embed';
+import { generateMessageLink } from '../../util/generateMessageLink';
 
 export default class implements Command {
 	public async execute(
@@ -28,7 +33,7 @@ export default class implements Command {
 
 		const logChannel = await checkLogChannel(
 			interaction.guild,
-			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
+			(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));

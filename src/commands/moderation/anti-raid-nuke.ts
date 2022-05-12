@@ -1,33 +1,32 @@
+import { ms } from '@naval-base/ms';
+import dayjs from 'dayjs';
 import {
-	BaseCommandInteraction,
-	ButtonInteraction,
+	type BaseCommandInteraction,
+	type ButtonInteraction,
 	Formatters,
-	GuildMember,
+	type GuildMember,
 	MessageActionRow,
 	MessageButton,
 } from 'discord.js';
 import i18next from 'i18next';
-import { ms } from '@naval-base/ms';
-import { nanoid } from 'nanoid';
-import dayjs from 'dayjs';
-import { inject, injectable } from 'tsyringe';
 import type { Redis } from 'ioredis';
+import { nanoid } from 'nanoid';
 import RE2 from 're2';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
+import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command';
-import type { AntiRaidNukeCommand } from '../../interactions';
-import { Case, CaseAction, createCase } from '../../functions/cases/createCase';
-import { generateCasePayload } from '../../functions/logs/generateCasePayload';
-import { checkModRole } from '../../functions/permissions/checkModRole';
 import { DATE_FORMAT_LOGFILE } from '../../Constants';
+import { type Case, CaseAction, createCase } from '../../functions/cases/createCase';
+import { generateCasePayload } from '../../functions/logs/generateCasePayload';
+import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { kRedis } from '../../tokens';
-import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
+import type { AntiRaidNukeCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
-import { generateTargetInformation } from '../../util/generateTargetInformation';
+import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { generateTargetInformation } from '../../util/generateTargetInformation';
 
 @injectable()
 export default class implements Command {
@@ -43,7 +42,7 @@ export default class implements Command {
 
 		const logChannel = await checkLogChannel(
 			interaction.guild,
-			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
+			(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));

@@ -1,9 +1,8 @@
 import type { Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-
+import { type RawLockdown, transformLockdown } from './transformLockdown';
 import { kSQL } from '../../tokens';
-import { RawLockdown, transformLockdown } from './transformLockdown';
 
 export async function getLockdown(guildId: Snowflake, channelId: Snowflake) {
 	const sql = container.resolve<Sql<any>>(kSQL);

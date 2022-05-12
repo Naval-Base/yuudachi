@@ -1,22 +1,21 @@
-import { BaseCommandInteraction, ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { type BaseCommandInteraction, type ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import i18next from 'i18next';
-import { nanoid } from 'nanoid';
 import type { Redis } from 'ioredis';
+import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
-
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import type { Command } from '../../Command';
-import type { KickCommand } from '../../interactions';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { generateHistory } from '../../util/generateHistory';
 import { createCase, CaseAction } from '../../functions/cases/createCase';
 import { generateCasePayload } from '../../functions/logs/generateCasePayload';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
+import { checkModRole } from '../../functions/permissions/checkModRole';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { kRedis } from '../../tokens';
+import type { KickCommand } from '../../interactions';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
+import { kRedis } from '../../tokens';
 import { awaitComponent } from '../../util/awaitComponent';
+import { generateHistory } from '../../util/generateHistory';
 
 @injectable()
 export default class implements Command {
@@ -32,7 +31,7 @@ export default class implements Command {
 
 		const logChannel = await checkLogChannel(
 			interaction.guild,
-			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
+			(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,
 		);
 		if (!logChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));

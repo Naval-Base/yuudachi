@@ -1,6 +1,5 @@
 import type { Redis } from 'ioredis';
 import fetch, { Response } from 'node-fetch';
-
 import { logger } from '../../logger';
 
 export const scamURLEnvs = ['SCAM_DOMAIN_URL', 'SCAM_DOMAIN_DISCORD_URL'] as const;
@@ -54,6 +53,7 @@ export async function refreshScamDomains(redis: Redis): Promise<ScamDomainRefres
 			case 'SCAM_DOMAIN_DISCORD_URL':
 			case 'SCAM_DOMAIN_URL': {
 				const key = ScamRedisKeys[urlEnv];
+				// @ts-expect-error
 				const [[, lastRefresh], [, before], , , [, after]] = await redis
 					.multi()
 					.get(`${key}:refresh`)
@@ -64,6 +64,7 @@ export async function refreshScamDomains(redis: Redis): Promise<ScamDomainRefres
 					.set(`${key}:refresh`, Date.now())
 					.exec();
 
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				const lastRefreshTimestamp = parseInt(lastRefresh, 10);
 
 				logger.info({
@@ -71,7 +72,9 @@ export async function refreshScamDomains(redis: Redis): Promise<ScamDomainRefres
 					envVar: urlEnv,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					before,
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					after,
 				});
 
@@ -79,7 +82,9 @@ export async function refreshScamDomains(redis: Redis): Promise<ScamDomainRefres
 					envVar: urlEnv,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					before,
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					after,
 				});
 				break;

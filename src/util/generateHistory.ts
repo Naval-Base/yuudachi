@@ -2,25 +2,23 @@ import { oneLine } from 'common-tags';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {
-	BaseCommandInteraction,
-	ButtonInteraction,
+	type BaseCommandInteraction,
+	type ButtonInteraction,
 	Formatters,
-	GuildMember,
+	type GuildMember,
 	SelectMenuInteraction,
-	Snowflake,
-	User,
+	type User,
 } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-
-dayjs.extend(relativeTime);
-
+import { addFields, truncateEmbed } from './embed';
+import { generateMessageLink } from './generateMessageLink';
 import type { RawCase } from '../functions/cases/transformCase';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
 import { kSQL } from '../tokens';
-import { addFields, truncateEmbed } from './embed';
-import { generateMessageLink } from './generateMessageLink';
+
+dayjs.extend(relativeTime);
 
 const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban', 'timeout', ''];
 
@@ -41,7 +39,7 @@ export async function generateHistory(
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const logChannelId: Snowflake = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)!;
+	const logChannelId = (await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string;
 
 	const sinceCreationFormatted = Formatters.time(
 		dayjs(target.user.createdTimestamp).unix(),

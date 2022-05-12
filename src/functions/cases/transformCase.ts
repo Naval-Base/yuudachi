@@ -1,5 +1,4 @@
 import type { Snowflake } from 'discord.js';
-
 import type { Case } from './createCase';
 
 export interface RawCase {

@@ -1,18 +1,17 @@
+import { ms } from '@naval-base/ms';
+import dayjs from 'dayjs';
+import type { APIMessage } from 'discord-api-types';
 import {
-	BaseCommandInteraction,
-	ButtonInteraction,
+	type BaseCommandInteraction,
+	type ButtonInteraction,
 	Formatters,
-	Message,
+	type Message,
 	MessageActionRow,
 	MessageButton,
-	TextChannel,
+	type TextChannel,
 } from 'discord.js';
-import dayjs from 'dayjs';
 import i18next from 'i18next';
-import { ms } from '@naval-base/ms';
 import { nanoid } from 'nanoid';
-import type { APIMessage } from 'discord-api-types';
-
 import { createLockdown } from '../../../../functions/lockdowns/createLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
 import { awaitComponent } from '../../../../util/awaitComponent';

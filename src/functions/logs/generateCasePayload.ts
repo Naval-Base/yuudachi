@@ -1,5 +1,4 @@
 import type { GuildMember, Snowflake, User } from 'discord.js';
-
 import type { CaseAction } from '../cases/createCase';
 
 interface CasePayloadArgs {

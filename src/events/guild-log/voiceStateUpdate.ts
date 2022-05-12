@@ -1,8 +1,7 @@
-import { Client, Constants, VoiceState, Webhook } from 'discord.js';
-import i18next from 'i18next';
 import { on } from 'node:events';
+import { type Client, Constants, type VoiceState, type Webhook } from 'discord.js';
+import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
-
 import type { Event } from '../../Event';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
 import { logger } from '../../logger';
@@ -32,9 +31,9 @@ export default class implements Event {
 			}
 
 			try {
-				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
-				const logChannelId = await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId);
-				const ignoreChannels = await getGuildSetting(newState.guild.id, SettingsKeys.LogIgnoreChannels);
+				const locale = (await getGuildSetting(newState.guild.id, SettingsKeys.Locale)) as string;
+				const logChannelId = (await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId)) as string;
+				const ignoreChannels = (await getGuildSetting(newState.guild.id, SettingsKeys.LogIgnoreChannels)) as string;
 
 				if (!logChannelId) {
 					continue;
@@ -45,7 +44,7 @@ export default class implements Event {
 				}
 
 				let description = '';
-				if ((!oldState || !oldState.channel || ignoreChannels.includes(oldState.channelId)) && newState.channel) {
+				if ((!oldState || !oldState.channel || ignoreChannels.includes(oldState.channelId ?? '')) && newState.channel) {
 					if (ignoreChannels.includes(newState.channelId)) {
 						continue;
 					}

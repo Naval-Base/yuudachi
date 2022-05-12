@@ -1,7 +1,6 @@
 import type { Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-
 import { kSQL } from '../../tokens';
 
 export enum SettingsKeys {
@@ -23,5 +22,6 @@ export async function getGuildSetting(guildId: Snowflake, prop: SettingsKeys, ta
 		[guildId],
 	);
 
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
 	return data?.value ?? null;
 }

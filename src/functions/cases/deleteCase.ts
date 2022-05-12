@@ -1,10 +1,9 @@
 import type { Guild, Snowflake, User } from 'discord.js';
-import { container } from 'tsyringe';
 import type { Sql } from 'postgres';
-
-import { kSQL } from '../../tokens';
-import type { RawCase } from './transformCase';
+import { container } from 'tsyringe';
 import { CaseAction, createCase } from './createCase';
+import type { RawCase } from './transformCase';
+import { kSQL } from '../../tokens';
 import { generateCasePayload } from '../logs/generateCasePayload';
 
 interface DeleteCaseOptions {
