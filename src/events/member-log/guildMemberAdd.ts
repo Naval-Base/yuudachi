@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { type Client, Constants, type GuildMember, type Webhook } from 'discord.js';
+import { Client, Constants, type GuildMember, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';

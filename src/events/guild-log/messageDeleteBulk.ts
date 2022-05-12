@@ -2,7 +2,7 @@ import { on } from 'node:events';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
-import { type Client, type Collection, Constants, type Message, type Snowflake, type Webhook } from 'discord.js';
+import { Client, type Collection, Constants, type Message, type Snowflake, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';

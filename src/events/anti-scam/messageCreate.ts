@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { type Client, Constants, type Message } from 'discord.js';
+import { Client, Constants, type Message } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';

@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { type Client, Constants, type GuildMember } from 'discord.js';
+import { Client, Constants, type GuildMember } from 'discord.js';
 import type { Sql } from 'postgres';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event';

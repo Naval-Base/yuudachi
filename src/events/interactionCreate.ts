@@ -1,4 +1,4 @@
-import { type Client, Constants } from 'discord.js';
+import { Client, Constants } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command';
 import type { Event } from '../Event';
