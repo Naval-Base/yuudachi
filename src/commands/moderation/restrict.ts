@@ -17,7 +17,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof RestrictCommand>,
 		locale: string,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
+		const reply = await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(

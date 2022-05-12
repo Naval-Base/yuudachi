@@ -1,4 +1,4 @@
-import { type CommandInteraction, type ButtonInteraction, ButtonStyle, ComponentType } from 'discord.js';
+import { type CommandInteraction, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command';
@@ -11,7 +11,6 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 import type { WarnCommand } from '../../interactions';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
 import { logger } from '../../logger';
-import { awaitComponent } from '../../util/awaitComponent';
 import { createButton } from '../../util/button';
 import { generateHistory } from '../../util/generateHistory';
 import { createMessageActionRow } from '../../util/messageActionRow';
@@ -22,7 +21,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof WarnCommand>,
 		locale: string,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
+		const reply = await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
@@ -62,22 +61,24 @@ export default class implements Command {
 			components: [createMessageActionRow([cancelButton, warnButton])],
 		});
 
-		const collectedInteraction = (await awaitComponent(interaction.client, reply, {
-			filter: (collected) => collected.user.id === interaction.user.id,
-			componentType: ComponentType.Button,
-			time: 15000,
-		}).catch(async () => {
-			try {
-				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
-					components: [],
-				});
-			} catch (e) {
-				const error = e as Error;
-				logger.error(error, error.message);
-			}
-			return undefined;
-		})) as ButtonInteraction<'cached'> | undefined;
+		const collectedInteraction = await reply
+			.awaitMessageComponent({
+				filter: (collected) => collected.user.id === interaction.user.id,
+				componentType: ComponentType.Button,
+				time: 15000,
+			})
+			.catch(async () => {
+				try {
+					await interaction.editReply({
+						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						components: [],
+					});
+				} catch (e) {
+					const error = e as Error;
+					logger.error(error, error.message);
+				}
+				return undefined;
+			});
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({

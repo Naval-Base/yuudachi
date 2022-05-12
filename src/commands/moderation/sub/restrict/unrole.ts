@@ -1,12 +1,4 @@
-import type { APIMessage } from 'discord-api-types/v10';
-import {
-	type CommandInteraction,
-	type ButtonInteraction,
-	type Message,
-	type Snowflake,
-	ButtonStyle,
-	ComponentType,
-} from 'discord.js';
+import { type CommandInteraction, type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
@@ -16,13 +8,12 @@ import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
 import type { RestrictCommand } from '../../../../interactions';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
 import { kSQL } from '../../../../tokens';
-import { awaitComponent } from '../../../../util/awaitComponent';
 import { createButton } from '../../../../util/button';
 import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function unrole(
 	interaction: CommandInteraction<'cached'>,
-	reply: Message | APIMessage,
+	reply: InteractionResponse<true>,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
 	locale: string,
 ): Promise<void> {
@@ -77,19 +68,21 @@ export async function unrole(
 		components: [createMessageActionRow([cancelButton, roleButton])],
 	});
 
-	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
-		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: ComponentType.Button,
-		time: 15000,
-	}).catch(async () => {
-		try {
-			await interaction.editReply({
-				content: i18next.t('common.errors.timed_out', { lng: locale }),
-				components: [],
-			});
-		} catch {}
-		return undefined;
-	})) as ButtonInteraction<'cached'> | undefined;
+	const collectedInteraction = await reply
+		.awaitMessageComponent({
+			filter: (collected) => collected.user.id === interaction.user.id,
+			componentType: ComponentType.Button,
+			time: 15000,
+		})
+		.catch(async () => {
+			try {
+				await interaction.editReply({
+					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					components: [],
+				});
+			} catch {}
+			return undefined;
+		});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
