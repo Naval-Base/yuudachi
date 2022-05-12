@@ -14,7 +14,7 @@ export default class implements Command {
 		args: ArgumentsOf<typeof LockdownCommand>,
 		locale: string,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
+		const reply = await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
 		if (!interaction.guild.me?.permissions.has(PermissionFlagsBits.Administrator)) {

@@ -1,23 +1,14 @@
-import type { APIMessage } from 'discord-api-types/v10';
-import {
-	type CommandInteraction,
-	type ButtonInteraction,
-	type Message,
-	type TextChannel,
-	ButtonStyle,
-	ComponentType,
-} from 'discord.js';
+import { type CommandInteraction, type TextChannel, ButtonStyle, ComponentType, InteractionResponse } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
-import { awaitComponent } from '../../../../util/awaitComponent';
 import { createButton } from '../../../../util/button';
 import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function lift(
 	interaction: CommandInteraction<'cached'>,
-	reply: Message | APIMessage,
+	reply: InteractionResponse<true>,
 	channel: TextChannel,
 	locale: string,
 ): Promise<void> {
@@ -55,19 +46,21 @@ export async function lift(
 		components: [createMessageActionRow([cancelButton, unlockButton])],
 	});
 
-	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
-		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: ComponentType.Button,
-		time: 15000,
-	}).catch(async () => {
-		try {
-			await interaction.editReply({
-				content: i18next.t('common.errors.timed_out', { lng: locale }),
-				components: [],
-			});
-		} catch {}
-		return undefined;
-	})) as ButtonInteraction<'cached'> | undefined;
+	const collectedInteraction = await reply
+		.awaitMessageComponent({
+			filter: (collected) => collected.user.id === interaction.user.id,
+			componentType: ComponentType.Button,
+			time: 15000,
+		})
+		.catch(async () => {
+			try {
+				await interaction.editReply({
+					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					components: [],
+				});
+			} catch {}
+			return undefined;
+		});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({

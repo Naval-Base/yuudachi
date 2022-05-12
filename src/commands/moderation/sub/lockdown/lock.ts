@@ -1,26 +1,23 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import type { APIMessage } from 'discord-api-types/v10';
 import {
 	type CommandInteraction,
-	type ButtonInteraction,
 	Formatters,
-	type Message,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
+	InteractionResponse,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { createLockdown } from '../../../../functions/lockdowns/createLockdown';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
-import { awaitComponent } from '../../../../util/awaitComponent';
 import { createButton } from '../../../../util/button';
 import { createMessageActionRow } from '../../../../util/messageActionRow';
 
 export async function lock(
 	interaction: CommandInteraction<'cached'>,
-	reply: Message | APIMessage,
+	reply: InteractionResponse<true>,
 	args: { channel: TextChannel; duration: string; reason?: string },
 	locale: string,
 ): Promise<void> {
@@ -63,19 +60,21 @@ export async function lock(
 		components: [createMessageActionRow([cancelButton, lockButton])],
 	});
 
-	const collectedInteraction = (await awaitComponent(interaction.client, reply, {
-		filter: (collected) => collected.user.id === interaction.user.id,
-		componentType: ComponentType.Button,
-		time: 15000,
-	}).catch(async () => {
-		try {
-			await interaction.editReply({
-				content: i18next.t('common.errors.timed_out', { lng: locale }),
-				components: [],
-			});
-		} catch {}
-		return undefined;
-	})) as ButtonInteraction<'cached'> | undefined;
+	const collectedInteraction = await reply
+		.awaitMessageComponent({
+			filter: (collected) => collected.user.id === interaction.user.id,
+			componentType: ComponentType.Button,
+			time: 15000,
+		})
+		.catch(async () => {
+			try {
+				await interaction.editReply({
+					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					components: [],
+				});
+			} catch {}
+			return undefined;
+		});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
