@@ -1,5 +1,6 @@
 import { on } from 'node:events';
 import { diffLines, diffWords } from 'diff';
+import { ChannelType } from 'discord-api-types/v10';
 import { Client, Events, type Message, Util, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
@@ -43,7 +44,10 @@ export default class implements Event {
 					continue;
 				}
 				if (
-					(newMessage.channel.isThread() && ignoreChannels.includes(newMessage.channel.parentId ?? '')) ||
+					((newMessage.channel.type === ChannelType.GuildNewsThread ||
+						newMessage.channel.type === ChannelType.GuildPublicThread ||
+						newMessage.channel.type === ChannelType.GuildPrivateThread) &&
+						ignoreChannels.includes(newMessage.channel.parentId ?? '')) ||
 					ignoreChannels.includes(newMessage.channelId)
 				) {
 					continue;

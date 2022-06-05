@@ -1,4 +1,4 @@
-import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { ChannelType, PermissionFlagsBits } from 'discord-api-types/v10';
 import type { CommandInteraction, TextChannel } from 'discord.js';
 import i18next from 'i18next';
 import { lift } from './sub/lockdown/lift.js';
@@ -27,7 +27,7 @@ export default class implements Command {
 
 		switch (Object.keys(args)[0]) {
 			case 'lock': {
-				if (args.lock.channel && !args.lock.channel.isText()) {
+				if (args.lock.channel && args.lock.channel.type === ChannelType.GuildText) {
 					throw new Error(
 						i18next.t('command.mod.common.errors.not_a_text_channel', {
 							channel: `${args.lock.channel.toString()} - ${args.lock.channel.name} (${args.lock.channel.id})`,
@@ -65,7 +65,7 @@ export default class implements Command {
 			}
 
 			case 'lift': {
-				if (args.lift.channel && !args.lift.channel.isText()) {
+				if (args.lift.channel && args.lift.channel.type !== ChannelType.GuildText) {
 					throw new Error(
 						i18next.t('command.mod.common.errors.not_a_text_channel', {
 							channel: `${args.lift.channel.toString()} - ${args.lift.channel.name} (${args.lift.channel.id})`,

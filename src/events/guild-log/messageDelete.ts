@@ -1,4 +1,5 @@
 import { on } from 'node:events';
+import { ChannelType } from 'discord-api-types/v10';
 import { Client, Events, type Message, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
@@ -40,7 +41,10 @@ export default class implements Event {
 				}
 				// TODO: ignore based on parent category once .inGuild() is available
 				if (
-					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId ?? '')) ||
+					((message.channel.type === ChannelType.GuildNewsThread ||
+						message.channel.type === ChannelType.GuildPublicThread ||
+						message.channel.type === ChannelType.GuildPrivateThread) &&
+						ignoreChannels.includes(message.channel.parentId ?? '')) ||
 					ignoreChannels.includes(message.channelId)
 				) {
 					continue;
