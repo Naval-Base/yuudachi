@@ -1,6 +1,6 @@
 import type { Redis } from 'ioredis';
 import fetch, { Response } from 'node-fetch';
-import { logger } from '../../logger';
+import { logger } from '../../logger.js';
 
 export const scamURLEnvs = ['SCAM_DOMAIN_URL', 'SCAM_DOMAIN_DISCORD_URL'] as const;
 export enum ScamRedisKeys {

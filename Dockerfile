@@ -12,4 +12,4 @@ WORKDIR /usr/yuudachi
 COPY package.json package-lock.json ./
 COPY --from=build /usr/yuudachi/dist ./dist
 RUN npm ci --legacy-peer-deps --audit=false --fund=false --production
-CMD ["node", "--enable-source-maps", "--es-module-specifier-resolution=node", "./dist/index.js"]
+CMD ["node", "--enable-source-maps", "./dist/index.js"]

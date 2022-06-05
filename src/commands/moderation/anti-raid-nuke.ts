@@ -6,21 +6,21 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import RE2 from 're2';
 import { inject, injectable } from 'tsyringe';
-import type { Command } from '../../Command';
-import { DATE_FORMAT_LOGFILE } from '../../Constants';
-import { type Case, CaseAction, createCase } from '../../functions/cases/createCase';
-import { generateCasePayload } from '../../functions/logs/generateCasePayload';
-import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import type { AntiRaidNukeCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { logger } from '../../logger';
-import { kRedis } from '../../tokens';
-import { createButton } from '../../util/button';
-import { generateTargetInformation } from '../../util/generateTargetInformation';
-import { createMessageActionRow } from '../../util/messageActionRow';
+import type { Command } from '../../Command.js';
+import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
+import { generateCasePayload } from '../../functions/logs/generateCasePayload.js';
+import { insertAntiRaidNukeCaseLog } from '../../functions/logs/insertAntiRaidNukeCaseLog.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { AntiRaidNukeCommand } from '../../interactions/index.js';
+import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
+import { createButton } from '../../util/button.js';
+import { generateTargetInformation } from '../../util/generateTargetInformation.js';
+import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 @injectable()
 export default class implements Command {
@@ -222,7 +222,6 @@ export default class implements Command {
 				],
 			});
 
-			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15, 'true');
 			let idx = 0;
 			const promises = [];
@@ -260,14 +259,12 @@ export default class implements Command {
 						.catch(() => {
 							survivors.push(member);
 						})
-						// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 						.finally(() => void this.redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15)),
 				);
 			}
 
 			const resolvedCases = await Promise.all(promises);
 			const cases = resolvedCases.filter((resolvedCase) => resolvedCase) as Case[];
-			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 5);
 
 			await insertAntiRaidNukeCaseLog(

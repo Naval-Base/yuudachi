@@ -7,7 +7,7 @@ import {
 	EMBED_FIELD_VALUE_LIMIT,
 	EMBED_FOOTER_TEXT_LIMIT,
 	EMBED_TITLE_LIMIT,
-} from '../Constants';
+} from '../Constants.js';
 
 export function addFields(embed: APIEmbed, ...data: APIEmbedField[]): APIEmbed {
 	return {

@@ -3,11 +3,11 @@ import { diffLines, diffWords } from 'diff';
 import { Client, Events, type Message, Util, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { logger } from '../../logger';
-import { kWebhooks } from '../../tokens';
-import { addFields, truncateEmbed } from '../../util/embed';
+import type { Event } from '../../Event.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import { logger } from '../../logger.js';
+import { kWebhooks } from '../../tokens.js';
+import { addFields, truncateEmbed } from '../../util/embed.js';
 
 @injectable()
 export default class implements Event {

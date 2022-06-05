@@ -1,16 +1,16 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
 import { AuditLogEvent } from 'discord-api-types/v10';
-import { Client, Events, type GuildBan, type User } from 'discord.js';
+import { Client, Events, type GuildBan } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event';
-import { deleteCase } from '../../functions/cases/deleteCase';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { logger } from '../../logger';
-import { kRedis } from '../../tokens';
+import type { Event } from '../../Event.js';
+import { deleteCase } from '../../functions/cases/deleteCase.js';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
 
 @injectable()
 export default class implements Event {
@@ -57,7 +57,7 @@ export default class implements Event {
 
 				await pSetTimeout(5000);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberBanRemove });
-				const logs = auditLogs.entries.find((log) => (log.target as User).id === guildBan.user.id);
+				const logs = auditLogs.entries.find((log) => log.target!.id === guildBan.user.id);
 				logger.info(
 					{
 						event: { name: this.name, event: this.event },

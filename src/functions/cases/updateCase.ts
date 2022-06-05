@@ -1,8 +1,8 @@
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import type { CreateCase } from './createCase';
-import { type RawCase, transformCase } from './transformCase';
-import { kSQL } from '../../tokens';
+import type { CreateCase } from './createCase.js';
+import { type RawCase, transformCase } from './transformCase.js';
+import { kSQL } from '../../tokens.js';
 
 export type PatchCase = Pick<
 	CreateCase,

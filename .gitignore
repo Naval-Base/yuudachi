@@ -4,12 +4,10 @@ node_modules
 
 # Build artifacts
 dist/
-typings/
 tsconfig.tsbuildinfo
 
 # Log files
 logs
-!src/functions/logs
 *.log
 npm-debug.log*
 
@@ -20,9 +18,6 @@ pids
 
 # Docker (experimental)
 docker-compose.config.yml
-
-# Tests
-coverage/
 
 # Miscellaneous
 .tmp/

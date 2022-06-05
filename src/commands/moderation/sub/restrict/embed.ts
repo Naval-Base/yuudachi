@@ -1,18 +1,24 @@
 import { ms } from '@naval-base/ms';
-import { type CommandInteraction, type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
+import {
+	type CommandInteraction,
+	type Snowflake,
+	ButtonStyle,
+	ComponentType,
+	type InteractionResponse,
+} from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { CaseAction, createCase } from '../../../../functions/cases/createCase';
-import { generateCasePayload } from '../../../../functions/logs/generateCasePayload';
-import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog';
-import type { RestrictCommand } from '../../../../interactions';
-import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf';
-import { kSQL } from '../../../../tokens';
-import { createButton } from '../../../../util/button';
-import { generateHistory } from '../../../../util/generateHistory';
-import { createMessageActionRow } from '../../../../util/messageActionRow';
+import { CaseAction, createCase } from '../../../../functions/cases/createCase.js';
+import { generateCasePayload } from '../../../../functions/logs/generateCasePayload.js';
+import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog.js';
+import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
+import type { RestrictCommand } from '../../../../interactions/index.js';
+import { kSQL } from '../../../../tokens.js';
+import { createButton } from '../../../../util/button.js';
+import { generateHistory } from '../../../../util/generateHistory.js';
+import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function embed(
 	interaction: CommandInteraction<'cached'>,

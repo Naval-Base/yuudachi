@@ -1,11 +1,11 @@
 import { on } from 'node:events';
 import { Client, Events, type GuildMember, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { logger } from '../../logger';
-import { kWebhooks } from '../../tokens';
-import { generateMemberLog } from '../../util/generateMemberLog';
+import type { Event } from '../../Event.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import { logger } from '../../logger.js';
+import { kWebhooks } from '../../tokens.js';
+import { generateMemberLog } from '../../util/generateMemberLog.js';
 
 @injectable()
 export default class implements Event {

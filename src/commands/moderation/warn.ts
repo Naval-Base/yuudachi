@@ -1,19 +1,19 @@
 import { type CommandInteraction, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import type { Command } from '../../Command';
-import { CaseAction, createCase } from '../../functions/cases/createCase';
-import { generateCasePayload } from '../../functions/logs/generateCasePayload';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import type { WarnCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { logger } from '../../logger';
-import { createButton } from '../../util/button';
-import { generateHistory } from '../../util/generateHistory';
-import { createMessageActionRow } from '../../util/messageActionRow';
+import type { Command } from '../../Command.js';
+import { CaseAction, createCase } from '../../functions/cases/createCase.js';
+import { generateCasePayload } from '../../functions/logs/generateCasePayload.js';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { WarnCommand } from '../../interactions/index.js';
+import { logger } from '../../logger.js';
+import { createButton } from '../../util/button.js';
+import { generateHistory } from '../../util/generateHistory.js';
+import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 export default class implements Command {
 	public async execute(

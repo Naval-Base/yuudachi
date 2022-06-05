@@ -3,16 +3,16 @@ import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { container } from 'tsyringe';
-import type { Command } from '../../Command';
-import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import type { RefreshScamlistCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { logger } from '../../logger';
-import { kRedis } from '../../tokens';
-import { createButton } from '../../util/button';
-import { addFields } from '../../util/embed';
-import { createMessageActionRow } from '../../util/messageActionRow';
+import type { Command } from '../../Command.js';
+import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { RefreshScamlistCommand } from '../../interactions/index.js';
+import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
+import { createButton } from '../../util/button.js';
+import { addFields } from '../../util/embed.js';
+import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 export default class implements Command {
 	public async execute(

@@ -1,6 +1,6 @@
 import { oneLine } from 'common-tags';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import relativeTime from 'dayjs/plugin/relativeTime.js';
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
@@ -12,11 +12,11 @@ import {
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { addFields, truncateEmbed } from './embed';
-import { generateMessageLink } from './generateMessageLink';
-import type { RawCase } from '../functions/cases/transformCase';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
-import { kSQL } from '../tokens';
+import { addFields, truncateEmbed } from './embed.js';
+import { generateMessageLink } from './generateMessageLink.js';
+import type { RawCase } from '../functions/cases/transformCase.js';
+import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
+import { kSQL } from '../tokens.js';
 
 dayjs.extend(relativeTime);
 
@@ -102,12 +102,12 @@ export async function generateHistory(
 			order by created_at desc`;
 
 	const footer = cases.reduce((count: CaseFooter, c) => {
-		const action = ACTION_KEYS[c.action];
+		const action = ACTION_KEYS[c.action]!;
 		count[action] = (count[action] ?? 0) + 1;
 		return count;
 	}, {});
 	const colors = [8319775, 8450847, 10870283, 13091073, 14917123, 16152591, 16667430, 16462404];
-	const values = [
+	const values: [number, number, number, number, number, number, number] = [
 		footer.unban ?? 0,
 		footer.warn ?? 0,
 		footer.restriction ?? 0,
@@ -141,7 +141,7 @@ export async function generateHistory(
 
 	for (const c of cases) {
 		const dateFormatted = Formatters.time(dayjs(c.created_at).unix(), Formatters.TimestampStyles.ShortDate);
-		const caseString = `${dateFormatted} ${Formatters.inlineCode(`${ACTION_KEYS[c.action].toUpperCase()}`)} ${
+		const caseString = `${dateFormatted} ${Formatters.inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
 			c.log_message_id
 				? Formatters.hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, logChannelId, c.log_message_id))
 				: `#${c.case_id}`

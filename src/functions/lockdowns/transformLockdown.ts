@@ -1,5 +1,5 @@
 import type { PermissionOverwrites, Snowflake } from 'discord.js';
-import type { Lockdown } from './createLockdown';
+import type { Lockdown } from './createLockdown.js';
 
 export interface RawLockdown {
 	guild_id: Snowflake;

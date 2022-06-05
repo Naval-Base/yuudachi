@@ -2,8 +2,8 @@ import { OverwriteType, PermissionFlagsBits } from 'discord-api-types/v10';
 import type { GuildChannel, PermissionOverwrites, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { type RawLockdown, transformLockdown } from './transformLockdown';
-import { kSQL } from '../../tokens';
+import { type RawLockdown, transformLockdown } from './transformLockdown.js';
+import { kSQL } from '../../tokens.js';
 
 export interface Lockdown {
 	guildId: Snowflake;

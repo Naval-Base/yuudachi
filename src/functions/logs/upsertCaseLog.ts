@@ -3,11 +3,11 @@ import { Client, type Snowflake, type User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { generateCaseLog, generateCaseColor } from './generateCaseLog';
-import { kSQL } from '../../tokens';
-import type { Case } from '../cases/createCase';
-import { checkLogChannel } from '../settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting';
+import { generateCaseLog, generateCaseColor } from './generateCaseLog.js';
+import { kSQL } from '../../tokens.js';
+import type { Case } from '../cases/createCase.js';
+import { checkLogChannel } from '../settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export async function upsertCaseLog(guildId: Snowflake, user: User | undefined | null, case_: Case) {
 	const client = container.resolve<Client<true>>(Client);

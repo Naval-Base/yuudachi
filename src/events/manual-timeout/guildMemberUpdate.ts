@@ -1,18 +1,18 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
 import { AuditLogEvent } from 'discord-api-types/v10';
-import { Client, Events, type GuildMember, type User } from 'discord.js';
+import { Client, Events, type GuildMember } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event';
-import { createCase, CaseAction } from '../../functions/cases/createCase';
-import { deleteCase } from '../../functions/cases/deleteCase';
-import { generateCasePayload } from '../../functions/logs/generateCasePayload';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { logger } from '../../logger';
-import { kRedis } from '../../tokens';
+import type { Event } from '../../Event.js';
+import { createCase, CaseAction } from '../../functions/cases/createCase.js';
+import { deleteCase } from '../../functions/cases/deleteCase.js';
+import { generateCasePayload } from '../../functions/logs/generateCasePayload.js';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
 
 @injectable()
 export default class implements Event {
@@ -59,8 +59,7 @@ export default class implements Event {
 				const auditLogs = await oldMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberUpdate });
 				const logs = auditLogs.entries.find(
 					(log) =>
-						(log.target as User).id === oldMember.user.id &&
-						log.changes.some((c) => c.key === 'communication_disabled_until'),
+						log.target!.id === oldMember.user.id && log.changes.some((c) => c.key === 'communication_disabled_until'),
 				);
 
 				if (!logs?.changes) {

@@ -1,11 +1,11 @@
 import { Client, Events } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
-import type { Command } from '../Command';
-import type { Event } from '../Event';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
-import { transformInteraction } from '../interactions/InteractionOptions';
-import { logger } from '../logger';
-import { kCommands } from '../tokens';
+import type { Command } from '../Command.js';
+import type { Event } from '../Event.js';
+import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
+import { transformInteraction } from '../interactions/InteractionOptions.js';
+import { logger } from '../logger.js';
+import { kCommands } from '../tokens.js';
 
 @injectable()
 export default class implements Event {

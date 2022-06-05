@@ -1,10 +1,16 @@
-import { type CommandInteraction, type TextChannel, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
+import {
+	type CommandInteraction,
+	type TextChannel,
+	ButtonStyle,
+	ComponentType,
+	type InteractionResponse,
+} from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown';
-import { getLockdown } from '../../../../functions/lockdowns/getLockdown';
-import { createButton } from '../../../../util/button';
-import { createMessageActionRow } from '../../../../util/messageActionRow';
+import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown.js';
+import { getLockdown } from '../../../../functions/lockdowns/getLockdown.js';
+import { createButton } from '../../../../util/button.js';
+import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function lift(
 	interaction: CommandInteraction<'cached'>,

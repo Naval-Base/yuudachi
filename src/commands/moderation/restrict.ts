@@ -1,15 +1,15 @@
 import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
-import { embed } from './sub/restrict/embed';
-import { emoji } from './sub/restrict/emoji';
-import { react } from './sub/restrict/react';
-import { unrole } from './sub/restrict/unrole';
-import type { Command } from '../../Command';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import type { RestrictCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
+import { embed } from './sub/restrict/embed.js';
+import { emoji } from './sub/restrict/emoji.js';
+import { react } from './sub/restrict/react.js';
+import { unrole } from './sub/restrict/unrole.js';
+import type { Command } from '../../Command.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { RestrictCommand } from '../../interactions/index.js';
 
 export default class implements Command {
 	public async execute(
@@ -44,6 +44,9 @@ export default class implements Command {
 			case 'unrole': {
 				return unrole(interaction, reply, args.unrole, locale);
 			}
+
+			default:
+				break;
 		}
 	}
 }

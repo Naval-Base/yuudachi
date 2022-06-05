@@ -1,5 +1,5 @@
 import { type CommandInteractionOption, ApplicationCommandOptionType } from 'discord.js';
-import type { ArgumentsOf, Command } from './ArgumentsOf';
+import type { ArgumentsOf, Command } from './ArgumentsOf.js';
 
 export function transformInteraction<T extends Command>(options: readonly CommandInteractionOption[]): ArgumentsOf<T> {
 	const opts: any = {};

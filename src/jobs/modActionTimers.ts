@@ -1,7 +1,7 @@
 import { parentPort } from 'node:worker_threads';
 import type { Snowflake } from 'discord-api-types/v10';
 import postgres from 'postgres';
-import { JobType } from '../Constants';
+import { JobType } from '../Constants.js';
 
 const sql = postgres({
 	types: {
@@ -9,7 +9,7 @@ const sql = postgres({
 			to: 1184,
 			from: [1082, 1083, 1114, 1184],
 			serialize: (date: Date) => date.toISOString(),
-			parse: (isoString) => isoString,
+			parse: (isoString: string) => isoString,
 		},
 	},
 });

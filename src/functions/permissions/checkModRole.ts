@@ -2,7 +2,7 @@ import type { CommandInteraction, ButtonInteraction, GuildMember, SelectMenuInte
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { kSQL } from '../../tokens';
+import { kSQL } from '../../tokens.js';
 
 export async function checkModRole(
 	interaction: CommandInteraction | ButtonInteraction | SelectMenuInteraction,

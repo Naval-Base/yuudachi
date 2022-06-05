@@ -1,12 +1,12 @@
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import type { CommandInteraction, TextChannel } from 'discord.js';
 import i18next from 'i18next';
-import { lift } from './sub/lockdown/lift';
-import { lock } from './sub/lockdown/lock';
-import type { Command } from '../../Command';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import type { LockdownCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
+import { lift } from './sub/lockdown/lift.js';
+import { lock } from './sub/lockdown/lock.js';
+import type { Command } from '../../Command.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { LockdownCommand } from '../../interactions/index.js';
 
 export default class implements Command {
 	public async execute(
@@ -17,7 +17,7 @@ export default class implements Command {
 		const reply = await interaction.deferReply({ ephemeral: true });
 		await checkModRole(interaction, locale);
 
-		if (!interaction.guild.me?.permissions.has(PermissionFlagsBits.Administrator)) {
+		if (!interaction.guild.members.me?.permissions.has(PermissionFlagsBits.Administrator)) {
 			throw new Error(
 				i18next.t('command.mod.lockdown.lock.errors.bot_requires_admin', {
 					lng: locale,
@@ -76,6 +76,9 @@ export default class implements Command {
 
 				return lift(interaction, reply, (args.lift.channel ?? interaction.channel) as TextChannel, locale);
 			}
+
+			default:
+				break;
 		}
 	}
 }

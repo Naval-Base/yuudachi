@@ -1,8 +1,8 @@
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
-import { checkScam } from './checkScam';
-import { SCAM_EXPIRE_SECONDS } from '../../Constants';
-import { kRedis } from '../../tokens';
+import { checkScam } from './checkScam.js';
+import { SCAM_EXPIRE_SECONDS } from '../../Constants.js';
+import { kRedis } from '../../tokens.js';
 
 export async function totalScams(content: string, guildId: string, userId: string): Promise<number> {
 	const redis = container.resolve<Redis>(kRedis);

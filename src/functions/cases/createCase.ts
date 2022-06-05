@@ -1,9 +1,9 @@
 import type { Guild, GuildMember, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { type RawCase, transformCase } from './transformCase';
-import { logger } from '../../logger';
-import { kSQL } from '../../tokens';
+import { type RawCase, transformCase } from './transformCase.js';
+import { logger } from '../../logger.js';
+import { kSQL } from '../../tokens.js';
 
 export enum CaseAction {
 	Role,

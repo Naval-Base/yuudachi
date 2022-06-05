@@ -2,11 +2,11 @@ import { on } from 'node:events';
 import { Client, Events, type GuildMember } from 'discord.js';
 import type { Sql } from 'postgres';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event';
-import { CaseAction } from '../../functions/cases/createCase';
-import type { RawCase } from '../../functions/cases/transformCase';
-import { logger } from '../../logger';
-import { kSQL } from '../../tokens';
+import type { Event } from '../../Event.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
+import type { RawCase } from '../../functions/cases/transformCase.js';
+import { logger } from '../../logger.js';
+import { kSQL } from '../../tokens.js';
 
 @injectable()
 export default class implements Event {

@@ -3,10 +3,10 @@ import type { Guild, TextChannel, User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog';
-import { kSQL } from '../../tokens';
-import type { Case } from '../cases/createCase';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting';
+import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog.js';
+import { kSQL } from '../../tokens.js';
+import type { Case } from '../cases/createCase.js';
+import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export async function insertAntiRaidNukeCaseLog(
 	guild: Guild,

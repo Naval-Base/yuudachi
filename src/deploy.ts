@@ -28,7 +28,7 @@ import {
 
 	// Context Menu
 	HistoryContextMenuCommand,
-} from './interactions';
+} from './interactions/index.js';
 
 const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN!);
 

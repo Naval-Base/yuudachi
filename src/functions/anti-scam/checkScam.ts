@@ -2,10 +2,10 @@ import { createHash } from 'node:crypto';
 import { URL } from 'node:url';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
-import { ScamRedisKeys, scamURLEnvs } from './refreshScamDomains';
-import { logger } from '../../logger';
-import { kRedis } from '../../tokens';
-import { resolveRedirect } from '../../util/resolveRedirect';
+import { ScamRedisKeys, scamURLEnvs } from './refreshScamDomains.js';
+import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
+import { resolveRedirect } from '../../util/resolveRedirect.js';
 
 const scamDomainChecks = {
 	SCAM_DOMAIN_URL: (url: URL, host: string) => `.${url.host}`.endsWith(`.${host}`),

@@ -3,16 +3,16 @@ import { Client, Events, type Message } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
-import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants';
-import type { Event } from '../../Event';
-import { createContentHash, totalContent } from '../../functions/anti-spam/totalContents';
-import { totalMentions } from '../../functions/anti-spam/totalMentions';
-import { type Case, CaseAction, createCase } from '../../functions/cases/createCase';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { logger } from '../../logger';
-import { kRedis } from '../../tokens';
+import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants.js';
+import type { Event } from '../../Event.js';
+import { createContentHash, totalContent } from '../../functions/anti-spam/totalContents.js';
+import { totalMentions } from '../../functions/anti-spam/totalMentions.js';
+import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
 
 @injectable()
 export default class implements Event {

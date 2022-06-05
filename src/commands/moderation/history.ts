@@ -1,9 +1,9 @@
 import type { CommandInteraction } from 'discord.js';
-import type { Command } from '../../Command';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import type { HistoryCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { generateHistory } from '../../util/generateHistory';
+import type { Command } from '../../Command.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { HistoryCommand } from '../../interactions/index.js';
+import { generateHistory } from '../../util/generateHistory.js';
 
 export default class implements Command {
 	public async execute(

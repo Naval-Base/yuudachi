@@ -1,8 +1,8 @@
 import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
-import type { Command } from '../../Command';
-import type { PingCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
+import type { Command } from '../../Command.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { PingCommand } from '../../interactions/index.js';
 
 export default class implements Command {
 	public async execute(

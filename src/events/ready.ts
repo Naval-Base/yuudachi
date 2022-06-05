@@ -2,11 +2,11 @@ import { on } from 'node:events';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { Client, Events, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../Event';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting';
-import { registerJobs, startJobs } from '../jobs';
-import { logger } from '../logger';
-import { kWebhooks } from '../tokens';
+import type { Event } from '../Event.js';
+import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
+import { registerJobs, startJobs } from '../jobs.js';
+import { logger } from '../logger.js';
+import { kWebhooks } from '../tokens.js';
 
 @injectable()
 export default class implements Event {
@@ -23,7 +23,7 @@ export default class implements Event {
 		for await (const _ of on(this.client, this.event) as AsyncIterableIterator<[void]>) {
 			logger.info({ event: { name: this.name, event: this.event } }, 'Caching webhooks');
 			for (const guild of this.client.guilds.cache.values()) {
-				if (!guild.me?.permissions.has(PermissionFlagsBits.ManageWebhooks, true)) {
+				if (!guild.members.me?.permissions.has(PermissionFlagsBits.ManageWebhooks, true)) {
 					logger.info(
 						{ event: { name: this.name, event: this.event }, guildId: guild.id },
 						'No permission to fetch webhooks',

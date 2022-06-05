@@ -1,7 +1,7 @@
 import type { Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { kSQL } from '../../tokens';
+import { kSQL } from '../../tokens.js';
 
 export enum SettingsKeys {
 	ModLogChannelId = 'mod_log_channel_id',

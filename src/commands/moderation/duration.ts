@@ -1,16 +1,16 @@
 import { ms } from '@naval-base/ms';
 import { type CommandInteraction, Formatters } from 'discord.js';
 import i18next from 'i18next';
-import type { Command } from '../../Command';
-import { getCase } from '../../functions/cases/getCase';
-import { updateCase } from '../../functions/cases/updateCase';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import type { DurationCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { generateMessageLink } from '../../util/generateMessageLink';
+import type { Command } from '../../Command.js';
+import { getCase } from '../../functions/cases/getCase.js';
+import { updateCase } from '../../functions/cases/updateCase.js';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { DurationCommand } from '../../interactions/index.js';
+import { generateMessageLink } from '../../util/generateMessageLink.js';
 
 export default class implements Command {
 	public async execute(

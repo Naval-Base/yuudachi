@@ -1,21 +1,21 @@
 import { type CommandInteraction, Formatters, ComponentType, ButtonStyle } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import type { Command } from '../../Command';
-import type { Case } from '../../functions/cases/createCase';
-import { getCase } from '../../functions/cases/getCase';
-import { updateCase } from '../../functions/cases/updateCase';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import type { ReasonCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { logger } from '../../logger';
-import { createButton } from '../../util/button';
-import { truncate } from '../../util/embed';
-import { generateMessageLink } from '../../util/generateMessageLink';
-import { createMessageActionRow } from '../../util/messageActionRow';
+import type { Command } from '../../Command.js';
+import type { Case } from '../../functions/cases/createCase.js';
+import { getCase } from '../../functions/cases/getCase.js';
+import { updateCase } from '../../functions/cases/updateCase.js';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { ReasonCommand } from '../../interactions/index.js';
+import { logger } from '../../logger.js';
+import { createButton } from '../../util/button.js';
+import { truncate } from '../../util/embed.js';
+import { generateMessageLink } from '../../util/generateMessageLink.js';
+import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 export default class implements Command {
 	public async execute(

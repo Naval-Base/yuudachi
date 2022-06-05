@@ -1,15 +1,15 @@
 import { on } from 'node:events';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import utc from 'dayjs/plugin/utc';
+import relativeTime from 'dayjs/plugin/relativeTime.js';
+import utc from 'dayjs/plugin/utc.js';
 import { Client, type Collection, Events, type Message, type Snowflake, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import { logger } from '../../logger';
-import { kWebhooks } from '../../tokens';
-import { addFields, truncateEmbed } from '../../util/embed';
+import type { Event } from '../../Event.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import { logger } from '../../logger.js';
+import { kWebhooks } from '../../tokens.js';
+import { addFields, truncateEmbed } from '../../util/embed.js';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -91,7 +91,7 @@ export default class implements Event {
 
 				await webhook.send({
 					embeds: [truncateEmbed(embed)],
-					files: [{ attachment: Buffer.from(output, 'utf-8'), name: 'logs.txt' }],
+					files: [{ name: 'logs.txt', attachment: Buffer.from(output, 'utf-8') }],
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});

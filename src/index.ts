@@ -4,17 +4,17 @@ import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import Bree from 'bree';
 import { Client, GatewayIntentBits, Options, Partials, type Webhook } from 'discord.js';
 import i18next from 'i18next';
-import Backend from 'i18next-fs-backend';
-import Redis from 'ioredis';
+import { default as Backend } from 'i18next-fs-backend';
+import { default as Redis } from 'ioredis';
 import postgres from 'postgres';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
-import { Command, commandInfo } from './Command';
-import type { Event } from './Event';
-import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains';
-import { logger } from './logger';
-import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens';
-import { WebSocketConnection } from './websocket/WebSocketConnection';
+import { Command, commandInfo } from './Command.js';
+import type { Event } from './Event.js';
+import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains.js';
+import { logger } from './logger.js';
+import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens.js';
+import { WebSocketConnection } from './websocket/WebSocketConnection.js';
 
 const sql = postgres({
 	types: {
@@ -22,12 +22,12 @@ const sql = postgres({
 			to: 1184,
 			from: [1082, 1083, 1114, 1184],
 			serialize: (date: Date) => date.toISOString(),
-			parse: (isoString) => isoString,
+			parse: (isoString: string) => isoString,
 		},
 	},
 });
 const redis = new Redis(process.env.REDISHOST!);
-const bree = new Bree({ root: false, logger });
+const bree = new Bree({ root: false, logger: false });
 
 const client = new Client({
 	intents: [

@@ -3,19 +3,19 @@ import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
-import type { Command } from '../../Command';
-import { deleteCase } from '../../functions/cases/deleteCase';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog';
-import { checkModRole } from '../../functions/permissions/checkModRole';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting';
-import type { UnbanCommand } from '../../interactions';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf';
-import { logger } from '../../logger';
-import { kRedis } from '../../tokens';
-import { createButton } from '../../util/button';
-import { generateHistory } from '../../util/generateHistory';
-import { createMessageActionRow } from '../../util/messageActionRow';
+import type { Command } from '../../Command.js';
+import { deleteCase } from '../../functions/cases/deleteCase.js';
+import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { checkModRole } from '../../functions/permissions/checkModRole.js';
+import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
+import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import type { UnbanCommand } from '../../interactions/index.js';
+import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
+import { createButton } from '../../util/button.js';
+import { generateHistory } from '../../util/generateHistory.js';
+import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 @injectable()
 export default class implements Command {
@@ -107,7 +107,6 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === unbanKey) {
 			await collectedInteraction.deferUpdate();
 
-			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, '');
 			const case_ = await deleteCase({
 				guild: collectedInteraction.guild,

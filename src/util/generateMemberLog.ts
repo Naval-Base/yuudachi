@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import relativeTime from 'dayjs/plugin/relativeTime.js';
 import { Formatters, type GuildMember } from 'discord.js';
 import i18next from 'i18next';
-import { addFields, truncateEmbed } from './embed';
-import { MAX_TRUST_ACCOUNT_AGE } from '../Constants';
+import { addFields, truncateEmbed } from './embed.js';
+import { MAX_TRUST_ACCOUNT_AGE } from '../Constants.js';
 
 dayjs.extend(relativeTime);
 

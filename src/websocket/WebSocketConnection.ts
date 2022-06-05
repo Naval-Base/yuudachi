@@ -1,6 +1,6 @@
 import type { Redis } from 'ioredis';
 import WebSocket from 'ws';
-import { logger } from '../logger';
+import { logger } from '../logger.js';
 
 interface ScamAPIData {
 	type: 'add' | 'delete';
