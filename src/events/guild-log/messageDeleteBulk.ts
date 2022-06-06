@@ -2,7 +2,6 @@ import { on } from 'node:events';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import utc from 'dayjs/plugin/utc.js';
-import { ChannelType } from 'discord-api-types/v10';
 import { Client, type Collection, Events, type Message, type Snowflake, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
@@ -49,10 +48,7 @@ export default class implements Event {
 				const ignoreChannels = (await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels)) as string;
 				// TODO: ignore based on parent category once .inGuild() is available
 				if (
-					((message.channel.type === ChannelType.GuildNewsThread ||
-						message.channel.type === ChannelType.GuildPublicThread ||
-						message.channel.type === ChannelType.GuildPrivateThread) &&
-						ignoreChannels.includes(message.channel.parentId ?? '')) ||
+					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId ?? '')) ||
 					ignoreChannels.includes(message.channelId)
 				) {
 					continue;

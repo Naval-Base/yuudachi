@@ -29,7 +29,7 @@
 		"common-tags": "^1.8.2",
 		"dayjs": "^1.11.2",
 		"diff": "^5.1.0",
-		"discord.js": "^14.0.0-dev.1654461564-6aa6232",
+		"discord.js": "^14.0.0-dev.1654519696-fba9710",
 		"env-cmd": "^10.1.0",
 		"i18next": "^21.8.8",
 		"i18next-fs-backend": "^1.1.4",
