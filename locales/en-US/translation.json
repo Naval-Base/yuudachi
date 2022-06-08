@@ -341,6 +341,18 @@
 				"joined": "Joined {{- channel}}",
 				"moved": "Moved from {{- fromChannel}} to {{- toChannel}}",
 				"left": "Left {{- channel}}"
+			},
+			"thread_created": {
+				"title": "Thread created",
+				"channel": "• Thread: {{- channel}} {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
+			},
+			"thread_deleted": {
+				"title": "Thread deleted",
+				"channel": "• Thread: {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
 			}
 		}
 	}
