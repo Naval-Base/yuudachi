@@ -25,10 +25,19 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
-				if (message.author.bot || !message.guild || !message.guildId || !message.content.length) continue;
+				if (
+					message.author.bot ||
+					!message.guild ||
+					!message.guildId ||
+					// @ts-expect-error Automod message, not yet in types (no overlap)
+					(!message.content.length && message.type !== 24)
+				)
+					continue;
+
+				const content = message.content.length ? message.content : message.embeds[0]!.description!;
 
 				const totalMentionCount = await totalMentions(message);
-				const totalContentCount = await totalContent(message.content, message.guildId, message.author.id);
+				const totalContentCount = await totalContent(content, message.guildId, message.author.id);
 
 				const mentionExceeded = totalMentionCount >= MENTION_THRESHOLD;
 				const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
@@ -94,7 +103,7 @@ export default class implements Event {
 							deleteMessageDays: 1,
 						});
 
-						const contentHash = createContentHash(message.content);
+						const contentHash = createContentHash(content);
 						const channelSpamKey = `guild:${message.guild.id}:user:${message.author.id}:contenthash:${contentHash}`;
 						await this.redis.del(channelSpamKey);
 					}

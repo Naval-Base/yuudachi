@@ -24,9 +24,18 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
-				if (message.author.bot || !message.guild || !message.guildId || !message.content.length) continue;
+				if (
+					message.author.bot ||
+					!message.guild ||
+					!message.guildId ||
+					// @ts-expect-error Automod message, not yet in types (no overlap)
+					(!message.content.length && message.type !== 24)
+				)
+					continue;
 
-				const totalScamCount = await totalScams(message.content, message.guildId, message.author.id);
+				const content = message.content.length ? message.content : message.embeds[0]!.description!;
+
+				const totalScamCount = await totalScams(content, message.guildId, message.author.id);
 				const scamExceeded = totalScamCount >= SCAM_THRESHOLD;
 
 				if (scamExceeded) {
