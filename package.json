@@ -7,7 +7,7 @@
 		"prebuild": "npm run clean",
 		"build": "tsc",
 		"postbuild": "npm run copy-locales",
-		"copy-locales": "cpy locales/**/*.* dist/",
+		"copy-locales": "cpy locales/ dist/",
 		"lint": "prettier --check . && eslint src --ext .ts",
 		"format": "prettier --write . && eslint src --ext ts --fix",
 		"start": "env-cmd node --enable-source-maps dist/index.js",
