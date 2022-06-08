@@ -327,11 +327,14 @@
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",
+				"stickers": "• Stickers: {{- stickers}}",
 				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
-				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)"
+				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
+				"attachment": "↳ Attachment: {{- url}}",
+				"sticker": "↳ Sticker: {{- name}}"
 			},
 			"voice_state_update": {
 				"title": "Voice state update",

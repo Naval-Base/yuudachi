@@ -63,12 +63,30 @@ export default class implements Event {
 				}
 
 				const output = messages.reduce((out, msg) => {
-					const attachments = msg.attachments;
+					const { stickers, attachments } = msg;
 					out += `[${dayjs(msg.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${msg.author.tag} (${
 						msg.author.id
 					}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${
 						attachments.size
-							? `\r\n${attachments.map((attachment) => `↳ Attachment: ${attachment.proxyURL}`).join('\r\n')}`
+							? `\r\n${attachments
+									.map((attachment) =>
+										i18next.t('log.guild_log.message_bulk_deleted.attachment', {
+											lng: locale,
+											url: attachment.proxyURL,
+										}),
+									)
+									.join('\r\n')}`
+							: ''
+					}${
+						stickers.size
+							? `\r\n${stickers
+									.map((sticker) =>
+										i18next.t('log.guild_log.message_bulk_deleted.sticker', {
+											lng: locale,
+											name: sticker.name,
+										}),
+									)
+									.join('\r\n')}`
 							: ''
 					}\r\n`;
 					return out;
