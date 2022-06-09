@@ -20,7 +20,7 @@ export default class implements Event {
 
 	public execute(): void {
 		this.client.on(this.event, async (interaction) => {
-			if (!interaction.isCommand() && !interaction.isUserContextMenuCommand()) {
+			if (!interaction.isCommand() && !interaction.isUserContextMenuCommand() && !interaction.isAutocomplete()) {
 				return;
 			}
 
@@ -31,17 +31,32 @@ export default class implements Event {
 			const command = this.commands.get(interaction.commandName.toLowerCase());
 			if (command) {
 				try {
-					logger.info(
-						{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-						`Executing command ${interaction.commandName}`,
-					);
-
 					const locale = (await getGuildSetting(interaction.guildId, SettingsKeys.Locale)) as string | undefined;
-					await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
+
+					if (interaction.isAutocomplete()) {
+						if (!command.autocomplete) {
+							logger.info(
+								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+								`Received autocomplete for ${interaction.commandName}, but the command does not handle autocomplete`,
+							);
+							return;
+						}
+						await command.autocomplete(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
+					} else {
+						logger.info(
+							{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+							`Executing command ${interaction.commandName}`,
+						);
+						await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
+					}
 				} catch (e) {
 					const error = e as Error;
 					logger.error(error, error.message);
 					try {
+						if (interaction.isAutocomplete()) {
+							return;
+						}
+
 						if (!interaction.deferred && !interaction.replied) {
 							logger.warn(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
