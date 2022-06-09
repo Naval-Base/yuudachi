@@ -2,5 +2,5 @@ export const RefreshScamlistCommand = {
 	name: 'refreshscams',
 	description: 'Refresh scamlists',
 	options: [],
-	default_permission: false,
+	default_member_permissions: '0',
 } as const;

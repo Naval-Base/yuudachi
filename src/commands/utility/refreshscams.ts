@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid';
 import { container } from 'tsyringe';
 import type { Command } from '../../Command.js';
 import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains.js';
-import { checkModRole } from '../../functions/permissions/checkModRole.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { RefreshScamlistCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
@@ -23,7 +22,6 @@ export default class implements Command {
 		const redis = container.resolve<Redis>(kRedis);
 
 		const reply = await interaction.deferReply({ ephemeral: true });
-		await checkModRole(interaction, locale);
 
 		const missing = scamURLEnvs.filter((u) => !process.env[u]);
 

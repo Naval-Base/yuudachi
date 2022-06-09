@@ -5,7 +5,6 @@ import { container } from 'tsyringe';
 import type { Command } from '../../Command.js';
 import { RawCase, transformCase } from '../../functions/cases/transformCase.js';
 import { generateCaseEmbed } from '../../functions/logging/generateCaseEmbed.js';
-import { checkModRole } from '../../functions/permissions/checkModRole.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
@@ -91,7 +90,6 @@ export default class implements Command {
 	): Promise<void> {
 		const sql = container.resolve<Sql<any>>(kSQL);
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
-		await checkModRole(interaction, locale);
 
 		const [cmd, id] = args.phrase.split(OP_DELIMITER);
 		if (cmd === 'history' && id) {

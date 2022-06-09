@@ -10,4 +10,5 @@ export const PingCommand = {
 			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
+	default_member_permissions: '0',
 } as const;

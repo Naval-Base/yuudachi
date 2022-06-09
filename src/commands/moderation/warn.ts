@@ -5,7 +5,6 @@ import type { Command } from '../../Command.js';
 import { CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
-import { checkModRole } from '../../functions/permissions/checkModRole.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
@@ -22,7 +21,6 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
-		await checkModRole(interaction, locale);
 
 		const logChannel = await checkLogChannel(
 			interaction.guild,

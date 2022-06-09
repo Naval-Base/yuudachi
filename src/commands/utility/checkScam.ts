@@ -3,7 +3,6 @@ import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command.js';
 import { checkScam } from '../../functions/anti-scam/checkScam.js';
-import { checkModRole } from '../../functions/permissions/checkModRole.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { CheckScamCommand } from '../../interactions/index.js';
 import { addFields, truncateEmbed } from '../../util/embed.js';
@@ -15,7 +14,6 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
-		await checkModRole(interaction, locale);
 
 		const domains = await checkScam(args.content);
 

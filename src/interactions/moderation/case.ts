@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, PermissionFlagsBits } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 
 export const CaseLookupCommand = {
 	name: 'case',
@@ -17,5 +17,5 @@ export const CaseLookupCommand = {
 			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
-	default_member_permissions: PermissionFlagsBits.BanMembers.toString(),
+	default_member_permissions: '0',
 } as const;
