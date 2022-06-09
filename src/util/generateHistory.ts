@@ -12,6 +12,7 @@ import {
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import { ACTION_KEYS } from './actionKeys.js';
 import { addFields, truncateEmbed } from './embed.js';
 import { generateMessageLink } from './generateMessageLink.js';
 import type { RawCase } from '../functions/cases/transformCase.js';
@@ -19,9 +20,6 @@ import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSet
 import { kSQL } from '../tokens.js';
 
 dayjs.extend(relativeTime);
-
-const ACTION_KEYS = ['restriction', '', 'warn', 'kick', 'softban', 'ban', 'unban', 'timeout', ''];
-
 interface CaseFooter {
 	warn?: number;
 	restriction?: number;

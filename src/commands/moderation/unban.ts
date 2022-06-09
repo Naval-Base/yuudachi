@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command.js';
 import { deleteCase } from '../../functions/cases/deleteCase.js';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkModRole } from '../../functions/permissions/checkModRole.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';

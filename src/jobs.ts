@@ -5,7 +5,7 @@ import { container } from 'tsyringe';
 import { JobType } from './Constants.js';
 import { deleteCase } from './functions/cases/deleteCase.js';
 import { deleteLockdown } from './functions/lockdowns/deleteLockdown.js';
-import { upsertCaseLog } from './functions/logs/upsertCaseLog.js';
+import { upsertCaseLog } from './functions/logging/upsertCaseLog.js';
 import { logger } from './logger.js';
 import { kBree } from './tokens.js';
 

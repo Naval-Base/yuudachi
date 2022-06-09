@@ -1,9 +1,14 @@
 import { basename, extname } from 'node:path';
-import type { CommandInteraction } from 'discord.js';
+import type { AutocompleteInteraction, CommandInteraction } from 'discord.js';
 
 export interface Command {
 	name?: string;
 	execute: (interaction: CommandInteraction<'cached'>, args: any, locale: string) => unknown | Promise<unknown>;
+	autocomplete?: (
+		interaction: AutocompleteInteraction<'cached'>,
+		args: any,
+		locale: string,
+	) => unknown | Promise<unknown>;
 }
 
 export interface CommandInfo {

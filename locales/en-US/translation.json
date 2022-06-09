@@ -13,7 +13,8 @@
 				"generic": "Something went wrong.",
 				"no_enabled_module": "The {{ module }} is not enabled on this guild.",
 				"target_not_found": "The given member is not in this guild.",
-				"duration_format": "Wrong duration format."
+				"duration_format": "Wrong duration format.",
+				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option."
 			}
 		},
 		"config": {
@@ -32,6 +33,12 @@
 					"no_case_range": "Invalid case range #{{lower_case}} to #{{upper_case}}",
 					"case_lower_one": "Case ids have to be above 0",
 					"no_ref_case": "Cannot find reference case #{{case}}"
+				}
+			},
+			"case": {
+				"autocomplete": {
+					"no_reason": "no reason",
+					"show_history": "Show history for user {{- user}}"
 				}
 			},
 			"warn": {
