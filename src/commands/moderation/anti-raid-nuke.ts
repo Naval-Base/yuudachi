@@ -11,7 +11,6 @@ import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logging/insertAntiRaidNukeCaseLog.js';
-import { checkModRole } from '../../functions/permissions/checkModRole.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
@@ -32,8 +31,6 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		const reply = await interaction.deferReply();
-		await checkModRole(interaction, locale);
-
 		const logChannel = await checkLogChannel(
 			interaction.guild,
 			(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,

@@ -22,5 +22,5 @@ export const ReasonCommand = {
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],
-	default_permission: false,
+	default_member_permissions: '0',
 } as const;

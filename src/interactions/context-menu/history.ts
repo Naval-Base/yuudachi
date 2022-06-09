@@ -2,6 +2,6 @@ import { ApplicationCommandType, type RESTPostAPIContextMenuApplicationCommandsJ
 
 export const HistoryContextMenuCommand: RESTPostAPIContextMenuApplicationCommandsJSONBody = {
 	name: 'History',
-	default_permission: false,
+	default_member_permissions: '0',
 	type: ApplicationCommandType.User,
 } as const;

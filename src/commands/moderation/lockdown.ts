@@ -4,7 +4,6 @@ import i18next from 'i18next';
 import { lift } from './sub/lockdown/lift.js';
 import { lock } from './sub/lockdown/lock.js';
 import type { Command } from '../../Command.js';
-import { checkModRole } from '../../functions/permissions/checkModRole.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { LockdownCommand } from '../../interactions/index.js';
 
@@ -15,7 +14,6 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
-		await checkModRole(interaction, locale);
 
 		if (!interaction.guild.members.me?.permissions.has(PermissionFlagsBits.Administrator)) {
 			throw new Error(
