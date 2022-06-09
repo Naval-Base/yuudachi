@@ -17,5 +17,5 @@ export const CaseLookupCommand = {
 			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
-	default_member_permission: PermissionFlagsBits.BanMembers.toString(),
+	default_member_permissions: PermissionFlagsBits.BanMembers.toString(),
 } as const;
