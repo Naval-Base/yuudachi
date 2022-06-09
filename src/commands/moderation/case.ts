@@ -50,6 +50,9 @@ export default class implements Command {
 			const uniqueTargets = new Collection<string, { id: string; tag: string }>();
 
 			for (const c of cases) {
+				if (uniqueTargets.has(c.target_id)) {
+					continue;
+				}
 				uniqueTargets.set(c.target_id, { id: c.target_id, tag: c.target_tag });
 			}
 
@@ -57,17 +60,17 @@ export default class implements Command {
 				const target = uniqueTargets.first()!;
 				choices = [
 					{
-							name: i18next.t('command.mod.case.autocomplete.show_history', {
-								lng: locale,
-								user: target.tag,
-							})!,
-							value: `history${OP_DELIMITER}${target.id}`,
+						name: i18next.t('command.mod.case.autocomplete.show_history', {
+							lng: locale,
+							user: target.tag,
+						})!,
+						value: `history${OP_DELIMITER}${target.id}`,
 					},
 					...choices,
 				];
 				if (choices.length > AUTOCOMPLETE_CHOICES_MAX) {
 					choices.length = AUTOCOMPLETE_CHOICES_MAX;
-					}
+				}
 			}
 
 			await interaction.respond(choices.slice(0, 25));
