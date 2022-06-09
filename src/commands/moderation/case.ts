@@ -3,6 +3,7 @@ import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import type { Command } from '../../Command.js';
+import { AUTOCOMPLETE_CHOICES_MAX } from '../../Constants.js';
 import { RawCase, transformCase } from '../../functions/cases/transformCase.js';
 import { generateCaseEmbed } from '../../functions/logging/generateCaseEmbed.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
@@ -36,7 +37,7 @@ export default class implements Command {
 		try {
 			const trimmedPhrase = args.phrase.trim();
 			const cases = await findCases(trimmedPhrase, interaction.guildId);
-			const choices = cases.map((c) => ({
+			let choices = cases.map((c) => ({
 				name: `#${c.case_id} ${ACTION_KEYS[c.action]!.toUpperCase()} ${c.target_tag}: ${
 					c.reason ??
 					i18next.t('command.mod.case.autocomplete.no_reason', {
@@ -49,31 +50,27 @@ export default class implements Command {
 			const uniqueTargets = new Collection<string, { id: string; tag: string }>();
 
 			for (const c of cases) {
+				if (uniqueTargets.has(c.target_id)) {
+					continue;
+				}
 				uniqueTargets.set(c.target_id, { id: c.target_id, tag: c.target_tag });
 			}
 
 			if (uniqueTargets.size === 1) {
 				const target = uniqueTargets.first()!;
-				try {
-					if (choices.length >= 25) {
-						choices.length = 25;
-						choices.splice(-1, 1, {
-							name: i18next.t('command.mod.case.autocomplete.show_history', {
-								lng: locale,
-								user: target.tag,
-							})!,
-							value: `history${OP_DELIMITER}${target.id}`,
-						});
-					} else {
-						choices.push({
-							name: i18next.t('command.mod.case.autocomplete.show_history', {
-								lng: locale,
-								user: target.tag,
-							})!,
-							value: `history${OP_DELIMITER}${target.id}`,
-						});
-					}
-				} catch {}
+				choices = [
+					{
+						name: i18next.t('command.mod.case.autocomplete.show_history', {
+							lng: locale,
+							user: target.tag,
+						})!,
+						value: `history${OP_DELIMITER}${target.id}`,
+					},
+					...choices,
+				];
+				if (choices.length > AUTOCOMPLETE_CHOICES_MAX) {
+					choices.length = AUTOCOMPLETE_CHOICES_MAX;
+				}
 			}
 
 			await interaction.respond(choices.slice(0, 25));
