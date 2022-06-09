@@ -327,17 +327,32 @@
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",
+				"stickers": "• Stickers: {{- stickers}}",
 				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
-				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)"
+				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
+				"attachment": "↳ Attachment: {{- url}}",
+				"sticker": "↳ Sticker: {{- name}}"
 			},
 			"voice_state_update": {
 				"title": "Voice state update",
 				"joined": "Joined {{- channel}}",
 				"moved": "Moved from {{- fromChannel}} to {{- toChannel}}",
 				"left": "Left {{- channel}}"
+			},
+			"thread_created": {
+				"title": "Thread created",
+				"channel": "• Thread: {{- channel}} {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
+			},
+			"thread_deleted": {
+				"title": "Thread deleted",
+				"channel": "• Thread: {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Events, type Message, type Webhook } from 'discord.js';
+import { ChannelType, Client, Events, type Message, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -24,10 +24,10 @@ export default class implements Event {
 			if (message.author.bot) {
 				continue;
 			}
-			if (!message.guild) {
+			if (!message.inGuild()) {
 				continue;
 			}
-			if (!message.content && !message.embeds.length && !message.attachments.size) {
+			if (!message.content.length && !message.embeds.length && !message.attachments.size && !message.stickers.size) {
 				continue;
 			}
 
@@ -38,10 +38,11 @@ export default class implements Event {
 				if (!logChannelId) {
 					continue;
 				}
-				// TODO: ignore based on parent category once .inGuild() is available
+
 				if (
-					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId ?? '')) ||
-					ignoreChannels.includes(message.channelId)
+					ignoreChannels.includes(message.channelId) ||
+					(message.channel.parentId && ignoreChannels.includes(message.channel.parentId)) ||
+					(message.channel.parent?.parentId && ignoreChannels.includes(message.channel.parent.parentId))
 				) {
 					continue;
 				}
@@ -51,8 +52,10 @@ export default class implements Event {
 						event: { name: this.name, event: this.event },
 						guildId: message.guild.id,
 						memberId: message.author.id,
+						channelId: message.channelId,
+						channelType: ChannelType[message.channel.type],
 					},
-					`Member ${message.author.id} deleted a message`,
+					`Message by ${message.author.id} deleted in channel ${message.channelId}`,
 				);
 
 				const webhook = this.webhooks.get(logChannelId);
@@ -97,6 +100,13 @@ export default class implements Event {
 					}
 					info += `\n${i18next.t('log.guild_log.message_deleted.attachments', {
 						attachments: attachmentParts.join(' '),
+						lng: locale,
+					})}`;
+				}
+
+				if (message.stickers.size) {
+					info += `\n${i18next.t('log.guild_log.message_deleted.stickers', {
+						stickers: message.stickers.map((s) => `\`${s.name}\``).join(', '),
 						lng: locale,
 					})}`;
 				}
