@@ -12,8 +12,9 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { CaseLookupCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
+import { ACTION_KEYS } from '../../util/actionKeys.js';
 import { findCases } from '../../util/findCases.js';
-import { ACTION_KEYS, generateHistory } from '../../util/generateHistory.js';
+import { generateHistory } from '../../util/generateHistory.js';
 
 const OP_DELIMITER = '-' as const;
 
