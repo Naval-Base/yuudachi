@@ -6,7 +6,7 @@ export const CaseLookupCommand = {
 	options: [
 		{
 			name: 'phrase',
-			description: 'Search term to find the case by',
+			description: 'Term to find a case by (case id, target id, part of target tag, part of reason)',
 			type: ApplicationCommandOptionType.String,
 			autocomplete: true,
 			required: true,
