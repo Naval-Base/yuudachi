@@ -1,6 +1,6 @@
-/* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions } from 'discord-api-types/v10'; */
+/* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions, APIAttachment } from 'discord-api-types/v10'; */
 import type { ApplicationCommandOptionType } from 'discord-api-types/v10';
-import type { GuildChannel, GuildMember, Role, User } from 'discord.js';
+import type { Attachment, GuildChannel, GuildMember, Role, User } from 'discord.js';
 
 export type Command = Readonly<{
 	name: string;
@@ -32,7 +32,8 @@ type Option = Readonly<
 					| ApplicationCommandOptionType.User
 					| ApplicationCommandOptionType.Channel
 					| ApplicationCommandOptionType.Role
-					| ApplicationCommandOptionType.Mentionable;
+					| ApplicationCommandOptionType.Mentionable
+					| ApplicationCommandOptionType.Attachment;
 		  }
 	)
 >;
@@ -60,10 +61,9 @@ type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	: T extends ApplicationCommandOptionType.Role
 	? Role /* | APIRole */
 	: T extends ApplicationCommandOptionType.Mentionable
-	?
-			| { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
-			| GuildChannel /* | (APIPartialChannel & { permissions: Permissions }) */
-			| Role /* | APIRole */
+	? { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ } | Role /* | APIRole */
+	: T extends ApplicationCommandOptionType.Attachment
+	? Attachment /* | APIAttachment */
 	: never;
 
 type OptionToObject<O> = O extends {
