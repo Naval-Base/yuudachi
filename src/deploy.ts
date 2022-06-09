@@ -8,6 +8,7 @@ import {
 import {
 	// Moderation
 	AntiRaidNukeCommand,
+	CaseLookupCommand,
 	BanCommand,
 	DurationCommand,
 	HistoryCommand,
@@ -42,6 +43,7 @@ try {
 				// Moderation
 				AntiRaidNukeCommand,
 				BanCommand,
+			CaseLookupCommand,
 				DurationCommand,
 				HistoryCommand,
 				KickCommand,

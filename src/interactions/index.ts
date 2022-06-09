@@ -1,5 +1,6 @@
 export * from './moderation/anti-raid-nuke.js';
 export * from './moderation/ban.js';
+export * from './moderation/case.js';
 export * from './moderation/duration.js';
 export * from './moderation/history.js';
 export * from './moderation/kick.js';
