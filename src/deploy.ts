@@ -43,7 +43,7 @@ try {
 				// Moderation
 				AntiRaidNukeCommand,
 				BanCommand,
-			CaseLookupCommand,
+				CaseLookupCommand,
 				DurationCommand,
 				HistoryCommand,
 				KickCommand,
