@@ -7,7 +7,7 @@ import { SCAM_THRESHOLD } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { totalScams } from '../../functions/anti-scam/totalScam.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';

@@ -4,7 +4,7 @@ import { container } from 'tsyringe';
 import { CaseAction, createCase } from './createCase.js';
 import type { RawCase } from './transformCase.js';
 import { kSQL } from '../../tokens.js';
-import { generateCasePayload } from '../logs/generateCasePayload.js';
+import { generateCasePayload } from '../logging/generateCasePayload.js';
 
 interface DeleteCaseOptions {
 	guild: Guild;

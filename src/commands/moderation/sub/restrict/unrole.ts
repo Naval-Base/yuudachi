@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { deleteCase } from '../../../../functions/cases/deleteCase.js';
-import { upsertCaseLog } from '../../../../functions/logs/upsertCaseLog.js';
+import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
 import type { RestrictCommand } from '../../../../interactions/index.js';
 import { kSQL } from '../../../../tokens.js';

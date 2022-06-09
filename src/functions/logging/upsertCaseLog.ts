@@ -1,9 +1,8 @@
-import type { APIEmbed } from 'discord-api-types/v10';
-import { Client, type Snowflake, type User } from 'discord.js';
-import i18next from 'i18next';
+import { Client, Snowflake, User } from 'discord.js';
+
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { generateCaseLog, generateCaseColor } from './generateCaseLog.js';
+import { generateCaseEmbed } from './generateCaseEmbed.js';
 import { kSQL } from '../../tokens.js';
 import type { Case } from '../cases/createCase.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
@@ -14,31 +13,12 @@ export async function upsertCaseLog(guildId: Snowflake, user: User | undefined |
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const guild = await client.guilds.fetch(guildId);
-
-	const locale = (await getGuildSetting(guild.id, SettingsKeys.Locale)) as string;
 	const logChannel = await checkLogChannel(
 		guild,
 		(await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId)) as string,
 	);
 
-	let embed: APIEmbed = {
-		color: generateCaseColor(case_),
-		description: await generateCaseLog(guild.client, case_, logChannel!.id, locale),
-		footer: {
-			text: i18next.t('log.mod_log.case_log.footer', { caseId: case_.caseId, lng: locale }),
-		},
-		timestamp: new Date().toISOString(),
-	};
-
-	if (user) {
-		embed = {
-			...embed,
-			author: {
-				name: `${user.tag} (${user.id})`,
-				icon_url: user.displayAvatarURL(),
-			},
-		};
-	}
+	const embed = await generateCaseEmbed(guildId, logChannel!.id, user, case_);
 
 	if (case_.logMessageId) {
 		const message = await logChannel!.messages.fetch(case_.logMessageId);

@@ -8,7 +8,7 @@ import type { Event } from '../../Event.js';
 import { createContentHash, totalContent } from '../../functions/anti-spam/totalContents.js';
 import { totalMentions } from '../../functions/anti-spam/totalMentions.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { upsertCaseLog } from '../../functions/logs/upsertCaseLog.js';
+import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
