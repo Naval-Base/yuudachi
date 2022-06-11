@@ -22,5 +22,6 @@ export const EMBED_FIELD_LIMIT = 25;
 export const EMBED_FIELD_NAME_LIMIT = 256;
 export const EMBED_FIELD_VALUE_LIMIT = 1024;
 export const SNOWFLAKE_MIN_LENGTH = 17;
-export const AUTOCOMPLETE_CHOICES_MAX = 25;
 export const AUTOMOD_FLAG_INDICATOR_FIELD_NAME = 'flagged_message_id';
+export const AUTOCOMPLETE_CHOICE_LIMIT = 25;
+export const AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT = 100;

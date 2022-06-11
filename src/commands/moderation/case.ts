@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import type { Command } from '../../Command.js';
-import { AUTOCOMPLETE_CHOICES_MAX } from '../../Constants.js';
+import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from '../../Constants.js';
 import { RawCase, transformCase } from '../../functions/cases/transformCase.js';
 import { generateCaseEmbed } from '../../functions/logging/generateCaseEmbed.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
@@ -13,6 +13,7 @@ import type { CaseLookupCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
 import { ACTION_KEYS } from '../../util/actionKeys.js';
+import { ellipsis, truncateEmbed } from '../../util/embed.js';
 import { findCases } from '../../util/findCases.js';
 import { generateHistory } from '../../util/generateHistory.js';
 
@@ -37,15 +38,18 @@ export default class implements Command {
 		try {
 			const trimmedPhrase = args.phrase.trim();
 			const cases = await findCases(trimmedPhrase, interaction.guildId);
-			let choices = cases.map((c) => ({
-				name: `#${c.case_id} ${ACTION_KEYS[c.action]!.toUpperCase()} ${c.target_tag}: ${
+			let choices = cases.map((c) => {
+				const choiceName = `#${c.case_id} ${ACTION_KEYS[c.action]!.toUpperCase()} ${c.target_tag}: ${
 					c.reason ??
 					i18next.t('command.mod.case.autocomplete.no_reason', {
 						lng: locale,
 					})!
-				}`,
-				value: String(c.case_id),
-			}));
+				}`;
+				return {
+					name: ellipsis(choiceName, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT),
+					value: String(c.case_id),
+				};
+			});
 
 			const uniqueTargets = new Collection<string, { id: string; tag: string }>();
 
@@ -60,16 +64,19 @@ export default class implements Command {
 				const target = uniqueTargets.first()!;
 				choices = [
 					{
-						name: i18next.t('command.mod.case.autocomplete.show_history', {
-							lng: locale,
-							user: target.tag,
-						})!,
+						name: ellipsis(
+							i18next.t('command.mod.case.autocomplete.show_history', {
+								lng: locale,
+								user: target.tag,
+							})!,
+							AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
+						),
 						value: `history${OP_DELIMITER}${target.id}`,
 					},
 					...choices,
 				];
-				if (choices.length > AUTOCOMPLETE_CHOICES_MAX) {
-					choices.length = AUTOCOMPLETE_CHOICES_MAX;
+				if (choices.length > AUTOCOMPLETE_CHOICE_LIMIT) {
+					choices.length = AUTOCOMPLETE_CHOICE_LIMIT;
 				}
 			}
 
@@ -92,7 +99,7 @@ export default class implements Command {
 		if (cmd === 'history' && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
 			await interaction.editReply({
-				embeds: [await generateHistory(interaction, data, locale)],
+				embeds: [truncateEmbed(await generateHistory(interaction, data, locale))],
 			});
 			return;
 		}
@@ -115,7 +122,11 @@ export default class implements Command {
 			const moderator = await interaction.client.users.fetch(modCase.mod_id);
 
 			await interaction.editReply({
-				embeds: [await generateCaseEmbed(interaction.guildId, logChannel!.id, moderator, transformCase(modCase))],
+				embeds: [
+					truncateEmbed(
+						await generateCaseEmbed(interaction.guildId, logChannel!.id, moderator, transformCase(modCase)),
+					),
+				],
 			});
 			return;
 		}
