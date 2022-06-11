@@ -6,6 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import { SCAM_THRESHOLD } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { totalScams } from '../../functions/anti-scam/totalScam.js';
+import { considerableText } from '../../functions/anti-spam/considerableText.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
@@ -24,16 +25,10 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
-				if (
-					message.author.bot ||
-					!message.guild ||
-					!message.guildId ||
-					// @ts-expect-error Automod message, not yet in types (no overlap)
-					(!message.content.length && message.type !== 24)
-				)
+				const content = considerableText(message);
+				if (!content || !message.inGuild()) {
 					continue;
-
-				const content = message.content.length ? message.content : message.embeds[0]!.description!;
+				}
 
 				const totalScamCount = await totalScams(content, message.guildId, message.author.id);
 				const scamExceeded = totalScamCount >= SCAM_THRESHOLD;
