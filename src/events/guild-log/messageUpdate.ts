@@ -1,6 +1,6 @@
 import { on } from 'node:events';
 import { diffLines, diffWords } from 'diff';
-import { Client, Events, type Message, Util, type Webhook } from 'discord.js';
+import { Client, Events, type Message, escapeMarkdown, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -30,7 +30,7 @@ export default class implements Event {
 			if (!newMessage.guild) {
 				continue;
 			}
-			if (Util.escapeMarkdown(oldMessage.content) === Util.escapeMarkdown(newMessage.content)) {
+			if (escapeMarkdown(oldMessage.content) === escapeMarkdown(newMessage.content)) {
 				continue;
 			}
 
@@ -90,10 +90,7 @@ export default class implements Event {
 					const append = '\n```';
 					description = `${prepend}${description.substring(0, 3900)}${append}`;
 				} else {
-					const diffMessage = diffWords(
-						Util.escapeMarkdown(oldMessage.content),
-						Util.escapeMarkdown(newMessage.content),
-					);
+					const diffMessage = diffWords(escapeMarkdown(oldMessage.content), escapeMarkdown(newMessage.content));
 
 					for (const part of diffMessage) {
 						const markdown = part.added ? '**' : part.removed ? '~~' : '';

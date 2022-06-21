@@ -1,3 +1,4 @@
+import { InteractionType } from 'discord-api-types/v10';
 import { Client, Events } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command.js';
@@ -20,7 +21,11 @@ export default class implements Event {
 
 	public execute(): void {
 		this.client.on(this.event, async (interaction) => {
-			if (!interaction.isCommand() && !interaction.isUserContextMenuCommand() && !interaction.isAutocomplete()) {
+			if (
+				interaction.type !== InteractionType.ApplicationCommand &&
+				!interaction.isUserContextMenuCommand() &&
+				interaction.type !== InteractionType.ApplicationCommandAutocomplete
+			) {
 				return;
 			}
 
@@ -33,7 +38,7 @@ export default class implements Event {
 				try {
 					const locale = (await getGuildSetting(interaction.guildId, SettingsKeys.Locale)) as string | undefined;
 
-					if (interaction.isAutocomplete()) {
+					if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
 						if (!command.autocomplete) {
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
@@ -53,7 +58,7 @@ export default class implements Event {
 					const error = e as Error;
 					logger.error(error, error.message);
 					try {
-						if (interaction.isAutocomplete()) {
+						if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
 							return;
 						}
 

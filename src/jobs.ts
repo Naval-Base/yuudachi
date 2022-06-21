@@ -9,25 +9,25 @@ import { upsertCaseLog } from './functions/logging/upsertCaseLog.js';
 import { logger } from './logger.js';
 import { kBree } from './tokens.js';
 
-export function registerJobs() {
+export async function registerJobs() {
 	const bree = container.resolve<Bree>(kBree);
 
 	logger.info({ job: { name: 'modActionTimers' } }, `Registering job: modActionTimers`);
-	bree.add({
+	await bree.add({
 		name: 'modActionTimers',
 		interval: '1m',
 		path: fileURLToPath(new URL('./jobs/modActionTimers.js', import.meta.url)),
 	});
 
 	logger.info({ job: { name: 'modLockdownTimers' } }, `Registering job: modLockdownTimers`);
-	bree.add({
+	await bree.add({
 		name: 'modLockdownTimers',
 		interval: '1m',
 		path: fileURLToPath(new URL('./jobs/modLockdownTimers.js', import.meta.url)),
 	});
 
 	logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
-	bree.add({
+	await bree.add({
 		name: 'scamDomainUpdateTimers',
 		interval: '5m',
 		timeout: 0,
@@ -35,7 +35,7 @@ export function registerJobs() {
 	});
 }
 
-export function startJobs() {
+export async function startJobs() {
 	const client = container.resolve<Client<true>>(Client);
 	const bree = container.resolve<Bree>(kBree);
 
@@ -80,5 +80,5 @@ export function startJobs() {
 		bree.workers.get(name)?.removeAllListeners();
 	});
 
-	bree.start();
+	await bree.start();
 }
