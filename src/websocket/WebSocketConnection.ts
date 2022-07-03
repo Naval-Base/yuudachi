@@ -27,6 +27,7 @@ export class WebSocketConnection {
 		this.connection.on('open', this.onOpen.bind(this));
 		this.connection.on('message', this.onMessage.bind(this));
 		this.connection.on('close', this.onClose.bind(this));
+		this.connection.on('error', this.onError.bind(this));
 	}
 
 	private onOpen() {
@@ -35,6 +36,10 @@ export class WebSocketConnection {
 			url: this.url,
 		});
 		this.tries = 0;
+	}
+
+	private onError(err: Error) {
+		logger.warn(err, 'WS error received');
 	}
 
 	private onMessage(data: Buffer) {
