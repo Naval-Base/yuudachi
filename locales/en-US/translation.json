@@ -309,6 +309,9 @@
 			"spam": {
 				"reason": "Spam detection",
 				"reason_mentions": "Mention spam detection"
+			},
+			"username": {
+				"reason": "Banned username detected: {{- username}}"
 			}
 		},
 		"member_log": {
