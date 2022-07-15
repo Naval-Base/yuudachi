@@ -1,7 +1,7 @@
 import { on } from 'node:events';
 import { Client, Events, type GuildMember } from 'discord.js';
 import i18next from 'i18next';
-import type { Redis } from 'ioredis'
+import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { checkUsername } from '../../functions/anti-raid/usernameCheck.js';
@@ -23,18 +23,17 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
-				const badNameHit = checkUsername(guildMember.user.username); 
+				const badNameHit = checkUsername(guildMember.user.username);
 
 				if (badNameHit) {
-					
 					const logChannel = await checkLogChannel(
 						guildMember.guild,
 						(await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId)) as string,
 					);
 					if (!logChannel) {
-							continue;
+						continue;
 					}
-						
+
 					const locale = (await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale)) as string;
 
 					await this.redis.setex(`guild:${guildMember.guild.id}:user:${guildMember.id}:ban`, 15, '');
@@ -65,7 +64,6 @@ export default class implements Event {
 
 					await upsertCaseLog(guildMember.guild.id, this.client.user, case_);
 				}
-
 			} catch (e) {
 				const error = e as Error;
 				logger.error(error, error.message);

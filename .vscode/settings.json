@@ -1,6 +1,4 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"i18n-ally.localesPaths": [
-		"locales"
-	]
+	"i18n-ally.localesPaths": ["locales"]
 }

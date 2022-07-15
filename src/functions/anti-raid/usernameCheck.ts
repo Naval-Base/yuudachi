@@ -21,7 +21,7 @@ const badUsernamesRegex = [
 	},
 	{
 		name: 'Mod_Developers_Academy',
-		regex: 	/(mod(erator)?('?s)?|hype\s*squad|developers?)\s+(academy|message|exam|team|events?)/i,
+		regex: /(mod(erator)?('?s)?|hype\s*squad|developers?)\s+(academy|message|exam|team|events?)/i,
 	},
 	{
 		name: 'Contact_Hype',
