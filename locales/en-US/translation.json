@@ -275,6 +275,18 @@
 				"success": "Successfully refreshed scam domain lists",
 				"pending": "Current scam domain lists",
 				"error": "Something went wrong when refreshing scam domains"
+			},
+			"usernames": {
+				"added": {
+					"success": "Successfully added {{- name}} to the banned usernames list",
+					"update": "Successfully updated {{- name}} in the banned usernames list",
+					"failed": "Failed to add {{- name}} to the banned usernames list",
+					"invalid": "Invalid regex provided"
+				},
+				"removed": {
+					"success": "Successfully removed {{- name}} from the usernames list",
+					"failed": "Failed to remove {{- name}} from the usernames list"
+				}
 			}
 		}
 	},
@@ -311,7 +323,7 @@
 				"reason_mentions": "Mention spam detection"
 			},
 			"username": {
-				"reason": "Banned username detected: {{- username}}"
+				"reason": "Banned username detection"
 			}
 		},
 		"member_log": {
