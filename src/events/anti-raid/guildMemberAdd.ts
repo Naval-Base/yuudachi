@@ -5,7 +5,7 @@ import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { checkUsername } from '../../functions/anti-raid/usernameCheck.js';
-import { Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
+import { CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
@@ -23,7 +23,7 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
-				const badNameHit = checkUsername(guildMember.user.username);
+				const badNameHit = await checkUsername(this.redis, guildMember.user.username);
 
 				if (badNameHit) {
 					const logChannel = await checkLogChannel(
@@ -37,7 +37,6 @@ export default class implements Event {
 					const locale = (await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale)) as string;
 
 					await this.redis.setex(`guild:${guildMember.guild.id}:user:${guildMember.id}:ban`, 15, '');
-					let case_: Case | null = null;
 
 					logger.info(
 						{
@@ -50,7 +49,7 @@ export default class implements Event {
 						`Member ${guildMember.id} banned (Bad Usename)`,
 					);
 
-					case_ = await createCase(guildMember.guild, {
+					const case_ = await createCase(guildMember.guild, {
 						targetId: guildMember.id,
 						guildId: guildMember.guild.id,
 						action: CaseAction.Ban,

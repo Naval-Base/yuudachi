@@ -1,50 +1,20 @@
-const badUsernamesRegex = [
-	{
-		name: 'Discord_HypeSquad',
-		regex: /discord\s+hype\s*squad/i,
-	},
-	{
-		name: 'Discord_Events_Academy',
-		regex: /(hype\s*squad|discord)\s+(events?|academy|team|mail|system)/i,
-	},
-	{
-		name: 'Discord_Developers',
-		regex: /discord\s+(developers?|api|bots?|message)?/i,
-	},
-	{
-		name: 'Discord_Moderators',
-		regex: /^discord\s+moderators?$/i,
-	},
-	{
-		name: 'Academy_Staff',
-		regex: /^academy\s+(staff|moderator|system)s?/i,
-	},
-	{
-		name: 'Mod_Developers_Academy',
-		regex: /(mod(erator)?('?s)?|hype\s*squad|developers?)\s+(academy|message|exam|team|events?)/i,
-	},
-	{
-		name: 'Contact_Hype',
-		regex: /contact\s*(hype|events?)/i,
-	},
-	{
-		name: 'HypeSquad_Events',
-		regex: /(hype)\s+(events?|messages?|apply|team|system)/i,
-	},
-];
+import { remove } from 'confusables';
+import type { Redis } from 'ioredis';
+import { getAllBannedUsernames } from '../../util/bannedUsernames.js';
 
-interface BadUsernameHit {
+export interface BannedUsernameData {
 	name: string;
 	regex: RegExp;
 }
 
-export function checkUsername(username: string): BadUsernameHit | null {
-	for (const regexEntry of badUsernamesRegex) {
-		if (regexEntry.regex.test(username)) {
-			return {
-				name: regexEntry.name,
-				regex: regexEntry.regex,
-			};
+export async function checkUsername(redis: Redis, username: string): Promise<BannedUsernameData | null> {
+	const bannedUsernames = await getAllBannedUsernames(redis);
+
+	for (const entry of bannedUsernames) {
+		const sanitizedUsername = remove(username);
+
+		if (entry.regex.test(sanitizedUsername)) {
+			return entry;
 		}
 	}
 
