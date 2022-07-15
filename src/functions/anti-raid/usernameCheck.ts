@@ -5,7 +5,7 @@ const badUsernamesRegex = [
 	},
 	{
 		name: 'Discord_Events_Academy',
-		regex: /(hype\s*squad|discord)\s+(events?|academy|team|mail)/i,
+		regex: /(hype\s*squad|discord)\s+(events?|academy|team|mail|system)/i,
 	},
 	{
 		name: 'Discord_Developers',
@@ -17,7 +17,7 @@ const badUsernamesRegex = [
 	},
 	{
 		name: 'Academy_Staff',
-		regex: /^academy\s+(staff|moderator)s?/i,
+		regex: /^academy\s+(staff|moderator|system)s?/i,
 	},
 	{
 		name: 'Mod_Developers_Academy',
@@ -29,7 +29,7 @@ const badUsernamesRegex = [
 	},
 	{
 		name: 'HypeSquad_Events',
-		regex: /(hype)\s+(events?|messages?|apply|team)/i,
+		regex: /(hype)\s+(events?|messages?|apply|team|system)/i,
 	},
 ];
 
