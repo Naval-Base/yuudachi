@@ -1,3 +1,4 @@
+import clean from '@aero/sanitizer';
 import { remove } from 'confusables';
 import type { Redis } from 'ioredis';
 import { getAllBannedUsernames } from '../../util/bannedUsernames.js';
@@ -11,7 +12,7 @@ export async function checkUsername(redis: Redis, username: string): Promise<Ban
 	const bannedUsernames = await getAllBannedUsernames(redis);
 
 	for (const entry of bannedUsernames) {
-		const sanitizedUsername = remove(username);
+		const sanitizedUsername = clean(remove(username));
 
 		if (entry.regex.test(sanitizedUsername)) {
 			return entry;
