@@ -15,4 +15,5 @@ export * from './moderation/timeout.js';
 export * from './utility/ping.js';
 export * from './utility/checkScam.js';
 export * from './utility/refreshscams.js';
+export * from './utility/usernames.js';
 export * from './context-menu/history.js';
