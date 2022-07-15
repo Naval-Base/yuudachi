@@ -27,6 +27,7 @@
 		"bree": "^9.1.0",
 		"bufferutil": "^4.0.6",
 		"common-tags": "^1.8.2",
+		"confusables": "^1.1.1",
 		"dayjs": "^1.11.3",
 		"diff": "^5.1.0",
 		"discord.js": "^14.0.0-dev.1656864763-c7a205f",
