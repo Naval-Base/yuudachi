@@ -323,7 +323,8 @@
 				"reason_mentions": "Mention spam detection"
 			},
 			"username": {
-				"reason": "Banned username detection"
+				"reason": "Banned username detection",
+				"reason_update": "Account possibly compromised"
 			}
 		},
 		"member_log": {
