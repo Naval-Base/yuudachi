@@ -10,9 +10,9 @@ export interface BannedUsernameData {
 
 export async function checkUsername(redis: Redis, username: string): Promise<BannedUsernameData | null> {
 	const bannedUsernames = await getAllBannedUsernames(redis);
+	const sanitizedUsername = clean(remove(username));
 
 	for (const entry of bannedUsernames) {
-		const sanitizedUsername = clean(remove(username));
 
 		if (entry.regex.test(sanitizedUsername)) {
 			return entry;
