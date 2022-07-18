@@ -23,35 +23,37 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
+
+				const guild = guildMember.guild;
 				const badNameHit = await checkUsername(this.redis, guildMember.user.username);
 
 				if (badNameHit) {
 					const logChannel = await checkLogChannel(
-						guildMember.guild,
-						(await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId)) as string,
+						guild,
+						(await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId)) as string,
 					);
 					if (!logChannel) {
 						continue;
 					}
 
-					const locale = (await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale)) as string;
+					const locale = (await getGuildSetting(guild.id, SettingsKeys.Locale)) as string;
 
-					await this.redis.setex(`guild:${guildMember.guild.id}:user:${guildMember.id}:ban`, 15, '');
+					await this.redis.setex(`guild:${guild.id}:user:${guildMember.id}:ban`, 15, '');
 
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
-							guildId: guildMember.guild.id,
-							userId: guildMember.client.user!.id,
+							guildId: guild.id,
+							userId: this.client.user.id,
 							memberId: guildMember.id,
 							badNameHit,
 						},
 						`Member ${guildMember.id} banned (Bad Usename)`,
 					);
 
-					const case_ = await createCase(guildMember.guild, {
+					const case_ = await createCase(guild, {
 						targetId: guildMember.id,
-						guildId: guildMember.guild.id,
+						guildId: guild.id,
 						action: CaseAction.Ban,
 						targetTag: guildMember.user.tag,
 						reason: i18next.t('log.mod_log.username.reason', {
@@ -61,7 +63,7 @@ export default class implements Event {
 						deleteMessageDays: 1,
 					});
 
-					await upsertCaseLog(guildMember.guild.id, this.client.user, case_);
+					await upsertCaseLog(guild.id, this.client.user, case_);
 				}
 			} catch (e) {
 				const error = e as Error;
