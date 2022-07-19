@@ -24,10 +24,12 @@ export default class implements Event {
 		for await (const [oldMember, newMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember, GuildMember]>) {
 			try {
 
-				const [ oldUser, newUser ] = [ oldMember.user, newMember.user ];
+				const [oldUser, newUser] = [oldMember.user, newMember.user];
 				const guild = newMember.guild;
 
-				if (oldUser.username === newUser.username) return;
+				if (oldUser.username === newUser.username) {
+					return;
+				}
 
 				const badNameHit = await checkUsername(this.redis, newUser.username);
 

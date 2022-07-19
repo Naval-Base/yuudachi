@@ -23,6 +23,7 @@ export default class implements Command {
 			case 'add': {
 				return add(interaction, args.add, this.redis, locale);
 			}
+
 			case 'remove': {
 				return remove(interaction, args.remove.query, this.redis, locale);
 			}
