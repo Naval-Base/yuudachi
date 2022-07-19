@@ -1,13 +1,17 @@
+import clean from '@aero/sanitizer';
 import { ms } from '@naval-base/ms';
+import { remove } from 'confusables';
 import dayjs from 'dayjs';
 import { type CommandInteraction, Formatters, type GuildMember, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
+import leven from 'leven';
 import { nanoid } from 'nanoid';
 import RE2 from 're2';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { parseAvatar, promiseImageHash } from '../../functions/anti-raid/parseAvatar.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
 import { insertAntiRaidNukeCaseLog } from '../../functions/logging/insertAntiRaidNukeCaseLog.js';
@@ -23,7 +27,7 @@ import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 @injectable()
 export default class implements Command {
-	public constructor(@inject(kRedis) public readonly redis: Redis) {}
+	public constructor(@inject(kRedis) public readonly redis: Redis) { }
 
 	public async execute(
 		interaction: CommandInteraction<'cached'>,
@@ -49,6 +53,8 @@ export default class implements Command {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 		}
 
+		const parsedAvatar = args.avatar ? await parseAvatar(args.avatar, interaction.client) : null;
+
 		if (args.reason && args.reason.length >= 500) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
@@ -58,23 +64,46 @@ export default class implements Command {
 
 		const fetchedMembers = await interaction.guild.members.fetch({ force: true });
 		const members = fetchedMembers.filter((member) => {
+
+			const sanitized = clean(remove(member.user.username));
+
 			if (args.pattern) {
 				try {
 					const re = new RE2(`^${args.pattern}$`, 'i');
-					if (!re.test(member.user.username)) {
+					if (!re.test(member.user.username) && !re.test(sanitized)) {
 						return false;
 					}
-				} catch {}
+				} catch { }
 			}
 
-			if (args.avatar) {
-				if (member.avatar !== args.avatar && member.user.avatar !== args.avatar) {
-					return false;
-				}
+			if (args.zalgo && !(member.user.username.match(/[\u0300-\u036F]/g) || []).length) {
+				return false;
+			}
+
+			if (args.confusables && member.user.username === sanitized) {
+				return false;
 			}
 
 			return member.joinedTimestamp! > joinCutoff && member.user.createdTimestamp > accountCutoff;
 		});
+
+		for (const member of members.values()) {
+			if (!parsedAvatar) continue;
+			try {
+				const userAvatar = member.user.avatarURL({ size: 512, extension: 'jpeg', forceStatic: true });
+				if (parsedAvatar === 'noPfp' && userAvatar) {
+					members.delete(member.id);
+					continue;
+				}
+
+				const hash = await promiseImageHash(userAvatar!);
+
+				if (leven(hash, parsedAvatar) > 3) {
+					members.delete(member.id);
+				}
+
+			} catch { }
+		}
 
 		const parameterStrings = [
 			i18next.t('command.mod.anti_raid_nuke.errors.parameters.heading', {
@@ -94,10 +123,11 @@ export default class implements Command {
 			}),
 		];
 
-		if (args.avatar) {
+
+		if (parsedAvatar) {
 			parameterStrings.push(
 				i18next.t('command.mod.anti_raid_nuke.errors.parameters.avatar', {
-					avatar: Formatters.inlineCode(args.avatar),
+					avatar: Formatters.inlineCode(parsedAvatar === 'noPfp' ? 'No profile picture' : parsedAvatar),
 					lng: locale,
 				}),
 			);
@@ -110,6 +140,14 @@ export default class implements Command {
 				}),
 				Formatters.codeBlock(`^${args.pattern}$`),
 			);
+		}
+
+		if (args.zalgo) {
+			parameterStrings.push(i18next.t('command.mod.anti_raid_nuke.errors.parameters.zalgo', { lng: locale }));
+		}
+
+		if (args.confusables) {
+			parameterStrings.push(i18next.t('command.mod.anti_raid_nuke.errors.parameters.confusables', { lng: locale }));
 		}
 
 		const deletionDays = args.days === undefined ? 1 : Math.min(Math.max(Number(args.days), 0), 7);
@@ -224,6 +262,7 @@ export default class implements Command {
 			const promises = [];
 			const fatalities: GuildMember[] = [];
 			const survivors: GuildMember[] = [];
+			let processed = 0;
 			for (const member of members.values()) {
 				promises.push(
 					createCase(
@@ -256,7 +295,19 @@ export default class implements Command {
 						.catch(() => {
 							survivors.push(member);
 						})
-						.finally(() => void this.redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15)),
+						.finally(() => {
+							processed++;
+							if (processed % 50 === 0) {
+								void collectedInteraction.editReply({
+									content: [
+										collectedInteraction.message.content,
+										'', '',
+										i18next.t('command.mod.anti_raid_nuke.stages.processing', { lng: locale, current: processed, total: members.size }),
+									].join('\n'),
+								}).catch(() => null);
+							}
+							void this.redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15)
+						}),
 				);
 			}
 
