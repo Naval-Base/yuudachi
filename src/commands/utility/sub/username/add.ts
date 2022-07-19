@@ -1,11 +1,11 @@
 import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
-import { addBannedUsername, type RawBannedUsernameData } from '../../../../util/bannedUsernames.js';
+import { addFlaggedUsername, type RawFlaggedUsernameData } from '../../../../util/flaggedUsernames.js';
 
 export async function add(
 	interaction: CommandInteraction<'cached'>,
-	data: RawBannedUsernameData,
+	data: RawFlaggedUsernameData,
 	redis: Redis,
 	locale: string,
 ): Promise<void> {
@@ -21,22 +21,22 @@ export async function add(
 		return input;
 	};
 
-	data = {
+	const parsedData = {
 		name: data.name,
 		regex: parseRegex(data.regex),
 	};
 
 	try {
-		new RegExp(data.regex);
+		new RegExp(parsedData.regex);
 
-		const alreadyExists = await redis.hexists('banned_usernames', data.name);
-		const added = await addBannedUsername(redis, data);
+		const alreadyExists = await redis.hexists('flagged_usernames', parsedData.name);
+		const added = await addFlaggedUsername(redis, parsedData);
 
 		if (added) {
 			const key = alreadyExists ? 'update' : 'success';
-			await interaction.editReply(i18next.t(`command.utility.usernames.added.${key}`, { locale, name: data.name }));
+			await interaction.editReply(i18next.t(`command.utility.usernames.added.${key}`, { locale, name: parsedData.name }));
 		} else {
-			await interaction.editReply(i18next.t('command.utility.usernames.added.failed', { locale, name: data.name }));
+			await interaction.editReply(i18next.t('command.utility.usernames.added.failed', { locale, name: parsedData.name }));
 		}
 	} catch (error) {
 		await interaction.editReply(i18next.t('command.utility.usernames.added.invalid', { locale }));
