@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 import RE2 from 're2';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command.js';
-import { ANTI_RAID_NUKE_AVATAR_THRESHOLD, DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { ANTI_RAID_NUKE_AVATAR_THRESHOLD, ANTI_RAID_NUKE_PROGRESS_SPLIT, DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { parseAvatar, promiseImageHash } from '../../functions/anti-raid/parseAvatar.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
@@ -300,7 +300,7 @@ export default class implements Command {
 						})
 						.finally(() => {
 							processed++;
-							if (processed % 50 === 0) {
+							if (processed % ANTI_RAID_NUKE_PROGRESS_SPLIT === 0) {
 								void collectedInteraction.editReply({
 									content: [
 										collectedInteraction.message.content,
