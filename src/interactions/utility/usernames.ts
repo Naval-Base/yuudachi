@@ -2,11 +2,11 @@ import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 
 export const UsernamesCommand = {
 	name: 'username',
-	description: 'Modify the list of banned usernames',
+	description: 'Modify the list of flagged usernames',
 	options: [
 		{
 			name: 'add',
-			description: 'Add an regex to the list of banned usernames',
+			description: 'Add an regex to the list of flagged usernames',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
@@ -25,7 +25,7 @@ export const UsernamesCommand = {
 		},
 		{
 			name: 'remove',
-			description: 'Remove an regex to the list of banned usernames',
+			description: 'Remove an regex to the list of flagged usernames',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{

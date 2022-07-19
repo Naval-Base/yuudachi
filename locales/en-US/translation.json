@@ -278,9 +278,9 @@
 			},
 			"usernames": {
 				"added": {
-					"success": "Successfully added {{- name}} to the banned usernames list",
-					"update": "Successfully updated {{- name}} in the banned usernames list",
-					"failed": "Failed to add {{- name}} to the banned usernames list",
+					"success": "Successfully added {{- name}} to the flagged usernames list",
+					"update": "Successfully updated {{- name}} in the flagged usernames list",
+					"failed": "Failed to add {{- name}} to the flagged usernames list",
 					"invalid": "Invalid regex provided"
 				},
 				"removed": {
