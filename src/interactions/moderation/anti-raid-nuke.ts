@@ -18,13 +18,23 @@ export const AntiRaidNukeCommand = {
 		},
 		{
 			name: 'pattern',
-			description: "A pattern the member's username should match (case insensitive, full match)",
+			description: "A pattern the member's username should match (case insensitive, full match. Will test sanitized and raw usernames)",
 			type: ApplicationCommandOptionType.String,
 		},
 		{
 			name: 'avatar',
-			description: 'The avatar hash the user or member should have (exact match)',
+			description: 'The avatar to match, can be a userId, a url or \'nopfp\' (Use \'noPfp\' to match no pfp)',
 			type: ApplicationCommandOptionType.String,
+		},
+		{
+			name: 'zalgo',
+			description: 'Filter usernames that contains zalgo (t̶͔̘͇̑̎̕h̸̼̙̹͐͑̃ḯ̷̪̫͖̙̉s̶̜͈̙͕̄̎)',
+			type: ApplicationCommandOptionType.Boolean,
+		},
+		{
+			name: 'confusables',
+			description: 'Filter usernames that contains confusables (lookalike characters)',
+			type: ApplicationCommandOptionType.Boolean,
 		},
 		{
 			name: 'reason',
