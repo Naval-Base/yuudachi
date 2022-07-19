@@ -124,6 +124,7 @@
 			},
 			"anti_raid_nuke": {
 				"errors": {
+					"invalid_avatar": "Invalid avatar format, must be a userId, a URL or `noPfp`.",
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
 					"parameters": {
 						"heading": "Parameters:",

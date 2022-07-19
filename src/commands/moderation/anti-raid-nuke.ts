@@ -54,6 +54,9 @@ export default class implements Command {
 		}
 
 		const parsedAvatar = args.avatar ? await parseAvatar(args.avatar, interaction.client) : null;
+		if (args.avatar && !parsedAvatar) {
+			throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.invalid_avatar', { lng: locale }));
+		}
 
 		if (args.reason && args.reason.length >= 500) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
