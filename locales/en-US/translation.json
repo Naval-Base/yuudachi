@@ -132,10 +132,17 @@
 						"created_after": "• Account creation after: {{- age}}",
 						"pattern": "• Username matching pattern:",
 						"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
+						"zalgo": "• Filtering usernames with Zalgo",
+						"confusables": "• Filtering usernames with Confusables",
 						"days": "• Deleting messages sent in the last {{count}} day",
 						"days_plural": "• Deleting messages sent in the last {{count}} days",
 						"days_none": "• Not deleting any messages"
 					}
+				},
+				"stages": {
+					"filtering": "Filterting members to match the parameters...",
+					"processing": "**Processing Anti-Raid-Nuke ({{current}}/{{members}})...**"
+
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
 				"reason_fallback": "Anti-Raid-Nuke",
