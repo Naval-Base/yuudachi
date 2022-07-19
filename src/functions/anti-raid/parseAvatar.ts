@@ -1,11 +1,12 @@
 import type { Client } from 'discord.js';
 import { type BufferObject, type UrlRequestObject, imageHash } from 'image-hash';
 import { noop } from 'lodash';
+import { ANTI_RAID_NUKE_AVATAR_BITS } from '../../Constants.js';
 
 
 export async function promiseImageHash(params: string | UrlRequestObject | BufferObject): Promise<string> {
 	return new Promise((resolve, reject) => {
-		imageHash(params, 16, true, (err: Error | null, hash: string) => {
+		imageHash(params, ANTI_RAID_NUKE_AVATAR_BITS, true, (err: Error | null, hash: string) => {
 			if (err) {
 				reject(err);
 			} else {

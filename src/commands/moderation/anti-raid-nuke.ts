@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 import RE2 from 're2';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command.js';
-import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { ANTI_RAID_NUKE_AVATAR_THRESHOLD, DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { parseAvatar, promiseImageHash } from '../../functions/anti-raid/parseAvatar.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
@@ -101,7 +101,7 @@ export default class implements Command {
 
 				const hash = await promiseImageHash(userAvatar!);
 
-				if (leven(hash, parsedAvatar) > 3) {
+				if (leven(hash, parsedAvatar) > ANTI_RAID_NUKE_AVATAR_THRESHOLD) {
 					members.delete(member.id);
 				}
 
