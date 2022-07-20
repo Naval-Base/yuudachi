@@ -5,14 +5,13 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command.js';
-import { CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { TimeoutCommand } from '../../interactions/moderation/timeout.js';
 import { logger } from '../../logger.js';
+import ModAction from '../../structures/ModAction.js';
 import { kRedis } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
 import { generateHistory } from '../../util/generateHistory.js';
@@ -126,20 +125,18 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === timeoutKey) {
 			await collectedInteraction.deferUpdate();
 
-			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:timeout`, 15, '');
-			const case_ = await createCase(
+			await new ModAction(
 				collectedInteraction.guild,
-				generateCasePayload({
-					guildId: collectedInteraction.guildId,
+				{
 					user: collectedInteraction.user,
 					args: {
 						...args,
 					},
 					duration: ms(args.duration),
 					action: CaseAction.Timeout,
-				}),
-			);
-			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+				},
+				this.redis,
+			).takeAction();
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.timeout.success', {

@@ -10,11 +10,10 @@ import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { CaseAction, createCase } from '../../../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
+import { CaseAction } from '../../../../functions/cases/createCase.js';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
 import type { RestrictCommand } from '../../../../interactions/index.js';
+import ModAction from '../../../../structures/ModAction.js';
 import { kSQL } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
 import { generateHistory } from '../../../../util/generateHistory.js';
@@ -116,18 +115,13 @@ export async function react(
 	} else if (collectedInteraction?.customId === roleKey) {
 		await collectedInteraction.deferUpdate();
 
-		const case_ = await createCase(
-			collectedInteraction.guild,
-			generateCasePayload({
-				guildId: collectedInteraction.guildId,
-				user: collectedInteraction.user,
-				roleId: roles.reaction_role_id,
-				args,
-				action: CaseAction.Role,
-				duration: parsedDuration,
-			}),
-		);
-		await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+		await new ModAction(collectedInteraction.guild, {
+			user: collectedInteraction.user,
+			roleId: roles.reaction_role_id,
+			args,
+			action: CaseAction.Role,
+			duration: parsedDuration,
+		}).takeAction();
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.react.success', {

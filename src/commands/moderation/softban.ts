@@ -4,14 +4,13 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command.js';
-import { CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { SoftbanCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
+import ModAction from '../../structures/ModAction.js';
 import { kRedis } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
 import { generateHistory } from '../../util/generateHistory.js';
@@ -110,24 +109,26 @@ export default class implements Command {
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, '');
 
 			if (isStillMember) {
-				const case_ = await createCase(
+				await new ModAction(
 					collectedInteraction.guild,
-					generateCasePayload({
-						guildId: collectedInteraction.guildId,
+					{
 						user: collectedInteraction.user,
 						args: {
 							...args,
 							days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
 						},
 						action: CaseAction.Softban,
-					}),
-				);
-				await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+					},
+					this.redis,
+				).takeAction();
 			} else {
 				const reason = i18next.t('command.mod.softban.reasons.clear_messages', {
 					user: collectedInteraction.user.tag,
 					lng: locale,
 				});
+
+				await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:ban`, 15, '');
+				await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, '');
 
 				await interaction.guild.bans.create(args.user.user, {
 					reason,

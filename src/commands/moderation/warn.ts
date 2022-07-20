@@ -2,14 +2,13 @@ import { type CommandInteraction, ButtonStyle, ComponentType } from 'discord.js'
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command.js';
-import { CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { WarnCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
+import ModAction from '../../structures/ModAction.js';
 import { createButton } from '../../util/button.js';
 import { generateHistory } from '../../util/generateHistory.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
@@ -89,16 +88,11 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === warnKey) {
 			await collectedInteraction.deferUpdate();
 
-			const case_ = await createCase(
-				collectedInteraction.guild,
-				generateCasePayload({
-					guildId: collectedInteraction.guildId,
-					user: collectedInteraction.user,
-					args,
-					action: CaseAction.Warn,
-				}),
-			);
-			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+			await new ModAction(collectedInteraction.guild, {
+				user: collectedInteraction.user,
+				args,
+				action: CaseAction.Warn,
+			}).takeAction();
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.warn.success', {
