@@ -3,6 +3,7 @@ import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import RE2 from 're2';
 import { addFlaggedUsername, type RawFlaggedUsernameData } from '../../../../util/flaggedUsernames.js';
+import { parseRegex } from '../../../../util/parseRegex.js';
 
 export async function add(
 	interaction: CommandInteraction<'cached'>,
@@ -10,18 +11,6 @@ export async function add(
 	redis: Redis,
 	locale: string,
 ): Promise<void> {
-	/**
-	 * @param input `/(hype)\s+(events?|messages?|apply|team|system)/i`
-	 * @returns `(hype)\s+(events?|messages?|apply|team|system)`
-	 */
-	const parseRegex = (input: string) => {
-		const regex = /^\/(.+)\/(?:g|m|i|s|u|y)?$/;
-		if (regex.test(input)) {
-			return input.replace(regex, '$1');
-		}
-		return input;
-	};
-
 	const parsedData = {
 		name: data.name,
 		regex: parseRegex(data.regex),
