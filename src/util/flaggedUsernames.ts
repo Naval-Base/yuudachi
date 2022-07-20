@@ -1,4 +1,5 @@
 import type { Redis } from 'ioredis';
+import RE2 from 're2';
 import type { FlaggedUsernameData } from '../functions/anti-raid/usernameCheck.js';
 
 export interface RawFlaggedUsernameData {
@@ -11,7 +12,7 @@ export async function getAllFlaggedUsernames(redis: Redis): Promise<FlaggedUsern
 
 	return Object.entries(flaggedUsernames).map(([name, regex]) => ({
 		name,
-		regex: new RegExp(regex, 'i'),
+		regex: new RE2(regex, 'i'),
 	}));
 }
 
