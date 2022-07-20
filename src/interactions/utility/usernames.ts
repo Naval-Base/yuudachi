@@ -32,6 +32,7 @@ export const UsernamesCommand = {
 					name: 'query',
 					description: 'The name or part of the regex to remove',
 					type: ApplicationCommandOptionType.String,
+					autocomplete: true,
 					required: true,
 				},
 			],

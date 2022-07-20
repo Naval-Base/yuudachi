@@ -21,9 +21,10 @@ export default class implements Event {
 	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(): Promise<void> {
-		for await (const [oldMember, newMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember, GuildMember]>) {
+		for await (const [oldMember, newMember] of on(this.client, this.event) as AsyncIterableIterator<
+			[GuildMember, GuildMember]
+		>) {
 			try {
-
 				const [oldUser, newUser] = [oldMember.user, newMember.user];
 				const guild = newMember.guild;
 

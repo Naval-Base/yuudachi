@@ -23,7 +23,6 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
-
 				const guild = guildMember.guild;
 				const badNameHit = await checkUsername(this.redis, guildMember.user.username);
 

@@ -13,7 +13,6 @@ export async function checkUsername(redis: Redis, username: string): Promise<Fla
 	const sanitizedUsername = clean(remove(username));
 
 	for (const entry of flaggedUsernames) {
-
 		if (entry.regex.test(sanitizedUsername)) {
 			return entry;
 		}
