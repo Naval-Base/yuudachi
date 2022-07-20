@@ -5,12 +5,11 @@ import { Client, Events, type GuildMember } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
-import { createCase, CaseAction } from '../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
+import ModAction from '../../structures/ModAction.js';
 import { kRedis } from '../../tokens.js';
 
 @injectable()
@@ -48,17 +47,11 @@ export default class implements Event {
 				const logs = auditLogs.entries.find((log) => log.target!.id === guildMember.user.id);
 
 				if (logs) {
-					const case_ = await createCase(
-						guildMember.guild,
-						generateCasePayload({
-							guildId: guildMember.guild.id,
-							user: logs.executor,
-							args: { user: { user: guildMember.user }, reason: logs.reason },
-							action: CaseAction.Kick,
-						}),
-						true,
-					);
-					await upsertCaseLog(guildMember.guild.id, logs.executor, case_);
+					await new ModAction(guildMember.guild, {
+						user: logs.executor,
+						args: { user: { user: guildMember.user }, reason: logs.reason },
+						action: CaseAction.Kick,
+					}).takeAction(true);
 				}
 			} catch (e) {
 				const error = e as Error;

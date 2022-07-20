@@ -5,11 +5,11 @@ import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { checkUsername } from '../../functions/anti-raid/usernameCheck.js';
-import { CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
+import { RawModAction } from '../../structures/ModAction.js';
 import { kRedis } from '../../tokens.js';
 
 @injectable()
@@ -50,19 +50,21 @@ export default class implements Event {
 						`Member ${guildMember.id} banned (Bad Usename)`,
 					);
 
-					const case_ = await createCase(guild, {
-						targetId: guildMember.id,
-						guildId: guild.id,
-						action: CaseAction.Ban,
-						targetTag: guildMember.user.tag,
-						reason: i18next.t('log.mod_log.username.reason', {
-							lng: locale,
-							username: badNameHit.name,
-						}),
-						deleteMessageDays: 1,
-					});
-
-					await upsertCaseLog(guild.id, this.client.user, case_);
+					await new RawModAction(
+						guild,
+						{
+							targetId: guildMember.id,
+							guildId: guild.id,
+							action: CaseAction.Ban,
+							targetTag: guildMember.user.tag,
+							reason: i18next.t('log.mod_log.username.reason', {
+								lng: locale,
+								username: badNameHit.name,
+							}),
+							deleteMessageDays: 1,
+						},
+						this.redis,
+					).takeAction();
 				}
 			} catch (e) {
 				const error = e as Error;

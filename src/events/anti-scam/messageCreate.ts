@@ -7,11 +7,11 @@ import { SCAM_THRESHOLD } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { totalScams } from '../../functions/anti-scam/totalScam.js';
 import { considerableText } from '../../functions/anti-spam/considerableText.js';
-import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
+import { RawModAction } from '../../structures/ModAction.js';
 import { kRedis } from '../../tokens.js';
 
 @injectable()
@@ -46,9 +46,6 @@ export default class implements Event {
 
 					const locale = (await getGuildSetting(message.guildId, SettingsKeys.Locale)) as string;
 
-					await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:ban`, 15, '');
-					let case_: Case | null = null;
-
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
@@ -60,20 +57,23 @@ export default class implements Event {
 						`Member ${message.author.id} banned (scam)`,
 					);
 
-					case_ = await createCase(message.guild, {
-						targetId: message.author.id,
-						guildId: message.guildId,
-						action: CaseAction.Ban,
-						targetTag: message.author.tag,
-						reason: i18next.t('log.mod_log.scam.reason', {
-							lng: locale,
-						}),
-						deleteMessageDays: 1,
-					});
+					await new RawModAction(
+						message.guild,
+						{
+							targetId: message.author.id,
+							guildId: message.guildId,
+							action: CaseAction.Ban,
+							targetTag: message.author.tag,
+							reason: i18next.t('log.mod_log.scam.reason', {
+								lng: locale,
+							}),
+							deleteMessageDays: 1,
+						},
+						this.redis,
+					).takeAction();
 
 					const scamKey = `guild:${message.guildId}:user:${message.author.id}:scams`;
 					await this.redis.del(scamKey);
-					await upsertCaseLog(message.guildId, this.client.user, case_);
 				}
 			} catch (e) {
 				const error = e as Error;
