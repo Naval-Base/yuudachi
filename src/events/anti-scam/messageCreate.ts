@@ -30,6 +30,11 @@ export default class implements Event {
 					continue;
 				}
 
+				const ignoreRoles = (await getGuildSetting(message.guild.id, SettingsKeys.AutomodIgnoreRoles)) as string[];
+				if (ignoreRoles.some((id) => message.member?.roles.cache.has(id))) {
+					return;
+				}
+
 				const totalScamCount = await totalScams(content, message.guildId, message.author.id);
 				const scamExceeded = totalScamCount >= SCAM_THRESHOLD;
 
