@@ -13,7 +13,7 @@ interface CasePayloadArgs {
 	accountCutoff?: Date | null;
 }
 
-interface GenerateCasePayloadOptions {
+export interface GenerateCasePayloadOptions {
 	guildId: Snowflake;
 	user?: User | null;
 	roleId?: Snowflake | null;
