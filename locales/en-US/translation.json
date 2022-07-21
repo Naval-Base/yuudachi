@@ -124,26 +124,29 @@
 			},
 			"anti_raid_nuke": {
 				"errors": {
+					"invalid_file_type": "Invalid file type provided, must be a `.txt` or `.json` file.",
 					"invalid_avatar": "Invalid avatar format, must be a userId, a URL or `noPfp`.",
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
-					"parameters": {
-						"heading": "Parameters:",
-						"current_time": "• Current time: {{- now}}",
-						"join_after": "• Join date after: {{- join}}",
-						"created_after": "• Account creation after: {{- age}}",
-						"pattern": "• Username matching pattern:",
-						"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
-						"zalgo": "• Filtering usernames with Zalgo",
-						"confusables": "• Filtering usernames with Confusables",
-						"days": "• Deleting messages sent in the last {{count}} day",
-						"days_plural": "• Deleting messages sent in the last {{count}} days",
-						"days_none": "• Not deleting any messages"
-					}
+					"no_ids": "This file does not contain any ids.",
+					"duration_format": "Wrong format for the argument {{ arg }} argument",
+					"pattern_format": "Invalid pattern provided"
+				},
+				"parameters": {
+					"heading": "Parameters:",
+					"current_time": "• Current time: {{- now}}",
+					"join_after": "• **Join:**\n> From: {{- joinFrom}}\n> To: {{- joinTo}}",
+					"created_after": "• **Account creation:** \n> From: {{- ageFrom}}\n> To: {{- ageTo}}",
+					"pattern": "• Username matching pattern:",
+					"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
+					"zalgo": "• Filtering usernames with Zalgo",
+					"confusables": "• Filtering usernames with Confusables",
+					"days": "• Deleting messages sent in the last {{count}} day",
+					"days_plural": "• Deleting messages sent in the last {{count}} days",
+					"days_none": "• Not deleting any messages"
 				},
 				"stages": {
 					"filtering": "Filterting members to match the parameters...",
 					"processing": "**Processing Anti-Raid-Nuke ({{current}}/{{members}})...**"
-
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
 				"reason_fallback": "Anti-Raid-Nuke",
