@@ -8,7 +8,7 @@ export function joinFilter(
 	joinTo: number = Number.POSITIVE_INFINITY,
 ): boolean {
 	if (!member.joinedTimestamp) return false;
-	return member.joinedTimestamp >= joinFrom && member.joinedTimestamp <= joinTo;
+	return member.joinedTimestamp <= joinFrom || member.joinedTimestamp >= joinTo;
 }
 
 export function ageFilter(
@@ -16,31 +16,31 @@ export function ageFilter(
 	ageFrom: number = Number.NEGATIVE_INFINITY,
 	ageTo: number = Number.POSITIVE_INFINITY,
 ): boolean {
-	return member.user.createdTimestamp >= ageFrom && member.user.createdTimestamp <= ageTo;
+	return member.user.createdTimestamp <= ageFrom || member.user.createdTimestamp >= ageTo;
 }
 
 export function patternFilter(member: GuildMember, pattern: RegExp | RE2 | undefined, confusables = true): boolean {
-	if (!pattern) return true;
+	if (!pattern) return false;
 	const usernames = [member.user.username];
 	if (confusables) {
 		usernames.push(clean(member.user.username));
 	}
-	return usernames.some((username) => pattern.test(username));
+	return !usernames.some((username) => pattern.test(username));
 }
 
 export function avatarFilter(member: GuildMember, avatar?: string): boolean {
-	if (!avatar) return true;
+	if (!avatar) return false;
 
-	if (avatar.toLowerCase() === 'nopfp') {
-		return !member.user.avatar;
+	if (avatar.toLowerCase() === 'none') {
+		return Boolean(member.user.avatar);
 	}
-	return member.user.avatar === avatar;
+	return member.user.avatar !== avatar;
 }
 
 export function zalgoFilter(member: GuildMember): boolean {
-	return /[\u0300-\u036F]/g.test(member.user.username);
+	return !/[\u0300-\u036F]/g.test(member.user.username);
 }
 
 export function confusablesFilter(member: GuildMember): boolean {
-	return member.user.username.toLowerCase() !== clean(member.user.username).toLowerCase();
+	return member.user.username.toLowerCase() === clean(member.user.username).toLowerCase();
 }
