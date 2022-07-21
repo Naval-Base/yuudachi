@@ -14,7 +14,8 @@
 		"dev": "env-cmd node --enable-source-maps dist/index.js",
 		"deploy:commands": "env-cmd node --enable-source-maps dist/deploy.js",
 		"migrate": "env-cmd ley",
-		"postinstall": "patch-package"
+		"postinstall": "patch-package",
+		"start:dev": "npm run build && npm run dev"
 	},
 	"type": "module",
 	"keywords": [],
