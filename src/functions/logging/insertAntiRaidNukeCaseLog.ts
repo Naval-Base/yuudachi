@@ -41,5 +41,5 @@ export async function insertAntiRaidNukeCaseLog(
 	await sql`update cases
 		set log_message_id = ${logMessage.id}
 		where guild_id = ${guild.id}
-			and case_id in ${ sql(cases.map((case_) => case_.caseId) )}`;
+			and case_id in ${sql(cases.map((case_) => case_.caseId))}`;
 }

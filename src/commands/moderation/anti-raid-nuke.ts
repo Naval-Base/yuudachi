@@ -14,14 +14,13 @@ import { kRedis } from '../../tokens.js';
 
 @injectable()
 export default class implements Command {
-	public constructor(@inject(kRedis) public readonly redis: Redis) { }
+	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(
 		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {
-
 		const logChannel = await checkLogChannel(
 			interaction.guild,
 			(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,
