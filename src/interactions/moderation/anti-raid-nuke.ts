@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 
 export const AntiRaidNukeCommand = {
 	name: 'anti-raid-nuke',
-	description: '',
+	description: 'Handle raids and nukes',
 	options: [
 		{
 			name: 'manual',
@@ -104,11 +104,6 @@ export const AntiRaidNukeCommand = {
 					required: true,
 				},
 				{
-					name: 'member_only',
-					description: 'Whether to only ban members (default: false)',
-					type: ApplicationCommandOptionType.Boolean,
-				},
-				{
 					name: 'reason',
 					description: 'The reason to ban the members',
 					type: ApplicationCommandOptionType.String,
@@ -140,11 +135,6 @@ export const AntiRaidNukeCommand = {
 			description: 'Filters and bans members prompted by a modal',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
-				{
-					name: 'member_only',
-					description: 'Whether to only ban members (default: false)',
-					type: ApplicationCommandOptionType.Boolean,
-				},
 				{
 					name: 'reason',
 					description: 'The reason to ban the members',
