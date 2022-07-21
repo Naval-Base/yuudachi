@@ -125,8 +125,9 @@
 			"anti_raid_nuke": {
 				"errors": {
 					"invalid_file_type": "Invalid file type provided, must be a `.txt` or `.json` file.",
-					"invalid_avatar": "Invalid avatar format, must be a userId, a URL or `noPfp`.",
+					"invalid_avatar": "Invalid avatar format, must be a userId, a URL or `none`.",
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
+					"no_hits_file": "The Anti-Raid-Nuke will not hit anyone, the file you provided did not contain any valid Member Ids!",
 					"no_ids": "This file does not contain any ids.",
 					"duration_format": "Wrong format for the argument {{ arg }} argument",
 					"pattern_format": "Invalid pattern provided"
@@ -142,7 +143,8 @@
 					"confusables": "• Filtering usernames with Confusables",
 					"days": "• Deleting messages sent in the last {{count}} day",
 					"days_plural": "• Deleting messages sent in the last {{count}} days",
-					"days_none": "• Not deleting any messages"
+					"days_none": "• Not deleting any messages",
+					"file": "• File: {{- file}}"
 				},
 				"stages": {
 					"filtering": "Filterting members to match the parameters...",
