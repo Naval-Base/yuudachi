@@ -20,9 +20,9 @@ export const AntiRaidNukeCommand = {
 					type: ApplicationCommandOptionType.Integer,
 					choices: [
 						{ name: 'Off', value: 0 },
-						{ name: 'Only Pattern (Pattern will be resistant to confusables)', value: 1 },
+						{ name: 'Only Pattern (Pattern will be resistant to confusables, Default)', value: 1 },
 						{ name: 'Only Filter Members (Filter only members with confusables)', value: 2 },
-						{ name: 'Pattern & Filter Members (Default)', value: 3 },
+						{ name: 'Pattern & Filter Members', value: 3 },
 					],
 				},
 				{
