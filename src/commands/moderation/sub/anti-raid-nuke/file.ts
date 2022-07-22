@@ -1,3 +1,4 @@
+import { performance } from 'perf_hooks';
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
 import {
@@ -15,6 +16,8 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import fetch from 'node-fetch';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
+import { checkBan } from '../../../../functions/anti-raid/checkBan.js';
+import { formatReport } from '../../../../functions/anti-raid/formatReport.js';
 import { Case, CaseAction, createCase } from '../../../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
@@ -22,8 +25,10 @@ import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { generateTargetInformation } from '../../../../util/generateTargetInformation.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
+import { noop } from '../../../../util/noop.js';
+import type { AntiRaidResult } from '../../anti-raid-nuke.js';
 
-interface AntiRaidFileArgs {
+export interface AntiRaidFileArgs {
 	file: Attachment;
 	reason?: string | undefined;
 	days?: number | undefined;
@@ -46,13 +51,15 @@ export async function file(
 	interaction: CommandInteraction<'cached'>,
 	data: AntiRaidFileArgs,
 	logChannel: TextChannel,
+	modRoleId: string,
 	locale: string,
 	redis: Redis,
 ): Promise<void> {
+	const start = performance.now();
+
 	const reply = await interaction.deferReply({ ephemeral: data.hide ?? true });
 
 	const file = data.file;
-
 	const ids = await parseFile(file);
 
 	if (!ids.size) {
@@ -92,6 +99,13 @@ export async function file(
 			file: Formatters.hyperlink('File uploaded', file.url),
 		}),
 	];
+
+	if (fails.size) {
+		parameterStrings.push(i18next.t('command.mod.anti_raid_nuke.parameters.users', {
+			lng: locale,
+			users: Formatters.inlineCode(fails.size.toString()),
+		}));
+	}
 
 	const banKey = nanoid();
 	const cancelKey = nanoid();
@@ -178,64 +192,138 @@ export async function file(
 		await redis.setex(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15, 'true');
 		let idx = 0;
 		const promises = [];
-		const fatalities: GuildMember[] = [];
-		const survivors: GuildMember[] = [];
+
+		const result: AntiRaidResult[] = [];
+
 		for (const member of members.values()) {
-			promises.push(
-				createCase(
+			promises.push((async () => {
+				const reason = i18next.t('command.mod.anti_raid_nuke.reason', {
+					current: ++idx,
+					members: members.size,
+					lng: locale,
+				});
+
+				const authorization = checkBan(member, interaction.user.id, modRoleId);
+
+				if (authorization) {
+					result.push({
+						member,
+						success: false,
+						error: i18next.t(`command.mod.anti_raid_nuke.errors.result.${authorization}`, { lng: locale }),
+					});
+					return;
+				}
+
+				const ban = await member.ban({ reason, deleteMessageDays: days }).catch(noop);
+
+				if (!ban) {
+					result.push({
+						member,
+						success: false,
+						error: i18next.t('command.mod.anti_raid_nuke.errors.result.ban_failed', { lng: locale }),
+					});
+					return;
+				}
+
+				const case_ = await createCase(
 					collectedInteraction.guild,
 					generateCasePayload({
 						guildId: collectedInteraction.guildId,
 						user: collectedInteraction.user,
 						args: {
-							reason: i18next.t('command.mod.anti_raid_nuke.reason', {
-								current: ++idx,
-								members: members.size,
-								lng: locale,
-							}),
+							reason,
 							user: {
 								member: member,
 								user: member.user,
 							},
-							days: days,
+							days,
 						},
 						action: CaseAction.Ban,
 						multi: true,
 					}),
-				)
-					.then((case_) => {
-						fatalities.push(member);
-						return case_;
-					})
-					.catch(() => {
-						survivors.push(member);
-					})
-					.finally(() => void redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15)),
-			);
+					true,
+				).catch(noop);
+
+				if (!case_) {
+					result.push({
+						member,
+						success: false,
+						error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', { lng: locale }),
+					});
+					return;
+				}
+
+				await redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15);
+
+				result.push({
+					member,
+					success: true,
+					caseId: case_.caseId,
+					error: undefined,
+				});
+
+				return case_;
+			})());
 		}
 
 		const resolvedCases = await Promise.all(promises);
-		const cases = resolvedCases.filter((resolvedCase) => resolvedCase) as Case[];
+		const cases = resolvedCases.filter(Boolean) as Case[];
 		await redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 5);
 
-		await insertAntiRaidNukeCaseLog(
-			collectedInteraction.guild,
-			collectedInteraction.user,
-			logChannel,
-			cases,
-			reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: fatalities.length }),
-		);
+		if (cases.length > 0) {
 
-		const membersHit = Buffer.from(fatalities.map((member) => member.id).join('\r\n'));
+			console.log(cases);
+
+			await insertAntiRaidNukeCaseLog(
+				collectedInteraction.guild,
+				collectedInteraction.user,
+				logChannel,
+				cases,
+				reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: result.length }),
+			);
+		}
+
+		const end = performance.now();
+
+		const membersHit = Buffer.from(
+			formatReport(
+				interaction.guild,
+				{
+					mode: 'file',
+					time: end - start,
+					cases,
+					logChannel,
+					...data,
+				},
+				result,
+			),
+			'utf8',
+		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		await collectedInteraction.editReply({
+		const msg = await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.success', {
-				members: fatalities.length,
+				members: result.filter((r) => r.success).length,
 				lng: locale,
 			}),
-			files: [{ name: `${membersHitDate}-anti-raid-nuke-report.txt`, attachment: membersHit }],
+			files: [{ name: `${membersHitDate}-anti-raid-nuke-report.md`, attachment: membersHit }],
 			components: [],
 		});
+
+		const attachment = msg.attachments.find(a => a.name === `${membersHitDate}-anti-raid-nuke-report.md`);
+
+		if (!attachment) return;
+
+		await collectedInteraction.editReply({
+			components: [createMessageActionRow([
+				{
+					type: ComponentType.Button,
+					style: ButtonStyle.Link,
+					url: `https://dev--md-online.jpbm135.autocode.gg/md?url=${attachment.url}`,
+					label: i18next.t('command.mod.anti_raid_nuke.buttons.report', { lng: locale }),
+				}
+			])]
+		})
+
 	}
 }
