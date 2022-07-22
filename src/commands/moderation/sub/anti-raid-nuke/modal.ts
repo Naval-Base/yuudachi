@@ -16,10 +16,11 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { checkBan } from '../../../../functions/anti-raid/checkBan.js';
-import { formatReport } from '../../../../functions/anti-raid/formatReport.js';
+import { generateReportTargetInfo, reportSort } from '../../../../functions/anti-raid/formatReport.js';
 import { Case, CaseAction, createCase } from '../../../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
+import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { generateTargetInformation } from '../../../../util/generateTargetInformation.js';
@@ -187,7 +188,8 @@ export async function modal(
 		components: [createMessageActionRow([cancelButton, banButton])],
 	});
 
-	const collectedInteraction = await reply.awaitMessageComponent({
+	const collectedInteraction = await reply
+		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
 			time: 60000,
@@ -324,41 +326,41 @@ export async function modal(
 		const end = performance.now();
 
 		const membersHit = Buffer.from(
-			formatReport(
-				interaction.guild,
-				{
-					mode: 'modal',
-					time: end - start,
-					cases,
-					logChannel,
-					...data,
-				},
-				result,
-			),
-			'utf8',
+			result
+				.sort(reportSort)
+				.map((r) => generateReportTargetInfo(r))
+				.join('\n'),
 		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		const msg = await collectedInteraction.editReply({
+		const message = await upsertAntiRaidNukeReport(
+			collectedInteraction.guild.id,
+			collectedInteraction.user,
+			collectedInteraction.channel as TextChannel,
+			result,
+			{
+				mode: 'modal',
+				time: end - start,
+				cases,
+				logChannel,
+				...data,
+			},
+		);
+
+		const attachment = message!.attachments.first();
+
+		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.success', {
 				members: result.filter((r) => r.success).length,
 				lng: locale,
 			}),
-			files: [{ name: `${membersHitDate}-anti-raid-nuke-report.md`, attachment: membersHit }],
-			components: [],
-		});
-
-		const attachment = msg.attachments.find((a) => a.name === `${membersHitDate}-anti-raid-nuke-report.md`);
-
-		if (!attachment) return;
-
-		await collectedInteraction.editReply({
+			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.ansi`, attachment: membersHit }],
 			components: [
 				createMessageActionRow([
 					{
 						type: ComponentType.Button,
 						style: ButtonStyle.Link,
-						url: `https://dev--md-online.jpbm135.autocode.gg/md?url=${attachment.url}`,
+						url: `https://dev--md-online.jpbm135.autocode.gg/md?url=${attachment!.url}`,
 						label: i18next.t('command.mod.anti_raid_nuke.buttons.report', { lng: locale }),
 					},
 				]),
