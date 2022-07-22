@@ -1,4 +1,4 @@
-import type { CommandInteraction } from 'discord.js';
+import type { CommandInteraction, GuildMember } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
@@ -11,6 +11,13 @@ import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuild
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { AntiRaidNukeCommand } from '../../interactions/index.js';
 import { kRedis } from '../../tokens.js';
+
+export interface AntiRaidResult {
+	member: GuildMember;
+	success: boolean;
+	caseId?: number;
+	error?: string;
+}
 
 @injectable()
 export default class implements Command {
@@ -29,17 +36,19 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
+		const modRoleId = (await getGuildSetting(interaction.guildId, SettingsKeys.ModRoleId)) as string;
+
 		switch (Object.keys(args)[0]) {
 			case 'file': {
-				return file(interaction, args.file, logChannel, locale, this.redis);
+				return file(interaction, args.file, logChannel, modRoleId, locale, this.redis);
 			}
 
 			case 'modal': {
-				return modal(interaction, args.modal, logChannel, locale, this.redis);
+				return modal(interaction, args.modal, logChannel, modRoleId, locale, this.redis);
 			}
 
 			case 'manual': {
-				return manual(interaction, args.manual, logChannel, locale, this.redis);
+				return manual(interaction, args.manual, logChannel, modRoleId, locale, this.redis);
 			}
 
 			default:
