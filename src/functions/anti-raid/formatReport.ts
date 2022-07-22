@@ -6,16 +6,42 @@ import type { AntiRaidResult } from '../../commands/moderation/anti-raid-nuke.js
 import type { AntiRaidFileArgs } from '../../commands/moderation/sub/anti-raid-nuke/file.js';
 import type { AntiRaidManualArgs } from '../../commands/moderation/sub/anti-raid-nuke/manual.js';
 import type { AntiRaidModalArgs } from '../../commands/moderation/sub/anti-raid-nuke/modal.js';
+import { colorBasedOnBoolean, colorBasedOnDifference } from '../../util/color.js';
 import { generateMessageLink } from '../../util/generateMessageLink.js';
 import { resolveTimestamp } from '../../util/timestamp.js';
 import type { Case } from '../cases/createCase.js';
 
-type ReportArgs = {
+export type ReportArgs = {
 	mode: 'file' | 'modal' | 'manual';
 	time: number;
 	cases: Case[];
 	logChannel: TextChannel;
 } & Partial<AntiRaidFileArgs & AntiRaidManualArgs & AntiRaidModalArgs>;
+
+export function reportSort(a: AntiRaidResult, b: AntiRaidResult) {
+	if (!a.member.joinedTimestamp || !b.member.joinedTimestamp) {
+		return 0;
+	}
+	return b.member.joinedTimestamp - a.member.joinedTimestamp;
+}
+
+export function generateReportTargetInfo(r: AntiRaidResult) {
+	const colorId = colorBasedOnBoolean(r.success, r.member.user.id);
+	const colorJoin = colorBasedOnDifference(
+		Date.now() - (r.member.joinedTimestamp ?? Date.now()),
+		dayjs(r.member.joinedTimestamp).format(DATE_FORMAT_LOGFILE),
+	);
+	const colorCreation = colorBasedOnDifference(
+		Date.now() - r.member.user.createdTimestamp,
+		dayjs(r.member.user.createdTimestamp).format(DATE_FORMAT_LOGFILE),
+	);
+
+	console.log(colorId, colorJoin, colorCreation);
+
+	console.log(`${colorId} | ${r.member.user.tag} | Join: ${colorJoin} | Creation: ${colorCreation}`);
+
+	return `${colorId} | Join: ${colorJoin} | Creation: ${colorCreation} | ${r.member.user.tag}`;
+}
 
 export function resolveDateLocale(timestamp: number | undefined, discord = true): string {
 	return timestamp
@@ -41,14 +67,11 @@ export function formatReport(guild: Guild, args: ReportArgs, results: AntiRaidRe
 	const lines = [
 		`# Anti-Raid-Nuke Report on ${Formatters.inlineCode(guild.name)}`,
 		'## **Summary**',
+		`- **Mode:** ${Formatters.inlineCode(args.mode)}`,
+		`- **Current Time:** ${dayjs().format(DATE_FORMAT_LOGFILE)}`,
+		`- **Time Taken:** ${ms(args.time, true)}`,
 		'',
-		`> **Mode:** ${Formatters.inlineCode(args.mode)}`,
-		'',
-		`> **Current Time:** ${dayjs().format(DATE_FORMAT_LOGFILE)}`,
-		'',
-		`> **Time Taken:** ${ms(args.time, true)}`,
-		'',
-		'### **Results**',
+		'## **Results**',
 		`**Total:** ${Formatters.inlineCode(results.length.toString())}`,
 		`- ${successes.length} members were successfully banned`,
 		`- ${failures.length} members were not banned`,
@@ -65,7 +88,7 @@ export function formatReport(guild: Guild, args: ReportArgs, results: AntiRaidRe
 				: Formatters.inlineCode('Not specified')
 		}`,
 		'',
-		'### **Details**',
+		'## **Details**',
 		'',
 	];
 
@@ -181,17 +204,8 @@ export function formatReport(guild: Guild, args: ReportArgs, results: AntiRaidRe
 		lines.push('> ## No failures, everything went fine.');
 	}
 
-	lines.push(...['', '## Raw Data', '']);
-	lines.push(
-		...[
-			'```diff',
-			...results.map(
-				(r) =>
-					`${r.success ? '+' : '-'} ${r.member.user.id} | ${r.member.user.tag} | ${r.caseId ?? r.error ?? 'Unknown'}`,
-			),
-			'```',
-		],
-	);
+	lines.push(...['', '## Raw Data', '', 'Sorted by join date descending, highlight based on account age', '']);
+	lines.push(...['```ansi', ...results.sort(reportSort).map((r) => generateReportTargetInfo(r)), '```']);
 
 	return lines.join('\n');
 }
