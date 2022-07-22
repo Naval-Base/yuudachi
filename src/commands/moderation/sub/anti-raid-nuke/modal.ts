@@ -72,14 +72,14 @@ export async function modal(
 	const modalInteraction = await interaction
 		.awaitModalSubmit({
 			time: 120000,
-			componentType: ComponentType.TextInput,
 			filter: (component) => component.customId === modalKey,
 		})
 		.catch(async () => {
 			try {
-				await interaction.editReply({
+				await interaction.followUp({
 					content: i18next.t('common.errors.timed_out', { lng: locale }),
 					components: [],
+					ephemeral: true,
 				});
 			} catch (e) {
 				const error = e as Error;
@@ -176,7 +176,7 @@ export async function modal(
 	const creationrange = ms(creationUpper - creationLower, true);
 	const joinrange = ms(joinUpper - joinLower, true);
 
-	await interaction.editReply({
+	await modalInteraction.editReply({
 		content: `${i18next.t('command.mod.anti_raid_nuke.pending', {
 			members: members.size,
 			creationrange,
@@ -187,15 +187,15 @@ export async function modal(
 		components: [createMessageActionRow([cancelButton, banButton])],
 	});
 
-	const collectedInteraction = await reply
-		.awaitMessageComponent({
+	const collectedInteraction = await reply.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
 			time: 60000,
+			interactionResponse: reply,
 		})
 		.catch(async () => {
 			try {
-				await interaction.editReply({
+				await modalInteraction.editReply({
 					content: i18next.t('common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
@@ -205,6 +205,8 @@ export async function modal(
 			}
 			return undefined;
 		});
+
+	console.log(collectedInteraction);
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
