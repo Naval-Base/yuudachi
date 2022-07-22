@@ -4,7 +4,8 @@
 			"no_mod_role": "This command can only be used by moderators.",
 			"target_not_found": "The given member is not in this guild.",
 			"timed_out": "Action timer ran out.",
-			"no_mod_log_channel": "No mod log channel has been initialized yet."
+			"no_mod_log_channel": "No mod log channel has been initialized yet.",
+			"no_general_log_channel": "No general log channel has been initialized yet."
 		}
 	},
 	"command": {
@@ -395,6 +396,12 @@
 				"channel": "• Thread: {{- name}} {{- channelId}}",
 				"starter": "• Starter message: {{- messageId}}",
 				"jump_to": "• [Jump to starter message]({{- link}})"
+			}
+		},
+		"general_log": {
+			"anti_raid_nuke": {
+				"title": "Anti-Raid-Nuke launched",
+				"description": "• Author: {{- author}}\n• Channel: {{- channel}}\n• Hit count: {{- hit_count}}"
 			}
 		}
 	}
