@@ -31,13 +31,13 @@ export const AntiRaidNukeCommand = {
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
-					name: 'zalgo',
-					description: 'Whether to filter members with zalgo (default: false)',
+					name: 'full_match',
+					description: 'Whether the pattern should only match the whole username (default: false)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
-					name: 'full_match',
-					description: 'Whether the pattern should only match the whole username (default: false)',
+					name: 'zalgo',
+					description: 'Whether to filter members with zalgo (default: false)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
