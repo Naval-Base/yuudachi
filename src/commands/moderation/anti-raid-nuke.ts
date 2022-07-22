@@ -36,6 +36,14 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
+		const archiveChannel = await checkLogChannel(
+			interaction.guild,
+			(await getGuildSetting(interaction.guildId, SettingsKeys.GeneralLogChannelId)) as string,
+		);
+		if (!archiveChannel) {
+			throw new Error(i18next.t('common.errors.no_general_log_channel', { lng: locale }));
+		}
+
 		const modRoleId = (await getGuildSetting(interaction.guildId, SettingsKeys.ModRoleId)) as string;
 
 		switch (Object.keys(args)[0]) {
