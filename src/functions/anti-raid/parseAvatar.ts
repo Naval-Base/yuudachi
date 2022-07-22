@@ -1,8 +1,5 @@
 import type { Client } from 'discord.js';
-
-function noop(...args: any[]): void {
-	void args;
-}
+import { noop } from '../../util/noop.js';
 
 export async function parseAvatar(client: Client, input?: string): Promise<string | 'none' | undefined> {
 	if (!input) {
