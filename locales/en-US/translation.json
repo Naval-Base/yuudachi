@@ -126,7 +126,7 @@
 			"anti_raid_nuke": {
 				"errors": {
 					"invalid_file_type": "Invalid file type provided, must be a `.txt` or `.json` file.",
-					"invalid_avatar": "Invalid avatar format, must be a userId, a URL or `none`.",
+					"invalid_avatar": "Invalid avatar format, must be an raw hash, a userId, a URL or `none`.",
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
 					"no_hits_file": "The Anti-Raid-Nuke will not hit anyone, content you provided did not contain any valid Member Ids!",
 					"no_ids": "This file does not contain any ids.",
@@ -136,7 +136,7 @@
 						"ban_failed": "There was an error trying to ban.",
 						"case_failed": "There was an error trying to create a case (Ban suceeded)",
 						"reject_perms": "The member has elevated permissions.",
-						"reject_unbannable": "The member is not bannable by me.",
+						"reject_unbanable": "The member is not bannable by me.",
 						"reject_bot": "The member is a bot.",
 						"reject_self": "The member is you.",
 						"reject_protected": "The member has a role ignored by the Anti-Raid-Nuke.",
