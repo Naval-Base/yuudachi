@@ -12,7 +12,7 @@ import { addFields, truncateEmbed } from '../../util/embed.js';
 export default class implements Event {
 	public name = 'Guild log voice state update';
 
-	public event = Events.VoiceStateUpdate;
+	public event = Events.VoiceStateUpdate as const;
 
 	public constructor(
 		public readonly client: Client<true>,

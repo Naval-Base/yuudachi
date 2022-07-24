@@ -9,7 +9,7 @@ export function considerableText(message: Message) {
 	// @ts-expect-error Automod message, not yet in types (no overlap)
 	if (message.type === 24) {
 		const logEmbed = message.embeds[0]!;
-		const isFlagged = logEmbed.fields?.some((field) => field.name === AUTOMOD_FLAG_INDICATOR_FIELD_NAME);
+		const isFlagged = logEmbed.fields.some((field) => field.name === AUTOMOD_FLAG_INDICATOR_FIELD_NAME);
 		if (isFlagged) {
 			return null;
 		}

@@ -20,7 +20,7 @@ const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
 export default class implements Event {
 	public name = 'Guild log message bulk delete';
 
-	public event = Events.MessageBulkDelete;
+	public event = Events.MessageBulkDelete as const;
 
 	public constructor(
 		public readonly client: Client<true>,

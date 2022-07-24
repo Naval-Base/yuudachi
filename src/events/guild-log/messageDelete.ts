@@ -12,7 +12,7 @@ import { addFields, truncateEmbed } from '../../util/embed.js';
 export default class implements Event {
 	public name = 'Guild log message delete';
 
-	public event = Events.MessageDelete;
+	public event = Events.MessageDelete as const;
 
 	public constructor(
 		public readonly client: Client<true>,

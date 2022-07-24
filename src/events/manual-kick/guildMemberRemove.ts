@@ -17,7 +17,7 @@ import { kRedis } from '../../tokens.js';
 export default class implements Event {
 	public name = 'Manual kick handling';
 
-	public event = Events.GuildMemberRemove;
+	public event = Events.GuildMemberRemove as const;
 
 	public disabled = true;
 

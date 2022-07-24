@@ -11,7 +11,7 @@ import { generateMemberLog } from '../../util/generateMemberLog.js';
 export default class implements Event {
 	public name = 'Member log add';
 
-	public event = Events.GuildMemberAdd;
+	public event = Events.GuildMemberAdd as const;
 
 	public constructor(
 		public readonly client: Client<true>,

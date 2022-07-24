@@ -12,7 +12,7 @@ import { kWebhooks } from '../tokens.js';
 export default class implements Event {
 	public name = 'Client ready handling';
 
-	public event = Events.ClientReady;
+	public event = Events.ClientReady as const;
 
 	public constructor(
 		public readonly client: Client<true>,

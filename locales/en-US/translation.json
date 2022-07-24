@@ -61,7 +61,7 @@
 					"execute": "Timeout"
 				},
 				"pending": "Do you really want to time out {{- user}}?",
-				"cancel": "Cancelled timeout for user {{- user}}",
+				"cancel": "Cancelled timeout for {{- user}}",
 				"success": "Successfully timed out {{- user}}"
 			},
 			"kick": {

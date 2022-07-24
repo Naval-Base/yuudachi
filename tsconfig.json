@@ -38,7 +38,10 @@
 		"experimentalDecorators": true,
 		"lib": ["ESNext"],
 		"target": "ES2021",
-		"useDefineForClassFields": true
+		"useDefineForClassFields": true,
+
+		// Completeness
+		"skipLibCheck": true
 	},
 	"include": ["src/**/*.ts"]
 }
