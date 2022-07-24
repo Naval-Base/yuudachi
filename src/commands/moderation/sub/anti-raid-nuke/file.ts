@@ -324,7 +324,7 @@ export async function file(
 					{
 						type: ComponentType.Button,
 						style: ButtonStyle.Link,
-						url: `https://dev--md-online.jpbm135.autocode.gg/md?url=${attachment!.url}`,
+						url: `${process.env.REPORT_FORMATER_URL!}${attachment!.url}`,
 						label: i18next.t('command.mod.anti_raid_nuke.buttons.report', { lng: locale }),
 					},
 				]),

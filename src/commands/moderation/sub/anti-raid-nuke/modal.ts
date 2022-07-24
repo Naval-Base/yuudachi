@@ -2,12 +2,15 @@ import { performance } from 'perf_hooks';
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
 import {
+	ButtonInteraction,
 	ButtonStyle,
 	Collection,
 	CommandInteraction,
 	ComponentType,
 	Formatters,
 	GuildMember,
+	InteractionCollector,
+	TextBasedChannelResolvable,
 	TextChannel,
 	TextInputStyle,
 } from 'discord.js';
@@ -188,25 +191,37 @@ export async function modal(
 		components: [createMessageActionRow([cancelButton, banButton])],
 	});
 
-	const collectedInteraction = await reply
-		.awaitMessageComponent({
-			filter: (collected) => collected.user.id === interaction.user.id,
+	const collectedInteraction = await new Promise<ButtonInteraction<'cached'>>((resolve, reject) => {
+		const collector = new InteractionCollector<ButtonInteraction<'cached'>>(modalInteraction.client, {
+			time: 120000,
+			filter: (component) => component.user.id === modalInteraction.user.id,
+			channel: modalInteraction.channel as TextBasedChannelResolvable,
 			componentType: ComponentType.Button,
-			time: 60000,
 			interactionResponse: reply,
+			message: modalInteraction.message,
 		})
-		.catch(async () => {
-			try {
-				await modalInteraction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
-					components: [],
-				});
-			} catch (e) {
-				const error = e as Error;
-				logger.error(error, error.message);
-			}
-			return undefined;
-		});
+
+		collector.on('collect', (interaction) => {
+			resolve(interaction);
+			collector.stop('collected');
+		})
+
+		collector.on('end', (_, reason) => {
+			if (reason === 'collected') return;
+			reject(reason);
+		})
+	}).catch(async () => {
+		try {
+			await modalInteraction.editReply({
+				content: i18next.t('common.errors.timed_out', { lng: locale }),
+				components: [],
+			});
+		} catch (e) {
+			const error = e as Error;
+			logger.error(error, error.message);
+		}
+		return undefined;
+	});
 
 	console.log(collectedInteraction);
 
@@ -360,7 +375,7 @@ export async function modal(
 					{
 						type: ComponentType.Button,
 						style: ButtonStyle.Link,
-						url: `https://dev--md-online.jpbm135.autocode.gg/md?url=${attachment!.url}`,
+						url: `${process.env.REPORT_FORMATER_URL!}${attachment!.url}`,
 						label: i18next.t('command.mod.anti_raid_nuke.buttons.report', { lng: locale }),
 					},
 				]),
