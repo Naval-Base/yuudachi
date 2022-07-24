@@ -25,6 +25,8 @@ import {
 
 	// Context Menu
 	HistoryContextMenuCommand,
+	SponsorCommand,
+	SponsorContextMenuCommand,
 } from './interactions/index.js';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
@@ -54,9 +56,11 @@ try {
 			PingCommand,
 			CheckScamCommand,
 			RefreshScamlistCommand,
+			SponsorCommand,
 
 			// Context Menu
 			HistoryContextMenuCommand,
+			SponsorContextMenuCommand,
 		],
 	});
 	console.log('Successfully reloaded interaction (/) commands.');
