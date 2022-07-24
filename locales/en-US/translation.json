@@ -133,8 +133,8 @@
 					"duration_format": "Wrong format for the argument {{ arg }} argument",
 					"pattern_format": "Invalid pattern provided",
 					"result": {
-						"ban_failed": "There was an error trying to ban.",
-						"case_failed": "There was an error trying to create a case (Ban suceeded)",
+						"ban_failed": "There was an error trying to ban: {{- error}}",
+						"case_failed": "There was an error trying to create a case (ban suceeded): {{- error}}",
 						"reject_perms": "The member has elevated permissions.",
 						"reject_unbanable": "The member is not bannable by me.",
 						"reject_bot": "The member is a bot.",
@@ -146,6 +146,7 @@
 				"parameters": {
 					"heading": "Parameters:",
 					"current_time": "• Current time: {{- now}}",
+					"dry_run": "• Operating in **dry run** mode, no members will be banned!",
 					"join_after": "• **Join:**\n> From: {{- joinFrom}}\n> To: {{- joinTo}}",
 					"created_after": "• **Account creation:** \n> From: {{- ageFrom}}\n> To: {{- ageTo}}",
 					"pattern": "• Username matching pattern:",
@@ -175,7 +176,8 @@
 				"buttons": {
 					"cancel": "Cancel",
 					"execute": "Launch",
-					"report": "View the formatted report"
+					"report": "View the formatted report",
+					"dry_run": "Launch (Dry run mode)"
 				},
 				"cancel": "Cancelled Anti-Raid-Nuke.",
 				"success": "Anti-Raid-Nuke hit {{- members}} guild members."
