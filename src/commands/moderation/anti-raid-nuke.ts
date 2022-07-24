@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import { file } from './sub/anti-raid-nuke/file.js';
-import { filter } from './sub/anti-raid-nuke/manual.js';
+import { filter } from './sub/anti-raid-nuke/filter.js';
 import { modal } from './sub/anti-raid-nuke/modal.js';
 import type { Command } from '../../Command.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
