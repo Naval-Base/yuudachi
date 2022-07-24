@@ -139,7 +139,7 @@
 						"reject_unbannable": "The member is not bannable by me.",
 						"reject_bot": "The member is a bot.",
 						"reject_self": "The member is you.",
-						"reject_mod": "The member is a moderator.",
+						"reject_protected": "The member has a role ignored by the Anti-Raid-Nuke.",
 						"reject_user": "The user is not in the guild."
 					}
 				},

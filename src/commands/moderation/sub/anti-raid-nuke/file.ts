@@ -52,7 +52,7 @@ export async function file(
 	interaction: CommandInteraction<'cached'>,
 	data: AntiRaidFileArgs,
 	logChannel: TextChannel,
-	modRoleId: string,
+	ignoreRolesId: string[],
 	locale: string,
 	redis: Redis,
 ): Promise<void> {
@@ -207,7 +207,7 @@ export async function file(
 						lng: locale,
 					});
 
-					const authorization = checkBan(member, interaction.user.id, modRoleId);
+					const authorization = checkBan(member, interaction.user.id, ignoreRolesId);
 
 					if (authorization) {
 						result.push({

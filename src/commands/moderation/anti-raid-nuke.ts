@@ -44,19 +44,19 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_general_log_channel', { lng: locale }));
 		}
 
-		const modRoleId = (await getGuildSetting(interaction.guildId, SettingsKeys.ModRoleId)) as string;
+		const ignoreRolesId = (await getGuildSetting(interaction.guildId, SettingsKeys.AutomodIgnoreRoles)) as string[];
 
 		switch (Object.keys(args)[0]) {
 			case 'file': {
-				return file(interaction, args.file, logChannel, modRoleId, locale, this.redis);
+				return file(interaction, args.file, logChannel, ignoreRolesId, locale, this.redis);
 			}
 
 			case 'modal': {
-				return modal(interaction, args.modal, logChannel, modRoleId, locale, this.redis);
+				return modal(interaction, args.modal, logChannel, ignoreRolesId, locale, this.redis);
 			}
 
 			case 'manual': {
-				return manual(interaction, args.manual, logChannel, modRoleId, locale, this.redis);
+				return manual(interaction, args.manual, logChannel, ignoreRolesId, locale, this.redis);
 			}
 
 			default:
