@@ -16,6 +16,7 @@ import {
 	zalgoFilter,
 } from '../../../../functions/anti-raid/filters.js';
 import {
+	AntiRaidNukeModes,
 	generateReportTargetInfo,
 	reportSort,
 	resolveDateLocale,
@@ -29,7 +30,6 @@ import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { generateTargetInformation } from '../../../../util/generateTargetInformation.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
-import { noop } from '../../../../util/noop.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
 import { resolveTimestamp } from '../../../../util/timestamp.js';
 import type { AntiRaidResult } from '../../anti-raid-nuke.js';
@@ -41,7 +41,7 @@ enum Confusables {
 	PatternMembers,
 }
 
-export interface AntiRaidManualArgs {
+export interface AntiRaidFilterArgs {
 	pattern?: string | undefined;
 	confusables?: number | undefined;
 	insensitive?: boolean | undefined;
@@ -57,9 +57,9 @@ export interface AntiRaidManualArgs {
 	hide?: boolean | undefined;
 }
 
-export async function manual(
+export async function filter(
 	interaction: CommandInteraction<'cached'>,
-	data: AntiRaidManualArgs,
+	data: AntiRaidFilterArgs,
 	logChannel: TextChannel,
 	ignoreRolesId: string[],
 	locale: string,
@@ -68,6 +68,8 @@ export async function manual(
 	const start = performance.now();
 
 	const reply = await interaction.deferReply({ ephemeral: data.hide ?? true });
+
+	console.log(reply);
 
 	const parsedJoinFrom = resolveTimestamp(data.join_from);
 	if (data.join_from && !parsedJoinFrom) {
@@ -187,6 +189,7 @@ export async function manual(
 
 	const banKey = nanoid();
 	const cancelKey = nanoid();
+	const dryRunKey = nanoid();
 
 	const banButton = createButton({
 		customId: banKey,
@@ -197,6 +200,11 @@ export async function manual(
 		customId: cancelKey,
 		label: i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
+	});
+	const dryRunButton = createButton({
+		customId: dryRunKey,
+		label: i18next.t('command.mod.anti_raid_nuke.buttons.dry_run', { lng: locale }),
+		style: ButtonStyle.Primary,
 	});
 
 	const potentialHits = Buffer.from(members.map((member) => generateTargetInformation(member)).join('\r\n'));
@@ -227,7 +235,7 @@ export async function manual(
 			lng: locale,
 		})}\n\n${parameterStrings.join('\n')}`,
 		files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
-		components: [createMessageActionRow([cancelButton, banButton])],
+		components: [createMessageActionRow([cancelButton, banButton, dryRunButton])],
 	});
 
 	const collectedInteraction = await reply
@@ -257,15 +265,22 @@ export async function manual(
 			components: [],
 			attachments: [],
 		});
-	} else if (collectedInteraction?.customId === banKey) {
+	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
+		const dryRunMode = collectedInteraction.customId === dryRunKey;
+
+		const content = collectedInteraction.message.content + (dryRunMode ? (`\n\n${i18next.t('command.mod.anti_raid_nuke.parameters.dry_run', { lng: locale })}`) : '');
+
 		await collectedInteraction.update({
+			content, 
 			components: [
 				createMessageActionRow([
 					{ ...cancelButton, disabled: true },
 					{ ...banButton, disabled: true },
+					{ ...dryRunButton, disabled: true },
 				]),
 			],
 		});
+
 
 		await redis.setex(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15, 'true');
 		let idx = 0;
@@ -293,14 +308,18 @@ export async function manual(
 						return;
 					}
 
-					const ban = await member.ban({ reason, deleteMessageDays: parsedData.days }).catch(noop);
-
-					if (!ban) {
+					const ban = dryRunMode ? true : await member.ban({ reason, deleteMessageDays: parsedData.days }).catch((err) => {
+						const error = err as Error;
+						
 						result.push({
 							member,
 							success: false,
-							error: i18next.t('command.mod.anti_raid_nuke.errors.result.ban_failed', { lng: locale }),
+							error: i18next.t('command.mod.anti_raid_nuke.errors.result.ban_failed', { lng: locale, error: error.message }),
 						});
+						return false;
+					});
+
+					if (!ban) {
 						return;
 					}
 
@@ -323,14 +342,18 @@ export async function manual(
 							multi: true,
 						}),
 						true,
-					).catch(noop);
-
-					if (!case_) {
+					).catch((err) => {
+						const error = err as Error;
+						
 						result.push({
 							member,
 							success: false,
-							error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', { lng: locale }),
+							error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', { lng: locale, error: error.message }),
 						});
+						return false;
+					});
+
+					if (!case_) {
 						return;
 					}
 
@@ -339,7 +362,7 @@ export async function manual(
 					result.push({
 						member,
 						success: true,
-						caseId: case_.caseId,
+						caseId: (case_ as Case).caseId,
 						error: undefined,
 					});
 
@@ -380,11 +403,12 @@ export async function manual(
 			collectedInteraction.channel as TextChannel,
 			result,
 			{
-				mode: 'manual',
+				mode: AntiRaidNukeModes.Filter,
 				time: end - start,
 				avatar: parsedAvatar,
 				cases,
 				logChannel,
+				dryRun: dryRunMode,
 				...data,
 			},
 		);
