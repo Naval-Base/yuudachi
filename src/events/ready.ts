@@ -1,6 +1,6 @@
 import { on } from 'node:events';
-import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { Client, Events, type Webhook } from 'discord.js';
+import { ChannelType, PermissionFlagsBits } from 'discord-api-types/v10';
+import { Client, Collection, Events, type Webhook } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../Event.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
@@ -12,7 +12,7 @@ import { kWebhooks } from '../tokens.js';
 export default class implements Event {
 	public name = 'Client ready handling';
 
-	public event = Events.ClientReady;
+	public event = Events.ClientReady as const;
 
 	public constructor(
 		public readonly client: Client<true>,
@@ -34,7 +34,17 @@ export default class implements Event {
 				const memberLogWebhookId = (await getGuildSetting(guild.id, SettingsKeys.MemberLogWebhookId)) as string;
 				const guildLogWebhookId = (await getGuildSetting(guild.id, SettingsKeys.GuildLogWebhookId)) as string;
 
-				const webhooks = await guild.fetchWebhooks();
+				const webhooks = new Collection<string, Webhook>();
+				for (const channel of guild.channels.cache.values()) {
+					if (channel.type === ChannelType.GuildText) {
+						if (!channel.permissionsFor(guild.members.me).has(PermissionFlagsBits.ManageWebhooks)) {
+							continue;
+						}
+
+						const channelWebhooks = await guild.channels.fetchWebhooks(channel);
+						channelWebhooks.forEach((webhook, key) => webhooks.set(key, webhook));
+					}
+				}
 
 				if (memberLogWebhookId) {
 					const webhook = webhooks.get(memberLogWebhookId);

@@ -18,7 +18,7 @@ import { kRedis } from '../../tokens.js';
 export default class implements Event {
 	public name = 'Spam check';
 
-	public event = Events.MessageCreate;
+	public event = Events.MessageCreate as const;
 
 	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 

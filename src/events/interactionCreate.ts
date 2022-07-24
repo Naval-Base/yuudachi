@@ -12,7 +12,7 @@ import { kCommands } from '../tokens.js';
 export default class implements Event {
 	public name = 'Interaction handling';
 
-	public event = Events.InteractionCreate;
+	public event = Events.InteractionCreate as const;
 
 	public constructor(
 		public readonly client: Client<true>,

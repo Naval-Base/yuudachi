@@ -17,7 +17,7 @@ import { kRedis } from '../../tokens.js';
 export default class implements Event {
 	public name = 'Manual ban handling';
 
-	public event = Events.GuildBanAdd;
+	public event = Events.GuildBanAdd as const;
 
 	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 

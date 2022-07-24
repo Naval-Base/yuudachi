@@ -2,6 +2,6 @@
 export async function up(sql) {
 	await sql.unsafe(`
 		alter table guild_settings
-			add column log_ignore_channels text[] not null default '{}'::text[]
+			add column sponsor_role_id text
 	`);
 }

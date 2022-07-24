@@ -18,7 +18,7 @@ import { kRedis } from '../../tokens.js';
 export default class implements Event {
 	public name = 'Manual timeout handling';
 
-	public event = Events.GuildMemberUpdate;
+	public event = Events.GuildMemberUpdate as const;
 
 	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 

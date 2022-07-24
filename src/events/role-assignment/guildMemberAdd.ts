@@ -12,7 +12,7 @@ import { kSQL } from '../../tokens.js';
 export default class implements Event {
 	public name = 'Role assignment';
 
-	public event = Events.GuildMemberAdd;
+	public event = Events.GuildMemberAdd as const;
 
 	public constructor(public readonly client: Client<true>, @inject(kSQL) public readonly sql: Sql<any>) {}
 

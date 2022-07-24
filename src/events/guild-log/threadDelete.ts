@@ -12,7 +12,7 @@ import { truncateEmbed } from '../../util/embed.js';
 export default class implements Event {
 	public name = 'Guild log thread create';
 
-	public event = Events.ThreadDelete;
+	public event = Events.ThreadDelete as const;
 
 	public constructor(
 		public readonly client: Client<true>,
