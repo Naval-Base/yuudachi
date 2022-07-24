@@ -1,10 +1,18 @@
 import { GuildMember, PermissionFlagsBits } from 'discord.js';
 
-export function checkBan(member: GuildMember, authorId: string, ignoreRolesId: string[]): string | null {
-	if (member.id === authorId) return 'reject_self';
-	if (!member.bannable) return 'reject_unbannable';
-	if (member.user.bot) return 'reject_bot';
-	if (member.roles.cache.hasAny(...ignoreRolesId)) return 'reject_protected';
+enum BanRejectReasons {
+	Self = 'reject_self',
+	MemberUnbanable = 'reject_unbanable',
+	MemberIsBot = 'reject_bot',
+	HasAutomodIgnoreRole = 'reject_protected',
+	HasHigherPerms = 'reject_perms',
+}
+
+export function checkBan(member: GuildMember, authorId: string, ignoreRolesId: string[]): BanRejectReasons | null {
+	if (member.id === authorId) return BanRejectReasons.Self;
+	if (!member.bannable) return BanRejectReasons.MemberUnbanable;
+	if (member.user.bot) return BanRejectReasons.MemberIsBot;
+	if (member.roles.cache.hasAny(...ignoreRolesId)) return BanRejectReasons.HasAutomodIgnoreRole;
 	if (
 		member.permissions.any([
 			PermissionFlagsBits.Administrator,
@@ -16,6 +24,6 @@ export function checkBan(member: GuildMember, authorId: string, ignoreRolesId: s
 			PermissionFlagsBits.ManageGuild,
 		])
 	)
-		return 'reject_perms';
+		return BanRejectReasons.HasHigherPerms;
 	return null;
 }
