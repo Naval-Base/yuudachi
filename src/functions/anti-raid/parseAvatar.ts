@@ -10,19 +10,23 @@ export async function parseAvatar(client: Client, input?: string): Promise<strin
 		return 'none';
 	}
 
+	if (/^[a-f,0-9]{32}$/.test(input)) {
+		return input;
+	}
+
 	const idReg = /\d{17,}/;
 
 	if (idReg.test(input)) {
 		const user = await client.users.fetch(input).catch(noop);
 		if (user) {
-			return user.avatar ?? undefined;
+			return user.avatar ?? 'none';
 		}
 		return undefined;
 	}
 
 	try {
 		new URL(input);
-		return input.replace(/https:\/\/cdn.discordapp.com.*\/([a-f0-9]*)/, '$1');
+		return input.replace(/https:\/\/cdn.discordapp.com.*\/([a-f,0-9]{32})/, '$1');
 	} catch (e) {
 		return undefined;
 	}
