@@ -4,25 +4,39 @@ import { Formatters, Guild, TextChannel } from 'discord.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import type { AntiRaidResult } from '../../commands/moderation/anti-raid-nuke.js';
 import type { AntiRaidFileArgs } from '../../commands/moderation/sub/anti-raid-nuke/file.js';
-import type { AntiRaidManualArgs } from '../../commands/moderation/sub/anti-raid-nuke/manual.js';
+import type { AntiRaidFilterArgs } from '../../commands/moderation/sub/anti-raid-nuke/filter.js';
 import type { AntiRaidModalArgs } from '../../commands/moderation/sub/anti-raid-nuke/modal.js';
 import { colorBasedOnBoolean, colorBasedOnDifference } from '../../util/color.js';
 import { generateMessageLink } from '../../util/generateMessageLink.js';
 import { resolveTimestamp } from '../../util/timestamp.js';
 import type { Case } from '../cases/createCase.js';
 
+export enum AntiRaidNukeModes {
+	Filter = 'filter',
+	Modal = 'modal',
+	File = 'file',
+}
+
 export type ReportArgs = {
-	mode: 'file' | 'modal' | 'manual';
+	mode: AntiRaidNukeModes;
 	time: number;
 	cases: Case[];
 	logChannel: TextChannel;
-} & Partial<AntiRaidFileArgs & AntiRaidManualArgs & AntiRaidModalArgs>;
+	dryRun: boolean;
+} & Partial<AntiRaidFileArgs & AntiRaidFilterArgs & AntiRaidModalArgs>;
 
 export function reportSort(a: AntiRaidResult, b: AntiRaidResult) {
 	if (!a.member.joinedTimestamp || !b.member.joinedTimestamp) {
 		return 0;
 	}
 	return b.member.joinedTimestamp - a.member.joinedTimestamp;
+}
+
+function sortByCase(a: AntiRaidResult, b: AntiRaidResult) {
+	if (!a.caseId || !b.caseId) {
+		return 0;
+	}
+	return a.caseId - b.caseId;
 }
 
 export function generateReportTargetInfo(r: AntiRaidResult) {
@@ -70,7 +84,7 @@ export function formatReport(guild: Guild, args: ReportArgs, results: AntiRaidRe
 		`- **Mode:** ${Formatters.inlineCode(args.mode)}`,
 		`- **Current Time:** ${dayjs().format(DATE_FORMAT_LOGFILE)}`,
 		`- **Time Taken:** ${ms(args.time, true)}`,
-		'',
+		args.dryRun ? '- **Operated in dry-run mode**\n' : '',
 		'## **Results**',
 		`**Total:** ${Formatters.inlineCode(results.length.toString())}`,
 		`- ${successes.length} members were successfully banned`,
@@ -185,6 +199,7 @@ export function formatReport(guild: Guild, args: ReportArgs, results: AntiRaidRe
 			'|:-------|:---------:|:-------:|',
 			...results
 				.filter((r) => r.success)
+				.sort(sortByCase)
 				.map((r) => `| ${r.caseId ?? 'None'} | ${r.member.user.id} | ${r.member.user.tag}`),
 		);
 	} else {
@@ -198,6 +213,7 @@ export function formatReport(guild: Guild, args: ReportArgs, results: AntiRaidRe
 			'|:-------|:---------:|:-------:|',
 			...results
 				.filter((r) => !r.success)
+				.sort(reportSort)
 				.map((r) => `| ${r.member.user.id} | ${r.member.user.tag} | ${r.error ?? 'Unknown error'}`),
 		);
 	} else {
