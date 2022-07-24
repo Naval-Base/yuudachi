@@ -5,8 +5,8 @@ export const AntiRaidNukeCommand = {
 	description: 'Handle raids and nukes',
 	options: [
 		{
-			name: 'manual',
-			description: 'Manually filters and bans members based on various criterias',
+			name: 'filter',
+			description: 'Manually filter and ban members based on various criterias',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
@@ -16,12 +16,12 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'confusables',
-					description: 'Whether to use confusables',
+					description: 'Whether to enable confusables (cleaning the username or filter out members without confusables in their username)',
 					type: ApplicationCommandOptionType.Integer,
 					choices: [
 						{ name: 'Off', value: 0 },
-						{ name: 'Only Pattern (Pattern will be resistant to confusables, Default)', value: 1 },
-						{ name: 'Only Filter Members (Filter only members with confusables)', value: 2 },
+						{ name: 'Only Pattern (pattern will be resistant to confusables and zalgo, Default)', value: 1 },
+						{ name: 'Only Filter Members (filter out members without confusables in their username)', value: 2 },
 						{ name: 'Pattern & Filter Members', value: 3 },
 					],
 				},
@@ -37,7 +37,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'zalgo',
-					description: 'Whether to filter members with zalgo (default: false)',
+					description: 'Whether to filter out members without zalgo in their username (default: false)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
@@ -62,7 +62,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'avatar',
-					description: 'The avatar hash (UserId, cdn url, or "none" to match no avatar)',
+					description: 'The avatar (Raw hash, UserId, Cdn url, or "none" to match no avatar)',
 					type: ApplicationCommandOptionType.String,
 				},
 				{
@@ -94,12 +94,12 @@ export const AntiRaidNukeCommand = {
 		},
 		{
 			name: 'file',
-			description: 'Filters and bans members from a file of IDs',
+			description: 'Filter and ban members from a file of IDs',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'file',
-					description: 'The file to read from (must be a .txt file)',
+					description: 'The file to read from',
 					type: ApplicationCommandOptionType.Attachment,
 					required: true,
 				},
@@ -132,7 +132,7 @@ export const AntiRaidNukeCommand = {
 		},
 		{
 			name: 'modal',
-			description: 'Filters and bans members prompted by a modal',
+			description: 'Filter and ban members prompted by a modal',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
