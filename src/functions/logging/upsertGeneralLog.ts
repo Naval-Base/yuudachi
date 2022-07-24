@@ -33,18 +33,20 @@ export async function upsertAntiRaidNukeReport(
 
 	const reportDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
+	const reportFileName = `${reportDate}-anti-raid-nuke-report.md`;
+
 	const message = await logChannel!
 		.send({
 			embeds: [embed],
 			files: [
 				{
-					name: `${reportDate}-anti-raid-nuke-report.md`,
+					name: reportFileName,
 					attachment: file,
 				},
 			],
 		})
 		.then(async (msg) => {
-			const attachment = msg.attachments.find((a) => a.name === `${reportDate}-anti-raid-nuke-report.md`);
+			const attachment = msg.attachments.first();
 
 			if (!attachment) return;
 
