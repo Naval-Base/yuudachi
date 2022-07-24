@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import { file } from './sub/anti-raid-nuke/file.js';
-import { manual } from './sub/anti-raid-nuke/manual.js';
+import { filter } from './sub/anti-raid-nuke/manual.js';
 import { modal } from './sub/anti-raid-nuke/modal.js';
 import type { Command } from '../../Command.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
@@ -55,8 +55,8 @@ export default class implements Command {
 				return modal(interaction, args.modal, logChannel, ignoreRolesId, locale, this.redis);
 			}
 
-			case 'manual': {
-				return manual(interaction, args.manual, logChannel, ignoreRolesId, locale, this.redis);
+			case 'filter': {
+				return filter(interaction, args.filter, logChannel, ignoreRolesId, locale, this.redis);
 			}
 
 			default:
