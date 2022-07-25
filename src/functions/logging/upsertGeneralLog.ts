@@ -33,14 +33,14 @@ export async function upsertAntiRaidNukeReport(
 
 	const reportDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-	const reportFileName = `${reportDate}-anti-raid-nuke-report.md`;
+	const reportName = `${reportDate}-anti-raid-nuke-report.md`;
 
 	const message = await logChannel!
 		.send({
 			embeds: [embed],
 			files: [
 				{
-					name: reportFileName,
+					name: reportName,
 					attachment: file,
 				},
 			],

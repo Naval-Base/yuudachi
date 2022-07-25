@@ -17,7 +17,11 @@ import { nanoid } from 'nanoid';
 import fetch from 'node-fetch';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { checkBan } from '../../../../functions/anti-raid/checkBan.js';
-import { AntiRaidNukeModes, generateReportTargetInfo, reportSort } from '../../../../functions/anti-raid/formatReport.js';
+import {
+	AntiRaidNukeModes,
+	generateReportTargetInfo,
+	reportSort,
+} from '../../../../functions/anti-raid/formatReport.js';
 import { Case, CaseAction, createCase } from '../../../../functions/cases/createCase.js';
 import { getCaseId } from '../../../../functions/cases/getCaseId.js';
 import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
@@ -191,7 +195,9 @@ export async function file(
 	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
 		const dryRunMode = collectedInteraction.customId === dryRunKey;
 
-		const content = collectedInteraction.message.content + (dryRunMode ? (`\n\n${i18next.t('command.mod.anti_raid_nuke.parameters.dry_run', { lng: locale })}`) : '');
+		const content =
+			collectedInteraction.message.content +
+			(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.parameters.dry_run', { lng: locale })}` : '');
 
 		await collectedInteraction.update({
 			content,
@@ -212,7 +218,7 @@ export async function file(
 
 		const caseIdKey = `anti_raid_nuke_${nanoid()}`;
 
-		await redis.setex(caseIdKey, 15, (await getCaseId(interaction.guildId)));
+		await redis.setex(caseIdKey, 15, await getCaseId(interaction.guildId));
 
 		for (const member of members.values()) {
 			promises.push(
@@ -234,16 +240,21 @@ export async function file(
 						return;
 					}
 
-					const ban = dryRunMode ? true : await member.ban({ reason, deleteMessageDays: days }).catch((err) => {
-						const error = err as Error;
-						
-						result.push({
-							member,
-							success: false,
-							error: i18next.t('command.mod.anti_raid_nuke.errors.result.ban_failed', { lng: locale, error: error.message }),
-						});
-						return false;
-					});
+					const ban = dryRunMode
+						? true
+						: await member.ban({ reason, deleteMessageDays: days }).catch((err) => {
+								const error = err as Error;
+
+								result.push({
+									member,
+									success: false,
+									error: i18next.t('command.mod.anti_raid_nuke.errors.result.ban_failed', {
+										lng: locale,
+										error: error.message,
+									}),
+								});
+								return false;
+						  });
 
 					if (!ban) {
 						return;
@@ -269,11 +280,14 @@ export async function file(
 						true,
 					).catch((err) => {
 						const error = err as Error;
-						
+
 						result.push({
 							member,
 							success: false,
-							error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', { lng: locale, error: error.message }),
+							error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', {
+								lng: locale,
+								error: error.message,
+							}),
 						});
 						return false;
 					});
@@ -310,7 +324,11 @@ export async function file(
 				collectedInteraction.user,
 				logChannel,
 				cases,
-				reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: result.filter((r) => r.success).length }),
+				reason ??
+					i18next.t('command.mod.anti_raid_nuke.success', {
+						lng: locale,
+						members: result.filter((r) => r.success).length,
+					}),
 			);
 		}
 

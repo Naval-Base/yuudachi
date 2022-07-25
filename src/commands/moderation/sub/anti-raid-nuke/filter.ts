@@ -269,10 +269,12 @@ export async function filter(
 	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
 		const dryRunMode = collectedInteraction.customId === dryRunKey;
 
-		const content = collectedInteraction.message.content + (dryRunMode ? (`\n\n${i18next.t('command.mod.anti_raid_nuke.parameters.dry_run', { lng: locale })}`) : '');
+		const content =
+			collectedInteraction.message.content +
+			(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.parameters.dry_run', { lng: locale })}` : '');
 
 		await collectedInteraction.update({
-			content, 
+			content,
 			components: [
 				createMessageActionRow([
 					{ ...cancelButton, disabled: true },
@@ -282,7 +284,6 @@ export async function filter(
 			],
 		});
 
-
 		await redis.setex(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15, 'true');
 		let idx = 0;
 		const promises = [];
@@ -290,7 +291,7 @@ export async function filter(
 		const result: AntiRaidResult[] = [];
 		const caseIdKey = `anti_raid_nuke_${nanoid()}`;
 
-		await redis.set(caseIdKey, (await getCaseId(interaction.guildId)));
+		await redis.set(caseIdKey, await getCaseId(interaction.guildId));
 
 		for (const member of members.values()) {
 			promises.push(
@@ -312,16 +313,21 @@ export async function filter(
 						return;
 					}
 
-					const ban = dryRunMode ? true : await member.ban({ reason, deleteMessageDays: parsedData.days }).catch((err) => {
-						const error = err as Error;
-						
-						result.push({
-							member,
-							success: false,
-							error: i18next.t('command.mod.anti_raid_nuke.errors.result.ban_failed', { lng: locale, error: error.message }),
-						});
-						return false;
-					});
+					const ban = dryRunMode
+						? true
+						: await member.ban({ reason, deleteMessageDays: parsedData.days }).catch((err) => {
+								const error = err as Error;
+
+								result.push({
+									member,
+									success: false,
+									error: i18next.t('command.mod.anti_raid_nuke.errors.result.ban_failed', {
+										lng: locale,
+										error: error.message,
+									}),
+								});
+								return false;
+						  });
 
 					if (!ban) {
 						return;
@@ -330,7 +336,6 @@ export async function filter(
 					const case_ = await createCase(
 						collectedInteraction.guild,
 						generateCasePayload({
-							
 							guildId: collectedInteraction.guildId,
 							user: collectedInteraction.user,
 							args: {
@@ -350,11 +355,14 @@ export async function filter(
 						true,
 					).catch((err) => {
 						const error = err as Error;
-						
+
 						result.push({
 							member,
 							success: false,
-							error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', { lng: locale, error: error.message }),
+							error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', {
+								lng: locale,
+								error: error.message,
+							}),
 						});
 						return false;
 					});
@@ -391,7 +399,11 @@ export async function filter(
 				collectedInteraction.user,
 				logChannel,
 				cases,
-				parsedData.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: result.filter((r) => r.success).length }),
+				parsedData.reason ??
+					i18next.t('command.mod.anti_raid_nuke.success', {
+						lng: locale,
+						members: result.filter((r) => r.success).length,
+					}),
 			);
 		}
 

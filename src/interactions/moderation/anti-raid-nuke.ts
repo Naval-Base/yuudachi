@@ -16,7 +16,8 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'confusables',
-					description: 'Whether to enable confusables (cleaning the username or filter out members without confusables)',
+					description:
+						'Whether to enable confusables (cleaning the username or filter out members without confusables)',
 					type: ApplicationCommandOptionType.Integer,
 					choices: [
 						{ name: 'Off', value: 0 },

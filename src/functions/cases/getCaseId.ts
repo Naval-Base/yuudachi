@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 import { kSQL } from '../../tokens.js';
 
 interface RawCaseId {
-	case_id: number,
+	case_id: number;
 }
 
 export async function getCaseId(guildId: string) {
@@ -12,7 +12,7 @@ export async function getCaseId(guildId: string) {
 	const [case_] = await sql<[RawCaseId]>`
 		select next_case(${guildId}) as case_id
 		from cases 
-		limit 1;`
+		limit 1;`;
 
 	return case_.case_id;
 }
