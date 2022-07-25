@@ -21,6 +21,7 @@ import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { checkBan } from '../../../../functions/anti-raid/checkBan.js';
 import { AntiRaidNukeModes, generateReportTargetInfo, reportSort } from '../../../../functions/anti-raid/formatReport.js';
 import { Case, CaseAction, createCase } from '../../../../functions/cases/createCase.js';
+import { getCaseId } from '../../../../functions/cases/getCaseId.js';
 import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
@@ -260,6 +261,9 @@ export async function modal(
 		const promises = [];
 
 		const result: AntiRaidResult[] = [];
+		const caseIdKey = `anti_raid_nuke_${nanoid()}`;
+
+		await redis.setex(caseIdKey, 15, (await getCaseId(interaction.guildId)));
 
 		for (const member of members.values()) {
 			promises.push(
@@ -310,6 +314,7 @@ export async function modal(
 								days: days,
 							},
 							action: CaseAction.Ban,
+							caseId: await redis.incr(caseIdKey),
 							multi: true,
 						}),
 						true,
@@ -329,6 +334,7 @@ export async function modal(
 					}
 
 					await redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15);
+					await redis.expire(caseIdKey, 15);
 
 					result.push({
 						member,
@@ -345,6 +351,7 @@ export async function modal(
 		const resolvedCases = await Promise.all(promises);
 		const cases = resolvedCases.filter(Boolean) as Case[];
 		await redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 5);
+		await redis.expire(caseIdKey, 5);
 
 		if (cases.length > 0) {
 			console.log(cases);
@@ -354,7 +361,7 @@ export async function modal(
 				collectedInteraction.user,
 				logChannel,
 				cases,
-				reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: result.length }),
+				reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: result.filter((r) => r.success).length }),
 			);
 		}
 

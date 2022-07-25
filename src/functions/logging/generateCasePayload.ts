@@ -21,6 +21,7 @@ interface GenerateCasePayloadOptions {
 	action: CaseAction;
 	messageId?: Snowflake | null;
 	duration?: number | null;
+	caseId?: number;
 	multi?: boolean | null;
 }
 
@@ -32,12 +33,14 @@ export function generateCasePayload({
 	action,
 	messageId = null,
 	duration,
+	caseId,
 	multi = false,
 }: GenerateCasePayloadOptions) {
 	return {
 		guildId,
 		action,
 		roleId,
+		caseId,
 		actionExpiration: duration ? new Date(Date.now() + duration) : undefined,
 		reason: args.reason,
 		moderatorId: user?.id,

@@ -125,7 +125,7 @@ export async function createCase(
 			join_cutoff,
 			account_cutoff
 		) values (
-			next_case(${case_.guildId}),
+			${case_.caseId ?? `next_case(${case_.guildId})`},
 			${case_.guildId},
 			${case_.moderatorId ?? null},
 			${case_.moderatorTag ?? null},

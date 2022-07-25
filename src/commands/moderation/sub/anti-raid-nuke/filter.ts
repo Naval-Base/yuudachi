@@ -23,6 +23,7 @@ import {
 } from '../../../../functions/anti-raid/formatReport.js';
 import { parseAvatar } from '../../../../functions/anti-raid/parseAvatar.js';
 import { Case, CaseAction, createCase } from '../../../../functions/cases/createCase.js';
+import { getCaseId } from '../../../../functions/cases/getCaseId.js';
 import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
@@ -287,6 +288,9 @@ export async function filter(
 		const promises = [];
 
 		const result: AntiRaidResult[] = [];
+		const caseIdKey = `anti_raid_nuke_${nanoid()}`;
+
+		await redis.set(caseIdKey, (await getCaseId(interaction.guildId)));
 
 		for (const member of members.values()) {
 			promises.push(
@@ -326,6 +330,7 @@ export async function filter(
 					const case_ = await createCase(
 						collectedInteraction.guild,
 						generateCasePayload({
+							
 							guildId: collectedInteraction.guildId,
 							user: collectedInteraction.user,
 							args: {
@@ -339,6 +344,7 @@ export async function filter(
 								accountCutoff: dayjs(parsedCreatedFrom).toDate(),
 							},
 							action: CaseAction.Ban,
+							caseId: await redis.incr(caseIdKey),
 							multi: true,
 						}),
 						true,
@@ -358,6 +364,7 @@ export async function filter(
 					}
 
 					await redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 15);
+					await redis.expire(caseIdKey, 15);
 
 					result.push({
 						member,
@@ -374,6 +381,7 @@ export async function filter(
 		const resolvedCases = await Promise.all(promises);
 		const cases = resolvedCases.filter(Boolean) as Case[];
 		await redis.expire(`guild:${collectedInteraction.guildId}:anti_raid_nuke`, 5);
+		await redis.expire(caseIdKey, 5);
 
 		if (cases.length > 0) {
 			console.log(cases);
@@ -383,7 +391,7 @@ export async function filter(
 				collectedInteraction.user,
 				logChannel,
 				cases,
-				parsedData.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: result.length }),
+				parsedData.reason ?? i18next.t('command.mod.anti_raid_nuke.success', { lng: locale, members: result.filter((r) => r.success).length }),
 			);
 		}
 
