@@ -1,3 +1,10 @@
 {
-	"typescript.tsdk": "node_modules\\typescript\\lib"
+	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true,
+		"source.organizeImports": false
+	},
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

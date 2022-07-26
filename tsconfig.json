@@ -26,7 +26,6 @@
 		"inlineSources": true,
 		"newLine": "lf",
 		"noEmitHelpers": true,
-		"outDir": "dist",
 		"preserveConstEnums": false,
 		"removeComments": false,
 		"sourceMap": true,
@@ -42,6 +41,5 @@
 
 		// Completeness
 		"skipLibCheck": true
-	},
-	"include": ["src/**/*.ts"]
+	}
 }
