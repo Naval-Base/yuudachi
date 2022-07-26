@@ -200,7 +200,7 @@ export function formatReport(guild: Guild, args: ReportArgs, results: AntiRaidRe
 			...results
 				.filter((r) => r.success)
 				.sort(sortByCase)
-				.map((r) => `| ${r.caseId ?? 'None'} | ${r.member.user.id} | ${r.member.user.tag}`),
+				.map((r) => `| ${args.dryRun ? 'Dry Run' : r.caseId ?? 'None'} | ${r.member.user.id} | ${r.member.user.tag}`),
 		);
 	} else {
 		lines.push('> ## No successes, something went wrong.');

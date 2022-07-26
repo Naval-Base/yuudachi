@@ -311,7 +311,9 @@ export async function modal(
 						return;
 					}
 
-					const case_ = await createCase(
+					const case_ = dryRunMode
+					? true
+					: await createCase(
 						collectedInteraction.guild,
 						generateCasePayload({
 							guildId: collectedInteraction.guildId,
