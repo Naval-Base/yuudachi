@@ -333,41 +333,41 @@ export async function filter(
 						return;
 					}
 
-					const case_ =dryRunMode
-					? true
-					: await createCase(
-						collectedInteraction.guild,
-						generateCasePayload({
-							guildId: collectedInteraction.guildId,
-							user: collectedInteraction.user,
-							args: {
-								reason,
-								user: {
-									member: member,
-									user: member.user,
-								},
-								days: parsedData.days,
-								joinCutoff: dayjs(parsedJoinFrom).toDate(),
-								accountCutoff: dayjs(parsedCreatedFrom).toDate(),
-							},
-							action: CaseAction.Ban,
-							caseId: await redis.incr(caseIdKey),
-							multi: true,
-						}),
-						true,
-					).catch((err) => {
-						const error = err as Error;
+					const case_ = dryRunMode
+						? true
+						: await createCase(
+								collectedInteraction.guild,
+								generateCasePayload({
+									guildId: collectedInteraction.guildId,
+									user: collectedInteraction.user,
+									args: {
+										reason,
+										user: {
+											member: member,
+											user: member.user,
+										},
+										days: parsedData.days,
+										joinCutoff: dayjs(parsedJoinFrom).toDate(),
+										accountCutoff: dayjs(parsedCreatedFrom).toDate(),
+									},
+									action: CaseAction.Ban,
+									caseId: await redis.incr(caseIdKey),
+									multi: true,
+								}),
+								true,
+						  ).catch((err) => {
+								const error = err as Error;
 
-						result.push({
-							member,
-							success: false,
-							error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', {
-								lng: locale,
-								error: error.message,
-							}),
-						});
-						return false;
-					});
+								result.push({
+									member,
+									success: false,
+									error: i18next.t('command.mod.anti_raid_nuke.errors.result.case_failed', {
+										lng: locale,
+										error: error.message,
+									}),
+								});
+								return false;
+						  });
 
 					if (!case_) {
 						return;
