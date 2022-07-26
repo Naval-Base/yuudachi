@@ -1,4 +1,4 @@
-name: Label Sync
+name: Label sync
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -9,14 +9,14 @@ on:
     paths:
       - '.github/labels.yml'
 jobs:
-  labeler:
-    name: Labeler
+  label-sync:
+    name: Label sync
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Run Label Sync
-        uses: crazy-max/ghaction-github-labeler@v3
+      - name: Label sync
+        uses: crazy-max/ghaction-github-labeler@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

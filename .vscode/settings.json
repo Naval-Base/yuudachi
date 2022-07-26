@@ -1,5 +1,18 @@
 {
-	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"i18n-ally.localesPaths": ["locales"],
-	"i18n-ally.keystyle": "nested"
+	"i18n-ally.localesPaths": [
+		"locales"
+	],
+	"i18n-ally.keystyle": "nested",
+	"eslint.workingDirectories": [
+		{
+			"pattern": "./packages/*"
+		}
+	],
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true,
+		"source.organizeImports": false
+	},
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

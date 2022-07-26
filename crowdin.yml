@@ -4,5 +4,5 @@ append_commit_message: false
 base_path: .
 preserve_hierarchy: true
 files:
-  - source: /src/locales/en-US/translation.json
-    translation: /src/locales/%locale%/%original_file_name%
+  - source: /packages/yuudachi/locales/en-US/translation.json
+    translation: /packages/yuudachi/locales/%locale%/%original_file_name%

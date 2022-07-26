@@ -1,7 +1,7 @@
-diff --git a/node_modules/postgres/package.json b/node_modules/postgres/package.json
-index ea27572..38c6803 100644
---- a/node_modules/postgres/package.json
-+++ b/node_modules/postgres/package.json
+diff --git a/package.json b/package.json
+index ea27572178f578b77fd7536659c6b4ab8e77e440..38c6803f3219a84abf7f9f071928be26c8d16b62 100644
+--- a/package.json
++++ b/package.json
 @@ -7,7 +7,8 @@
    "main": "cjs/src/index.js",
    "exports": {
