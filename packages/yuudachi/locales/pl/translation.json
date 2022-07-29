@@ -42,13 +42,13 @@
 				}
 			},
 			"warn": {
-				"pending": "",
+				"pending": "Czy na pewno chcesz ostrzec {{- user}}?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Anuluj",
+					"execute": "Ostrzeż"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Anulowano ostrzeganie {{- user}}",
+				"success": "Pomyślnie ostrzeżono {{- user}}"
 			},
 			"timeout": {
 				"errors": {
@@ -57,12 +57,12 @@
 					"already_timed_out": ""
 				},
 				"buttons": {
-					"cancel": "",
+					"cancel": "Anuluj",
 					"execute": ""
 				},
 				"pending": "",
 				"cancel": "",
-				"success": ""
+				"success": "Pomyślnie wyciszono {{- user}}"
 			},
 			"kick": {
 				"errors": {
@@ -71,11 +71,11 @@
 				},
 				"pending": "",
 				"buttons": {
-					"cancel": "",
+					"cancel": "Anuluj",
 					"execute": ""
 				},
 				"cancel": "",
-				"success": ""
+				"success": "Pomyślnie wykopano {{- user}}"
 			},
 			"softban": {
 				"errors": {
@@ -84,7 +84,7 @@
 				"pending": "",
 				"not_member": "",
 				"buttons": {
-					"cancel": "",
+					"cancel": "Anuluj",
 					"execute": ""
 				},
 				"reasons": {
@@ -92,8 +92,8 @@
 				},
 				"cancel": "",
 				"success": {
-					"regular": "",
-					"clear_messages": ""
+					"regular": "Pomyślnie wykonano softban na {{- user}}",
+					"clear_messages": "Pomyślnie usunięto wiadomości od {{- user}}"
 				}
 			},
 			"ban": {
@@ -103,11 +103,11 @@
 				},
 				"pending": "",
 				"buttons": {
-					"cancel": "",
+					"cancel": "Anuluj",
 					"execute": ""
 				},
 				"cancel": "",
-				"success": ""
+				"success": "Pomyślnie zbanowano {{- user}}"
 			},
 			"unban": {
 				"errors": {
@@ -116,11 +116,11 @@
 				},
 				"pending": "",
 				"buttons": {
-					"cancel": "",
+					"cancel": "Anuluj",
 					"execute": ""
 				},
 				"cancel": "",
-				"success": ""
+				"success": "Pomyślnie odbanowano {{- user}}"
 			},
 			"anti_raid_nuke": {
 				"errors": {
@@ -141,11 +141,11 @@
 				"reason_fallback": "",
 				"pending": "",
 				"buttons": {
-					"cancel": "",
+					"cancel": "Anuluj",
 					"execute": ""
 				},
 				"cancel": "",
-				"success": ""
+				"success": "Anit-Raid-Nuke uderzył w {{- members}} członków serwera."
 			},
 			"restrict": {
 				"embed": {
@@ -156,7 +156,7 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
+						"cancel": "Anuluj",
 						"execute": ""
 					},
 					"cancel": "",
@@ -170,7 +170,7 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
+						"cancel": "Anuluj",
 						"execute": ""
 					},
 					"cancel": "",
@@ -184,7 +184,7 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
+						"cancel": "Anuluj",
 						"execute": ""
 					},
 					"cancel": "",
@@ -197,7 +197,7 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
+						"cancel": "Anuluj",
 						"execute": ""
 					},
 					"cancel": "",
@@ -213,43 +213,43 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
+						"cancel": "Anuluj",
 						"execute": ""
 					},
 					"message": "",
 					"message_reason": "",
 					"cancel": "",
-					"success": ""
+					"success": "Pomyślnie zablokowano {{- channel}}"
 				},
 				"lift": {
 					"errors": {
 						"missing_permissions": "",
-						"not_locked": ""
+						"not_locked": "{{- channel}} nie jest zablokowany."
 					},
-					"pending": "",
+					"pending": "Czy na pewno chcesz znieść blokadę dla {{- channel}}?",
 					"buttons": {
-						"cancel": "",
-						"execute": ""
+						"cancel": "Anuluj",
+						"execute": "Odblokuj"
 					},
 					"cancel": "",
-					"success": ""
+					"success": "Pomyślnie zniesiono blokadę dla {{- channel}}"
 				}
 			},
 			"reason": {
-				"success": "",
-				"success_multiple": "",
+				"success": "Pomyślnie ustawiono powód dla incydentu {{- case}}",
+				"success_multiple": "Pomyślnie ustawiono powód dla incydentów z zakresu {{- lower_case}} do {{- upper_case}} ({{amount}}/{{target}} incydentów)",
 				"pending_multiple": "",
 				"buttons": {
-					"cancel": "",
+					"cancel": "Anuluj",
 					"execute": ""
 				},
 				"cancel": ""
 			},
 			"reference": {
-				"success": ""
+				"success": "Pomyślnie ustawiono odniesienie dla incydentu {{- case}} na {{- ref}}"
 			},
 			"duration": {
-				"success": ""
+				"success": "Pomyślnie ustawiono czas trwania dla incydentu {{- case}}"
 			}
 		},
 		"utility": {
