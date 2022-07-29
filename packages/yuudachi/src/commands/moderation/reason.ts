@@ -36,8 +36,8 @@ export default class implements Command {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 
-		const lower = Math.min(args.case, args.lastcase ?? args.case);
-		const upper = Math.max(args.case, args.lastcase ?? args.case);
+		const lower = Math.min(args.case, args.last_case ?? args.case);
+		const upper = Math.max(args.case, args.last_case ?? args.case);
 
 		if (lower < 1 || upper < 1) {
 			await interaction.editReply({
@@ -51,7 +51,7 @@ export default class implements Command {
 		let originalCaseLower: Case | null;
 		let originalCaseUpper: Case | null;
 
-		if (args.lastcase) {
+		if (args.last_case) {
 			const changeKey = nanoid();
 			const cancelKey = nanoid();
 
@@ -162,7 +162,7 @@ export default class implements Command {
 			success.push(caseId);
 		}
 
-		const message = args.lastcase
+		const message = args.last_case
 			? i18next.t('command.mod.reason.success_multiple', {
 					lower_case: Formatters.hyperlink(
 						`#${lower}`,

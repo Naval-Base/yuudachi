@@ -130,7 +130,7 @@
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
 					"no_hits_file": "The Anti-Raid-Nuke will not hit anyone, content you provided did not contain any valid ids.",
 					"no_ids": "This file does not contain any ids.",
-					"duration_format": "Wrong format for the argument {{ arg }} argument",
+					"duration_format": "Wrong format for the argument {{ arg }}",
 					"pattern_format": "Invalid pattern provided",
 					"result": {
 						"ban_failed": "There was an error trying to ban: {{- error}}",
@@ -414,7 +414,7 @@
 		"general_log": {
 			"anti_raid_nuke": {
 				"title": "Anti-Raid-Nuke launched",
-				"description": "• Author: {{- author}}\n• Channel: {{- channel}}\n• Hit count: {{- hit_count}}"
+				"description": "• Author: {{- author}}\n• Hit count: {{- hit_count}}"
 			}
 		}
 	}

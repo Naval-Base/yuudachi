@@ -117,7 +117,7 @@ export default class implements Command {
 						user: collectedInteraction.user,
 						args: {
 							...args,
-							days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+							days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 						},
 						action: CaseAction.Softban,
 					}),
@@ -131,7 +131,7 @@ export default class implements Command {
 
 				await interaction.guild.bans.create(args.user.user, {
 					reason,
-					deleteMessageDays: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+					deleteMessageDays: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 				});
 				await interaction.guild.bans.remove(args.user.user, reason);
 			}

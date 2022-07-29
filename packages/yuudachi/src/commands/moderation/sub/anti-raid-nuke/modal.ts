@@ -9,7 +9,6 @@ import {
 	GuildMember,
 	InteractionCollector,
 	TextBasedChannelResolvable,
-	TextChannel,
 	TextInputStyle,
 } from 'discord.js';
 import i18next from 'i18next';
@@ -19,6 +18,8 @@ import executeNuke from '../../../../functions/anti-raid/executeNuke.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
+import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
+import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
@@ -26,22 +27,11 @@ import { createModal } from '../../../../util/modal.js';
 import { createModalActionRow } from '../../../../util/modalActionRow.js';
 import { createTextComponent } from '../../../../util/textComponent.js';
 
-export interface AntiRaidModalArgs {
-	reason?: string | undefined;
-	days?: number | undefined;
-	hide?: boolean | undefined;
-}
-
 export async function modal(
 	interaction: CommandInteraction<'cached'>,
-	data: AntiRaidModalArgs,
+	args: ArgumentsOf<typeof AntiRaidNukeCommand>['modal'],
 	locale: string,
 ): Promise<void> {
-	const { reason, days } = {
-		reason: data.reason ?? null,
-		days: data.days ?? 1,
-	};
-
 	const modalKey = nanoid();
 
 	const textComponents = new Array(5).fill(0).map((_, i) =>
@@ -60,7 +50,7 @@ export async function modal(
 		createModal({
 			customId: modalKey,
 			title: i18next.t('command.mod.anti_raid_nuke.modal.title', { lng: locale }),
-			components: [createModalActionRow(textComponents)],
+			components: textComponents.map((textComponent) => createModalActionRow([textComponent])),
 		}),
 	);
 
@@ -87,7 +77,7 @@ export async function modal(
 		return;
 	}
 
-	await modalInteraction.deferReply({ ephemeral: data.hide ?? true });
+	await modalInteraction.deferReply({ ephemeral: args.hide ?? true });
 
 	const fetchedMembers = await interaction.guild.members.fetch();
 	const fullContent = modalInteraction.components
@@ -227,7 +217,7 @@ export async function modal(
 		const { result, cases } = await executeNuke(
 			collectedInteraction,
 			{
-				days,
+				days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 				dryRun: dryRunMode,
 			},
 			members,
@@ -239,7 +229,7 @@ export async function modal(
 				collectedInteraction.guildId,
 				collectedInteraction.user,
 				cases,
-				reason ??
+				args.reason ??
 					i18next.t('command.mod.anti_raid_nuke.success', {
 						lng: locale,
 						members: result.filter((r) => r.success).length,
@@ -259,12 +249,7 @@ export async function modal(
 		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		await upsertAntiRaidNukeReport(
-			collectedInteraction.guild.id,
-			collectedInteraction.user,
-			collectedInteraction.channel as TextChannel,
-			result,
-		);
+		await upsertAntiRaidNukeReport(collectedInteraction.guildId, collectedInteraction.user, result);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.success', {

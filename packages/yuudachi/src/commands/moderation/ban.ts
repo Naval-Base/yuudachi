@@ -126,7 +126,7 @@ export default class implements Command {
 					user: collectedInteraction.user,
 					args: {
 						...args,
-						days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
+						days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 					},
 					action: CaseAction.Ban,
 				}),

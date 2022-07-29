@@ -7,7 +7,6 @@ import {
 	ComponentType,
 	Formatters,
 	GuildMember,
-	TextChannel,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -17,16 +16,11 @@ import executeNuke from '../../../../functions/anti-raid/executeNuke.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
+import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
+import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
-
-export interface AntiRaidFileArgs {
-	file: Attachment;
-	reason?: string | undefined;
-	days?: number | undefined;
-	hide?: boolean | undefined;
-}
 
 async function parseFile(file: Attachment): Promise<Set<string>> {
 	const content = await fetch(file.url).then((res) => res.text());
@@ -42,22 +36,15 @@ async function parseFile(file: Attachment): Promise<Set<string>> {
 
 export async function file(
 	interaction: CommandInteraction<'cached'>,
-	data: AntiRaidFileArgs,
+	args: ArgumentsOf<typeof AntiRaidNukeCommand>['file'],
 	locale: string,
 ): Promise<void> {
-	const reply = await interaction.deferReply({ ephemeral: data.hide ?? true });
-
-	const file = data.file;
-	const ids = await parseFile(file);
+	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
+	const ids = await parseFile(args.file);
 
 	if (!ids.size) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.no_ids', { lng: locale }));
 	}
-
-	const { reason, days } = {
-		reason: data.reason ?? null,
-		days: data.days ?? 1,
-	};
 
 	const fetchedMembers = await interaction.guild.members.fetch();
 	const members = new Collection<string, GuildMember>();
@@ -84,7 +71,7 @@ export async function file(
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.file', {
 			lng: locale,
-			file: Formatters.hyperlink('File uploaded', file.url),
+			file: Formatters.hyperlink('File uploaded', args.file.url),
 		}),
 	];
 
@@ -175,7 +162,7 @@ export async function file(
 		const { result, cases } = await executeNuke(
 			collectedInteraction,
 			{
-				days,
+				days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 				dryRun: dryRunMode,
 			},
 			members,
@@ -187,7 +174,7 @@ export async function file(
 				collectedInteraction.guildId,
 				collectedInteraction.user,
 				cases,
-				reason ??
+				args.reason ??
 					i18next.t('command.mod.anti_raid_nuke.success', {
 						lng: locale,
 						members: result.filter((r) => r.success).length,
@@ -207,12 +194,7 @@ export async function file(
 		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		await upsertAntiRaidNukeReport(
-			collectedInteraction.guild.id,
-			collectedInteraction.user,
-			collectedInteraction.channel as TextChannel,
-			result,
-		);
+		await upsertAntiRaidNukeReport(collectedInteraction.guildId, collectedInteraction.user, result);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.success', {

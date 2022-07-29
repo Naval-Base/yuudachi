@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { ButtonStyle, CommandInteraction, ComponentType, Formatters, TextChannel } from 'discord.js';
+import { ButtonStyle, codeBlock, CommandInteraction, ComponentType, Formatters } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
@@ -17,6 +17,8 @@ import { resolveDateLocale } from '../../../../functions/anti-raid/formatReport.
 import { parseAvatar } from '../../../../functions/anti-raid/parseAvatar.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
+import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
+import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
@@ -30,79 +32,74 @@ enum Confusables {
 	PatternMembers,
 }
 
-export interface AntiRaidFilterArgs {
-	pattern?: string | undefined;
-	confusables?: number | undefined;
-	insensitive?: boolean | undefined;
-	zalgo?: boolean | undefined;
-	full_match?: boolean | undefined;
-	join_from?: string | undefined;
-	join_to?: string | undefined;
-	created_from?: string | undefined;
-	created_to?: string | undefined;
-	avatar?: string | undefined;
-	reason?: string | undefined;
-	days?: number | undefined;
-	hide?: boolean | undefined;
-}
-
 export async function filter(
 	interaction: CommandInteraction<'cached'>,
-	data: AntiRaidFilterArgs,
+	args: ArgumentsOf<typeof AntiRaidNukeCommand>['filter'],
 	locale: string,
 ): Promise<void> {
-	const reply = await interaction.deferReply({ ephemeral: data.hide ?? true });
+	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
 
-	const parsedJoinFrom = resolveTimestamp(data.join_from);
-	if (data.join_from && !parsedJoinFrom) {
+	const parsedJoinFrom = resolveTimestamp(args.join_from);
+	if (args.join_from && !parsedJoinFrom) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'join_from' }));
 	}
 
-	const parsedJoinTo = resolveTimestamp(data.join_to);
-	if (data.join_to && !parsedJoinTo) {
+	const parsedJoinTo = resolveTimestamp(args.join_to);
+	if (args.join_to && !parsedJoinTo) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'join_to' }));
 	}
 
-	const parsedCreatedFrom = resolveTimestamp(data.created_from);
-	if (data.created_from && !parsedCreatedFrom) {
+	const parsedCreatedFrom = resolveTimestamp(args.created_from);
+	if (args.created_from && !parsedCreatedFrom) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'created_from' }));
 	}
 
-	const parsedCreatedTo = resolveTimestamp(data.created_to);
-	if (data.created_to && !parsedCreatedTo) {
+	const parsedCreatedTo = resolveTimestamp(args.created_to);
+	if (args.created_to && !parsedCreatedTo) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'created_to' }));
 	}
 
-	const parsedPattern = parseRegex(data.pattern, data.insensitive ?? true, data.full_match ?? false);
-	if (data.pattern && !parsedPattern) {
+	const parsedPattern = parseRegex(args.pattern, args.insensitive ?? true, args.full_match ?? false);
+	if (args.pattern && !parsedPattern) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.pattern_format', { locale }));
 	}
 
-	const parsedAvatar = await parseAvatar(interaction.client, data.avatar);
-	if (data.avatar && !parsedAvatar) {
+	const parsedAvatar = await parseAvatar(interaction.client, args.avatar);
+	if (args.avatar && !parsedAvatar) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.invalid_avatar', { locale }));
 	}
 
 	const parsedConfusables = {
-		members: data.confusables === Confusables.OnlyMembers || data.confusables === Confusables.PatternMembers,
-		pattern: data.confusables === Confusables.OnlyPattern || data.confusables === Confusables.PatternMembers,
-	};
-
-	const parsedData = {
-		confusables: data.confusables ?? Confusables.PatternMembers,
-		zalgo: data.zalgo ?? false,
-		reason: data.reason ?? undefined,
-		days: data.days ?? 1,
+		members: args.confusables === Confusables.OnlyMembers || args.confusables === Confusables.PatternMembers,
+		pattern: args.confusables === Confusables.OnlyPattern || args.confusables === Confusables.PatternMembers,
 	};
 
 	const fetchedMembers = await interaction.guild.members.fetch();
 	const members = fetchedMembers.filter((member) => {
-		if (joinFilter(member, parsedJoinFrom, parsedJoinTo)) return false;
-		if (ageFilter(member, parsedCreatedFrom, parsedCreatedTo)) return false;
-		if (avatarFilter(member, parsedAvatar)) return false;
-		if (patternFilter(member, parsedPattern, parsedConfusables.pattern)) return false;
-		if (parsedData.zalgo && zalgoFilter(member)) return false;
-		if (parsedConfusables.members && confusablesFilter(member)) return false;
+		if (joinFilter(member, parsedJoinFrom, parsedJoinTo)) {
+			return false;
+		}
+
+		if (ageFilter(member, parsedCreatedFrom, parsedCreatedTo)) {
+			return false;
+		}
+
+		if (avatarFilter(member, parsedAvatar)) {
+			return false;
+		}
+
+		if (patternFilter(member, parsedPattern, parsedConfusables.pattern)) {
+			return false;
+		}
+
+		if (args.zalgo && zalgoFilter(member)) {
+			return false;
+		}
+
+		if (parsedConfusables.members && confusablesFilter(member)) {
+			return false;
+		}
+
 		return true;
 	});
 
@@ -141,15 +138,15 @@ export async function filter(
 				lng: locale,
 			}),
 			// eslint-disable-next-line @typescript-eslint/no-base-to-string
-			Formatters.codeBlock(parsedPattern.toString()),
+			codeBlock(parsedPattern.toString()),
 		);
 	}
 
-	if (parsedData.days) {
+	if (args.days) {
 		parameterStrings.push(
 			i18next.t('command.mod.anti_raid_nuke.parameters.days', {
 				lng: locale,
-				count: parsedData.days,
+				count: Math.min(Math.max(Number(args.days), 0), 7),
 			}),
 		);
 	} else {
@@ -247,7 +244,7 @@ export async function filter(
 		const { result, cases } = await executeNuke(
 			collectedInteraction,
 			{
-				days: parsedData.days,
+				days: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
 				joinCutoff: parsedJoinFrom,
 				accountCutoff: parsedCreatedFrom,
 				dryRun: dryRunMode,
@@ -261,7 +258,7 @@ export async function filter(
 				collectedInteraction.guildId,
 				collectedInteraction.user,
 				cases,
-				parsedData.reason ??
+				args.reason ??
 					i18next.t('command.mod.anti_raid_nuke.success', {
 						lng: locale,
 						members: result.filter((r) => r.success).length,
@@ -281,12 +278,7 @@ export async function filter(
 		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		await upsertAntiRaidNukeReport(
-			collectedInteraction.guild.id,
-			collectedInteraction.user,
-			collectedInteraction.channel as TextChannel,
-			result,
-		);
+		await upsertAntiRaidNukeReport(collectedInteraction.guildId, collectedInteraction.user, result);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.success', {

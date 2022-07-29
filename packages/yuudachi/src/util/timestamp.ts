@@ -1,24 +1,24 @@
 import { ms } from '@naval-base/ms';
 import { SnowflakeUtil } from 'discord.js';
 
-export function resolveTimestamp(datestring?: string) {
-	if (!datestring) {
+export function resolveTimestamp(dateString?: string) {
+	if (!dateString) {
 		return undefined;
 	}
 
-	if (Date.parse(datestring)) {
-		return Date.parse(datestring);
+	if (Date.parse(dateString)) {
+		return Date.parse(dateString);
 	}
 
-	if (/^\d{17,20}$/.test(datestring)) {
-		return SnowflakeUtil.timestampFrom(datestring);
+	if (/^\d{17,20}$/.test(dateString)) {
+		return SnowflakeUtil.timestampFrom(dateString);
 	}
 
-	if (/^\d*$/.test(datestring)) {
-		return Number(datestring);
+	if (/^\d*$/.test(dateString)) {
+		return Number(dateString);
 	}
 
-	const msParse = ms(datestring);
+	const msParse = ms(dateString);
 	if (!msParse) {
 		return undefined;
 	}
