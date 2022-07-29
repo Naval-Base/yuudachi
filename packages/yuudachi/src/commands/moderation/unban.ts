@@ -113,7 +113,7 @@ export default class implements Command {
 				reason: args.reason,
 				manual: true,
 			});
-			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.unban.success', {

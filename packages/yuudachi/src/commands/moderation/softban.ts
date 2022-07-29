@@ -122,7 +122,7 @@ export default class implements Command {
 						action: CaseAction.Softban,
 					}),
 				);
-				await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+				await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 			} else {
 				const reason = i18next.t('command.mod.softban.reasons.clear_messages', {
 					user: collectedInteraction.user.tag,

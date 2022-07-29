@@ -111,7 +111,7 @@ export async function unrole(
 			caseId: args.case,
 			manual: true,
 		});
-		await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+		await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.unrole.success', {

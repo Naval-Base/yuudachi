@@ -169,7 +169,7 @@ export async function file(
 
 		if (!dryRunMode && cases.length) {
 			await insertAntiRaidNukeCaseLog(
-				collectedInteraction.guildId,
+				collectedInteraction.guild,
 				collectedInteraction.user,
 				cases,
 				args.reason ??
@@ -192,7 +192,7 @@ export async function file(
 		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		await upsertAntiRaidNukeReport(collectedInteraction.guildId, collectedInteraction.user, result);
+		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.success', {

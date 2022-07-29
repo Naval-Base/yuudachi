@@ -158,7 +158,7 @@ export default class implements Command {
 				reason: args.reason,
 			});
 
-			await upsertCaseLog(interaction.guildId, interaction.user, case_);
+			await upsertCaseLog(interaction.guild, interaction.user, case_);
 			success.push(caseId);
 		}
 

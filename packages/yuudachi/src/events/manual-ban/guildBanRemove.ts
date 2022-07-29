@@ -77,7 +77,7 @@ export default class implements Event {
 					skipAction: true,
 					reason: logs?.reason,
 				});
-				await upsertCaseLog(guildBan.guild.id, logs?.executor, case_);
+				await upsertCaseLog(guildBan.guild, logs?.executor, case_);
 			} catch (e) {
 				const error = e as Error;
 				logger.error(error, error.message);

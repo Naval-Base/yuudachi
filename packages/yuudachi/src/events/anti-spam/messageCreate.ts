@@ -108,7 +108,7 @@ export default class implements Event {
 						await this.redis.del(channelSpamKey);
 					}
 
-					await upsertCaseLog(message.guildId, this.client.user, case_!);
+					await upsertCaseLog(message.guild, this.client.user, case_!);
 				}
 			} catch (e) {
 				const error = e as Error;

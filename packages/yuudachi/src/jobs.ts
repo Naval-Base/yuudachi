@@ -50,7 +50,7 @@ export async function startJobs() {
 							try {
 								const guild = await client.guilds.fetch(message.d.guildId);
 								const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
-								await upsertCaseLog(message.d.guildId, client.user, case_);
+								await upsertCaseLog(guild, client.user, case_);
 							} catch (e) {
 								const error = e as Error;
 								logger.error(error, error.message);

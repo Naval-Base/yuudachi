@@ -127,7 +127,7 @@ export async function react(
 				duration: parsedDuration,
 			}),
 		);
-		await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+		await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.react.success', {

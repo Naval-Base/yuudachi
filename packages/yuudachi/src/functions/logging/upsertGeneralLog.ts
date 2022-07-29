@@ -1,15 +1,11 @@
-import { Client, Snowflake, User } from 'discord.js';
+import type { Guild, User } from 'discord.js';
 import i18next from 'i18next';
-import { container } from 'tsyringe';
 import { generateAntiRaidNukeReportEmbed } from './generateAntiRaidNukeReportEmbed.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function upsertAntiRaidNukeReport(guildId: Snowflake, user: User, report: AntiRaidNukeResult[]) {
-	const client = container.resolve<Client<true>>(Client);
-
-	const guild = await client.guilds.fetch(guildId);
+export async function upsertAntiRaidNukeReport(guild: Guild, user: User, report: AntiRaidNukeResult[]) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.AntiRaidArchive));
 	if (!logChannel) {

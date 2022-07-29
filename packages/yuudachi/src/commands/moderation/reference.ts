@@ -41,7 +41,7 @@ export default class implements Command {
 			guildId: interaction.guildId,
 			referenceId: referenceCase.caseId,
 		});
-		await upsertCaseLog(interaction.guildId, interaction.user, case_);
+		await upsertCaseLog(interaction.guild, interaction.user, case_);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.reference.success', {

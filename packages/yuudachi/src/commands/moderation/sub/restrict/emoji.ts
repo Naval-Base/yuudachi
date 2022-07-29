@@ -127,7 +127,7 @@ export async function emoji(
 				duration: parsedDuration,
 			}),
 		);
-		void upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+		void upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.emoji.success', {

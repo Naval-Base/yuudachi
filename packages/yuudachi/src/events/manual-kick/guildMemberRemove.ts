@@ -58,7 +58,7 @@ export default class implements Event {
 						}),
 						true,
 					);
-					await upsertCaseLog(guildMember.guild.id, logs.executor, case_);
+					await upsertCaseLog(guildMember.guild, logs.executor, case_);
 				}
 			} catch (e) {
 				const error = e as Error;

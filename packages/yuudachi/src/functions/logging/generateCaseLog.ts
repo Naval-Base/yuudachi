@@ -1,4 +1,4 @@
-import { type Client, type Snowflake, hyperlink, time, TimestampStyles } from 'discord.js';
+import { Client, type Snowflake, hyperlink, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -7,7 +7,8 @@ import { kSQL } from '../../tokens.js';
 import { generateMessageLink } from '../../util/generateMessageLink.js';
 import { Case, CaseAction } from '../cases/createCase.js';
 
-export async function generateCaseLog(client: Client, case_: Case, logChannelId: Snowflake, locale: string) {
+export async function generateCaseLog(case_: Case, logChannelId: Snowflake, locale: string) {
+	const client = container.resolve<Client<true>>(Client);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let action = CaseAction[case_.action];

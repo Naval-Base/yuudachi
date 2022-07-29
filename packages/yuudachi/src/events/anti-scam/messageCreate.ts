@@ -78,7 +78,7 @@ export default class implements Event {
 
 					const scamKey = `guild:${message.guildId}:user:${message.author.id}:scams`;
 					await this.redis.del(scamKey);
-					await upsertCaseLog(message.guildId, this.client.user, case_);
+					await upsertCaseLog(message.guild, this.client.user, case_);
 				}
 			} catch (e) {
 				const error = e as Error;
