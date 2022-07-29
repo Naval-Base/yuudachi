@@ -254,7 +254,7 @@
 		},
 		"utility": {
 			"ping": {
-				"success": "ok"
+				"success": "Verstanden"
 			},
 			"check_scam": {
 				"found_one": "Erkannte Betrugsdomäne ({{count}})",
@@ -265,7 +265,7 @@
 				"refresh_never": "`never`",
 				"amount": "• Betrag: {{- amount}}",
 				"before": "• Vorher: {{- amount}}",
-				"nach": "• Nachher: {{- amount}}",
+				"after": "• After: {{- amount}}",
 				"last_change": "• Letzte Änderung: {{- timestamp}}",
 				"buttons": {
 					"execute": "Aktualisieren",
@@ -336,14 +336,14 @@
 		"guild_log": {
 			"message_updated": {
 				"title": "Message updated",
-				"info": "\u200b",
+				"info": "​\\u200b",
 				"channel": "• Channel: {{- channel}}",
 				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_deleted": {
 				"title": "Message deleted",
 				"no_content": "No content",
-				"info": "\u200b",
+				"info": "​",
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",
