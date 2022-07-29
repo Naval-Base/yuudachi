@@ -2,6 +2,9 @@ import { ApplicationCommandType, type RESTPostAPIContextMenuApplicationCommandsJ
 
 export const SponsorContextMenuCommand: RESTPostAPIContextMenuApplicationCommandsJSONBody = {
 	name: 'Assign sponsor',
+	name_localizations: {
+		de: 'Vergebe sponsor',
+	},
 	default_member_permissions: '0',
 	type: ApplicationCommandType.User,
 } as const;

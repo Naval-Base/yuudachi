@@ -63,7 +63,7 @@ try {
 			loadPath: fileURLToPath(new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)),
 		},
 		cleanCode: true,
-		supportedLngs: ['en-US', 'en-GB'],
+		supportedLngs: ['en-US', 'en-GB', 'de'],
 		fallbackLng: ['en-US'],
 		defaultNS: 'translation',
 		ns: ['translation'],

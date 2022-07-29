@@ -3,6 +3,9 @@ import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 export const SponsorCommand = {
 	name: 'sponsor',
 	description: 'Add sponsor role to a member of this guild',
+	description_localizations: {
+		de: 'Sponsorrolle für ein Mitglied dieser Gilde hinzufügen',
+	},
 	options: [
 		{
 			name: 'user',
