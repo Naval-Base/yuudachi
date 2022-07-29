@@ -4,10 +4,13 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
-	Formatters,
 	type GuildMember,
 	SelectMenuInteraction,
 	type User,
+	hyperlink,
+	inlineCode,
+	time,
+	TimestampStyles,
 } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
@@ -39,14 +42,8 @@ export async function generateHistory(
 
 	const logChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
 
-	const sinceCreationFormatted = Formatters.time(
-		dayjs(target.user.createdTimestamp).unix(),
-		Formatters.TimestampStyles.RelativeTime,
-	);
-	const creationFormatted = Formatters.time(
-		dayjs(target.user.createdTimestamp).unix(),
-		Formatters.TimestampStyles.ShortDateTime,
-	);
+	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
+	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 	let embed = addFields(
 		{
@@ -70,14 +67,8 @@ export async function generateHistory(
 	);
 
 	if (target.member?.joinedTimestamp) {
-		const sinceJoinFormatted = Formatters.time(
-			dayjs(target.member.joinedTimestamp).unix(),
-			Formatters.TimestampStyles.RelativeTime,
-		);
-		const joinFormatted = Formatters.time(
-			dayjs(target.member.joinedTimestamp).unix(),
-			Formatters.TimestampStyles.ShortDateTime,
-		);
+		const sinceJoinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
+		const joinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 		embed = addFields(embed, {
 			name: i18next.t('log.history.member_details', { lng: locale }),
@@ -138,10 +129,10 @@ export async function generateHistory(
 	let truncated = false;
 
 	for (const c of cases) {
-		const dateFormatted = Formatters.time(dayjs(c.created_at).unix(), Formatters.TimestampStyles.ShortDate);
-		const caseString = `${dateFormatted} ${Formatters.inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
+		const dateFormatted = time(dayjs(c.created_at).unix(), TimestampStyles.ShortDate);
+		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
 			c.log_message_id
-				? Formatters.hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, logChannelId, c.log_message_id))
+				? hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, logChannelId, c.log_message_id))
 				: `#${c.case_id}`
 		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
 		if (summary.join('\n').length + caseString.length + 1 < 4060) {

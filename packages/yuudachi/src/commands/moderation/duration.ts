@@ -1,5 +1,5 @@
 import { ms } from '@naval-base/ms';
-import { type CommandInteraction, Formatters } from 'discord.js';
+import { type CommandInteraction, hyperlink } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command.js';
 import { getCase } from '../../functions/cases/getCase.js';
@@ -45,7 +45,7 @@ export default class implements Command {
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.duration.success', {
-				case: Formatters.hyperlink(
+				case: hyperlink(
 					`#${originalCase.caseId}`,
 					generateMessageLink(interaction.guildId, logChannel.id, originalCase.logMessageId!),
 				),

@@ -1,4 +1,4 @@
-import { type CommandInteraction, Formatters, ComponentType, ButtonStyle } from 'discord.js';
+import { type CommandInteraction, ComponentType, ButtonStyle, hyperlink } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command.js';
@@ -83,11 +83,11 @@ export default class implements Command {
 
 			await interaction.editReply({
 				content: i18next.t('command.mod.reason.pending_multiple', {
-					lower_case: Formatters.hyperlink(
+					lower_case: hyperlink(
 						`#${lower}`,
 						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
 					),
-					upper_case: Formatters.hyperlink(
+					upper_case: hyperlink(
 						`#${upper}`,
 						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper.logMessageId!),
 					),
@@ -164,11 +164,11 @@ export default class implements Command {
 
 		const message = args.last_case
 			? i18next.t('command.mod.reason.success_multiple', {
-					lower_case: Formatters.hyperlink(
+					lower_case: hyperlink(
 						`#${lower}`,
 						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
 					),
-					upper_case: Formatters.hyperlink(
+					upper_case: hyperlink(
 						`#${upper}`,
 						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper!.logMessageId!),
 					),
@@ -177,7 +177,7 @@ export default class implements Command {
 					lng: locale,
 			  })
 			: i18next.t('command.mod.reason.success', {
-					case: Formatters.hyperlink(
+					case: hyperlink(
 						`#${lower}`,
 						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
 					),

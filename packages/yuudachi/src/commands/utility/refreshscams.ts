@@ -1,4 +1,4 @@
-import { type CommandInteraction, Formatters, ButtonStyle, ComponentType } from 'discord.js';
+import { type CommandInteraction, ButtonStyle, ComponentType, inlineCode } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -63,7 +63,7 @@ export default class implements Command {
 			const parts = [
 				i18next.t('command.utility.refresh_scamlist.amount', {
 					lng: locale,
-					amount: Formatters.inlineCode(String(num)),
+					amount: inlineCode(String(num)),
 				}),
 
 				i18next.t('command.utility.refresh_scamlist.last_change', {
@@ -130,11 +130,11 @@ export default class implements Command {
 					const parts = [
 						i18next.t('command.utility.refresh_scamlist.before', {
 							lng: locale,
-							amount: Formatters.inlineCode(String(result.before)),
+							amount: inlineCode(String(result.before)),
 						}),
 						i18next.t('command.utility.refresh_scamlist.after', {
 							lng: locale,
-							amount: Formatters.inlineCode(String(result.after)),
+							amount: inlineCode(String(result.after)),
 						}),
 						i18next.t('command.utility.refresh_scamlist.last_change', {
 							lng: locale,

@@ -1,4 +1,4 @@
-import type { CommandInteraction, GuildMember } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import { file } from './sub/anti-raid-nuke/file.js';
 import { filter } from './sub/anti-raid-nuke/filter.js';
@@ -8,13 +8,6 @@ import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { AntiRaidNukeCommand } from '../../interactions/index.js';
-
-export interface AntiRaidResult {
-	member: GuildMember;
-	success: boolean;
-	caseId?: number;
-	error?: string;
-}
 
 export default class implements Command {
 	public async execute(

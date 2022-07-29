@@ -5,15 +5,17 @@ import {
 	Collection,
 	CommandInteraction,
 	ComponentType,
-	Formatters,
 	GuildMember,
+	inlineCode,
 	InteractionCollector,
 	TextBasedChannelResolvable,
+	time,
+	TimestampStyles,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
-import executeNuke from '../../../../functions/anti-raid/executeNuke.js';
+import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
@@ -110,12 +112,12 @@ export async function modal(
 	const parameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.parameters.heading', { lng: locale }),
 		i18next.t('command.mod.anti_raid_nuke.parameters.current_time', {
+			now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 			lng: locale,
-			now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
-			lng: locale,
 			count: Math.min(Math.max(Number(args.days), 0), 7),
+			lng: locale,
 		}),
 	];
 
@@ -123,7 +125,7 @@ export async function modal(
 		parameterStrings.push(
 			i18next.t('command.mod.anti_raid_nuke.parameters.users', {
 				lng: locale,
-				users: Formatters.inlineCode(fails.size.toString()),
+				users: inlineCode(fails.size.toString()),
 			}),
 		);
 	}
@@ -212,10 +214,15 @@ export async function modal(
 
 		await collectedInteraction.update({
 			content,
-			components: [],
+			components: [
+				createMessageActionRow([
+					{ ...cancelButton, disabled: true },
+					{ ...banButton, disabled: true },
+				]),
+			],
 		});
 
-		const { result, cases } = await executeNuke(
+		const { result, cases } = await blastOff(
 			collectedInteraction,
 			{
 				days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
@@ -225,7 +232,7 @@ export async function modal(
 			locale,
 		);
 
-		if (!dryRunMode && cases.length > 0) {
+		if (!dryRunMode && cases.length) {
 			await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guildId,
 				collectedInteraction.user,

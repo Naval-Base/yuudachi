@@ -2,17 +2,16 @@ import { Client, Snowflake, User } from 'discord.js';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
 import { generateAntiRaidNukeReportEmbed } from './generateAntiRaidNukeReportEmbed.js';
-import type { AntiRaidResult } from '../../commands/moderation/anti-raid-nuke.js';
+import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function upsertAntiRaidNukeReport(guildId: Snowflake, user: User, report: AntiRaidResult[]) {
+export async function upsertAntiRaidNukeReport(guildId: Snowflake, user: User, report: AntiRaidNukeResult[]) {
 	const client = container.resolve<Client<true>>(Client);
 
 	const guild = await client.guilds.fetch(guildId);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.AntiRaidArchive));
-
 	if (!logChannel) {
 		throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 	}

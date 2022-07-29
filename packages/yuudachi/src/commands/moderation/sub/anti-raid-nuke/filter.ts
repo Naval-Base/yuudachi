@@ -1,9 +1,17 @@
 import dayjs from 'dayjs';
-import { ButtonStyle, codeBlock, CommandInteraction, ComponentType, Formatters } from 'discord.js';
+import {
+	ButtonStyle,
+	codeBlock,
+	CommandInteraction,
+	ComponentType,
+	inlineCode,
+	time,
+	TimestampStyles,
+} from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
-import executeNuke from '../../../../functions/anti-raid/executeNuke.js';
+import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import {
 	ageFilter,
 	joinFilter,
@@ -13,8 +21,8 @@ import {
 	zalgoFilter,
 } from '../../../../functions/anti-raid/filters.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
-import { resolveDateLocale } from '../../../../functions/anti-raid/formatReport.js';
 import { parseAvatar } from '../../../../functions/anti-raid/parseAvatar.js';
+import { resolveDateLocale } from '../../../../functions/anti-raid/resolveDateLocale.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
@@ -108,29 +116,29 @@ export async function filter(
 			lng: locale,
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.current_time', {
+			now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 			lng: locale,
-			now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.join_after', {
-			lng: locale,
 			joinTo: resolveDateLocale(parsedJoinTo),
 			joinFrom: resolveDateLocale(parsedJoinFrom),
+			lng: locale,
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.created_after', {
-			lng: locale,
 			ageTo: resolveDateLocale(parsedCreatedTo),
 			ageFrom: resolveDateLocale(parsedCreatedFrom),
+			lng: locale,
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
-			lng: locale,
 			count: Math.min(Math.max(Number(args.days), 0), 7),
+			lng: locale,
 		}),
 	];
 
 	if (parsedAvatar) {
 		parameterStrings.push(
 			i18next.t('command.mod.anti_raid_nuke.parameters.avatar', {
-				avatar: Formatters.inlineCode(parsedAvatar === 'none' ? 'No avatar' : parsedAvatar),
+				avatar: inlineCode(parsedAvatar === 'none' ? 'No avatar' : parsedAvatar),
 				lng: locale,
 			}),
 		);
@@ -216,7 +224,6 @@ export async function filter(
 				lng: locale,
 			}),
 			components: [],
-			attachments: [],
 		});
 	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
 		const dryRunMode = collectedInteraction.customId === dryRunKey;
@@ -227,10 +234,15 @@ export async function filter(
 
 		await collectedInteraction.update({
 			content,
-			components: [],
+			components: [
+				createMessageActionRow([
+					{ ...cancelButton, disabled: true },
+					{ ...banButton, disabled: true },
+				]),
+			],
 		});
 
-		const { result, cases } = await executeNuke(
+		const { result, cases } = await blastOff(
 			collectedInteraction,
 			{
 				days: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
@@ -242,7 +254,7 @@ export async function filter(
 			locale,
 		);
 
-		if (!dryRunMode && cases.length > 0) {
+		if (!dryRunMode && cases.length) {
 			await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guildId,
 				collectedInteraction.user,

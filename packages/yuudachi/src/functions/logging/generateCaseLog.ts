@@ -1,4 +1,4 @@
-import { type Client, Formatters, type Snowflake } from 'discord.js';
+import { type Client, type Snowflake, hyperlink, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -35,7 +35,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 
 	if (case_.actionExpiration) {
 		msg += i18next.t('log.mod_log.case_log.expiration', {
-			time: Formatters.time(new Date(case_.actionExpiration), Formatters.TimestampStyles.RelativeTime),
+			time: time(new Date(case_.actionExpiration), TimestampStyles.RelativeTime),
 			lng: locale,
 		});
 	}
@@ -48,7 +48,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 
 		if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
 			msg += i18next.t('log.mod_log.case_log.context', {
-				link: Formatters.hyperlink(
+				link: hyperlink(
 					i18next.t('log.mod_log.case_log.context_sub', { lng: locale }),
 					generateMessageLink(case_.guildId, contextMessage!.channel_id!, case_.contextMessageId),
 				),
@@ -72,7 +72,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 
 		if (Reflect.has(reference ?? {}, 'log_message_id')) {
 			msg += i18next.t('log.mod_log.case_log.reference', {
-				ref: Formatters.hyperlink(
+				ref: hyperlink(
 					`#${case_.referenceId}`,
 					generateMessageLink(case_.guildId, logChannelId, reference!.log_message_id!),
 				),

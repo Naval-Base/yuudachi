@@ -2,11 +2,13 @@ import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
 import {
 	type CommandInteraction,
-	Formatters,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
 	type InteractionResponse,
+	inlineCode,
+	time,
+	TimestampStyles,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -102,12 +104,12 @@ export async function lock(
 		await args.channel.send({
 			content: args.reason
 				? i18next.t('command.mod.lockdown.lock.message_reason', {
-						duration: Formatters.time(dayjs(duration.toISOString()).unix(), Formatters.TimestampStyles.RelativeTime),
-						reason: Formatters.inlineCode(args.reason),
+						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
+						reason: inlineCode(args.reason),
 						lng: locale,
 				  })
 				: i18next.t('command.mod.lockdown.lock.message', {
-						duration: Formatters.time(dayjs(duration.toISOString()).unix(), Formatters.TimestampStyles.RelativeTime),
+						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
 						lng: locale,
 				  }),
 		});

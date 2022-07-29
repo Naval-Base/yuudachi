@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
-import { Formatters, type GuildMember } from 'discord.js';
+import { time, TimestampStyles, type GuildMember } from 'discord.js';
 import i18next from 'i18next';
 import { addFields, truncateEmbed } from './embed.js';
 import { MAX_TRUST_ACCOUNT_AGE } from '../Constants.js';
@@ -31,14 +31,8 @@ function colorFromDuration(duration: number) {
 }
 
 export function generateMemberLog(member: GuildMember, locale: string, join = true) {
-	const sinceCreationFormatted = Formatters.time(
-		dayjs(member.user.createdTimestamp).unix(),
-		Formatters.TimestampStyles.RelativeTime,
-	);
-	const creationFormatted = Formatters.time(
-		dayjs(member.user.createdTimestamp).unix(),
-		Formatters.TimestampStyles.ShortDateTime,
-	);
+	const sinceCreationFormatted = time(dayjs(member.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
+	const creationFormatted = time(dayjs(member.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 	let description = i18next.t('log.member_log.description', {
 		userMention: member.user.toString(),
@@ -50,14 +44,8 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 	});
 
 	if (member.joinedTimestamp) {
-		const sinceJoinFormatted = Formatters.time(
-			dayjs(member.joinedTimestamp).unix(),
-			Formatters.TimestampStyles.RelativeTime,
-		);
-		const joinFormatted = Formatters.time(
-			dayjs(member.joinedTimestamp).unix(),
-			Formatters.TimestampStyles.ShortDateTime,
-		);
+		const sinceJoinFormatted = time(dayjs(member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
+		const joinFormatted = time(dayjs(member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 		description += i18next.t('log.member_log.joined_at', {
 			joined_at: joinFormatted,
@@ -67,8 +55,8 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 	}
 
 	if (!join) {
-		const sinceleaveFormatted = Formatters.time(dayjs().unix(), Formatters.TimestampStyles.RelativeTime);
-		const leaveFormatted = Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime);
+		const sinceleaveFormatted = time(dayjs().unix(), TimestampStyles.RelativeTime);
+		const leaveFormatted = time(dayjs().unix(), TimestampStyles.ShortDateTime);
 
 		description += i18next.t('log.member_log.left_at', {
 			left_at: leaveFormatted,

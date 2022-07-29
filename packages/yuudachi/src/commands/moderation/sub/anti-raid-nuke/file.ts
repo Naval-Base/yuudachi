@@ -1,19 +1,21 @@
 import dayjs from 'dayjs';
 import {
-	Attachment,
 	ButtonStyle,
 	Collection,
 	CommandInteraction,
 	ComponentType,
-	Formatters,
 	GuildMember,
+	hyperlink,
+	inlineCode,
+	time,
+	TimestampStyles,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import fetch from 'node-fetch';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
-import executeNuke from '../../../../functions/anti-raid/executeNuke.js';
+import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
+import { parseFile } from '../../../../functions/anti-raid/parseFile.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
 import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
@@ -21,17 +23,6 @@ import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
-
-async function parseFile(file: Attachment): Promise<Set<string>> {
-	const content = await (await fetch(file.url)).text();
-	const ids: string[] | null = content.match(/\d{17,20}/g);
-
-	if (!ids?.length) {
-		return new Set();
-	}
-
-	return new Set(ids);
-}
 
 export async function file(
 	interaction: CommandInteraction<'cached'>,
@@ -65,24 +56,24 @@ export async function file(
 	const parameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.parameters.heading', { lng: locale }),
 		i18next.t('command.mod.anti_raid_nuke.parameters.current_time', {
+			now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 			lng: locale,
-			now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.file', {
+			file: hyperlink('File uploaded', args.file.url),
 			lng: locale,
-			file: Formatters.hyperlink('File uploaded', args.file.url),
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
-			lng: locale,
 			count: Math.min(Math.max(Number(args.days), 0), 7),
+			lng: locale,
 		}),
 	];
 
 	if (fails.size) {
 		parameterStrings.push(
 			i18next.t('command.mod.anti_raid_nuke.parameters.users', {
+				users: inlineCode(fails.size.toString()),
 				lng: locale,
-				users: Formatters.inlineCode(fails.size.toString()),
 			}),
 		);
 	}
@@ -148,7 +139,6 @@ export async function file(
 				lng: locale,
 			}),
 			components: [],
-			attachments: [],
 		});
 	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
 		const dryRunMode = collectedInteraction.customId === dryRunKey;
@@ -159,10 +149,15 @@ export async function file(
 
 		await collectedInteraction.update({
 			content,
-			components: [],
+			components: [
+				createMessageActionRow([
+					{ ...cancelButton, disabled: true },
+					{ ...banButton, disabled: true },
+				]),
+			],
 		});
 
-		const { result, cases } = await executeNuke(
+		const { result, cases } = await blastOff(
 			collectedInteraction,
 			{
 				days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
@@ -172,7 +167,7 @@ export async function file(
 			locale,
 		);
 
-		if (!dryRunMode && cases.length > 0) {
+		if (!dryRunMode && cases.length) {
 			await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guildId,
 				collectedInteraction.user,
