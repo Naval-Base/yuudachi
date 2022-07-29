@@ -336,14 +336,12 @@
 		"guild_log": {
 			"message_updated": {
 				"title": "Message updated",
-				"info": "\u200b",
 				"channel": "• Channel: {{- channel}}",
 				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_deleted": {
 				"title": "Message deleted",
 				"no_content": "No content",
-				"info": "\u200b",
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",

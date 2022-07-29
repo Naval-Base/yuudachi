@@ -1,0 +1,377 @@
+{
+	"common": {
+		"errors": {
+			"no_mod_role": "",
+			"target_not_found": "",
+			"timed_out": "",
+			"no_mod_log_channel": ""
+		}
+	},
+	"command": {
+		"common": {
+			"errors": {
+				"generic": "",
+				"no_enabled_module": "",
+				"target_not_found": "",
+				"duration_format": "",
+				"use_autocomplete": ""
+			}
+		},
+		"config": {
+			"common": {
+				"errors": {
+					"no_settings": ""
+				}
+			}
+		},
+		"mod": {
+			"common": {
+				"errors": {
+					"max_length_reason": "",
+					"not_a_text_channel": "",
+					"no_case": "",
+					"no_case_range": "",
+					"case_lower_one": "",
+					"no_ref_case": ""
+				}
+			},
+			"case": {
+				"autocomplete": {
+					"no_reason": "",
+					"show_history": ""
+				}
+			},
+			"warn": {
+				"pending": "",
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"timeout": {
+				"errors": {
+					"missing_permissions": "",
+					"not_member": "",
+					"already_timed_out": ""
+				},
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"pending": "",
+				"cancel": "",
+				"success": ""
+			},
+			"kick": {
+				"errors": {
+					"missing_permissions": "",
+					"not_member": ""
+				},
+				"pending": "",
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"softban": {
+				"errors": {
+					"missing_permissions": ""
+				},
+				"pending": "",
+				"not_member": "",
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"reasons": {
+					"clear_messages": ""
+				},
+				"cancel": "",
+				"success": {
+					"regular": "",
+					"clear_messages": ""
+				}
+			},
+			"ban": {
+				"errors": {
+					"missing_permissions": "",
+					"already_banned": ""
+				},
+				"pending": "",
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"unban": {
+				"errors": {
+					"missing_permissions": "",
+					"no_ban": ""
+				},
+				"pending": "",
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"anti_raid_nuke": {
+				"errors": {
+					"no_hits": "",
+					"parameters": {
+						"heading": "",
+						"current_time": "",
+						"join_after": "",
+						"created_after": "",
+						"pattern": "",
+						"avatar": "",
+						"days_one": "",
+						"days_other": "",
+						"days_none": ""
+					}
+				},
+				"reason": "",
+				"reason_fallback": "",
+				"pending": "",
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"restrict": {
+				"embed": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"already_restricted": ""
+					},
+					"pending": "",
+					"buttons": {
+						"cancel": "",
+						"execute": ""
+					},
+					"cancel": "",
+					"success": ""
+				},
+				"react": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"already_restricted": ""
+					},
+					"pending": "",
+					"buttons": {
+						"cancel": "",
+						"execute": ""
+					},
+					"cancel": "",
+					"success": ""
+				},
+				"emoji": {
+					"errors": {
+						"no_role": "",
+						"missing_permissions": "",
+						"already_restricted": ""
+					},
+					"pending": "",
+					"buttons": {
+						"cancel": "",
+						"execute": ""
+					},
+					"cancel": "",
+					"success": ""
+				},
+				"unrole": {
+					"errors": {
+						"missing_permissions": "",
+						"already_processed": ""
+					},
+					"pending": "",
+					"buttons": {
+						"cancel": "",
+						"execute": ""
+					},
+					"cancel": "",
+					"success": ""
+				}
+			},
+			"lockdown": {
+				"lock": {
+					"errors": {
+						"missing_permissions": "",
+						"already_locked": "",
+						"bot_requires_admin": ""
+					},
+					"pending": "",
+					"buttons": {
+						"cancel": "",
+						"execute": ""
+					},
+					"message": "",
+					"message_reason": "",
+					"cancel": "",
+					"success": ""
+				},
+				"lift": {
+					"errors": {
+						"missing_permissions": "",
+						"not_locked": ""
+					},
+					"pending": "",
+					"buttons": {
+						"cancel": "",
+						"execute": ""
+					},
+					"cancel": "",
+					"success": ""
+				}
+			},
+			"reason": {
+				"success": "",
+				"success_multiple": "",
+				"pending_multiple": "",
+				"buttons": {
+					"cancel": "",
+					"execute": ""
+				},
+				"cancel": ""
+			},
+			"reference": {
+				"success": ""
+			},
+			"duration": {
+				"success": ""
+			}
+		},
+		"utility": {
+			"ping": {
+				"success": "Wszystko w porządku"
+			},
+			"check_scam": {
+				"found_one": "Wykryto domenę ze scamem ({{count}})",
+				"found_other": "Wykryto domeny ze scamem ({{count}})"
+			},
+			"refresh_scamlist": {
+				"missing_env": "Brakuje zmiennych środowiskowych {{missing, list}} z listami domen ze scamem do sprawdzenia.",
+				"refresh_never": "`never`",
+				"amount": "• Ilość: {{- amount}}",
+				"before": "• Przed: {{- amount}}",
+				"after": "• Po: {{- amount}}",
+				"last_change": "• Ostatnia zmiana: {{- timestamp}}",
+				"buttons": {
+					"execute": "Odśwież",
+					"cancel": "Anuluj"
+				},
+				"cancel": "Anulowano odświeżanie listy domen ze scamem",
+				"success": "Pomyślnie odświeżono listy domen ze scamem",
+				"pending": "Bieżące listy domen ze scamem",
+				"error": "Coś poszło nie tak podczas odświeżania domen ze scamem"
+			},
+			"sponsor": {
+				"errors": {
+					"no_role": "Nie skonfigurowano żadnej roli dla sponsorów.",
+					"already_sponsor": "{{- user}} jest już sponsorem."
+				},
+				"pending": "Czy na pewno chcesz przyznać rolę sponsora dla {{- user}}?",
+				"buttons": {
+					"cancel": "Anuluj",
+					"execute": "Zastosuj"
+				},
+				"cancel": "Anulowano przyznawanie roli sponsora dla {{- user}}",
+				"success": "Pomyślnie przyznano rolę sponsora dla {{- user}}"
+			}
+		}
+	},
+	"log": {
+		"history": {
+			"title": "Case History",
+			"user_details": "User details",
+			"user_details_description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"member_details": "Member details",
+			"member_details_description": "• Nickname: {{- memberNickname}}\n• Roles: {{- memberRoles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"member_details_no_nickname": "No nickname",
+			"summary_truncated": "{{- summary}}\nand more..."
+		},
+		"mod_log": {
+			"case_log": {
+				"description": "**Member**: `{{- targetTag}}` ({{targetId}})\n**Action**: {{- action}}",
+				"expiration": "\n**Expiration**: {{- time}}",
+				"context": "**Context:** {{- link}}",
+				"context_sub": "Beam me up, Yuu",
+				"reason": "\n**Reason:** {{- reason}}",
+				"reason_fallback": "\n**Reason:** Use `/reason {{caseId}} <...reason>` to set a reason for this case",
+				"reference": "\n**Reference:** {{- ref}}",
+				"footer": "Case {{caseId}}"
+			},
+			"anti_raid_nuke": {
+				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
+				"footer": "Cases {{from}}-{{to}}"
+			},
+			"scam": {
+				"reason": "Scam detection"
+			},
+			"spam": {
+				"reason": "Spam detection",
+				"reason_mentions": "Mention spam detection"
+			}
+		},
+		"member_log": {
+			"description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
+			"footer": {
+				"joined": "User joined",
+				"left": "User left"
+			}
+		},
+		"guild_log": {
+			"message_updated": {
+				"title": "Message updated",
+				"channel": "• Channel: {{- channel}}",
+				"jump_to": "• [Jump to]({{- link}})"
+			},
+			"message_deleted": {
+				"title": "Message deleted",
+				"no_content": "No content",
+				"channel": "• Channel: {{- channel}}",
+				"embeds": "• Embeds: {{- embeds}}",
+				"attachments": "• Attachments: {{- attachments}}",
+				"stickers": "• Stickers: {{- stickers}}",
+				"jump_to": "• [Jump to]({{- link}})"
+			},
+			"message_bulk_deleted": {
+				"title": "Message deleted bulk",
+				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
+				"attachment": "↳ Attachment: {{- url}}",
+				"sticker": "↳ Sticker: {{- name}}"
+			},
+			"voice_state_update": {
+				"title": "Voice state update",
+				"joined": "Joined {{- channel}}",
+				"moved": "Moved from {{- fromChannel}} to {{- toChannel}}",
+				"left": "Left {{- channel}}"
+			},
+			"thread_created": {
+				"title": "Thread created",
+				"channel": "• Thread: {{- channel}} {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
+			},
+			"thread_deleted": {
+				"title": "Thread deleted",
+				"channel": "• Thread: {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
+			}
+		}
+	}
+}
