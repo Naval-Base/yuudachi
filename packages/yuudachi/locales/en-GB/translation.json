@@ -4,7 +4,8 @@
 			"no_mod_role": "This command can only be used by moderators.",
 			"target_not_found": "The given member is not in this guild.",
 			"timed_out": "Action timer ran out.",
-			"no_mod_log_channel": "No mod log channel has been initialised yet."
+			"no_mod_log_channel": "No mod log channel has been initialised yet.",
+			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialised yet."
 		}
 	},
 	"command": {
@@ -124,17 +125,49 @@
 			},
 			"anti_raid_nuke": {
 				"errors": {
+					"invalid_file_type": "Invalid file type provided, must be a `.txt` or `.json` file.",
+					"invalid_avatar": "Invalid avatar format, must be an raw hash, a user id, a URL or `none`.",
 					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
-					"parameters": {
-						"heading": "Parameters:",
-						"current_time": "• Current time: {{- now}}",
-						"join_after": "• Join date after: {{- join}}",
-						"created_after": "• Account creation after: {{- age}}",
-						"pattern": "• Username matching pattern:",
-						"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
-						"days_one": "• Deleting messages sent in the last {{count}} day",
-						"days_other": "• Deleting messages sent in the last {{count}} days",
-						"days_none": "• Not deleting any messages"
+					"no_hits_file": "The Anti-Raid-Nuke will not hit anyone, content you provided did not contain any valid ids.",
+					"no_ids": "This file does not contain any ids.",
+					"duration_format": "Wrong format for the argument {{ arg }} argument",
+					"pattern_format": "Invalid pattern provided",
+					"result": {
+						"ban_failed": "There was an error trying to ban: {{- error}}",
+						"case_failed": "There was an error trying to create a case (ban succeeded): {{- error}}",
+						"reject_perms": "The member has elevated permissions.",
+						"reject_unbanable": "The member is not bannable by me.",
+						"reject_bot": "The member is a bot.",
+						"reject_self": "The member is you.",
+						"reject_protected": "The member has a role ignored by the Anti-Raid-Nuke.",
+						"reject_user": "The user is not in the guild."
+					}
+				},
+				"parameters": {
+					"heading": "Parameters:",
+					"current_time": "• Current time: {{- now}}",
+					"dry_run": "• Operating in **dry-run** mode, no members will be banned!",
+					"join_after": "• **Join:**\n> From: {{- joinFrom}}\n> To: {{- joinTo}}",
+					"created_after": "• **Account creation:** \n> From: {{- ageFrom}}\n> To: {{- ageTo}}",
+					"pattern": "• Username matching pattern:",
+					"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
+					"zalgo": "• Filtering usernames with Zalgo",
+					"confusables": "• Filtering usernames with Confusables",
+					"days": "• Deleting messages sent in the last {{count}} day",
+					"days_plural": "• Deleting messages sent in the last {{count}} days",
+					"days_none": "• Not deleting any messages",
+					"file": "• File: {{- file}}",
+					"users": "• From all of the ids, {{- users}} aren't members of this guild"
+				},
+				"stages": {
+					"filtering": "Filtering members to match the parameters...",
+					"processing": "**Processing Anti-Raid-Nuke ({{current}}/{{members}})...**"
+				},
+				"modal": {
+					"title": "Anti-Raid-Nuke Entry",
+					"components": {
+						"label": "{{i}}- Enter valid ids",
+						"placeholder": "Enter ids separated by spaces / new lines"
 					}
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
@@ -142,7 +175,9 @@
 				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.\n• Created within {{creationrange}}\n• Joined within {{joinrange}}",
 				"buttons": {
 					"cancel": "Cancel",
-					"execute": "Launch"
+					"execute": "Launch",
+					"report": "View the formatted report",
+					"dry_run": "Launch (Dry run mode)"
 				},
 				"cancel": "Cancelled Anti-Raid-Nuke.",
 				"success": "Anti-Raid-Nuke hit {{- members}} guild members."
@@ -313,7 +348,10 @@
 				"footer": "Case {{caseId}}"
 			},
 			"anti_raid_nuke": {
-				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
+				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}",
+				"parameters": {
+					"cutoff": "**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}"
+				},
 				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
@@ -371,6 +409,12 @@
 				"channel": "• Thread: {{- name}} {{- channelId}}",
 				"starter": "• Starter message: {{- messageId}}",
 				"jump_to": "• [Jump to starter message]({{- link}})"
+			}
+		},
+		"general_log": {
+			"anti_raid_nuke": {
+				"title": "Anti-Raid-Nuke launched",
+				"description": "• Author: {{- author}}\n• Channel: {{- channel}}\n• Hit count: {{- hit_count}}"
 			}
 		}
 	}

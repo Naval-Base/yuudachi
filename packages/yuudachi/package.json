@@ -10,6 +10,7 @@
 		"format": "prettier --write . && eslint src --ext ts --fix",
 		"fmt": "yarn format",
 		"start": "env-cmd node --enable-source-maps dist/index.js",
+		"start:dev": "npm run build && npm run dev",
 		"dev": "env-cmd node --enable-source-maps dist/index.js",
 		"deploy:commands": "env-cmd node --enable-source-maps dist/deploy.js",
 		"migrate": "env-cmd ley"
@@ -20,6 +21,7 @@
 	"license": "AGPL-3.0",
 	"private": true,
 	"dependencies": {
+		"@aero/sanitizer": "^1.2.0",
 		"@discordjs/rest": "^1.0.1",
 		"@naval-base/ms": "^3.1.0",
 		"bree": "^9.1.1",
@@ -45,6 +47,7 @@
 		"ws": "^8.8.1"
 	},
 	"devDependencies": {
+		"@types/aero__sanitizer": "^1.2.0",
 		"@types/common-tags": "^1.8.1",
 		"@types/diff": "^5.0.2",
 		"@types/i18next-fs-backend": "^1.1.2",
