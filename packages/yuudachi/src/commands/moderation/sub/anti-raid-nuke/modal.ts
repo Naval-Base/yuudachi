@@ -35,8 +35,6 @@ export interface AntiRaidModalArgs {
 export async function modal(
 	interaction: CommandInteraction<'cached'>,
 	data: AntiRaidModalArgs,
-	logChannel: TextChannel,
-	ignoreRolesId: string[],
 	locale: string,
 ): Promise<void> {
 	const { reason, days } = {
@@ -233,15 +231,13 @@ export async function modal(
 				dryRun: dryRunMode,
 			},
 			members,
-			ignoreRolesId,
 			locale,
 		);
 
 		if (!dryRunMode && cases.length > 0) {
 			await insertAntiRaidNukeCaseLog(
-				collectedInteraction.guild,
+				collectedInteraction.guildId,
 				collectedInteraction.user,
-				logChannel,
 				cases,
 				reason ??
 					i18next.t('command.mod.anti_raid_nuke.success', {

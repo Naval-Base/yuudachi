@@ -43,8 +43,6 @@ async function parseFile(file: Attachment): Promise<Set<string>> {
 export async function file(
 	interaction: CommandInteraction<'cached'>,
 	data: AntiRaidFileArgs,
-	logChannel: TextChannel,
-	ignoreRolesId: string[],
 	locale: string,
 ): Promise<void> {
 	const reply = await interaction.deferReply({ ephemeral: data.hide ?? true });
@@ -181,15 +179,13 @@ export async function file(
 				dryRun: dryRunMode,
 			},
 			members,
-			ignoreRolesId,
 			locale,
 		);
 
 		if (!dryRunMode && cases.length > 0) {
 			await insertAntiRaidNukeCaseLog(
-				collectedInteraction.guild,
+				collectedInteraction.guildId,
 				collectedInteraction.user,
-				logChannel,
 				cases,
 				reason ??
 					i18next.t('command.mod.anti_raid_nuke.success', {

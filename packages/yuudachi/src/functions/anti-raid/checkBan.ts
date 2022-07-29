@@ -1,32 +1,32 @@
 import { GuildMember, PermissionFlagsBits } from 'discord.js';
 
-enum BanRejectReasons {
+enum BanRejectReason {
 	Self = 'reject_self',
-	MemberUnbanable = 'reject_unbanable',
-	MemberIsBot = 'reject_bot',
+	TargetUnbanable = 'reject_unbanable',
+	TargetIsBot = 'reject_bot',
 	HasAutomodIgnoreRole = 'reject_protected',
 	HasHigherPerms = 'reject_perms',
 }
 
-export function checkBan(member: GuildMember, authorId: string, ignoreRolesId: string[]): BanRejectReasons | null {
-	if (member.id === authorId) {
-		return BanRejectReasons.Self;
+export function checkBan(target: GuildMember, userId: string, ignoreRoles: string[]): BanRejectReason | null {
+	if (target.id === userId) {
+		return BanRejectReason.Self;
 	}
 
-	if (!member.bannable) {
-		return BanRejectReasons.MemberUnbanable;
+	if (!target.bannable) {
+		return BanRejectReason.TargetUnbanable;
 	}
 
-	if (member.user.bot) {
-		return BanRejectReasons.MemberIsBot;
+	if (target.user.bot) {
+		return BanRejectReason.TargetIsBot;
 	}
 
-	if (member.roles.cache.hasAny(...ignoreRolesId)) {
-		return BanRejectReasons.HasAutomodIgnoreRole;
+	if (target.roles.cache.hasAny(...ignoreRoles)) {
+		return BanRejectReason.HasAutomodIgnoreRole;
 	}
 
 	if (
-		member.permissions.any([
+		target.permissions.any([
 			PermissionFlagsBits.Administrator,
 			PermissionFlagsBits.BanMembers,
 			PermissionFlagsBits.KickMembers,
@@ -36,7 +36,7 @@ export function checkBan(member: GuildMember, authorId: string, ignoreRolesId: s
 			PermissionFlagsBits.ManageGuild,
 		])
 	) {
-		return BanRejectReasons.HasHigherPerms;
+		return BanRejectReason.HasHigherPerms;
 	}
 
 	return null;

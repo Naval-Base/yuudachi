@@ -49,8 +49,6 @@ export interface AntiRaidFilterArgs {
 export async function filter(
 	interaction: CommandInteraction<'cached'>,
 	data: AntiRaidFilterArgs,
-	logChannel: TextChannel,
-	ignoreRolesId: string[],
 	locale: string,
 ): Promise<void> {
 	const reply = await interaction.deferReply({ ephemeral: data.hide ?? true });
@@ -255,15 +253,13 @@ export async function filter(
 				dryRun: dryRunMode,
 			},
 			members,
-			ignoreRolesId,
 			locale,
 		);
 
 		if (!dryRunMode && cases.length > 0) {
 			await insertAntiRaidNukeCaseLog(
-				collectedInteraction.guild,
+				collectedInteraction.guildId,
 				collectedInteraction.user,
-				logChannel,
 				cases,
 				parsedData.reason ??
 					i18next.t('command.mod.anti_raid_nuke.success', {

@@ -38,19 +38,17 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_anti_raid_archive_channel', { lng: locale }));
 		}
 
-		const ignoreRolesId = await getGuildSetting<string[]>(interaction.guildId, SettingsKeys.AutomodIgnoreRoles);
-
 		switch (Object.keys(args)[0]) {
 			case 'file': {
-				return file(interaction, args.file, logChannel, ignoreRolesId, locale);
+				return file(interaction, args.file, locale);
 			}
 
 			case 'modal': {
-				return modal(interaction, args.modal, logChannel, ignoreRolesId, locale);
+				return modal(interaction, args.modal, locale);
 			}
 
 			case 'filter': {
-				return filter(interaction, args.filter, logChannel, ignoreRolesId, locale);
+				return filter(interaction, args.filter, locale);
 			}
 
 			default:
