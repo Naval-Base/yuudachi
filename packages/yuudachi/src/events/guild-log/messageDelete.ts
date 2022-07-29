@@ -114,7 +114,7 @@ export default class implements Event {
 				info += `\n${i18next.t('log.guild_log.message_deleted.jump_to', { link: message.url, lng: locale })}`;
 
 				embed = addFields(embed, {
-					name: i18next.t('log.guild_log.message_deleted.info', { lng: locale }),
+					name: '\u200b',
 					value: info,
 				});
 

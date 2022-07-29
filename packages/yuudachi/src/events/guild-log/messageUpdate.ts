@@ -118,7 +118,7 @@ export default class implements Event {
 						timestamp: new Date().toISOString(),
 					},
 					{
-						name: i18next.t('log.guild_log.message_updated.info', { lng: locale }),
+						name: '\u200b',
 						value: info,
 					},
 				);
