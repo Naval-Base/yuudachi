@@ -1,16 +1,21 @@
-import { ComponentType, ModalComponentData, TextInputComponentData } from 'discord.js';
+import type {
+	APIModalInteractionResponseCallbackData,
+	APIActionRowComponent,
+	APIModalActionRowComponent,
+} from 'discord-api-types/v10';
 
-export function createModal(
-	title: string,
-	customId: string,
-	componentsData: TextInputComponentData[],
-): ModalComponentData {
+export function createModal({
+	customId,
+	title,
+	components,
+}: {
+	customId: string;
+	title: string;
+	components: APIActionRowComponent<APIModalActionRowComponent>[];
+}): APIModalInteractionResponseCallbackData {
 	return {
+		custom_id: customId,
 		title,
-		customId,
-		components: componentsData.map((c) => ({
-			type: ComponentType.ActionRow,
-			components: [c],
-		})),
+		components,
 	};
 }

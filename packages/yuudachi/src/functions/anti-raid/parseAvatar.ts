@@ -1,5 +1,4 @@
 import type { Client } from 'discord.js';
-import { noop } from '../../util/noop.js';
 
 export async function parseAvatar(client: Client, input?: string): Promise<string | 'none' | undefined> {
 	if (!input) {
@@ -17,17 +16,18 @@ export async function parseAvatar(client: Client, input?: string): Promise<strin
 	const idReg = /\d{17,}/;
 
 	if (idReg.test(input)) {
-		const user = await client.users.fetch(input).catch(noop);
-		if (user) {
+		try {
+			const user = await client.users.fetch(input);
 			return user.avatar ?? 'none';
+		} catch {
+			return undefined;
 		}
-		return undefined;
 	}
 
 	try {
 		new URL(input);
 		return input.replace(/https:\/\/cdn.discordapp.com.*\/([a-f,0-9]{32})/, '$1');
-	} catch (e) {
+	} catch {
 		return undefined;
 	}
 }

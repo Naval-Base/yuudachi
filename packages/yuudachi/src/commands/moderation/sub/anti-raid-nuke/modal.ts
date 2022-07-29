@@ -30,6 +30,7 @@ import { generateFormatterUrl } from '../../../../util/formatterUrl.js';
 import { generateTargetInformation } from '../../../../util/generateTargetInformation.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 import { createModal } from '../../../../util/modal.js';
+import { createModalActionRow } from '../../../../util/modalActionRow.js';
 import { createTextComponent } from '../../../../util/textComponent.js';
 
 export interface AntiRaidModalArgs {
@@ -54,22 +55,24 @@ export async function modal(
 
 	const modalKey = nanoid();
 
-	const textComponents = new Array(5)
-		.fill(0)
-		.map((_, i) =>
-			createTextComponent(
-				`${modalKey}-${i}`,
-				i18next.t('command.mod.anti_raid_nuke.modal.components.label', { lng: locale, i: i + 1 }),
-				TextInputStyle.Paragraph,
-				undefined,
-				17,
-				i18next.t('command.mod.anti_raid_nuke.modal.components.placeholder', { lng: locale }),
-				i === 0,
-			),
-		);
+	const textComponents = new Array(5).fill(0).map((_, i) =>
+		createTextComponent({
+			customId: `${modalKey}-${i}`,
+			label: i18next.t('command.mod.anti_raid_nuke.modal.components.label', { lng: locale, i: i + 1 }),
+			style: TextInputStyle.Paragraph,
+			maxLength: undefined,
+			minLength: 17,
+			placeholder: i18next.t('command.mod.anti_raid_nuke.modal.components.placeholder', { lng: locale }),
+			required: i === 0,
+		}),
+	);
 
 	await interaction.showModal(
-		createModal(i18next.t('command.mod.anti_raid_nuke.modal.title', { lng: locale }), modalKey, textComponents),
+		createModal({
+			customId: i18next.t('command.mod.anti_raid_nuke.modal.title', { lng: locale }),
+			title: modalKey,
+			components: [createModalActionRow(textComponents)],
+		}),
 	);
 
 	const modalInteraction = await interaction
@@ -91,7 +94,9 @@ export async function modal(
 			return undefined;
 		});
 
-	if (!modalInteraction) return;
+	if (!modalInteraction) {
+		return;
+	}
 
 	await modalInteraction.deferReply({ ephemeral: data.hide ?? true });
 
@@ -99,9 +104,7 @@ export async function modal(
 	const fullContent = modalInteraction.components
 		.map((row) => row.components)
 		.flat()
-		// @ts-expect-error
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-		.map((component) => component.value || '') as string[];
+		.map((component) => (component.type === ComponentType.TextInput ? component.value || '' : ''));
 
 	const ids = fullContent.join(' ').match(/\d{17,20}/g) ?? [];
 
