@@ -293,84 +293,84 @@
 	},
 	"log": {
 		"history": {
-			"title": "",
-			"user_details": "",
-			"user_details_description": "",
-			"member_details": "",
-			"member_details_description": "",
-			"member_details_no_nickname": "",
-			"summary_truncated": ""
+			"title": "Case History",
+			"user_details": "User details",
+			"user_details_description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"member_details": "Member details",
+			"member_details_description": "• Nickname: {{- memberNickname}}\n• Roles: {{- memberRoles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"member_details_no_nickname": "No nickname",
+			"summary_truncated": "{{- summary}}\nand more..."
 		},
 		"mod_log": {
 			"case_log": {
-				"description": "",
-				"expiration": "",
-				"context": "",
-				"context_sub": "",
-				"reason": "",
-				"reason_fallback": "",
-				"reference": "",
-				"footer": ""
+				"description": "**Member**: `{{- targetTag}}` ({{targetId}})\n**Action**: {{- action}}",
+				"expiration": "\n**Expiration**: {{- time}}",
+				"context": "**Context:** {{- link}}",
+				"context_sub": "Beam me up, Yuu",
+				"reason": "\n**Reason:** {{- reason}}",
+				"reason_fallback": "\n**Reason:** Use `/reason {{caseId}} <...reason>` to set a reason for this case",
+				"reference": "\n**Reference:** {{- ref}}",
+				"footer": "Case {{caseId}}"
 			},
 			"anti_raid_nuke": {
-				"description": "",
-				"footer": ""
+				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
+				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
-				"reason": ""
+				"reason": "Scam detection"
 			},
 			"spam": {
-				"reason": "",
-				"reason_mentions": ""
+				"reason": "Spam detection",
+				"reason_mentions": "Mention spam detection"
 			}
 		},
 		"member_log": {
-			"description": "",
-			"joined_at": "",
-			"left_at": "",
+			"description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
-				"joined": "",
-				"left": ""
+				"joined": "User joined",
+				"left": "User left"
 			}
 		},
 		"guild_log": {
 			"message_updated": {
-				"title": "",
-				"channel": "",
-				"jump_to": ""
+				"title": "Message updated",
+				"channel": "• Channel: {{- channel}}",
+				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_deleted": {
-				"title": "",
-				"no_content": "",
-				"channel": "",
-				"embeds": "",
-				"attachments": "",
-				"stickers": "",
-				"jump_to": ""
+				"title": "Message deleted",
+				"no_content": "No content",
+				"channel": "• Channel: {{- channel}}",
+				"embeds": "• Embeds: {{- embeds}}",
+				"attachments": "• Attachments: {{- attachments}}",
+				"stickers": "• Stickers: {{- stickers}}",
+				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_bulk_deleted": {
-				"title": "",
-				"description": "",
-				"attachment": "",
-				"sticker": ""
+				"title": "Message deleted bulk",
+				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
+				"attachment": "↳ Attachment: {{- url}}",
+				"sticker": "↳ Sticker: {{- name}}"
 			},
 			"voice_state_update": {
-				"title": "",
-				"joined": "",
-				"moved": "",
-				"left": ""
+				"title": "Voice state update",
+				"joined": "Joined {{- channel}}",
+				"moved": "Moved from {{- fromChannel}} to {{- toChannel}}",
+				"left": "Left {{- channel}}"
 			},
 			"thread_created": {
-				"title": "",
-				"channel": "",
-				"starter": "",
-				"jump_to": ""
+				"title": "Thread created",
+				"channel": "• Thread: {{- channel}} {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
 			},
 			"thread_deleted": {
-				"title": "",
-				"channel": "",
-				"starter": "",
-				"jump_to": ""
+				"title": "Thread deleted",
+				"channel": "• Thread: {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
 			}
 		}
 	}
