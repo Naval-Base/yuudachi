@@ -336,14 +336,12 @@
 		"guild_log": {
 			"message_updated": {
 				"title": "",
-				"info": "",
 				"channel": "",
 				"jump_to": ""
 			},
 			"message_deleted": {
 				"title": "",
 				"no_content": "",
-				"info": "",
 				"channel": "",
 				"embeds": "",
 				"attachments": "",
