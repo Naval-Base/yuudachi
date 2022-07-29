@@ -1,378 +1,378 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_role": "",
-			"target_not_found": "",
-			"timed_out": "",
-			"no_mod_log_channel": ""
+			"no_mod_role": "This command can only be used by moderators.",
+			"target_not_found": "The given member is not in this guild.",
+			"timed_out": "Action timer ran out.",
+			"no_mod_log_channel": "No mod log channel has been initialised yet."
 		}
 	},
 	"command": {
 		"common": {
 			"errors": {
-				"generic": "",
-				"no_enabled_module": "",
-				"target_not_found": "",
-				"duration_format": "",
-				"use_autocomplete": ""
+				"generic": "Something went wrong.",
+				"no_enabled_module": "The {{ module }} is not enabled on this guild.",
+				"target_not_found": "The given member is not in this guild.",
+				"duration_format": "Wrong duration format.",
+				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option."
 			}
 		},
 		"config": {
 			"common": {
 				"errors": {
-					"no_settings": ""
+					"no_settings": "No guild settings have been initialised yet."
 				}
 			}
 		},
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "",
-					"not_a_text_channel": "",
-					"no_case": "",
-					"no_case_range": "",
-					"case_lower_one": "",
-					"no_ref_case": ""
+					"max_length_reason": "Max length of 1900 for reason exceeded.",
+					"not_a_text_channel": "{{- channel}} is not a text channel.",
+					"no_case": "Cannot find case #{{case}}",
+					"no_case_range": "Invalid case range #{{lower_case}} to #{{upper_case}}",
+					"case_lower_one": "Case ids have to be above 0",
+					"no_ref_case": "Cannot find reference case #{{case}}"
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "",
-					"show_history": ""
+					"no_reason": "no reason",
+					"show_history": "Show history for user {{- user}}"
 				}
 			},
 			"warn": {
-				"pending": "",
+				"pending": "Do you really want to warn {{- user}}?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Warn"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Cancelled warn on {{- user}}",
+				"success": "Successfully warned {{- user}}"
 			},
 			"timeout": {
 				"errors": {
-					"missing_permissions": "",
-					"not_member": "",
-					"already_timed_out": ""
+					"missing_permissions": "Missing permissions to time out {{- user}}",
+					"not_member": "{{- user}} needs to be a member of this guild to be timed out",
+					"already_timed_out": "{{- user}} is already in timeout"
 				},
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Timeout"
 				},
-				"pending": "",
-				"cancel": "",
-				"success": ""
+				"pending": "Do you really want to time out {{- user}}?",
+				"cancel": "Cancelled timeout for {{- user}}",
+				"success": "Successfully timed out {{- user}}"
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "",
-					"not_member": ""
+					"missing_permissions": "Missing permissions to kick {{- user}}",
+					"not_member": "User {{- user}} is not on this guild"
 				},
-				"pending": "",
+				"pending": "Do you really want to kick {{- user}}?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Kick"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Cancelled kick on {{- user}}",
+				"success": "Successfully kicked {{- user}}"
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": ""
+					"missing_permissions": "Missing permissions to softban {{- user}}"
 				},
-				"pending": "",
-				"not_member": "",
+				"pending": "Do you really want to softban {{- user}}?",
+				"not_member": "User {{- user}} is not on this guild. Do you still wish to softban them to remove messages?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Softban"
 				},
 				"reasons": {
-					"clear_messages": ""
+					"clear_messages": "Mod: {{- user}} | Softban to clear messages"
 				},
-				"cancel": "",
+				"cancel": "Cancelled softban on {{- user}}",
 				"success": {
-					"regular": "",
-					"clear_messages": ""
+					"regular": "Successfully softbanned {{- user}}",
+					"clear_messages": "Successfully cleared messages from {{- user}}"
 				}
 			},
 			"ban": {
 				"errors": {
-					"missing_permissions": "",
-					"already_banned": ""
+					"missing_permissions": "Missing permissions to ban {{- user}}",
+					"already_banned": "{{- user}} is already banned."
 				},
-				"pending": "",
+				"pending": "Do you really want to ban {{- user}}?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Ban"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Cancelled ban on {{- user}}",
+				"success": "Successfully banned {{- user}}"
 			},
 			"unban": {
 				"errors": {
-					"missing_permissions": "",
-					"no_ban": ""
+					"missing_permissions": "Missing permissions to unban {{- user}}",
+					"no_ban": "{{- user}} is not banned."
 				},
-				"pending": "",
+				"pending": "Do you really want to unban {{- user}}?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Unban"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Cancelled unban on {{- user}}",
+				"success": "Successfully unbanned {{- user}}"
 			},
 			"anti_raid_nuke": {
 				"errors": {
-					"no_hits": "",
+					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
 					"parameters": {
-						"heading": "",
-						"current_time": "",
-						"join_after": "",
-						"created_after": "",
-						"pattern": "",
-						"avatar": "",
-						"days_one": "",
-						"days_other": "",
-						"days_none": ""
+						"heading": "Parameters:",
+						"current_time": "• Current time: {{- now}}",
+						"join_after": "• Join date after: {{- join}}",
+						"created_after": "• Account creation after: {{- age}}",
+						"pattern": "• Username matching pattern:",
+						"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
+						"days_one": "• Deleting messages sent in the last {{count}} day",
+						"days_other": "• Deleting messages sent in the last {{count}} days",
+						"days_none": "• Not deleting any messages"
 					}
 				},
-				"reason": "",
-				"reason_fallback": "",
-				"pending": "",
+				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
+				"reason_fallback": "Anti-Raid-Nuke",
+				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.\n• Created within {{creationrange}}\n• Joined within {{joinrange}}",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Launch"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Cancelled Anti-Raid-Nuke.",
+				"success": "Anti-Raid-Nuke hit {{- members}} guild members."
 			},
 			"restrict": {
 				"embed": {
 					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
+						"no_role": "No role for embed restrictions has been configured.",
+						"missing_permissions": "Missing permissions to embed restrict {{- user}}",
+						"already_restricted": "{{- user}} is already embed restricted."
 					},
-					"pending": "",
+					"pending": "Do you really want to embed restrict {{- user}}?",
 					"buttons": {
-						"cancel": "",
-						"execute": ""
+						"cancel": "Cancel",
+						"execute": "Restrict"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Cancelled embed restriction on {{- user}}",
+					"success": "Successfully embed restricted {{- user}}"
 				},
 				"react": {
 					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
+						"no_role": "No role for reaction restrictions has been configured.",
+						"missing_permissions": "Missing permissions to react restrict {{- user}}",
+						"already_restricted": "{{- user}} is already reaction restricted."
 					},
-					"pending": "",
+					"pending": "Do you really want to react restrict {{- user}}?",
 					"buttons": {
-						"cancel": "",
-						"execute": ""
+						"cancel": "Cancel",
+						"execute": "Restrict"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Cancelled react restriction on {{- user}}",
+					"success": "Successfully react restricted {{- user}}"
 				},
 				"emoji": {
 					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
+						"no_role": "No role for emoji restrictions has been configured.",
+						"missing_permissions": "Missing permissions to emoji restrict {{- user}}",
+						"already_restricted": "{{- user}} is already emoji restricted."
 					},
-					"pending": "",
+					"pending": "Do you really want to emoji restrict {{- user}}?",
 					"buttons": {
-						"cancel": "",
-						"execute": ""
+						"cancel": "Cancel",
+						"execute": "Restrict"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Cancelled emoji restriction on {{- user}}",
+					"success": "Successfully emoji restricted {{- user}}"
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "",
-						"already_processed": ""
+						"missing_permissions": "Missing permissions to unrole #{{case}}",
+						"already_processed": "{{- user}} with case #{{case}} has no running restrictions."
 					},
-					"pending": "",
+					"pending": "Do you really want to unrole {{- user}} from {{- role}} with case #{{case}}?",
 					"buttons": {
-						"cancel": "",
-						"execute": ""
+						"cancel": "Cancel",
+						"execute": "Unrole"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Cancelled unrole on {{- user}} from {{- role}} on case #{{case}}",
+					"success": "Successfully unroled {{- user}} from {{- role}} with case #{{case}}"
 				}
 			},
 			"lockdown": {
 				"lock": {
 					"errors": {
-						"missing_permissions": "",
-						"already_locked": "",
-						"bot_requires_admin": ""
+						"missing_permissions": "Missing permissions to lock {{- channel}}",
+						"already_locked": "{{- channel}} is already locked.",
+						"bot_requires_admin": "The bot requires the `ADMINISTRATOR` permission to lock down channels as Discord does not allow setting all overwrites without it, potentially causing issues when locking or unlocking."
 					},
-					"pending": "",
+					"pending": "Do you really want to lock {{- channel}}?",
 					"buttons": {
-						"cancel": "",
-						"execute": ""
+						"cancel": "Cancel",
+						"execute": "Lock"
 					},
-					"message": "",
-					"message_reason": "",
-					"cancel": "",
-					"success": ""
+					"message": "🔒 This channel has been locked, it will be unlocked {{- duration}}",
+					"message_reason": "🔒 This channel has been locked with reason {{- reason}}, it will be unlocked {{- duration}}",
+					"cancel": "Cancelled locking of {{- channel}}",
+					"success": "Successfully locked {{- channel}}"
 				},
 				"lift": {
 					"errors": {
-						"missing_permissions": "",
-						"not_locked": ""
+						"missing_permissions": "Missing permissions to lift the lock on {{- channel}}",
+						"not_locked": "{{- channel}} is not locked."
 					},
-					"pending": "",
+					"pending": "Do you really want to lift the lock on {{- channel}}?",
 					"buttons": {
-						"cancel": "",
-						"execute": ""
+						"cancel": "Cancel",
+						"execute": "Unlock"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Cancelled lifting lock of {{- channel}}",
+					"success": "Successfully lifted lock on {{- channel}}"
 				}
 			},
 			"reason": {
-				"success": "",
-				"success_multiple": "",
-				"pending_multiple": "",
+				"success": "Successfully set reason for case {{- case}}",
+				"success_multiple": "Successfully set reason for case range {{- lower_case}} to {{- upper_case}} ({{amount}}/{{target}} cases)",
+				"pending_multiple": "Do you really want to set a reason for case range {{- lower_case}} to {{- upper_case}} ({{amount}} cases)?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Set Reason"
 				},
-				"cancel": ""
+				"cancel": "Cancelled setting reason"
 			},
 			"reference": {
-				"success": ""
+				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
 			},
 			"duration": {
-				"success": ""
+				"success": "Successfully set duration for case {{- case}}"
 			}
 		},
 		"utility": {
 			"ping": {
-				"success": ""
+				"success": "ok"
 			},
 			"check_scam": {
-				"found_one": "",
-				"found_other": ""
+				"found_one": "Detected scam domain ({{count}})",
+				"found_other": "Detected scam domains ({{count}})"
 			},
 			"refresh_scamlist": {
-				"missing_env": "",
-				"refresh_never": "",
-				"amount": "",
-				"before": "",
-				"after": "",
-				"last_change": "",
+				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
+				"refresh_never": "`never`",
+				"amount": "• Amount: {{- amount}}",
+				"before": "• Before: {{- amount}}",
+				"after": "• After: {{- amount}}",
+				"last_change": "• Last change: {{- timestamp}}",
 				"buttons": {
-					"execute": "",
-					"cancel": ""
+					"execute": "Refresh",
+					"cancel": "Cancel"
 				},
-				"cancel": "",
-				"success": "",
-				"pending": "",
-				"error": ""
+				"cancel": "Cancelled scam domain list refreshing",
+				"success": "Successfully refreshed scam domain lists",
+				"pending": "Current scam domain lists",
+				"error": "Something went wrong when refreshing scam domains"
 			},
 			"sponsor": {
 				"errors": {
-					"no_role": "",
-					"already_sponsor": ""
+					"no_role": "No role for sponsors has been configured.",
+					"already_sponsor": "{{- user}} is already a sponsor."
 				},
-				"pending": "",
+				"pending": "Do you really want to apply the sponsor role to {{- user}}?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Cancel",
+					"execute": "Apply"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Cancelled applying sponsor role to {{- user}}",
+				"success": "Successfully applied sponsor role to {{- user}}"
 			}
 		}
 	},
 	"log": {
 		"history": {
-			"title": "",
-			"user_details": "",
-			"user_details_description": "",
-			"member_details": "",
-			"member_details_description": "",
-			"member_details_no_nickname": "",
-			"summary_truncated": ""
+			"title": "Case History",
+			"user_details": "User details",
+			"user_details_description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"member_details": "Member details",
+			"member_details_description": "• Nickname: {{- memberNickname}}\n• Roles: {{- memberRoles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"member_details_no_nickname": "No nickname",
+			"summary_truncated": "{{- summary}}\nand more..."
 		},
 		"mod_log": {
 			"case_log": {
-				"description": "",
-				"expiration": "",
-				"context": "",
-				"context_sub": "",
-				"reason": "",
-				"reason_fallback": "",
-				"reference": "",
-				"footer": ""
+				"description": "**Member**: `{{- targetTag}}` ({{targetId}})\n**Action**: {{- action}}",
+				"expiration": "\n**Expiration**: {{- time}}",
+				"context": "**Context:** {{- link}}",
+				"context_sub": "Beam me up, Yuu",
+				"reason": "\n**Reason:** {{- reason}}",
+				"reason_fallback": "\n**Reason:** Use `/reason {{caseId}} <...reason>` to set a reason for this case",
+				"reference": "\n**Reference:** {{- ref}}",
+				"footer": "Case {{caseId}}"
 			},
 			"anti_raid_nuke": {
-				"description": "",
-				"footer": ""
+				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
+				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
-				"reason": ""
+				"reason": "Scam detection"
 			},
 			"spam": {
-				"reason": "",
-				"reason_mentions": ""
+				"reason": "Spam detection",
+				"reason_mentions": "Mention spam detection"
 			}
 		},
 		"member_log": {
-			"description": "",
-			"joined_at": "",
-			"left_at": "",
+			"description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
-				"joined": "",
-				"left": ""
+				"joined": "User joined",
+				"left": "User left"
 			}
 		},
 		"guild_log": {
 			"message_updated": {
-				"title": "",
-				"info": "",
-				"channel": "",
-				"jump_to": ""
+				"title": "Message updated",
+				"info": "​",
+				"channel": "• Channel: {{- channel}}",
+				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_deleted": {
-				"title": "",
-				"no_content": "",
-				"info": "",
-				"channel": "",
-				"embeds": "",
-				"attachments": "",
-				"stickers": "",
-				"jump_to": ""
+				"title": "Message deleted",
+				"no_content": "No content",
+				"info": "​",
+				"channel": "• Channel: {{- channel}}",
+				"embeds": "• Embeds: {{- embeds}}",
+				"attachments": "• Attachments: {{- attachments}}",
+				"stickers": "• Stickers: {{- stickers}}",
+				"jump_to": "• [Jump to]({{- link}})"
 			},
 			"message_bulk_deleted": {
-				"title": "",
-				"description": "",
-				"attachment": "",
-				"sticker": ""
+				"title": "Message deleted bulk",
+				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
+				"attachment": "↳ Attachment: {{- url}}",
+				"sticker": "↳ Sticker: {{- name}}"
 			},
 			"voice_state_update": {
-				"title": "",
-				"joined": "",
-				"moved": "",
-				"left": ""
+				"title": "Voice state update",
+				"joined": "Joined {{- channel}}",
+				"moved": "Moved from {{- fromChannel}} to {{- toChannel}}",
+				"left": "Left {{- channel}}"
 			},
 			"thread_created": {
-				"title": "",
-				"channel": "",
-				"starter": "",
-				"jump_to": ""
+				"title": "Thread created",
+				"channel": "• Thread: {{- channel}} {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
 			},
 			"thread_deleted": {
-				"title": "",
-				"channel": "",
-				"starter": "",
-				"jump_to": ""
+				"title": "Thread deleted",
+				"channel": "• Thread: {{- name}} {{- channelId}}",
+				"starter": "• Starter message: {{- messageId}}",
+				"jump_to": "• [Jump to starter message]({{- link}})"
 			}
 		}
 	}
