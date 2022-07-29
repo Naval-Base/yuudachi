@@ -132,8 +132,8 @@
 						"created_after": "• Kontoerstellung nach: {{- Alter}}",
 						"pattern": "• Muster für den Benutzernamen:",
 						"avatar": "• Avatar-Hash (Benutzer oder Mitglied) passend zu: {{- avatar}}",
-						"days": "• Löschen von Nachrichten, die in den letzten {{count}} Tagen gesendet wurden",
-						"days_plural": "• Löschen von Nachrichten, die in den letzten {{count}} Tagen gesendet wurden",
+						"days_one": "• Löschen von Nachrichten, die in den letzten {{count}} Tagen gesendet wurden",
+						"days_other": "• Löschen von Nachrichten, die in den letzten {{count}} Tagen gesendet wurden",
 						"days_none": "• Keine Nachrichten löschend"
 					}
 				},
@@ -257,8 +257,8 @@
 				"success": "ok"
 			},
 			"check_scam": {
-				"found": "Erkannte Betrugsdomäne ({{count}})",
-				"found_plural": "Erkannte Betrugsdomänen ({{count}})"
+				"found_one": "Erkannte Betrugsdomäne ({{count}})",
+				"found_other": "Erkannte Betrugsdomänen ({{count}})"
 			},
 			"refresh_scamlist": {
 				"missing_env": "Fehlende Umgebungsvariablen {{missing, list}} zum Abrufen von Scam-Domains.",

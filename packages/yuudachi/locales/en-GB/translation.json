@@ -132,8 +132,8 @@
 						"created_after": "• Account creation after: {{- age}}",
 						"pattern": "• Username matching pattern:",
 						"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
-						"days": "• Deleting messages sent in the last {{count}} day",
-						"days_plural": "• Deleting messages sent in the last {{count}} days",
+						"days_one": "• Deleting messages sent in the last {{count}} day",
+						"days_other": "• Deleting messages sent in the last {{count}} days",
 						"days_none": "• Not deleting any messages"
 					}
 				},
@@ -257,8 +257,8 @@
 				"success": "ok"
 			},
 			"check_scam": {
-				"found": "Detected scam domain ({{count}})",
-				"found_plural": "Detected scam domains ({{count}})"
+				"found_one": "Detected scam domain ({{count}})",
+				"found_other": "Detected scam domains ({{count}})"
 			},
 			"refresh_scamlist": {
 				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",

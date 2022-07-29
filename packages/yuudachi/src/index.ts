@@ -63,10 +63,9 @@ try {
 			loadPath: fileURLToPath(new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)),
 		},
 		cleanCode: true,
+		preload: ['en-US', 'en-GB', 'de'],
 		supportedLngs: ['en-US', 'en-GB', 'de'],
 		fallbackLng: ['en-US'],
-		defaultNS: 'translation',
-		ns: ['translation'],
 	});
 
 	for await (const dir of commandFiles) {
