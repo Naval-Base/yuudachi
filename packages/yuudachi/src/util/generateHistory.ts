@@ -37,7 +37,7 @@ export async function generateHistory(
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const logChannelId = (await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string;
+	const logChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
 
 	const sinceCreationFormatted = Formatters.time(
 		dayjs(target.user.createdTimestamp).unix(),

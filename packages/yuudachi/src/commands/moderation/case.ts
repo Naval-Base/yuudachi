@@ -117,7 +117,7 @@ export default class implements Command {
 
 			const logChannel = await checkLogChannel(
 				interaction.guild,
-				(await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId)) as string,
+				await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 			);
 			const moderator = await interaction.client.users.fetch(modCase.mod_id);
 

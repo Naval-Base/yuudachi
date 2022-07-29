@@ -26,7 +26,7 @@ export default class implements Event {
 			try {
 				const logChannel = await checkLogChannel(
 					guildBan.guild,
-					(await getGuildSetting(guildBan.guild.id, SettingsKeys.ModLogChannelId)) as string,
+					await getGuildSetting(guildBan.guild.id, SettingsKeys.ModLogChannelId),
 				);
 				if (!logChannel) {
 					continue;

@@ -31,8 +31,8 @@ export default class implements Event {
 					continue;
 				}
 
-				const memberLogWebhookId = (await getGuildSetting(guild.id, SettingsKeys.MemberLogWebhookId)) as string;
-				const guildLogWebhookId = (await getGuildSetting(guild.id, SettingsKeys.GuildLogWebhookId)) as string;
+				const memberLogWebhookId = await getGuildSetting(guild.id, SettingsKeys.MemberLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(guild.id, SettingsKeys.GuildLogWebhookId);
 
 				const webhooks = new Collection<string, Webhook>();
 				for (const channel of guild.channels.cache.values()) {

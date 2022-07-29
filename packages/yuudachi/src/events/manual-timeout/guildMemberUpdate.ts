@@ -29,7 +29,7 @@ export default class implements Event {
 			try {
 				const logChannel = await checkLogChannel(
 					oldMember.guild,
-					(await getGuildSetting(oldMember.guild.id, SettingsKeys.ModLogChannelId)) as string,
+					await getGuildSetting(oldMember.guild.id, SettingsKeys.ModLogChannelId),
 				);
 
 				if (

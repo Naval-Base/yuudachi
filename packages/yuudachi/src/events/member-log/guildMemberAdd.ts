@@ -26,8 +26,7 @@ export default class implements Event {
 					`Member ${guildMember.id} joined`,
 				);
 
-				const locale = (await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale)) as string;
-				const logChannelId = (await getGuildSetting(guildMember.guild.id, SettingsKeys.MemberLogWebhookId)) as string;
+				const logChannelId = await getGuildSetting(guildMember.guild.id, SettingsKeys.MemberLogWebhookId);
 				if (!logChannelId) {
 					continue;
 				}
@@ -35,6 +34,8 @@ export default class implements Event {
 				if (!webhook) {
 					continue;
 				}
+
+				const locale = await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale);
 
 				await webhook.send({
 					embeds: [generateMemberLog(guildMember, locale)],

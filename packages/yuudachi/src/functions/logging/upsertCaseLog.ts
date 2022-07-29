@@ -13,10 +13,7 @@ export async function upsertCaseLog(guildId: Snowflake, user: User | undefined |
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const guild = await client.guilds.fetch(guildId);
-	const logChannel = await checkLogChannel(
-		guild,
-		(await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId)) as string,
-	);
+	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
 	const embed = await generateCaseEmbed(guildId, logChannel!.id, user, case_);
 
