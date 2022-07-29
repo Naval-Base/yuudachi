@@ -1,6 +1,5 @@
-import { performance } from 'perf_hooks';
 import dayjs from 'dayjs';
-import { ButtonStyle, CommandInteraction, ComponentType, Formatters, TextChannel } from 'discord.js';
+import { CommandInteraction, ComponentType, Formatters, TextChannel } from 'discord.js';
 import i18next from 'i18next';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import executeNuke from '../../../../functions/anti-raid/executeNuke.js';
@@ -12,20 +11,12 @@ import {
 	patternFilter,
 	zalgoFilter,
 } from '../../../../functions/anti-raid/filters.js';
-import {
-	AntiRaidNukeModes,
-	generateReportTargetInfo,
-	reportSort,
-	resolveDateLocale,
-} from '../../../../functions/anti-raid/formatReport.js';
+import { resolveDateLocale } from '../../../../functions/anti-raid/formatReport.js';
 import { parseAvatar } from '../../../../functions/anti-raid/parseAvatar.js';
 import { createAntiRaidActionRow, formatMemberTimestamps } from '../../../../functions/anti-raid/utils.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
 import { logger } from '../../../../logger.js';
-import { generateFormatterURL } from '../../../../util/generateFormatterUrl.js';
-import { generateTargetInformation } from '../../../../util/generateTargetInformation.js';
-import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
 import { resolveTimestamp } from '../../../../util/timestamp.js';
 
@@ -59,8 +50,6 @@ export async function filter(
 	ignoreRolesId: string[],
 	locale: string,
 ): Promise<void> {
-	const start = performance.now();
-
 	const reply = await interaction.deferReply({ ephemeral: data.hide ?? true });
 
 	const parsedJoinFrom = resolveTimestamp(data.join_from);
@@ -181,7 +170,7 @@ export async function filter(
 
 	const { actionRow, banKey, cancelKey, dryRunKey } = createAntiRaidActionRow(locale);
 
-	const potentialHits = Buffer.from(members.map((member) => generateTargetInformation(member)).join('\r\n'));
+	const potentialHits = Buffer.from(members.map((member) => `${member.user.tag} (${member.id})`).join('\n'));
 	const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
 	const { creationrange, joinrange } = formatMemberTimestamps(members);
@@ -263,50 +252,31 @@ export async function filter(
 			);
 		}
 
-		const end = performance.now();
-
 		const membersHit = Buffer.from(
 			result
-				.sort(reportSort)
-				.map((r) => generateReportTargetInfo(r))
-				.join('\r\n'),
+				.map(
+					(r) =>
+						`${r.member.user.id} | Join: ${dayjs(r.member.joinedTimestamp).format(
+							DATE_FORMAT_LOGFILE,
+						)} | Creation: ${dayjs(r.member.user.createdTimestamp).format(DATE_FORMAT_LOGFILE)} | ${r.member.user.tag}`,
+				)
+				.join('\n'),
 		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		const message = await upsertAntiRaidNukeReport(
+		await upsertAntiRaidNukeReport(
 			collectedInteraction.guild.id,
 			collectedInteraction.user,
 			collectedInteraction.channel as TextChannel,
 			result,
-			{
-				mode: AntiRaidNukeModes.Filter,
-				time: end - start,
-				avatar: parsedAvatar,
-				cases,
-				logChannel,
-				dryRun: dryRunMode,
-				...data,
-			},
 		);
-
-		const attachment = message!.attachments.first();
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.success', {
 				members: result.filter((r) => r.success).length,
 				lng: locale,
 			}),
-			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.ansi`, attachment: membersHit }],
-			components: [
-				createMessageActionRow([
-					{
-						type: ComponentType.Button,
-						style: ButtonStyle.Link,
-						url: generateFormatterURL(attachment!.url),
-						label: i18next.t('command.mod.anti_raid_nuke.buttons.report', { lng: locale }),
-					},
-				]),
-			],
+			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.txt`, attachment: membersHit }],
 		});
 	}
 }

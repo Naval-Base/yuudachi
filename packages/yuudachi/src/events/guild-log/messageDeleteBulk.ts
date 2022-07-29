@@ -67,29 +67,29 @@ export default class implements Event {
 					const { stickers, attachments } = msg;
 					out += `[${dayjs(msg.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${msg.author.tag} (${
 						msg.author.id
-					}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\r\n') : ''}${
+					}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\n') : ''}${
 						attachments.size
-							? `\r\n${attachments
+							? `\n${attachments
 									.map((attachment) =>
 										i18next.t('log.guild_log.message_bulk_deleted.attachment', {
 											lng: locale,
 											url: attachment.proxyURL,
 										}),
 									)
-									.join('\r\n')}`
+									.join('\n')}`
 							: ''
 					}${
 						stickers.size
-							? `\r\n${stickers
+							? `\n${stickers
 									.map((sticker) =>
 										i18next.t('log.guild_log.message_bulk_deleted.sticker', {
 											lng: locale,
 											name: sticker.name,
 										}),
 									)
-									.join('\r\n')}`
+									.join('\n')}`
 							: ''
-					}\r\n`;
+					}\n`;
 					return out;
 				}, '');
 
