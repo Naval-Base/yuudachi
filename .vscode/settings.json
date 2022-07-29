@@ -1,10 +1,22 @@
 {
-	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
 		"source.fixAll": true,
 		"source.organizeImports": false
 	},
+	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
+	"i18n-ally.localesPaths": "./packages/yuudachi/locales",
+	"i18n-ally.enabledFrameworks": ["i18next"],
+	"i18n-ally.sourceLanguage": "en-US",
+	"i18n-ally.displayLanguage": "en-US",
+	"i18n-ally.keystyle": "nested",
+	"i18n-ally.tabStyle": "tab",
+	"i18n-ally.sortKeys": true,
+	"i18n-ally.keepFulfilled": true,
+	"i18n-ally.theme.annotation": "#79b8ff",
+	"i18n-ally.theme.annotationBorder": "#c8e1ff",
+	"i18n-ally.theme.annotationMissing": "#79b8ff",
+	"i18n-ally.theme.annotationMissingBorder": "#f97583",
 	"typescript.tsdk": "node_modules/typescript/lib"
 }
