@@ -68,6 +68,8 @@ export async function unrole(
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.restrict.unrole.pending', {
+			user: `${user.toString()} - ${user.tag} (${user.id})`,
+			role: role ? `${role.toString()} - ${role.name} (${role.id})` : 'Unknown',
 			case: args.case,
 			lng: locale,
 		}),

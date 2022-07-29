@@ -23,8 +23,7 @@ import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 async function parseFile(file: Attachment): Promise<Set<string>> {
-	const content = await fetch(file.url).then((res) => res.text());
-
+	const content = await (await fetch(file.url)).text();
 	const ids: string[] | null = content.match(/\d{17,20}/g);
 
 	if (!ids?.length) {
@@ -46,7 +45,7 @@ export async function file(
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.no_ids', { lng: locale }));
 	}
 
-	const fetchedMembers = await interaction.guild.members.fetch();
+	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
 	const members = new Collection<string, GuildMember>();
 	const fails = new Set<string>();
 
@@ -72,6 +71,10 @@ export async function file(
 		i18next.t('command.mod.anti_raid_nuke.parameters.file', {
 			lng: locale,
 			file: Formatters.hyperlink('File uploaded', args.file.url),
+		}),
+		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
+			lng: locale,
+			count: Math.min(Math.max(Number(args.days), 0), 7),
 		}),
 	];
 

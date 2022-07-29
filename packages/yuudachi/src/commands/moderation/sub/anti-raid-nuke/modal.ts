@@ -9,7 +9,6 @@ import {
 	GuildMember,
 	InteractionCollector,
 	TextBasedChannelResolvable,
-	TextInputStyle,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -38,8 +37,6 @@ export async function modal(
 		createTextComponent({
 			customId: `${modalKey}-${i}`,
 			label: i18next.t('command.mod.anti_raid_nuke.modal.components.label', { lng: locale, i: i + 1 }),
-			style: TextInputStyle.Paragraph,
-			maxLength: undefined,
 			minLength: 17,
 			placeholder: i18next.t('command.mod.anti_raid_nuke.modal.components.placeholder', { lng: locale }),
 			required: i === 0,
@@ -79,7 +76,7 @@ export async function modal(
 
 	await modalInteraction.deferReply({ ephemeral: args.hide ?? true });
 
-	const fetchedMembers = await interaction.guild.members.fetch();
+	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
 	const fullContent = modalInteraction.components
 		.map((row) => row.components)
 		.flat()
@@ -115,6 +112,10 @@ export async function modal(
 		i18next.t('command.mod.anti_raid_nuke.parameters.current_time', {
 			lng: locale,
 			now: Formatters.time(dayjs().unix(), Formatters.TimestampStyles.ShortDateTime),
+		}),
+		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
+			lng: locale,
+			count: Math.min(Math.max(Number(args.days), 0), 7),
 		}),
 	];
 

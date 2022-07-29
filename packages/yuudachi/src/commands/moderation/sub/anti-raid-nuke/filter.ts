@@ -74,7 +74,7 @@ export async function filter(
 		pattern: args.confusables === Confusables.OnlyPattern || args.confusables === Confusables.PatternMembers,
 	};
 
-	const fetchedMembers = await interaction.guild.members.fetch();
+	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
 	const members = fetchedMembers.filter((member) => {
 		if (joinFilter(member, parsedJoinFrom, parsedJoinTo)) {
 			return false;
@@ -121,6 +121,10 @@ export async function filter(
 			ageTo: resolveDateLocale(parsedCreatedTo),
 			ageFrom: resolveDateLocale(parsedCreatedFrom),
 		}),
+		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
+			lng: locale,
+			count: Math.min(Math.max(Number(args.days), 0), 7),
+		}),
 	];
 
 	if (parsedAvatar) {
@@ -139,21 +143,6 @@ export async function filter(
 			}),
 			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			codeBlock(parsedPattern.toString()),
-		);
-	}
-
-	if (args.days) {
-		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.parameters.days', {
-				lng: locale,
-				count: Math.min(Math.max(Number(args.days), 0), 7),
-			}),
-		);
-	} else {
-		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.parameters.days_none', {
-				lng: locale,
-			}),
 		);
 	}
 
