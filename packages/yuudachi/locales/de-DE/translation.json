@@ -336,7 +336,7 @@
 		"guild_log": {
 			"message_updated": {
 				"title": "Message updated",
-				"info": "​",
+				"info": "​\\u200b",
 				"channel": "• Channel: {{- channel}}",
 				"jump_to": "• [Jump to]({{- link}})"
 			},
