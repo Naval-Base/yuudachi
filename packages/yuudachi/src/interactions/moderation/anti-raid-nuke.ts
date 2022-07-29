@@ -21,24 +21,24 @@ export const AntiRaidNukeCommand = {
 					type: ApplicationCommandOptionType.Integer,
 					choices: [
 						{ name: 'Off', value: 0 },
-						{ name: 'Only Pattern (pattern will be resistant to confusables and zalgo, Default)', value: 1 },
-						{ name: 'Only Filter Members (filter out members without confusables in their username)', value: 2 },
-						{ name: 'Pattern & Filter Members', value: 3 },
+						{ name: 'Only pattern (default) (pattern will be resistant to confusables and zalgo)', value: 1 },
+						{ name: 'Only filter members (filter out members without confusables in their username)', value: 2 },
+						{ name: 'Pattern & filter members', value: 3 },
 					],
 				},
 				{
 					name: 'insensitive',
-					description: 'Whether the pattern should be case insensitive (default: true)',
+					description: 'Whether the pattern should be case insensitive',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
 					name: 'full_match',
-					description: 'Whether the pattern should only match the whole username (default: false)',
+					description: 'Whether the pattern should only match the whole username',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
 					name: 'zalgo',
-					description: 'Whether to filter out members without zalgo in their username (default: false)',
+					description: 'Whether to filter out members without zalgo in their username',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
@@ -63,7 +63,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'avatar',
-					description: 'The avatar (Raw hash, UserId, Cdn url, or "none" to match no avatar)',
+					description: 'The avatar (Raw hash, user id, cdn url, or "none" to match no avatar)',
 					type: ApplicationCommandOptionType.String,
 				},
 				{
@@ -88,14 +88,14 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'hide',
-					description: 'Whether to hide the reply (default: true)',
+					description: 'Hides the output',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 			],
 		},
 		{
 			name: 'file',
-			description: 'Filter and ban members from a file of IDs',
+			description: 'Filter and ban members from a file of ids',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
@@ -126,7 +126,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'hide',
-					description: 'Whether to hide the reply (default: true)',
+					description: 'Hides the output',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 			],
@@ -158,7 +158,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'hide',
-					description: 'Whether to hide the reply (default: true)',
+					description: 'Hides the output',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 			],

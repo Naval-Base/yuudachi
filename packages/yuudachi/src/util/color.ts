@@ -14,7 +14,7 @@ interface PredicateEntry<T> {
  * @param colorPredicates  - Predicate structure to determine color by
  * @returns The colored string
  */
-export function colorBasedOnDeterminant<T>(
+function colorBasedOnDeterminant<T>(
 	determinant: T,
 	stringExtractor: (a0: T) => string,
 	predicates: PredicateEntry<T>[],

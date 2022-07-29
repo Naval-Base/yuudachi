@@ -26,7 +26,7 @@ import { createAntiRaidActionRow, formatMemberTimestamps } from '../../../../fun
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
 import { logger } from '../../../../logger.js';
-import { generateFormatterUrl } from '../../../../util/formatterUrl.js';
+import { generateFormatterURL } from '../../../../util/generateFormatterUrl.js';
 import { generateTargetInformation } from '../../../../util/generateTargetInformation.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 import { createModal } from '../../../../util/modal.js';
@@ -69,8 +69,8 @@ export async function modal(
 
 	await interaction.showModal(
 		createModal({
-			customId: i18next.t('command.mod.anti_raid_nuke.modal.title', { lng: locale }),
-			title: modalKey,
+			customId: modalKey,
+			title: i18next.t('command.mod.anti_raid_nuke.modal.title', { lng: locale }),
 			components: [createModalActionRow(textComponents)],
 		}),
 	);
@@ -280,7 +280,7 @@ export async function modal(
 					{
 						type: ComponentType.Button,
 						style: ButtonStyle.Link,
-						url: generateFormatterUrl(attachment!.url),
+						url: generateFormatterURL(attachment!.url),
 						label: i18next.t('command.mod.anti_raid_nuke.buttons.report', { lng: locale }),
 					},
 				]),

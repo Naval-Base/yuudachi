@@ -1,6 +1,6 @@
 import { logger } from '../logger.js';
 
-export function generateFormatterUrl(file: string) {
+export function generateFormatterURL(file: string) {
 	if (!process.env.REPORT_FORMATTER_URL) {
 		logger.info('Missing REPORT_FORMATTER_URL environment variable');
 		// I will implement a static url on the API later, for now let's have some fun
