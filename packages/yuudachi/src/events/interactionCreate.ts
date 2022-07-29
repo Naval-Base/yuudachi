@@ -36,7 +36,8 @@ export default class implements Event {
 			const command = this.commands.get(interaction.commandName.toLowerCase());
 			if (command) {
 				try {
-					const locale = (await getGuildSetting(interaction.guildId, SettingsKeys.Locale)) as string | undefined;
+					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
+					const forceLocale = await getGuildSetting<boolean>(interaction.guildId, SettingsKeys.Locale);
 
 					if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
 						if (!command.autocomplete) {
@@ -49,7 +50,7 @@ export default class implements Event {
 						await command.autocomplete(
 							interaction,
 							transformInteraction(interaction.options.data),
-							locale ?? interaction.locale,
+							forceLocale ? locale : interaction.locale,
 						);
 					} else {
 						logger.info(
@@ -59,7 +60,7 @@ export default class implements Event {
 						await command.execute(
 							interaction,
 							transformInteraction(interaction.options.data),
-							locale ?? interaction.locale,
+							forceLocale ? locale : interaction.locale,
 						);
 					}
 				} catch (e) {

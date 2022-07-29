@@ -28,9 +28,8 @@ export default class implements Event {
 					continue;
 				}
 
-				const locale = (await getGuildSetting(thread.guild.id, SettingsKeys.Locale)) as string;
-				const logChannelId = (await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId)) as string;
-				const ignoreChannels = (await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels)) as string;
+				const logChannelId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels);
 
 				if (!logChannelId) {
 					continue;
@@ -48,6 +47,8 @@ export default class implements Event {
 				) {
 					continue;
 				}
+
+				const locale = await getGuildSetting(thread.guild.id, SettingsKeys.Locale);
 
 				logger.info(
 					{

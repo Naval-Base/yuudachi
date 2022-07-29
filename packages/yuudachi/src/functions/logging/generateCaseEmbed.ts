@@ -14,7 +14,7 @@ export async function generateCaseEmbed(
 	case_: Case,
 ) {
 	const client = container.resolve<Client<true>>(Client);
-	const locale = (await getGuildSetting(guildId, SettingsKeys.Locale)) as string;
+	const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
 
 	let embed: APIEmbed = {
 		color: generateCaseColor(case_),

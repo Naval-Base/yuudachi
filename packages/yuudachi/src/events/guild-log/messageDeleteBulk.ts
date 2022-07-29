@@ -43,9 +43,8 @@ export default class implements Event {
 			}
 
 			try {
-				const locale = (await getGuildSetting(message.guild.id, SettingsKeys.Locale)) as string;
-				const logChannelId = (await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId)) as string;
-				const ignoreChannels = (await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels)) as string;
+				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels);
 				// TODO: ignore based on parent category once .inGuild() is available
 				if (
 					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId ?? '')) ||
@@ -61,6 +60,8 @@ export default class implements Event {
 				if (!webhook) {
 					continue;
 				}
+
+				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 
 				const output = messages.reduce((out, msg) => {
 					const { stickers, attachments } = msg;

@@ -16,7 +16,7 @@ export async function insertAntiRaidNukeCaseLog(
 	reason: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
-	const locale = (await getGuildSetting(guild.id, SettingsKeys.Locale)) as string;
+	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 
 	const [nextCase] = await sql<[{ next_case: number }]>`select next_case(${guild.id});`;
 	const from = nextCase.next_case - cases.length;

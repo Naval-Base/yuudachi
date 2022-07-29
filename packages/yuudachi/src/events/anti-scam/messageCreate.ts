@@ -30,7 +30,7 @@ export default class implements Event {
 					continue;
 				}
 
-				const ignoreRoles = (await getGuildSetting(message.guild.id, SettingsKeys.AutomodIgnoreRoles)) as string[];
+				const ignoreRoles = await getGuildSetting<string[]>(message.guild.id, SettingsKeys.AutomodIgnoreRoles);
 				if (ignoreRoles.some((id) => message.member?.roles.cache.has(id))) {
 					return;
 				}
@@ -43,13 +43,13 @@ export default class implements Event {
 
 					const logChannel = await checkLogChannel(
 						message.guild,
-						(await getGuildSetting(message.guildId, SettingsKeys.ModLogChannelId)) as string,
+						await getGuildSetting(message.guildId, SettingsKeys.ModLogChannelId),
 					);
 					if (!logChannel) {
 						continue;
 					}
 
-					const locale = (await getGuildSetting(message.guildId, SettingsKeys.Locale)) as string;
+					const locale = await getGuildSetting(message.guildId, SettingsKeys.Locale);
 
 					await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:ban`, 15, '');
 					let case_: Case | null = null;

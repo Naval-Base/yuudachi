@@ -31,9 +31,8 @@ export default class implements Event {
 			}
 
 			try {
-				const locale = (await getGuildSetting(newState.guild.id, SettingsKeys.Locale)) as string;
-				const logChannelId = (await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId)) as string;
-				const ignoreChannels = (await getGuildSetting(newState.guild.id, SettingsKeys.LogIgnoreChannels)) as string;
+				const logChannelId = await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(newState.guild.id, SettingsKeys.LogIgnoreChannels);
 
 				if (!logChannelId) {
 					continue;
@@ -42,6 +41,8 @@ export default class implements Event {
 				if (!webhook) {
 					continue;
 				}
+
+				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
 
 				let description = '';
 				if ((!oldState || !oldState.channel || ignoreChannels.includes(oldState.channelId ?? '')) && newState.channel) {
