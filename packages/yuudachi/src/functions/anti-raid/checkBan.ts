@@ -1,4 +1,5 @@
 import { GuildMember, PermissionFlagsBits } from 'discord.js';
+import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 enum BanRejectReason {
 	Self = 'reject_self',
@@ -8,7 +9,9 @@ enum BanRejectReason {
 	HasHigherPerms = 'reject_perms',
 }
 
-export function checkBan(target: GuildMember, userId: string, ignoreRoles: string[]): BanRejectReason | null {
+export async function checkBan(guildId: string, target: GuildMember, userId: string): Promise<BanRejectReason | null> {
+	const ignoreRoles = await getGuildSetting<string[]>(guildId, SettingsKeys.AutomodIgnoreRoles);
+
 	if (target.id === userId) {
 		return BanRejectReason.Self;
 	}

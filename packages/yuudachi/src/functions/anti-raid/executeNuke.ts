@@ -8,7 +8,6 @@ import type { AntiRaidResult } from '../../commands/moderation/anti-raid-nuke.js
 import { kRedis } from '../../tokens.js';
 import { Case, CaseAction, createCase } from '../cases/createCase.js';
 import { generateCasePayload } from '../logging/generateCasePayload.js';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 interface executeNukeArgs {
 	days: number;
@@ -25,8 +24,6 @@ export default async function executeNuke(
 ) {
 	const redis = container.resolve<Redis>(kRedis);
 
-	const ignoreRoles = await getGuildSetting<string[]>(interaction.guildId, SettingsKeys.AutomodIgnoreRoles);
-
 	await redis.setex(`guild:${interaction.guildId}:anti_raid_nuke`, 15, 'true');
 	let idx = 0;
 	const promises = [];
@@ -35,7 +32,7 @@ export default async function executeNuke(
 
 	for (const member of members.values()) {
 		const executor = (async () => {
-			const authorization = checkBan(member, interaction.user.id, ignoreRoles);
+			const authorization = await checkBan(interaction.guildId, member, interaction.user.id);
 
 			if (authorization) {
 				result.push({
