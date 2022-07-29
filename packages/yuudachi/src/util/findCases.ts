@@ -13,11 +13,12 @@ export async function findCases(phrase: string, guildId: string) {
 
 	if (!phrase.length) {
 		return sql<RawCase[]>`
-		select *
-		from cases
-		where guild_id = ${guildId}
-		order by created_at desc
-		limit 25`;
+			select *
+			from cases
+			where guild_id = ${guildId}
+			order by created_at desc
+			limit 25
+		`;
 	}
 
 	if (!isNaN(parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
@@ -30,14 +31,15 @@ export async function findCases(phrase: string, guildId: string) {
 	}
 
 	return sql<RawCase[]>`
-	select *
-	from cases
-	where guild_id = ${guildId}
-		and (
-			target_id = ${phrase}
-			or target_tag ilike ${`%${phrase}%`}
-			or reason ilike ${`%${phrase}%`}
-		)
-	order by created_at desc
-	limit 25`;
+		select *
+		from cases
+		where guild_id = ${guildId}
+			and (
+				target_id = ${phrase}
+				or target_tag ilike ${`%${phrase}%`}
+				or reason ilike ${`%${phrase}%`}
+			)
+		order by created_at desc
+		limit 25
+	`;
 }

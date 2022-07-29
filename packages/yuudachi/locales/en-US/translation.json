@@ -47,7 +47,7 @@
 					"cancel": "Cancel",
 					"execute": "Warn"
 				},
-				"cancel": "Cancelled warn on {{- user}}",
+				"cancel": "Canceled warn on {{- user}}",
 				"success": "Successfully warned {{- user}}"
 			},
 			"timeout": {
@@ -61,7 +61,7 @@
 					"execute": "Timeout"
 				},
 				"pending": "Do you really want to time out {{- user}}?",
-				"cancel": "Cancelled timeout for {{- user}}",
+				"cancel": "Canceled timeout for {{- user}}",
 				"success": "Successfully timed out {{- user}}"
 			},
 			"kick": {
@@ -74,7 +74,7 @@
 					"cancel": "Cancel",
 					"execute": "Kick"
 				},
-				"cancel": "Cancelled kick on {{- user}}",
+				"cancel": "Canceled kick on {{- user}}",
 				"success": "Successfully kicked {{- user}}"
 			},
 			"softban": {
@@ -90,10 +90,10 @@
 				"reasons": {
 					"clear_messages": "Mod: {{- user}} | Softban to clear messages"
 				},
-				"cancel": "Cancelled softban on {{- user}}",
+				"cancel": "Canceled softban on {{- user}}",
 				"success": {
 					"regular": "Successfully softbanned {{- user}}",
-					"clear_messages": "Successfully cleared messages by {{- user}}"
+					"clear_messages": "Successfully cleared messages from {{- user}}"
 				}
 			},
 			"ban": {
@@ -106,7 +106,7 @@
 					"cancel": "Cancel",
 					"execute": "Ban"
 				},
-				"cancel": "Cancelled ban on {{- user}}",
+				"cancel": "Canceled ban on {{- user}}",
 				"success": "Successfully banned {{- user}}"
 			},
 			"unban": {
@@ -119,7 +119,7 @@
 					"cancel": "Cancel",
 					"execute": "Unban"
 				},
-				"cancel": "Cancelled unban on {{- user}}",
+				"cancel": "Canceled unban on {{- user}}",
 				"success": "Successfully unbanned {{- user}}"
 			},
 			"anti_raid_nuke": {
@@ -144,7 +144,7 @@
 					"cancel": "Cancel",
 					"execute": "Launch"
 				},
-				"cancel": "Cancelled Anti-Raid-Nuke.",
+				"cancel": "Canceled Anti-Raid-Nuke.",
 				"success": "Anti-Raid-Nuke hit {{- members}} guild members."
 			},
 			"restrict": {
@@ -159,7 +159,7 @@
 						"cancel": "Cancel",
 						"execute": "Restrict"
 					},
-					"cancel": "Cancelled embed restriction on {{- user}}",
+					"cancel": "Canceled embed restriction on {{- user}}",
 					"success": "Successfully embed restricted {{- user}}"
 				},
 				"react": {
@@ -173,7 +173,7 @@
 						"cancel": "Cancel",
 						"execute": "Restrict"
 					},
-					"cancel": "Cancelled react restriction on {{- user}}",
+					"cancel": "Canceled react restriction on {{- user}}",
 					"success": "Successfully react restricted {{- user}}"
 				},
 				"emoji": {
@@ -187,7 +187,7 @@
 						"cancel": "Cancel",
 						"execute": "Restrict"
 					},
-					"cancel": "Cancelled emoji restriction on {{- user}}",
+					"cancel": "Canceled emoji restriction on {{- user}}",
 					"success": "Successfully emoji restricted {{- user}}"
 				},
 				"unrole": {
@@ -200,7 +200,7 @@
 						"cancel": "Cancel",
 						"execute": "Unrole"
 					},
-					"cancel": "Cancelled unrole on {{- user}} from {{- role}} on case #{{case}}",
+					"cancel": "Canceled unrole on {{- user}} from {{- role}} on case #{{case}}",
 					"success": "Successfully unroled {{- user}} from {{- role}} with case #{{case}}"
 				}
 			},
@@ -218,7 +218,7 @@
 					},
 					"message": "🔒 This channel has been locked, it will be unlocked {{- duration}}",
 					"message_reason": "🔒 This channel has been locked with reason {{- reason}}, it will be unlocked {{- duration}}",
-					"cancel": "Cancelled locking of {{- channel}}",
+					"cancel": "Canceled locking of {{- channel}}",
 					"success": "Successfully locked {{- channel}}"
 				},
 				"lift": {
@@ -231,7 +231,7 @@
 						"cancel": "Cancel",
 						"execute": "Unlock"
 					},
-					"cancel": "Cancelled lifting lock of {{- channel}}",
+					"cancel": "Canceled lifting lock of {{- channel}}",
 					"success": "Successfully lifted lock on {{- channel}}"
 				}
 			},
@@ -243,7 +243,7 @@
 					"cancel": "Cancel",
 					"execute": "Set Reason"
 				},
-				"cancel": "Cancelled setting reason"
+				"cancel": "Canceled setting reason"
 			},
 			"reference": {
 				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
@@ -271,7 +271,7 @@
 					"execute": "Refresh",
 					"cancel": "Cancel"
 				},
-				"cancel": "Cancelled scam domain list refreshing",
+				"cancel": "Canceled scam domain list refreshing",
 				"success": "Successfully refreshed scam domain lists",
 				"pending": "Current scam domain lists",
 				"error": "Something went wrong when refreshing scam domains"
@@ -286,7 +286,7 @@
 					"cancel": "Cancel",
 					"execute": "Apply"
 				},
-				"cancel": "Cancelled applying sponsor role to {{- user}}",
+				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
 			}
 		}

@@ -5,7 +5,7 @@ import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import { SCAM_THRESHOLD } from '../../Constants.js';
 import type { Event } from '../../Event.js';
-import { totalScams } from '../../functions/anti-scam/totalScam.js';
+import { totalScams } from '../../functions/anti-scam/totalScams.js';
 import { considerableText } from '../../functions/anti-spam/considerableText.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';

@@ -7,6 +7,12 @@ import { logger } from '../../logger.js';
 import { kRedis } from '../../tokens.js';
 import { resolveRedirect } from '../../util/resolveRedirect.js';
 
+interface ScamDomainHit {
+	lists: string[];
+	host: string;
+	full: string;
+}
+
 const scamDomainChecks = {
 	SCAM_DOMAIN_URL: (url: URL, host: string) => `.${url.host}`.endsWith(`.${host}`),
 	SCAM_DOMAIN_DISCORD_URL: (url: URL, hash: string) => {
@@ -21,12 +27,6 @@ function urlOption(url: string): URL | null {
 	} catch {
 		return null;
 	}
-}
-
-interface ScamDomainHit {
-	lists: string[];
-	host: string;
-	full: string;
 }
 
 async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null> {

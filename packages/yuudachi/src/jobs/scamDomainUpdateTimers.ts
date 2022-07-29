@@ -1,7 +1,8 @@
 import { parentPort } from 'node:worker_threads';
-import { default as Redis } from 'ioredis';
 import { refreshScamDomains } from '../functions/anti-scam/refreshScamDomains.js';
-const redis = new Redis(process.env.REDISHOST!);
+import { createRedis } from '../util/redis.js';
+
+const redis = createRedis();
 await refreshScamDomains(redis);
 
 if (parentPort) {

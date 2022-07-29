@@ -2,7 +2,8 @@ import type { APIEmbed } from 'discord-api-types/v10';
 import { Client, type Snowflake, type User } from 'discord.js';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
-import { generateCaseLog, generateCaseColor } from './generateCaseLog.js';
+import { generateCaseColor } from './generateCaseColor.js';
+import { generateCaseLog } from './generateCaseLog.js';
 import type { Case } from '../cases/createCase.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 

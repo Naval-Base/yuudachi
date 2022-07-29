@@ -46,13 +46,21 @@ export default class implements Event {
 							);
 							return;
 						}
-						await command.autocomplete(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
+						await command.autocomplete(
+							interaction,
+							transformInteraction(interaction.options.data),
+							locale ?? interaction.locale,
+						);
 					} else {
 						logger.info(
 							{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 							`Executing command ${interaction.commandName}`,
 						);
-						await command.execute(interaction, transformInteraction(interaction.options.data), locale ?? 'en');
+						await command.execute(
+							interaction,
+							transformInteraction(interaction.options.data),
+							locale ?? interaction.locale,
+						);
 					}
 				} catch (e) {
 					const error = e as Error;

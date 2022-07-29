@@ -8,18 +8,18 @@ export enum ScamRedisKeys {
 	SCAM_DOMAIN_DISCORD_URL = 'scamdomains_discord',
 }
 
-export function checkResponse(response: Response): Response | null {
-	if (response.ok) return response;
-	logger.warn({ response }, 'Fetching scam domains returned a non 2xx response code.');
-	return null;
-}
-
 export interface ScamDomainRefreshData {
 	envVar: string;
 	redisKey: string;
 	lastRefresh: number;
 	before: number;
 	after: number;
+}
+
+export function checkResponse(response: Response): Response | null {
+	if (response.ok) return response;
+	logger.warn({ response }, 'Fetching scam domains returned a non 2xx response code.');
+	return null;
 }
 
 export const scamDomainRequestHeaders = {

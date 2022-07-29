@@ -1,35 +1,28 @@
 import 'reflect-metadata';
 import { readFile } from 'node:fs/promises';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
-import Bree from 'bree';
-import { Client, GatewayIntentBits, Options, Partials, type Webhook } from 'discord.js';
+import { GatewayIntentBits, Options, Partials } from 'discord.js';
 import i18next from 'i18next';
 import { default as Backend } from 'i18next-fs-backend';
-import { default as Redis } from 'ioredis';
-import postgres from 'postgres';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
 import { Command, commandInfo } from './Command.js';
 import type { Event } from './Event.js';
 import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains.js';
 import { logger } from './logger.js';
-import { kBree, kCommands, kRedis, kSQL, kWebhooks } from './tokens.js';
+import { createBree } from './util/bree.js';
+import { createClient } from './util/client.js';
+import { createCommands } from './util/commands.js';
+import { createPostgres } from './util/postgres.js';
+import { createRedis } from './util/redis.js';
+import { createWebhooks } from './util/webhooks.js';
 import { WebSocketConnection } from './websocket/WebSocketConnection.js';
 
-const sql = postgres({
-	types: {
-		date: {
-			to: 1184,
-			from: [1082, 1083, 1114, 1184],
-			serialize: (date: Date) => date.toISOString(),
-			parse: (isoString: string) => isoString,
-		},
-	},
-});
-const redis = new Redis(process.env.REDISHOST!);
-const bree = new Bree({ root: false, logger: false });
+createPostgres();
+const redis = createRedis();
+createBree();
 
-const client = new Client({
+const client = createClient({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildBans,
@@ -45,17 +38,9 @@ const client = new Client({
 		VoiceStateManager: 10,
 	}),
 });
-client.setMaxListeners(20);
 
-const commands = new Map<string, Command>();
-const webhooks = new Map<string, Webhook>();
-
-container.register(Client, { useValue: client });
-container.register(kSQL, { useValue: sql });
-container.register(kRedis, { useValue: redis });
-container.register(kBree, { useValue: bree });
-container.register(kCommands, { useValue: commands });
-container.register(kWebhooks, { useValue: webhooks });
+const commands = createCommands();
+createWebhooks();
 
 const commandFiles = readdirp(fileURLToPath(new URL('./commands', import.meta.url)), {
 	fileFilter: '*.js',
@@ -78,9 +63,9 @@ try {
 			loadPath: fileURLToPath(new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)),
 		},
 		cleanCode: true,
+		supportedLngs: ['en-US', 'en-GB'],
 		fallbackLng: ['en-US'],
 		defaultNS: 'translation',
-		lng: 'en-US',
 		ns: ['translation'],
 	});
 

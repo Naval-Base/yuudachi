@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { considerableText } from '../../functions/anti-spam/considerableText.js';
-import { createContentHash, totalContent } from '../../functions/anti-spam/totalContents.js';
+import { createContentHash, totalContents } from '../../functions/anti-spam/totalContents.js';
 import { totalMentions } from '../../functions/anti-spam/totalMentions.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
@@ -37,7 +37,7 @@ export default class implements Event {
 				}
 
 				const totalMentionCount = await totalMentions(message);
-				const totalContentCount = await totalContent(content, message.guildId, message.author.id);
+				const totalContentCount = await totalContents(content, message.guildId, message.author.id);
 
 				const mentionExceeded = totalMentionCount >= MENTION_THRESHOLD;
 				const contentExceeded = totalContentCount >= SPAM_THRESHOLD;

@@ -1,18 +1,9 @@
 import { parentPort } from 'node:worker_threads';
 import type { Snowflake } from 'discord-api-types/v10';
-import postgres from 'postgres';
 import { JobType } from '../Constants.js';
+import { createPostgres } from '../util/postgres.js';
 
-const sql = postgres({
-	types: {
-		date: {
-			to: 1184,
-			from: [1082, 1083, 1114, 1184],
-			serialize: (date: Date) => date.toISOString(),
-			parse: (isoString: string) => isoString,
-		},
-	},
-});
+const sql = createPostgres();
 
 const currentLockdowns = await sql<[{ channel_id: Snowflake; expiration: string }]>`
 	select channel_id, expiration
