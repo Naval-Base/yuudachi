@@ -139,7 +139,7 @@
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
 				"reason_fallback": "Anti-Raid-Nuke",
-				"pending": "Anti-Raid-Nuke wird voraussichtlich {{members}} Gildenmitglieder treffen.\n- Erstellt innerhalb {{creationrange}}\n- Beigetreten innerhalb {{joinedrange}}",
+				"pending": "Anti-Raid-Nuke wird voraussichtlich {{members}} Gildenmitglieder treffen.\n- Erstellt innerhalb {{creationRange}}\n- Beigetreten innerhalb {{joinedRange}}",
 				"buttons": {
 					"cancel": "Abbrechen",
 					"execute": "Ausführen"

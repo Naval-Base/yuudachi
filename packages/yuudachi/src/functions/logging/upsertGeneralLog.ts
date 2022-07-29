@@ -24,9 +24,7 @@ export async function upsertAntiRaidNukeReport(
 
 	const embed = generateAntiRaidNukeReportEmbed(report.filter((r) => r.success).length, user, channel, locale);
 
-	const message = await logChannel.send({
+	await logChannel.send({
 		embeds: [embed],
 	});
-
-	return message;
 }

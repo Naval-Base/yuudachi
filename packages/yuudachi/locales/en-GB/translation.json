@@ -172,7 +172,7 @@
 				},
 				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
 				"reason_fallback": "Anti-Raid-Nuke",
-				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.\n• Created within {{creationrange}}\n• Joined within {{joinrange}}",
+				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.\n• Created within {{creationRange}}\n• Joined within {{joinRange}}",
 				"buttons": {
 					"cancel": "Cancel",
 					"execute": "Launch",

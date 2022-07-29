@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
-import { CommandInteraction, ComponentType, Formatters, TextChannel } from 'discord.js';
+import { ButtonStyle, CommandInteraction, ComponentType, Formatters, TextChannel } from 'discord.js';
 import i18next from 'i18next';
+import { nanoid } from 'nanoid';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import executeNuke from '../../../../functions/anti-raid/executeNuke.js';
 import {
@@ -11,12 +12,14 @@ import {
 	patternFilter,
 	zalgoFilter,
 } from '../../../../functions/anti-raid/filters.js';
+import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import { resolveDateLocale } from '../../../../functions/anti-raid/formatReport.js';
 import { parseAvatar } from '../../../../functions/anti-raid/parseAvatar.js';
-import { createAntiRaidActionRow, formatMemberTimestamps } from '../../../../functions/anti-raid/utils.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
 import { logger } from '../../../../logger.js';
+import { createButton } from '../../../../util/button.js';
+import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
 import { resolveTimestamp } from '../../../../util/timestamp.js';
 
@@ -168,22 +171,40 @@ export async function filter(
 		return;
 	}
 
-	const { actionRow, banKey, cancelKey, dryRunKey } = createAntiRaidActionRow(locale);
+	const banKey = nanoid();
+	const cancelKey = nanoid();
+	const dryRunKey = nanoid();
+
+	const banButton = createButton({
+		customId: banKey,
+		label: i18next.t('command.mod.anti_raid_nuke.buttons.execute', { lng: locale }),
+		style: ButtonStyle.Danger,
+	});
+	const cancelButton = createButton({
+		customId: cancelKey,
+		label: i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }),
+		style: ButtonStyle.Secondary,
+	});
+	const dryRunButton = createButton({
+		customId: dryRunKey,
+		label: i18next.t('command.mod.anti_raid_nuke.buttons.dry_run', { lng: locale }),
+		style: ButtonStyle.Primary,
+	});
 
 	const potentialHits = Buffer.from(members.map((member) => `${member.user.tag} (${member.id})`).join('\n'));
 	const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-	const { creationrange, joinrange } = formatMemberTimestamps(members);
+	const { creationRange, joinRange } = formatMemberTimestamps(members);
 
 	await interaction.editReply({
 		content: `${i18next.t('command.mod.anti_raid_nuke.pending', {
 			members: members.size,
-			creationrange,
-			joinrange,
+			creationRange,
+			joinRange,
 			lng: locale,
 		})}\n\n${parameterStrings.join('\n')}`,
 		files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
-		components: [actionRow],
+		components: [createMessageActionRow([cancelButton, banButton, dryRunButton])],
 	});
 
 	const collectedInteraction = await reply

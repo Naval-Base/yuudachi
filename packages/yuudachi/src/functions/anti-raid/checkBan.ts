@@ -9,10 +9,22 @@ enum BanRejectReasons {
 }
 
 export function checkBan(member: GuildMember, authorId: string, ignoreRolesId: string[]): BanRejectReasons | null {
-	if (member.id === authorId) return BanRejectReasons.Self;
-	if (!member.bannable) return BanRejectReasons.MemberUnbanable;
-	if (member.user.bot) return BanRejectReasons.MemberIsBot;
-	if (member.roles.cache.hasAny(...ignoreRolesId)) return BanRejectReasons.HasAutomodIgnoreRole;
+	if (member.id === authorId) {
+		return BanRejectReasons.Self;
+	}
+
+	if (!member.bannable) {
+		return BanRejectReasons.MemberUnbanable;
+	}
+
+	if (member.user.bot) {
+		return BanRejectReasons.MemberIsBot;
+	}
+
+	if (member.roles.cache.hasAny(...ignoreRolesId)) {
+		return BanRejectReasons.HasAutomodIgnoreRole;
+	}
+
 	if (
 		member.permissions.any([
 			PermissionFlagsBits.Administrator,
@@ -23,7 +35,9 @@ export function checkBan(member: GuildMember, authorId: string, ignoreRolesId: s
 			PermissionFlagsBits.ManageEvents,
 			PermissionFlagsBits.ManageGuild,
 		])
-	)
+	) {
 		return BanRejectReasons.HasHigherPerms;
+	}
+
 	return null;
 }
