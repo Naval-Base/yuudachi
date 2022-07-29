@@ -37,7 +37,7 @@ export default class implements Event {
 			if (command) {
 				try {
 					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
-					const forceLocale = await getGuildSetting<boolean>(interaction.guildId, SettingsKeys.Locale);
+					const forceLocale = await getGuildSetting<boolean>(interaction.guildId, SettingsKeys.ForceLocale);
 
 					if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
 						if (!command.autocomplete) {
