@@ -157,7 +157,7 @@
 					"days_plural": "• Deleting messages sent in the last {{count}} days",
 					"days_none": "• Not deleting any messages",
 					"file": "• File: {{- file}}",
-					"users": "• From all of the ids, {{- users}} aren't members of this guild"
+					"users": "• Out of all of the ids, {{- users}} aren't members of this guild"
 				},
 				"stages": {
 					"filtering": "Filtering members to match the parameters...",
