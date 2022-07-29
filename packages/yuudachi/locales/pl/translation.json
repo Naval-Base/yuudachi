@@ -254,40 +254,40 @@
 		},
 		"utility": {
 			"ping": {
-				"success": ""
+				"success": "Wszystko w porządku"
 			},
 			"check_scam": {
-				"found_one": "",
-				"found_other": ""
+				"found_one": "Wykryto domenę ze scamem ({{count}})",
+				"found_other": "Wykryto domeny ze scamem ({{count}})"
 			},
 			"refresh_scamlist": {
-				"missing_env": "",
-				"refresh_never": "",
-				"amount": "",
-				"before": "",
-				"after": "",
-				"last_change": "",
+				"missing_env": "Brakuje zmiennych środowiskowych {{missing, list}} z listami domen ze scamem do sprawdzenia.",
+				"refresh_never": "`never`",
+				"amount": "• Ilość: {{- amount}}",
+				"before": "• Przed: {{- amount}}",
+				"after": "• Po: {{- amount}}",
+				"last_change": "• Ostatnia zmiana: {{- timestamp}}",
 				"buttons": {
-					"execute": "",
-					"cancel": ""
+					"execute": "Odśwież",
+					"cancel": "Anuluj"
 				},
-				"cancel": "",
-				"success": "",
-				"pending": "",
-				"error": ""
+				"cancel": "Anulowano odświeżanie listy domen ze scamem",
+				"success": "Pomyślnie odświeżono listy domen ze scamem",
+				"pending": "Bieżące listy domen ze scamem",
+				"error": "Coś poszło nie tak podczas odświeżania domen ze scamem"
 			},
 			"sponsor": {
 				"errors": {
-					"no_role": "",
-					"already_sponsor": ""
+					"no_role": "Nie skonfigurowano żadnej roli dla sponsorów.",
+					"already_sponsor": "{{- user}} jest już sponsorem."
 				},
-				"pending": "",
+				"pending": "Czy na pewno chcesz przyznać rolę sponsora dla {{- user}}?",
 				"buttons": {
-					"cancel": "",
-					"execute": ""
+					"cancel": "Anuluj",
+					"execute": "Zastosuj"
 				},
-				"cancel": "",
-				"success": ""
+				"cancel": "Anulowano przyznawanie roli sponsora dla {{- user}}",
+				"success": "Pomyślnie przyznano rolę sponsora dla {{- user}}"
 			}
 		}
 	},
