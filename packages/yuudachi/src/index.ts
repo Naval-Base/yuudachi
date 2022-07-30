@@ -2,9 +2,9 @@ import 'reflect-metadata';
 import { readFile } from 'node:fs/promises';
 import process from 'node:process';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
+import { Backend } from '@skyra/i18next-backend';
 import { GatewayIntentBits, Options, Partials } from 'discord.js';
 import i18next from 'i18next';
-import { default as Backend } from 'i18next-fs-backend';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
 import { type Command, commandInfo } from './Command.js';
@@ -53,15 +53,14 @@ const eventFiles = readdirp(fileURLToPath(new URL('./events', import.meta.url)),
 });
 
 try {
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const shorteners = JSON.parse(
 		(await readFile(fileURLToPath(new URL('../linkshorteners.json', import.meta.url).href))).toString(),
-	);
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	) as string[];
 	await redis.sadd('linkshorteners', ...shorteners);
+
 	await i18next.use(Backend).init({
 		backend: {
-			loadPath: fileURLToPath(new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)),
+			paths: [new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)],
 		},
 		cleanCode: true,
 		preload: ['en-US', 'en-GB', 'de', 'es-ES', 'ja', 'ko', 'pl', 'zh-CH', 'zh-TW'],
