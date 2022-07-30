@@ -1,10 +1,8 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_role": "",
-			"target_not_found": "",
-			"timed_out": "",
-			"no_mod_log_channel": ""
+			"no_mod_log_channel": "",
+			"no_anti_raid_archive_channel": ""
 		}
 	},
 	"command": {
@@ -12,9 +10,13 @@
 			"errors": {
 				"generic": "",
 				"no_enabled_module": "",
-				"target_not_found": "",
 				"duration_format": "",
-				"use_autocomplete": ""
+				"use_autocomplete": "",
+				"target_not_found": "",
+				"timed_out": ""
+			},
+			"buttons": {
+				"cancel": ""
 			}
 		},
 		"config": {
@@ -44,7 +46,6 @@
 			"warn": {
 				"pending": "",
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
 				"cancel": "",
@@ -53,11 +54,9 @@
 			"timeout": {
 				"errors": {
 					"missing_permissions": "",
-					"not_member": "",
 					"already_timed_out": ""
 				},
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
 				"pending": "",
@@ -66,12 +65,10 @@
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "",
-					"not_member": ""
+					"missing_permissions": ""
 				},
 				"pending": "",
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
 				"cancel": "",
@@ -84,7 +81,6 @@
 				"pending": "",
 				"not_member": "",
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
 				"reasons": {
@@ -103,7 +99,6 @@
 				},
 				"pending": "",
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
 				"cancel": "",
@@ -116,36 +111,80 @@
 				},
 				"pending": "",
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
 				"cancel": "",
 				"success": ""
 			},
 			"anti_raid_nuke": {
-				"errors": {
-					"no_hits": "",
+				"common": {
+					"errors": {
+						"result": {
+							"reject_perms": "",
+							"reject_unbanable": "",
+							"reject_bot": "",
+							"reject_self": "",
+							"reject_protected": "",
+							"reject_user": ""
+						}
+					},
 					"parameters": {
 						"heading": "",
 						"current_time": "",
+						"dry_run": "",
+						"days_zero": "",
+						"days_one": "",
+						"days_other": ""
+					},
+					"reason": "",
+					"pending": "",
+					"buttons": {
+						"execute": "",
+						"dry_run": ""
+					},
+					"attachment": "",
+					"cancel": "",
+					"success": ""
+				},
+				"filter": {
+					"errors": {
+						"no_hits": "",
+						"invalid_avatar": "",
+						"pattern_format": ""
+					},
+					"parameters": {
 						"join_after": "",
 						"created_after": "",
 						"pattern": "",
 						"avatar": "",
-						"days_one": "",
-						"days_other": "",
-						"days_none": ""
+						"zalgo": "",
+						"confusables": ""
 					}
 				},
-				"reason": "",
-				"reason_fallback": "",
-				"pending": "",
-				"buttons": {
-					"cancel": "",
-					"execute": ""
+				"file": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": ""
+					},
+					"parameters": {
+						"file": "",
+						"users": ""
+					}
 				},
-				"cancel": "",
-				"success": ""
+				"modal": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": ""
+					},
+					"parameters": {
+						"users": ""
+					},
+					"title": "",
+					"components": {
+						"label": "",
+						"placeholder": ""
+					}
+				}
 			},
 			"restrict": {
 				"embed": {
@@ -156,7 +195,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
 						"execute": ""
 					},
 					"cancel": "",
@@ -170,7 +208,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
 						"execute": ""
 					},
 					"cancel": "",
@@ -184,7 +221,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
 						"execute": ""
 					},
 					"cancel": "",
@@ -197,7 +233,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
 						"execute": ""
 					},
 					"cancel": "",
@@ -213,7 +248,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
 						"execute": ""
 					},
 					"message": "",
@@ -224,11 +258,11 @@
 				"lift": {
 					"errors": {
 						"missing_permissions": "",
-						"not_locked": ""
+						"not_locked": "",
+						"failure": ""
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "",
 						"execute": ""
 					},
 					"cancel": "",
@@ -240,7 +274,6 @@
 				"success_multiple": "",
 				"pending_multiple": "",
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
 				"cancel": ""
@@ -268,8 +301,7 @@
 				"after": "",
 				"last_change": "",
 				"buttons": {
-					"execute": "",
-					"cancel": ""
+					"execute": ""
 				},
 				"cancel": "",
 				"success": "",
@@ -283,9 +315,9 @@
 				},
 				"pending": "",
 				"buttons": {
-					"cancel": "",
 					"execute": ""
 				},
+				"reason": "",
 				"cancel": "",
 				"success": ""
 			}
@@ -314,6 +346,9 @@
 			},
 			"anti_raid_nuke": {
 				"description": "",
+				"parameters": {
+					"cutoff": ""
+				},
 				"footer": ""
 			},
 			"scam": {
@@ -371,6 +406,12 @@
 				"channel": "",
 				"starter": "",
 				"jump_to": ""
+			}
+		},
+		"general_log": {
+			"anti_raid_nuke": {
+				"title": "",
+				"description": ""
 			}
 		}
 	}
