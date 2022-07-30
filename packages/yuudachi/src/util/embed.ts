@@ -22,6 +22,7 @@ export function ellipsis(text: string, total: number) {
 	}
 
 	const keep = total - 3;
+
 	if (keep < 1) {
 		return text.slice(0, total);
 	}
@@ -66,6 +67,7 @@ export function truncate(text: string, len: number, splitChar = ' ') {
 	const res: string[] = [];
 	for (const word of words) {
 		const full = res.join(splitChar);
+
 		if (full.length + word.length + 1 <= len - 3) {
 			res.push(word);
 		}

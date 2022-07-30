@@ -49,31 +49,37 @@ export async function filter(
 	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 	const parsedJoinFrom = resolveTimestamp(args.join_from);
+
 	if (args.join_from && !parsedJoinFrom) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'join_from' }));
 	}
 
 	const parsedJoinTo = resolveTimestamp(args.join_to);
+
 	if (args.join_to && !parsedJoinTo) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'join_to' }));
 	}
 
 	const parsedCreatedFrom = resolveTimestamp(args.created_from);
+
 	if (args.created_from && !parsedCreatedFrom) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'created_from' }));
 	}
 
 	const parsedCreatedTo = resolveTimestamp(args.created_to);
+
 	if (args.created_to && !parsedCreatedTo) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'created_to' }));
 	}
 
 	const parsedPattern = parseRegex(args.pattern, args.insensitive ?? true, args.full_match ?? false);
+
 	if (args.pattern && !parsedPattern) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.pattern_format', { locale }));
 	}
 
 	const parsedAvatar = await parseAvatar(args.avatar);
+
 	if (args.avatar && !parsedAvatar) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.invalid_avatar', { locale }));
 	}

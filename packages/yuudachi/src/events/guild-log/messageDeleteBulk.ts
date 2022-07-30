@@ -37,6 +37,7 @@ export default class implements Event {
 			}
 
 			const message = messages.first()!;
+
 			if (message.author.bot) {
 				continue;
 			}
@@ -54,6 +55,7 @@ export default class implements Event {
 				}
 
 				const webhook = this.webhooks.get(guildLogWebhookId);
+
 				if (!webhook) {
 					continue;
 				}

@@ -12,10 +12,12 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let action = CaseAction[case_.action];
+
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
 		try {
 			const guild = client.guilds.cache.get(case_.guildId)!;
 			const role = guild.roles.cache.get(case_.roleId);
+
 			if (role) {
 				action += ` \`${role.name}\` (${role.id})`;
 			} else {

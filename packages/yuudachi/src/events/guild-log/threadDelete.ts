@@ -30,6 +30,7 @@ export default class implements Event {
 				}
 
 				const webhook = this.webhooks.get(guildLogWebhookId);
+
 				if (!webhook) {
 					continue;
 				}

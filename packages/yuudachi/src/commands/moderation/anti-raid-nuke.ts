@@ -15,11 +15,12 @@ export default class implements Command {
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {
-		const logChannel = await checkLogChannel(
+		const modLogChannel = await checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
-		if (!logChannel) {
+
+		if (!modLogChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
@@ -27,6 +28,7 @@ export default class implements Command {
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.AntiRaidArchive),
 		);
+
 		if (!archiveChannel) {
 			throw new Error(i18next.t('common.errors.no_anti_raid_archive_channel', { lng: locale }));
 		}

@@ -26,13 +26,13 @@ export default class implements Event {
 			[GuildMember, GuildMember]
 		>) {
 			try {
-				const logChannel = await checkLogChannel(
+				const modLogChannel = await checkLogChannel(
 					oldMember.guild,
 					await getGuildSetting(oldMember.guild.id, SettingsKeys.ModLogChannelId),
 				);
 
 				if (
-					!logChannel ||
+					!modLogChannel ||
 					oldMember.communicationDisabledUntilTimestamp === newMember.communicationDisabledUntilTimestamp ||
 					(newMember.communicationDisabledUntilTimestamp ?? Infinity) < Date.now()
 				) {
@@ -40,6 +40,7 @@ export default class implements Event {
 				}
 
 				const deleted = await this.redis.del(`guild:${oldMember.guild.id}:user:${oldMember.id}:timeout`);
+
 				if (deleted) {
 					logger.info(
 						{

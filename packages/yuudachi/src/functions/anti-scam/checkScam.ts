@@ -36,6 +36,7 @@ async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null
 	for (const urlEnv of scamURLEnvs) {
 		const list = await redis.smembers(ScamRedisKeys[urlEnv]);
 		const hit = list.find((d) => scamDomainChecks[urlEnv](url, d));
+
 		if (hit) {
 			listHits.push(urlEnv);
 			continue;
@@ -62,11 +63,13 @@ export async function checkScam(content: string) {
 	while ((matches = linkRegex.exec(content)) !== null) {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const url = urlOption(matches[0]);
+
 		if (!url) {
 			continue;
 		}
 
 		const hit = await checkDomain(redis, url);
+
 		if (hit) {
 			trippedDomains.push(hit);
 		}
@@ -78,6 +81,7 @@ export async function checkScam(content: string) {
 		try {
 			const r = await resolveRedirect(url.href);
 			const resolved = urlOption(r);
+
 			if (!resolved) {
 				continue;
 			}

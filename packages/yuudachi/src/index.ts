@@ -73,6 +73,7 @@ try {
 
 	for await (const dir of commandFiles) {
 		const cmdInfo = commandInfo(dir.path);
+
 		if (!cmdInfo) {
 			continue;
 		}
@@ -101,6 +102,7 @@ try {
 	await client.login();
 
 	const wsURL = process.env.SCAM_DOMAIN_WS;
+
 	if (wsURL) {
 		new WebSocketConnection(process.env.SCAM_DOMAIN_WS!, scamDomainRequestHeaders['SCAM_DOMAIN_URL'], redis);
 	} else {

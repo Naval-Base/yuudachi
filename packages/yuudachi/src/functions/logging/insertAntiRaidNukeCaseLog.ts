@@ -11,7 +11,7 @@ import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases: Case[], reason: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
+	const modLogChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
 	const [nextCase] = await sql<[{ next_case: number }]>`select next_case(${guild.id});`;
 	const from = nextCase.next_case - cases.length;
@@ -29,7 +29,7 @@ export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases:
 		timestamp: new Date().toISOString(),
 	};
 
-	const logMessage = await logChannel!.send({
+	const logMessage = await modLogChannel!.send({
 		embeds: [embed],
 	});
 

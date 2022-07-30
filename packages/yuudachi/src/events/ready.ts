@@ -37,6 +37,7 @@ export default class implements Event {
 
 				if (memberLogWebhookId) {
 					const webhook = webhooks.get(memberLogWebhookId);
+
 					if (!webhook) {
 						continue;
 					}
@@ -45,6 +46,7 @@ export default class implements Event {
 
 				if (guildLogWebhookId) {
 					const webhook = webhooks.get(guildLogWebhookId);
+
 					if (!webhook) {
 						continue;
 					}

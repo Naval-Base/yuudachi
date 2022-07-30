@@ -43,6 +43,7 @@ export async function file(
 
 	for (const id of ids) {
 		const member = fetchedMembers.get(id);
+
 		if (member) {
 			members.set(id, member);
 		} else {

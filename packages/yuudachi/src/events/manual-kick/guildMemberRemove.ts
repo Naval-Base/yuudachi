@@ -30,15 +30,17 @@ export default class implements Event {
 					`Member ${guildMember.id} kicked`,
 				);
 
-				const logChannel = await checkLogChannel(
+				const modLogChannel = await checkLogChannel(
 					guildMember.guild,
 					await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId),
 				);
-				if (!logChannel) {
+
+				if (!modLogChannel) {
 					continue;
 				}
 
 				const deleted = await this.redis.del(`guild:${guildMember.guild.id}:user:${guildMember.user.id}:kick`);
+
 				if (deleted) {
 					continue;
 				}

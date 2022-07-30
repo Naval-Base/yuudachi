@@ -24,11 +24,12 @@ export default class implements Command {
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
-		const logChannel = await checkLogChannel(
+		const modLogChannel = await checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
-		if (!logChannel) {
+
+		if (!modLogChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
@@ -85,11 +86,11 @@ export default class implements Command {
 				content: i18next.t('command.mod.reason.pending_multiple', {
 					lower_case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
 					),
 					upper_case: hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper.logMessageId!),
 					),
 					amount: upper - lower + 1,
 					lng: locale,
@@ -132,6 +133,7 @@ export default class implements Command {
 			}
 		} else {
 			originalCaseLower = await getCase(interaction.guildId, lower);
+
 			if (!originalCaseLower) {
 				await interaction.editReply({
 					content: i18next.t('command.mod.common.errors.no_case', {
@@ -148,6 +150,7 @@ export default class implements Command {
 
 		for (let caseId = lower; caseId <= upper; caseId++) {
 			const originalCase = await getCase(interaction.guildId, caseId);
+
 			if (!originalCase) {
 				continue;
 			}
@@ -166,11 +169,11 @@ export default class implements Command {
 			? i18next.t('command.mod.reason.success_multiple', {
 					lower_case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
 					),
 					upper_case: hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper!.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper!.logMessageId!),
 					),
 					amount: success.length,
 					target: upper - lower + 1,
@@ -179,7 +182,7 @@ export default class implements Command {
 			: i18next.t('command.mod.reason.success', {
 					case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
 					),
 					lng: locale,
 			  });

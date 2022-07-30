@@ -24,9 +24,11 @@ export default class implements Event {
 			if (message.author.bot) {
 				continue;
 			}
+
 			if (!message.inGuild()) {
 				continue;
 			}
+
 			if (!message.content.length && !message.embeds.length && !message.attachments.size && !message.stickers.size) {
 				continue;
 			}
@@ -40,6 +42,7 @@ export default class implements Event {
 				}
 
 				const webhook = this.webhooks.get(guildLogWebhookId);
+
 				if (!webhook) {
 					continue;
 				}

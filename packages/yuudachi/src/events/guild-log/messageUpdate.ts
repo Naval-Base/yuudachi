@@ -45,6 +45,7 @@ export default class implements Event {
 				}
 
 				const webhook = this.webhooks.get(guildLogWebhookId);
+
 				if (!webhook) {
 					continue;
 				}
@@ -68,16 +69,20 @@ export default class implements Event {
 				);
 
 				let description = '';
+
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
 					const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
+
 					if (!strippedOldMessage || !strippedOldMessage[2]) {
 						continue;
 					}
 
 					const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
+
 					if (!strippedNewMessage || !strippedNewMessage[2]) {
 						continue;
 					}
+
 					if (strippedOldMessage[2] === strippedNewMessage[2]) {
 						continue;
 					}

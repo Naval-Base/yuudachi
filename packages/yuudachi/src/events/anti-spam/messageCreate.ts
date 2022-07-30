@@ -27,11 +27,13 @@ export default class implements Event {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
 				const content = considerableText(message);
+
 				if (!content || !message.inGuild()) {
 					continue;
 				}
 
 				const ignoreRoles = await getGuildSetting<string[]>(message.guild.id, SettingsKeys.AutomodIgnoreRoles);
+
 				if (ignoreRoles.some((id) => message.member?.roles.cache.has(id))) {
 					return;
 				}
@@ -47,11 +49,12 @@ export default class implements Event {
 						continue;
 					}
 
-					const logChannel = await checkLogChannel(
+					const modLogChannel = await checkLogChannel(
 						message.guild,
 						await getGuildSetting(message.guildId, SettingsKeys.ModLogChannelId),
 					);
-					if (!logChannel) {
+
+					if (!modLogChannel) {
 						continue;
 					}
 

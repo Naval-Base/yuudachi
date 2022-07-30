@@ -34,6 +34,7 @@ export default class implements Command {
 				}
 
 				const reason = args.lock.reason;
+
 				if (reason && reason.length >= 1900) {
 					throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 				}

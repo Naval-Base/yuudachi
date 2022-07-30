@@ -9,17 +9,17 @@ import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export async function upsertCaseLog(guild: Guild, user: User | undefined | null, case_: Case) {
 	const sql = container.resolve<Sql<any>>(kSQL);
-	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
+	const modLogChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
-	const embed = await generateCaseEmbed(guild.id, logChannel!.id, user, case_);
+	const embed = await generateCaseEmbed(guild.id, modLogChannel!.id, user, case_);
 
 	if (case_.logMessageId) {
-		const message = await logChannel!.messages.fetch(case_.logMessageId);
+		const message = await modLogChannel!.messages.fetch(case_.logMessageId);
 		await message.edit({
 			embeds: [embed],
 		});
 	} else {
-		const logMessage = await logChannel!.send({
+		const logMessage = await modLogChannel!.send({
 			embeds: [embed],
 		});
 

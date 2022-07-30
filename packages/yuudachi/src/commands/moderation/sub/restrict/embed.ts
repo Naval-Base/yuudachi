@@ -60,6 +60,7 @@ export async function embed(
 	}
 
 	const parsedDuration = ms(args.duration);
+
 	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}

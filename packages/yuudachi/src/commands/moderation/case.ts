@@ -84,6 +84,7 @@ export default class implements Command {
 					},
 					...choices,
 				];
+
 				if (choices.length > AUTOCOMPLETE_CHOICE_LIMIT) {
 					choices.length = AUTOCOMPLETE_CHOICE_LIMIT;
 				}
@@ -105,6 +106,7 @@ export default class implements Command {
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 		const [cmd, id] = args.phrase.split(OP_DELIMITER);
+
 		if (cmd === 'history' && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
 			await interaction.editReply({
@@ -124,7 +126,7 @@ export default class implements Command {
 				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
 			}
 
-			const logChannel = await checkLogChannel(
+			const modLogChannel = await checkLogChannel(
 				interaction.guild,
 				await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 			);
@@ -133,7 +135,7 @@ export default class implements Command {
 			await interaction.editReply({
 				embeds: [
 					truncateEmbed(
-						await generateCaseEmbed(interaction.guildId, logChannel!.id, moderator, transformCase(modCase)),
+						await generateCaseEmbed(interaction.guildId, modLogChannel!.id, moderator, transformCase(modCase)),
 					),
 				],
 			});

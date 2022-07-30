@@ -19,6 +19,7 @@ export async function lift(
 	locale: string,
 ): Promise<void> {
 	const lockdown = await getLockdown(interaction.guildId, channel.id);
+
 	if (!lockdown) {
 		throw new Error(
 			i18next.t('command.mod.lockdown.lock.errors.not_locked', {
@@ -81,6 +82,7 @@ export async function lift(
 		await collectedInteraction.deferUpdate();
 
 		const lockdown = await deleteLockdown(channel.id);
+
 		if (!lockdown) {
 			throw new Error(
 				i18next.t('command.mod.lockdown.lift.errors.failure', {

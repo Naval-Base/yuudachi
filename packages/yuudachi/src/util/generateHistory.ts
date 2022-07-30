@@ -136,6 +136,7 @@ export async function generateHistory(
 				? hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, modLogChannelId, c.log_message_id))
 				: `#${c.case_id}`
 		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
+
 		if (summary.join('\n').length + caseString.length + 1 < 4060) {
 			summary.push(caseString);
 			continue;
@@ -144,6 +145,7 @@ export async function generateHistory(
 		truncated = true;
 		break;
 	}
+
 	if (truncated) {
 		embed = {
 			description: i18next.t('log.history.summary_truncated', { summary: summary.join('\n'), lng: locale }),

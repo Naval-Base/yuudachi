@@ -44,6 +44,7 @@ export async function refreshScamDomains(redis?: Redis) {
 
 	for (const urlEnv of scamURLEnvs) {
 		const url = process.env[urlEnv];
+
 		if (!url) {
 			logger.warn(`Missing env var: ${urlEnv}`);
 			continue;
@@ -53,6 +54,7 @@ export async function refreshScamDomains(redis?: Redis) {
 			headers: scamDomainRequestHeaders[urlEnv],
 		});
 		const checkedResponse = checkResponse(response);
+
 		if (!checkedResponse) {
 			continue;
 		}

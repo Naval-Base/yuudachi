@@ -98,6 +98,7 @@ export async function modal(
 
 	for (const id of ids) {
 		const member = fetchedMembers.get(id);
+
 		if (member) {
 			members.set(id, member);
 		} else {

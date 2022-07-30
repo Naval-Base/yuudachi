@@ -23,16 +23,18 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildBan] of on(this.client, this.event) as AsyncIterableIterator<[GuildBan]>) {
 			try {
-				const logChannel = await checkLogChannel(
+				const modLogChannel = await checkLogChannel(
 					guildBan.guild,
 					await getGuildSetting(guildBan.guild.id, SettingsKeys.ModLogChannelId),
 				);
-				if (!logChannel) {
+
+				if (!modLogChannel) {
 					continue;
 				}
 
 				const deleted = await this.redis.del(`guild:${guildBan.guild.id}:user:${guildBan.user.id}:ban`);
 				const antiRaidNuke = await this.redis.get(`guild:${guildBan.guild.id}:anti_raid_nuke`);
+
 				if (deleted || antiRaidNuke) {
 					logger.info(
 						{

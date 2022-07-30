@@ -19,6 +19,7 @@ export function resolveTimestamp(dateString?: string) {
 	}
 
 	const msParse = ms(dateString);
+
 	if (!msParse) {
 		return null;
 	}

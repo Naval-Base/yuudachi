@@ -33,6 +33,7 @@ export default class implements Event {
 			}
 
 			const command = this.commands.get(interaction.commandName.toLowerCase());
+
 			if (command) {
 				try {
 					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);

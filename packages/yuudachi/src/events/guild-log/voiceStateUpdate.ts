@@ -26,6 +26,7 @@ export default class implements Event {
 			if (!newState.member || !newState.channelId) {
 				continue;
 			}
+
 			if (oldState?.member?.user.bot || newState.member.user.bot) {
 				continue;
 			}
@@ -39,6 +40,7 @@ export default class implements Event {
 				}
 
 				const webhook = this.webhooks.get(guildLogWebhookId);
+
 				if (!webhook) {
 					continue;
 				}
@@ -46,6 +48,7 @@ export default class implements Event {
 				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
 
 				let description = '';
+
 				if ((!oldState || !oldState.channel || ignoreChannels.includes(oldState.channelId ?? '')) && newState.channel) {
 					if (ignoreChannels.includes(newState.channelId)) {
 						continue;

@@ -30,6 +30,7 @@ export async function lock(
 	locale: string,
 ): Promise<void> {
 	const lockdown = await getLockdown(interaction.guildId, args.channel.id);
+
 	if (lockdown) {
 		throw new Error(
 			i18next.t('command.mod.lockdown.lock.errors.already_locked', {
@@ -41,6 +42,7 @@ export async function lock(
 	}
 
 	const parsedDuration = ms(args.duration);
+
 	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
