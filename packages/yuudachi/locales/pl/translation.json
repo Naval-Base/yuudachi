@@ -1,44 +1,44 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_role": "",
-			"target_not_found": "",
-			"timed_out": "",
-			"no_mod_log_channel": ""
+			"no_mod_role": "Ta komenda może być użyta tylko przez moderatorów.",
+			"target_not_found": "Podany użytkownik nie znajduje się na tym serwerze.",
+			"timed_out": "Upłynął limit czasu.",
+			"no_mod_log_channel": "Kanał dla logów nie został jeszcze zainicjowany."
 		}
 	},
 	"command": {
 		"common": {
 			"errors": {
-				"generic": "",
-				"no_enabled_module": "",
-				"target_not_found": "",
-				"duration_format": "",
-				"use_autocomplete": ""
+				"generic": "Coś poszło nie tak.",
+				"no_enabled_module": "Moduł {{ module }} nie jest włączony na tym serwerze.",
+				"target_not_found": "Podany użytkownik nie znajduje się na tym serwerze.",
+				"duration_format": "Nieprawidłowy format czasu trwania.",
+				"use_autocomplete": "Nie udało się przetworzyć podanej opcji. Upewnij się, że wybierasz opcję z uzupełnianiem."
 			}
 		},
 		"config": {
 			"common": {
 				"errors": {
-					"no_settings": ""
+					"no_settings": "Ustawienia serwera nie zostały jeszcze zainicjowane."
 				}
 			}
 		},
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "",
-					"not_a_text_channel": "",
-					"no_case": "",
-					"no_case_range": "",
-					"case_lower_one": "",
-					"no_ref_case": ""
+					"max_length_reason": "Maksymalna długość 1900 znaków dla powodu została przekroczona.",
+					"not_a_text_channel": "{{- channel}} nie jest kanałem tekstowym.",
+					"no_case": "Nie można znaleźć incydentu #{{case}}",
+					"no_case_range": "Nieprawidłowy zakres incydentów #{{lower_case}} do #{{upper_case}}",
+					"case_lower_one": "Numery incydentów muszą być większe niż 0",
+					"no_ref_case": "Nie można odnaleźć odniesienia do incydentu #{{case}}"
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "",
-					"show_history": ""
+					"no_reason": "brak powodu",
+					"show_history": "Pokaż historię dla użytkownika {{- user}}"
 				}
 			},
 			"warn": {
@@ -52,45 +52,45 @@
 			},
 			"timeout": {
 				"errors": {
-					"missing_permissions": "",
-					"not_member": "",
-					"already_timed_out": ""
+					"missing_permissions": "Brakuje uprawnień, aby wyciszyć {{- user}}",
+					"not_member": "{{- user}} musi być członkiem tego serwera, aby można było go wyciszyć",
+					"already_timed_out": "{{- user}} jest już wyciszony"
 				},
 				"buttons": {
 					"cancel": "Anuluj",
-					"execute": ""
+					"execute": "Wycisz"
 				},
-				"pending": "",
-				"cancel": "",
+				"pending": "Czy na pewno chcesz wyciszyć {{- user}}?",
+				"cancel": "Anulowano wyciszenie {{- user}}",
 				"success": "Pomyślnie wyciszono {{- user}}"
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "",
-					"not_member": ""
+					"missing_permissions": "Brakuje uprawnień aby wykopać {{- user}}",
+					"not_member": "Użytkownik {{- user}} nie znajduje się na tym serwerze"
 				},
-				"pending": "",
+				"pending": "Czy na pewno chcesz wykopać {{- user}}?",
 				"buttons": {
 					"cancel": "Anuluj",
-					"execute": ""
+					"execute": "Wykop"
 				},
-				"cancel": "",
+				"cancel": "Anulowano wykopanie {{- user}}",
 				"success": "Pomyślnie wykopano {{- user}}"
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": ""
+					"missing_permissions": "Brakuje uprawnień aby wykonać softban na {{- user}}"
 				},
-				"pending": "",
-				"not_member": "",
+				"pending": "Czy na pewno chcesz wykonać softban na {{- user}}?",
+				"not_member": "Użytkownik {{- user}} nie znajduje się na tym serwerze. Czy nadal chcesz kontynuować z wykonaniem softbanu aby usunąć jego wiadomości?",
 				"buttons": {
 					"cancel": "Anuluj",
-					"execute": ""
+					"execute": "Wykonaj"
 				},
 				"reasons": {
-					"clear_messages": ""
+					"clear_messages": "Mod: {{- user}} | Softban w celu usunięcia wiadomości"
 				},
-				"cancel": "",
+				"cancel": "Anulowano wykonywanie softbanu na {{- user}}",
 				"success": {
 					"regular": "Pomyślnie wykonano softban na {{- user}}",
 					"clear_messages": "Pomyślnie usunięto wiadomości od {{- user}}"
@@ -98,132 +98,132 @@
 			},
 			"ban": {
 				"errors": {
-					"missing_permissions": "",
-					"already_banned": ""
+					"missing_permissions": "Brakuje uprawnień, aby zbanować {{- user}}",
+					"already_banned": "{{- user}} jest już zbanowany."
 				},
-				"pending": "",
+				"pending": "Czy na pewno chcesz zbanować {{- user}}?",
 				"buttons": {
 					"cancel": "Anuluj",
-					"execute": ""
+					"execute": "Zbanuj"
 				},
-				"cancel": "",
+				"cancel": "Anulowano banowanie {{- user}}",
 				"success": "Pomyślnie zbanowano {{- user}}"
 			},
 			"unban": {
 				"errors": {
-					"missing_permissions": "",
-					"no_ban": ""
+					"missing_permissions": "Brakuje uprawnień, aby odbanować {{- user}}",
+					"no_ban": "{{- user}} nie jest zbanowany."
 				},
-				"pending": "",
+				"pending": "Czy na pewno chcesz odbanować {{- user}}?",
 				"buttons": {
 					"cancel": "Anuluj",
-					"execute": ""
+					"execute": "Odbanuj"
 				},
-				"cancel": "",
+				"cancel": "Anulowano odbanowanie {{- user}}",
 				"success": "Pomyślnie odbanowano {{- user}}"
 			},
 			"anti_raid_nuke": {
 				"errors": {
-					"no_hits": "",
+					"no_hits": "Anti-Raid-Nuke nie uderzy w nikogo. Możliwe, że potrzebne jest przejrzenie parametrów i spróbowanie ponownie!",
 					"parameters": {
-						"heading": "",
-						"current_time": "",
-						"join_after": "",
-						"created_after": "",
-						"pattern": "",
-						"avatar": "",
-						"days_one": "",
-						"days_other": "",
-						"days_none": ""
+						"heading": "Parametry:",
+						"current_time": "• Aktualny czas: {{- now}}",
+						"join_after": "• Data dołączenia po: {{- join}}",
+						"created_after": "• Data utworzenia konta po: {{- age}}",
+						"pattern": "• Nazwa użytkownika pasuje do wzoru:",
+						"avatar": "• Hasz awatara (użytkownika lub członka) pasujący do: {{- avatar}}",
+						"days_one": "• Usuwanie wiadomości wysłanych w ciągu ostatniego {{count}} dnia",
+						"days_other": "• Usuwanie wiadomości wysłanych w ciągu ostatnich {{count}} dni",
+						"days_none": "• Żadne wiadomości nie będą usunięte"
 					}
 				},
-				"reason": "",
-				"reason_fallback": "",
-				"pending": "",
+				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
+				"reason_fallback": "Anti-Raid-Nuke",
+				"pending": "Anti-Raid-Nuke zamierza uderzyć w {{members}} członków serwera.\n• Utworzenie w przeciągu {{creationrange}}\n• Dołączenie w przeciągu {{joinrange}}",
 				"buttons": {
 					"cancel": "Anuluj",
-					"execute": ""
+					"execute": "Uruchom"
 				},
-				"cancel": "",
+				"cancel": "Anulowano Anti-Raid-Nuke.",
 				"success": "Anit-Raid-Nuke uderzył w {{- members}} członków serwera."
 			},
 			"restrict": {
 				"embed": {
 					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
+						"no_role": "Rola dla ograniczania embedów nie została skonfigurowana.",
+						"missing_permissions": "Brakuje uprawnień, aby ograniczyć embedy dla {{- user}}",
+						"already_restricted": "{{- user}} ma już ograniczone embedy."
 					},
-					"pending": "",
+					"pending": "Czy na pewno chcesz ograniczyć embedy dla {{- user}}?",
 					"buttons": {
 						"cancel": "Anuluj",
-						"execute": ""
+						"execute": "Ogranicz"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Anulowano ograniczenie embedów dla {{- user}}",
+					"success": "Pomyślnie ograniczono embedy dla {{- user}}"
 				},
 				"react": {
 					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
+						"no_role": "Rola dla ograniczania reakcji nie została skonfigurowana.",
+						"missing_permissions": "Brakuje uprawnień, aby ograniczyć reakcje dla {{- user}}",
+						"already_restricted": "{{- user}} ma już ograniczone reakcje."
 					},
-					"pending": "",
+					"pending": "Czy na pewno chcesz ograniczyć reakcje dla {{- user}}?",
 					"buttons": {
 						"cancel": "Anuluj",
-						"execute": ""
+						"execute": "Ogranicz"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Anulowano ograniczenie reakcji dla {{- user}}",
+					"success": "Pomyślnie ograniczono reakcje dla {{- user}}"
 				},
 				"emoji": {
 					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
+						"no_role": "Rola dla ograniczania emoji nie została skonfigurowana.",
+						"missing_permissions": "Brakuje uprawnień, aby ograniczyć emoji dla {{- user}}",
+						"already_restricted": "{{- user}} ma już ograniczone emoji."
 					},
-					"pending": "",
+					"pending": "Czy na pewno chcesz ograniczyć emoji dla {{- user}}?",
 					"buttons": {
 						"cancel": "Anuluj",
-						"execute": ""
+						"execute": "Ogranicz"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Anulowano ograniczenie emoji dla {{- user}}",
+					"success": "Pomyślnie ograniczono emoji dla {{- user}}"
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "",
-						"already_processed": ""
+						"missing_permissions": "Brakuje uprawnień, aby wycofać ograniczenie dla incydentu #{{case}}",
+						"already_processed": "{{- user}} dla incydentu #{{case}} nie ma aktywnych ograniczeń."
 					},
-					"pending": "",
+					"pending": "Czy na pewno chcesz wycofać ograniczenie {{- role}} dla {{- user}} dla incydentu #{{case}}?",
 					"buttons": {
 						"cancel": "Anuluj",
-						"execute": ""
+						"execute": "Wycofaj"
 					},
-					"cancel": "",
-					"success": ""
+					"cancel": "Anulowano wycofanie ograniczenia {{- role}} dla {{- user}} dla incydentu #{{case}}",
+					"success": "Pomyślnie wycofano ograniczenie {{- role}} dla {{- user}} dla incydentu #{{case}}"
 				}
 			},
 			"lockdown": {
 				"lock": {
 					"errors": {
-						"missing_permissions": "",
-						"already_locked": "",
-						"bot_requires_admin": ""
+						"missing_permissions": "Brakuje uprawnień aby zablokować {{- channel}}",
+						"already_locked": "{{- channel}} jest już zablokowany.",
+						"bot_requires_admin": "Bot wymaga uprawnienia `ADMINISTRATOR` w celu blokowania kanałów, ponieważ bez niego Discord nie pozwala zmieniać wszystkich uprawnień kanału, co może powodować problemy w trakcie blokowania lub odblokowywania."
 					},
-					"pending": "",
+					"pending": "Czy na pewno chcesz zablokować {{- channel}}?",
 					"buttons": {
 						"cancel": "Anuluj",
-						"execute": ""
+						"execute": "Zablokuj"
 					},
-					"message": "",
-					"message_reason": "",
-					"cancel": "",
+					"message": "🔒 Ten kanał został zablokowany, zostanie odblokowany {{- duration}}",
+					"message_reason": "🔒 Ten kanał został zablokowany z powodem {{- reason}}, zostanie odblokowany {{- duration}}",
+					"cancel": "Anulowano blokowanie {{- channel}}",
 					"success": "Pomyślnie zablokowano {{- channel}}"
 				},
 				"lift": {
 					"errors": {
-						"missing_permissions": "",
+						"missing_permissions": "Brakuje uprawnień aby znieść blokadę dla {{- channel}}",
 						"not_locked": "{{- channel}} nie jest zablokowany."
 					},
 					"pending": "Czy na pewno chcesz znieść blokadę dla {{- channel}}?",
@@ -231,19 +231,19 @@
 						"cancel": "Anuluj",
 						"execute": "Odblokuj"
 					},
-					"cancel": "",
+					"cancel": "Anulowano znoszenie blokady dla {{- channel}}",
 					"success": "Pomyślnie zniesiono blokadę dla {{- channel}}"
 				}
 			},
 			"reason": {
 				"success": "Pomyślnie ustawiono powód dla incydentu {{- case}}",
 				"success_multiple": "Pomyślnie ustawiono powód dla incydentów z zakresu {{- lower_case}} do {{- upper_case}} ({{amount}}/{{target}} incydentów)",
-				"pending_multiple": "",
+				"pending_multiple": "Czy na pewno chcesz ustawić powód dla incydentów z zakresu {{- lower_case}} do {{- upper_case}} ({{amount}} incydentów)?",
 				"buttons": {
 					"cancel": "Anuluj",
-					"execute": ""
+					"execute": "Ustaw"
 				},
-				"cancel": ""
+				"cancel": "Anulowano ustawianie powodu"
 			},
 			"reference": {
 				"success": "Pomyślnie ustawiono odniesienie dla incydentu {{- case}} na {{- ref}}"
