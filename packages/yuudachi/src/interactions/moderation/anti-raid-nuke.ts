@@ -6,7 +6,7 @@ export const AntiRaidNukeCommand = {
 	options: [
 		{
 			name: 'filter',
-			description: 'Manually filter and ban members based on various criterias',
+			description: 'Filter and ban members based on various criterias',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
@@ -16,29 +16,28 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'confusables',
-					description:
-						'Whether to enable confusables (cleaning the username or filter out members without confusables)',
+					description: 'Enable confusables (Cleaning the username or filter out members without confusables)',
 					type: ApplicationCommandOptionType.Integer,
 					choices: [
 						{ name: 'Off', value: 0 },
-						{ name: 'Only pattern (default) (pattern will be resistant to confusables and zalgo)', value: 1 },
-						{ name: 'Only filter members (filter out members without confusables in their username)', value: 2 },
+						{ name: 'Only pattern (default) (Pattern will be resistant to confusables and zalgo)', value: 1 },
+						{ name: 'Only filter members (Filter out members without confusables in their username)', value: 2 },
 						{ name: 'Pattern & filter members', value: 3 },
 					],
 				},
 				{
 					name: 'insensitive',
-					description: 'Whether the pattern should be case insensitive',
+					description: 'The pattern should be case insensitive (default: true)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
 					name: 'full_match',
-					description: 'Whether the pattern should only match the whole username',
+					description: 'The pattern should only match the whole username (default: false)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
 					name: 'zalgo',
-					description: 'Whether to filter out members without zalgo in their username',
+					description: 'Filter out members without zalgo in their username',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
