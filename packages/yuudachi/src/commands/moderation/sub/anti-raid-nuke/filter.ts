@@ -137,7 +137,7 @@ export async function filter(
 			lng: locale,
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
-			count: Math.min(Math.max(Number(args.days), 0), 7),
+			count: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 			lng: locale,
 		}),
 	];
@@ -252,7 +252,7 @@ export async function filter(
 		const { result, cases } = await blastOff(
 			collectedInteraction,
 			{
-				days: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
+				days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 				joinCutoff: parsedJoinFrom,
 				accountCutoff: parsedCreatedFrom,
 				dryRun: dryRunMode,

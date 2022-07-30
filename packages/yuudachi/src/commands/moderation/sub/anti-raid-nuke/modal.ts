@@ -117,7 +117,7 @@ export async function modal(
 			lng: locale,
 		}),
 		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
-			count: Math.min(Math.max(Number(args.days), 0), 7),
+			count: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 			lng: locale,
 		}),
 	];
