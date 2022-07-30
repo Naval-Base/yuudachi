@@ -4,43 +4,54 @@ import type RE2 from 're2';
 
 export function joinFilter(
 	member: GuildMember,
-	joinFrom = Number.NEGATIVE_INFINITY,
-	joinTo = Number.POSITIVE_INFINITY,
-): boolean {
-	if (!member.joinedTimestamp) return false;
-	return member.joinedTimestamp <= joinFrom || member.joinedTimestamp >= joinTo;
+	joinFrom: number | null = Number.NEGATIVE_INFINITY,
+	joinTo: number | null = Number.POSITIVE_INFINITY,
+) {
+	if (!member.joinedTimestamp) {
+		return false;
+	}
+
+	return member.joinedTimestamp <= joinFrom! || member.joinedTimestamp >= joinTo!;
 }
 
 export function ageFilter(
 	member: GuildMember,
-	ageFrom = Number.NEGATIVE_INFINITY,
-	ageTo = Number.POSITIVE_INFINITY,
-): boolean {
-	return member.user.createdTimestamp <= ageFrom || member.user.createdTimestamp >= ageTo;
+	ageFrom: number | null = Number.NEGATIVE_INFINITY,
+	ageTo: number | null = Number.POSITIVE_INFINITY,
+) {
+	return member.user.createdTimestamp <= ageFrom! || member.user.createdTimestamp >= ageTo!;
 }
 
-export function patternFilter(member: GuildMember, pattern: RegExp | RE2 | undefined, confusables = true): boolean {
-	if (!pattern) return false;
+export function patternFilter(member: GuildMember, pattern?: RegExp | RE2 | null, confusables = true) {
+	if (!pattern) {
+		return false;
+	}
+
 	const usernames = [member.user.username];
+
 	if (confusables) {
 		usernames.push(clean(member.user.username));
 	}
+
 	return !usernames.some((username) => pattern.test(username));
 }
 
-export function avatarFilter(member: GuildMember, avatar?: string): boolean {
-	if (!avatar) return false;
+export function avatarFilter(member: GuildMember, avatar?: string | null) {
+	if (!avatar) {
+		return false;
+	}
 
 	if (avatar.toLowerCase() === 'none') {
 		return Boolean(member.user.avatar);
 	}
+
 	return member.user.avatar !== avatar;
 }
 
-export function zalgoFilter(member: GuildMember): boolean {
+export function zalgoFilter(member: GuildMember) {
 	return !/[\u0300-\u036F]/g.test(member.user.username);
 }
 
-export function confusablesFilter(member: GuildMember): boolean {
+export function confusablesFilter(member: GuildMember) {
 	return member.user.username.toLowerCase() === clean(member.user.username).toLowerCase();
 }

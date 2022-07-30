@@ -17,11 +17,12 @@ const scamDomainChecks = {
 	SCAM_DOMAIN_URL: (url: URL, host: string) => `.${url.host}`.endsWith(`.${host}`),
 	SCAM_DOMAIN_DISCORD_URL: (url: URL, hash: string) => {
 		const inHash = createHash('sha256').update(url.host).digest('hex');
+
 		return hash === inHash;
 	},
 };
 
-function urlOption(url: string): URL | null {
+function urlOption(url: string) {
 	try {
 		return new URL(url);
 	} catch {
@@ -50,7 +51,7 @@ async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null
 		: null;
 }
 
-export async function checkScam(content: string): Promise<ScamDomainHit[]> {
+export async function checkScam(content: string) {
 	const redis = container.resolve<Redis>(kRedis);
 
 	const linkRegex = /(?:https?:\/\/)(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b[-a-zA-Z0-9@:%_\+.~#?&//=]*/gi;

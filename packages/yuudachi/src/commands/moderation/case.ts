@@ -28,10 +28,12 @@ const OP_DELIMITER = '-' as const;
 async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
 	try {
 		const member = await guild.members.fetch(id);
-		return { member, user: member.user };
+
+		return { member, user: member.user } as const;
 	} catch {
 		const user = await guild.client.users.fetch(id);
-		return { user };
+
+		return { user } as const;
 	}
 }
 
@@ -51,10 +53,11 @@ export default class implements Command {
 						lng: locale,
 					})!
 				}`;
+
 				return {
 					name: ellipsis(choiceName, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT),
 					value: String(c.case_id),
-				};
+				} as const;
 			});
 
 			const uniqueTargets = new Collection<string, { id: Snowflake; tag: string }>();

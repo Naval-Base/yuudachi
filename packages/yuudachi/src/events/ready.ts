@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Collection, Events, type Webhook, ChannelType, PermissionFlagsBits } from 'discord.js';
+import { Client, Events, type Webhook, PermissionFlagsBits } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../Event.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
@@ -33,17 +33,7 @@ export default class implements Event {
 				const memberLogWebhookId = await getGuildSetting(guild.id, SettingsKeys.MemberLogWebhookId);
 				const guildLogWebhookId = await getGuildSetting(guild.id, SettingsKeys.GuildLogWebhookId);
 
-				const webhooks = new Collection<string, Webhook>();
-				for (const channel of guild.channels.cache.values()) {
-					if (channel.type === ChannelType.GuildText) {
-						if (!channel.permissionsFor(guild.members.me).has(PermissionFlagsBits.ManageWebhooks)) {
-							continue;
-						}
-
-						const channelWebhooks = await guild.channels.fetchWebhooks(channel);
-						channelWebhooks.forEach((webhook, key) => webhooks.set(key, webhook));
-					}
-				}
+				const webhooks = await guild.fetchWebhooks();
 
 				if (memberLogWebhookId) {
 					const webhook = webhooks.get(memberLogWebhookId);

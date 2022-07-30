@@ -20,5 +20,5 @@ export function transformLockdown(case_: RawLockdown): Lockdown {
 		moderatorId: case_.mod_id,
 		moderatorTag: case_.mod_tag,
 		overwrites: case_.overwrites,
-	};
+	} as const;
 }

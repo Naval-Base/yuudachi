@@ -6,5 +6,5 @@ export function createModalActionRow(
 	return {
 		type: ComponentType.ActionRow,
 		components,
-	};
+	} as const;
 }

@@ -43,7 +43,9 @@ export default class implements Event {
 				const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
 
 				if (mentionExceeded || contentExceeded) {
-					if (!message.member?.bannable) continue;
+					if (!message.member?.bannable) {
+						continue;
+					}
 
 					const logChannel = await checkLogChannel(
 						message.guild,

@@ -39,7 +39,9 @@ export default class implements Event {
 				const scamExceeded = totalScamCount >= SCAM_THRESHOLD;
 
 				if (scamExceeded) {
-					if (!message.member?.bannable) continue;
+					if (!message.member?.bannable) {
+						continue;
+					}
 
 					const logChannel = await checkLogChannel(
 						message.guild,

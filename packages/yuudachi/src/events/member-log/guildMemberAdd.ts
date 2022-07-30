@@ -21,21 +21,23 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
-				logger.info(
-					{ event: { name: this.name, event: this.event }, guildId: guildMember.guild.id, memberId: guildMember.id },
-					`Member ${guildMember.id} joined`,
-				);
+				const guildLogWebhookId = await getGuildSetting(guildMember.guild.id, SettingsKeys.MemberLogWebhookId);
 
-				const logChannelId = await getGuildSetting(guildMember.guild.id, SettingsKeys.MemberLogWebhookId);
-				if (!logChannelId) {
+				if (!guildLogWebhookId) {
 					continue;
 				}
-				const webhook = this.webhooks.get(logChannelId);
+
+				const webhook = this.webhooks.get(guildLogWebhookId);
 				if (!webhook) {
 					continue;
 				}
 
 				const locale = await getGuildSetting(guildMember.guild.id, SettingsKeys.Locale);
+
+				logger.info(
+					{ event: { name: this.name, event: this.event }, guildId: guildMember.guild.id, memberId: guildMember.id },
+					`Member ${guildMember.id} joined`,
+				);
 
 				await webhook.send({
 					embeds: [generateMemberLog(guildMember, locale)],

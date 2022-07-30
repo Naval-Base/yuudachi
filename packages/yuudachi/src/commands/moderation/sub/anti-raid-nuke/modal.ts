@@ -9,7 +9,6 @@ import {
 	type GuildMember,
 	inlineCode,
 	InteractionCollector,
-	type TextBasedChannelResolvable,
 	time,
 	TimestampStyles,
 } from 'discord.js';
@@ -169,9 +168,9 @@ export async function modal(
 
 	const collectedInteraction = await new Promise<ButtonInteraction<'cached'>>((resolve, reject) => {
 		const collector = new InteractionCollector<ButtonInteraction<'cached'>>(modalInteraction.client, {
-			time: 120000,
+			time: 180000,
 			filter: (component) => component.user.id === modalInteraction.user.id,
-			channel: modalInteraction.channel as TextBasedChannelResolvable,
+			channel: modalInteraction.channel!,
 			componentType: ComponentType.Button,
 			message: modalInteraction.message,
 		});
@@ -182,7 +181,9 @@ export async function modal(
 		});
 
 		collector.on('end', (_, reason) => {
-			if (reason === 'collected') return;
+			if (reason === 'collected') {
+				return;
+			}
 			reject(reason);
 		});
 	}).catch(async () => {
@@ -204,7 +205,6 @@ export async function modal(
 				lng: locale,
 			}),
 			components: [],
-			attachments: [],
 		});
 	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
 		const dryRunMode = collectedInteraction.customId === dryRunKey;

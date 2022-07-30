@@ -22,5 +22,5 @@ export function formatMemberTimestamps(members: Collection<string, GuildMember>)
 	return {
 		creationRange,
 		joinRange,
-	};
+	} as const;
 }

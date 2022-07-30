@@ -27,20 +27,28 @@ export default class implements Event {
 			if (newMessage.author.bot) {
 				continue;
 			}
+
 			if (!newMessage.guild) {
 				continue;
 			}
+
 			if (escapeMarkdown(oldMessage.content) === escapeMarkdown(newMessage.content)) {
 				continue;
 			}
 
 			try {
-				const logChannelId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(newMessage.guild.id, SettingsKeys.LogIgnoreChannels);
 
-				if (!logChannelId) {
+				if (!guildLogWebhookId) {
 					continue;
 				}
+
+				const webhook = this.webhooks.get(guildLogWebhookId);
+				if (!webhook) {
+					continue;
+				}
+
 				if (
 					(newMessage.channel.isThread() && ignoreChannels.includes(newMessage.channel.parentId ?? '')) ||
 					ignoreChannels.includes(newMessage.channelId)
@@ -58,11 +66,6 @@ export default class implements Event {
 					},
 					`Member ${newMessage.author.id} updated a message`,
 				);
-
-				const webhook = this.webhooks.get(logChannelId);
-				if (!webhook) {
-					continue;
-				}
 
 				let description = '';
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
@@ -82,7 +85,9 @@ export default class implements Event {
 					const diffMessage = diffLines(strippedOldMessage[2], strippedNewMessage[2], { newlineIsToken: true });
 
 					for (const part of diffMessage) {
-						if (part.value === '\n') continue;
+						if (part.value === '\n') {
+							continue;
+						}
 						const d = part.added ? '+ ' : part.removed ? '- ' : '';
 						description += `${d}${part.value.replace(/\n/g, '')}\n`;
 					}

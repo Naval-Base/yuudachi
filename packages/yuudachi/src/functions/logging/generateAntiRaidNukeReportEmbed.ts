@@ -10,5 +10,5 @@ export function generateAntiRaidNukeReportEmbed(hitCount: number, user: User, lo
 			lng: locale,
 		}),
 		color: 3407871,
-	};
+	} as const;
 }

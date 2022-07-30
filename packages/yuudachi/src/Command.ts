@@ -20,5 +20,5 @@ export function commandInfo(path: string): CommandInfo | null {
 		return null;
 	}
 
-	return { name: basename(path, '.js') };
+	return { name: basename(path, '.js') } as const;
 }

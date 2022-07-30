@@ -16,9 +16,9 @@ export interface AntiRaidNukeResult {
 
 interface AntiRaidNukeArgs {
 	days: number;
-	dryRun?: boolean;
-	joinCutoff?: number;
-	accountCutoff?: number;
+	dryRun: boolean;
+	joinCutoff?: number | null;
+	accountCutoff?: number | null;
 }
 
 export async function blastOff(
@@ -88,5 +88,5 @@ export async function blastOff(
 	return {
 		result,
 		cases,
-	};
+	} as const;
 }

@@ -1,7 +1,9 @@
 import process from 'node:process';
 import type { Redis } from 'ioredis';
 import fetch, { type Response } from 'node-fetch';
+import { container } from 'tsyringe';
 import { logger } from '../../logger.js';
+import { kRedis } from '../../tokens.js';
 
 export const scamURLEnvs = ['SCAM_DOMAIN_URL', 'SCAM_DOMAIN_DISCORD_URL'] as const;
 export enum ScamRedisKeys {
@@ -17,9 +19,13 @@ export interface ScamDomainRefreshData {
 	after: number;
 }
 
-export function checkResponse(response: Response): Response | null {
-	if (response.ok) return response;
+export function checkResponse(response: Response) {
+	if (response.ok) {
+		return response;
+	}
+
 	logger.warn({ response }, 'Fetching scam domains returned a non 2xx response code.');
+
 	return null;
 }
 
@@ -30,8 +36,11 @@ export const scamDomainRequestHeaders = {
 	SCAM_DOMAIN_DISCORD_URL: {},
 } as const;
 
-export async function refreshScamDomains(redis: Redis): Promise<ScamDomainRefreshData[]> {
-	const res = [];
+export async function refreshScamDomains(redis?: Redis) {
+	if (!redis) {
+		redis = container.resolve<Redis>(kRedis);
+	}
+	const res: ScamDomainRefreshData[] = [];
 
 	for (const urlEnv of scamURLEnvs) {
 		const url = process.env[urlEnv];

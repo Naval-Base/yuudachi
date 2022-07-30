@@ -17,5 +17,5 @@ export function createModal({
 		custom_id: customId,
 		title,
 		components,
-	};
+	} as const;
 }

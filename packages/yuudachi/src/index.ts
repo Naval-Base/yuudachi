@@ -73,7 +73,9 @@ try {
 
 	for await (const dir of commandFiles) {
 		const cmdInfo = commandInfo(dir.path);
-		if (!cmdInfo) continue;
+		if (!cmdInfo) {
+			continue;
+		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
 		const command = container.resolve<Command>((await import(pathToFileURL(dir.fullPath).href)).default);

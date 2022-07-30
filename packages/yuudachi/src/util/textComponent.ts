@@ -29,5 +29,5 @@ export function createTextComponent({
 		placeholder,
 		required: required ?? false,
 		value,
-	};
+	} as const;
 }

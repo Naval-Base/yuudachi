@@ -28,14 +28,14 @@ export default class implements Event {
 					continue;
 				}
 
-				const logChannelId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels);
 
-				if (!logChannelId) {
+				if (!guildLogWebhookId) {
 					continue;
 				}
 
-				const webhook = this.webhooks.get(logChannelId);
+				const webhook = this.webhooks.get(guildLogWebhookId);
 				if (!webhook) {
 					continue;
 				}

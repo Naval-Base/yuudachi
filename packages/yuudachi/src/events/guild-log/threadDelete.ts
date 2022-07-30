@@ -22,14 +22,14 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [thread] of on(this.client, this.event) as AsyncIterableIterator<[ThreadChannel, boolean]>) {
 			try {
-				const logChannelId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels);
 
-				if (!logChannelId) {
+				if (!guildLogWebhookId) {
 					continue;
 				}
 
-				const webhook = this.webhooks.get(logChannelId);
+				const webhook = this.webhooks.get(guildLogWebhookId);
 				if (!webhook) {
 					continue;
 				}

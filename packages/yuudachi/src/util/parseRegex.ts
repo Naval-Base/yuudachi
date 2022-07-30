@@ -4,9 +4,9 @@ import RE2 from 're2';
  * @param input `/(hype)\s+(events?|messages?|apply|team|system)/i`
  * @returns `(hype)\s+(events?|messages?|apply|team|system)`
  */
-export function parseRegex(input?: string, insensitive = true, fullMatch = false): RE2 | undefined {
+export function parseRegex(input?: string, insensitive = true, fullMatch = false) {
 	if (!input) {
-		return undefined;
+		return null;
 	}
 
 	try {
@@ -19,6 +19,6 @@ export function parseRegex(input?: string, insensitive = true, fullMatch = false
 
 		return new RE2(input, options);
 	} catch {
-		return undefined;
+		return null;
 	}
 }

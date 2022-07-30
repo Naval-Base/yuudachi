@@ -5,7 +5,7 @@ import { checkScam } from './checkScam.js';
 import { SCAM_EXPIRE_SECONDS } from '../../Constants.js';
 import { kRedis } from '../../tokens.js';
 
-export async function totalScams(content: string, guildId: Snowflake, userId: Snowflake): Promise<number> {
+export async function totalScams(content: string, guildId: Snowflake, userId: Snowflake) {
 	const redis = container.resolve<Redis>(kRedis);
 
 	const scamKey = `guild:${guildId}:user:${userId}:scams`;

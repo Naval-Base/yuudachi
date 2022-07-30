@@ -2,9 +2,9 @@ import { URL } from 'node:url';
 import { Client } from 'discord.js';
 import { container } from 'tsyringe';
 
-export async function parseAvatar(input?: string): Promise<string | 'none' | undefined> {
+export async function parseAvatar(input?: string) {
 	if (!input) {
-		return undefined;
+		return null;
 	}
 
 	if (input.toLowerCase() === 'none') {
@@ -21,9 +21,10 @@ export async function parseAvatar(input?: string): Promise<string | 'none' | und
 		try {
 			const client = container.resolve<Client<true>>(Client);
 			const user = await client.users.fetch(input);
+
 			return user.avatar ?? 'none';
 		} catch {
-			return undefined;
+			return null;
 		}
 	}
 
@@ -31,6 +32,6 @@ export async function parseAvatar(input?: string): Promise<string | 'none' | und
 		new URL(input);
 		return input.replace(/https:\/\/cdn.discordapp.com.*\/([a-f,0-9]{32})/, '$1');
 	} catch {
-		return undefined;
+		return null;
 	}
 }

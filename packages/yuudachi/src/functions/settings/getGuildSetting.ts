@@ -29,6 +29,6 @@ export async function getGuildSetting<T = string>(guildId: Snowflake, prop: Sett
 		[guildId],
 	);
 
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	return (data?.value ?? null) as T;
 }

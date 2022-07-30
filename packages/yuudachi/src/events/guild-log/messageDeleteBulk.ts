@@ -35,17 +35,29 @@ export default class implements Event {
 			if (!messages.size) {
 				continue;
 			}
+
 			const message = messages.first()!;
 			if (message.author.bot) {
 				continue;
 			}
+
 			if (!message.guild) {
 				continue;
 			}
 
 			try {
-				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels);
+
+				if (!guildLogWebhookId) {
+					continue;
+				}
+
+				const webhook = this.webhooks.get(guildLogWebhookId);
+				if (!webhook) {
+					continue;
+				}
+
 				// TODO: ignore based on parent category once .inGuild() is available
 				if (
 					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId ?? '')) ||
@@ -54,23 +66,14 @@ export default class implements Event {
 					continue;
 				}
 
-				if (!logChannelId) {
-					continue;
-				}
-				const webhook = this.webhooks.get(logChannelId);
-				if (!webhook) {
-					continue;
-				}
-
 				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
 
 				const output = messages.reduce((out, msg) => {
-					const { stickers, attachments } = msg;
 					out += `[${dayjs(msg.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${msg.author.tag} (${
 						msg.author.id
 					}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\n') : ''}${
-						attachments.size
-							? `\n${attachments
+						msg.attachments.size
+							? `\n${msg.attachments
 									.map((attachment) =>
 										i18next.t('log.guild_log.message_bulk_deleted.attachment', {
 											lng: locale,
@@ -80,8 +83,8 @@ export default class implements Event {
 									.join('\n')}`
 							: ''
 					}${
-						stickers.size
-							? `\n${stickers
+						msg.stickers.size
+							? `\n${msg.stickers
 									.map((sticker) =>
 										i18next.t('log.guild_log.message_bulk_deleted.sticker', {
 											lng: locale,

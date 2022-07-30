@@ -3,7 +3,7 @@ import { SnowflakeUtil } from 'discord.js';
 
 export function resolveTimestamp(dateString?: string) {
 	if (!dateString) {
-		return undefined;
+		return null;
 	}
 
 	if (Date.parse(dateString)) {
@@ -20,7 +20,7 @@ export function resolveTimestamp(dateString?: string) {
 
 	const msParse = ms(dateString);
 	if (!msParse) {
-		return undefined;
+		return null;
 	}
 
 	return Date.now() - msParse;

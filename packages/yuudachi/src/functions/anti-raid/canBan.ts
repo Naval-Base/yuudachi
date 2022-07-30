@@ -9,11 +9,7 @@ enum BanRejectReason {
 	HasHigherPerms = 'reject_perms',
 }
 
-export async function canBan(
-	guildId: Snowflake,
-	target: GuildMember,
-	userId: Snowflake,
-): Promise<BanRejectReason | null> {
+export async function canBan(guildId: Snowflake, target: GuildMember, userId: Snowflake) {
 	const ignoreRoles = await getGuildSetting<string[]>(guildId, SettingsKeys.AutomodIgnoreRoles);
 
 	if (target.id === userId) {

@@ -126,7 +126,7 @@ export default class implements Command {
 			});
 
 			try {
-				const res = await refreshScamDomains(redis);
+				const res = await refreshScamDomains();
 				for (const result of res) {
 					const parts = [
 						i18next.t('command.utility.refresh_scamlist.before', {

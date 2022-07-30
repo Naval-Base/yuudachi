@@ -17,5 +17,5 @@ export function createButton({
 		label,
 		style: style ?? ButtonStyle.Primary,
 		disabled,
-	};
+	} as const;
 }

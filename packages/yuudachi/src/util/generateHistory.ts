@@ -23,6 +23,7 @@ import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSet
 import { kSQL } from '../tokens.js';
 
 dayjs.extend(relativeTime);
+
 interface CaseFooter {
 	warn?: number;
 	restriction?: number;
@@ -40,7 +41,7 @@ export async function generateHistory(
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const logChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
+	const modLogChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
 
 	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
 	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
@@ -132,7 +133,7 @@ export async function generateHistory(
 		const dateFormatted = time(dayjs(c.created_at).unix(), TimestampStyles.ShortDate);
 		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
 			c.log_message_id
-				? hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, logChannelId, c.log_message_id))
+				? hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, modLogChannelId, c.log_message_id))
 				: `#${c.case_id}`
 		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
 		if (summary.join('\n').length + caseString.length + 1 < 4060) {

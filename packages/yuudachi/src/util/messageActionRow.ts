@@ -6,5 +6,5 @@ export function createMessageActionRow(
 	return {
 		type: ComponentType.ActionRow,
 		components,
-	};
+	} as const;
 }
