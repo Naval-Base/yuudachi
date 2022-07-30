@@ -1,20 +1,22 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_role": "Este comando solo puede ser usado por moderadores.",
-			"target_not_found": "El miembro seleccionado no está en este servidor.",
-			"timed_out": "El temporizador de la acción expiró.",
-			"no_mod_log_channel": "Aún no se ha definido el canal de registros de moderación."
+			"no_mod_log_channel": "Aún no se ha definido el canal de registros de moderación.",
+			"no_anti_raid_archive_channel": ""
 		}
 	},
 	"command": {
 		"common": {
 			"errors": {
 				"generic": "Algo salió mal.",
-				"no_enabled_module": "El módulo {{ module }} no está activo en este servidor.",
-				"target_not_found": "El miembro seleccionado no está en este servidor.",
+				"no_enabled_module": "",
 				"duration_format": "El formato de duración es incorrecto.",
-				"use_autocomplete": "No se pudo resolver la opción dada. Asegúrese de seleccionar una opción de autocompletado."
+				"use_autocomplete": "No se pudo resolver la opción dada. Asegúrese de seleccionar una opción de autocompletado.",
+				"target_not_found": "El miembro seleccionado no está en este servidor.",
+				"timed_out": ""
+			},
+			"buttons": {
+				"cancel": ""
 			}
 		},
 		"config": {
@@ -44,7 +46,6 @@
 			"warn": {
 				"pending": "¿Realmente quieres dar una advertencia a {{- user}}?",
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Advertir"
 				},
 				"cancel": "Se canceló la advertencia para {{- user}}",
@@ -53,11 +54,9 @@
 			"timeout": {
 				"errors": {
 					"missing_permissions": "Me faltan permisos para aislar temporalmente a {{- user}}",
-					"not_member": "{{- user}} debe ser miembro de este servidor para poder recibir un aislamiento temporal",
 					"already_timed_out": "{{- user}} ya está en aislamiento temporal"
 				},
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Aislamiento temporal"
 				},
 				"pending": "¿Realmente quieres aislar temporalmente a {{- user}}?",
@@ -66,12 +65,10 @@
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "Me faltan permisos para echar a {{- user}}",
-					"not_member": "{{- user}} no está en este servidor"
+					"missing_permissions": "Me faltan permisos para echar a {{- user}}"
 				},
 				"pending": "¿Realmente quieres expulsar a {{- user}}?",
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Expulsar"
 				},
 				"cancel": "Se canceló la expulsión para {{- user}}",
@@ -84,7 +81,6 @@
 				"pending": "¿Realmente quieres softbanear a {{- user}}?",
 				"not_member": "{{- user}} no está en este servidor. ¿Aún deseas proceder con el softban para borrar sus mensajes?",
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Softban"
 				},
 				"reasons": {
@@ -103,7 +99,6 @@
 				},
 				"pending": "¿Realmente quieres banear a {{- user}}?",
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Banear"
 				},
 				"cancel": "Se canceló el ban para {{- user}}",
@@ -116,36 +111,81 @@
 				},
 				"pending": "¿Realmente quieres revocar el ban a {{- user}}?",
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Revocar ban"
 				},
 				"cancel": "Se canceló el revoco del ban de {{- user}}",
 				"success": "Se revocó con éxito el ban de {{- user}}"
 			},
 			"anti_raid_nuke": {
-				"errors": {
-					"no_hits": "El Anti-Raid-Nuke no golpeará a nadie, ¡posiblemente quieras reajustar los parámetros y probar de nuevo!",
+				"common": {
+					"errors": {
+						"result": {
+							"reject_perms": "",
+							"reject_unbanable": "",
+							"reject_bot": "",
+							"reject_self": "",
+							"reject_protected": "",
+							"reject_user": ""
+						}
+					},
 					"parameters": {
-						"heading": "Parámetros:",
-						"current_time": "• Tiempo actual: {{- now}}",
-						"join_after": "• Fecha de ingreso desde: {{- join}}",
-						"created_after": "• Fecha de creación desde: {{- age}}",
-						"pattern": "• Patrón de similitud de nombre:",
-						"avatar": "• Hash de avatar (usuario o miembro) similar: {{- avatar}}",
-						"days_one": "• Eliminando mensajes enviados en el último {{count}} día",
-						"days_other": "• Eliminando mensajes enviados en el últimos {{count}} días",
-						"days_none": "• No se borrará ningún mensaje"
+						"heading": "",
+						"current_time": "",
+						"dry_run": "",
+						"days_zero": "",
+						"days_one": "",
+						"days_other": ""
+					},
+					"reason": "",
+					"pending": "",
+					"buttons": {
+						"execute": "",
+						"dry_run": ""
+					},
+					"attachment": "",
+					"cancel": "",
+					"success": ""
+				},
+				"filter": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": "",
+						"invalid_avatar": "",
+						"pattern_format": ""
+					},
+					"parameters": {
+						"join_after": "",
+						"created_after": "",
+						"pattern": "",
+						"avatar": "",
+						"zalgo": "",
+						"confusables": ""
 					}
 				},
-				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
-				"reason_fallback": "Anti-Raid-Nuke",
-				"pending": "Anti-Raid-Nuke proyecta que golpeará a {{members}} miembros del servidor.\n• Creados en los últimos {{creationrange}}\n• Unidos en los últimos {{joinrange}}",
-				"buttons": {
-					"cancel": "Cancelar",
-					"execute": "Iniciar"
+				"file": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": ""
+					},
+					"parameters": {
+						"file": "",
+						"users": ""
+					}
 				},
-				"cancel": "Se canceló el Anti-Raid-Nuke.",
-				"success": "Anti-Raid-Nuke golpeó a {{- members}} miembros de usuario."
+				"modal": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": ""
+					},
+					"parameters": {
+						"users": ""
+					},
+					"title": "",
+					"components": {
+						"label": "",
+						"placeholder": ""
+					}
+				}
 			},
 			"restrict": {
 				"embed": {
@@ -156,7 +196,6 @@
 					},
 					"pending": "¿Realmente quieres aplicar una restricción de incrustados a {{- user}}?",
 					"buttons": {
-						"cancel": "Cancelar",
 						"execute": "Restringir"
 					},
 					"cancel": "Se canceló la restricción de incrustados para {{- user}}",
@@ -170,7 +209,6 @@
 					},
 					"pending": "¿Realmente quieres aplicar una restricción de reacciones a {{- user}}?",
 					"buttons": {
-						"cancel": "Cancelar",
 						"execute": "Restringir"
 					},
 					"cancel": "Se canceló la restricción de reacciones para {{- user}}",
@@ -184,7 +222,6 @@
 					},
 					"pending": "¿Realmente quieres aplicar una restricción de emojis a {{- user}}?",
 					"buttons": {
-						"cancel": "Cancelar",
 						"execute": "Restringir"
 					},
 					"cancel": "Se canceló la restricción de emojis para {{- user}}",
@@ -197,7 +234,6 @@
 					},
 					"pending": "¿Realmente quieres revocar el rol {{- role}} de {{- user}} con el caso #{{case}}?",
 					"buttons": {
-						"cancel": "Cancelar",
 						"execute": "Revoco de rol"
 					},
 					"cancel": "Se canceló el revoco del rol {{- role}} de {{- user}} en el caso #{{case}}",
@@ -213,7 +249,6 @@
 					},
 					"pending": "¿Realmente quieres bloquear {{- channel}}?",
 					"buttons": {
-						"cancel": "Cancelar",
 						"execute": "Bloquear"
 					},
 					"message": "🔒 Este canal ha sido bloqueado, será desbloqueado {{- duration}}",
@@ -228,7 +263,6 @@
 					},
 					"pending": "¿Realmente quieres desbloquear {{- channel}}?",
 					"buttons": {
-						"cancel": "Cancelar",
 						"execute": "Desbloquear"
 					},
 					"cancel": "Se canceló el desbloqueo de {{- channel}}",
@@ -237,13 +271,12 @@
 			},
 			"reason": {
 				"success": "Se definió con éxito el motivo para el caso {{- case}}",
-				"success_multiple": "Se definió con éxito el motivo para los casos {{- lower_case}} hasta {{- upper_case}} ({{amount}}/{{target}} casos)",
-				"pending_multiple": "¿Realmente deseas definir un motivo para los casos {{- lower_case}} a {{- upper_case}} ({{amount}} casos)?",
+				"success_multiple": "",
+				"pending_multiple": "",
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Definir Motivo"
 				},
-				"cancel": "Se canceló la definición del motivo"
+				"cancel": ""
 			},
 			"reference": {
 				"success": "Se definió con éxito la referencia del caso {{- case}} a {{- ref}}"
@@ -268,13 +301,12 @@
 				"after": "• Después: {{- amount}}",
 				"last_change": "• Último cambio: {{- timestamp}}",
 				"buttons": {
-					"execute": "Actualizar",
-					"cancel": "Cancelar"
+					"execute": "Actualizar"
 				},
-				"cancel": "Se canceló el refresco de la lista de dominios fraudulentos",
-				"success": "Se actualizó con éxito la lista de dominios fraudulentos",
-				"pending": "La lista de dominios fraudulentos actual",
-				"error": "Se ha producido un error al refrescar los dominios fraudulentos"
+				"cancel": "",
+				"success": "",
+				"pending": "",
+				"error": ""
 			},
 			"sponsor": {
 				"errors": {
@@ -283,7 +315,6 @@
 				},
 				"pending": "¿Realmente quieres aplicar el rol de patrocinador a {{- user}}?",
 				"buttons": {
-					"cancel": "Cancelar",
 					"execute": "Aplicar"
 				},
 				"cancel": "Se canceló la aplicación del rol de patrocinadores a {{- user}}",
@@ -295,25 +326,28 @@
 		"history": {
 			"title": "Historial de Casos",
 			"user_details": "Detalles de usuario",
-			"user_details_description": "• Nombre: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Fecha de creación: {{- created_at}} ({{- created_at_since}})",
+			"user_details_description": "",
 			"member_details": "Detalles de miembro",
-			"member_details_description": "• Apodo: {{- memberNickname}}\n• Roles: {{- memberRoles}}\n• Fecha de ingreso: {{- joined_at}} ({{- joined_at_since}})",
+			"member_details_description": "",
 			"member_details_no_nickname": "Sin apodo",
 			"summary_truncated": "{{- summary}}\ny más..."
 		},
 		"mod_log": {
 			"case_log": {
-				"description": "**Miembro**: `{{- targetTag}}` ({{targetId}})\n**Acción**: {{- action}}",
+				"description": "",
 				"expiration": "\n**Fecha de expiración**: {{- time}}",
 				"context": "**Contexto:** {{- link}}",
 				"context_sub": "Transpórtame, Yuu",
 				"reason": "\n**Motivo:** {{- reason}}",
-				"reason_fallback": "\n**Motivo:** Usa `/reason {{caseId}} <...motivo>` para definir un motivo para este caso",
+				"reason_fallback": "",
 				"reference": "\n**Referencia:** {{- ref}}",
-				"footer": "Caso {{caseId}}"
+				"footer": ""
 			},
 			"anti_raid_nuke": {
-				"description": "**Acción**: Anti-Raid-Nuke\n**Motivo:** {{reason}}\n**Número de bajas:** {{members}}\n**Desde la fecha de ingreso:** {{- joined_after}}\n**Desde la fecha de creación:** {{- account_created_after}}",
+				"description": "",
+				"parameters": {
+					"cutoff": ""
+				},
 				"footer": "Casos {{from}}-{{to}}"
 			},
 			"scam": {
@@ -325,7 +359,7 @@
 			}
 		},
 		"member_log": {
-			"description": "• Nombre: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Fecha de creación: {{- created_at}} ({{- created_at_since}})",
+			"description": "",
 			"joined_at": "\n• Fecha de ingreso: {{- joined_at}} ({{- joined_at_since}})",
 			"left_at": "\n• Fecha de salida: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
@@ -357,20 +391,26 @@
 			"voice_state_update": {
 				"title": "Actualización de estado de voz",
 				"joined": "Se unió a {{- channel}}",
-				"moved": "Se movió de {{- fromChannel}} a {{- toChannel}}",
+				"moved": "",
 				"left": "Se salió de {{- channel}}"
 			},
 			"thread_created": {
 				"title": "Hilo creado",
-				"channel": "• Hilo: {{- channel}} {{- name}} {{- channelId}}",
-				"starter": "• Mensaje inicial: {{- messageId}}",
+				"channel": "",
+				"starter": "",
 				"jump_to": "• [Saltar al mensaje inicial]({{- link}})"
 			},
 			"thread_deleted": {
 				"title": "Hilo eliminado",
-				"channel": "• Hilo: {{- name}} {{- channelId}}",
-				"starter": "• Mensaje inicial: {{- messageId}}",
+				"channel": "",
+				"starter": "",
 				"jump_to": "• [Saltar al mensaje inicial]({{- link}})"
+			}
+		},
+		"general_log": {
+			"anti_raid_nuke": {
+				"title": "",
+				"description": ""
 			}
 		}
 	}
