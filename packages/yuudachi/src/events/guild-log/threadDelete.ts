@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { APIEmbed, Client, Events, type ThreadChannel, type Webhook } from 'discord.js';
+import { type APIEmbed, Client, Events, type ThreadChannel, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';

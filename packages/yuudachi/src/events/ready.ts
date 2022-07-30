@@ -1,6 +1,5 @@
 import { on } from 'node:events';
-import { ChannelType, PermissionFlagsBits } from 'discord-api-types/v10';
-import { Client, Collection, Events, type Webhook } from 'discord.js';
+import { Client, Collection, Events, type Webhook, ChannelType, PermissionFlagsBits } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../Event.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';

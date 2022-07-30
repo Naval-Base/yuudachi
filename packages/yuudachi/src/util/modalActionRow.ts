@@ -1,4 +1,4 @@
-import { APIActionRowComponent, APIModalActionRowComponent, ComponentType } from 'discord-api-types/v10';
+import { type APIActionRowComponent, type APIModalActionRowComponent, ComponentType } from 'discord-api-types/v10';
 
 export function createModalActionRow(
 	components: APIModalActionRowComponent[],

@@ -5,7 +5,7 @@ import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { canBan } from './canBan.js';
 import { kRedis } from '../../tokens.js';
-import { Case, CaseAction, createCase } from '../cases/createCase.js';
+import { type Case, CaseAction, createCase } from '../cases/createCase.js';
 import { generateCasePayload } from '../logging/generateCasePayload.js';
 
 export interface AntiRaidNukeResult {

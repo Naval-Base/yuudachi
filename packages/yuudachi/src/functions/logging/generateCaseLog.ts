@@ -5,7 +5,7 @@ import { container } from 'tsyringe';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
 import { generateMessageLink } from '../../util/generateMessageLink.js';
-import { Case, CaseAction } from '../cases/createCase.js';
+import { type Case, CaseAction } from '../cases/createCase.js';
 
 export async function generateCaseLog(case_: Case, logChannelId: Snowflake, locale: string) {
 	const client = container.resolve<Client<true>>(Client);

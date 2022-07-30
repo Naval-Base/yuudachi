@@ -1,4 +1,4 @@
-import { APITextInputComponent, TextInputStyle, ComponentType } from 'discord-api-types/v10';
+import { type APITextInputComponent, TextInputStyle, ComponentType } from 'discord-api-types/v10';
 
 export function createTextComponent({
 	customId,

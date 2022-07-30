@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import type { Snowflake } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { SPAM_EXPIRE_SECONDS } from '../../Constants.js';
@@ -8,7 +9,7 @@ export function createContentHash(content: string) {
 	return createHash('md5').update(content.toLowerCase()).digest('hex');
 }
 
-export async function totalContents(content: string, guildId: string, userId: string): Promise<number> {
+export async function totalContents(content: string, guildId: Snowflake, userId: Snowflake): Promise<number> {
 	const redis = container.resolve<Redis>(kRedis);
 
 	const contentHash = createContentHash(content);

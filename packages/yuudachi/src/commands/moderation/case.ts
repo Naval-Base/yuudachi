@@ -1,10 +1,16 @@
-import { AutocompleteInteraction, Collection, CommandInteraction, Guild } from 'discord.js';
+import {
+	type AutocompleteInteraction,
+	Collection,
+	type CommandInteraction,
+	type Guild,
+	type Snowflake,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import type { Command } from '../../Command.js';
 import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from '../../Constants.js';
-import { RawCase, transformCase } from '../../functions/cases/transformCase.js';
+import { type RawCase, transformCase } from '../../functions/cases/transformCase.js';
 import { generateCaseEmbed } from '../../functions/logging/generateCaseEmbed.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
@@ -19,7 +25,7 @@ import { generateHistory } from '../../util/generateHistory.js';
 
 const OP_DELIMITER = '-' as const;
 
-async function resolveMemberAndUser(guild: Guild, id: string) {
+async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
 	try {
 		const member = await guild.members.fetch(id);
 		return { member, user: member.user };
@@ -51,7 +57,7 @@ export default class implements Command {
 				};
 			});
 
-			const uniqueTargets = new Collection<string, { id: string; tag: string }>();
+			const uniqueTargets = new Collection<string, { id: Snowflake; tag: string }>();
 
 			for (const c of cases) {
 				if (uniqueTargets.has(c.target_id)) {

@@ -1,5 +1,4 @@
-import type { APIEmbed } from 'discord-api-types/v10';
-import type { CommandInteraction } from 'discord.js';
+import type { CommandInteraction, APIEmbed } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command.js';
 import { checkScam } from '../../functions/anti-scam/checkScam.js';

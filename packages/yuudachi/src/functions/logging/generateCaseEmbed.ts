@@ -1,5 +1,4 @@
-import type { APIEmbed } from 'discord-api-types/v10';
-import type { Snowflake, User } from 'discord.js';
+import type { Snowflake, User, APIEmbed } from 'discord.js';
 import i18next from 'i18next';
 import { generateCaseColor } from './generateCaseColor.js';
 import { generateCaseLog } from './generateCaseLog.js';
@@ -8,7 +7,7 @@ import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export async function generateCaseEmbed(
 	guildId: Snowflake,
-	logChannelId: string,
+	logChannelId: Snowflake,
 	user: User | undefined | null,
 	case_: Case,
 ) {

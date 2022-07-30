@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import {
 	ButtonStyle,
 	codeBlock,
-	CommandInteraction,
+	type CommandInteraction,
 	ComponentType,
 	inlineCode,
 	time,
@@ -73,7 +73,7 @@ export async function filter(
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.pattern_format', { locale }));
 	}
 
-	const parsedAvatar = await parseAvatar(interaction.client, args.avatar);
+	const parsedAvatar = await parseAvatar(args.avatar);
 	if (args.avatar && !parsedAvatar) {
 		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.invalid_avatar', { locale }));
 	}

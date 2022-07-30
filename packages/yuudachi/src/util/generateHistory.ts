@@ -5,7 +5,7 @@ import {
 	type CommandInteraction,
 	type ButtonInteraction,
 	type GuildMember,
-	SelectMenuInteraction,
+	type SelectMenuInteraction,
 	type User,
 	hyperlink,
 	inlineCode,

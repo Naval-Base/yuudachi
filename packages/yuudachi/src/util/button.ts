@@ -1,4 +1,4 @@
-import { APIButtonComponent, ButtonStyle, ComponentType } from 'discord-api-types/v10';
+import { type APIButtonComponent, ButtonStyle, ComponentType } from 'discord-api-types/v10';
 
 export function createButton({
 	customId,

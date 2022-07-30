@@ -1,5 +1,4 @@
-import { ChannelType, PermissionFlagsBits } from 'discord-api-types/v10';
-import type { CommandInteraction, TextChannel } from 'discord.js';
+import { type CommandInteraction, type TextChannel, ChannelType, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 import { lift } from './sub/lockdown/lift.js';
 import { lock } from './sub/lockdown/lock.js';

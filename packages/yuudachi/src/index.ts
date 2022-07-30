@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import { default as Backend } from 'i18next-fs-backend';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
-import { Command, commandInfo } from './Command.js';
+import { type Command, commandInfo } from './Command.js';
 import type { Event } from './Event.js';
 import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains.js';
 import { logger } from './logger.js';

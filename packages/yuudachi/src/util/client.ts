@@ -1,4 +1,4 @@
-import { Client, ClientOptions } from 'discord.js';
+import { Client, type ClientOptions } from 'discord.js';
 import { container } from 'tsyringe';
 
 export function createClient(options: ClientOptions): Client {

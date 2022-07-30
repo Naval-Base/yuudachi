@@ -1,15 +1,15 @@
 import { Buffer } from 'node:buffer';
 import dayjs from 'dayjs';
 import {
-	ButtonInteraction,
+	type ButtonInteraction,
 	ButtonStyle,
 	Collection,
-	CommandInteraction,
+	type CommandInteraction,
 	ComponentType,
-	GuildMember,
+	type GuildMember,
 	inlineCode,
 	InteractionCollector,
-	TextBasedChannelResolvable,
+	type TextBasedChannelResolvable,
 	time,
 	TimestampStyles,
 } from 'discord.js';

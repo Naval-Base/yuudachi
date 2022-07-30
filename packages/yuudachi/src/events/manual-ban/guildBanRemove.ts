@@ -1,7 +1,6 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
-import { AuditLogEvent } from 'discord-api-types/v10';
-import { Client, Events, type GuildBan } from 'discord.js';
+import { Client, Events, type GuildBan, AuditLogEvent } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';

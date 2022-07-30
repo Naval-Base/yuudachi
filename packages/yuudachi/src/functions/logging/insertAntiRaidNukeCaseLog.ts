@@ -1,5 +1,4 @@
-import type { APIEmbed } from 'discord-api-types/v10';
-import type { Guild, User } from 'discord.js';
+import type { Guild, User, APIEmbed } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';

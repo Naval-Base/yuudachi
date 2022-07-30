@@ -1,4 +1,4 @@
-import { GuildMember, PermissionFlagsBits } from 'discord.js';
+import { type GuildMember, PermissionFlagsBits, type Snowflake } from 'discord.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 enum BanRejectReason {
@@ -9,7 +9,11 @@ enum BanRejectReason {
 	HasHigherPerms = 'reject_perms',
 }
 
-export async function canBan(guildId: string, target: GuildMember, userId: string): Promise<BanRejectReason | null> {
+export async function canBan(
+	guildId: Snowflake,
+	target: GuildMember,
+	userId: Snowflake,
+): Promise<BanRejectReason | null> {
 	const ignoreRoles = await getGuildSetting<string[]>(guildId, SettingsKeys.AutomodIgnoreRoles);
 
 	if (target.id === userId) {

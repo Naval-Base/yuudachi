@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import {
 	ButtonStyle,
 	Collection,
-	CommandInteraction,
+	type CommandInteraction,
 	ComponentType,
-	GuildMember,
+	type GuildMember,
 	hyperlink,
 	inlineCode,
 	time,
