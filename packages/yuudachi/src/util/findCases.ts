@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
+import type { Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { SNOWFLAKE_MIN_LENGTH } from '../Constants.js';
@@ -8,7 +9,7 @@ import { kSQL } from '../tokens.js';
 
 dayjs.extend(relativeTime);
 
-export async function findCases(phrase: string, guildId: string) {
+export async function findCases(phrase: string, guildId: Snowflake) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	if (!phrase.length) {

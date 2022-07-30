@@ -1,5 +1,4 @@
-import { Client, Snowflake, User } from 'discord.js';
-
+import type { Guild, User } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { generateCaseEmbed } from './generateCaseEmbed.js';
@@ -8,22 +7,19 @@ import type { Case } from '../cases/createCase.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function upsertCaseLog(guildId: Snowflake, user: User | undefined | null, case_: Case) {
-	const client = container.resolve<Client<true>>(Client);
+export async function upsertCaseLog(guild: Guild, user: User | undefined | null, case_: Case) {
 	const sql = container.resolve<Sql<any>>(kSQL);
+	const modLogChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
-	const guild = await client.guilds.fetch(guildId);
-	const logChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
-
-	const embed = await generateCaseEmbed(guildId, logChannel!.id, user, case_);
+	const embed = await generateCaseEmbed(guild.id, modLogChannel!.id, user, case_);
 
 	if (case_.logMessageId) {
-		const message = await logChannel!.messages.fetch(case_.logMessageId);
+		const message = await modLogChannel!.messages.fetch(case_.logMessageId);
 		await message.edit({
 			embeds: [embed],
 		});
 	} else {
-		const logMessage = await logChannel!.send({
+		const logMessage = await modLogChannel!.send({
 			embeds: [embed],
 		});
 

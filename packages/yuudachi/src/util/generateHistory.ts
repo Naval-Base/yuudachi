@@ -4,10 +4,13 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
-	Formatters,
 	type GuildMember,
-	SelectMenuInteraction,
+	type SelectMenuInteraction,
 	type User,
+	hyperlink,
+	inlineCode,
+	time,
+	TimestampStyles,
 } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
@@ -20,6 +23,7 @@ import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSet
 import { kSQL } from '../tokens.js';
 
 dayjs.extend(relativeTime);
+
 interface CaseFooter {
 	warn?: number;
 	restriction?: number;
@@ -37,16 +41,10 @@ export async function generateHistory(
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const logChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
+	const modLogChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
 
-	const sinceCreationFormatted = Formatters.time(
-		dayjs(target.user.createdTimestamp).unix(),
-		Formatters.TimestampStyles.RelativeTime,
-	);
-	const creationFormatted = Formatters.time(
-		dayjs(target.user.createdTimestamp).unix(),
-		Formatters.TimestampStyles.ShortDateTime,
-	);
+	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
+	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 	let embed = addFields(
 		{
@@ -59,9 +57,9 @@ export async function generateHistory(
 		{
 			name: i18next.t('log.history.user_details', { lng: locale }),
 			value: i18next.t('log.history.user_details_description', {
-				userMention: target.user.toString(),
-				userTag: target.user.tag,
-				userId: target.user.id,
+				user_mention: target.user.toString(),
+				user_tag: target.user.tag,
+				user_id: target.user.id,
 				created_at: creationFormatted,
 				created_at_since: sinceCreationFormatted,
 				lng: locale,
@@ -70,20 +68,14 @@ export async function generateHistory(
 	);
 
 	if (target.member?.joinedTimestamp) {
-		const sinceJoinFormatted = Formatters.time(
-			dayjs(target.member.joinedTimestamp).unix(),
-			Formatters.TimestampStyles.RelativeTime,
-		);
-		const joinFormatted = Formatters.time(
-			dayjs(target.member.joinedTimestamp).unix(),
-			Formatters.TimestampStyles.ShortDateTime,
-		);
+		const sinceJoinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
+		const joinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 		embed = addFields(embed, {
 			name: i18next.t('log.history.member_details', { lng: locale }),
 			value: i18next.t('log.history.member_details_description', {
-				memberNickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
-				memberRoles: target.member.roles.cache.map((role) => role.name).join(', '),
+				member_nickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
+				member_roles: target.member.roles.cache.map((role) => role.name).join(', '),
 				joined_at: joinFormatted,
 				joined_at_since: sinceJoinFormatted,
 				lng: locale,
@@ -138,12 +130,13 @@ export async function generateHistory(
 	let truncated = false;
 
 	for (const c of cases) {
-		const dateFormatted = Formatters.time(dayjs(c.created_at).unix(), Formatters.TimestampStyles.ShortDate);
-		const caseString = `${dateFormatted} ${Formatters.inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
+		const dateFormatted = time(dayjs(c.created_at).unix(), TimestampStyles.ShortDate);
+		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
 			c.log_message_id
-				? Formatters.hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, logChannelId, c.log_message_id))
+				? hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, modLogChannelId, c.log_message_id))
 				: `#${c.case_id}`
 		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
+
 		if (summary.join('\n').length + caseString.length + 1 < 4060) {
 			summary.push(caseString);
 			continue;
@@ -152,6 +145,7 @@ export async function generateHistory(
 		truncated = true;
 		break;
 	}
+
 	if (truncated) {
 		embed = {
 			description: i18next.t('log.history.summary_truncated', { summary: summary.join('\n'), lng: locale }),

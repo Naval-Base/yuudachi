@@ -26,18 +26,21 @@ export default class implements Event {
 			if (!newState.member || !newState.channelId) {
 				continue;
 			}
+
 			if (oldState?.member?.user.bot || newState.member.user.bot) {
 				continue;
 			}
 
 			try {
-				const logChannelId = await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(newState.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(newState.guild.id, SettingsKeys.LogIgnoreChannels);
 
-				if (!logChannelId) {
+				if (!guildLogWebhookId) {
 					continue;
 				}
-				const webhook = this.webhooks.get(logChannelId);
+
+				const webhook = this.webhooks.get(guildLogWebhookId);
+
 				if (!webhook) {
 					continue;
 				}
@@ -45,6 +48,7 @@ export default class implements Event {
 				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
 
 				let description = '';
+
 				if ((!oldState || !oldState.channel || ignoreChannels.includes(oldState.channelId ?? '')) && newState.channel) {
 					if (ignoreChannels.includes(newState.channelId)) {
 						continue;
@@ -63,7 +67,7 @@ export default class implements Event {
 
 					description = i18next.t('log.guild_log.voice_state_update.joined', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: newState.channel.toString(),
+						channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
 				} else if (oldState?.channel && (!newState.channel || ignoreChannels.includes(newState.channelId))) {
@@ -80,15 +84,15 @@ export default class implements Event {
 
 					description = i18next.t('log.guild_log.voice_state_update.left', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: oldState.channel.toString(),
+						channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						lng: locale,
 					});
 				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
 					description = i18next.t('log.guild_log.voice_state_update.moved', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						fromChannel: oldState.channel.toString(),
+						from_channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						toChannel: newState.channel.toString(),
+						to_channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
 				} else {

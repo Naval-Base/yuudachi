@@ -16,14 +16,17 @@ export function addFields(embed: APIEmbed, ...data: APIEmbedField[]): APIEmbed {
 	};
 }
 
-export function ellipsis(text: string, total: number): string {
+export function ellipsis(text: string, total: number) {
 	if (text.length <= total) {
 		return text;
 	}
+
 	const keep = total - 3;
+
 	if (keep < 1) {
 		return text.slice(0, total);
 	}
+
 	return `${text.slice(0, keep)}...`;
 }
 
@@ -52,20 +55,25 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 					}))
 					.slice(0, EMBED_FIELD_LIMIT)
 			: [],
-	};
+	} as const;
 }
 
-export function truncate(text: string, len: number, splitChar = ' '): string {
-	if (text.length <= len) return text;
+export function truncate(text: string, len: number, splitChar = ' ') {
+	if (text.length <= len) {
+		return text;
+	}
+
 	const words = text.split(splitChar);
 	const res: string[] = [];
 	for (const word of words) {
 		const full = res.join(splitChar);
+
 		if (full.length + word.length + 1 <= len - 3) {
 			res.push(word);
 		}
 	}
 
 	const resText = res.join(splitChar);
+
 	return resText.length === text.length ? resText : `${resText.trim()}...`;
 }

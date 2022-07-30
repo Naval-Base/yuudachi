@@ -31,6 +31,7 @@ export async function deleteCase({
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let case_: RawCase | undefined;
+
 	if (target) {
 		[case_] = await sql<[RawCase]>`
 			select *

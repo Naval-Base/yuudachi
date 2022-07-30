@@ -1,20 +1,23 @@
-import { type Client, Formatters, type Snowflake } from 'discord.js';
+import { Client, type Snowflake, hyperlink, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
 import { generateMessageLink } from '../../util/generateMessageLink.js';
-import { Case, CaseAction } from '../cases/createCase.js';
+import { type Case, CaseAction } from '../cases/createCase.js';
 
-export async function generateCaseLog(client: Client, case_: Case, logChannelId: Snowflake, locale: string) {
+export async function generateCaseLog(case_: Case, logChannelId: Snowflake, locale: string) {
+	const client = container.resolve<Client<true>>(Client);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let action = CaseAction[case_.action];
+
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
 		try {
 			const guild = client.guilds.cache.get(case_.guildId)!;
 			const role = guild.roles.cache.get(case_.roleId);
+
 			if (role) {
 				action += ` \`${role.name}\` (${role.id})`;
 			} else {
@@ -27,15 +30,15 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 	}
 
 	let msg = i18next.t('log.mod_log.case_log.description', {
-		targetTag: case_.targetTag,
-		targetId: case_.targetId,
+		target_tag: case_.targetTag,
+		target_id: case_.targetId,
 		action,
 		lng: locale,
 	});
 
 	if (case_.actionExpiration) {
 		msg += i18next.t('log.mod_log.case_log.expiration', {
-			time: Formatters.time(new Date(case_.actionExpiration), Formatters.TimestampStyles.RelativeTime),
+			time: time(new Date(case_.actionExpiration), TimestampStyles.RelativeTime),
 			lng: locale,
 		});
 	}
@@ -48,7 +51,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 
 		if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
 			msg += i18next.t('log.mod_log.case_log.context', {
-				link: Formatters.hyperlink(
+				link: hyperlink(
 					i18next.t('log.mod_log.case_log.context_sub', { lng: locale }),
 					generateMessageLink(case_.guildId, contextMessage!.channel_id!, case_.contextMessageId),
 				),
@@ -60,7 +63,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 	if (case_.reason) {
 		msg += i18next.t('log.mod_log.case_log.reason', { reason: case_.reason, lng: locale });
 	} else {
-		msg += i18next.t('log.mod_log.case_log.reason_fallback', { caseId: case_.caseId, lng: locale });
+		msg += i18next.t('log.mod_log.case_log.reason_fallback', { case_id: case_.caseId, lng: locale });
 	}
 
 	if (case_.referenceId) {
@@ -72,7 +75,7 @@ export async function generateCaseLog(client: Client, case_: Case, logChannelId:
 
 		if (Reflect.has(reference ?? {}, 'log_message_id')) {
 			msg += i18next.t('log.mod_log.case_log.reference', {
-				ref: Formatters.hyperlink(
+				ref: hyperlink(
 					`#${case_.referenceId}`,
 					generateMessageLink(case_.guildId, logChannelId, reference!.log_message_id!),
 				),

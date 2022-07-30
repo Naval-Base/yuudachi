@@ -27,11 +27,13 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
-		const logChannel = await checkLogChannel(
+
+		const modLogChannel = await checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
-		if (!logChannel) {
+
+		if (!modLogChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
@@ -75,7 +77,7 @@ export default class implements Command {
 		});
 		const cancelButton = createButton({
 			customId: cancelKey,
-			label: i18next.t('command.mod.ban.buttons.cancel', { lng: locale }),
+			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 			style: ButtonStyle.Secondary,
 		});
 
@@ -97,7 +99,7 @@ export default class implements Command {
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
 				} catch (e) {
@@ -126,12 +128,12 @@ export default class implements Command {
 					user: collectedInteraction.user,
 					args: {
 						...args,
-						days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 0,
+						days: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
 					},
 					action: CaseAction.Ban,
 				}),
 			);
-			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.ban.success', {

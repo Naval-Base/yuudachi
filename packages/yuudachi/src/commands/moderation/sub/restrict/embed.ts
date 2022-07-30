@@ -26,6 +26,14 @@ export async function embed(
 	args: ArgumentsOf<typeof RestrictCommand>['embed'],
 	locale: string,
 ): Promise<void> {
+	if (!args.user.member) {
+		throw new Error(
+			i18next.t('command.common.errors.target_not_found', {
+				lng: locale,
+			}),
+		);
+	}
+
 	if (args.reason && args.reason.length >= 500) {
 		throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 	}
@@ -60,6 +68,7 @@ export async function embed(
 	}
 
 	const parsedDuration = ms(args.duration);
+
 	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
@@ -76,7 +85,7 @@ export async function embed(
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t('command.mod.restrict.embed.buttons.cancel', { lng: locale }),
+		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 
@@ -98,7 +107,7 @@ export async function embed(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch {}
@@ -127,7 +136,7 @@ export async function embed(
 				duration: parsedDuration,
 			}),
 		);
-		void upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+		void upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.embed.success', {

@@ -1,5 +1,4 @@
-import type { APIEmbed } from 'discord-api-types/v10';
-import type { CommandInteraction } from 'discord.js';
+import type { CommandInteraction, APIEmbed } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command.js';
 import { checkScam } from '../../functions/anti-scam/checkScam.js';
@@ -24,7 +23,7 @@ export default class implements Command {
 
 		if (domains.length) {
 			embed = addFields(embed, {
-				name: i18next.t('command.utility.check_scam.found', { lng: locale, count: domains.length }),
+				name: i18next.t('command.utility.check_scam.found', { count: domains.length, lng: locale }),
 				value: domains.map((domain) => `• \`${domain.host}\` on lists: \`[${domain.lists.join(',')}]\``).join('\n'),
 			});
 		}

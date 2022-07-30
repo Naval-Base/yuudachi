@@ -1,20 +1,22 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_role": "This command can only be used by moderators.",
-			"target_not_found": "The given member is not in this guild.",
-			"timed_out": "Action timer ran out.",
-			"no_mod_log_channel": "No mod log channel has been initialised yet."
+			"no_mod_log_channel": "No mod log channel has been initialised yet.",
+			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialised yet."
 		}
 	},
 	"command": {
 		"common": {
 			"errors": {
 				"generic": "Something went wrong.",
-				"no_enabled_module": "The {{ module }} is not enabled on this guild.",
-				"target_not_found": "The given member is not in this guild.",
+				"no_enabled_module": "The {{module}} is not enabled on this guild.",
 				"duration_format": "Wrong duration format.",
-				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option."
+				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
+				"target_not_found": "The given member is not in this guild.",
+				"timed_out": "Action timer ran out."
+			},
+			"buttons": {
+				"cancel": "Cancel"
 			}
 		},
 		"config": {
@@ -44,7 +46,6 @@
 			"warn": {
 				"pending": "Do you really want to warn {{- user}}?",
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Warn"
 				},
 				"cancel": "Cancelled warn on {{- user}}",
@@ -53,11 +54,9 @@
 			"timeout": {
 				"errors": {
 					"missing_permissions": "Missing permissions to time out {{- user}}",
-					"not_member": "{{- user}} needs to be a member of this guild to be timed out",
 					"already_timed_out": "{{- user}} is already in timeout"
 				},
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Timeout"
 				},
 				"pending": "Do you really want to time out {{- user}}?",
@@ -66,12 +65,10 @@
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "Missing permissions to kick {{- user}}",
-					"not_member": "User {{- user}} is not on this guild"
+					"missing_permissions": "Missing permissions to kick {{- user}}"
 				},
 				"pending": "Do you really want to kick {{- user}}?",
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Kick"
 				},
 				"cancel": "Cancelled kick on {{- user}}",
@@ -84,7 +81,6 @@
 				"pending": "Do you really want to softban {{- user}}?",
 				"not_member": "User {{- user}} is not on this guild. Do you still wish to softban them to remove messages?",
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Softban"
 				},
 				"reasons": {
@@ -103,7 +99,6 @@
 				},
 				"pending": "Do you really want to ban {{- user}}?",
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Ban"
 				},
 				"cancel": "Cancelled ban on {{- user}}",
@@ -116,36 +111,81 @@
 				},
 				"pending": "Do you really want to unban {{- user}}?",
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Unban"
 				},
 				"cancel": "Cancelled unban on {{- user}}",
 				"success": "Successfully unbanned {{- user}}"
 			},
 			"anti_raid_nuke": {
-				"errors": {
-					"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
+				"common": {
+					"errors": {
+						"result": {
+							"reject_perms": "This user has elevated permissions.",
+							"reject_unbanable": "This user is not bannable by me.",
+							"reject_bot": "This user is a bot.",
+							"reject_self": "This user is you.",
+							"reject_protected": "This user has a role ignored by the Anti-Raid-Nuke.",
+							"reject_user": "This user is not in the guild."
+						}
+					},
 					"parameters": {
 						"heading": "Parameters:",
 						"current_time": "• Current time: {{- now}}",
-						"join_after": "• Join date after: {{- join}}",
-						"created_after": "• Account creation after: {{- age}}",
+						"dry_run": "• Operating in **dry-run** mode, no members will be banned!",
+						"days_zero": "• Not deleting any messages",
+						"days_one": "• Deleting messages sent in the last day",
+						"days_other": "• Deleting messages sent in the last {{count}} days"
+					},
+					"reason": "Anti-Raid-Nuke `({{current}}/{{count}})`",
+					"pending": "Anti-Raid-Nuke is projected to hit {{count}} members.\n• Created within {{creation_range}}\n• Joined within {{join_range}}",
+					"buttons": {
+						"execute": "Launch",
+						"dry_run": "Dry run"
+					},
+					"attachment": "{{user_id}} | Join: {{- joined_at}} | Creation: {{- created_at}} | {{- user_tag}}`",
+					"cancel": "Cancelled Anti-Raid-Nuke.",
+					"success": "Anti-Raid-Nuke hit {{count}} members."
+				},
+				"filter": {
+					"errors": {
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again.",
+						"no_ids": "The filter did not match any users.",
+						"invalid_avatar": "Invalid avatar format, must be an raw hash, a user id, a URL or `none`.",
+						"pattern_format": "Invalid pattern provided"
+					},
+					"parameters": {
+						"join_after": "• **Join:**\n> From: {{- join_from}}\n> To: {{- join_to}}",
+						"created_after": "• **Account creation:** \n> From: {{- age_from}}\n> To: {{- age_to}}",
 						"pattern": "• Username matching pattern:",
 						"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
-						"days_one": "• Deleting messages sent in the last {{count}} day",
-						"days_other": "• Deleting messages sent in the last {{count}} days",
-						"days_none": "• Not deleting any messages"
+						"zalgo": "• Filtering usernames with Zalgo",
+						"confusables": "• Filtering usernames with Confusables"
 					}
 				},
-				"reason": "Anti-Raid-Nuke `({{current}}/{{members}})`",
-				"reason_fallback": "Anti-Raid-Nuke",
-				"pending": "Anti-Raid-Nuke is projected to hit {{members}} guild members.\n• Created within {{creationrange}}\n• Joined within {{joinrange}}",
-				"buttons": {
-					"cancel": "Cancel",
-					"execute": "Launch"
+				"file": {
+					"errors": {
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, the file you provided did not match any users.",
+						"no_ids": "This file does not contain any ids."
+					},
+					"parameters": {
+						"file": "• File: {{- file}}",
+						"users": "• Out of all of the ids, {{- users}} aren't members of this guild"
+					}
 				},
-				"cancel": "Cancelled Anti-Raid-Nuke.",
-				"success": "Anti-Raid-Nuke hit {{- members}} guild members."
+				"modal": {
+					"errors": {
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, the content you provided did not match any users.",
+						"no_ids": "The content does not contain any ids."
+					},
+					"parameters": {
+						"users": "• Out of all of the ids, {{- users}} aren't members of this guild"
+					},
+					"title": "Anti-Raid-Nuke Entry",
+					"components": {
+						"label": "{{i}}- Enter valid ids",
+						"placeholder": "Enter ids separated by spaces or any other valid separator (e.g. ,|/)"
+					}
+				}
 			},
 			"restrict": {
 				"embed": {
@@ -156,7 +196,6 @@
 					},
 					"pending": "Do you really want to embed restrict {{- user}}?",
 					"buttons": {
-						"cancel": "Cancel",
 						"execute": "Restrict"
 					},
 					"cancel": "Cancelled embed restriction on {{- user}}",
@@ -170,7 +209,6 @@
 					},
 					"pending": "Do you really want to react restrict {{- user}}?",
 					"buttons": {
-						"cancel": "Cancel",
 						"execute": "Restrict"
 					},
 					"cancel": "Cancelled react restriction on {{- user}}",
@@ -184,7 +222,6 @@
 					},
 					"pending": "Do you really want to emoji restrict {{- user}}?",
 					"buttons": {
-						"cancel": "Cancel",
 						"execute": "Restrict"
 					},
 					"cancel": "Cancelled emoji restriction on {{- user}}",
@@ -197,7 +234,6 @@
 					},
 					"pending": "Do you really want to unrole {{- user}} from {{- role}} with case #{{case}}?",
 					"buttons": {
-						"cancel": "Cancel",
 						"execute": "Unrole"
 					},
 					"cancel": "Cancelled unrole on {{- user}} from {{- role}} on case #{{case}}",
@@ -213,7 +249,6 @@
 					},
 					"pending": "Do you really want to lock {{- channel}}?",
 					"buttons": {
-						"cancel": "Cancel",
 						"execute": "Lock"
 					},
 					"message": "🔒 This channel has been locked, it will be unlocked {{- duration}}",
@@ -228,7 +263,6 @@
 					},
 					"pending": "Do you really want to lift the lock on {{- channel}}?",
 					"buttons": {
-						"cancel": "Cancel",
 						"execute": "Unlock"
 					},
 					"cancel": "Cancelled lifting lock of {{- channel}}",
@@ -237,13 +271,12 @@
 			},
 			"reason": {
 				"success": "Successfully set reason for case {{- case}}",
-				"success_multiple": "Successfully set reason for case range {{- lower_case}} to {{- upper_case}} ({{amount}}/{{target}} cases)",
-				"pending_multiple": "Do you really want to set a reason for case range {{- lower_case}} to {{- upper_case}} ({{amount}} cases)?",
+				"success_multiple": "Successfully set reason for case range {{- lower_case}} to {{- upper_case}} ({{current}}/{{count}} cases)",
+				"pending_multiple": "Do you really want to set a reason for case range {{- lower_case}} to {{- upper_case}} ({{count}} cases)?",
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Set Reason"
 				},
-				"cancel": "Cancelled setting reason"
+				"cancel": "Cancelled setting reason."
 			},
 			"reference": {
 				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
@@ -268,13 +301,12 @@
 				"after": "• After: {{- amount}}",
 				"last_change": "• Last change: {{- timestamp}}",
 				"buttons": {
-					"execute": "Refresh",
-					"cancel": "Cancel"
+					"execute": "Refresh"
 				},
-				"cancel": "Cancelled scam domain list refreshing",
-				"success": "Successfully refreshed scam domain lists",
-				"pending": "Current scam domain lists",
-				"error": "Something went wrong when refreshing scam domains"
+				"cancel": "Cancelled scam domain list refreshing.",
+				"success": "Successfully refreshed scam domain lists.",
+				"pending": "Current scam domain lists:",
+				"error": "Something went wrong when refreshing scam domains."
 			},
 			"sponsor": {
 				"errors": {
@@ -283,7 +315,6 @@
 				},
 				"pending": "Do you really want to apply the sponsor role to {{- user}}?",
 				"buttons": {
-					"cancel": "Cancel",
 					"execute": "Apply"
 				},
 				"cancel": "Cancelled applying sponsor role to {{- user}}",
@@ -295,25 +326,28 @@
 		"history": {
 			"title": "Case History",
 			"user_details": "User details",
-			"user_details_description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"user_details_description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})",
 			"member_details": "Member details",
-			"member_details_description": "• Nickname: {{- memberNickname}}\n• Roles: {{- memberRoles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"member_details_description": "• Nickname: {{- member_nickname}}\n• Roles: {{- member_roles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
 			"member_details_no_nickname": "No nickname",
 			"summary_truncated": "{{- summary}}\nand more..."
 		},
 		"mod_log": {
 			"case_log": {
-				"description": "**Member**: `{{- targetTag}}` ({{targetId}})\n**Action**: {{- action}}",
+				"description": "**Member**: `{{- target_tag}}` ({{target_id}})\n**Action**: {{- action}}",
 				"expiration": "\n**Expiration**: {{- time}}",
 				"context": "**Context:** {{- link}}",
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
-				"reason_fallback": "\n**Reason:** Use `/reason {{caseId}} <...reason>` to set a reason for this case",
+				"reason_fallback": "\n**Reason:** Use `/reason {{case_id}} <...reason>` to set a reason for this case",
 				"reference": "\n**Reference:** {{- ref}}",
-				"footer": "Case {{caseId}}"
+				"footer": "Case {{case_id}}"
 			},
 			"anti_raid_nuke": {
-				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{members}}\n**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}",
+				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{count}}",
+				"parameters": {
+					"cutoff": "**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}"
+				},
 				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
@@ -325,7 +359,7 @@
 			}
 		},
 		"member_log": {
-			"description": "• Username: {{- userMention}} - `{{userTag}}` ({{userId}})\n• Created: {{- created_at}} ({{- created_at_since}})",
+			"description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})",
 			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
 			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
@@ -357,20 +391,26 @@
 			"voice_state_update": {
 				"title": "Voice state update",
 				"joined": "Joined {{- channel}}",
-				"moved": "Moved from {{- fromChannel}} to {{- toChannel}}",
+				"moved": "Moved from {{- from_channel}} to {{- to_channel}}",
 				"left": "Left {{- channel}}"
 			},
 			"thread_created": {
 				"title": "Thread created",
-				"channel": "• Thread: {{- channel}} {{- name}} {{- channelId}}",
-				"starter": "• Starter message: {{- messageId}}",
+				"channel": "• Thread: {{- channel}} {{- name}} {{channel_id}}",
+				"starter": "• Starter message: {{message_id}}",
 				"jump_to": "• [Jump to starter message]({{- link}})"
 			},
 			"thread_deleted": {
 				"title": "Thread deleted",
-				"channel": "• Thread: {{- name}} {{- channelId}}",
-				"starter": "• Starter message: {{- messageId}}",
+				"channel": "• Thread: {{- name}} {{channel_id}}",
+				"starter": "• Starter message: {{message_id}}",
 				"jump_to": "• [Jump to starter message]({{- link}})"
+			}
+		},
+		"general_log": {
+			"anti_raid_nuke": {
+				"title": "Anti-Raid-Nuke launched",
+				"description": "• Author: {{- author}}\n• Hit count: {{count}}"
 			}
 		}
 	}

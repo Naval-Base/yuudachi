@@ -16,6 +16,7 @@ export enum SettingsKeys {
 	AutomodIgnoreRoles = 'automod_ignore_roles',
 	SponsorRoleId = 'sponsor_role_id',
 	ForceLocale = 'force_locale',
+	AntiRaidArchive = 'anti_raid_archive_channel_id',
 }
 
 export async function getGuildSetting<T = string>(guildId: Snowflake, prop: SettingsKeys, table = 'guild_settings') {
@@ -28,6 +29,6 @@ export async function getGuildSetting<T = string>(guildId: Snowflake, prop: Sett
 		[guildId],
 	);
 
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	return (data?.value ?? null) as T;
 }

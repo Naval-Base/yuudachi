@@ -1,4 +1,4 @@
-import postgres, { Sql } from 'postgres';
+import postgres, { type Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { kSQL } from '../tokens.js';
 

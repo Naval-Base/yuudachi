@@ -1,4 +1,4 @@
-import { type CommandInteraction, Formatters, ComponentType, ButtonStyle } from 'discord.js';
+import { type CommandInteraction, ComponentType, ButtonStyle, hyperlink } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command.js';
@@ -24,11 +24,12 @@ export default class implements Command {
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
-		const logChannel = await checkLogChannel(
+		const modLogChannel = await checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
-		if (!logChannel) {
+
+		if (!modLogChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
@@ -36,8 +37,8 @@ export default class implements Command {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
 
-		const lower = Math.min(args.case, args.lastcase ?? args.case);
-		const upper = Math.max(args.case, args.lastcase ?? args.case);
+		const lower = Math.min(args.case, args.last_case ?? args.case);
+		const upper = Math.max(args.case, args.last_case ?? args.case);
 
 		if (lower < 1 || upper < 1) {
 			await interaction.editReply({
@@ -51,7 +52,7 @@ export default class implements Command {
 		let originalCaseLower: Case | null;
 		let originalCaseUpper: Case | null;
 
-		if (args.lastcase) {
+		if (args.last_case) {
 			const changeKey = nanoid();
 			const cancelKey = nanoid();
 
@@ -62,7 +63,7 @@ export default class implements Command {
 			});
 			const cancelButton = createButton({
 				customId: cancelKey,
-				label: i18next.t('command.mod.reason.buttons.cancel', { lng: locale }),
+				label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 				style: ButtonStyle.Secondary,
 			});
 
@@ -83,15 +84,15 @@ export default class implements Command {
 
 			await interaction.editReply({
 				content: i18next.t('command.mod.reason.pending_multiple', {
-					lower_case: Formatters.hyperlink(
+					lower_case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
 					),
-					upper_case: Formatters.hyperlink(
+					upper_case: hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper.logMessageId!),
 					),
-					amount: upper - lower + 1,
+					count: upper - lower + 1,
 					lng: locale,
 				}),
 				components: [createMessageActionRow([cancelButton, changeButton])],
@@ -106,7 +107,7 @@ export default class implements Command {
 				.catch(async () => {
 					try {
 						await interaction.editReply({
-							content: i18next.t('common.errors.timed_out', { lng: locale }),
+							content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 							components: [],
 						});
 					} catch (e) {
@@ -132,6 +133,7 @@ export default class implements Command {
 			}
 		} else {
 			originalCaseLower = await getCase(interaction.guildId, lower);
+
 			if (!originalCaseLower) {
 				await interaction.editReply({
 					content: i18next.t('command.mod.common.errors.no_case', {
@@ -144,10 +146,11 @@ export default class implements Command {
 			}
 		}
 
-		const success = [];
+		const success: number[] = [];
 
 		for (let caseId = lower; caseId <= upper; caseId++) {
 			const originalCase = await getCase(interaction.guildId, caseId);
+
 			if (!originalCase) {
 				continue;
 			}
@@ -158,28 +161,28 @@ export default class implements Command {
 				reason: args.reason,
 			});
 
-			await upsertCaseLog(interaction.guildId, interaction.user, case_);
+			await upsertCaseLog(interaction.guild, interaction.user, case_);
 			success.push(caseId);
 		}
 
-		const message = args.lastcase
+		const message = args.last_case
 			? i18next.t('command.mod.reason.success_multiple', {
-					lower_case: Formatters.hyperlink(
+					lower_case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
 					),
-					upper_case: Formatters.hyperlink(
+					upper_case: hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseUpper!.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper!.logMessageId!),
 					),
 					amount: success.length,
-					target: upper - lower + 1,
+					count: upper - lower + 1,
 					lng: locale,
 			  })
 			: i18next.t('command.mod.reason.success', {
-					case: Formatters.hyperlink(
+					case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, logChannel.id, originalCaseLower.logMessageId!),
+						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
 					),
 					lng: locale,
 			  });

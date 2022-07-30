@@ -62,12 +62,14 @@ export async function unrole(
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t('command.mod.restrict.unrole.buttons.cancel', { lng: locale }),
+		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.restrict.unrole.pending', {
+			user: `${user.toString()} - ${user.tag} (${user.id})`,
+			role: role ? `${role.toString()} - ${role.name} (${role.id})` : 'Unknown',
 			case: args.case,
 			lng: locale,
 		}),
@@ -83,7 +85,7 @@ export async function unrole(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch {}
@@ -109,7 +111,7 @@ export async function unrole(
 			caseId: args.case,
 			manual: true,
 		});
-		await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+		await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.unrole.success', {

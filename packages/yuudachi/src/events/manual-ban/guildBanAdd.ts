@@ -1,7 +1,6 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
-import { AuditLogEvent } from 'discord-api-types/v10';
-import { Client, Events, type GuildBan } from 'discord.js';
+import { Client, Events, type GuildBan, AuditLogEvent } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -24,16 +23,18 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildBan] of on(this.client, this.event) as AsyncIterableIterator<[GuildBan]>) {
 			try {
-				const logChannel = await checkLogChannel(
+				const modLogChannel = await checkLogChannel(
 					guildBan.guild,
 					await getGuildSetting(guildBan.guild.id, SettingsKeys.ModLogChannelId),
 				);
-				if (!logChannel) {
+
+				if (!modLogChannel) {
 					continue;
 				}
 
 				const deleted = await this.redis.del(`guild:${guildBan.guild.id}:user:${guildBan.user.id}:ban`);
 				const antiRaidNuke = await this.redis.get(`guild:${guildBan.guild.id}:anti_raid_nuke`);
+
 				if (deleted || antiRaidNuke) {
 					logger.info(
 						{
@@ -85,7 +86,7 @@ export default class implements Event {
 					}),
 					true,
 				);
-				await upsertCaseLog(guildBan.guild.id, logs?.executor, case_);
+				await upsertCaseLog(guildBan.guild, logs?.executor, case_);
 			} catch (e) {
 				const error = e as Error;
 				logger.error(error, error.message);

@@ -1,7 +1,6 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
-import { AuditLogEvent } from 'discord-api-types/v10';
-import { Client, Events, type GuildMember } from 'discord.js';
+import { Client, Events, type GuildMember, AuditLogEvent } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -31,15 +30,17 @@ export default class implements Event {
 					`Member ${guildMember.id} kicked`,
 				);
 
-				const logChannel = await checkLogChannel(
+				const modLogChannel = await checkLogChannel(
 					guildMember.guild,
 					await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId),
 				);
-				if (!logChannel) {
+
+				if (!modLogChannel) {
 					continue;
 				}
 
 				const deleted = await this.redis.del(`guild:${guildMember.guild.id}:user:${guildMember.user.id}:kick`);
+
 				if (deleted) {
 					continue;
 				}
@@ -58,7 +59,7 @@ export default class implements Event {
 						}),
 						true,
 					);
-					await upsertCaseLog(guildMember.guild.id, logs.executor, case_);
+					await upsertCaseLog(guildMember.guild, logs.executor, case_);
 				}
 			} catch (e) {
 				const error = e as Error;

@@ -1,5 +1,6 @@
+import process from 'node:process';
 import { parentPort } from 'node:worker_threads';
-import type { Snowflake } from 'discord-api-types/v10';
+import type { Snowflake } from 'discord.js';
 import { JobType } from '../Constants.js';
 import { createPostgres } from '../util/postgres.js';
 

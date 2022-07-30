@@ -29,19 +29,20 @@ export default class implements Command {
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
-		const logChannel = await checkLogChannel(
+		const modLogChannel = await checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
-		if (!logChannel) {
+
+		if (!modLogChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
 		if (!args.user.member) {
 			throw new Error(
-				i18next.t('command.mod.timeout.errors.not_member', {
-					lng: locale,
+				i18next.t('command.common.errors.target_not_found', {
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
 				}),
 			);
 		}
@@ -49,8 +50,8 @@ export default class implements Command {
 		if (Date.now() < (args.user.member.communicationDisabledUntilTimestamp ?? 0)) {
 			throw new Error(
 				i18next.t('command.mod.timeout.errors.already_timed_out', {
-					lng: locale,
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
 				}),
 			);
 		}
@@ -61,8 +62,8 @@ export default class implements Command {
 		) {
 			throw new Error(
 				i18next.t('command.mod.timeout.errors.missing_permissions', {
-					lng: locale,
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
 				}),
 			);
 		}
@@ -83,7 +84,7 @@ export default class implements Command {
 		});
 		const cancelButton = createButton({
 			customId: cancelKey,
-			label: i18next.t('command.mod.timeout.buttons.cancel', { lng: locale }),
+			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 			style: ButtonStyle.Secondary,
 		});
 
@@ -105,7 +106,7 @@ export default class implements Command {
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
 				} catch (e) {
@@ -139,7 +140,7 @@ export default class implements Command {
 					action: CaseAction.Timeout,
 				}),
 			);
-			await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+			await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.mod.timeout.success', {

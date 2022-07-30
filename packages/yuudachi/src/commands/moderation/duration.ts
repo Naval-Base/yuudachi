@@ -1,5 +1,5 @@
 import { ms } from '@naval-base/ms';
-import { type CommandInteraction, Formatters } from 'discord.js';
+import { type CommandInteraction, hyperlink } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command.js';
 import { getCase } from '../../functions/cases/getCase.js';
@@ -18,20 +18,24 @@ export default class implements Command {
 		locale: string,
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
-		const logChannel = await checkLogChannel(
+
+		const modLogChannel = await checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
-		if (!logChannel) {
+
+		if (!modLogChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
 		const originalCase = await getCase(interaction.guildId, args.case);
+
 		if (!originalCase) {
 			throw new Error(i18next.t('command.mod.common.errors.no_case', { case: args.case, lng: locale }));
 		}
 
 		const parsedDuration = ms(args.duration);
+
 		if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 		}
@@ -41,13 +45,13 @@ export default class implements Command {
 			guildId: interaction.guildId,
 			actionExpiration: new Date(Date.now() + parsedDuration),
 		});
-		await upsertCaseLog(interaction.guildId, interaction.user, case_);
+		await upsertCaseLog(interaction.guild, interaction.user, case_);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.duration.success', {
-				case: Formatters.hyperlink(
+				case: hyperlink(
 					`#${originalCase.caseId}`,
-					generateMessageLink(interaction.guildId, logChannel.id, originalCase.logMessageId!),
+					generateMessageLink(interaction.guildId, modLogChannel.id, originalCase.logMessageId!),
 				),
 				lng: locale,
 			}),

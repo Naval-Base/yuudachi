@@ -1,5 +1,10 @@
-import { OverwriteType, PermissionFlagsBits } from 'discord-api-types/v10';
-import type { GuildChannel, PermissionOverwrites, Snowflake } from 'discord.js';
+import {
+	type GuildChannel,
+	type PermissionOverwrites,
+	type Snowflake,
+	OverwriteType,
+	PermissionFlagsBits,
+} from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { type RawLockdown, transformLockdown } from './transformLockdown.js';

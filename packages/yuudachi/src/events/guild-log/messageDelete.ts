@@ -24,17 +24,26 @@ export default class implements Event {
 			if (message.author.bot) {
 				continue;
 			}
+
 			if (!message.inGuild()) {
 				continue;
 			}
+
 			if (!message.content.length && !message.embeds.length && !message.attachments.size && !message.stickers.size) {
 				continue;
 			}
 
 			try {
-				const logChannelId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels);
-				if (!logChannelId) {
+
+				if (!guildLogWebhookId) {
+					continue;
+				}
+
+				const webhook = this.webhooks.get(guildLogWebhookId);
+
+				if (!webhook) {
 					continue;
 				}
 
@@ -59,14 +68,9 @@ export default class implements Event {
 					`Message by ${message.author.id} deleted in channel ${message.channelId}`,
 				);
 
-				const webhook = this.webhooks.get(logChannelId);
-				if (!webhook) {
-					continue;
-				}
-
 				let info = i18next.t('log.guild_log.message_deleted.channel', {
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					channel: message.channel.toString(),
+					channel: `${message.channel.toString()} - ${message.channel.name} (${message.channel.id})`,
 					lng: locale,
 				});
 				let embed = addFields({

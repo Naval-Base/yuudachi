@@ -1,7 +1,6 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
-import { AuditLogEvent } from 'discord-api-types/v10';
-import { Client, Events, type GuildMember } from 'discord.js';
+import { Client, Events, type GuildMember, AuditLogEvent } from 'discord.js';
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -27,13 +26,13 @@ export default class implements Event {
 			[GuildMember, GuildMember]
 		>) {
 			try {
-				const logChannel = await checkLogChannel(
+				const modLogChannel = await checkLogChannel(
 					oldMember.guild,
 					await getGuildSetting(oldMember.guild.id, SettingsKeys.ModLogChannelId),
 				);
 
 				if (
-					!logChannel ||
+					!modLogChannel ||
 					oldMember.communicationDisabledUntilTimestamp === newMember.communicationDisabledUntilTimestamp ||
 					(newMember.communicationDisabledUntilTimestamp ?? Infinity) < Date.now()
 				) {
@@ -41,6 +40,7 @@ export default class implements Event {
 				}
 
 				const deleted = await this.redis.del(`guild:${oldMember.guild.id}:user:${oldMember.id}:timeout`);
+
 				if (deleted) {
 					logger.info(
 						{
@@ -107,7 +107,7 @@ export default class implements Event {
 							true,
 					  ));
 
-				await upsertCaseLog(oldMember.guild.id, logs.executor, case_);
+				await upsertCaseLog(oldMember.guild, logs.executor, case_);
 			} catch (e) {
 				const error = e as Error;
 				logger.error(error, error.message);

@@ -1,5 +1,4 @@
-import { InteractionType } from 'discord-api-types/v10';
-import { Client, Events } from 'discord.js';
+import { Client, Events, InteractionType } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command.js';
 import type { Event } from '../Event.js';
@@ -34,6 +33,7 @@ export default class implements Event {
 			}
 
 			const command = this.commands.get(interaction.commandName.toLowerCase());
+
 			if (command) {
 				try {
 					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);

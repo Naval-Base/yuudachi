@@ -1,5 +1,4 @@
-import { ChannelType, PermissionFlagsBits } from 'discord-api-types/v10';
-import type { CommandInteraction, TextChannel } from 'discord.js';
+import { type CommandInteraction, type TextChannel, ChannelType, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 import { lift } from './sub/lockdown/lift.js';
 import { lock } from './sub/lockdown/lock.js';
@@ -35,6 +34,7 @@ export default class implements Command {
 				}
 
 				const reason = args.lock.reason;
+
 				if (reason && reason.length >= 1900) {
 					throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 				}
@@ -48,7 +48,7 @@ export default class implements Command {
 					throw new Error(
 						i18next.t('command.mod.lockdown.lock.errors.missing_permissions', {
 							// eslint-disable-next-line @typescript-eslint/no-base-to-string
-							channel: targetChannel.toString(),
+							channel: `${targetChannel.toString()} - ${targetChannel.name} (${targetChannel.id})`,
 							lng: locale,
 						}),
 					);

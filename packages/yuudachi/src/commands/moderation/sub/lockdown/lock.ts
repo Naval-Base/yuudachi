@@ -2,11 +2,13 @@ import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
 import {
 	type CommandInteraction,
-	Formatters,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
 	type InteractionResponse,
+	inlineCode,
+	time,
+	TimestampStyles,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -15,13 +17,20 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
+interface LockdownLockArgs {
+	channel: TextChannel;
+	duration: string;
+	reason?: string;
+}
+
 export async function lock(
 	interaction: CommandInteraction<'cached'>,
 	reply: InteractionResponse<true>,
-	args: { channel: TextChannel; duration: string; reason?: string },
+	args: LockdownLockArgs,
 	locale: string,
 ): Promise<void> {
 	const lockdown = await getLockdown(interaction.guildId, args.channel.id);
+
 	if (lockdown) {
 		throw new Error(
 			i18next.t('command.mod.lockdown.lock.errors.already_locked', {
@@ -33,6 +42,7 @@ export async function lock(
 	}
 
 	const parsedDuration = ms(args.duration);
+
 	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
@@ -47,7 +57,7 @@ export async function lock(
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t('command.mod.lockdown.lock.buttons.cancel', { lng: locale }),
+		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 
@@ -69,7 +79,7 @@ export async function lock(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch {}
@@ -102,12 +112,12 @@ export async function lock(
 		await args.channel.send({
 			content: args.reason
 				? i18next.t('command.mod.lockdown.lock.message_reason', {
-						duration: Formatters.time(dayjs(duration.toISOString()).unix(), Formatters.TimestampStyles.RelativeTime),
-						reason: Formatters.inlineCode(args.reason),
+						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
+						reason: inlineCode(args.reason),
 						lng: locale,
 				  })
 				: i18next.t('command.mod.lockdown.lock.message', {
-						duration: Formatters.time(dayjs(duration.toISOString()).unix(), Formatters.TimestampStyles.RelativeTime),
+						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
 						lng: locale,
 				  }),
 		});

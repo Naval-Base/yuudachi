@@ -27,20 +27,29 @@ export default class implements Event {
 			if (newMessage.author.bot) {
 				continue;
 			}
+
 			if (!newMessage.guild) {
 				continue;
 			}
+
 			if (escapeMarkdown(oldMessage.content) === escapeMarkdown(newMessage.content)) {
 				continue;
 			}
 
 			try {
-				const logChannelId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
+				const guildLogWebhookId = await getGuildSetting(newMessage.guild.id, SettingsKeys.GuildLogWebhookId);
 				const ignoreChannels = await getGuildSetting(newMessage.guild.id, SettingsKeys.LogIgnoreChannels);
 
-				if (!logChannelId) {
+				if (!guildLogWebhookId) {
 					continue;
 				}
+
+				const webhook = this.webhooks.get(guildLogWebhookId);
+
+				if (!webhook) {
+					continue;
+				}
+
 				if (
 					(newMessage.channel.isThread() && ignoreChannels.includes(newMessage.channel.parentId ?? '')) ||
 					ignoreChannels.includes(newMessage.channelId)
@@ -59,22 +68,21 @@ export default class implements Event {
 					`Member ${newMessage.author.id} updated a message`,
 				);
 
-				const webhook = this.webhooks.get(logChannelId);
-				if (!webhook) {
-					continue;
-				}
-
 				let description = '';
+
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
 					const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
+
 					if (!strippedOldMessage || !strippedOldMessage[2]) {
 						continue;
 					}
 
 					const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
+
 					if (!strippedNewMessage || !strippedNewMessage[2]) {
 						continue;
 					}
+
 					if (strippedOldMessage[2] === strippedNewMessage[2]) {
 						continue;
 					}
@@ -82,7 +90,9 @@ export default class implements Event {
 					const diffMessage = diffLines(strippedOldMessage[2], strippedNewMessage[2], { newlineIsToken: true });
 
 					for (const part of diffMessage) {
-						if (part.value === '\n') continue;
+						if (part.value === '\n') {
+							continue;
+						}
 						const d = part.added ? '+ ' : part.removed ? '- ' : '';
 						description += `${d}${part.value.replace(/\n/g, '')}\n`;
 					}
@@ -103,7 +113,9 @@ export default class implements Event {
 
 				const info = `${i18next.t('log.guild_log.message_updated.channel', {
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					channel: newMessage.channel.toString(),
+					channel: `${newMessage.channel.toString()} - ${newMessage.inGuild() ? newMessage.channel.name : ''}(${
+						newMessage.channel.id
+					})`,
 					lng: locale,
 				})}\n${i18next.t('log.guild_log.message_updated.jump_to', { link: newMessage.url, lng: locale })}`;
 				const embed = addFields(

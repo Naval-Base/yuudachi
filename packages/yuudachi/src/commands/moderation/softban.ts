@@ -28,11 +28,12 @@ export default class implements Command {
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
-		const logChannel = await checkLogChannel(
+		const modLogChannel = await checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
-		if (!logChannel) {
+
+		if (!modLogChannel) {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
@@ -63,7 +64,7 @@ export default class implements Command {
 		});
 		const cancelButton = createButton({
 			customId: cancelKey,
-			label: i18next.t('command.mod.softban.buttons.cancel', { lng: locale }),
+			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 			style: ButtonStyle.Secondary,
 		});
 
@@ -85,7 +86,7 @@ export default class implements Command {
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
 				} catch (e) {
@@ -117,12 +118,12 @@ export default class implements Command {
 						user: collectedInteraction.user,
 						args: {
 							...args,
-							days: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+							days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 						},
 						action: CaseAction.Softban,
 					}),
 				);
-				await upsertCaseLog(collectedInteraction.guildId, collectedInteraction.user, case_);
+				await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 			} else {
 				const reason = i18next.t('command.mod.softban.reasons.clear_messages', {
 					user: collectedInteraction.user.tag,
@@ -131,7 +132,7 @@ export default class implements Command {
 
 				await interaction.guild.bans.create(args.user.user, {
 					reason,
-					deleteMessageDays: args.days ? Math.min(Math.max(Number(args.days), 0), 7) : 1,
+					deleteMessageDays: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 				});
 				await interaction.guild.bans.remove(args.user.user, reason);
 			}

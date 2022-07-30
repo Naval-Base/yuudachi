@@ -1,22 +1,17 @@
-import type { APIEmbed } from 'discord-api-types/v10';
-import type { Guild, TextChannel, User } from 'discord.js';
+import type { Guild, User, APIEmbed } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog.js';
 import { kSQL } from '../../tokens.js';
 import type { Case } from '../cases/createCase.js';
+import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function insertAntiRaidNukeCaseLog(
-	guild: Guild,
-	user: User,
-	logChannel: TextChannel,
-	cases: Case[],
-	reason: string,
-) {
+export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases: Case[], reason: string) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
+	const modLogChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
 	const [nextCase] = await sql<[{ next_case: number }]>`select next_case(${guild.id});`;
 	const from = nextCase.next_case - cases.length;
@@ -34,12 +29,12 @@ export async function insertAntiRaidNukeCaseLog(
 		timestamp: new Date().toISOString(),
 	};
 
-	const logMessage = await logChannel.send({
+	const logMessage = await modLogChannel!.send({
 		embeds: [embed],
 	});
 
 	await sql`update cases
 		set log_message_id = ${logMessage.id}
 		where guild_id = ${guild.id}
-			and case_id in (${cases.map((case_) => case_.caseId)})`;
+			and case_id in ${sql(cases.map((case_) => case_.caseId))}`;
 }

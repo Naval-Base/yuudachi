@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 import type Bree from 'bree';
-import { Client } from 'discord.js';
+import { Client, type Snowflake } from 'discord.js';
 import { container } from 'tsyringe';
 import { JobType } from './Constants.js';
 import { deleteCase } from './functions/cases/deleteCase.js';
@@ -43,14 +43,14 @@ export async function startJobs() {
 		bree.workers.get(name)?.on(
 			'message',
 			// eslint-disable-next-line @typescript-eslint/no-misused-promises
-			async (message: string | { op: JobType; d: { guildId: string; channelId: string; caseId: number } }) => {
+			async (message: string | { op: JobType; d: { guildId: Snowflake; channelId: Snowflake; caseId: number } }) => {
 				if (typeof message !== 'string') {
 					switch (message.op) {
 						case JobType.Case: {
 							try {
 								const guild = await client.guilds.fetch(message.d.guildId);
 								const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
-								await upsertCaseLog(message.d.guildId, client.user, case_);
+								await upsertCaseLog(guild, client.user, case_);
 							} catch (e) {
 								const error = e as Error;
 								logger.error(error, error.message);

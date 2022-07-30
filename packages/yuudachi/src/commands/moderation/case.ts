@@ -1,10 +1,16 @@
-import { AutocompleteInteraction, Collection, CommandInteraction, Guild } from 'discord.js';
+import {
+	type AutocompleteInteraction,
+	Collection,
+	type CommandInteraction,
+	type Guild,
+	type Snowflake,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import type { Command } from '../../Command.js';
 import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from '../../Constants.js';
-import { RawCase, transformCase } from '../../functions/cases/transformCase.js';
+import { type RawCase, transformCase } from '../../functions/cases/transformCase.js';
 import { generateCaseEmbed } from '../../functions/logging/generateCaseEmbed.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
@@ -19,13 +25,15 @@ import { generateHistory } from '../../util/generateHistory.js';
 
 const OP_DELIMITER = '-' as const;
 
-async function resolveMemberAndUser(guild: Guild, id: string) {
+async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
 	try {
 		const member = await guild.members.fetch(id);
-		return { member, user: member.user };
+
+		return { member, user: member.user } as const;
 	} catch {
 		const user = await guild.client.users.fetch(id);
-		return { user };
+
+		return { user } as const;
 	}
 }
 
@@ -45,13 +53,14 @@ export default class implements Command {
 						lng: locale,
 					})!
 				}`;
+
 				return {
 					name: ellipsis(choiceName, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT),
 					value: String(c.case_id),
-				};
+				} as const;
 			});
 
-			const uniqueTargets = new Collection<string, { id: string; tag: string }>();
+			const uniqueTargets = new Collection<string, { id: Snowflake; tag: string }>();
 
 			for (const c of cases) {
 				if (uniqueTargets.has(c.target_id)) {
@@ -66,8 +75,8 @@ export default class implements Command {
 					{
 						name: ellipsis(
 							i18next.t('command.mod.case.autocomplete.show_history', {
-								lng: locale,
 								user: target.tag,
+								lng: locale,
 							})!,
 							AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
 						),
@@ -75,6 +84,7 @@ export default class implements Command {
 					},
 					...choices,
 				];
+
 				if (choices.length > AUTOCOMPLETE_CHOICE_LIMIT) {
 					choices.length = AUTOCOMPLETE_CHOICE_LIMIT;
 				}
@@ -96,6 +106,7 @@ export default class implements Command {
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 		const [cmd, id] = args.phrase.split(OP_DELIMITER);
+
 		if (cmd === 'history' && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
 			await interaction.editReply({
@@ -115,7 +126,7 @@ export default class implements Command {
 				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
 			}
 
-			const logChannel = await checkLogChannel(
+			const modLogChannel = await checkLogChannel(
 				interaction.guild,
 				await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 			);
@@ -124,7 +135,7 @@ export default class implements Command {
 			await interaction.editReply({
 				embeds: [
 					truncateEmbed(
-						await generateCaseEmbed(interaction.guildId, logChannel!.id, moderator, transformCase(modCase)),
+						await generateCaseEmbed(interaction.guildId, modLogChannel!.id, moderator, transformCase(modCase)),
 					),
 				],
 			});
