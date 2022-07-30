@@ -108,7 +108,9 @@ export default class implements Event {
 					title: i18next.t('log.guild_log.message_bulk_deleted.title', { lng: locale }),
 					description: i18next.t('log.guild_log.message_bulk_deleted.description', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: message.channel.toString(),
+						channel: `${message.channel.toString()} - ${message.inGuild() ? message.channel.name : ''}(${
+							message.channel.id
+						})`,
 						lng: locale,
 					}),
 					timestamp: new Date().toISOString(),

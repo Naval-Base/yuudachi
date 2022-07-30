@@ -67,7 +67,7 @@ export default class implements Event {
 
 					description = i18next.t('log.guild_log.voice_state_update.joined', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: newState.channel.toString(),
+						channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
 				} else if (oldState?.channel && (!newState.channel || ignoreChannels.includes(newState.channelId))) {
@@ -84,15 +84,15 @@ export default class implements Event {
 
 					description = i18next.t('log.guild_log.voice_state_update.left', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: oldState.channel.toString(),
+						channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						lng: locale,
 					});
 				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
 					description = i18next.t('log.guild_log.voice_state_update.moved', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						from_channel: oldState.channel.toString(),
+						from_channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						to_channel: newState.channel.toString(),
+						to_channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
 				} else {

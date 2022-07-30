@@ -113,7 +113,9 @@ export default class implements Event {
 
 				const info = `${i18next.t('log.guild_log.message_updated.channel', {
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					channel: newMessage.channel.toString(),
+					channel: `${newMessage.channel.toString()} - ${newMessage.inGuild() ? newMessage.channel.name : ''}(${
+						newMessage.channel.id
+					})`,
 					lng: locale,
 				})}\n${i18next.t('log.guild_log.message_updated.jump_to', { link: newMessage.url, lng: locale })}`;
 				const embed = addFields(

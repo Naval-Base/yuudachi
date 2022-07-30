@@ -70,7 +70,7 @@ export default class implements Event {
 
 				let info = i18next.t('log.guild_log.message_deleted.channel', {
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					channel: message.channel.toString(),
+					channel: `${message.channel.toString()} - ${message.channel.name} (${message.channel.id})`,
 					lng: locale,
 				});
 				let embed = addFields({

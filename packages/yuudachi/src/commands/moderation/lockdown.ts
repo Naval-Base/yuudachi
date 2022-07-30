@@ -48,7 +48,7 @@ export default class implements Command {
 					throw new Error(
 						i18next.t('command.mod.lockdown.lock.errors.missing_permissions', {
 							// eslint-disable-next-line @typescript-eslint/no-base-to-string
-							channel: targetChannel.toString(),
+							channel: `${targetChannel.toString()} - ${targetChannel.name} (${targetChannel.id})`,
 							lng: locale,
 						}),
 					);
