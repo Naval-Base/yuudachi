@@ -278,7 +278,7 @@ export async function filter(
 			result
 				.map(
 					(r) =>
-						`${r.member.user.id.padEnd(20, ' ')} | Join: ${dayjs(r.member.joinedTimestamp).format(
+						`${r.member.user.id.padEnd(19, ' ')} | Join: ${dayjs(r.member.joinedTimestamp).format(
 							DATE_FORMAT_LOGFILE,
 						)} | Creation: ${dayjs(r.member.user.createdTimestamp).format(DATE_FORMAT_LOGFILE)} | ${r.member.user.tag}`,
 				)
