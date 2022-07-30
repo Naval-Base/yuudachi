@@ -149,7 +149,6 @@
 				"filter": {
 					"errors": {
 						"no_hits": "",
-						"no_ids": "",
 						"invalid_avatar": "",
 						"pattern_format": ""
 					},
@@ -259,7 +258,8 @@
 				"lift": {
 					"errors": {
 						"missing_permissions": "Me faltan permisos para desbloquear {{- channel}}",
-						"not_locked": "{{- channel}} no está bloqueado."
+						"not_locked": "{{- channel}} no está bloqueado.",
+						"failure": ""
 					},
 					"pending": "¿Realmente quieres desbloquear {{- channel}}?",
 					"buttons": {
@@ -317,6 +317,7 @@
 				"buttons": {
 					"execute": "Aplicar"
 				},
+				"reason": "",
 				"cancel": "Se canceló la aplicación del rol de patrocinadores a {{- user}}",
 				"success": "Se aplicó con éxito el rol de patrocinadores a {{- user}}"
 			}
