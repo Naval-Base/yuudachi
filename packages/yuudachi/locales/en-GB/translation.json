@@ -149,7 +149,6 @@
 				"filter": {
 					"errors": {
 						"no_hits": "",
-						"no_ids": "",
 						"invalid_avatar": "",
 						"pattern_format": ""
 					},
@@ -259,7 +258,8 @@
 				"lift": {
 					"errors": {
 						"missing_permissions": "Missing permissions to lift the lock on {{- channel}}",
-						"not_locked": "{{- channel}} is not locked."
+						"not_locked": "{{- channel}} is not locked.",
+						"failure": ""
 					},
 					"pending": "Do you really want to lift the lock on {{- channel}}?",
 					"buttons": {
@@ -317,6 +317,7 @@
 				"buttons": {
 					"execute": "Apply"
 				},
+				"reason": "",
 				"cancel": "Cancelled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
 			}
