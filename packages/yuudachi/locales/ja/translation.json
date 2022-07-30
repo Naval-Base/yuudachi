@@ -1,20 +1,22 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_role": "このコマンドはモデレーターしか使えます。",
-			"target_not_found": "対象ユーザーはこのサーバーにいません。",
-			"timed_out": "",
-			"no_mod_log_channel": ""
+			"no_mod_log_channel": "",
+			"no_anti_raid_archive_channel": ""
 		}
 	},
 	"command": {
 		"common": {
 			"errors": {
 				"generic": "問題が発生しました。",
-				"no_enabled_module": "このサーバーで{{ module }}は無効化しています。",
-				"target_not_found": "対象ユーザーはこのサーバーにいません。",
+				"no_enabled_module": "",
 				"duration_format": "存続期間の形式は間違っています。",
-				"use_autocomplete": ""
+				"use_autocomplete": "",
+				"target_not_found": "対象ユーザーはこのサーバーにいません。",
+				"timed_out": ""
+			},
+			"buttons": {
+				"cancel": ""
 			}
 		},
 		"config": {
@@ -44,7 +46,6 @@
 			"warn": {
 				"pending": "",
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": "警告する"
 				},
 				"cancel": "{{- user}}を警告することをキャンセルしました",
@@ -53,11 +54,9 @@
 			"timeout": {
 				"errors": {
 					"missing_permissions": "",
-					"not_member": "",
 					"already_timed_out": ""
 				},
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": ""
 				},
 				"pending": "",
@@ -66,12 +65,10 @@
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "{{- user}}を追放するの権利がありません",
-					"not_member": "{{- user}}と言うユーザーはこのサーバーにいません"
+					"missing_permissions": "{{- user}}を追放するの権利がありません"
 				},
 				"pending": "本当に{{- user}}を追放しますか？",
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": "追放する"
 				},
 				"cancel": "{{- user}}を追放することをキャンセルしました",
@@ -84,7 +81,6 @@
 				"pending": "",
 				"not_member": "",
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": ""
 				},
 				"reasons": {
@@ -103,7 +99,6 @@
 				},
 				"pending": "本当に{{- user}}をBANしますか？",
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": "BAN"
 				},
 				"cancel": "{{- user}}をBANすることをキャンセルしました",
@@ -116,36 +111,81 @@
 				},
 				"pending": "本当に{{- user}}のBANを解除しますか？",
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": "BAN解除"
 				},
 				"cancel": "{{- user}}のBANを解除することをキャンセルしました",
 				"success": "{{- user}}のBANを解除することは成功しました"
 			},
 			"anti_raid_nuke": {
-				"errors": {
-					"no_hits": "",
+				"common": {
+					"errors": {
+						"result": {
+							"reject_perms": "",
+							"reject_unbanable": "",
+							"reject_bot": "",
+							"reject_self": "",
+							"reject_protected": "",
+							"reject_user": ""
+						}
+					},
 					"parameters": {
-						"heading": "パラメータ：",
+						"heading": "",
 						"current_time": "",
+						"dry_run": "",
+						"days_zero": "",
+						"days_one": "",
+						"days_other": ""
+					},
+					"reason": "",
+					"pending": "",
+					"buttons": {
+						"execute": "",
+						"dry_run": ""
+					},
+					"attachment": "",
+					"cancel": "",
+					"success": ""
+				},
+				"filter": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": "",
+						"invalid_avatar": "",
+						"pattern_format": ""
+					},
+					"parameters": {
 						"join_after": "",
 						"created_after": "",
 						"pattern": "",
 						"avatar": "",
-						"days_one": "",
-						"days_other": "",
-						"days_none": ""
+						"zalgo": "",
+						"confusables": ""
 					}
 				},
-				"reason": "",
-				"reason_fallback": "",
-				"pending": "",
-				"buttons": {
-					"cancel": "キャンセル",
-					"execute": "発射"
+				"file": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": ""
+					},
+					"parameters": {
+						"file": "",
+						"users": ""
+					}
 				},
-				"cancel": "",
-				"success": ""
+				"modal": {
+					"errors": {
+						"no_hits": "",
+						"no_ids": ""
+					},
+					"parameters": {
+						"users": ""
+					},
+					"title": "",
+					"components": {
+						"label": "",
+						"placeholder": ""
+					}
+				}
 			},
 			"restrict": {
 				"embed": {
@@ -156,7 +196,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "キャンセル",
 						"execute": "制限する"
 					},
 					"cancel": "",
@@ -170,7 +209,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "キャンセル",
 						"execute": "制限する"
 					},
 					"cancel": "",
@@ -184,7 +222,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "キャンセル",
 						"execute": "制限する"
 					},
 					"cancel": "",
@@ -197,7 +234,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "キャンセル",
 						"execute": "ロールを外す"
 					},
 					"cancel": "",
@@ -213,7 +249,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "キャンセル",
 						"execute": ""
 					},
 					"message": "",
@@ -228,7 +263,6 @@
 					},
 					"pending": "",
 					"buttons": {
-						"cancel": "キャンセル",
 						"execute": ""
 					},
 					"cancel": "",
@@ -240,10 +274,9 @@
 				"success_multiple": "",
 				"pending_multiple": "",
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": "理由を設定する"
 				},
-				"cancel": "理由を設定することをキャンセルしました"
+				"cancel": ""
 			},
 			"reference": {
 				"success": ""
@@ -268,13 +301,12 @@
 				"after": "• 後: {{- amount}}",
 				"last_change": "• 最終更新日時: {{- timestamp}}",
 				"buttons": {
-					"execute": "更新",
-					"cancel": "キャンセル"
+					"execute": "更新"
 				},
-				"cancel": "詐欺ドメインの更新をキャンセルしました",
-				"success": "詐欺ドメインの更新は成功しました",
-				"pending": "現在の詐欺ドメイン一覧",
-				"error": "詐欺ドメインの更新中にエラーが発生しました"
+				"cancel": "",
+				"success": "",
+				"pending": "",
+				"error": ""
 			},
 			"sponsor": {
 				"errors": {
@@ -283,7 +315,6 @@
 				},
 				"pending": "本当に{{- user}}に支援者ロールを与えますか？",
 				"buttons": {
-					"cancel": "キャンセル",
 					"execute": "保存"
 				},
 				"cancel": "{{- user}}に支援者ロールを与えることをキャンセルしました。",
@@ -295,7 +326,7 @@
 		"history": {
 			"title": "",
 			"user_details": "ユーザー情報",
-			"user_details_description": "• ユーザー名: {{- userMention}} - `{{userTag}}` ({{userId}})\n• アカウント作成日時: {{- created_at}} ({{- created_at_since}})",
+			"user_details_description": "",
 			"member_details": "",
 			"member_details_description": "",
 			"member_details_no_nickname": "ニックネームなし",
@@ -314,6 +345,9 @@
 			},
 			"anti_raid_nuke": {
 				"description": "",
+				"parameters": {
+					"cutoff": ""
+				},
 				"footer": ""
 			},
 			"scam": {
@@ -325,7 +359,7 @@
 			}
 		},
 		"member_log": {
-			"description": "• ユーザー名: {{- userMention}} - `{{userTag}}` ({{userId}})\n• アカウント作成日時: {{- created_at}} ({{- created_at_since}})",
+			"description": "",
 			"joined_at": "• サーバへの入場: {{- joined_at}} ({{- joined_at_since}})",
 			"left_at": "• サーバからの退場: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
@@ -357,20 +391,26 @@
 			"voice_state_update": {
 				"title": "ボイスステータス更新",
 				"joined": "{{- channel}}へ入場しました",
-				"moved": "{{- fromChannel}}から{{- toChannel}}へ移動しました",
+				"moved": "",
 				"left": "{{- channel}}から退場しました"
 			},
 			"thread_created": {
 				"title": "スレッド作成",
-				"channel": "• スレッド: {{- channel}} {{- name}} {{- channelId}}",
-				"starter": "• 元メッセージ: {{- messageId}}",
+				"channel": "",
+				"starter": "",
 				"jump_to": "• [元メッセージへ移動する]({{- link}})"
 			},
 			"thread_deleted": {
 				"title": "スレッド消し",
-				"channel": "• スレッド: {{- name}} {{- channelId}}",
-				"starter": "• 元メッセージ: {{- messageId}}",
+				"channel": "",
+				"starter": "",
 				"jump_to": "• [元メッセージへ移動する]({{- link}})"
+			}
+		},
+		"general_log": {
+			"anti_raid_nuke": {
+				"title": "",
+				"description": ""
 			}
 		}
 	}
