@@ -38,7 +38,7 @@ enum Confusables {
 	Off,
 	OnlyPattern,
 	OnlyMembers,
-	PatternMembers,
+	PatternAndMembers,
 }
 
 export async function filter(
@@ -85,38 +85,20 @@ export async function filter(
 	}
 
 	const parsedConfusables = {
-		members: args.confusables === Confusables.OnlyMembers || args.confusables === Confusables.PatternMembers,
-		pattern: args.confusables === Confusables.OnlyPattern || args.confusables === Confusables.PatternMembers,
+		members: args.confusables === Confusables.OnlyMembers || args.confusables === Confusables.PatternAndMembers,
+		pattern: args.confusables === Confusables.OnlyPattern || args.confusables === Confusables.PatternAndMembers,
 	};
 
 	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
-	const members = fetchedMembers.filter((member) => {
-		if (joinFilter(member, parsedJoinFrom, parsedJoinTo)) {
-			return false;
-		}
-
-		if (ageFilter(member, parsedCreatedFrom, parsedCreatedTo)) {
-			return false;
-		}
-
-		if (avatarFilter(member, parsedAvatar)) {
-			return false;
-		}
-
-		if (patternFilter(member, parsedPattern, parsedConfusables.pattern)) {
-			return false;
-		}
-
-		if (args.zalgo && zalgoFilter(member)) {
-			return false;
-		}
-
-		if (parsedConfusables.members && confusablesFilter(member)) {
-			return false;
-		}
-
-		return true;
-	});
+	const members = fetchedMembers.filter(
+		(member) =>
+			joinFilter(member, parsedJoinFrom, parsedJoinTo) &&
+			ageFilter(member, parsedCreatedFrom, parsedCreatedTo) &&
+			avatarFilter(member, parsedAvatar) &&
+			patternFilter(member, parsedPattern, parsedConfusables.pattern) &&
+			(!args.zalgo || zalgoFilter(member)) &&
+			(!parsedConfusables.members || confusablesFilter(member)),
+	);
 
 	const parameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', {
