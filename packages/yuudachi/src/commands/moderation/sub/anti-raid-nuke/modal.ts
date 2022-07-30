@@ -62,8 +62,8 @@ export async function modal(
 			try {
 				await interaction.followUp({
 					content: i18next.t('common.errors.timed_out', { lng: locale }),
-					components: [],
 					ephemeral: true,
+					components: [],
 				});
 			} catch (e) {
 				const error = e as Error;
@@ -267,6 +267,7 @@ export async function modal(
 				lng: locale,
 			}),
 			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.txt`, attachment: membersHit }],
+			components: [],
 		});
 	}
 }

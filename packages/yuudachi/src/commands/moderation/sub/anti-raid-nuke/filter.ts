@@ -294,6 +294,7 @@ export async function filter(
 				lng: locale,
 			}),
 			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.txt`, attachment: membersHit }],
+			components: [],
 		});
 	}
 }

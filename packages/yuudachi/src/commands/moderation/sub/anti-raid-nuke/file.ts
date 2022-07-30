@@ -202,6 +202,7 @@ export async function file(
 				lng: locale,
 			}),
 			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.txt`, attachment: membersHit }],
+			components: [],
 		});
 	}
 }
