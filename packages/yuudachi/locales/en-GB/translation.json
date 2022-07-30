@@ -148,7 +148,8 @@
 				},
 				"filter": {
 					"errors": {
-						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again!",
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again.",
+						"no_ids": "The filter did not match any users.",
 						"invalid_avatar": "Invalid avatar format, must be an raw hash, a user id, a URL or `none`.",
 						"pattern_format": "Invalid pattern provided"
 					},
@@ -163,7 +164,7 @@
 				},
 				"file": {
 					"errors": {
-						"no_hits": "The Anti-Raid-Nuke will not hit anyone, the content you provided did not contain any valid ids.",
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, the file you provided did not match any users.",
 						"no_ids": "This file does not contain any ids."
 					},
 					"parameters": {
@@ -173,8 +174,8 @@
 				},
 				"modal": {
 					"errors": {
-						"no_hits": "The Anti-Raid-Nuke will not hit anyone, the content you provided did not contain any valid ids.",
-						"no_ids": "This file does not contain any ids."
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, the content you provided did not match any users.",
+						"no_ids": "The content does not contain any ids."
 					},
 					"parameters": {
 						"users": "• Out of all of the ids, {{- users}} aren't members of this guild"
