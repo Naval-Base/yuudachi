@@ -107,7 +107,7 @@ export async function modal(
 	}
 
 	if (!members.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.modal.errors.not_hits', { lng: locale }));
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.modal.errors.no_hits', { lng: locale }));
 	}
 
 	const parameterStrings = [

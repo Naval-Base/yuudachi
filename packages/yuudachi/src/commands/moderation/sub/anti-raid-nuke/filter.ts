@@ -145,7 +145,7 @@ export async function filter(
 
 	if (!members.size) {
 		await interaction.editReply({
-			content: `${i18next.t('command.mod.anti_raid_nuke.filter.errors.no_ids', {
+			content: `${i18next.t('command.mod.anti_raid_nuke.filter.errors.no_hits', {
 				lng: locale,
 			})}\n\n${parameterStrings.join('\n')}`,
 		});

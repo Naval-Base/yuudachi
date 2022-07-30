@@ -52,7 +52,7 @@ export async function file(
 	}
 
 	if (!members.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.file.errors.not_hits', { lng: locale }));
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.file.errors.no_hits', { lng: locale }));
 	}
 
 	const parameterStrings = [

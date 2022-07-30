@@ -22,7 +22,7 @@ export async function lift(
 
 	if (!lockdown) {
 		throw new Error(
-			i18next.t('command.mod.lockdown.lock.errors.not_locked', {
+			i18next.t('command.mod.lockdown.lift.errors.not_locked', {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 				lng: locale,
