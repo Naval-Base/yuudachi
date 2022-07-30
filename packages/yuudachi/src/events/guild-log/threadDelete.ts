@@ -57,9 +57,9 @@ export default class implements Event {
 
 				const descriptionParts = [
 					i18next.t('log.guild_log.thread_deleted.channel', {
-						lng: locale,
 						name: `\`${thread.name}\``,
-						channelId: thread.id,
+						channel_id: thread.id,
+						lng: locale,
 					}),
 				];
 
@@ -68,12 +68,12 @@ export default class implements Event {
 				if (starterMessage) {
 					descriptionParts.push(
 						i18next.t('log.guild_log.thread_deleted.starter', {
+							message_id: starterMessage.id,
 							lng: locale,
-							messageId: starterMessage.id,
 						}),
 						i18next.t('log.guild_log.thread_deleted.jump_to', {
-							lng: locale,
 							link: starterMessage.url,
+							lng: locale,
 						}),
 					);
 				}

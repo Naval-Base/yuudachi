@@ -31,6 +31,14 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
+		if (!args.user.member) {
+			throw new Error(
+				i18next.t('command.common.errors.target_not_found', {
+					lng: locale,
+				}),
+			);
+		}
+
 		if (args.reason && args.reason.length >= 500) {
 			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 		}
@@ -47,7 +55,7 @@ export default class implements Command {
 		});
 		const cancelButton = createButton({
 			customId: cancelKey,
-			label: i18next.t('command.mod.warn.buttons.cancel', { lng: locale }),
+			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 			style: ButtonStyle.Secondary,
 		});
 
@@ -69,7 +77,7 @@ export default class implements Command {
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
 				} catch (e) {

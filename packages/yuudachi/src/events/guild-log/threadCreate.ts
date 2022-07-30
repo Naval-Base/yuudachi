@@ -64,10 +64,10 @@ export default class implements Event {
 
 				const descriptionParts = [
 					i18next.t('log.guild_log.thread_created.channel', {
-						lng: locale,
 						channel: thread.toString(),
 						name: `\`${thread.name}\``,
-						channelId: thread.id,
+						channel_id: thread.id,
+						lng: locale,
 					}),
 				];
 
@@ -76,12 +76,12 @@ export default class implements Event {
 				if (starterMessage) {
 					descriptionParts.push(
 						i18next.t('log.guild_log.thread_created.starter', {
+							message_id: starterMessage.id,
 							lng: locale,
-							messageId: starterMessage.id,
 						}),
 						i18next.t('log.guild_log.thread_created.jump_to', {
-							lng: locale,
 							link: starterMessage.url,
+							lng: locale,
 						}),
 					);
 				}

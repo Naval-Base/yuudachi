@@ -63,7 +63,7 @@ export default class implements Command {
 			});
 			const cancelButton = createButton({
 				customId: cancelKey,
-				label: i18next.t('command.mod.reason.buttons.cancel', { lng: locale }),
+				label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 				style: ButtonStyle.Secondary,
 			});
 
@@ -92,7 +92,7 @@ export default class implements Command {
 						`#${upper}`,
 						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper.logMessageId!),
 					),
-					amount: upper - lower + 1,
+					count: upper - lower + 1,
 					lng: locale,
 				}),
 				components: [createMessageActionRow([cancelButton, changeButton])],
@@ -107,7 +107,7 @@ export default class implements Command {
 				.catch(async () => {
 					try {
 						await interaction.editReply({
-							content: i18next.t('common.errors.timed_out', { lng: locale }),
+							content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 							components: [],
 						});
 					} catch (e) {
@@ -146,7 +146,7 @@ export default class implements Command {
 			}
 		}
 
-		const success = [];
+		const success: number[] = [];
 
 		for (let caseId = lower; caseId <= upper; caseId++) {
 			const originalCase = await getCase(interaction.guildId, caseId);
@@ -176,7 +176,7 @@ export default class implements Command {
 						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper!.logMessageId!),
 					),
 					amount: success.length,
-					target: upper - lower + 1,
+					count: upper - lower + 1,
 					lng: locale,
 			  })
 			: i18next.t('command.mod.reason.success', {

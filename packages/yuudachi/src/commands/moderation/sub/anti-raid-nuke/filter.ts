@@ -51,37 +51,37 @@ export async function filter(
 	const parsedJoinFrom = resolveTimestamp(args.join_from);
 
 	if (args.join_from && !parsedJoinFrom) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'join_from' }));
+		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
 	const parsedJoinTo = resolveTimestamp(args.join_to);
 
 	if (args.join_to && !parsedJoinTo) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'join_to' }));
+		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
 	const parsedCreatedFrom = resolveTimestamp(args.created_from);
 
 	if (args.created_from && !parsedCreatedFrom) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'created_from' }));
+		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
 	const parsedCreatedTo = resolveTimestamp(args.created_to);
 
 	if (args.created_to && !parsedCreatedTo) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.duration_format', { locale, arg: 'created_to' }));
+		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
 	const parsedPattern = parseRegex(args.pattern, args.insensitive ?? true, args.full_match ?? false);
 
 	if (args.pattern && !parsedPattern) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.pattern_format', { locale }));
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.filter.errors.pattern_format', { locale }));
 	}
 
 	const parsedAvatar = await parseAvatar(args.avatar);
 
 	if (args.avatar && !parsedAvatar) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.invalid_avatar', { locale }));
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.filter.errors.invalid_avatar', { locale }));
 	}
 
 	const parsedConfusables = {
@@ -119,24 +119,24 @@ export async function filter(
 	});
 
 	const parameterStrings = [
-		i18next.t('command.mod.anti_raid_nuke.parameters.heading', {
+		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', {
 			lng: locale,
 		}),
-		i18next.t('command.mod.anti_raid_nuke.parameters.current_time', {
+		i18next.t('command.mod.anti_raid_nuke.common.parameters.current_time', {
 			now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 			lng: locale,
 		}),
-		i18next.t('command.mod.anti_raid_nuke.parameters.join_after', {
-			joinTo: resolveDateLocale(parsedJoinTo),
-			joinFrom: resolveDateLocale(parsedJoinFrom),
+		i18next.t('command.mod.anti_raid_nuke.filter.parameters.join_after', {
+			join_to: resolveDateLocale(parsedJoinTo),
+			join_from: resolveDateLocale(parsedJoinFrom),
 			lng: locale,
 		}),
-		i18next.t('command.mod.anti_raid_nuke.parameters.created_after', {
-			ageTo: resolveDateLocale(parsedCreatedTo),
-			ageFrom: resolveDateLocale(parsedCreatedFrom),
+		i18next.t('command.mod.anti_raid_nuke.filter.parameters.created_after', {
+			age_to: resolveDateLocale(parsedCreatedTo),
+			age_from: resolveDateLocale(parsedCreatedFrom),
 			lng: locale,
 		}),
-		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
+		i18next.t('command.mod.anti_raid_nuke.common.parameters.days', {
 			count: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 			lng: locale,
 		}),
@@ -144,7 +144,7 @@ export async function filter(
 
 	if (parsedAvatar) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.parameters.avatar', {
+			i18next.t('command.mod.anti_raid_nuke.filter.parameters.avatar', {
 				avatar: inlineCode(parsedAvatar === 'none' ? 'No avatar' : parsedAvatar),
 				lng: locale,
 			}),
@@ -153,7 +153,7 @@ export async function filter(
 
 	if (parsedPattern) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.parameters.pattern', {
+			i18next.t('command.mod.anti_raid_nuke.filter.parameters.pattern', {
 				lng: locale,
 			}),
 			// eslint-disable-next-line @typescript-eslint/no-base-to-string
@@ -163,7 +163,7 @@ export async function filter(
 
 	if (!members.size) {
 		await interaction.editReply({
-			content: `${i18next.t('command.mod.anti_raid_nuke.errors.no_hits', {
+			content: `${i18next.t('command.mod.anti_raid_nuke.filter.errors.no_ids', {
 				lng: locale,
 			})}\n\n${parameterStrings.join('\n')}`,
 		});
@@ -176,17 +176,17 @@ export async function filter(
 
 	const banButton = createButton({
 		customId: banKey,
-		label: i18next.t('command.mod.anti_raid_nuke.buttons.execute', { lng: locale }),
+		label: i18next.t('command.mod.anti_raid_nuke.common.buttons.execute', { lng: locale }),
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }),
+		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 	const dryRunButton = createButton({
 		customId: dryRunKey,
-		label: i18next.t('command.mod.anti_raid_nuke.buttons.dry_run', { lng: locale }),
+		label: i18next.t('command.mod.anti_raid_nuke.common.buttons.dry_run', { lng: locale }),
 		style: ButtonStyle.Primary,
 	});
 
@@ -196,10 +196,10 @@ export async function filter(
 	const { creationRange, joinRange } = formatMemberTimestamps(members);
 
 	await interaction.editReply({
-		content: `${i18next.t('command.mod.anti_raid_nuke.pending', {
-			members: members.size,
-			creationRange,
-			joinRange,
+		content: `${i18next.t('command.mod.anti_raid_nuke.common.pending', {
+			count: members.size,
+			creation_range: creationRange,
+			join_range: joinRange,
 			lng: locale,
 		})}\n\n${parameterStrings.join('\n')}`,
 		files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
@@ -215,7 +215,7 @@ export async function filter(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch (e) {
@@ -227,7 +227,7 @@ export async function filter(
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t('command.mod.anti_raid_nuke.cancel', {
+			content: i18next.t('command.mod.anti_raid_nuke.common.cancel', {
 				lng: locale,
 			}),
 			components: [],
@@ -237,7 +237,7 @@ export async function filter(
 
 		const content =
 			collectedInteraction.message.content +
-			(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.parameters.dry_run', { lng: locale })}` : '');
+			(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.common.parameters.dry_run', { lng: locale })}` : '');
 
 		await collectedInteraction.update({
 			content,
@@ -267,9 +267,9 @@ export async function filter(
 				collectedInteraction.user,
 				cases,
 				args.reason ??
-					i18next.t('command.mod.anti_raid_nuke.success', {
+					i18next.t('command.mod.anti_raid_nuke.common.success', {
+						count: result.filter((r) => r.success).length,
 						lng: locale,
-						members: result.filter((r) => r.success).length,
 					}),
 			);
 		}
@@ -289,8 +289,8 @@ export async function filter(
 		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result);
 
 		await collectedInteraction.editReply({
-			content: i18next.t('command.mod.anti_raid_nuke.success', {
-				members: result.filter((r) => r.success).length,
+			content: i18next.t('command.mod.anti_raid_nuke.common.success', {
+				count: result.filter((r) => r.success).length,
 				lng: locale,
 			}),
 			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.txt`, attachment: membersHit }],

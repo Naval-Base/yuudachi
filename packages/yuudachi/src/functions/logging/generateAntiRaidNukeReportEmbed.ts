@@ -5,8 +5,8 @@ export function generateAntiRaidNukeReportEmbed(hitCount: number, user: User, lo
 	return {
 		title: i18next.t('log.general_log.anti_raid_nuke.title', { lng: locale }),
 		description: i18next.t('log.general_log.anti_raid_nuke.description', {
-			hit_count: hitCount,
 			author: `${user.tag} (${user.id})`,
+			count: hitCount,
 			lng: locale,
 		}),
 		color: 3407871,

@@ -42,7 +42,7 @@ export async function blastOff(
 			result.push({
 				member,
 				success: false,
-				error: i18next.t(`command.mod.anti_raid_nuke.errors.result.${authorization}`, { lng: locale }),
+				error: i18next.t(`command.mod.anti_raid_nuke.common.errors.result.${authorization}`, { lng: locale }),
 			});
 			continue;
 		}
@@ -54,9 +54,9 @@ export async function blastOff(
 					guildId: interaction.guildId,
 					user: interaction.user,
 					args: {
-						reason: i18next.t('command.mod.anti_raid_nuke.reason', {
+						reason: i18next.t('command.mod.anti_raid_nuke.common.reason', {
 							current: ++idx,
-							members: members.size,
+							count: members.size,
 							lng: locale,
 						}),
 						user: {

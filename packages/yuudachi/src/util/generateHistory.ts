@@ -57,9 +57,9 @@ export async function generateHistory(
 		{
 			name: i18next.t('log.history.user_details', { lng: locale }),
 			value: i18next.t('log.history.user_details_description', {
-				userMention: target.user.toString(),
-				userTag: target.user.tag,
-				userId: target.user.id,
+				user_mention: target.user.toString(),
+				user_tag: target.user.tag,
+				user_id: target.user.id,
 				created_at: creationFormatted,
 				created_at_since: sinceCreationFormatted,
 				lng: locale,
@@ -74,8 +74,8 @@ export async function generateHistory(
 		embed = addFields(embed, {
 			name: i18next.t('log.history.member_details', { lng: locale }),
 			value: i18next.t('log.history.member_details_description', {
-				memberNickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
-				memberRoles: target.member.roles.cache.map((role) => role.name).join(', '),
+				member_nickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
+				member_roles: target.member.roles.cache.map((role) => role.name).join(', '),
 				joined_at: joinFormatted,
 				joined_at_since: sinceJoinFormatted,
 				lng: locale,

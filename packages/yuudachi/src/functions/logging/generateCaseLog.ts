@@ -30,8 +30,8 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	}
 
 	let msg = i18next.t('log.mod_log.case_log.description', {
-		targetTag: case_.targetTag,
-		targetId: case_.targetId,
+		target_tag: case_.targetTag,
+		target_id: case_.targetId,
 		action,
 		lng: locale,
 	});
@@ -63,7 +63,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	if (case_.reason) {
 		msg += i18next.t('log.mod_log.case_log.reason', { reason: case_.reason, lng: locale });
 	} else {
-		msg += i18next.t('log.mod_log.case_log.reason_fallback', { caseId: case_.caseId, lng: locale });
+		msg += i18next.t('log.mod_log.case_log.reason_fallback', { case_id: case_.caseId, lng: locale });
 	}
 
 	if (case_.referenceId) {

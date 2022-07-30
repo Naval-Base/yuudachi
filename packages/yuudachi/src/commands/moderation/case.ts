@@ -75,8 +75,8 @@ export default class implements Command {
 					{
 						name: ellipsis(
 							i18next.t('command.mod.case.autocomplete.show_history', {
-								lng: locale,
 								user: target.tag,
+								lng: locale,
 							})!,
 							AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
 						),

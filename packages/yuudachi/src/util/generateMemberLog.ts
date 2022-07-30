@@ -35,9 +35,9 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 	const creationFormatted = time(dayjs(member.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 	let description = i18next.t('log.member_log.description', {
-		userMention: member.user.toString(),
-		userTag: member.user.tag,
-		userId: member.user.id,
+		user_mention: member.user.toString(),
+		user_tag: member.user.tag,
+		user_id: member.user.id,
 		created_at: creationFormatted,
 		created_at_since: sinceCreationFormatted,
 		lng: locale,

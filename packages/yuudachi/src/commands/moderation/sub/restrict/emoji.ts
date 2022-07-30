@@ -26,6 +26,14 @@ export async function emoji(
 	args: ArgumentsOf<typeof RestrictCommand>['emoji'],
 	locale: string,
 ): Promise<void> {
+	if (!args.user.member) {
+		throw new Error(
+			i18next.t('command.common.errors.target_not_found', {
+				lng: locale,
+			}),
+		);
+	}
+
 	if (args.reason && args.reason.length >= 500) {
 		throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
 	}
@@ -77,7 +85,7 @@ export async function emoji(
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t('command.mod.restrict.emoji.buttons.cancel', { lng: locale }),
+		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 
@@ -99,7 +107,7 @@ export async function emoji(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch {}

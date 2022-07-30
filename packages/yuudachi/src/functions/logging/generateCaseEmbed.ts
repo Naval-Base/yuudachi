@@ -17,7 +17,7 @@ export async function generateCaseEmbed(
 		color: generateCaseColor(case_),
 		description: await generateCaseLog(case_, logChannelId, locale),
 		footer: {
-			text: i18next.t('log.mod_log.case_log.footer', { caseId: case_.caseId, lng: locale }),
+			text: i18next.t('log.mod_log.case_log.footer', { case_id: case_.caseId, lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
 	};

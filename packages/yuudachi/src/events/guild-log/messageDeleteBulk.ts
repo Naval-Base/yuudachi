@@ -78,8 +78,8 @@ export default class implements Event {
 							? `\n${msg.attachments
 									.map((attachment) =>
 										i18next.t('log.guild_log.message_bulk_deleted.attachment', {
-											lng: locale,
 											url: attachment.proxyURL,
+											lng: locale,
 										}),
 									)
 									.join('\n')}`
@@ -89,8 +89,8 @@ export default class implements Event {
 							? `\n${msg.stickers
 									.map((sticker) =>
 										i18next.t('log.guild_log.message_bulk_deleted.sticker', {
-											lng: locale,
 											name: sticker.name,
+											lng: locale,
 										}),
 									)
 									.join('\n')}`

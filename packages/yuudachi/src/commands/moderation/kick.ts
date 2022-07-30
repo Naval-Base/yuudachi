@@ -37,16 +37,20 @@ export default class implements Command {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
-		if (!args.user.member?.kickable) {
-			const isStillMember = interaction.guild.members.resolve(args.user.user.id);
+		if (!args.user.member) {
 			throw new Error(
-				i18next.t(
-					isStillMember ? 'command.mod.kick.errors.missing_permissions' : 'command.mod.kick.errors.not_member',
-					{
-						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
-						lng: locale,
-					},
-				),
+				i18next.t('command.common.errors.target_not_found', {
+					lng: locale,
+				}),
+			);
+		}
+
+		if (!args.user.member.kickable) {
+			throw new Error(
+				i18next.t('command.mod.kick.errors.missing_permissions', {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
+				}),
 			);
 		}
 
@@ -66,7 +70,7 @@ export default class implements Command {
 		});
 		const cancelButton = createButton({
 			customId: cancelKey,
-			label: i18next.t('command.mod.kick.buttons.cancel', { lng: locale }),
+			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 			style: ButtonStyle.Secondary,
 		});
 
@@ -88,7 +92,7 @@ export default class implements Command {
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
 				} catch (e) {

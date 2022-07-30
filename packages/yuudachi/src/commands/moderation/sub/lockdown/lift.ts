@@ -40,7 +40,7 @@ export async function lift(
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t('command.mod.lockdown.lift.buttons.cancel', { lng: locale }),
+		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 
@@ -62,7 +62,7 @@ export async function lift(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch {}

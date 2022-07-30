@@ -90,9 +90,9 @@ export default class implements Event {
 				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
 					description = i18next.t('log.guild_log.voice_state_update.moved', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						fromChannel: oldState.channel.toString(),
+						from_channel: oldState.channel.toString(),
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						toChannel: newState.channel.toString(),
+						to_channel: newState.channel.toString(),
 						lng: locale,
 					});
 				} else {

@@ -31,7 +31,7 @@ export default class implements Command {
 		}
 
 		if (missing.length === 2) {
-			await interaction.editReply(i18next.t('command.utility.refresh_scamlist.missing_env', { lng: locale, missing }));
+			await interaction.editReply(i18next.t('command.utility.refresh_scamlist.missing_env', { missing, lng: locale }));
 			return;
 		}
 
@@ -45,7 +45,7 @@ export default class implements Command {
 		});
 		const cancelButton = createButton({
 			customId: cancelKey,
-			label: i18next.t('command.utility.refresh_scamlist.buttons.cancel', { lng: locale }),
+			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 			style: ButtonStyle.Secondary,
 		});
 
@@ -63,17 +63,17 @@ export default class implements Command {
 
 			const parts = [
 				i18next.t('command.utility.refresh_scamlist.amount', {
-					lng: locale,
 					amount: inlineCode(String(num)),
+					lng: locale,
 				}),
 
 				i18next.t('command.utility.refresh_scamlist.last_change', {
-					lng: locale,
 					timestamp: lastRefresh
 						? `<t:${Math.floor(parseInt(lastRefresh, 10) / 1000)}:f> (<t:${Math.floor(
 								parseInt(lastRefresh, 10) / 1000,
 						  )}:R>)`
 						: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale }),
+					lng: locale,
 				}),
 			];
 
@@ -98,7 +98,7 @@ export default class implements Command {
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('common.errors.timed_out', { lng: locale }),
+						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
 				} catch (e) {
@@ -130,18 +130,18 @@ export default class implements Command {
 				for (const result of res) {
 					const parts = [
 						i18next.t('command.utility.refresh_scamlist.before', {
-							lng: locale,
 							amount: inlineCode(String(result.before)),
+							lng: locale,
 						}),
 						i18next.t('command.utility.refresh_scamlist.after', {
-							lng: locale,
 							amount: inlineCode(String(result.after)),
+							lng: locale,
 						}),
 						i18next.t('command.utility.refresh_scamlist.last_change', {
-							lng: locale,
 							timestamp: result.lastRefresh
 								? `<t:${Math.floor(result.lastRefresh / 1000)}:f> (<t:${Math.floor(result.lastRefresh / 1000)}:R>)`
 								: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale }),
+							lng: locale,
 						}),
 					];
 

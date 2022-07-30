@@ -6,7 +6,7 @@ export function generateAntiRaidNukeCaseLog(cases: Case[], reason: string, local
 	const msg = [
 		i18next.t('log.mod_log.anti_raid_nuke.description', {
 			reason,
-			members: cases.length,
+			count: cases.length,
 			lng: locale,
 		}),
 	];

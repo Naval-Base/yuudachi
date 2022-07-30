@@ -34,7 +34,7 @@ export async function file(
 	const ids = await parseFile(args.file);
 
 	if (!ids.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.no_ids', { lng: locale }));
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.file.errors.no_ids', { lng: locale }));
 	}
 
 	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
@@ -52,20 +52,20 @@ export async function file(
 	}
 
 	if (!members.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.errors.no_hits_file', { lng: locale }));
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.file.errors.not_hits', { lng: locale }));
 	}
 
 	const parameterStrings = [
-		i18next.t('command.mod.anti_raid_nuke.parameters.heading', { lng: locale }),
-		i18next.t('command.mod.anti_raid_nuke.parameters.current_time', {
+		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', { lng: locale }),
+		i18next.t('command.mod.anti_raid_nuke.common.parameters.current_time', {
 			now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 			lng: locale,
 		}),
-		i18next.t('command.mod.anti_raid_nuke.parameters.file', {
+		i18next.t('command.mod.anti_raid_nuke.file.parameters.file', {
 			file: hyperlink('File uploaded', args.file.url),
 			lng: locale,
 		}),
-		i18next.t('command.mod.anti_raid_nuke.parameters.days', {
+		i18next.t('command.mod.anti_raid_nuke.common.parameters.days', {
 			count: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 			lng: locale,
 		}),
@@ -73,7 +73,7 @@ export async function file(
 
 	if (fails.size) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.parameters.users', {
+			i18next.t('command.mod.anti_raid_nuke.file.parameters.users', {
 				users: inlineCode(fails.size.toString()),
 				lng: locale,
 			}),
@@ -86,17 +86,17 @@ export async function file(
 
 	const banButton = createButton({
 		customId: banKey,
-		label: i18next.t('command.mod.anti_raid_nuke.buttons.execute', { lng: locale }),
+		label: i18next.t('command.mod.anti_raid_nuke.common.buttons.execute', { lng: locale }),
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t('command.mod.anti_raid_nuke.buttons.cancel', { lng: locale }),
+		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 	const dryRunButton = createButton({
 		customId: dryRunKey,
-		label: i18next.t('command.mod.anti_raid_nuke.buttons.dry_run', { lng: locale }),
+		label: i18next.t('command.mod.anti_raid_nuke.common.buttons.dry_run', { lng: locale }),
 		style: ButtonStyle.Primary,
 	});
 
@@ -106,10 +106,10 @@ export async function file(
 	const { creationRange, joinRange } = formatMemberTimestamps(members);
 
 	await interaction.editReply({
-		content: `${i18next.t('command.mod.anti_raid_nuke.pending', {
-			members: members.size,
-			creationRange,
-			joinRange,
+		content: `${i18next.t('command.mod.anti_raid_nuke.common.pending', {
+			count: members.size,
+			creation_range: creationRange,
+			join_range: joinRange,
 			lng: locale,
 		})}\n\n${parameterStrings.join('\n')}`,
 		files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
@@ -125,7 +125,7 @@ export async function file(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch (e) {
@@ -137,7 +137,7 @@ export async function file(
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t('command.mod.anti_raid_nuke.cancel', {
+			content: i18next.t('command.mod.anti_raid_nuke.common.cancel', {
 				lng: locale,
 			}),
 			components: [],
@@ -147,7 +147,7 @@ export async function file(
 
 		const content =
 			collectedInteraction.message.content +
-			(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.parameters.dry_run', { lng: locale })}` : '');
+			(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.common.parameters.dry_run', { lng: locale })}` : '');
 
 		await collectedInteraction.update({
 			content,
@@ -175,20 +175,23 @@ export async function file(
 				collectedInteraction.user,
 				cases,
 				args.reason ??
-					i18next.t('command.mod.anti_raid_nuke.success', {
+					i18next.t('command.mod.anti_raid_nuke.common.success', {
+						count: result.filter((r) => r.success).length,
 						lng: locale,
-						members: result.filter((r) => r.success).length,
 					}),
 			);
 		}
 
 		const membersHit = Buffer.from(
 			result
-				.map(
-					(r) =>
-						`${r.member.user.id.padEnd(19, ' ')} | Join: ${dayjs(r.member.joinedTimestamp).format(
-							DATE_FORMAT_LOGFILE,
-						)} | Creation: ${dayjs(r.member.user.createdTimestamp).format(DATE_FORMAT_LOGFILE)} | ${r.member.user.tag}`,
+				.map((r) =>
+					i18next.t('command.mod.anti_raid_nuke.common.attachment', {
+						user_id: r.member.user.id.padEnd(19, ' '),
+						joined_at: dayjs(r.member.joinedTimestamp).format(DATE_FORMAT_LOGFILE),
+						created_at: dayjs(r.member.user.createdTimestamp).format(DATE_FORMAT_LOGFILE),
+						user_tag: r.member.user.tag,
+						lng: locale,
+					}),
 				)
 				.join('\n'),
 		);
@@ -197,8 +200,8 @@ export async function file(
 		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result);
 
 		await collectedInteraction.editReply({
-			content: i18next.t('command.mod.anti_raid_nuke.success', {
-				members: result.filter((r) => r.success).length,
+			content: i18next.t('command.mod.anti_raid_nuke.common.success', {
+				count: result.filter((r) => r.success).length,
 				lng: locale,
 			}),
 			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.txt`, attachment: membersHit }],
