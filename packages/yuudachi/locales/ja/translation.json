@@ -149,7 +149,6 @@
 				"filter": {
 					"errors": {
 						"no_hits": "",
-						"no_ids": "",
 						"invalid_avatar": "",
 						"pattern_format": ""
 					},
@@ -259,7 +258,8 @@
 				"lift": {
 					"errors": {
 						"missing_permissions": "",
-						"not_locked": ""
+						"not_locked": "",
+						"failure": ""
 					},
 					"pending": "",
 					"buttons": {
@@ -317,6 +317,7 @@
 				"buttons": {
 					"execute": "保存"
 				},
+				"reason": "",
 				"cancel": "{{- user}}に支援者ロールを与えることをキャンセルしました。",
 				"success": "{{- user}}に支援者ロールを与えることは成功しました"
 			}
