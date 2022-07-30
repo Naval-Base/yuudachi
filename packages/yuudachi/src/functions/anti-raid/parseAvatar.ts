@@ -1,3 +1,4 @@
+import { URL } from 'node:url';
 import type { Client } from 'discord.js';
 
 export async function parseAvatar(client: Client, input?: string): Promise<string | 'none' | undefined> {

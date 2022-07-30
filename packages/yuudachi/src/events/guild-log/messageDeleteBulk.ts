@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import { on } from 'node:events';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';

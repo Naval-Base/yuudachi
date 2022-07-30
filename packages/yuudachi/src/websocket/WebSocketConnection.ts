@@ -1,3 +1,5 @@
+import type { Buffer } from 'node:buffer';
+import { setTimeout } from 'node:timers';
 import type { Redis } from 'ioredis';
 import WebSocket from 'ws';
 import { logger } from '../logger.js';

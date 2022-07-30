@@ -14,9 +14,16 @@ export interface AntiRaidNukeResult {
 	error?: string;
 }
 
+interface AntiRaidNukeArgs {
+	days: number;
+	dryRun?: boolean;
+	joinCutoff?: number;
+	accountCutoff?: number;
+}
+
 export async function blastOff(
 	interaction: ButtonInteraction<'cached'>,
-	args: { days: number; dryRun?: boolean; joinCutoff?: number; accountCutoff?: number },
+	args: AntiRaidNukeArgs,
 	members: Collection<string, GuildMember>,
 	locale: string,
 ) {

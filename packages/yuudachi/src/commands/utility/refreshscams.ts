@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { type CommandInteraction, ButtonStyle, ComponentType, inlineCode } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';

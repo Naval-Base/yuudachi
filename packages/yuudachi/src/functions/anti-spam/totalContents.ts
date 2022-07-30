@@ -1,4 +1,4 @@
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { SPAM_EXPIRE_SECONDS } from '../../Constants.js';

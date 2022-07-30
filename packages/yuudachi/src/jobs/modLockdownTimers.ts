@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { parentPort } from 'node:worker_threads';
 import type { Snowflake } from 'discord-api-types/v10';
 import { JobType } from '../Constants.js';

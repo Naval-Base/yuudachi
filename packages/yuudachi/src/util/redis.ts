@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { default as Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { kRedis } from '../tokens.js';

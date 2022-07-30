@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { readFile } from 'node:fs/promises';
+import process from 'node:process';
 import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import { GatewayIntentBits, Options, Partials } from 'discord.js';
 import i18next from 'i18next';

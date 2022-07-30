@@ -1,3 +1,4 @@
+import process from 'node:process';
 import type { Redis } from 'ioredis';
 import fetch, { Response } from 'node-fetch';
 import { logger } from '../../logger.js';

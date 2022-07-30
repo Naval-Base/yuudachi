@@ -17,10 +17,16 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
+interface LockdownLockArgs {
+	channel: TextChannel;
+	duration: string;
+	reason?: string;
+}
+
 export async function lock(
 	interaction: CommandInteraction<'cached'>,
 	reply: InteractionResponse<true>,
-	args: { channel: TextChannel; duration: string; reason?: string },
+	args: LockdownLockArgs,
 	locale: string,
 ): Promise<void> {
 	const lockdown = await getLockdown(interaction.guildId, args.channel.id);
