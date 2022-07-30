@@ -149,7 +149,6 @@
 				"filter": {
 					"errors": {
 						"no_hits": "",
-						"no_ids": "",
 						"invalid_avatar": "",
 						"pattern_format": ""
 					},
@@ -259,7 +258,8 @@
 				"lift": {
 					"errors": {
 						"missing_permissions": "Brakuje uprawnień aby znieść blokadę dla {{- channel}}",
-						"not_locked": "{{- channel}} nie jest zablokowany."
+						"not_locked": "{{- channel}} nie jest zablokowany.",
+						"failure": ""
 					},
 					"pending": "Czy na pewno chcesz znieść blokadę dla {{- channel}}?",
 					"buttons": {
@@ -317,6 +317,7 @@
 				"buttons": {
 					"execute": "Zastosuj"
 				},
+				"reason": "",
 				"cancel": "Anulowano przyznawanie roli sponsora dla {{- user}}",
 				"success": "Pomyślnie przyznano rolę sponsora dla {{- user}}"
 			}
