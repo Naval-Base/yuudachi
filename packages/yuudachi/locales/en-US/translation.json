@@ -290,15 +290,15 @@
 					"no_message": "Could not find message {{message_id}} in channel {{- channel}}",
 					"no_results": "Could not find messages in the provided range that are younger than 12 hours."
 				},
-				"pending": "You are about to clear {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
-				"pending_plural": "You are about to clear {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
-				"success": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}",
-				"success_plural": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}.",
-				"authors": "{{count}} author",
-				"authors_plural": "{{count}} authors",
+				"pending_one": "You are about to clear {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"pending_other": "You are about to clear {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"success_one": "Successfully cleared {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}",
+				"success_other": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}.",
+				"authors_one": "{{count}} author",
+				"authors_other": "{{count}} authors",
 				"buttons": {
-					"execute": "Clear {{count}} message",
-					"execute_plural": "Clear {{count}} messages"
+					"execute_one": "Clear {{count}} message",
+					"execute_other": "Clear {{count}} messages"
 				},
 				"cancel": "Cancelled clearing messages."
 			}

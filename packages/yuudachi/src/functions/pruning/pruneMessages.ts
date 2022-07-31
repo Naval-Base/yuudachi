@@ -37,12 +37,6 @@ export async function fetchMessages(channel: TextBasedChannel, from: Message, to
 	while (
 		pivot ? oldest.createdTimestamp < pivot.createdTimestamp && pivot.createdTimestamp > earliestPossiblePrune : true
 	) {
-		console.log('fetching more', {
-			pivot: pivot?.createdTimestamp,
-			oldest: oldest.createdTimestamp,
-			res_size: res.size,
-		});
-
 		const messages = await channel.messages.fetch({
 			limit: 100,
 			before: pivot?.id,
@@ -58,7 +52,6 @@ export async function fetchMessages(channel: TextBasedChannel, from: Message, to
 		pivot = messages.last();
 	}
 
-	console.log('res size: ', res.size);
 	return res;
 }
 
@@ -82,8 +75,6 @@ export function chunkMessages(messages: Collection<Snowflake, Message>) {
 }
 
 export async function pruneMessages(channel: GuildTextBasedChannel, messages: Collection<Snowflake, Message>) {
-	console.log(messages.map((m) => `${m.author.tag}: ${m.content}`).join('\n'));
-
 	const res = new Collection<Snowflake, Message>();
 	for (const chunk of chunkMessages(messages)) {
 		const deleted = await channel.bulkDelete(chunk, true);
