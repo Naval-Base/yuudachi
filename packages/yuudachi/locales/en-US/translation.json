@@ -382,16 +382,16 @@
 				"attachments": "• Attachments: {{- attachments}}",
 				"stickers": "• Stickers: {{- stickers}}",
 				"jump_to": "• [Jump to]({{- link}})",
-				"reply_to": "• Replying to [{{message_id}}]({{- message_url}}) by `{{- user_tag}}` ({{- user_id}})",
-				"reply_to_mentions": "• @Replying to [{{message_id}}]({{- message_url}}) by `{{- user_tag}}` ({{- user_id}})"
+				"reply_to": "• Replying to [{{message_id}}]({{- message_url}}) by `{{- user_tag}}` ({{user_id}})",
+				"reply_to_mentions": "• @Replying to [{{message_id}}]({{- message_url}}) by `{{- user_tag}}` ({{user_id}})"
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
 				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
 				"attachment": "↳ Attachment: {{- url}}",
 				"sticker": "↳ Sticker: {{- name}}",
-				"reply_to": "↳ Replying to {{message_id}} ({{- message_url}}) by {{- user_tag}} ({{- user_id}})",
-				"reply_to_mentions": "↳ @Replying to {{message_id}} ({{- message_url}}) by {{- user_tag}} ({{- user_id}})"
+				"reply_to": "↳ Replying to {{message_id}} ({{- message_url}}) by {{- user_tag}} ({{user_id}})",
+				"reply_to_mentions": "↳ @Replying to {{message_id}} ({{- message_url}}) by {{- user_tag}} ({{user_id}})"
 			},
 			"voice_state_update": {
 				"title": "Voice state update",
