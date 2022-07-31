@@ -78,9 +78,10 @@ export default class implements Command {
 
 		const clearKey = nanoid();
 		const cancelKey = nanoid();
+
 		const clearButton = createButton({
 			customId: clearKey,
-			label: i18next.t('command.mod.clear.buttons.execute', { lng: locale, count: messages.size }),
+			label: i18next.t('command.mod.clear.buttons.execute', { count: messages.size, lng: locale }),
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
