@@ -134,18 +134,18 @@ export default class implements Event {
 					infoParts.push(
 						message.mentions.users.has(message.mentions.repliedUser.id)
 							? i18next.t('log.guild_log.message_deleted.reply_to_mentions', {
-									lng: locale,
 									message_id: messageId,
 									message_url: replyURL,
 									user_tag: message.mentions.repliedUser.tag,
 									user_id: message.mentions.repliedUser.id,
+									lng: locale,
 							  })
 							: i18next.t('log.guild_log.message_deleted.reply_to', {
-									lng: locale,
 									message_id: messageId,
 									message_url: replyURL,
 									user_tag: message.mentions.repliedUser.tag,
 									user_id: message.mentions.repliedUser.id,
+									lng: locale,
 							  }),
 					);
 				}
