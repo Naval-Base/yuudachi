@@ -13,7 +13,8 @@
 				"duration_format": "Wrong duration format.",
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
-				"timed_out": "Action timer ran out."
+				"timed_out": "Action timer ran out.",
+				"not_message_id": "Provided value `{{- val}}` for argument `{{- arg}}` is not a valid message id."
 			},
 			"buttons": {
 				"cancel": "Cancel"
@@ -283,6 +284,23 @@
 			},
 			"duration": {
 				"success": "Successfully set duration for case {{- case}}"
+			},
+			"clear": {
+				"errors": {
+					"no_message": "Could not find message {{message_id}} in channel {{- channel}}",
+					"no_results": "Could not find messages in the provided range that are younger than 12 hours."
+				},
+				"pending": "You are about to clear {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"pending_plural": "You are about to clear {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"success": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}",
+				"success_plural": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}.",
+				"authors": "{{count}} author",
+				"authors_plural": "{{count}} authors",
+				"buttons": {
+					"execute": "Clear {{count}} message",
+					"execute_plural": "Clear {{count}} messages"
+				},
+				"cancel": "Cancelled clearing messages."
 			}
 		},
 		"utility": {

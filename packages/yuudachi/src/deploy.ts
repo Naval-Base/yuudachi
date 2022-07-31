@@ -18,6 +18,7 @@ import {
 	UnbanCommand,
 	WarnCommand,
 	TimeoutCommand,
+	ClearCommand,
 
 	// Utility
 	PingCommand,
@@ -52,6 +53,7 @@ try {
 			WarnCommand,
 			LockdownCommand,
 			TimeoutCommand,
+			ClearCommand,
 
 			// Utility
 			PingCommand,
