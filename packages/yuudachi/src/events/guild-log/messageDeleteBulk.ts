@@ -3,7 +3,16 @@ import { on } from 'node:events';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import utc from 'dayjs/plugin/utc.js';
-import { Client, type Collection, Events, type Message, type Snowflake, type Webhook } from 'discord.js';
+import {
+	Client,
+	type Collection,
+	Events,
+	type Message,
+	type Snowflake,
+	type Webhook,
+	MessageType,
+	messageLink,
+} from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -32,23 +41,16 @@ export default class implements Event {
 		for await (const [messages] of on(this.client, this.event) as AsyncIterableIterator<
 			[Collection<Snowflake, Message>]
 		>) {
-			if (!messages.size) {
-				continue;
-			}
+			const userMessages = messages.filter((msg) => !msg.author.bot);
+			const firstMessage = userMessages.first();
 
-			const message = messages.first()!;
-
-			if (message.author.bot) {
-				continue;
-			}
-
-			if (!message.guild) {
+			if (!firstMessage?.inGuild()) {
 				continue;
 			}
 
 			try {
-				const guildLogWebhookId = await getGuildSetting(message.guild.id, SettingsKeys.GuildLogWebhookId);
-				const ignoreChannels = await getGuildSetting(message.guild.id, SettingsKeys.LogIgnoreChannels);
+				const guildLogWebhookId = await getGuildSetting(firstMessage.guild.id, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(firstMessage.guild.id, SettingsKeys.LogIgnoreChannels);
 
 				if (!guildLogWebhookId) {
 					continue;
@@ -60,57 +62,87 @@ export default class implements Event {
 					continue;
 				}
 
-				// TODO: ignore based on parent category once .inGuild() is available
 				if (
-					(message.channel.isThread() && ignoreChannels.includes(message.channel.parentId ?? '')) ||
-					ignoreChannels.includes(message.channelId)
+					ignoreChannels.includes(firstMessage.channelId) ||
+					(firstMessage.channel.parentId && ignoreChannels.includes(firstMessage.channel.parentId)) ||
+					(firstMessage.channel.parent?.parentId && ignoreChannels.includes(firstMessage.channel.parent.parentId))
 				) {
 					continue;
 				}
 
-				const locale = await getGuildSetting(message.guild.id, SettingsKeys.Locale);
+				const locale = await getGuildSetting(firstMessage.guild.id, SettingsKeys.Locale);
 
-				const output = messages.reduce((out, msg) => {
-					out += `[${dayjs(msg.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${msg.author.tag} (${
-						msg.author.id
-					}): ${msg.cleanContent ? msg.cleanContent.replace(/\n/g, '\n') : ''}${
-						msg.attachments.size
-							? `\n${msg.attachments
+				const output = userMessages
+					.map((message) => {
+						const outParts = [
+							`[${dayjs(message.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${
+								message.author.tag
+							} (${message.author.id}): ${message.cleanContent ? message.cleanContent.replace(/\n/g, '\n') : ''}`,
+						];
+
+						if (message.attachments.size) {
+							outParts.push(
+								message.attachments
 									.map((attachment) =>
 										i18next.t('log.guild_log.message_bulk_deleted.attachment', {
 											url: attachment.proxyURL,
 											lng: locale,
 										}),
 									)
-									.join('\n')}`
-							: ''
-					}${
-						msg.stickers.size
-							? `\n${msg.stickers
+									.join('\n'),
+							);
+						}
+
+						if (message.stickers.size) {
+							outParts.push(
+								message.stickers
 									.map((sticker) =>
 										i18next.t('log.guild_log.message_bulk_deleted.sticker', {
 											name: sticker.name,
 											lng: locale,
 										}),
 									)
-									.join('\n')}`
-							: ''
-					}\n`;
-					return out;
-				}, '');
+									.join('\n'),
+							);
+						}
+
+						if (message.type === MessageType.Reply && message.reference && message.mentions.repliedUser) {
+							const { channelId, messageId, guildId } = message.reference;
+							const replyURL = messageLink(channelId, messageId!, guildId!);
+
+							outParts.push(
+								message.mentions.users.has(message.mentions.repliedUser.id)
+									? i18next.t('log.guild_log.message_bulk_deleted.reply_to_mentions', {
+											message_id: messageId,
+											message_url: replyURL,
+											user_tag: message.mentions.repliedUser.tag,
+											user_id: message.mentions.repliedUser.id,
+									  })
+									: i18next.t('log.guild_log.message_bulk_deleted.reply_to', {
+											message_id: messageId,
+											message_url: replyURL,
+											user_tag: message.mentions.repliedUser.tag,
+											user_id: message.mentions.repliedUser.id,
+									  }),
+							);
+						}
+
+						return outParts.join('\n');
+					})
+					.join('\n');
 
 				const embed = addFields({
 					author: {
-						name: `${message.author.tag} (${message.author.id})`,
-						icon_url: message.author.displayAvatarURL(),
+						name: `${firstMessage.author.tag} (${firstMessage.author.id})`,
+						icon_url: firstMessage.author.displayAvatarURL(),
 					},
 					color: 12016895,
 					title: i18next.t('log.guild_log.message_bulk_deleted.title', { lng: locale }),
 					description: i18next.t('log.guild_log.message_bulk_deleted.description', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: `${message.channel.toString()} - ${message.inGuild() ? message.channel.name : ''}(${
-							message.channel.id
-						})`,
+						channel: `${firstMessage.channel.toString()} - ${
+							firstMessage.inGuild() ? firstMessage.channel.name : ''
+						} (${firstMessage.channel.id})`,
 						lng: locale,
 					}),
 					timestamp: new Date().toISOString(),
