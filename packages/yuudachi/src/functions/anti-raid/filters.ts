@@ -70,7 +70,7 @@ export function avatarFilter(member: GuildMember, avatar?: string | null) {
 		return !member.avatar && !member.user.avatar;
 	}
 
-	return member.user.avatar === avatar || member.avatar === avatar;
+	return member.avatar === avatar || member.user.avatar === avatar;
 }
 
 /**
