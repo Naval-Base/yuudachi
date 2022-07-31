@@ -21,9 +21,9 @@ export default class implements Command {
 		if (!/^\d{17,20}$/.test(args.last_message)) {
 			throw new Error(
 				i18next.t('command.common.errors.not_message_id', {
-					lng: locale,
 					val: args.last_message,
 					arg: 'from',
+					lng: locale,
 				}),
 			);
 		}
@@ -31,9 +31,9 @@ export default class implements Command {
 		if (args.first_message && !/^\d{17,20}$/.test(args.first_message)) {
 			throw new Error(
 				i18next.t('command.common.errors.not_message_id', {
-					lng: locale,
 					val: args.first_message,
 					arg: 'to',
+					lng: locale,
 				}),
 			);
 		}
@@ -41,10 +41,10 @@ export default class implements Command {
 		const firstMessage = await interaction.channel!.messages.fetch(args.last_message).catch(() => {
 			throw new Error(
 				i18next.t('command.mod.clear.errors.no_message', {
-					lng: locale,
 					message_id: args.last_message,
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
 					channel: interaction.channel!.toString(),
+					lng: locale,
 				}),
 			);
 		});
@@ -52,10 +52,10 @@ export default class implements Command {
 			? await interaction.channel!.messages.fetch(args.first_message).catch(() => {
 					throw new Error(
 						i18next.t('command.mod.clear.errors.no_message', {
-							lng: locale,
 							message_id: args.first_message,
 							// eslint-disable-next-line @typescript-eslint/no-base-to-string
 							channel: interaction.channel!.toString(),
+							lng: locale,
 						}),
 					);
 			  })
