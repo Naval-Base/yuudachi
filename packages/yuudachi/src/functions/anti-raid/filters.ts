@@ -67,10 +67,10 @@ export function avatarFilter(member: GuildMember, avatar?: string | null) {
 	}
 
 	if (avatar.toLowerCase() === 'none') {
-		return !Boolean(member.user.avatar);
+		return !member.avatar && !member.user.avatar;
 	}
 
-	return member.user.avatar === avatar;
+	return member.user.avatar === avatar || member.avatar === avatar;
 }
 
 /**
