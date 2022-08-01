@@ -1,10 +1,9 @@
-import { Client, type Snowflake, hyperlink, time, TimestampStyles } from 'discord.js';
+import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
-import { generateMessageLink } from '../../util/generateMessageLink.js';
 import { type Case, CaseAction } from '../cases/createCase.js';
 
 export async function generateCaseLog(case_: Case, logChannelId: Snowflake, locale: string) {
@@ -53,7 +52,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 			msg += i18next.t('log.mod_log.case_log.context', {
 				link: hyperlink(
 					i18next.t('log.mod_log.case_log.context_sub', { lng: locale }),
-					generateMessageLink(case_.guildId, contextMessage!.channel_id!, case_.contextMessageId),
+					messageLink(contextMessage!.channel_id!, case_.contextMessageId, case_.guildId),
 				),
 				lng: locale,
 			});
@@ -75,10 +74,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 
 		if (Reflect.has(reference ?? {}, 'log_message_id')) {
 			msg += i18next.t('log.mod_log.case_log.reference', {
-				ref: hyperlink(
-					`#${case_.referenceId}`,
-					generateMessageLink(case_.guildId, logChannelId, reference!.log_message_id!),
-				),
+				ref: hyperlink(`#${case_.referenceId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
 				lng: locale,
 			});
 		}

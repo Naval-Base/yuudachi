@@ -2,8 +2,10 @@
 	"common": {
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
-			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet."
-		}
+			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet.",
+			"no_content": "<No message content>"
+		},
+		"moderator": "Moderator"
 	},
 	"command": {
 		"common": {
@@ -13,7 +15,8 @@
 				"duration_format": "Wrong duration format.",
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
-				"timed_out": "Action timer ran out."
+				"timed_out": "Action timer ran out.",
+				"not_message_id": "Provided value `{{val}}` for argument `{{arg}}` is not a valid message id."
 			},
 			"buttons": {
 				"cancel": "Cancel"
@@ -283,6 +286,24 @@
 			},
 			"duration": {
 				"success": "Successfully set duration for case {{- case}}"
+			},
+			"clear": {
+				"errors": {
+					"no_message": "Could not find message {{message_id}} in channel {{- channel}}",
+					"no_results": "Could not find messages in the provided range that are younger than 12 hours."
+				},
+				"pending_one": "You are about to clear {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"pending_other": "You are about to clear {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"message_too_old": "Note: You can only clear messages that are up to 12 hours old. The oldest message that will be cleared is shown below.",
+				"success_one": "Successfully cleared {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}",
+				"success_other": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}.",
+				"authors_one": "{{count}} author",
+				"authors_other": "{{count}} authors",
+				"buttons": {
+					"execute_one": "Clear {{count}} message",
+					"execute_other": "Clear {{count}} messages"
+				},
+				"cancel": "Cancelled clearing messages."
 			}
 		},
 		"utility": {
@@ -387,6 +408,7 @@
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
+				"multiple_authors": "Multiple authors",
 				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
 				"attachment": "↳ Attachment: {{- url}}",
 				"sticker": "↳ Sticker: {{- name}}",
@@ -410,6 +432,14 @@
 				"channel": "• Thread: {{- name}} {{channel_id}}",
 				"starter": "• Starter message: {{message_id}}",
 				"jump_to": "• [Jump to starter message]({{- link}})"
+			},
+			"messages_cleared": {
+				"title": "Messages cleared",
+				"messages_one": "• Message: {{count}}",
+				"messages_other": "• Messages: {{count}}",
+				"authors_one": "• Author: {{count}}",
+				"authors_other": "• Authors: {{count}}",
+				"time": "• Timespan: {{time}}"
 			}
 		},
 		"general_log": {

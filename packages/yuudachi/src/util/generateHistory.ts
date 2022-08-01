@@ -11,13 +11,13 @@ import {
 	inlineCode,
 	time,
 	TimestampStyles,
+	messageLink,
 } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { ACTION_KEYS } from './actionKeys.js';
 import { addFields, truncateEmbed } from './embed.js';
-import { generateMessageLink } from './generateMessageLink.js';
 import type { RawCase } from '../functions/cases/transformCase.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
 import { kSQL } from '../tokens.js';
@@ -133,7 +133,7 @@ export async function generateHistory(
 		const dateFormatted = time(dayjs(c.created_at).unix(), TimestampStyles.ShortDate);
 		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
 			c.log_message_id
-				? hyperlink(`#${c.case_id}`, generateMessageLink(c.guild_id, modLogChannelId, c.log_message_id))
+				? hyperlink(`#${c.case_id}`, messageLink(modLogChannelId, c.log_message_id), c.guild_id)
 				: `#${c.case_id}`
 		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
 

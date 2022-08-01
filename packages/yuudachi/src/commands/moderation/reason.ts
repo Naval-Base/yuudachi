@@ -1,4 +1,4 @@
-import { type CommandInteraction, ComponentType, ButtonStyle, hyperlink } from 'discord.js';
+import { type CommandInteraction, ComponentType, ButtonStyle, hyperlink, messageLink } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command.js';
@@ -13,7 +13,6 @@ import type { ReasonCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { createButton } from '../../util/button.js';
 import { truncate } from '../../util/embed.js';
-import { generateMessageLink } from '../../util/generateMessageLink.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 export default class implements Command {
@@ -86,11 +85,11 @@ export default class implements Command {
 				content: i18next.t('command.mod.reason.pending_multiple', {
 					lower_case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
+						messageLink(modLogChannel.id, originalCaseLower.logMessageId!, interaction.guildId),
 					),
 					upper_case: hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper.logMessageId!),
+						messageLink(modLogChannel.id, originalCaseUpper.logMessageId!, interaction.guildId),
 					),
 					count: upper - lower + 1,
 					lng: locale,
@@ -169,11 +168,11 @@ export default class implements Command {
 			? i18next.t('command.mod.reason.success_multiple', {
 					lower_case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
+						messageLink(modLogChannel.id, originalCaseLower.logMessageId!, interaction.guildId),
 					),
 					upper_case: hyperlink(
 						`#${upper}`,
-						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseUpper!.logMessageId!),
+						messageLink(modLogChannel.id, originalCaseUpper!.logMessageId!, interaction.guildId),
 					),
 					amount: success.length,
 					count: upper - lower + 1,
@@ -182,7 +181,7 @@ export default class implements Command {
 			: i18next.t('command.mod.reason.success', {
 					case: hyperlink(
 						`#${lower}`,
-						generateMessageLink(interaction.guildId, modLogChannel.id, originalCaseLower.logMessageId!),
+						messageLink(modLogChannel.id, originalCaseLower.logMessageId!, interaction.guildId),
 					),
 					lng: locale,
 			  });
