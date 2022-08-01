@@ -1,16 +1,25 @@
 import { ms } from '@naval-base/ms';
-import { ButtonStyle, CommandInteraction, ComponentType } from 'discord.js';
+import dayjs from 'dayjs';
+import { APIEmbed, ButtonStyle, type CommandInteraction, ComponentType, Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import { inject, injectable } from 'tsyringe';
 import type { Command } from '../../Command.js';
-import { fetchMessages, pruneMessages } from '../../functions/pruning/pruneMessages.js';
+import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { formatMessagesToAttachment } from '../../functions/logging/formatMessagesToAttachment.js';
+import { fetchMessages, orderMessages, pruneMessages } from '../../functions/pruning/pruneMessages.js';
+import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { ClearCommand } from '../../interactions/moderation/clear.js';
 import { logger } from '../../logger.js';
+import { kWebhooks } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
+import { truncateEmbed } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
+@injectable()
 export default class implements Command {
+	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {}
 	public async execute(
 		interaction: CommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof ClearCommand>,
@@ -61,6 +70,7 @@ export default class implements Command {
 			  })
 			: undefined;
 
+		const { oldest } = orderMessages(firstMessage, lastMessage);
 		const messages = await fetchMessages(interaction.channel!, firstMessage, lastMessage);
 
 		if (messages.size < 1) {
@@ -90,14 +100,46 @@ export default class implements Command {
 			style: ButtonStyle.Secondary,
 		});
 
-		await interaction.editReply({
-			content: i18next.t('command.mod.clear.pending', {
+		const confirmParts = [
+			i18next.t('command.mod.clear.pending', {
 				count: messages.size,
 				author_count: uniqueAuthors.size,
 				time: ms(delta, true),
 				lng: locale,
 			}),
+		];
+
+		const embeds: APIEmbed[] = [];
+
+		if (!messages.has(oldest.id)) {
+			embeds.push({
+				author: {
+					name: `${earliest.author.tag} (${earliest.author.id})`,
+					url: earliest.url,
+					icon_url: earliest.author.displayAvatarURL(),
+				},
+				description: earliest.content.length
+					? earliest.content
+					: i18next.t('common.errors.no_content', {
+							lng: locale,
+					  }),
+				timestamp: earliest.createdAt.toISOString(),
+				color: 3092790,
+			});
+
+			confirmParts.push(
+				i18next.t('command.mod.clear.message_too_old', {
+					lng: locale,
+					embeds,
+				}),
+				'',
+			);
+		}
+
+		await interaction.editReply({
+			content: confirmParts.join('\n'),
 			components: [createMessageActionRow([cancelButton, clearButton])],
+			embeds,
 		});
 
 		const collectedInteraction = await reply
@@ -111,6 +153,7 @@ export default class implements Command {
 					await interaction.editReply({
 						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
+						embeds: [],
 					});
 				} catch (e) {
 					const error = e as Error;
@@ -125,6 +168,7 @@ export default class implements Command {
 					lng: locale,
 				}),
 				components: [],
+				embeds: [],
 			});
 		} else if (collectedInteraction?.customId === clearKey) {
 			logger.info(`Pruning messages`, {
@@ -149,7 +193,76 @@ export default class implements Command {
 					lng: locale,
 				}),
 				components: [],
+				embeds: [],
 			});
+
+			try {
+				const guildLogWebhookId = await getGuildSetting(firstMessage.guildId!, SettingsKeys.GuildLogWebhookId);
+				const ignoreChannels = await getGuildSetting(firstMessage.guildId!, SettingsKeys.LogIgnoreChannels);
+
+				if (
+					!firstMessage.inGuild() ||
+					ignoreChannels.includes(firstMessage.channelId) ||
+					(firstMessage.channel.parentId && ignoreChannels.includes(firstMessage.channel.parentId)) ||
+					(firstMessage.channel.parent?.parentId && ignoreChannels.includes(firstMessage.channel.parent.parentId))
+				) {
+					return;
+				}
+
+				if (!guildLogWebhookId) {
+					return;
+				}
+
+				const webhook = this.webhooks.get(guildLogWebhookId);
+
+				if (!webhook) {
+					return;
+				}
+
+				const descriptionParts = [
+					i18next.t('log.guild_log.messages_cleared.messages', {
+						count: prunedMessages.size,
+						lng: locale,
+					}),
+					i18next.t('log.guild_log.messages_cleared.authors', {
+						count: prunedUniqueAuthors.size,
+						lng: locale,
+					}),
+					i18next.t('log.guild_log.messages_cleared.time', {
+						time: ms(prunedDelta, true),
+						lng: locale,
+					}),
+				];
+
+				const embed: APIEmbed = {
+					author: {
+						name: `${i18next.t('common.moderator', {
+							lng: locale,
+						})}: ${interaction.user.tag} (${interaction.user.id})`,
+						icon_url: interaction.member.displayAvatarURL(),
+					},
+					description: descriptionParts.join('\n'),
+					title: i18next.t('log.guild_log.messages_cleared.title'),
+					timestamp: new Date().toISOString(),
+					color: 6094749,
+				};
+
+				const logDate = dayjs().format(DATE_FORMAT_LOGFILE);
+				await webhook.send({
+					embeds: [truncateEmbed(embed)],
+					files: [
+						{
+							name: `${logDate}-clear-logs.txt`,
+							attachment: Buffer.from(formatMessagesToAttachment(prunedMessages, locale), 'utf-8'),
+						},
+					],
+					username: interaction.client.user!.username,
+					avatarURL: interaction.client.user!.displayAvatarURL(),
+				});
+			} catch (err) {
+				const error = err as Error;
+				logger.error(error.message, error);
+			}
 		}
 	}
 }

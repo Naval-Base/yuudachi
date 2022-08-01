@@ -3,19 +3,11 @@ import { on } from 'node:events';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import utc from 'dayjs/plugin/utc.js';
-import {
-	Client,
-	type Collection,
-	Events,
-	type Message,
-	type Snowflake,
-	type Webhook,
-	MessageType,
-	messageLink,
-} from 'discord.js';
+import { Client, type Collection, Events, type Message, type Snowflake, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
+import { formatMessagesToAttachment } from '../../functions/logging/formatMessagesToAttachment.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
 import { kWebhooks } from '../../tokens.js';
@@ -23,8 +15,6 @@ import { addFields, truncateEmbed } from '../../util/embed.js';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
-
-const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
 
 @injectable()
 export default class implements Event {
@@ -70,73 +60,21 @@ export default class implements Event {
 					continue;
 				}
 
+				const uniqueAuthors = new Set<Snowflake>();
+				for (const message of userMessages.values()) {
+					uniqueAuthors.add(message.author.id);
+				}
+
 				const locale = await getGuildSetting(firstMessage.guild.id, SettingsKeys.Locale);
-
-				const output = userMessages
-					.map((message) => {
-						const outParts = [
-							`[${dayjs(message.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${
-								message.author.tag
-							} (${message.author.id}): ${message.cleanContent ? message.cleanContent.replace(/\n/g, '\n') : ''}`,
-						];
-
-						if (message.attachments.size) {
-							outParts.push(
-								message.attachments
-									.map((attachment) =>
-										i18next.t('log.guild_log.message_bulk_deleted.attachment', {
-											url: attachment.proxyURL,
-											lng: locale,
-										}),
-									)
-									.join('\n'),
-							);
-						}
-
-						if (message.stickers.size) {
-							outParts.push(
-								message.stickers
-									.map((sticker) =>
-										i18next.t('log.guild_log.message_bulk_deleted.sticker', {
-											name: sticker.name,
-											lng: locale,
-										}),
-									)
-									.join('\n'),
-							);
-						}
-
-						if (message.type === MessageType.Reply && message.reference && message.mentions.repliedUser) {
-							const { channelId, messageId, guildId } = message.reference;
-							const replyURL = messageLink(channelId, messageId!, guildId!);
-
-							outParts.push(
-								message.mentions.users.has(message.mentions.repliedUser.id)
-									? i18next.t('log.guild_log.message_bulk_deleted.reply_to_mentions', {
-											message_id: messageId,
-											message_url: replyURL,
-											user_tag: message.mentions.repliedUser.tag,
-											user_id: message.mentions.repliedUser.id,
-											lng: locale,
-									  })
-									: i18next.t('log.guild_log.message_bulk_deleted.reply_to', {
-											message_id: messageId,
-											message_url: replyURL,
-											user_tag: message.mentions.repliedUser.tag,
-											user_id: message.mentions.repliedUser.id,
-											lng: locale,
-									  }),
-							);
-						}
-
-						return outParts.join('\n');
-					})
-					.join('\n');
 
 				const embed = addFields({
 					author: {
-						name: `${firstMessage.author.tag} (${firstMessage.author.id})`,
-						icon_url: firstMessage.author.displayAvatarURL(),
+						name:
+							uniqueAuthors.size === 1
+								? `${firstMessage.author.tag} (${firstMessage.author.id})`
+								: i18next.t('log.guild_log.message_bulk_deleted.multiple_authors', { lng: locale }),
+						icon_url:
+							uniqueAuthors.size === 1 ? firstMessage.author.displayAvatarURL() : this.client.user.displayAvatarURL(),
 					},
 					color: 12016895,
 					title: i18next.t('log.guild_log.message_bulk_deleted.title', { lng: locale }),
@@ -152,7 +90,9 @@ export default class implements Event {
 
 				await webhook.send({
 					embeds: [truncateEmbed(embed)],
-					files: [{ name: 'logs.txt', attachment: Buffer.from(output, 'utf-8') }],
+					files: [
+						{ name: 'logs.txt', attachment: Buffer.from(formatMessagesToAttachment(userMessages, locale), 'utf-8') },
+					],
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});

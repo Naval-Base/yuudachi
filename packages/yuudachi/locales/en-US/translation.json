@@ -2,8 +2,10 @@
 	"common": {
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
-			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet."
-		}
+			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet.",
+			"no_content": "<No message content>"
+		},
+		"moderator": "Moderator"
 	},
 	"command": {
 		"common": {
@@ -292,6 +294,7 @@
 				},
 				"pending_one": "You are about to clear {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
 				"pending_other": "You are about to clear {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"message_too_old": "Note: You can only clear messages that are up to 12 hours old. The oldest message that will be cleared is shown below.",
 				"success_one": "Successfully cleared {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}",
 				"success_other": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}.",
 				"authors_one": "{{count}} author",
@@ -405,6 +408,7 @@
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
+				"multiple_authors": "Multiple authors",
 				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
 				"attachment": "↳ Attachment: {{- url}}",
 				"sticker": "↳ Sticker: {{- name}}",
@@ -435,7 +439,7 @@
 				"messages_other": "• Messages: {{count}}",
 				"authors_one": "• Author: {{count}}",
 				"authors_other": "• Authors: {{count}}",
-				"time": "Timespan: {{time}}"
+				"time": "• Timespan: {{time}}"
 			}
 		},
 		"general_log": {

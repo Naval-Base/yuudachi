@@ -5,7 +5,7 @@ interface MessageOrder {
 	oldest: Message;
 }
 
-function orderMessages(first: Message, second?: Message): MessageOrder {
+export function orderMessages(first: Message, second?: Message): MessageOrder {
 	if (first.id === second?.id || !second) {
 		return {
 			newest: undefined,
@@ -24,7 +24,6 @@ function orderMessages(first: Message, second?: Message): MessageOrder {
 
 export async function fetchMessages(channel: TextBasedChannel, from: Message, to?: Message) {
 	const { newest, oldest } = orderMessages(from, to);
-
 	const res = new Collection<Snowflake, Message>();
 
 	if (newest) {
@@ -75,11 +74,11 @@ export function chunkMessages(messages: Collection<Snowflake, Message>) {
 }
 
 export async function pruneMessages(channel: GuildTextBasedChannel, messages: Collection<Snowflake, Message>) {
-	const res = new Collection<Snowflake, Message>();
+	const deletedMessages = new Set<Snowflake>();
 	for (const chunk of chunkMessages(messages)) {
 		const deleted = await channel.bulkDelete(chunk, true);
-		res.concat(deleted);
+		deleted.forEach((_, id) => deletedMessages.add(id));
 	}
 
-	return res;
+	return messages.filter((message) => deletedMessages.has(message.id));
 }

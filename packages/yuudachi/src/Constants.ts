@@ -16,6 +16,7 @@ export const ANTI_RAID_NUKE_AVATAR_THRESHOLD = 5;
 export const ANTI_RAID_NUKE_PROGRESS_SPLIT = 50;
 
 export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD_HH-mm-ss';
+export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
 
 export const EMBED_TITLE_LIMIT = 256;
 export const EMBED_DESCRIPTION_LIMIT = 4096;
