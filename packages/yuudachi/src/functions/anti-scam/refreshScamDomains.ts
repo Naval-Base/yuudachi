@@ -1,7 +1,7 @@
 import process from 'node:process';
 import type { Redis } from 'ioredis';
-import fetch, { type Response } from 'node-fetch';
 import { container } from 'tsyringe';
+import { request as fetch, type Dispatcher } from 'undici';
 import { logger } from '../../logger.js';
 import { kRedis } from '../../tokens.js';
 
@@ -19,8 +19,8 @@ export interface ScamDomainRefreshData {
 	after: number;
 }
 
-export function checkResponse(response: Response) {
-	if (response.ok) {
+export function checkResponse(response: Dispatcher.ResponseData) {
+	if (response.statusCode >= 200 && response.statusCode < 300) {
 		return response;
 	}
 
@@ -59,7 +59,7 @@ export async function refreshScamDomains(redis?: Redis) {
 			continue;
 		}
 
-		const list = (await checkedResponse.json()) as string[];
+		const list = (await checkedResponse.body.json()) as string[];
 
 		switch (urlEnv) {
 			case 'SCAM_DOMAIN_DISCORD_URL':
