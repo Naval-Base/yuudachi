@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { ChannelType, Client, Events, type Message, type Webhook } from 'discord.js';
+import { ChannelType, Client, Events, messageLink, MessageType, type Message, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -68,11 +68,14 @@ export default class implements Event {
 					`Message by ${message.author.id} deleted in channel ${message.channelId}`,
 				);
 
-				let info = i18next.t('log.guild_log.message_deleted.channel', {
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					channel: `${message.channel.toString()} - ${message.channel.name} (${message.channel.id})`,
-					lng: locale,
-				});
+				const infoParts = [
+					i18next.t('log.guild_log.message_deleted.channel', {
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
+						channel: `${message.channel.toString()} - ${message.channel.name} (${message.channel.id})`,
+						lng: locale,
+					}),
+				];
+
 				let embed = addFields({
 					author: {
 						name: `${message.author.tag} (${message.author.id})`,
@@ -90,10 +93,12 @@ export default class implements Event {
 				});
 
 				if (!message.content && message.embeds.length) {
-					info += `\n${i18next.t('log.guild_log.message_deleted.embeds', {
-						embeds: message.embeds.length,
-						lng: locale,
-					})}`;
+					infoParts.push(
+						i18next.t('log.guild_log.message_deleted.embeds', {
+							embeds: message.embeds.length,
+							lng: locale,
+						}),
+					);
 				}
 
 				if (message.attachments.size) {
@@ -103,24 +108,51 @@ export default class implements Event {
 						attachmentParts.push(`[${counter}](${attachment.proxyURL})`);
 						counter++;
 					}
-					info += `\n${i18next.t('log.guild_log.message_deleted.attachments', {
-						attachments: attachmentParts.join(' '),
-						lng: locale,
-					})}`;
+					infoParts.push(
+						i18next.t('log.guild_log.message_deleted.attachments', {
+							attachments: attachmentParts.join(' '),
+							lng: locale,
+						}),
+					);
 				}
 
 				if (message.stickers.size) {
-					info += `\n${i18next.t('log.guild_log.message_deleted.stickers', {
-						stickers: message.stickers.map((s) => `\`${s.name}\``).join(', '),
-						lng: locale,
-					})}`;
+					infoParts.push(
+						i18next.t('log.guild_log.message_deleted.stickers', {
+							stickers: message.stickers.map((s) => `\`${s.name}\``).join(', '),
+							lng: locale,
+						}),
+					);
 				}
 
-				info += `\n${i18next.t('log.guild_log.message_deleted.jump_to', { link: message.url, lng: locale })}`;
+				infoParts.push(i18next.t('log.guild_log.message_deleted.jump_to', { link: message.url, lng: locale }));
+
+				if (message.type === MessageType.Reply && message.reference && message.mentions.repliedUser) {
+					const { channelId, messageId, guildId } = message.reference;
+					const replyURL = messageLink(channelId, messageId!, guildId!);
+
+					infoParts.push(
+						message.mentions.users.has(message.mentions.repliedUser.id)
+							? i18next.t('log.guild_log.message_deleted.reply_to_mentions', {
+									message_id: messageId,
+									message_url: replyURL,
+									user_tag: message.mentions.repliedUser.tag,
+									user_id: message.mentions.repliedUser.id,
+									lng: locale,
+							  })
+							: i18next.t('log.guild_log.message_deleted.reply_to', {
+									message_id: messageId,
+									message_url: replyURL,
+									user_tag: message.mentions.repliedUser.tag,
+									user_id: message.mentions.repliedUser.id,
+									lng: locale,
+							  }),
+					);
+				}
 
 				embed = addFields(embed, {
 					name: '\u200b',
-					value: info,
+					value: infoParts.join('\n'),
 				});
 
 				await webhook.send({

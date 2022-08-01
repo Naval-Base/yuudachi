@@ -28,7 +28,7 @@ export default class implements Event {
 				continue;
 			}
 
-			if (!newMessage.guild) {
+			if (!newMessage.inGuild()) {
 				continue;
 			}
 
@@ -51,8 +51,9 @@ export default class implements Event {
 				}
 
 				if (
-					(newMessage.channel.isThread() && ignoreChannels.includes(newMessage.channel.parentId ?? '')) ||
-					ignoreChannels.includes(newMessage.channelId)
+					ignoreChannels.includes(newMessage.channelId) ||
+					(newMessage.channel.parentId && ignoreChannels.includes(newMessage.channel.parentId)) ||
+					(newMessage.channel.parent?.parentId && ignoreChannels.includes(newMessage.channel.parent.parentId))
 				) {
 					continue;
 				}
