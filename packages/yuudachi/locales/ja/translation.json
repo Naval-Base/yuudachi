@@ -2,8 +2,10 @@
 	"common": {
 		"errors": {
 			"no_mod_log_channel": "",
-			"no_anti_raid_archive_channel": ""
-		}
+			"no_anti_raid_archive_channel": "",
+			"no_content": ""
+		},
+		"moderator": ""
 	},
 	"command": {
 		"common": {
@@ -13,7 +15,8 @@
 				"duration_format": "存続期間の形式は間違っています。",
 				"use_autocomplete": "",
 				"target_not_found": "対象ユーザーはこのサーバーにいません。",
-				"timed_out": ""
+				"timed_out": "",
+				"not_message_id": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -283,6 +286,24 @@
 			},
 			"duration": {
 				"success": ""
+			},
+			"clear": {
+				"errors": {
+					"no_message": "",
+					"no_results": ""
+				},
+				"pending_one": "",
+				"pending_other": "",
+				"message_too_old": "",
+				"success_one": "",
+				"success_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"buttons": {
+					"execute_one": "",
+					"execute_other": ""
+				},
+				"cancel": ""
 			}
 		},
 		"utility": {
@@ -381,13 +402,18 @@
 				"embeds": "",
 				"attachments": "",
 				"stickers": "",
-				"jump_to": "• [メッセージへ移動する]({{- link}})"
+				"jump_to": "• [メッセージへ移動する]({{- link}})",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"message_bulk_deleted": {
 				"title": "",
+				"multiple_authors": "",
 				"description": "",
 				"attachment": "",
-				"sticker": ""
+				"sticker": "",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"voice_state_update": {
 				"title": "ボイスステータス更新",
@@ -406,6 +432,14 @@
 				"channel": "",
 				"starter": "",
 				"jump_to": "• [元メッセージへ移動する]({{- link}})"
+			},
+			"messages_cleared": {
+				"title": "",
+				"messages_one": "",
+				"messages_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"time": ""
 			}
 		},
 		"general_log": {

@@ -2,8 +2,10 @@
 	"common": {
 		"errors": {
 			"no_mod_log_channel": "Aún no se ha definido el canal de registros de moderación.",
-			"no_anti_raid_archive_channel": ""
-		}
+			"no_anti_raid_archive_channel": "",
+			"no_content": ""
+		},
+		"moderator": ""
 	},
 	"command": {
 		"common": {
@@ -13,7 +15,8 @@
 				"duration_format": "El formato de duración es incorrecto.",
 				"use_autocomplete": "No se pudo resolver la opción dada. Asegúrese de seleccionar una opción de autocompletado.",
 				"target_not_found": "El miembro seleccionado no está en este servidor.",
-				"timed_out": ""
+				"timed_out": "",
+				"not_message_id": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -283,6 +286,24 @@
 			},
 			"duration": {
 				"success": "Se definió con éxito la duración para el caso {{- case}}"
+			},
+			"clear": {
+				"errors": {
+					"no_message": "",
+					"no_results": ""
+				},
+				"pending_one": "",
+				"pending_other": "",
+				"message_too_old": "",
+				"success_one": "",
+				"success_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"buttons": {
+					"execute_one": "",
+					"execute_other": ""
+				},
+				"cancel": ""
 			}
 		},
 		"utility": {
@@ -381,13 +402,18 @@
 				"embeds": "• Incrustados: {{- embeds}}",
 				"attachments": "• Archivos: {{- attachments}}",
 				"stickers": "• Pegatinas: {{- stickers}}",
-				"jump_to": "• [Saltar a]({{- link}})"
+				"jump_to": "• [Saltar a]({{- link}})",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"message_bulk_deleted": {
 				"title": "Eliminación de mensajes",
+				"multiple_authors": "",
 				"description": "• Canal: {{- channel}}\n• Registro: Lee el fichero incrustado para los registros completos (posiblemente encima de este mensaje)",
 				"attachment": "↳ Archivo: {{- url}}",
-				"sticker": "↳ Pegatina: {{- name}}"
+				"sticker": "↳ Pegatina: {{- name}}",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"voice_state_update": {
 				"title": "Actualización de estado de voz",
@@ -406,6 +432,14 @@
 				"channel": "",
 				"starter": "",
 				"jump_to": "• [Saltar al mensaje inicial]({{- link}})"
+			},
+			"messages_cleared": {
+				"title": "",
+				"messages_one": "",
+				"messages_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"time": ""
 			}
 		},
 		"general_log": {
