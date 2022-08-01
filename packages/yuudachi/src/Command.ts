@@ -1,12 +1,47 @@
 import { basename, extname } from 'node:path';
-import type { AutocompleteInteraction, CommandInteraction } from 'discord.js';
+import type {
+	AutocompleteInteraction,
+	ChatInputCommandInteraction,
+	UserContextMenuCommandInteraction,
+	MessageContextMenuCommandInteraction,
+	User,
+	GuildMember,
+	Message,
+	CommandInteraction,
+} from 'discord.js';
+
+interface UserContextArgs {
+	user: User;
+	member: GuildMember;
+}
+
+interface MessageContextArgs {
+	message: Message;
+}
 
 export interface Command {
 	name?: string;
+	userContextName?: string;
+	messageContextName?: string;
 	execute: (interaction: CommandInteraction<'cached'>, args: any, locale: string) => unknown | Promise<unknown>;
 	autocomplete?: (
 		interaction: AutocompleteInteraction<'cached'>,
 		args: any,
+		locale: string,
+	) => unknown | Promise<unknown>;
+	executeChatInput?: (
+		interaction: ChatInputCommandInteraction<'cached'>,
+		args: any,
+		locale: string,
+	) => unknown | Promise<unknown>;
+	executeUserContext?: (
+		interaction: UserContextMenuCommandInteraction<'cached'>,
+		args: UserContextArgs,
+		locale: string,
+	) => unknown | Promise<unknown>;
+	executeMessageContext?: (
+		interaction: MessageContextMenuCommandInteraction<'cached'>,
+		args: MessageContextArgs,
 		locale: string,
 	) => unknown | Promise<unknown>;
 }
