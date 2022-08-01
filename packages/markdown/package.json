@@ -3,8 +3,8 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"lint": "prettier --check . && eslint src --ext .ts",
-		"format": "prettier --write . && eslint src --ext ts --fix",
+		"lint": "prettier --check . && eslint api --ext mjs",
+		"format": "prettier --write . && eslint api --ext mjs --fix",
 		"fmt": "yarn format"
 	},
 	"type": "module",

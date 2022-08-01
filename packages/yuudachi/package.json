@@ -6,7 +6,7 @@
 		"clean": "rimraf dist",
 		"build": "yarn clean && tsc && yarn copy-locales",
 		"copy-locales": "cpy locales/ dist/",
-		"lint": "prettier --check . && eslint src --ext .ts",
+		"lint": "prettier --check . && eslint src --ext ts",
 		"format": "prettier --write . && eslint src --ext ts --fix",
 		"fmt": "yarn format",
 		"start": "env-cmd node --enable-source-maps dist/index.js",
