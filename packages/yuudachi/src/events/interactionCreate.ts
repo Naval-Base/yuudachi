@@ -1,11 +1,23 @@
-import { Client, Events, InteractionType } from 'discord.js';
+import { AutocompleteInteraction, Client, Collection, CommandInteraction, Events, InteractionType } from 'discord.js';
+import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
-import type { Command } from '../Command.js';
+import type { Command, MessageContextArgs, UserContextArgs } from '../Command.js';
 import type { Event } from '../Event.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
 import { transformInteraction } from '../interactions/InteractionOptions.js';
 import { logger } from '../logger.js';
 import { kCommands } from '../tokens.js';
+
+function unexpectedInteractionType(
+	interaction: CommandInteraction<'cached'> | AutocompleteInteraction,
+	type: string,
+): never {
+	logger.info(
+		{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+		`Received ${type} for ${interaction.commandName}, but the command does not handle ${type}`,
+	);
+	throw new Error(i18next.t('common.errors.unexpected_interaction', { type }));
+}
 
 @injectable()
 export default class implements Event {
@@ -15,7 +27,7 @@ export default class implements Event {
 
 	public constructor(
 		public readonly client: Client<true>,
-		@inject(kCommands) public readonly commands: Map<string, Command>,
+		@inject(kCommands) public readonly commands: Collection<string, Command>,
 	) {}
 
 	public execute(): void {
@@ -23,6 +35,7 @@ export default class implements Event {
 			if (
 				interaction.type !== InteractionType.ApplicationCommand &&
 				!interaction.isUserContextMenuCommand() &&
+				!interaction.isMessageContextMenuCommand() &&
 				interaction.type !== InteractionType.ApplicationCommandAutocomplete
 			) {
 				return;
@@ -32,35 +45,59 @@ export default class implements Event {
 				return;
 			}
 
-			const command = this.commands.get(interaction.commandName.toLowerCase());
+			const command =
+				this.commands.get(interaction.commandName) ??
+				this.commands.find(
+					(c) =>
+						interaction.commandName === c.name ||
+						interaction.commandName === c.userContextName ||
+						interaction.commandName === c.messageContextName,
+				);
 
 			if (command) {
 				try {
 					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
 					const forceLocale = await getGuildSetting<boolean>(interaction.guildId, SettingsKeys.ForceLocale);
 
+					const effectiveLocale = forceLocale ? locale : interaction.locale;
+
 					if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
 						if (!command.autocomplete) {
-							logger.info(
-								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-								`Received autocomplete for ${interaction.commandName}, but the command does not handle autocomplete`,
-							);
-							return;
+							unexpectedInteractionType(interaction, 'autocomplete');
 						}
-						await command.autocomplete(
+
+						await command.autocomplete(interaction, transformInteraction(interaction.options.data), effectiveLocale);
+					} else if (interaction.isUserContextMenuCommand()) {
+						if (!command.executeUserContext) {
+							unexpectedInteractionType(interaction, 'UserContext');
+						}
+
+						await command.executeUserContext(
 							interaction,
-							transformInteraction(interaction.options.data),
-							forceLocale ? locale : interaction.locale,
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+							transformInteraction(interaction.options.data) as UserContextArgs,
+							effectiveLocale,
+						);
+					} else if (interaction.isMessageContextMenuCommand()) {
+						if (!command.executeMessageContext) {
+							unexpectedInteractionType(interaction, 'MessageContext');
+						}
+
+						await command.executeMessageContext(
+							interaction,
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+							transformInteraction(interaction.options.data) as MessageContextArgs,
+							effectiveLocale,
 						);
 					} else {
-						logger.info(
-							{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-							`Executing command ${interaction.commandName}`,
-						);
-						await command.execute(
+						if (!command.executeChatInput) {
+							unexpectedInteractionType(interaction, 'ChatInput');
+						}
+
+						await command.executeChatInput(
 							interaction,
 							transformInteraction(interaction.options.data),
-							forceLocale ? locale : interaction.locale,
+							effectiveLocale,
 						);
 					}
 				} catch (e) {
