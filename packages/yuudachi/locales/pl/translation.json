@@ -381,13 +381,17 @@
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",
 				"stickers": "• Stickers: {{- stickers}}",
-				"jump_to": "• [Jump to]({{- link}})"
+				"jump_to": "• [Jump to]({{- link}})",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
 				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
 				"attachment": "↳ Attachment: {{- url}}",
-				"sticker": "↳ Sticker: {{- name}}"
+				"sticker": "↳ Sticker: {{- name}}",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"voice_state_update": {
 				"title": "Voice state update",
