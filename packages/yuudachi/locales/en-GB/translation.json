@@ -2,8 +2,10 @@
 	"common": {
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialised yet.",
-			"no_anti_raid_archive_channel": ""
-		}
+			"no_anti_raid_archive_channel": "",
+			"no_content": ""
+		},
+		"moderator": ""
 	},
 	"command": {
 		"common": {
@@ -13,7 +15,8 @@
 				"duration_format": "Wrong duration format.",
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
-				"timed_out": ""
+				"timed_out": "",
+				"not_message_id": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -283,6 +286,24 @@
 			},
 			"duration": {
 				"success": "Successfully set duration for case {{- case}}"
+			},
+			"clear": {
+				"errors": {
+					"no_message": "",
+					"no_results": ""
+				},
+				"pending_one": "",
+				"pending_other": "",
+				"message_too_old": "",
+				"success_one": "",
+				"success_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"buttons": {
+					"execute_one": "",
+					"execute_other": ""
+				},
+				"cancel": ""
 			}
 		},
 		"utility": {
@@ -387,6 +408,7 @@
 			},
 			"message_bulk_deleted": {
 				"title": "Message deleted bulk",
+				"multiple_authors": "",
 				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
 				"attachment": "↳ Attachment: {{- url}}",
 				"sticker": "↳ Sticker: {{- name}}",
@@ -410,6 +432,14 @@
 				"channel": "",
 				"starter": "",
 				"jump_to": "• [Jump to starter message]({{- link}})"
+			},
+			"messages_cleared": {
+				"title": "",
+				"messages_one": "",
+				"messages_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"time": ""
 			}
 		},
 		"general_log": {
