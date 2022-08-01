@@ -1,0 +1,3 @@
+{
+	"extends": ["marine/prettier/index", "../../.eslintrc.json"]
+}

@@ -14,11 +14,6 @@
 		"useUnknownInCatchVariables": true,
 		"noUncheckedIndexedAccess": true,
 
-		// Modules
-		"module": "Node16",
-		"moduleResolution": "Node16",
-		"resolveJsonModule": true,
-
 		// Emit
 		"declaration": false,
 		"importHelpers": true,
@@ -35,7 +30,6 @@
 		// Language and Environment
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"lib": ["ESNext"],
 		"target": "ES2021",
 		"useDefineForClassFields": true,
 
