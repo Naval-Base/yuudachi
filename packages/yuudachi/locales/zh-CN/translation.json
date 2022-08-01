@@ -381,13 +381,17 @@
 				"embeds": "",
 				"attachments": "",
 				"stickers": "",
-				"jump_to": ""
+				"jump_to": "",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"message_bulk_deleted": {
 				"title": "",
 				"description": "",
 				"attachment": "",
-				"sticker": ""
+				"sticker": "",
+				"reply_to": "",
+				"reply_to_mentions": ""
 			},
 			"voice_state_update": {
 				"title": "",
