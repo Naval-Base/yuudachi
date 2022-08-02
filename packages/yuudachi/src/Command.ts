@@ -7,23 +7,23 @@ import type {
 	User,
 	GuildMember,
 	Message,
-	CommandInteraction,
 } from 'discord.js';
 
 interface UserContextArgs {
 	user: User;
-	member: GuildMember;
+	member?: GuildMember;
 }
 
 interface MessageContextArgs {
 	message: Message;
 }
 
+export type StaticContextArgs<T extends 'user' | 'message'> = T extends 'user' ? UserContextArgs : MessageContextArgs;
+
 export interface Command {
 	name?: string;
 	userContextName?: string;
 	messageContextName?: string;
-	execute: (interaction: CommandInteraction<'cached'>, args: any, locale: string) => unknown | Promise<unknown>;
 	autocomplete?: (
 		interaction: AutocompleteInteraction<'cached'>,
 		args: any,
@@ -36,7 +36,7 @@ export interface Command {
 	) => unknown | Promise<unknown>;
 	executeUserContext?: (
 		interaction: UserContextMenuCommandInteraction<'cached'>,
-		args: UserContextArgs,
+		args: any,
 		locale: string,
 	) => unknown | Promise<unknown>;
 	executeMessageContext?: (
