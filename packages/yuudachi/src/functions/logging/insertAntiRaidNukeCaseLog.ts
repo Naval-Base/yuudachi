@@ -1,9 +1,10 @@
-import type { Guild, User, APIEmbed } from 'discord.js';
+import type { Guild, User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog.js';
 import { kSQL } from '../../tokens.js';
+import { addFields } from '../../util/embed.js';
 import type { Case } from '../cases/createCase.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
@@ -17,7 +18,7 @@ export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases:
 	const from = nextCase.next_case - cases.length;
 	const to = nextCase.next_case - 1;
 
-	const embed: APIEmbed = {
+	const embed = addFields({
 		author: {
 			name: `${user.tag} (${user.id})`,
 			icon_url: user.displayAvatarURL(),
@@ -27,7 +28,7 @@ export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases:
 			text: i18next.t('log.mod_log.anti_raid_nuke.footer', { from, to, lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
-	};
+	});
 
 	const logMessage = await modLogChannel!.send({
 		embeds: [embed],

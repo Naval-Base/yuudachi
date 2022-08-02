@@ -1,6 +1,6 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { APIEmbed, ButtonStyle, ComponentType, Webhook } from 'discord.js';
+import { type APIEmbed, ButtonStyle, ComponentType, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
@@ -13,7 +13,7 @@ import type { ClearCommand } from '../../interactions/moderation/clear.js';
 import { logger } from '../../logger.js';
 import { kWebhooks } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
-import { truncateEmbed } from '../../util/embed.js';
+import { addFields, truncateEmbed } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 @injectable()
@@ -236,7 +236,7 @@ export default class extends Command<typeof ClearCommand> {
 					}),
 				];
 
-				const embed: APIEmbed = {
+				const embed = addFields({
 					author: {
 						name: `${i18next.t('common.moderator', {
 							lng: locale,
@@ -247,7 +247,7 @@ export default class extends Command<typeof ClearCommand> {
 					title: i18next.t('log.guild_log.messages_cleared.title'),
 					timestamp: new Date().toISOString(),
 					color: 6094749,
-				};
+				});
 
 				const logDate = dayjs().format(DATE_FORMAT_LOGFILE);
 				await webhook.send({

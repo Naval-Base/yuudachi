@@ -1,4 +1,3 @@
-import type { APIEmbed } from 'discord.js';
 import i18next from 'i18next';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { checkScam } from '../../functions/anti-scam/checkScam.js';
@@ -15,10 +14,10 @@ export default class extends Command<typeof CheckScamCommand> {
 
 		const domains = await checkScam(args.content);
 
-		let embed: APIEmbed = {
+		let embed = addFields({
 			color: domains.length ? 16462404 : 3908957,
 			description: args.content,
-		};
+		});
 
 		if (domains.length) {
 			embed = addFields(embed, {

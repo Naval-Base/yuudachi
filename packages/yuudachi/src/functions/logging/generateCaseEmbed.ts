@@ -1,7 +1,8 @@
-import type { Snowflake, User, APIEmbed } from 'discord.js';
+import type { Snowflake, User } from 'discord.js';
 import i18next from 'i18next';
 import { generateCaseColor } from './generateCaseColor.js';
 import { generateCaseLog } from './generateCaseLog.js';
+import { addFields } from '../../util/embed.js';
 import type { Case } from '../cases/createCase.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
@@ -13,14 +14,14 @@ export async function generateCaseEmbed(
 ) {
 	const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
 
-	let embed: APIEmbed = {
+	let embed = addFields({
 		color: generateCaseColor(case_),
 		description: await generateCaseLog(case_, logChannelId, locale),
 		footer: {
 			text: i18next.t('log.mod_log.case_log.footer', { case_id: case_.caseId, lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
-	};
+	});
 
 	if (user) {
 		embed = {

@@ -4,12 +4,12 @@ import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
-import type { SponsorCommand, SponsorContextMenuCommand } from '../../interactions/index.js';
+import type { SponsorCommand, SponsorUserContextCommand } from '../../interactions/index.js';
 import { kSQL } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
-export default class extends Command<typeof SponsorCommand | typeof SponsorContextMenuCommand> {
+export default class extends Command<typeof SponsorCommand | typeof SponsorUserContextCommand> {
 	public constructor() {
 		super(['sponsor', 'Assign sponsor']);
 	}
@@ -115,7 +115,7 @@ export default class extends Command<typeof SponsorCommand | typeof SponsorConte
 
 	public override async userContext(
 		interaction: InteractionParam<CommandMethod.UserContext>,
-		args: ArgsParam<typeof SponsorContextMenuCommand>,
+		args: ArgsParam<typeof SponsorUserContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
 		await this.handle(interaction, args, locale);

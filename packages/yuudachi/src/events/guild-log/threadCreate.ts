@@ -1,12 +1,12 @@
 import { on } from 'node:events';
-import { type APIEmbed, Client, Events, type ThreadChannel, type Webhook } from 'discord.js';
+import { Client, Events, type ThreadChannel, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
 import { kWebhooks } from '../../tokens.js';
-import { truncateEmbed } from '../../util/embed.js';
+import { addFields, truncateEmbed } from '../../util/embed.js';
 
 @injectable()
 export default class implements Event {
@@ -87,7 +87,7 @@ export default class implements Event {
 				}
 
 				const owner = thread.ownerId ? await this.client.users.fetch(thread.ownerId) : null;
-				const embed: APIEmbed = {
+				const embed = addFields({
 					author: owner
 						? {
 								name: `${owner.tag} (${owner.id})`,
@@ -98,7 +98,7 @@ export default class implements Event {
 					title: i18next.t('log.guild_log.thread_created.title'),
 					timestamp: (thread.createdAt ?? new Date()).toISOString(),
 					color: 6094749,
-				};
+				});
 
 				await webhook.send({
 					embeds: [truncateEmbed(embed)],

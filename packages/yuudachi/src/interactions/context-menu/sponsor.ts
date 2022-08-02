@@ -1,6 +1,6 @@
 import { ApplicationCommandType } from 'discord-api-types/v10';
 
-export const SponsorContextMenuCommand = {
+export const SponsorUserContextCommand = {
 	name: 'Assign sponsor',
 	name_localizations: {
 		de: 'Vergebe sponsor',
