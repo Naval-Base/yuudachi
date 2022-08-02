@@ -29,6 +29,7 @@ import {
 	HistoryContextMenuCommand,
 	SponsorCommand,
 	SponsorContextMenuCommand,
+	ClearContentContextMenuCommand,
 } from './interactions/index.js';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
@@ -64,6 +65,7 @@ try {
 			// Context Menu
 			HistoryContextMenuCommand,
 			SponsorContextMenuCommand,
+			ClearContentContextMenuCommand,
 		],
 	});
 	console.log('Successfully reloaded interaction (/) commands.');

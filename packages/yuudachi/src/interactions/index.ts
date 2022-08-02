@@ -19,3 +19,4 @@ export * from './utility/refreshScams.js';
 export * from './utility/sponsor.js';
 export * from './context-menu/history.js';
 export * from './context-menu/sponsor.js';
+export * from './context-menu/clearContent.js';
