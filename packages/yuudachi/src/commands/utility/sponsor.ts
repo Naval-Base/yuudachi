@@ -1,9 +1,17 @@
-import { type CommandInteraction, type Snowflake, ButtonStyle, ComponentType } from 'discord.js';
+import {
+	type ChatInputCommandInteraction,
+	type Snowflake,
+	ButtonStyle,
+	ComponentType,
+	CommandInteraction,
+	GuildMember,
+	UserContextMenuCommandInteraction,
+} from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import type { Command } from '../../Command.js';
+import type { Command, StaticContextArgs } from '../../Command.js';
 import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { SponsorCommand } from '../../interactions/index.js';
 import { kSQL } from '../../tokens.js';
@@ -11,11 +19,26 @@ import { createButton } from '../../util/button.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public readonly userContextName = 'Assign sponsor';
+
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof SponsorCommand>,
 		locale: string,
 	): Promise<void> {
+		await this.handler(interaction, args.user.member!, locale);
+	}
+
+	public async executeUserContext(
+		interaction: UserContextMenuCommandInteraction<'cached'>,
+		args: StaticContextArgs<'user'>,
+		locale: string,
+	): Promise<void> {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+		await this.handler(interaction, args.member!, locale);
+	}
+
+	public async handler(interaction: CommandInteraction<'cached'>, member: GuildMember, locale: string) {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
 		const sql = container.resolve<Sql<any>>(kSQL);
@@ -29,10 +52,10 @@ export default class implements Command {
 			throw new Error(i18next.t('command.utility.sponsor.errors.no_role', { lng: locale }));
 		}
 
-		if (args.user.member?.roles.cache.has(roles.sponsor_role_id)) {
+		if (member.roles.cache.has(roles.sponsor_role_id)) {
 			throw new Error(
 				i18next.t('command.utility.sponsor.errors.already_sponsor', {
-					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					user: `${member.user.toString()} - ${member.user.tag} (${member.user.id})`,
 					lng: locale,
 				}),
 			);
@@ -54,7 +77,7 @@ export default class implements Command {
 
 		await interaction.editReply({
 			content: i18next.t('command.utility.sponsor.pending', {
-				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+				user: `${member.user.toString()} - ${member.user.tag} (${member.user.id})`,
 				lng: locale,
 			}),
 			components: [createMessageActionRow([cancelButton, roleButton])],
@@ -79,7 +102,7 @@ export default class implements Command {
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
 				content: i18next.t('command.utility.sponsor.cancel', {
-					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					user: `${member.user.toString()} - ${member.user.tag} (${member.user.id})`,
 					lng: locale,
 				}),
 				components: [],
@@ -87,14 +110,11 @@ export default class implements Command {
 		} else if (collectedInteraction?.customId === sponsorKey) {
 			await collectedInteraction.deferUpdate();
 
-			await args.user.member?.roles.add(
-				roles.sponsor_role_id,
-				i18next.t('command.utility.sponsor.reason', { lng: locale }),
-			);
+			await member.roles.add(roles.sponsor_role_id, i18next.t('command.utility.sponsor.reason', { lng: locale }));
 
 			await collectedInteraction.editReply({
 				content: i18next.t('command.utility.sponsor.success', {
-					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					user: `${member.user.toString()} - ${member.user.tag} (${member.user.id})`,
 					lng: locale,
 				}),
 				components: [],
