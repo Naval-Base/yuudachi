@@ -4,7 +4,7 @@ import {
 	type ButtonInteraction,
 	ButtonStyle,
 	Collection,
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	ComponentType,
 	type GuildMember,
 	inlineCode,
@@ -29,7 +29,7 @@ import { createModalActionRow } from '../../../../util/modalActionRow.js';
 import { createTextComponent } from '../../../../util/textComponent.js';
 
 export async function modal(
-	interaction: CommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'>,
 	args: ArgumentsOf<typeof AntiRaidNukeCommand>['modal'],
 	locale: string,
 ): Promise<void> {

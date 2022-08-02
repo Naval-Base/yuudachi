@@ -1,4 +1,4 @@
-import { type CommandInteraction, hyperlink, messageLink } from 'discord.js';
+import { type ChatInputCommandInteraction, hyperlink, messageLink } from 'discord.js';
 import i18next from 'i18next';
 import type { Command } from '../../Command.js';
 import { getCase } from '../../functions/cases/getCase.js';
@@ -10,8 +10,8 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { ReferenceCommand } from '../../interactions/index.js';
 
 export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof ReferenceCommand>,
 		locale: string,
 	): Promise<void> {

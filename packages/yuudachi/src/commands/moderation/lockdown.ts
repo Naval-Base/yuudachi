@@ -1,4 +1,4 @@
-import { type CommandInteraction, type TextChannel, ChannelType, PermissionFlagsBits } from 'discord.js';
+import { type ChatInputCommandInteraction, type TextChannel, ChannelType, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 import { lift } from './sub/lockdown/lift.js';
 import { lock } from './sub/lockdown/lock.js';
@@ -7,8 +7,8 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { LockdownCommand } from '../../interactions/index.js';
 
 export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof LockdownCommand>,
 		locale: string,
 	): Promise<void> {

@@ -1,4 +1,4 @@
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import { file } from './sub/anti-raid-nuke/file.js';
 import { filter } from './sub/anti-raid-nuke/filter.js';
@@ -10,8 +10,8 @@ import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { AntiRaidNukeCommand } from '../../interactions/index.js';
 
 export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof AntiRaidNukeCommand>,
 		locale: string,
 	): Promise<void> {

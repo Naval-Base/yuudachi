@@ -1,5 +1,5 @@
 import process from 'node:process';
-import { type CommandInteraction, ButtonStyle, ComponentType, inlineCode } from 'discord.js';
+import { type ChatInputCommandInteraction, ButtonStyle, ComponentType, inlineCode } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -15,8 +15,8 @@ import { addFields } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		_: ArgumentsOf<typeof RefreshScamlistCommand>,
 		locale: string,
 	): Promise<void> {

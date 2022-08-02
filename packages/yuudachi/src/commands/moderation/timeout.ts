@@ -1,5 +1,5 @@
 import { ms } from '@naval-base/ms';
-import { type CommandInteraction, ButtonStyle, ComponentType, PermissionFlagsBits } from 'discord.js';
+import { type ChatInputCommandInteraction, ButtonStyle, ComponentType, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -22,8 +22,8 @@ import { createMessageActionRow } from '../../util/messageActionRow.js';
 export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof TimeoutCommand>,
 		locale: string,
 	): Promise<void> {

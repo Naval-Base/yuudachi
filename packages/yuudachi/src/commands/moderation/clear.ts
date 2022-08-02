@@ -1,6 +1,6 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { APIEmbed, ButtonStyle, type CommandInteraction, ComponentType, Webhook } from 'discord.js';
+import { APIEmbed, ButtonStyle, type ChatInputCommandInteraction, ComponentType, Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
@@ -20,8 +20,8 @@ import { createMessageActionRow } from '../../util/messageActionRow.js';
 @injectable()
 export default class implements Command {
 	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {}
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof ClearCommand>,
 		locale: string,
 	): Promise<void> {

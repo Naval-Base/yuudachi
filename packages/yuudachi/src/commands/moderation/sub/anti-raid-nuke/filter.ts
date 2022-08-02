@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import {
 	ButtonStyle,
 	codeBlock,
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	ComponentType,
 	inlineCode,
 	time,
@@ -42,7 +42,7 @@ enum Confusables {
 }
 
 export async function filter(
-	interaction: CommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'>,
 	args: ArgumentsOf<typeof AntiRaidNukeCommand>['filter'],
 	locale: string,
 ): Promise<void> {

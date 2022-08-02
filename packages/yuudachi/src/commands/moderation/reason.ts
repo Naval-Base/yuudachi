@@ -1,4 +1,4 @@
-import { type CommandInteraction, ComponentType, ButtonStyle, hyperlink, messageLink } from 'discord.js';
+import { type ChatInputCommandInteraction, ComponentType, ButtonStyle, hyperlink, messageLink } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Command } from '../../Command.js';
@@ -16,8 +16,8 @@ import { truncate } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof ReasonCommand>,
 		locale: string,
 	): Promise<void> {

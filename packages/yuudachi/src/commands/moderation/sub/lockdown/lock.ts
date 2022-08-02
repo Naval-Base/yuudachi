@@ -1,7 +1,7 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
 import {
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
@@ -24,7 +24,7 @@ interface LockdownLockArgs {
 }
 
 export async function lock(
-	interaction: CommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'>,
 	reply: InteractionResponse<true>,
 	args: LockdownLockArgs,
 	locale: string,

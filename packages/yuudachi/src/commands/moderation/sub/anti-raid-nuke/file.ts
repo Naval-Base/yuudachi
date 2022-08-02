@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import {
 	ButtonStyle,
 	Collection,
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	ComponentType,
 	type GuildMember,
 	hyperlink,
@@ -26,7 +26,7 @@ import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function file(
-	interaction: CommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'>,
 	args: ArgumentsOf<typeof AntiRaidNukeCommand>['file'],
 	locale: string,
 ): Promise<void> {

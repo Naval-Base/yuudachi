@@ -1,5 +1,5 @@
 import {
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
@@ -13,7 +13,7 @@ import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function lift(
-	interaction: CommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'>,
 	reply: InteractionResponse<true>,
 	channel: TextChannel,
 	locale: string,

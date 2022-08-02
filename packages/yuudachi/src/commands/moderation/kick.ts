@@ -1,4 +1,4 @@
-import { type CommandInteraction, ComponentType, ButtonStyle } from 'discord.js';
+import { type ChatInputCommandInteraction, ComponentType, ButtonStyle } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -21,8 +21,8 @@ import { createMessageActionRow } from '../../util/messageActionRow.js';
 export default class implements Command {
 	public constructor(@inject(kRedis) public readonly redis: Redis) {}
 
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof KickCommand>,
 		locale: string,
 	): Promise<void> {

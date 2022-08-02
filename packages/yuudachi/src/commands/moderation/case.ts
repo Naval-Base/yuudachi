@@ -1,7 +1,7 @@
 import {
 	type AutocompleteInteraction,
 	Collection,
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	type Guild,
 	type Snowflake,
 } from 'discord.js';
@@ -97,8 +97,8 @@ export default class implements Command {
 		}
 	}
 
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
+	public async executeChatInput(
+		interaction: ChatInputCommandInteraction<'cached'>,
 		args: ArgumentsOf<typeof CaseLookupCommand>,
 		locale: string,
 	): Promise<void> {

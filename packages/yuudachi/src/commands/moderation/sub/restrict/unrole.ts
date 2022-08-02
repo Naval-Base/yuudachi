@@ -1,5 +1,5 @@
 import {
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	type Snowflake,
 	ButtonStyle,
 	ComponentType,
@@ -18,7 +18,7 @@ import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function unrole(
-	interaction: CommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'>,
 	reply: InteractionResponse<true>,
 	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
 	locale: string,

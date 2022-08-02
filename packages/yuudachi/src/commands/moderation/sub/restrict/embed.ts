@@ -1,6 +1,6 @@
 import { ms } from '@naval-base/ms';
 import {
-	type CommandInteraction,
+	type ChatInputCommandInteraction,
 	type Snowflake,
 	ButtonStyle,
 	ComponentType,
@@ -21,7 +21,7 @@ import { generateHistory } from '../../../../util/generateHistory.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function embed(
-	interaction: CommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'>,
 	reply: InteractionResponse<true>,
 	args: ArgumentsOf<typeof RestrictCommand>['embed'],
 	locale: string,
