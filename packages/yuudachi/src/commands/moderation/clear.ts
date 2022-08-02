@@ -1,15 +1,14 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { APIEmbed, ButtonStyle, type CommandInteraction, ComponentType, Webhook } from 'discord.js';
+import { APIEmbed, ButtonStyle, ComponentType, Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
-import type { Command } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { formatMessagesToAttachment } from '../../functions/logging/formatMessagesToAttachment.js';
 import { fetchMessages, orderMessages, pruneMessages } from '../../functions/pruning/pruneMessages.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { ClearCommand } from '../../interactions/moderation/clear.js';
 import { logger } from '../../logger.js';
 import { kWebhooks } from '../../tokens.js';
@@ -18,12 +17,15 @@ import { truncateEmbed } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 @injectable()
-export default class implements Command {
-	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {}
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
-		args: ArgumentsOf<typeof ClearCommand>,
-		locale: string,
+export default class extends Command<typeof ClearCommand> {
+	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {
+		super();
+	}
+
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof ClearCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 

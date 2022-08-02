@@ -1,12 +1,11 @@
 import process from 'node:process';
-import { type CommandInteraction, ButtonStyle, ComponentType, inlineCode } from 'discord.js';
+import { ButtonStyle, ComponentType, inlineCode } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { container } from 'tsyringe';
-import type { Command } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { RefreshScamlistCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { kRedis } from '../../tokens.js';
@@ -14,11 +13,11 @@ import { createButton } from '../../util/button.js';
 import { addFields } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
-export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction,
-		_: ArgumentsOf<typeof RefreshScamlistCommand>,
-		locale: string,
+export default class extends Command<typeof RefreshScamlistCommand> {
+	public override async chatInput(
+		interaction: InteractionParam,
+		_: ArgsParam<typeof RefreshScamlistCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const redis = container.resolve<Redis>(kRedis);
 

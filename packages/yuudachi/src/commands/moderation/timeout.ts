@@ -1,16 +1,15 @@
 import { ms } from '@naval-base/ms';
-import { type CommandInteraction, ButtonStyle, ComponentType, PermissionFlagsBits } from 'discord.js';
+import { ButtonStyle, ComponentType, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
-import type { Command } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { TimeoutCommand } from '../../interactions/moderation/timeout.js';
 import { logger } from '../../logger.js';
 import { kRedis } from '../../tokens.js';
@@ -19,13 +18,15 @@ import { generateHistory } from '../../util/generateHistory.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 @injectable()
-export default class implements Command {
-	public constructor(@inject(kRedis) public readonly redis: Redis) {}
+export default class extends Command<typeof TimeoutCommand> {
+	public constructor(@inject(kRedis) public readonly redis: Redis) {
+		super();
+	}
 
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
-		args: ArgumentsOf<typeof TimeoutCommand>,
-		locale: string,
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof TimeoutCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 

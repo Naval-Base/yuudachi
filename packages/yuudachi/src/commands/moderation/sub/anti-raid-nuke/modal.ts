@@ -4,7 +4,6 @@ import {
 	type ButtonInteraction,
 	ButtonStyle,
 	Collection,
-	type CommandInteraction,
 	ComponentType,
 	type GuildMember,
 	inlineCode,
@@ -14,12 +13,12 @@ import {
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
-import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
@@ -29,9 +28,9 @@ import { createModalActionRow } from '../../../../util/modalActionRow.js';
 import { createTextComponent } from '../../../../util/textComponent.js';
 
 export async function modal(
-	interaction: CommandInteraction<'cached'>,
-	args: ArgumentsOf<typeof AntiRaidNukeCommand>['modal'],
-	locale: string,
+	interaction: InteractionParam,
+	args: ArgsParam<typeof AntiRaidNukeCommand>['modal'],
+	locale: LocaleParam,
 ): Promise<void> {
 	const modalKey = nanoid();
 

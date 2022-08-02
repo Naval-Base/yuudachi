@@ -1,20 +1,18 @@
-import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 import { embed } from './sub/restrict/embed.js';
 import { emoji } from './sub/restrict/emoji.js';
 import { react } from './sub/restrict/react.js';
 import { unrole } from './sub/restrict/unrole.js';
-import type { Command } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { RestrictCommand } from '../../interactions/index.js';
 
-export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
-		args: ArgumentsOf<typeof RestrictCommand>,
-		locale: string,
+export default class extends Command<typeof RestrictCommand> {
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof RestrictCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 

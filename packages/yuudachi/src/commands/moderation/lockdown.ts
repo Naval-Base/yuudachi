@@ -1,16 +1,15 @@
-import { type CommandInteraction, type TextChannel, ChannelType, PermissionFlagsBits } from 'discord.js';
+import { type TextChannel, ChannelType, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 import { lift } from './sub/lockdown/lift.js';
 import { lock } from './sub/lockdown/lock.js';
-import type { Command } from '../../Command.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import type { LockdownCommand } from '../../interactions/index.js';
 
-export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
-		args: ArgumentsOf<typeof LockdownCommand>,
-		locale: string,
+export default class extends Command<typeof LockdownCommand> {
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof LockdownCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 

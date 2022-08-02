@@ -1,10 +1,10 @@
-import { ApplicationCommandType, type RESTPostAPIContextMenuApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { ApplicationCommandType } from 'discord-api-types/v10';
 
-export const SponsorContextMenuCommand: RESTPostAPIContextMenuApplicationCommandsJSONBody = {
+export const SponsorContextMenuCommand = {
 	name: 'Assign sponsor',
 	name_localizations: {
 		de: 'Vergebe sponsor',
 	},
-	default_member_permissions: '0',
 	type: ApplicationCommandType.User,
+	default_member_permissions: '0',
 } as const;

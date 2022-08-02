@@ -1,7 +1,6 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
 import {
-	type CommandInteraction,
 	type TextChannel,
 	ButtonStyle,
 	ComponentType,
@@ -12,6 +11,7 @@ import {
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import type { InteractionParam, LocaleParam } from '../../../../Command.js';
 import { createLockdown } from '../../../../functions/lockdowns/createLockdown.js';
 import { getLockdown } from '../../../../functions/lockdowns/getLockdown.js';
 import { createButton } from '../../../../util/button.js';
@@ -24,10 +24,10 @@ interface LockdownLockArgs {
 }
 
 export async function lock(
-	interaction: CommandInteraction<'cached'>,
+	interaction: InteractionParam,
 	reply: InteractionResponse<true>,
 	args: LockdownLockArgs,
-	locale: string,
+	locale: LocaleParam,
 ): Promise<void> {
 	const lockdown = await getLockdown(interaction.guildId, args.channel.id);
 
