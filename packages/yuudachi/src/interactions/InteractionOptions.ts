@@ -6,8 +6,11 @@ import {
 	User,
 	GuildMember,
 	Attachment,
+	UserContextMenuCommandInteraction,
+	MessageContextMenuCommandInteraction,
 } from 'discord.js';
 import type { ArgumentsOf, Command } from './ArgumentsOf.js';
+import type { StaticContextArgs } from '../Command.js';
 
 export function transformInteraction<T extends Command>(
 	options: readonly CommandInteractionOption<'cached'>[],
@@ -58,4 +61,21 @@ export function transformInteraction<T extends Command>(
 	}
 
 	return opts as ArgumentsOf<T>;
+}
+
+export function transformUserContext(
+	interaction: UserContextMenuCommandInteraction<'cached'>,
+): StaticContextArgs<'user'> {
+	return {
+		user: interaction.targetUser,
+		member: interaction.targetMember,
+	};
+}
+
+export function transformMessageContext(
+	interaction: MessageContextMenuCommandInteraction<'cached'>,
+): StaticContextArgs<'message'> {
+	return {
+		message: interaction.targetMessage,
+	};
 }

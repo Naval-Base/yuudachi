@@ -1,10 +1,14 @@
 import { AutocompleteInteraction, Client, Collection, CommandInteraction, Events, InteractionType } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
-import type { Command, MessageContextArgs, UserContextArgs } from '../Command.js';
+import type { Command } from '../Command.js';
 import type { Event } from '../Event.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
-import { transformInteraction } from '../interactions/InteractionOptions.js';
+import {
+	transformInteraction,
+	transformMessageContext,
+	transformUserContext,
+} from '../interactions/InteractionOptions.js';
 import { logger } from '../logger.js';
 import { kCommands } from '../tokens.js';
 
@@ -34,8 +38,7 @@ export default class implements Event {
 		this.client.on(this.event, async (interaction) => {
 			if (
 				interaction.type !== InteractionType.ApplicationCommand &&
-				!interaction.isUserContextMenuCommand() &&
-				!interaction.isMessageContextMenuCommand() &&
+				!interaction.isContextMenuCommand() &&
 				interaction.type !== InteractionType.ApplicationCommandAutocomplete
 			) {
 				return;
@@ -45,13 +48,12 @@ export default class implements Event {
 				return;
 			}
 
+			const { commandName } = interaction;
+
 			const command =
-				this.commands.get(interaction.commandName) ??
+				this.commands.get(commandName.toLowerCase()) ??
 				this.commands.find(
-					(c) =>
-						interaction.commandName === c.name ||
-						interaction.commandName === c.userContextName ||
-						interaction.commandName === c.messageContextName,
+					(c) => commandName === c.name || commandName === c.userContextName || commandName === c.messageContextName,
 				);
 
 			if (command) {
@@ -75,7 +77,7 @@ export default class implements Event {
 						await command.executeUserContext(
 							interaction,
 							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-							transformInteraction(interaction.options.data) as UserContextArgs,
+							transformUserContext(interaction),
 							effectiveLocale,
 						);
 					} else if (interaction.isMessageContextMenuCommand()) {
@@ -86,7 +88,7 @@ export default class implements Event {
 						await command.executeMessageContext(
 							interaction,
 							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-							transformInteraction(interaction.options.data) as MessageContextArgs,
+							transformMessageContext(interaction),
 							effectiveLocale,
 						);
 					} else {
