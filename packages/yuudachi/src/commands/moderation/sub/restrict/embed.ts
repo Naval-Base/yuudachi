@@ -1,19 +1,13 @@
 import { ms } from '@naval-base/ms';
-import {
-	type CommandInteraction,
-	type Snowflake,
-	ButtonStyle,
-	ComponentType,
-	type InteractionResponse,
-} from 'discord.js';
+import { type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import { CaseAction, createCase } from '../../../../functions/cases/createCase.js';
 import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
 import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
-import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
 import type { RestrictCommand } from '../../../../interactions/index.js';
 import { kSQL } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
@@ -21,10 +15,10 @@ import { generateHistory } from '../../../../util/generateHistory.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function embed(
-	interaction: CommandInteraction<'cached'>,
+	interaction: InteractionParam,
 	reply: InteractionResponse<true>,
-	args: ArgumentsOf<typeof RestrictCommand>['embed'],
-	locale: string,
+	args: ArgsParam<typeof RestrictCommand>['embed'],
+	locale: LocaleParam,
 ): Promise<void> {
 	if (!args.user.member) {
 		throw new Error(

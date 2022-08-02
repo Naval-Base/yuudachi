@@ -1,15 +1,16 @@
 import {
 	type CommandInteractionOption,
 	ApplicationCommandOptionType,
-	GuildBasedChannel,
-	Role,
-	User,
-	GuildMember,
-	Attachment,
+	type GuildBasedChannel,
+	type Role,
+	type User,
+	type GuildMember,
+	type Attachment,
+	type Message,
 } from 'discord.js';
-import type { ArgumentsOf, Command } from './ArgumentsOf.js';
+import type { ArgumentsOf, CommandPayload } from './ArgumentsOf.js';
 
-export function transformInteraction<T extends Command>(
+export function transformInteraction<T extends CommandPayload = CommandPayload>(
 	options: readonly CommandInteractionOption<'cached'>[],
 ): ArgumentsOf<T> {
 	const opts: Record<
@@ -22,6 +23,7 @@ export function transformInteraction<T extends Command>(
 		| number
 		| boolean
 		| Attachment
+		| Message<true>
 		| undefined
 	> = {};
 
@@ -52,6 +54,9 @@ export function transformInteraction<T extends Command>(
 			case ApplicationCommandOptionType.Attachment:
 				opts[top.name] = top.attachment;
 				break;
+			// @ts-expect-error: This is actually a string
+			case '_MESSAGE':
+				opts[top.name] = top.message;
 			default:
 				break;
 		}

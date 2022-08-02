@@ -1,20 +1,13 @@
-import {
-	type AutocompleteInteraction,
-	Collection,
-	type CommandInteraction,
-	type Guild,
-	type Snowflake,
-} from 'discord.js';
+import { Collection, type Guild, type Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import type { Command } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
 import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from '../../Constants.js';
 import { type RawCase, transformCase } from '../../functions/cases/transformCase.js';
 import { generateCaseEmbed } from '../../functions/logging/generateCaseEmbed.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { CaseLookupCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
@@ -37,11 +30,11 @@ async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
 	}
 }
 
-export default class implements Command {
-	public async autocomplete(
-		interaction: AutocompleteInteraction<'cached'>,
-		args: ArgumentsOf<typeof CaseLookupCommand>,
-		locale: string,
+export default class extends Command<typeof CaseLookupCommand> {
+	public override async autocomplete(
+		interaction: InteractionParam<CommandMethod.Autocomplete>,
+		args: ArgsParam<typeof CaseLookupCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		try {
 			const trimmedPhrase = args.phrase.trim();
@@ -97,10 +90,10 @@ export default class implements Command {
 		}
 	}
 
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
-		args: ArgumentsOf<typeof CaseLookupCommand>,
-		locale: string,
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof CaseLookupCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const sql = container.resolve<Sql<any>>(kSQL);
 		await interaction.deferReply({ ephemeral: args.hide ?? true });

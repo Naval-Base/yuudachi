@@ -10,10 +10,12 @@ import { container } from 'tsyringe';
 import { type Command, commandInfo } from './Command.js';
 import type { Event } from './Event.js';
 import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains.js';
+import type { CommandPayload } from './interactions/ArgumentsOf.js';
 import { logger } from './logger.js';
 import { createBree } from './util/bree.js';
 import { createClient } from './util/client.js';
 import { createCommands } from './util/commands.js';
+import { dynamicImport } from './util/dynamicImport.js';
 import { createPostgres } from './util/postgres.js';
 import { createRedis } from './util/redis.js';
 import { createWebhooks } from './util/webhooks.js';
@@ -77,25 +79,28 @@ try {
 			continue;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-		const command = container.resolve<Command>((await import(pathToFileURL(dir.fullPath).href)).default);
+		const dynamic = await dynamicImport<new () => Command<CommandPayload>>(
+			() => import(pathToFileURL(dir.fullPath).href),
+		);
+		const command = container.resolve<Command<CommandPayload>>(dynamic.default);
 		logger.info(
-			{ command: { name: command.name ?? cmdInfo.name } },
-			`Registering command: ${command.name ?? cmdInfo.name}`,
+			{ command: { name: command.name?.join(', ') ?? cmdInfo.name } },
+			`Registering command: ${command.name?.join(', ') ?? cmdInfo.name}`,
 		);
 
-		commands.set((command.name ?? cmdInfo.name).toLowerCase(), command);
+		command.name?.forEach((name) => (commands.has(name) ? null : commands.set(name.toLowerCase(), command))) ??
+			commands.set(cmdInfo.name, command);
 	}
 
 	for await (const dir of eventFiles) {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-		const event_ = container.resolve<Event>((await import(pathToFileURL(dir.fullPath).href)).default);
+		const dynamic = await dynamicImport<new () => Event>(() => import(pathToFileURL(dir.fullPath).href));
+		const event_ = container.resolve<Event>(dynamic.default);
 		logger.info({ event: { name: event_.name, event: event_.event } }, `Registering event: ${event_.name}`);
 
 		if (event_.disabled) {
 			continue;
 		}
-		event_.execute();
+		void event_.execute();
 	}
 
 	await client.login();

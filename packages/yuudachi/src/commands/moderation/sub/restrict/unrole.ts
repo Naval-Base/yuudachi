@@ -1,27 +1,21 @@
-import {
-	type CommandInteraction,
-	type Snowflake,
-	ButtonStyle,
-	ComponentType,
-	type InteractionResponse,
-} from 'discord.js';
+import { type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import { deleteCase } from '../../../../functions/cases/deleteCase.js';
 import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
-import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
 import type { RestrictCommand } from '../../../../interactions/index.js';
 import { kSQL } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function unrole(
-	interaction: CommandInteraction<'cached'>,
+	interaction: InteractionParam,
 	reply: InteractionResponse<true>,
-	args: ArgumentsOf<typeof RestrictCommand>['unrole'],
-	locale: string,
+	args: ArgsParam<typeof RestrictCommand>['unrole'],
+	locale: LocaleParam,
 ): Promise<void> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 

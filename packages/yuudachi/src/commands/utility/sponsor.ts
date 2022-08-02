@@ -1,20 +1,23 @@
-import { type CommandInteraction, type Snowflake, ButtonStyle, ComponentType } from 'discord.js';
+import { type Snowflake, ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import type { Command } from '../../Command.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
-import type { SponsorCommand } from '../../interactions/index.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
+import type { SponsorCommand, SponsorContextMenuCommand } from '../../interactions/index.js';
 import { kSQL } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
-export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
-		args: ArgumentsOf<typeof SponsorCommand>,
-		locale: string,
+export default class extends Command<typeof SponsorCommand | typeof SponsorContextMenuCommand> {
+	public constructor() {
+		super(['sponsor', 'Assign sponsor']);
+	}
+
+	private async handle(
+		interaction: InteractionParam | InteractionParam<CommandMethod.UserContext>,
+		args: ArgsParam<typeof SponsorCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
@@ -100,5 +103,21 @@ export default class implements Command {
 				components: [],
 			});
 		}
+	}
+
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof SponsorCommand>,
+		locale: LocaleParam,
+	): Promise<void> {
+		await this.handle(interaction, args, locale);
+	}
+
+	public override async userContext(
+		interaction: InteractionParam<CommandMethod.UserContext>,
+		args: ArgsParam<typeof SponsorContextMenuCommand>,
+		locale: LocaleParam,
+	): Promise<void> {
+		await this.handle(interaction, args, locale);
 	}
 }

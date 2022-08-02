@@ -1,16 +1,15 @@
-import type { CommandInteraction, APIEmbed } from 'discord.js';
+import type { APIEmbed } from 'discord.js';
 import i18next from 'i18next';
-import type { Command } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { checkScam } from '../../functions/anti-scam/checkScam.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { CheckScamCommand } from '../../interactions/index.js';
 import { addFields, truncateEmbed } from '../../util/embed.js';
 
-export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction,
-		args: ArgumentsOf<typeof CheckScamCommand>,
-		locale: string,
+export default class extends Command<typeof CheckScamCommand> {
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof CheckScamCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 

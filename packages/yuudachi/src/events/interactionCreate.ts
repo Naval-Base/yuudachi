@@ -1,8 +1,9 @@
-import { Client, Events, InteractionType } from 'discord.js';
+import { ApplicationCommandType, Client, Events } from 'discord.js';
 import { inject, injectable } from 'tsyringe';
 import type { Command } from '../Command.js';
 import type { Event } from '../Event.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
+import type { CommandPayload } from '../interactions/ArgumentsOf.js';
 import { transformInteraction } from '../interactions/InteractionOptions.js';
 import { logger } from '../logger.js';
 import { kCommands } from '../tokens.js';
@@ -15,15 +16,16 @@ export default class implements Event {
 
 	public constructor(
 		public readonly client: Client<true>,
-		@inject(kCommands) public readonly commands: Map<string, Command>,
+		@inject(kCommands) public readonly commands: Map<string, Command<CommandPayload>>,
 	) {}
 
 	public execute(): void {
 		this.client.on(this.event, async (interaction) => {
 			if (
-				interaction.type !== InteractionType.ApplicationCommand &&
+				!interaction.isCommand() &&
 				!interaction.isUserContextMenuCommand() &&
-				interaction.type !== InteractionType.ApplicationCommandAutocomplete
+				!interaction.isMessageContextMenuCommand() &&
+				!interaction.isAutocomplete()
 			) {
 				return;
 			}
@@ -39,35 +41,69 @@ export default class implements Event {
 					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
 					const forceLocale = await getGuildSetting<boolean>(interaction.guildId, SettingsKeys.ForceLocale);
 
-					if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
-						if (!command.autocomplete) {
+					switch (interaction.commandType) {
+						case ApplicationCommandType.ChatInput: {
+							const isAutocomplete = interaction.isAutocomplete();
+
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-								`Received autocomplete for ${interaction.commandName}, but the command does not handle autocomplete`,
+								`Executing ${isAutocomplete ? 'autocomplete' : 'chatInput command'} ${interaction.commandName}`,
 							);
-							return;
+
+							if (isAutocomplete) {
+								await command.autocomplete(
+									interaction,
+									transformInteraction(interaction.options.data),
+									forceLocale ? locale : interaction.locale,
+								);
+								break;
+							} else {
+								await command.chatInput(
+									interaction,
+									transformInteraction(interaction.options.data),
+									forceLocale ? locale : interaction.locale,
+								);
+								break;
+							}
 						}
-						await command.autocomplete(
-							interaction,
-							transformInteraction(interaction.options.data),
-							forceLocale ? locale : interaction.locale,
-						);
-					} else {
-						logger.info(
-							{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-							`Executing command ${interaction.commandName}`,
-						);
-						await command.execute(
-							interaction,
-							transformInteraction(interaction.options.data),
-							forceLocale ? locale : interaction.locale,
-						);
+
+						case ApplicationCommandType.Message: {
+							logger.info(
+								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+								`Executing message context command ${interaction.commandName}`,
+							);
+
+							await command.messageContext(
+								interaction,
+								transformInteraction(interaction.options.data),
+								forceLocale ? locale : interaction.locale,
+							);
+							break;
+						}
+
+						case ApplicationCommandType.User: {
+							logger.info(
+								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+								`Executing user context command ${interaction.commandName}`,
+							);
+
+							await command.userContext(
+								interaction,
+								transformInteraction(interaction.options.data),
+								forceLocale ? locale : interaction.locale,
+							);
+							break;
+						}
+
+						default:
+							break;
 					}
 				} catch (e) {
 					const error = e as Error;
 					logger.error(error, error.message);
+
 					try {
-						if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
+						if (interaction.isAutocomplete()) {
 							return;
 						}
 

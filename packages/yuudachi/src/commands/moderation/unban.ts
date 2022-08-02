@@ -1,14 +1,13 @@
-import { type CommandInteraction, ButtonStyle, ComponentType } from 'discord.js';
+import { ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
-import type { Command } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { deleteCase } from '../../functions/cases/deleteCase.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
 import type { UnbanCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { kRedis } from '../../tokens.js';
@@ -17,13 +16,15 @@ import { generateHistory } from '../../util/generateHistory.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 
 @injectable()
-export default class implements Command {
-	public constructor(@inject(kRedis) public readonly redis: Redis) {}
+export default class extends Command<typeof UnbanCommand> {
+	public constructor(@inject(kRedis) public readonly redis: Redis) {
+		super();
+	}
 
-	public async execute(
-		interaction: CommandInteraction<'cached'>,
-		args: ArgumentsOf<typeof UnbanCommand>,
-		locale: string,
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof UnbanCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 

@@ -1,14 +1,12 @@
-import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
-import type { Command } from '../../Command.js';
-import type { ArgumentsOf } from '../../interactions/ArgumentsOf.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import type { PingCommand } from '../../interactions/index.js';
 
-export default class implements Command {
-	public async execute(
-		interaction: CommandInteraction,
-		args: ArgumentsOf<typeof PingCommand>,
-		locale: string,
+export default class extends Command<typeof PingCommand> {
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof PingCommand>,
+		locale: LocaleParam,
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 

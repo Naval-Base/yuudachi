@@ -1,16 +1,9 @@
 import { Buffer } from 'node:buffer';
 import dayjs from 'dayjs';
-import {
-	ButtonStyle,
-	codeBlock,
-	type CommandInteraction,
-	ComponentType,
-	inlineCode,
-	time,
-	TimestampStyles,
-} from 'discord.js';
+import { ButtonStyle, codeBlock, ComponentType, inlineCode, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import {
@@ -26,7 +19,6 @@ import { parseAvatar } from '../../../../functions/anti-raid/parseAvatar.js';
 import { resolveDateLocale } from '../../../../functions/anti-raid/resolveDateLocale.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
-import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
@@ -42,9 +34,9 @@ enum Confusables {
 }
 
 export async function filter(
-	interaction: CommandInteraction<'cached'>,
-	args: ArgumentsOf<typeof AntiRaidNukeCommand>['filter'],
-	locale: string,
+	interaction: InteractionParam,
+	args: ArgsParam<typeof AntiRaidNukeCommand>['filter'],
+	locale: LocaleParam,
 ): Promise<void> {
 	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
 

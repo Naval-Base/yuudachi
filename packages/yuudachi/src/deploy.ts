@@ -24,10 +24,10 @@ import {
 	PingCommand,
 	CheckScamCommand,
 	RefreshScamlistCommand,
+	SponsorCommand,
 
 	// Context Menu
 	HistoryContextMenuCommand,
-	SponsorCommand,
 	SponsorContextMenuCommand,
 } from './interactions/index.js';
 

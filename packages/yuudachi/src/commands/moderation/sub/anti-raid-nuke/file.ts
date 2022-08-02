@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import {
 	ButtonStyle,
 	Collection,
-	type CommandInteraction,
 	ComponentType,
 	type GuildMember,
 	hyperlink,
@@ -13,22 +12,22 @@ import {
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import type { ArgsParam, InteractionParam, LocaleParam } from '../../../../Command.js';
 import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import { parseFile } from '../../../../functions/anti-raid/parseFile.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
-import type { ArgumentsOf } from '../../../../interactions/ArgumentsOf.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function file(
-	interaction: CommandInteraction<'cached'>,
-	args: ArgumentsOf<typeof AntiRaidNukeCommand>['file'],
-	locale: string,
+	interaction: InteractionParam,
+	args: ArgsParam<typeof AntiRaidNukeCommand>['file'],
+	locale: LocaleParam,
 ): Promise<void> {
 	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
 	const ids = await parseFile(args.file);

@@ -1,16 +1,24 @@
 /* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions, APIAttachment } from 'discord-api-types/v10'; */
-import type { ApplicationCommandOptionType, Attachment, GuildChannel, GuildMember, Role, User } from 'discord.js';
+import type {
+	ApplicationCommandOptionType,
+	ApplicationCommandType,
+	Attachment,
+	GuildChannel,
+	GuildMember,
+	Message,
+	Role,
+	User,
+} from 'discord.js';
 
-export type Command = Readonly<{
+export type CommandPayload = Readonly<{
 	name: string;
-	description: string;
 	options?: readonly Option[];
+	type?: ApplicationCommandType;
 }>;
 
 type Option = Readonly<
 	{
 		name: string;
-		description: string;
 		required?: boolean;
 	} & (
 		| {
@@ -83,6 +91,10 @@ type OptionToObject<O> = O extends {
 
 type ArgumentsOfRaw<O> = O extends readonly any[] ? UnionToIntersection<OptionToObject<O[number]>> : never;
 
-export type ArgumentsOf<C extends Command> = C extends { options: readonly Option[] }
+export type ArgumentsOf<C extends CommandPayload> = C extends { options: readonly Option[] }
 	? UnionToIntersection<OptionToObject<C['options'][number]>>
-	: unknown;
+	: C extends { type: ApplicationCommandType.Message }
+	? { message: Message<true> }
+	: C extends { type: ApplicationCommandType.User }
+	? { user: { user: User; member?: GuildMember } }
+	: never;
