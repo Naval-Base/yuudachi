@@ -451,6 +451,7 @@
 		"general_log": {
 			"anti_raid_nuke": {
 				"title": "Anti-Raid-Nuke launched",
+				"title_dryrun": "Anti-Raid-Nuke dry run",
 				"description": "• Author: {{- author}}\n• Hit count: {{count}}"
 			}
 		}

@@ -5,9 +5,11 @@ import { addFields } from '../../util/embed.js';
 
 export function generateAntiRaidNukeReportEmbed(hitCount: number, user: User, locale: string, dryRun = false) {
 	return addFields({
-		title: i18next.t('log.general_log.anti_raid_nuke.title', { lng: locale }),
+		title: dryRun
+			? i18next.t('log.general_log.anti_raid_nuke.title_dryrun', { lng: locale })
+			: i18next.t('log.general_log.anti_raid_nuke.title', { lng: locale }),
 		description: i18next.t('log.general_log.anti_raid_nuke.description', {
-			author: `${user.tag} (${user.id})`,
+			author: `\`${user.tag}\` (${user.id})`,
 			count: hitCount,
 			lng: locale,
 		}),
