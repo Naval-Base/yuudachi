@@ -16,7 +16,8 @@
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
 				"timed_out": "",
-				"not_message_id": ""
+				"not_message_id": "",
+				"no_message": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -32,17 +33,17 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Max length of 1900 for reason exceeded.",
+					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
-					"no_case": "Cannot find case #{{case}}",
-					"no_case_range": "Invalid case range #{{lower_case}} to #{{upper_case}}",
-					"case_lower_one": "Case ids have to be above 0",
-					"no_ref_case": "Cannot find reference case #{{case}}"
+					"no_case": "",
+					"no_case_range": "",
+					"case_lower_one": "",
+					"no_reference_case": ""
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "no reason",
+					"no_reason": "",
 					"show_history": "Show history for user {{- user}}"
 				}
 			},
@@ -231,15 +232,15 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "Missing permissions to unrole #{{case}}",
-						"already_processed": "{{- user}} with case #{{case}} has no running restrictions."
+						"missing_permissions": "",
+						"already_processed": ""
 					},
-					"pending": "Do you really want to unrole {{- user}} from {{- role}} with case #{{case}}?",
+					"pending": "",
 					"buttons": {
 						"execute": "Unrole"
 					},
-					"cancel": "Cancelled unrole on {{- user}} from {{- role}} on case #{{case}}",
-					"success": "Successfully unroled {{- user}} from {{- role}} with case #{{case}}"
+					"cancel": "",
+					"success": ""
 				}
 			},
 			"lockdown": {
@@ -254,7 +255,7 @@
 						"execute": "Lock"
 					},
 					"message": "🔒 This channel has been locked, it will be unlocked {{- duration}}",
-					"message_reason": "🔒 This channel has been locked with reason {{- reason}}, it will be unlocked {{- duration}}",
+					"message_reason": "",
 					"cancel": "Cancelled locking of {{- channel}}",
 					"success": "Successfully locked {{- channel}}"
 				},
@@ -289,7 +290,6 @@
 			},
 			"clear": {
 				"errors": {
-					"no_message": "",
 					"no_results": ""
 				},
 				"pending_one": "",
@@ -317,9 +317,9 @@
 			"refresh_scamlist": {
 				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
 				"refresh_never": "`never`",
-				"amount": "• Amount: {{- amount}}",
-				"before": "• Before: {{- amount}}",
-				"after": "• After: {{- amount}}",
+				"amount": "",
+				"before": "",
+				"after": "",
 				"last_change": "• Last change: {{- timestamp}}",
 				"buttons": {
 					"execute": "Refresh"
@@ -341,6 +341,13 @@
 				"reason": "",
 				"cancel": "Cancelled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
+			},
+			"repost": {
+				"errors": {
+					"not_message_link": "",
+					"no_guild": "",
+					"no_channel": ""
+				}
 			}
 		}
 	},
@@ -397,7 +404,6 @@
 			},
 			"message_deleted": {
 				"title": "Message deleted",
-				"no_content": "No content",
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",
