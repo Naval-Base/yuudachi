@@ -25,6 +25,7 @@ import {
 	CheckScamCommand,
 	RefreshScamlistCommand,
 	SponsorCommand,
+	RepostCommand,
 
 	// Context Menu
 	HistoryUserContextCommand,
@@ -61,6 +62,7 @@ try {
 			CheckScamCommand,
 			RefreshScamlistCommand,
 			SponsorCommand,
+			RepostCommand,
 
 			// Context Menu
 			HistoryUserContextCommand,

@@ -17,6 +17,7 @@ export * from './utility/ping.js';
 export * from './utility/checkScam.js';
 export * from './utility/refreshScams.js';
 export * from './utility/sponsor.js';
+export * from './utility/repost.js';
 export * from './context-menu/history.js';
 export * from './context-menu/sponsor.js';
 export * from './context-menu/repost.js';
