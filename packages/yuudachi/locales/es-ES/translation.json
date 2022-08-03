@@ -16,7 +16,8 @@
 				"use_autocomplete": "No se pudo resolver la opción dada. Asegúrese de seleccionar una opción de autocompletado.",
 				"target_not_found": "El miembro seleccionado no está en este servidor.",
 				"timed_out": "",
-				"not_message_id": ""
+				"not_message_id": "",
+				"no_message": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -32,17 +33,17 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Se excedió la longitud máxima de 1900.",
+					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} no es un canal de texto.",
-					"no_case": "No se pudo encontrar el caso #{{case}}",
-					"no_case_range": "El rango de casos #{{lower_case}} a #{{upper_case}} es inválido",
-					"case_lower_one": "La ID de los casos deben estar por encima de 0",
-					"no_ref_case": "No se pudo encontrar el caso #{{case}}"
+					"no_case": "",
+					"no_case_range": "",
+					"case_lower_one": "",
+					"no_reference_case": ""
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "razón sin definir",
+					"no_reason": "",
 					"show_history": "Muestra la historia para {{- user}}"
 				}
 			},
@@ -231,15 +232,15 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "Me faltan permisos para revocar el rol #{{case}}",
-						"already_processed": "{{- user}} con el caso #{{case}} no tiene ninguna restricción activa."
+						"missing_permissions": "",
+						"already_processed": ""
 					},
-					"pending": "¿Realmente quieres revocar el rol {{- role}} de {{- user}} con el caso #{{case}}?",
+					"pending": "",
 					"buttons": {
 						"execute": "Revoco de rol"
 					},
-					"cancel": "Se canceló el revoco del rol {{- role}} de {{- user}} en el caso #{{case}}",
-					"success": "Se revocó con éxito el rol {{- role}} de {{- user}} con en caso #{{case}}"
+					"cancel": "",
+					"success": ""
 				}
 			},
 			"lockdown": {
@@ -254,7 +255,7 @@
 						"execute": "Bloquear"
 					},
 					"message": "🔒 Este canal ha sido bloqueado, será desbloqueado {{- duration}}",
-					"message_reason": "🔒 Este canal ha sido bloqueado con el motivo {{- reason}}, será desbloqueado {{- duration}}",
+					"message_reason": "",
 					"cancel": "Se canceló el bloqueo de {{- channel}}",
 					"success": "Se bloqueó {{- channel}} con éxito"
 				},
@@ -289,7 +290,6 @@
 			},
 			"clear": {
 				"errors": {
-					"no_message": "",
 					"no_results": ""
 				},
 				"pending_one": "",
@@ -317,9 +317,9 @@
 			"refresh_scamlist": {
 				"missing_env": "Faltan las variables de entorno {{missing, list}} del cual descargar los dominios fraudulentos.",
 				"refresh_never": "`nunca`",
-				"amount": "• Cantidad: {{- amount}}",
-				"before": "• Antes: {{- amount}}",
-				"after": "• Después: {{- amount}}",
+				"amount": "",
+				"before": "",
+				"after": "",
 				"last_change": "• Último cambio: {{- timestamp}}",
 				"buttons": {
 					"execute": "Actualizar"
@@ -341,6 +341,13 @@
 				"reason": "",
 				"cancel": "Se canceló la aplicación del rol de patrocinadores a {{- user}}",
 				"success": "Se aplicó con éxito el rol de patrocinadores a {{- user}}"
+			},
+			"repost": {
+				"errors": {
+					"not_message_link": "",
+					"no_guild": "",
+					"no_channel": ""
+				}
 			}
 		}
 	},
@@ -397,7 +404,6 @@
 			},
 			"message_deleted": {
 				"title": "Eliminación de mensaje",
-				"no_content": "Sin contenido",
 				"channel": "• Canal: {{- channel}}",
 				"embeds": "• Incrustados: {{- embeds}}",
 				"attachments": "• Archivos: {{- attachments}}",
