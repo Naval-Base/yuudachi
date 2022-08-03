@@ -57,7 +57,7 @@ export async function modal(
 		return;
 	}
 
-	const reply = await modalInteraction.deferReply({ ephemeral: args.hide ?? true });
+	await modalInteraction.deferReply({ ephemeral: args.hide ?? true });
 	const fullContent = modalInteraction.components
 		.map((row) => row.components)
 		.flat()
@@ -65,7 +65,7 @@ export async function modal(
 
 	const ids = new Set(fullContent.join(' ').match(/\d{17,20}/g) ?? []);
 	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(
-		interaction,
+		modalInteraction,
 		ids,
 		i18next.t('command.mod.anti_raid_nuke.modal.errors.no_ids', { lng: locale }),
 	);
@@ -78,5 +78,5 @@ export async function modal(
 		}),
 	];
 
-	await handleAntiRaidNuke(interaction, reply, validMembers, locale, parameterStrings, args.reason, args.days);
+	await handleAntiRaidNuke(modalInteraction, validMembers, locale, parameterStrings, args.reason, args.days);
 }

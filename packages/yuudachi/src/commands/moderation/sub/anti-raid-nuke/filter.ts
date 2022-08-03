@@ -59,7 +59,7 @@ export async function filter(
 	args: ArgsParam<typeof AntiRaidNukeCommand>['filter'],
 	locale: LocaleParam,
 ): Promise<void> {
-	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
+	await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 	const { parsedCreatedAfter, parsedCreatedBefore, parsedJoinAfter, parsedJoinBefore } = parseDates(
 		{
@@ -189,5 +189,5 @@ export async function filter(
 		);
 	}
 
-	await handleAntiRaidNuke(interaction, reply, members, locale, parameterStrings, args.reason, args.days);
+	await handleAntiRaidNuke(interaction, members, locale, parameterStrings, args.reason, args.days);
 }

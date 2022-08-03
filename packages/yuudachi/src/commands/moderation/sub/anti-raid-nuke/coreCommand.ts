@@ -1,11 +1,12 @@
 import dayjs from 'dayjs';
 import {
+	ButtonInteraction,
 	ButtonStyle,
 	ChatInputCommandInteraction,
 	Collection,
 	ComponentType,
 	GuildMember,
-	InteractionResponse,
+	ModalSubmitInteraction,
 	Snowflake,
 } from 'discord.js';
 import i18next from 'i18next';
@@ -31,7 +32,7 @@ export interface IdValidationResult {
 }
 
 export async function validateMemberIds(
-	interaction: ChatInputCommandInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
 	ids: Set<Snowflake>,
 	emptyResultErrorText: string,
 ): Promise<IdValidationResult> {
@@ -59,8 +60,7 @@ export async function validateMemberIds(
 }
 
 export async function handleAntiRaidNuke(
-	interaction: ChatInputCommandInteraction<'cached'>,
-	reply: InteractionResponse<true>,
+	interaction: ChatInputCommandInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
 	members: Collection<Snowflake, GuildMember>,
 	locale: string,
 	parameterStrings: string[],
@@ -110,7 +110,7 @@ export async function handleAntiRaidNuke(
 	const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
 	const { creationRange, joinRange } = formatMemberTimestamps(members);
 
-	await interaction.editReply({
+	const reply = await interaction.editReply({
 		content: `${i18next.t('command.mod.anti_raid_nuke.common.pending', {
 			count: members.size,
 			creation_range: creationRange,
@@ -126,7 +126,7 @@ export async function handleAntiRaidNuke(
 		components: [createMessageActionRow([cancelButton, banButton, dryRunButton])],
 	});
 
-	const collectedInteraction = await reply
+	const collectedInteraction = (await reply
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
@@ -143,7 +143,7 @@ export async function handleAntiRaidNuke(
 				logger.error(error, error.message);
 			}
 			return undefined;
-		});
+		})) as ButtonInteraction<'cached'> | undefined;
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({

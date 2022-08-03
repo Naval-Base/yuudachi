@@ -10,7 +10,7 @@ export async function file(
 	args: ArgsParam<typeof AntiRaidNukeCommand>['file'],
 	locale: LocaleParam,
 ): Promise<void> {
-	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
+	await interaction.deferReply({ ephemeral: args.hide ?? true });
 	const ids = await parseFile(args.file);
 	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(
 		interaction,
@@ -35,5 +35,5 @@ export async function file(
 		}),
 	];
 
-	await handleAntiRaidNuke(interaction, reply, validMembers, locale, parameterStrings, args.reason, args.days);
+	await handleAntiRaidNuke(interaction, validMembers, locale, parameterStrings, args.reason, args.days);
 }
