@@ -1,5 +1,5 @@
 import process from 'node:process';
-import { ButtonStyle, ComponentType, inlineCode } from 'discord.js';
+import { ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -62,7 +62,7 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 
 			const parts = [
 				i18next.t('command.utility.refresh_scamlist.amount', {
-					amount: inlineCode(String(num)),
+					count: num,
 					lng: locale,
 				}),
 
@@ -129,11 +129,11 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 				for (const result of res) {
 					const parts = [
 						i18next.t('command.utility.refresh_scamlist.before', {
-							amount: inlineCode(String(result.before)),
+							count: result.before,
 							lng: locale,
 						}),
 						i18next.t('command.utility.refresh_scamlist.after', {
-							amount: inlineCode(String(result.after)),
+							count: result.after,
 							lng: locale,
 						}),
 						i18next.t('command.utility.refresh_scamlist.last_change', {

@@ -6,7 +6,6 @@ import {
 	Collection,
 	ComponentType,
 	type GuildMember,
-	inlineCode,
 	InteractionCollector,
 	time,
 	TimestampStyles,
@@ -124,7 +123,7 @@ export async function modal(
 	if (fails.size) {
 		parameterStrings.push(
 			i18next.t('command.mod.anti_raid_nuke.modal.parameters.users', {
-				users: inlineCode(fails.size.toString()),
+				count: fails.size,
 				lng: locale,
 			}),
 		);

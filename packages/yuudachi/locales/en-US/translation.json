@@ -3,7 +3,7 @@
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
 			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet.",
-			"no_content": "<No message content>"
+			"no_content": "`<No message content>`"
 		},
 		"moderator": "Moderator"
 	},
@@ -11,12 +11,13 @@
 		"common": {
 			"errors": {
 				"generic": "Something went wrong.",
-				"no_enabled_module": "The {{module}} is not enabled on this guild.",
+				"no_enabled_module": "The `{{module}}` is not enabled on this guild.",
 				"duration_format": "Wrong duration format.",
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
 				"timed_out": "Action timer ran out.",
-				"not_message_id": "Provided value `{{val}}` for argument `{{arg}}` is not a valid message id."
+				"not_message_id": "Provided value `{{val}}` for argument `{{arg}}` is not a valid message id.",
+				"no_message": "Could not find message `{{message_id}}` in channel {{- channel}}"
 			},
 			"buttons": {
 				"cancel": "Cancel"
@@ -32,17 +33,17 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Max length of 1900 for reason exceeded.",
+					"max_length_reason": "Maximum length of `1900` for reason exceeded.",
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
-					"no_case": "Cannot find case #{{case}}",
-					"no_case_range": "Invalid case range #{{lower_case}} to #{{upper_case}}",
-					"case_lower_one": "Case ids have to be above 0",
-					"no_ref_case": "Cannot find reference case #{{case}}"
+					"no_case": "Cannot find case `#{{case}}`",
+					"no_case_range": "Invalid case range `#{{lower_case}}` to `#{{upper_case}}`",
+					"case_lower_one": "Case ids have to be above `0`",
+					"no_reference_case": "Cannot find reference case `#{{case}}`"
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "no reason",
+					"no_reason": "No reason",
 					"show_history": "Show history for user {{- user}}"
 				}
 			},
@@ -134,32 +135,32 @@
 					"parameters": {
 						"heading": "Parameters:",
 						"current_time": "• Current time: {{- now}}",
-						"dry_run": "• Operating in **dry-run** mode, no members will be banned!",
+						"dry_run": "• Operating in **dry-run** mode, no members will be banned",
 						"days_zero": "• Not deleting any messages",
 						"days_one": "• Deleting messages sent in the last day",
-						"days_other": "• Deleting messages sent in the last {{count}} days"
+						"days_other": "• Deleting messages sent in the last `{{count}}` days"
 					},
 					"reason": "Anti-Raid-Nuke `({{current}}/{{count}})`",
-					"pending": "Anti-Raid-Nuke is projected to hit {{count}} members.\n• Created within {{creation_range}}\n• Joined within {{join_range}}",
+					"pending": "Anti-Raid-Nuke is projected to hit `{{count}}` members.\n• Created within `{{creation_range}}`\n• Joined within `{{join_range}}`",
 					"buttons": {
 						"execute": "Launch",
 						"dry_run": "Dry run"
 					},
 					"attachment": "{{user_id}} | Join: {{- joined_at}} | Creation: {{- created_at}} | {{- user_tag}}`",
 					"cancel": "Canceled Anti-Raid-Nuke.",
-					"success": "Anti-Raid-Nuke hit {{count}} members."
+					"success": "Anti-Raid-Nuke hit `{{count}}` member."
 				},
 				"filter": {
 					"errors": {
 						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you might want to re-adjust the parameters and try again.",
-						"invalid_avatar": "Invalid avatar format, must be an raw hash, a user id, a URL or `none`.",
-						"pattern_format": "Invalid pattern provided"
+						"invalid_avatar": "Invalid avatar format, must be an raw hash, a user id, a URL or `none`",
+						"pattern_format": "Invalid pattern provided."
 					},
 					"parameters": {
-						"join_after": "• **Join:**\n> From: {{- join_from}}\n> To: {{- join_to}}",
-						"created_after": "• **Account creation:** \n> From: {{- age_from}}\n> To: {{- age_to}}",
+						"join_after": "• **Join:**\n> From: `{{- join_from}}`\n> To: `{{- join_to}}`",
+						"created_after": "• **Account creation:** \n> From: `{{- age_from}}`\n> To: `{{- age_to}}`",
 						"pattern": "• Username matching pattern:",
-						"avatar": "• Avatar hash (user or member) matching: {{- avatar}}",
+						"avatar": "• Avatar hash (user or member) matching: `{{- avatar}}`",
 						"zalgo": "• Filtering usernames with Zalgo",
 						"confusables": "• Filtering usernames with Confusables"
 					}
@@ -171,7 +172,7 @@
 					},
 					"parameters": {
 						"file": "• File: {{- file}}",
-						"users": "• Out of all of the ids, {{- users}} aren't members of this guild"
+						"users": "• Out of all of the ids, `{{count}}` aren't members of this guild"
 					}
 				},
 				"modal": {
@@ -180,12 +181,12 @@
 						"no_ids": "The content does not contain any ids."
 					},
 					"parameters": {
-						"users": "• Out of all of the ids, {{- users}} aren't members of this guild"
+						"users": "• Out of all of the ids, `{{count}}` aren't members of this guild"
 					},
 					"title": "Anti-Raid-Nuke Entry",
 					"components": {
 						"label": "{{i}}- Enter valid ids",
-						"placeholder": "Enter ids separated by spaces or any other valid separator (e.g. ,|/)"
+						"placeholder": "Enter ids separated by spaces or any other valid separator (e.g. `,|/`)"
 					}
 				}
 			},
@@ -231,15 +232,15 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "Missing permissions to unrole #{{case}}",
-						"already_processed": "{{- user}} with case #{{case}} has no running restrictions."
+						"missing_permissions": "Missing permissions to unrole `#{{case}}`",
+						"already_processed": "{{- user}} with case {{- case}} has no running restrictions."
 					},
-					"pending": "Do you really want to unrole {{- user}} from {{- role}} with case #{{case}}?",
+					"pending": "Do you really want to unrole {{- user}} from `{{- role}}` with case {{- case}}?",
 					"buttons": {
 						"execute": "Unrole"
 					},
-					"cancel": "Canceled unrole on {{- user}} from {{- role}} on case #{{case}}",
-					"success": "Successfully unroled {{- user}} from {{- role}} with case #{{case}}"
+					"cancel": "Canceled unrole on {{- user}} from `{{- role}}` on case {{- case}}",
+					"success": "Successfully unroled {{- user}} from `{{- role}}` with case {{- case}}"
 				}
 			},
 			"lockdown": {
@@ -254,7 +255,7 @@
 						"execute": "Lock"
 					},
 					"message": "🔒 This channel has been locked, it will be unlocked {{- duration}}",
-					"message_reason": "🔒 This channel has been locked with reason {{- reason}}, it will be unlocked {{- duration}}",
+					"message_reason": "🔒 This channel has been locked with reason `{{- reason}}`, it will be unlocked {{- duration}}",
 					"cancel": "Canceled locking of {{- channel}}",
 					"success": "Successfully locked {{- channel}}"
 				},
@@ -274,8 +275,8 @@
 			},
 			"reason": {
 				"success": "Successfully set reason for case {{- case}}",
-				"success_multiple": "Successfully set reason for case range {{- lower_case}} to {{- upper_case}} ({{current}}/{{count}} cases)",
-				"pending_multiple": "Do you really want to set a reason for case range {{- lower_case}} to {{- upper_case}} ({{count}} cases)?",
+				"success_multiple": "Successfully set reason for case range {{- lower_case}} to {{- upper_case}} (`{{current}}/{{count}}` cases)",
+				"pending_multiple": "Do you really want to set a reason for case range {{- lower_case}} to {{- upper_case}} (`{{count}}` cases)?",
 				"buttons": {
 					"execute": "Set Reason"
 				},
@@ -289,16 +290,15 @@
 			},
 			"clear": {
 				"errors": {
-					"no_message": "Could not find message {{message_id}} in channel {{- channel}}",
 					"no_results": "Could not find messages in the provided range that are younger than 12 hours."
 				},
-				"pending_one": "You are about to clear {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
-				"pending_other": "You are about to clear {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}. Are you sure?",
+				"pending_one": "You are about to clear `{{count}}` message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in `{{time}}`. Are you sure?",
+				"pending_other": "You are about to clear `{{count}}` messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in `{{time}}`. Are you sure?",
 				"message_too_old": "Note: You can only clear messages that are up to 12 hours old. The oldest message that will be cleared is shown below.",
-				"success_one": "Successfully cleared {{count}} message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}",
-				"success_other": "Successfully cleared {{count}} messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in {{time}}.",
-				"authors_one": "{{count}} author",
-				"authors_other": "{{count}} authors",
+				"success_one": "Successfully cleared `{{count}}` message by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in `{{time}}`",
+				"success_other": "Successfully cleared `{{count}}` messages by $t(command.mod.clear.authors, {\"count\": {{author_count}}}) sent in `{{time}}`",
+				"authors_one": "`{{count}}` author",
+				"authors_other": "`{{count}}` authors",
 				"buttons": {
 					"execute_one": "Clear {{count}} message",
 					"execute_other": "Clear {{count}} messages"
@@ -317,9 +317,9 @@
 			"refresh_scamlist": {
 				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
 				"refresh_never": "`never`",
-				"amount": "• Amount: {{- amount}}",
-				"before": "• Before: {{- amount}}",
-				"after": "• After: {{- amount}}",
+				"amount": "• Amount: `{{count}}`",
+				"before": "• Before: `{{count}}`",
+				"after": "• After: `{{count}}`",
 				"last_change": "• Last change: {{- timestamp}}",
 				"buttons": {
 					"execute": "Refresh"
@@ -341,6 +341,13 @@
 				"reason": "Sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
+			},
+			"repost": {
+				"errors": {
+					"not_message_link": "Provided value `{{val}}` for argument `{{arg}}` is not a valid message link.",
+					"no_guild": "Could not find guild `{{guild_id}}`",
+					"no_channel": "Could not find channel `{{channel_id}}` in guild `{{- guild}}`"
+				}
 			}
 		}
 	},
@@ -397,7 +404,6 @@
 			},
 			"message_deleted": {
 				"title": "Message deleted",
-				"no_content": "No content",
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",

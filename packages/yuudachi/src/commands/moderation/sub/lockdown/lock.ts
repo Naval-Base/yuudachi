@@ -5,7 +5,6 @@ import {
 	ButtonStyle,
 	ComponentType,
 	type InteractionResponse,
-	inlineCode,
 	time,
 	TimestampStyles,
 } from 'discord.js';
@@ -113,7 +112,7 @@ export async function lock(
 			content: args.reason
 				? i18next.t('command.mod.lockdown.lock.message_reason', {
 						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
-						reason: inlineCode(args.reason),
+						reason: args.reason,
 						lng: locale,
 				  })
 				: i18next.t('command.mod.lockdown.lock.message', {

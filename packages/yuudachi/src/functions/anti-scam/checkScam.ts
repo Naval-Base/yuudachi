@@ -55,7 +55,8 @@ async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null
 export async function checkScam(content: string) {
 	const redis = container.resolve<Redis>(kRedis);
 
-	const linkRegex = /(?:https?:\/\/)(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b[-a-zA-Z0-9@:%_\+.~#?&//=]*/gi;
+	const linkRegex =
+		/(?:https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,})/gi;
 
 	let matches: any[] | null = [];
 	const trippedDomains: ScamDomainHit[] = [];

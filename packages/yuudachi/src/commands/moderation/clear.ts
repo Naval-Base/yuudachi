@@ -51,7 +51,7 @@ export default class extends Command<typeof ClearCommand> {
 
 		const firstMessage = await interaction.channel!.messages.fetch(args.last_message).catch(() => {
 			throw new Error(
-				i18next.t('command.mod.clear.errors.no_message', {
+				i18next.t('command.common.errors.no_message', {
 					message_id: args.last_message,
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
 					channel: interaction.channel!.toString(),
@@ -62,8 +62,8 @@ export default class extends Command<typeof ClearCommand> {
 		const lastMessage = args.first_message
 			? await interaction.channel!.messages.fetch(args.first_message).catch(() => {
 					throw new Error(
-						i18next.t('command.mod.clear.errors.no_message', {
-							message_id: args.first_message,
+						i18next.t('command.common.errors.no_message', {
+							message_id: args.first_message!,
 							// eslint-disable-next-line @typescript-eslint/no-base-to-string
 							channel: interaction.channel!.toString(),
 							lng: locale,

@@ -1,15 +1,6 @@
 import { Buffer } from 'node:buffer';
 import dayjs from 'dayjs';
-import {
-	ButtonStyle,
-	Collection,
-	ComponentType,
-	type GuildMember,
-	hyperlink,
-	inlineCode,
-	time,
-	TimestampStyles,
-} from 'discord.js';
+import { ButtonStyle, Collection, ComponentType, type GuildMember, hyperlink, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { ArgsParam, InteractionParam, LocaleParam } from '../../../../Command.js';
@@ -73,7 +64,7 @@ export async function file(
 	if (fails.size) {
 		parameterStrings.push(
 			i18next.t('command.mod.anti_raid_nuke.file.parameters.users', {
-				users: inlineCode(fails.size.toString()),
+				count: fails.size,
 				lng: locale,
 			}),
 		);

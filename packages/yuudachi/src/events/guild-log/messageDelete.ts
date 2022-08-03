@@ -84,9 +84,7 @@ export default class implements Event {
 					color: 12016895,
 					title: i18next.t('log.guild_log.message_deleted.title'),
 					description: `${
-						message.content.length
-							? message.content
-							: i18next.t('log.guild_log.message_deleted.no_content', { lng: locale })
+						message.content.length ? message.content : i18next.t('common.errors.no_content', { lng: locale })
 					}`,
 					footer: { text: message.id },
 					timestamp: new Date().toISOString(),

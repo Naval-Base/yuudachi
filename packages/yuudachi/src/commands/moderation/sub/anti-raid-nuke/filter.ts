@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer';
 import dayjs from 'dayjs';
-import { ButtonStyle, codeBlock, ComponentType, inlineCode, time, TimestampStyles } from 'discord.js';
+import { ButtonStyle, codeBlock, ComponentType, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
@@ -119,7 +119,7 @@ export async function filter(
 	if (parsedAvatar) {
 		parameterStrings.push(
 			i18next.t('command.mod.anti_raid_nuke.filter.parameters.avatar', {
-				avatar: inlineCode(parsedAvatar === 'none' ? 'No avatar' : parsedAvatar),
+				avatar: parsedAvatar === 'none' ? 'No avatar' : parsedAvatar,
 				lng: locale,
 			}),
 		);
