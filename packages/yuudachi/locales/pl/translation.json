@@ -16,7 +16,8 @@
 				"use_autocomplete": "Nie udało się przetworzyć podanej opcji. Upewnij się, że wybierasz opcję z uzupełnianiem.",
 				"target_not_found": "Podany użytkownik nie znajduje się na tym serwerze.",
 				"timed_out": "",
-				"not_message_id": ""
+				"not_message_id": "",
+				"no_message": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -32,17 +33,17 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Maksymalna długość 1900 znaków dla powodu została przekroczona.",
+					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} nie jest kanałem tekstowym.",
-					"no_case": "Nie można znaleźć incydentu #{{case}}",
-					"no_case_range": "Nieprawidłowy zakres incydentów #{{lower_case}} do #{{upper_case}}",
-					"case_lower_one": "Numery incydentów muszą być większe niż 0",
-					"no_ref_case": "Nie można odnaleźć odniesienia do incydentu #{{case}}"
+					"no_case": "",
+					"no_case_range": "",
+					"case_lower_one": "",
+					"no_reference_case": ""
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "brak powodu",
+					"no_reason": "",
 					"show_history": "Pokaż historię dla użytkownika {{- user}}"
 				}
 			},
@@ -231,15 +232,15 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "Brakuje uprawnień, aby wycofać ograniczenie dla incydentu #{{case}}",
-						"already_processed": "{{- user}} dla incydentu #{{case}} nie ma aktywnych ograniczeń."
+						"missing_permissions": "",
+						"already_processed": ""
 					},
-					"pending": "Czy na pewno chcesz wycofać ograniczenie {{- role}} dla {{- user}} dla incydentu #{{case}}?",
+					"pending": "",
 					"buttons": {
 						"execute": "Wycofaj"
 					},
-					"cancel": "Anulowano wycofanie ograniczenia {{- role}} dla {{- user}} dla incydentu #{{case}}",
-					"success": "Pomyślnie wycofano ograniczenie {{- role}} dla {{- user}} dla incydentu #{{case}}"
+					"cancel": "",
+					"success": ""
 				}
 			},
 			"lockdown": {
@@ -254,7 +255,7 @@
 						"execute": "Zablokuj"
 					},
 					"message": "🔒 Ten kanał został zablokowany, zostanie odblokowany {{- duration}}",
-					"message_reason": "🔒 Ten kanał został zablokowany z powodem {{- reason}}, zostanie odblokowany {{- duration}}",
+					"message_reason": "",
 					"cancel": "Anulowano blokowanie {{- channel}}",
 					"success": "Pomyślnie zablokowano {{- channel}}"
 				},
@@ -289,7 +290,6 @@
 			},
 			"clear": {
 				"errors": {
-					"no_message": "",
 					"no_results": ""
 				},
 				"pending_one": "",
@@ -317,9 +317,9 @@
 			"refresh_scamlist": {
 				"missing_env": "Brakuje zmiennych środowiskowych {{missing, list}} z listami domen ze scamem do sprawdzenia.",
 				"refresh_never": "`never`",
-				"amount": "• Ilość: {{- amount}}",
-				"before": "• Przed: {{- amount}}",
-				"after": "• Po: {{- amount}}",
+				"amount": "",
+				"before": "",
+				"after": "",
 				"last_change": "• Ostatnia zmiana: {{- timestamp}}",
 				"buttons": {
 					"execute": "Odśwież"
@@ -341,6 +341,13 @@
 				"reason": "",
 				"cancel": "Anulowano przyznawanie roli sponsora dla {{- user}}",
 				"success": "Pomyślnie przyznano rolę sponsora dla {{- user}}"
+			},
+			"repost": {
+				"errors": {
+					"not_message_link": "",
+					"no_guild": "",
+					"no_channel": ""
+				}
 			}
 		}
 	},
@@ -397,7 +404,6 @@
 			},
 			"message_deleted": {
 				"title": "Message deleted",
-				"no_content": "No content",
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",

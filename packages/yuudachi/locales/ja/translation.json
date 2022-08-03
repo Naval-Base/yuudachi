@@ -16,7 +16,8 @@
 				"use_autocomplete": "",
 				"target_not_found": "対象ユーザーはこのサーバーにいません。",
 				"timed_out": "",
-				"not_message_id": ""
+				"not_message_id": "",
+				"no_message": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -32,17 +33,17 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "理由文字上限の1900文字を超えました。",
+					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}}はテキストチャンネルではありません。",
 					"no_case": "",
 					"no_case_range": "",
 					"case_lower_one": "",
-					"no_ref_case": ""
+					"no_reference_case": ""
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "理由なし",
+					"no_reason": "",
 					"show_history": "{{- user}}の歴史を見る"
 				}
 			},
@@ -231,7 +232,7 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "#{{case}}のロールを外すの権利がありません",
+						"missing_permissions": "",
 						"already_processed": ""
 					},
 					"pending": "",
@@ -289,7 +290,6 @@
 			},
 			"clear": {
 				"errors": {
-					"no_message": "",
 					"no_results": ""
 				},
 				"pending_one": "",
@@ -317,9 +317,9 @@
 			"refresh_scamlist": {
 				"missing_env": "詐欺ドメインを取り出す環境変数の{{missing, list}}は未設定です。",
 				"refresh_never": "`なし`",
-				"amount": "• 数: {{- amount}}",
-				"before": "• 前: {{- amount}}",
-				"after": "• 後: {{- amount}}",
+				"amount": "",
+				"before": "",
+				"after": "",
 				"last_change": "• 最終更新日時: {{- timestamp}}",
 				"buttons": {
 					"execute": "更新"
@@ -341,6 +341,13 @@
 				"reason": "",
 				"cancel": "{{- user}}に支援者ロールを与えることをキャンセルしました。",
 				"success": "{{- user}}に支援者ロールを与えることは成功しました"
+			},
+			"repost": {
+				"errors": {
+					"not_message_link": "",
+					"no_guild": "",
+					"no_channel": ""
+				}
 			}
 		}
 	},
@@ -397,7 +404,6 @@
 			},
 			"message_deleted": {
 				"title": "メッセージ消し",
-				"no_content": "内容無し",
 				"channel": "• チャンネル: {{- channel}}",
 				"embeds": "",
 				"attachments": "",

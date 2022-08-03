@@ -16,7 +16,8 @@
 				"use_autocomplete": "",
 				"target_not_found": "",
 				"timed_out": "",
-				"not_message_id": ""
+				"not_message_id": "",
+				"no_message": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -37,7 +38,7 @@
 					"no_case": "",
 					"no_case_range": "",
 					"case_lower_one": "",
-					"no_ref_case": ""
+					"no_reference_case": ""
 				}
 			},
 			"case": {
@@ -289,7 +290,6 @@
 			},
 			"clear": {
 				"errors": {
-					"no_message": "",
 					"no_results": ""
 				},
 				"pending_one": "",
@@ -341,6 +341,13 @@
 				"reason": "",
 				"cancel": "",
 				"success": ""
+			},
+			"repost": {
+				"errors": {
+					"not_message_link": "",
+					"no_guild": "",
+					"no_channel": ""
+				}
 			}
 		}
 	},
@@ -397,7 +404,6 @@
 			},
 			"message_deleted": {
 				"title": "",
-				"no_content": "",
 				"channel": "",
 				"embeds": "",
 				"attachments": "",
