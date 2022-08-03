@@ -1,3 +1,5 @@
-export function dynamicImport<T, R = Promise<{ default: T }>>(factory: () => Promise<any>) {
-	return factory as unknown as R;
+import type { InjectionToken } from 'tsyringe';
+
+export function dynamicImport<T, R = Promise<{ default: InjectionToken<T> }>>(path: string) {
+	return import(path) as unknown as R;
 }

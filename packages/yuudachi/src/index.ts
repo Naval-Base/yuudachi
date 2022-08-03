@@ -79,9 +79,8 @@ try {
 			continue;
 		}
 
-		const dynamic = await dynamicImport<new () => Command<CommandPayload>>(
-			() => import(pathToFileURL(dir.fullPath).href),
-		);
+		const dynamic = await dynamicImport<Command<CommandPayload>>(pathToFileURL(dir.fullPath).href);
+
 		const command = container.resolve<Command<CommandPayload>>(dynamic.default);
 		logger.info(
 			{ command: { name: command.name?.join(', ') ?? cmdInfo.name } },
@@ -93,7 +92,7 @@ try {
 	}
 
 	for await (const dir of eventFiles) {
-		const dynamic = await dynamicImport<new () => Event>(() => import(pathToFileURL(dir.fullPath).href));
+		const dynamic = await dynamicImport<Event>(pathToFileURL(dir.fullPath).href);
 		const event_ = container.resolve<Event>(dynamic.default);
 		logger.info({ event: { name: event_.name, event: event_.event } }, `Registering event: ${event_.name}`);
 
