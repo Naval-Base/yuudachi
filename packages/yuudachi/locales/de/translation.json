@@ -16,7 +16,8 @@
 				"use_autocomplete": "Die angegebene Option konnte nicht aufgelöst werden. Stellen Sie sicher, dass Sie eine Option zur automatischen Vervollständigung auswählen.",
 				"target_not_found": "Das angegebene Mitglied ist nicht in dieser Gilde.",
 				"timed_out": "",
-				"not_message_id": ""
+				"not_message_id": "",
+				"no_message": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -32,17 +33,17 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Maximale Länge von 1900 für Grund überschritten.",
+					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} ist kein Textkanal.",
-					"no_case": "Kann den Fall #{{case}} nicht finden",
-					"no_case_range": "Ungültiger Groß-/Kleinschreibungsbereich #{{lower_case}} bis #{{upper_case}}",
-					"case_lower_one": "Case ids müssen über 0 liegen",
-					"no_ref_case": "Kann den Referenzfall #{{case}} nicht finden"
+					"no_case": "",
+					"no_case_range": "",
+					"case_lower_one": "",
+					"no_reference_case": ""
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "kein Grund",
+					"no_reason": "",
 					"show_history": "Historie für Benutzer {{- user}} anzeigen"
 				}
 			},
@@ -231,15 +232,15 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "Fehlende Berechtigungen zum Aufheben der Rolle #{{case}}",
-						"already_processed": "{{- user}} mit Fall #{{case}} hat keine laufenden Einschränkungen."
+						"missing_permissions": "",
+						"already_processed": ""
 					},
-					"pending": "Wollen Sie wirklich {{- user}} von {{- role}} mit dem Fall #{{case}} entrollen?",
+					"pending": "",
 					"buttons": {
 						"execute": "Unrole"
 					},
-					"cancel": "Unrole auf {{- user}} von {{- role}} auf Fall #{{case}} abgebrochen",
-					"success": "Erfolgreich entrollt {{- user}} von {{- role}} mit Fall #{{case}}"
+					"cancel": "",
+					"success": ""
 				}
 			},
 			"lockdown": {
@@ -254,7 +255,7 @@
 						"execute": "Sperren"
 					},
 					"message": "🔒 Dieser Kanal wurde gesperrt, er wird wieder entsperrt {{- duration}}",
-					"message_reason": "🔒 Dieser Kanal wurde mit Grund {{- reason}} gesperrt, er wird {{- duration}} entsperrt",
+					"message_reason": "",
 					"cancel": "Sperrung von {{- channel}} aufgehoben",
 					"success": "Erfolgreich gesperrt {{- channel}}"
 				},
@@ -289,7 +290,6 @@
 			},
 			"clear": {
 				"errors": {
-					"no_message": "",
 					"no_results": ""
 				},
 				"pending_one": "",
@@ -317,9 +317,9 @@
 			"refresh_scamlist": {
 				"missing_env": "Fehlende Umgebungsvariablen {{missing, list}} zum Abrufen von Scam-Domains.",
 				"refresh_never": "`never`",
-				"amount": "• Betrag: {{- amount}}",
-				"before": "• Vorher: {{- amount}}",
-				"after": "• Nacher: {{- amount}}",
+				"amount": "",
+				"before": "",
+				"after": "",
 				"last_change": "• Letzte Änderung: {{- timestamp}}",
 				"buttons": {
 					"execute": "Aktualisieren"
@@ -341,6 +341,13 @@
 				"reason": "",
 				"cancel": "Anwendung der Sponsorrolle auf {{- user}} abgebrochen",
 				"success": "Sponsorrolle erfolgreich auf {{- user}} angewendet"
+			},
+			"repost": {
+				"errors": {
+					"not_message_link": "",
+					"no_guild": "",
+					"no_channel": ""
+				}
 			}
 		}
 	},
@@ -397,7 +404,6 @@
 			},
 			"message_deleted": {
 				"title": "Message deleted",
-				"no_content": "No content",
 				"channel": "• Channel: {{- channel}}",
 				"embeds": "• Embeds: {{- embeds}}",
 				"attachments": "• Attachments: {{- attachments}}",
