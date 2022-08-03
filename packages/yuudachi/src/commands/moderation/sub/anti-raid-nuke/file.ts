@@ -8,6 +8,10 @@ import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import { parseFile } from '../../../../functions/anti-raid/parseFile.js';
+import {
+	formatAntiRaidResultsToAttachment,
+	formatMembersToAttachment,
+} from '../../../../functions/logging/format MembersToAttachment.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
@@ -90,7 +94,6 @@ export async function file(
 		style: ButtonStyle.Primary,
 	});
 
-	const potentialHits = Buffer.from(members.map((member) => `${member.user.tag} (${member.id})`).join('\n'));
 	const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
 	const { creationRange, joinRange } = formatMemberTimestamps(members);
@@ -102,7 +105,12 @@ export async function file(
 			join_range: joinRange,
 			lng: locale,
 		})}\n\n${parameterStrings.join('\n')}`,
-		files: [{ name: `${potentialHitsDate}-anti-raid-nuke-list.txt`, attachment: potentialHits }],
+		files: [
+			{
+				name: `${potentialHitsDate}-anti-raid-nuke-list.txt`,
+				attachment: Buffer.from(formatMembersToAttachment(members, locale)),
+			},
+		],
 		components: [createMessageActionRow([cancelButton, banButton, dryRunButton])],
 	});
 
@@ -172,19 +180,6 @@ export async function file(
 			);
 		}
 
-		const membersHit = Buffer.from(
-			result
-				.map((r) =>
-					i18next.t('command.mod.anti_raid_nuke.common.attachment', {
-						user_id: r.member.user.id.padEnd(19, ' '),
-						joined_at: dayjs(r.member.joinedTimestamp).format(DATE_FORMAT_LOGFILE),
-						created_at: dayjs(r.member.user.createdTimestamp).format(DATE_FORMAT_LOGFILE),
-						user_tag: r.member.user.tag,
-						lng: locale,
-					}),
-				)
-				.join('\n'),
-		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
 		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result, dryRunMode);
@@ -194,7 +189,12 @@ export async function file(
 				count: result.filter((r) => r.success).length,
 				lng: locale,
 			}),
-			files: [{ name: `${membersHitDate}-anti-raid-nuke-hits.txt`, attachment: membersHit }],
+			files: [
+				{
+					name: `${membersHitDate}-anti-raid-nuke-hits.txt`,
+					attachment: Buffer.from(formatAntiRaidResultsToAttachment(result, locale)),
+				},
+			],
 			components: [],
 		});
 	}

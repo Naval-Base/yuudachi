@@ -358,6 +358,11 @@
 		}
 	},
 	"log": {
+		"common": {
+			"formatting": {
+				"guildmember": "{{id}} Joined: {{join}} Created: {{creation}} {{tag}}"
+			}
+		},
 		"history": {
 			"title": "Case History",
 			"user_details": "User details",
