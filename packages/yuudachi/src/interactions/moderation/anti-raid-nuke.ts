@@ -41,22 +41,22 @@ export const AntiRaidNukeCommand = {
 					type: ApplicationCommandOptionType.Boolean,
 				},
 				{
-					name: 'join_from',
+					name: 'join_after',
 					description: 'Minimum join date (Snowflake | Timestamp | Duration | ISO)',
 					type: ApplicationCommandOptionType.String,
 				},
 				{
-					name: 'join_to',
+					name: 'join_before',
 					description: 'Maximum join date (Snowflake | Timestamp | Duration | ISO)',
 					type: ApplicationCommandOptionType.String,
 				},
 				{
-					name: 'created_from',
+					name: 'created_after',
 					description: 'Minimum creation date (Snowflake | Timestamp | Duration | ISO)',
 					type: ApplicationCommandOptionType.String,
 				},
 				{
-					name: 'created_to',
+					name: 'created_before',
 					description: 'Maximum creation date (Snowflake | Timestamp | Duration | ISO)',
 					type: ApplicationCommandOptionType.String,
 				},

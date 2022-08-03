@@ -157,8 +157,14 @@
 						"pattern_format": "Invalid pattern provided."
 					},
 					"parameters": {
-						"join_after": "• **Join:**\n> From: `{{- join_from}}`\n> To: `{{- join_to}}`",
-						"created_after": "• **Account creation:** \n> From: `{{- age_from}}`\n> To: `{{- age_to}}`",
+						"join": {
+							"before": "• Joined before: {{- date}}",
+							"after": "• Joined after: {{- date}}"
+						},
+						"created": {
+							"before": "• Account created before: {{- date}}",
+							"after": "• Account created after: {{- date}}"
+						},
 						"pattern": "• Username matching pattern:",
 						"avatar": "• Avatar hash (user or member) matching: `{{- avatar}}`",
 						"zalgo": "• Filtering usernames with Zalgo",

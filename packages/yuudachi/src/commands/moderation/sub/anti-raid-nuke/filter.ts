@@ -33,6 +33,36 @@ enum Confusables {
 	PatternAndMembers,
 }
 
+interface ParseDateParams {
+	createdAfter?: string;
+	createdBefore?: string;
+	joinAfter?: string;
+	joinBefore?: string;
+}
+
+function parseDates({ createdAfter, createdBefore, joinAfter, joinBefore }: ParseDateParams, locale: string) {
+	const parsedCreatedAfter = resolveTimestamp(createdAfter);
+	const parsedCreatedBefore = resolveTimestamp(createdBefore);
+	const parsedJoinAfter = resolveTimestamp(joinAfter);
+	const parsedJoinBefore = resolveTimestamp(joinBefore);
+
+	if (
+		(createdAfter && !parsedCreatedAfter) ||
+		(createdBefore && !parsedCreatedBefore) ||
+		(joinAfter && !parsedJoinAfter) ||
+		(joinBefore && !parsedJoinBefore)
+	) {
+		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
+	}
+
+	return {
+		parsedCreatedAfter,
+		parsedCreatedBefore,
+		parsedJoinAfter,
+		parsedJoinBefore,
+	};
+}
+
 export async function filter(
 	interaction: InteractionParam,
 	args: ArgsParam<typeof AntiRaidNukeCommand>['filter'],
@@ -40,29 +70,15 @@ export async function filter(
 ): Promise<void> {
 	const reply = await interaction.deferReply({ ephemeral: args.hide ?? true });
 
-	const parsedJoinFrom = resolveTimestamp(args.join_from);
-
-	if (args.join_from && !parsedJoinFrom) {
-		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
-	}
-
-	const parsedJoinTo = resolveTimestamp(args.join_to);
-
-	if (args.join_to && !parsedJoinTo) {
-		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
-	}
-
-	const parsedCreatedFrom = resolveTimestamp(args.created_from);
-
-	if (args.created_from && !parsedCreatedFrom) {
-		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
-	}
-
-	const parsedCreatedTo = resolveTimestamp(args.created_to);
-
-	if (args.created_to && !parsedCreatedTo) {
-		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
-	}
+	const { parsedCreatedAfter, parsedCreatedBefore, parsedJoinAfter, parsedJoinBefore } = parseDates(
+		{
+			createdAfter: args.created_after,
+			createdBefore: args.created_before,
+			joinAfter: args.join_after,
+			joinBefore: args.join_before,
+		},
+		locale,
+	);
 
 	const parsedPattern = parseRegex(args.pattern, args.insensitive ?? true, args.full_match ?? false);
 
@@ -84,37 +100,62 @@ export async function filter(
 	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
 	const members = fetchedMembers.filter(
 		(member) =>
-			joinFilter(member, parsedJoinFrom, parsedJoinTo) &&
-			ageFilter(member, parsedCreatedFrom, parsedCreatedTo) &&
+			joinFilter(member, parsedJoinAfter, parsedJoinBefore) &&
+			ageFilter(member, parsedCreatedAfter, parsedCreatedBefore) &&
 			avatarFilter(member, parsedAvatar) &&
 			patternFilter(member, parsedPattern, parsedConfusables.pattern) &&
 			(!args.zalgo || zalgoFilter(member)) &&
 			(!parsedConfusables.members || confusablesFilter(member)),
 	);
 
-	const parameterStrings = [
-		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', {
-			lng: locale,
-		}),
-		i18next.t('command.mod.anti_raid_nuke.common.parameters.current_time', {
-			now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
-			lng: locale,
-		}),
-		i18next.t('command.mod.anti_raid_nuke.filter.parameters.join_after', {
-			join_to: resolveDateLocale(parsedJoinTo),
-			join_from: resolveDateLocale(parsedJoinFrom),
-			lng: locale,
-		}),
-		i18next.t('command.mod.anti_raid_nuke.filter.parameters.created_after', {
-			age_to: resolveDateLocale(parsedCreatedTo),
-			age_from: resolveDateLocale(parsedCreatedFrom),
-			lng: locale,
-		}),
-		i18next.t('command.mod.anti_raid_nuke.common.parameters.days', {
-			count: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
-			lng: locale,
-		}),
-	];
+	const pruneDays = Math.min(Math.max(Number(args.days ?? 1), 0), 7);
+
+	const parameterStrings = [];
+
+	if (parsedCreatedAfter || parsedCreatedBefore || parsedJoinAfter || parsedJoinBefore) {
+		parameterStrings.push(
+			i18next.t('command.mod.anti_raid_nuke.common.parameters.current_time', {
+				now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
+				lng: locale,
+			}),
+		);
+
+		if (parsedCreatedAfter) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.filter.parameters.created.after', {
+					date: resolveDateLocale(parsedCreatedAfter),
+					lng: locale,
+				}),
+			);
+		}
+
+		if (parsedCreatedBefore) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.filter.parameters.created.before', {
+					date: resolveDateLocale(parsedCreatedBefore),
+					lng: locale,
+				}),
+			);
+		}
+
+		if (parsedJoinAfter) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.filter.parameters.join.after', {
+					date: resolveDateLocale(parsedJoinAfter),
+					lng: locale,
+				}),
+			);
+		}
+
+		if (parsedJoinBefore) {
+			parameterStrings.push(
+				i18next.t('command.mod.anti_raid_nuke.filter.parameters.join.before', {
+					date: resolveDateLocale(parsedJoinBefore),
+					lng: locale,
+				}),
+			);
+		}
+	}
 
 	if (parsedAvatar) {
 		parameterStrings.push(
@@ -132,6 +173,16 @@ export async function filter(
 			}),
 			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			codeBlock(parsedPattern.toString()),
+		);
+	}
+
+	if (parameterStrings.length) {
+		parameterStrings.splice(
+			0,
+			0,
+			i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', {
+				lng: locale,
+			}),
 		);
 	}
 
@@ -226,9 +277,9 @@ export async function filter(
 		const { result, cases } = await blastOff(
 			collectedInteraction,
 			{
-				days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
-				joinCutoff: parsedJoinFrom,
-				accountCutoff: parsedCreatedFrom,
+				days: pruneDays,
+				joinCutoff: parsedJoinAfter,
+				accountCutoff: parsedCreatedAfter,
 				dryRun: dryRunMode,
 			},
 			members,
