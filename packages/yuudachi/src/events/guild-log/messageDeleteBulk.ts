@@ -6,6 +6,7 @@ import utc from 'dayjs/plugin/utc.js';
 import { Client, type Collection, Events, type Message, type Snowflake, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
+import { Color } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { formatMessagesToAttachment } from '../../functions/logging/formatMessagesToAttachment.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
@@ -76,7 +77,7 @@ export default class implements Event {
 						icon_url:
 							uniqueAuthors.size === 1 ? firstMessage.author.displayAvatarURL() : this.client.user.displayAvatarURL(),
 					},
-					color: 12016895,
+					color: Color.LogsMessageDelete,
 					title: i18next.t('log.guild_log.message_bulk_deleted.title', { lng: locale }),
 					description: i18next.t('log.guild_log.message_bulk_deleted.description', {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string

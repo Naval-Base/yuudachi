@@ -4,6 +4,28 @@ export const enum JobType {
 	ScamDomains,
 }
 
+export const enum Color {
+	DiscordEmbedBackground = 0x2f3136,
+	DiscordSuccess = 0x57f287,
+	DiscordDanger = 0xed4245,
+	DiscordWarning = 0xfee75c,
+	DiscordPrimary = 0x5865f2,
+	DiscordGem = 0xeb459e,
+	LogsMessageDelete = 0xb75cff,
+	LogsMessaegUpdate = 0x5c6cff,
+}
+
+export const enum ThreatLevelColor {
+	Level0 = 0x7ef31f,
+	Level1 = 0x80f31f,
+	Level2 = 0xa5de0b,
+	Level3 = 0xc7c101,
+	Level4 = 0xe39e03,
+	Level5 = 0xf6780f,
+	Level6 = 0xfe5326,
+	Level7 = 0xfb3244,
+}
+
 export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
 export const SPAM_THRESHOLD = 4;
 export const SPAM_EXPIRE_SECONDS = 30;

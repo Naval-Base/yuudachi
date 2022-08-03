@@ -257,7 +257,7 @@ export async function modal(
 		);
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result);
+		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result, dryRunMode);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.common.success', {

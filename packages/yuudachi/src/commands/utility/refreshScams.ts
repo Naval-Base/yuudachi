@@ -5,6 +5,7 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { container } from 'tsyringe';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
+import { Color } from '../../Constants.js';
 import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains.js';
 import type { RefreshScamlistCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
@@ -49,7 +50,7 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 		});
 
 		let embed = addFields({
-			color: 3092790,
+			color: Color.DiscordEmbedBackground,
 			title: i18next.t('command.utility.refresh_scamlist.pending', {
 				lng: locale,
 			}),
@@ -118,7 +119,7 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 
 		if (collectedInteraction?.customId === refreshKey) {
 			let embed = addFields({
-				color: 5763719,
+				color: Color.DiscordSuccess,
 				title: i18next.t('command.utility.refresh_scamlist.success', {
 					lng: locale,
 				}),
@@ -154,7 +155,7 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 				const error = err as Error;
 				logger.error(error, error.message);
 				embed = addFields({
-					color: 15548997,
+					color: Color.DiscordDanger,
 					title: i18next.t('command.utility.refresh_scamlist.error', {
 						lng: locale,
 					}),

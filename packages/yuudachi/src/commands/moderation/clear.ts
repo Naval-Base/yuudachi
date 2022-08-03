@@ -5,7 +5,7 @@ import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
-import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { Color, DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { formatMessagesToAttachment } from '../../functions/logging/formatMessagesToAttachment.js';
 import { fetchMessages, orderMessages, pruneMessages } from '../../functions/pruning/pruneMessages.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
@@ -126,7 +126,7 @@ export default class extends Command<typeof ClearCommand> {
 							lng: locale,
 					  }),
 				timestamp: earliest.createdAt.toISOString(),
-				color: 3092790,
+				color: Color.DiscordEmbedBackground,
 			});
 
 			confirmParts.push(
@@ -246,7 +246,7 @@ export default class extends Command<typeof ClearCommand> {
 					description: descriptionParts.join('\n'),
 					title: i18next.t('log.guild_log.messages_cleared.title'),
 					timestamp: new Date().toISOString(),
-					color: 6094749,
+					color: Color.DiscordWarning,
 				});
 
 				const logDate = dayjs().format(DATE_FORMAT_LOGFILE);

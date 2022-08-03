@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
+import { Color } from '../../Constants.js';
 import { checkScam } from '../../functions/anti-scam/checkScam.js';
 import type { CheckScamCommand } from '../../interactions/index.js';
 import { addFields, truncateEmbed } from '../../util/embed.js';
@@ -15,7 +16,7 @@ export default class extends Command<typeof CheckScamCommand> {
 		const domains = await checkScam(args.content);
 
 		let embed = addFields({
-			color: domains.length ? 16462404 : 3908957,
+			color: domains.length ? Color.DiscordDanger : Color.DiscordSuccess,
 			description: args.content,
 		});
 
