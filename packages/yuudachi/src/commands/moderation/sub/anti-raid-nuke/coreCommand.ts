@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 import {
-	ButtonInteraction,
+	type ButtonInteraction,
 	ButtonStyle,
-	ChatInputCommandInteraction,
+	type ChatInputCommandInteraction,
 	Collection,
 	ComponentType,
-	GuildMember,
-	ModalSubmitInteraction,
-	Snowflake,
+	type GuildMember,
+	type ModalSubmitInteraction,
+	type Snowflake,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
