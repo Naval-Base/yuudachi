@@ -6,7 +6,6 @@ import { inject, injectable } from 'tsyringe';
 import { SCAM_THRESHOLD } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { totalScams } from '../../functions/anti-scam/totalScams.js';
-import { considerableText } from '../../functions/anti-spam/considerableText.js';
 import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
@@ -25,7 +24,11 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
-				const content = considerableText(message);
+				if (message.author.bot) {
+					continue;
+				}
+
+				const { content } = message;
 
 				if (!content || !message.inGuild()) {
 					continue;
