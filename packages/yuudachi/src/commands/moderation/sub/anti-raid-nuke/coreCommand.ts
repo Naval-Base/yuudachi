@@ -159,12 +159,7 @@ export async function handleAntiRaidNuke(
 
 		await collectedInteraction.update({
 			content,
-			components: [
-				createMessageActionRow([
-					{ ...cancelButton, disabled: true },
-					{ ...banButton, disabled: true },
-				]),
-			],
+			components: [],
 		});
 
 		const { result, cases } = await blastOff(
