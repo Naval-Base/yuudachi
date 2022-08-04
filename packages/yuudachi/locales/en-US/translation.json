@@ -459,7 +459,7 @@
 			"anti_raid_nuke": {
 				"title": "Anti-Raid-Nuke launched",
 				"title_dryrun": "Anti-Raid-Nuke dry run",
-				"description": "• Moderator: {{- author}}\n• Hit count: {{count}}"
+				"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
 			}
 		}
 	}

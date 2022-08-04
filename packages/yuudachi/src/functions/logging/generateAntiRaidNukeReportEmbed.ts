@@ -9,7 +9,7 @@ export function generateAntiRaidNukeReportEmbed(hitCount: number, user: User, lo
 			? i18next.t('log.general_log.anti_raid_nuke.title_dryrun', { lng: locale })
 			: i18next.t('log.general_log.anti_raid_nuke.title', { lng: locale }),
 		description: i18next.t('log.general_log.anti_raid_nuke.description', {
-			author: `\`${user.tag}\` (${user.id})`,
+			moderator: `\`${user.tag}\` (${user.id})`,
 			count: hitCount,
 			lng: locale,
 		}),
