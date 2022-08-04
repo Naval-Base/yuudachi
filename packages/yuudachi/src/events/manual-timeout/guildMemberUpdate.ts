@@ -56,6 +56,13 @@ export default class implements Event {
 				}
 
 				await pSetTimeout(5000);
+
+				const automod = await this.redis.del(`guild:${oldMember.guild.id}:user:${oldMember.id}:automod_timeout`);
+
+				if (automod) {
+					continue;
+				}
+
 				const auditLogs = await oldMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberUpdate });
 				const logs = auditLogs.entries.find(
 					(log) =>

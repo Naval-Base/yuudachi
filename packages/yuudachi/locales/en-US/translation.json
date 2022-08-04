@@ -388,6 +388,13 @@
 			"spam": {
 				"reason": "Spam detection",
 				"reason_mentions": "Mention spam detection"
+			},
+			"auto_mod": {
+				"keyword": "Message contained a keyword defined in AutoMod rule",
+				"keyword_preset": "Message flagged by the AutoMod",
+				"harmful_link": "Message contained a harmful link",
+				"spam": "Message was detected as spam",
+				"default": "Message flagged by the AutoMod"
 			}
 		},
 		"member_log": {
