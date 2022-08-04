@@ -67,25 +67,23 @@ export async function handleAntiRaidNuke(
 	reason?: string,
 	days?: number,
 ) {
-	if (!members.size) {
-		await interaction.editReply({
-			content: `${i18next.t('command.mod.anti_raid_nuke.common.errors.no_hits', {
-				lng: locale,
-			})}\n\n${parameterStrings.join('\n')}`,
-		});
-	}
-
 	const pruneDays = Math.min(Math.max(Number(days ?? 1), 0), 7);
-
-	parameterStrings.splice(
-		0,
-		0,
+	const prefixedParameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', { lng: locale }),
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.days', {
 			count: pruneDays,
 			lng: locale,
 		}),
-	);
+		...parameterStrings,
+	];
+
+	if (!members.size) {
+		await interaction.editReply({
+			content: `${i18next.t('command.mod.anti_raid_nuke.common.errors.no_hits', {
+				lng: locale,
+			})}\n\n${prefixedParameterStrings.join('\n')}`,
+		});
+	}
 
 	const banKey = nanoid();
 	const cancelKey = nanoid();
@@ -116,7 +114,7 @@ export async function handleAntiRaidNuke(
 			creation_range: creationRange,
 			join_range: joinRange,
 			lng: locale,
-		})}\n\n${parameterStrings.join('\n')}`,
+		})}\n\n${prefixedParameterStrings.join('\n')}`,
 		files: [
 			{
 				name: `${potentialHitsDate}-anti-raid-nuke-list.txt`,
