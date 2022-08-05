@@ -47,6 +47,14 @@ export async function blastOff(
 			continue;
 		}
 
+		if (args.dryRun) {
+			result.push({
+				member,
+				success: true,
+			});
+			continue;
+		}
+
 		promises.push(
 			createCase(
 				interaction.guild,
@@ -70,13 +78,12 @@ export async function blastOff(
 					action: CaseAction.Ban,
 					multi: true,
 				}),
-				args.dryRun,
 			)
 				.then((case_) => {
 					result.push({ member, success: true });
 					return case_;
 				})
-				.catch(() => result.push({ member, success: false }))
+				.catch((err) => result.push({ member, success: false, error: (err as Error).message }))
 				.finally(() => void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15)),
 		);
 	}
