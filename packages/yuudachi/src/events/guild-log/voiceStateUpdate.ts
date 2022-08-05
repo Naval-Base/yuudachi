@@ -2,6 +2,7 @@ import { on } from 'node:events';
 import { Client, Events, type VoiceState, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
+import { Color } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
@@ -104,7 +105,7 @@ export default class implements Event {
 						name: `${newState.member.user.tag} (${newState.member.id})`,
 						icon_url: newState.member.user.displayAvatarURL(),
 					},
-					color: 3407871,
+					color: Color.DiscordPrimary,
 					title: i18next.t('log.guild_log.voice_state_update.title', { lng: locale }),
 					description,
 					timestamp: new Date().toISOString(),

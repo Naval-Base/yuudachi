@@ -2,6 +2,7 @@ import { on } from 'node:events';
 import { ChannelType, Client, Events, messageLink, MessageType, type Message, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
+import { Color } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
@@ -81,7 +82,7 @@ export default class implements Event {
 						name: `${message.author.tag} (${message.author.id})`,
 						icon_url: message.author.displayAvatarURL(),
 					},
-					color: 12016895,
+					color: Color.LogsMessageDelete,
 					title: i18next.t('log.guild_log.message_deleted.title'),
 					description: `${
 						message.content.length ? message.content : i18next.t('common.errors.no_content', { lng: locale })

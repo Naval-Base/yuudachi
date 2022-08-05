@@ -3,6 +3,7 @@ import { diffLines, diffWords } from 'diff';
 import { Client, Events, type Message, escapeMarkdown, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
+import { Color } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
@@ -125,7 +126,7 @@ export default class implements Event {
 							name: `${newMessage.author.tag} (${newMessage.author.id})`,
 							icon_url: newMessage.author.displayAvatarURL(),
 						},
-						color: 6057215,
+						color: Color.LogsMessaegUpdate,
 						title: i18next.t('log.guild_log.message_updated.title', { lng: locale }),
 						description,
 						footer: { text: newMessage.id },

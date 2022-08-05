@@ -18,6 +18,7 @@ import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { ACTION_KEYS } from './actionKeys.js';
 import { addFields, truncateEmbed } from './embed.js';
+import { ThreatLevelColor } from '../Constants.js';
 import type { RawCase } from '../functions/cases/transformCase.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
 import { kSQL } from '../tokens.js';
@@ -96,7 +97,16 @@ export async function generateHistory(
 		count[action] = (count[action] ?? 0) + 1;
 		return count;
 	}, {});
-	const colors = [8319775, 8450847, 10870283, 13091073, 14917123, 16152591, 16667430, 16462404];
+	const colors = [
+		ThreatLevelColor.Level0,
+		ThreatLevelColor.Level1,
+		ThreatLevelColor.Level2,
+		ThreatLevelColor.Level3,
+		ThreatLevelColor.Level4,
+		ThreatLevelColor.Level5,
+		ThreatLevelColor.Level6,
+		ThreatLevelColor.Level7,
+	];
 	const values: [number, number, number, number, number, number, number] = [
 		footer.unban ?? 0,
 		footer.warn ?? 0,

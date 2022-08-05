@@ -5,32 +5,32 @@ import type RE2 from 're2';
 /**
  * Check if a member should be kept in the set, based on its join timestamp
  * @param member Member to check
- * @param joinFrom Floor value for join timestamp, if any
- * @param joinTo Ceilling value for join timestamp, if any
+ * @param joinAfter Floor value for join timestamp, if any
+ * @param joinBefore Ceilling value for join timestamp, if any
  * @returns Whether the member should be kept in the set
  */
-export function joinFilter(member: GuildMember, joinFrom?: number | null, joinTo?: number | null) {
+export function joinFilter(member: GuildMember, joinAfter?: number | null, joinBefore?: number | null) {
 	if (!member.joinedTimestamp) {
 		return true;
 	}
 
 	return (
-		member.joinedTimestamp >= (joinFrom ?? Number.NEGATIVE_INFINITY) &&
-		member.joinedTimestamp <= (joinTo ?? Number.POSITIVE_INFINITY)
+		member.joinedTimestamp >= (joinAfter ?? Number.NEGATIVE_INFINITY) &&
+		member.joinedTimestamp <= (joinBefore ?? Number.POSITIVE_INFINITY)
 	);
 }
 
 /**
  * Check if a member should be kept in the set, based on its user creation timestamp
  * @param member Member to check
- * @param joinFrom Floor value for creation timestamp, if any
- * @param joinTo Ceilling value for creation timestamp, if any
+ * @param joinAfter Floor value for creation timestamp, if any
+ * @param joinBefore Ceilling value for creation timestamp, if any
  * @returns Whether the member should be kept in the set
  */
-export function ageFilter(member: GuildMember, ageFrom?: number | null, ageTo?: number | null) {
+export function ageFilter(member: GuildMember, ageAfter?: number | null, ageBefore?: number | null) {
 	return (
-		member.user.createdTimestamp >= (ageFrom ?? Number.NEGATIVE_INFINITY) &&
-		member.user.createdTimestamp <= (ageTo ?? Number.POSITIVE_INFINITY)
+		member.user.createdTimestamp >= (ageAfter ?? Number.NEGATIVE_INFINITY) &&
+		member.user.createdTimestamp <= (ageBefore ?? Number.POSITIVE_INFINITY)
 	);
 }
 

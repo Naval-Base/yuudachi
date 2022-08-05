@@ -2,6 +2,7 @@ import { on } from 'node:events';
 import { Client, Events, type ThreadChannel, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
+import { Color } from '../../Constants.js';
 import type { Event } from '../../Event.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import { logger } from '../../logger.js';
@@ -97,7 +98,7 @@ export default class implements Event {
 					description: descriptionParts.join('\n'),
 					title: i18next.t('log.guild_log.thread_created.title'),
 					timestamp: (thread.createdAt ?? new Date()).toISOString(),
-					color: 6094749,
+					color: Color.DiscordGem,
 				});
 
 				await webhook.send({
