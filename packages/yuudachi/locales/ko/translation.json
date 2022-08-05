@@ -130,7 +130,8 @@
 							"reject_self": "",
 							"reject_protected": "",
 							"reject_user": ""
-						}
+						},
+						"no_hits": ""
 					},
 					"parameters": {
 						"heading": "",
@@ -138,7 +139,8 @@
 						"dry_run": "",
 						"days_zero": "",
 						"days_one": "",
-						"days_other": ""
+						"days_other": "",
+						"parsed_ids": ""
 					},
 					"reason": "",
 					"pending": "",
@@ -146,42 +148,42 @@
 						"execute": "",
 						"dry_run": ""
 					},
-					"attachment": "",
 					"cancel": "",
 					"success": ""
 				},
 				"filter": {
 					"errors": {
-						"no_hits": "",
 						"invalid_avatar": "",
 						"pattern_format": ""
 					},
 					"parameters": {
-						"join_after": "",
-						"created_after": "",
+						"join": {
+							"before": "",
+							"after": ""
+						},
+						"created": {
+							"before": "",
+							"after": ""
+						},
 						"pattern": "",
 						"avatar": "",
 						"zalgo": "",
-						"confusables": ""
+						"filter_confusables": "",
+						"clean_confusables": ""
 					}
 				},
 				"file": {
 					"errors": {
-						"no_hits": "",
 						"no_ids": ""
 					},
 					"parameters": {
 						"file": "",
-						"users": ""
+						"link_label": ""
 					}
 				},
 				"modal": {
 					"errors": {
-						"no_hits": "",
 						"no_ids": ""
-					},
-					"parameters": {
-						"users": ""
 					},
 					"title": "",
 					"components": {
@@ -352,6 +354,11 @@
 		}
 	},
 	"log": {
+		"common": {
+			"formatting": {
+				"guildmember": ""
+			}
+		},
 		"history": {
 			"title": "",
 			"user_details": "",
@@ -451,6 +458,7 @@
 		"general_log": {
 			"anti_raid_nuke": {
 				"title": "",
+				"title_dryrun": "",
 				"description": ""
 			}
 		}
