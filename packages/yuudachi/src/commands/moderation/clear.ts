@@ -16,7 +16,7 @@ import { kWebhooks } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
 import { addFields, truncateEmbed } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
-import { parseMessageLink, resolveMessage, validateSnowflake } from '../../util/parseMessages.js';
+import { parseMessageLink, resolveMessage, validateSnowflake } from '../../util/resolveMessages.js';
 
 async function resolveSnowflakeOrLink(
 	interaction: InteractionParam,
