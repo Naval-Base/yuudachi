@@ -3,7 +3,7 @@
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
 			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet.",
-			"no_content": "`<No message content>`"
+			"no_content": "<No message content>"
 		},
 		"moderator": "Moderator"
 	},
@@ -16,8 +16,11 @@
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
 				"timed_out": "Action timer ran out.",
-				"not_message_id": "Provided value `{{val}}` for argument `{{arg}}` is not a valid message id.",
-				"no_message": "Could not find message `{{message_id}}` in channel {{- channel}}"
+				"no_message": "Could not find message `{{message_id}}` in channel {{- channel}}",
+				"not_message_link": "Provided value `{{-val}}` for argument `{{arg}}` is not a valid message link.",
+				"no_message_resolvable": "Provided value `{{-val}}` for argument `{{arg}}` is not a valid message link or id.",
+				"no_guild": "Could not find guild `{{guild_id}}`",
+				"no_channel": "Could not find channel `{{channel_id}}` in guild `{{- guild}}`"
 			},
 			"buttons": {
 				"cancel": "Cancel"
@@ -343,13 +346,6 @@
 				"reason": "Sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
-			},
-			"repost": {
-				"errors": {
-					"not_message_link": "Provided value `{{val}}` for argument `{{arg}}` is not a valid message link.",
-					"no_guild": "Could not find guild `{{guild_id}}`",
-					"no_channel": "Could not find channel `{{channel_id}}` in guild `{{- guild}}`"
-				}
 			}
 		}
 	},
