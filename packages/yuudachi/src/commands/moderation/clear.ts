@@ -1,10 +1,10 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { type APIEmbed, ButtonStyle, ComponentType, type Webhook, Message } from 'discord.js';
+import { type APIEmbed, ButtonStyle, ComponentType, type Webhook, type Message } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, CommandMethod } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
 import { Color, DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { formatMessageToEmbed } from '../../functions/logging/formatMessageToEmbed.js';
 import { formatMessagesToAttachment } from '../../functions/logging/formatMessagesToAttachment.js';
