@@ -1,5 +1,6 @@
-import type { Snowflake, Client } from 'discord.js';
+import { type Snowflake, Client } from 'discord.js';
 import i18next from 'i18next';
+import { container } from 'tsyringe';
 
 export function parseMessageLink(link: string) {
 	const linkRegex =
@@ -18,13 +19,8 @@ export function validateSnowflake(id: Snowflake) {
 	return /^\d{17,20}$/.test(id);
 }
 
-export async function resolveMessage(
-	client: Client,
-	guildId: Snowflake,
-	channelId: Snowflake,
-	messageId: Snowflake,
-	locale: string,
-) {
+export async function resolveMessage(guildId: Snowflake, channelId: Snowflake, messageId: Snowflake, locale: string) {
+	const client = container.resolve<Client<true>>(Client);
 	const guild = client.guilds.resolve(guildId);
 	if (!guild) {
 		throw new Error(

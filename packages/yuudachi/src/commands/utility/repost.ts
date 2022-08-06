@@ -33,7 +33,7 @@ export default class extends Command<typeof RepostCommand | typeof RepostMessage
 		}
 
 		const { guildId, channelId, messageId } = parsedLink;
-		const message = await resolveMessage(interaction.client, guildId!, channelId!, messageId!, locale);
+		const message = await resolveMessage(guildId!, channelId!, messageId!, locale);
 
 		await this.handle(interaction, message as Message<true>, locale);
 	}
