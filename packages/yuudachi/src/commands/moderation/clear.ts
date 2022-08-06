@@ -1,76 +1,68 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { type APIEmbed, ButtonStyle, ComponentType, type Webhook } from 'discord.js';
+import { type APIEmbed, ButtonStyle, ComponentType, type Webhook, Message } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, CommandMethod } from '../../Command.js';
 import { Color, DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { formatMessageToEmbed } from '../../functions/logging/formatMessageToEmbed.js';
 import { formatMessagesToAttachment } from '../../functions/logging/formatMessagesToAttachment.js';
 import { fetchMessages, orderMessages, pruneMessages } from '../../functions/pruning/pruneMessages.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { ClearCommand } from '../../interactions/moderation/clear.js';
+import type { ClearCommand, ClearContextCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { kWebhooks } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
 import { addFields, truncateEmbed } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
+import { parseMessageLink, resolveMessage, validateSnowflake } from '../../util/parseMessages.js';
 
-@injectable()
-export default class extends Command<typeof ClearCommand> {
-	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {
-		super();
+async function resolveSnowflakeOrLink(
+	interaction: InteractionParam,
+	arg: string,
+	locale: string,
+	argumentName: string,
+) {
+	if (validateSnowflake(arg)) {
+		return resolveMessage(interaction.client, interaction.guildId, interaction.channelId, arg, locale);
 	}
 
-	public override async chatInput(
-		interaction: InteractionParam,
-		args: ArgsParam<typeof ClearCommand>,
+	const parsedLink = parseMessageLink(arg);
+	if (!parsedLink) {
+		throw new Error(
+			i18next.t('command.common.errors.not_message_link', {
+				val: arg,
+				arg: argumentName,
+				lng: locale,
+			}),
+		);
+	}
+
+	return resolveMessage(interaction.client, parsedLink.guildId!, parsedLink.channelId!, parsedLink.messageId!, locale);
+}
+
+@injectable()
+export default class extends Command<typeof ClearCommand | typeof ClearContextCommand> {
+	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {
+		super(['clear', 'Clear messages to']);
+	}
+
+	private async handle(
+		interaction: InteractionParam | InteractionParam<CommandMethod.MessageContext>,
 		locale: LocaleParam,
+		firstMessage: Message,
+		lastMessage?: Message,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 
-		if (!/^\d{17,20}$/.test(args.last_message)) {
+		if (lastMessage && firstMessage.channelId !== lastMessage.channelId) {
 			throw new Error(
-				i18next.t('command.common.errors.not_message_id', {
-					val: args.last_message,
-					arg: 'from',
+				i18next.t('command.mod.clear.errors.other_channel', {
 					lng: locale,
 				}),
 			);
 		}
-
-		if (args.first_message && !/^\d{17,20}$/.test(args.first_message)) {
-			throw new Error(
-				i18next.t('command.common.errors.not_message_id', {
-					val: args.first_message,
-					arg: 'to',
-					lng: locale,
-				}),
-			);
-		}
-
-		const firstMessage = await interaction.channel!.messages.fetch(args.last_message).catch(() => {
-			throw new Error(
-				i18next.t('command.common.errors.no_message', {
-					message_id: args.last_message,
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					channel: interaction.channel!.toString(),
-					lng: locale,
-				}),
-			);
-		});
-		const lastMessage = args.first_message
-			? await interaction.channel!.messages.fetch(args.first_message).catch(() => {
-					throw new Error(
-						i18next.t('command.common.errors.no_message', {
-							message_id: args.first_message!,
-							// eslint-disable-next-line @typescript-eslint/no-base-to-string
-							channel: interaction.channel!.toString(),
-							lng: locale,
-						}),
-					);
-			  })
-			: undefined;
 
 		const { oldest } = orderMessages(firstMessage, lastMessage);
 		const messages = await fetchMessages(interaction.channel!, firstMessage, lastMessage);
@@ -114,21 +106,7 @@ export default class extends Command<typeof ClearCommand> {
 		const embeds: APIEmbed[] = [];
 
 		if (!messages.has(oldest.id)) {
-			embeds.push({
-				author: {
-					name: `${earliest.author.tag} (${earliest.author.id})`,
-					url: earliest.url,
-					icon_url: earliest.author.displayAvatarURL(),
-				},
-				description: earliest.content.length
-					? earliest.content
-					: i18next.t('common.errors.no_content', {
-							lng: locale,
-					  }),
-				timestamp: earliest.createdAt.toISOString(),
-				color: Color.DiscordEmbedBackground,
-			});
-
+			embeds.push(formatMessageToEmbed(earliest as Message<true>, locale));
 			confirmParts.push(
 				i18next.t('command.mod.clear.message_too_old', {
 					lng: locale,
@@ -266,5 +244,26 @@ export default class extends Command<typeof ClearCommand> {
 				logger.error(error.message, error);
 			}
 		}
+	}
+
+	public override async chatInput(
+		interaction: InteractionParam,
+		args: ArgsParam<typeof ClearCommand>,
+		locale: LocaleParam,
+	): Promise<void> {
+		const lastMessage = await resolveSnowflakeOrLink(interaction, args.last_message, locale, 'last_message');
+		const firstMessage = args.first_message
+			? await resolveSnowflakeOrLink(interaction, args.first_message, locale, 'first_message')
+			: undefined;
+
+		await this.handle(interaction, locale, lastMessage, firstMessage);
+	}
+
+	public override async messageContext(
+		interaction: InteractionParam<CommandMethod.MessageContext>,
+		args: ArgsParam<typeof ClearContextCommand>,
+		locale: LocaleParam,
+	): Promise<void> {
+		await this.handle(interaction, locale, args.message, undefined);
 	}
 }
