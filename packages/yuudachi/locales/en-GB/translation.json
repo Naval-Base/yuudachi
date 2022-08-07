@@ -16,8 +16,11 @@
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
 				"timed_out": "",
-				"not_message_id": "",
-				"no_message": ""
+				"no_message": "",
+				"not_message_link": "",
+				"no_message_resolvable": "",
+				"no_guild": "",
+				"no_channel": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -292,7 +295,8 @@
 			},
 			"clear": {
 				"errors": {
-					"no_results": ""
+					"no_results": "",
+					"other_channel": ""
 				},
 				"pending_one": "",
 				"pending_other": "",
@@ -343,13 +347,6 @@
 				"reason": "",
 				"cancel": "Cancelled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
-			},
-			"repost": {
-				"errors": {
-					"not_message_link": "",
-					"no_guild": "",
-					"no_channel": ""
-				}
 			}
 		}
 	},
