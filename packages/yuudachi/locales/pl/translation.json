@@ -16,8 +16,11 @@
 				"use_autocomplete": "Nie udało się przetworzyć podanej opcji. Upewnij się, że wybierasz opcję z uzupełnianiem.",
 				"target_not_found": "Podany użytkownik nie znajduje się na tym serwerze.",
 				"timed_out": "",
-				"not_message_id": "",
-				"no_message": ""
+				"no_message": "",
+				"not_message_link": "",
+				"no_message_resolvable": "",
+				"no_guild": "",
+				"no_channel": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -292,7 +295,8 @@
 			},
 			"clear": {
 				"errors": {
-					"no_results": ""
+					"no_results": "",
+					"other_channel": ""
 				},
 				"pending_one": "",
 				"pending_other": "",
@@ -343,13 +347,6 @@
 				"reason": "",
 				"cancel": "Anulowano przyznawanie roli sponsora dla {{- user}}",
 				"success": "Pomyślnie przyznano rolę sponsora dla {{- user}}"
-			},
-			"repost": {
-				"errors": {
-					"not_message_link": "",
-					"no_guild": "",
-					"no_channel": ""
-				}
 			}
 		}
 	},
