@@ -16,8 +16,11 @@
 				"use_autocomplete": "Die angegebene Option konnte nicht aufgelöst werden. Stellen Sie sicher, dass Sie eine Option zur automatischen Vervollständigung auswählen.",
 				"target_not_found": "Das angegebene Mitglied ist nicht in dieser Gilde.",
 				"timed_out": "",
-				"not_message_id": "",
-				"no_message": ""
+				"no_message": "",
+				"not_message_link": "",
+				"no_message_resolvable": "",
+				"no_guild": "",
+				"no_channel": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -292,7 +295,8 @@
 			},
 			"clear": {
 				"errors": {
-					"no_results": ""
+					"no_results": "",
+					"other_channel": ""
 				},
 				"pending_one": "",
 				"pending_other": "",
@@ -343,13 +347,6 @@
 				"reason": "",
 				"cancel": "Anwendung der Sponsorrolle auf {{- user}} abgebrochen",
 				"success": "Sponsorrolle erfolgreich auf {{- user}} angewendet"
-			},
-			"repost": {
-				"errors": {
-					"not_message_link": "",
-					"no_guild": "",
-					"no_channel": ""
-				}
 			}
 		}
 	},
