@@ -31,6 +31,7 @@ import {
 	HistoryUserContextCommand,
 	SponsorUserContextCommand,
 	RepostMessageContextCommand,
+	ClearContextCommand,
 } from './interactions/index.js';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
@@ -68,6 +69,7 @@ try {
 			HistoryUserContextCommand,
 			SponsorUserContextCommand,
 			RepostMessageContextCommand,
+			ClearContextCommand,
 		],
 	});
 	console.log('Successfully reloaded interaction (/) commands.');
