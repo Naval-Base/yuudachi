@@ -83,7 +83,7 @@ export async function blastOff(
 					result.push({ member, success: true });
 					return case_;
 				})
-				.catch((err) => result.push({ member, success: false, error: (err as Error).message }))
+				.catch(() => result.push({ member, success: false }))
 				.finally(() => void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15)),
 		);
 	}
