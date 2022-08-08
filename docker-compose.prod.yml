@@ -13,7 +13,7 @@ services:
 
   redis:
     environment:
-      REDIS_ARGS: '--requirepass admin'
+      REDIS_ARGS: '--requirepass admin --save 300 1 --appendonly yes'
     volumes:
       - ./redis-data:/data
     ports:
