@@ -47,6 +47,14 @@ export async function blastOff(
 			continue;
 		}
 
+		if (args.dryRun) {
+			result.push({
+				member,
+				success: true,
+			});
+			continue;
+		}
+
 		promises.push(
 			createCase(
 				interaction.guild,
@@ -70,7 +78,6 @@ export async function blastOff(
 					action: CaseAction.Ban,
 					multi: true,
 				}),
-				args.dryRun,
 			)
 				.then((case_) => {
 					result.push({ member, success: true });
