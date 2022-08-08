@@ -16,8 +16,11 @@
 				"use_autocomplete": "Could not resolve the provided option. Make sure to select an autocomplete option.",
 				"target_not_found": "The given member is not in this guild.",
 				"timed_out": "",
-				"not_message_id": "",
-				"no_message": ""
+				"no_message": "",
+				"not_message_link": "",
+				"no_message_resolvable": "",
+				"no_guild": "",
+				"no_channel": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -130,7 +133,8 @@
 							"reject_self": "",
 							"reject_protected": "",
 							"reject_user": ""
-						}
+						},
+						"no_hits": ""
 					},
 					"parameters": {
 						"heading": "",
@@ -138,7 +142,8 @@
 						"dry_run": "",
 						"days_zero": "",
 						"days_one": "",
-						"days_other": ""
+						"days_other": "",
+						"parsed_ids": ""
 					},
 					"reason": "",
 					"pending": "",
@@ -146,42 +151,42 @@
 						"execute": "",
 						"dry_run": ""
 					},
-					"attachment": "",
 					"cancel": "",
 					"success": ""
 				},
 				"filter": {
 					"errors": {
-						"no_hits": "",
 						"invalid_avatar": "",
 						"pattern_format": ""
 					},
 					"parameters": {
-						"join_after": "",
-						"created_after": "",
+						"join": {
+							"before": "",
+							"after": ""
+						},
+						"created": {
+							"before": "",
+							"after": ""
+						},
 						"pattern": "",
 						"avatar": "",
 						"zalgo": "",
-						"confusables": ""
+						"filter_confusables": "",
+						"clean_confusables": ""
 					}
 				},
 				"file": {
 					"errors": {
-						"no_hits": "",
 						"no_ids": ""
 					},
 					"parameters": {
 						"file": "",
-						"users": ""
+						"link_label": ""
 					}
 				},
 				"modal": {
 					"errors": {
-						"no_hits": "",
 						"no_ids": ""
-					},
-					"parameters": {
-						"users": ""
 					},
 					"title": "",
 					"components": {
@@ -290,7 +295,8 @@
 			},
 			"clear": {
 				"errors": {
-					"no_results": ""
+					"no_results": "",
+					"other_channel": ""
 				},
 				"pending_one": "",
 				"pending_other": "",
@@ -341,17 +347,15 @@
 				"reason": "",
 				"cancel": "Cancelled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
-			},
-			"repost": {
-				"errors": {
-					"not_message_link": "",
-					"no_guild": "",
-					"no_channel": ""
-				}
 			}
 		}
 	},
 	"log": {
+		"common": {
+			"formatting": {
+				"guildmember": ""
+			}
+		},
 		"history": {
 			"title": "Case History",
 			"user_details": "User details",
@@ -451,6 +455,7 @@
 		"general_log": {
 			"anti_raid_nuke": {
 				"title": "",
+				"title_dryrun": "",
 				"description": ""
 			}
 		}
