@@ -10,32 +10,6 @@ import { logger } from './logger.js';
 import { kBree } from './tokens.js';
 
 export async function registerJobs() {
-	const bree = container.resolve<Bree>(kBree);
-
-	logger.info({ job: { name: 'modActionTimers' } }, `Registering job: modActionTimers`);
-	await bree.add({
-		name: 'modActionTimers',
-		interval: '1m',
-		path: fileURLToPath(new URL('./jobs/modActionTimers.js', import.meta.url)),
-	});
-
-	logger.info({ job: { name: 'modLockdownTimers' } }, `Registering job: modLockdownTimers`);
-	await bree.add({
-		name: 'modLockdownTimers',
-		interval: '1m',
-		path: fileURLToPath(new URL('./jobs/modLockdownTimers.js', import.meta.url)),
-	});
-
-	logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
-	await bree.add({
-		name: 'scamDomainUpdateTimers',
-		interval: '5m',
-		timeout: 0,
-		path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
-	});
-}
-
-export async function startJobs() {
 	const client = container.resolve<Client<true>>(Client);
 	const bree = container.resolve<Bree>(kBree);
 
@@ -80,5 +54,30 @@ export async function startJobs() {
 		bree.workers.get(name)?.removeAllListeners();
 	});
 
+	logger.info({ job: { name: 'modActionTimers' } }, `Registering job: modActionTimers`);
+	await bree.add({
+		name: 'modActionTimers',
+		interval: '1m',
+		path: fileURLToPath(new URL('./jobs/modActionTimers.js', import.meta.url)),
+	});
+
+	logger.info({ job: { name: 'modLockdownTimers' } }, `Registering job: modLockdownTimers`);
+	await bree.add({
+		name: 'modLockdownTimers',
+		interval: '1m',
+		path: fileURLToPath(new URL('./jobs/modLockdownTimers.js', import.meta.url)),
+	});
+
+	logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
+	await bree.add({
+		name: 'scamDomainUpdateTimers',
+		interval: '5m',
+		timeout: 0,
+		path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
+	});
+}
+
+export async function startJobs() {
+	const bree = container.resolve<Bree>(kBree);
 	await bree.start();
 }
