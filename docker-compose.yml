@@ -18,9 +18,11 @@ services:
       timeout: 5s
 
   redis:
-    image: redis:6-alpine
+    image: redis/redis-stack-server:latest
     labels:
       com.naval-base.description: 'Redis'
+    environment:
+      REDIS_ARGS: ''
     expose:
       - '6379'
     restart: unless-stopped

@@ -12,6 +12,8 @@ services:
       - '127.0.0.1:5432:5432'
 
   redis:
+    environment:
+      REDIS_ARGS: '--requirepass admin'
     volumes:
       - ./redis-data:/data
     ports:
