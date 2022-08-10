@@ -30,7 +30,7 @@ export default class implements Event {
 					`Member ${guildMember.id} kicked`,
 				);
 
-				const modLogChannel = await checkLogChannel(
+				const modLogChannel = checkLogChannel(
 					guildMember.guild,
 					await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId),
 				);

@@ -9,7 +9,7 @@ import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export async function upsertCaseLog(guild: Guild, user: User | undefined | null, case_: Case) {
 	const sql = container.resolve<Sql<any>>(kSQL);
-	const modLogChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
+	const modLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
 	const embed = await generateCaseEmbed(guild.id, modLogChannel!.id, user, case_);
 

@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
 import { formatMessageToEmbed } from '../../functions/logging/formatMessageToEmbed.js';
 import type { RepostCommand, RepostMessageContextCommand } from '../../interactions/index.js';
-import { parseMessageLink, resolveMessage } from '../../util/resolveMessages.js';
+import { parseMessageLink, resolveMessage } from '../../util/resolveMessage.js';
 
 export default class extends Command<typeof RepostCommand | typeof RepostMessageContextCommand> {
 	private async handle(

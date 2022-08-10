@@ -119,7 +119,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
 			}
 
-			const modLogChannel = await checkLogChannel(
+			const modLogChannel = checkLogChannel(
 				interaction.guild,
 				await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 			);

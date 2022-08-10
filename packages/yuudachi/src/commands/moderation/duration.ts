@@ -17,7 +17,7 @@ export default class extends Command<typeof DurationCommand> {
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
 
-		const modLogChannel = await checkLogChannel(
+		const modLogChannel = checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);

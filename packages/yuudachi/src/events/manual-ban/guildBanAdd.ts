@@ -23,7 +23,7 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildBan] of on(this.client, this.event) as AsyncIterableIterator<[GuildBan]>) {
 			try {
-				const modLogChannel = await checkLogChannel(
+				const modLogChannel = checkLogChannel(
 					guildBan.guild,
 					await getGuildSetting(guildBan.guild.id, SettingsKeys.ModLogChannelId),
 				);

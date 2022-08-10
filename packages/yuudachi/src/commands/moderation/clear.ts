@@ -16,7 +16,7 @@ import { kWebhooks } from '../../tokens.js';
 import { createButton } from '../../util/button.js';
 import { addFields, truncateEmbed } from '../../util/embed.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
-import { parseMessageLink, resolveMessage, validateSnowflake } from '../../util/resolveMessages.js';
+import { parseMessageLink, resolveMessage, validateSnowflake } from '../../util/resolveMessage.js';
 
 async function resolveSnowflakeOrLink(
 	interaction: InteractionParam,
@@ -110,8 +110,8 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 			embeds.push(formatMessageToEmbed(earliest as Message<true>, locale));
 			confirmParts.push(
 				i18next.t('command.mod.clear.message_too_old', {
-					lng: locale,
 					embeds,
+					lng: locale,
 				}),
 				'',
 			);

@@ -14,33 +14,7 @@ export async function up(sql) {
 		$$;`);
 
 	await sql.unsafe(`
-		create table messages (
-			id text,
-			channel_id text not null,
-			guild_id text,
-			author_id text,
-			content text,
-			"type" integer,
-			flags integer,
-			embeds jsonb,
-			attachments jsonb,
-			created_at timestamp with time zone default now() not null,
-			updated_at timestamp with time zone
-		);
-		
-		comment on column messages.id is 'The message id';
-		comment on column messages.channel_id is 'The id of the channel this message belongs to';
-		comment on column messages.guild_id is 'The id of the guild this message belongs to';
-		comment on column messages.author_id is 'The id of the author this message belongs to';
-		comment on column messages.content is 'The content of this message';
-		comment on column messages.type is 'The type of this message';
-		comment on column messages.flags is 'The flags of this message';
-		comment on column messages.embeds is 'The embeds of this message';
-		comment on column messages.attachments is 'The attachments of this message';
-		
-		alter table messages
-			add constraint messages_pkey primary key (id)
-		;`);
+		drop table if exists messages;`);
 
 	await sql.unsafe(`
 		alter table cases rename "message" to log_message_id;
@@ -118,19 +92,7 @@ export async function up(sql) {
 		comment on column lockdowns.overwrites IS 'The overwrites before this lockdown';`);
 
 	await sql.unsafe(`
-		alter table role_states rename guild to guild_id;
-		alter table role_states rename member to member_id;
-
-		alter table role_states
-			drop constraint role_states_guild_member_key,
-			drop constraint role_states_pkey,
-			drop id,
-			add constraint role_states_pkey primary key (guild_id, member_id)
-		;
-
-		comment on column role_states.guild_id is 'The id of the guild this role state belongs to';
-		comment on column role_states.member_id is 'The id of the member this role state belongs to';
-		comment on column role_states.roles is 'The roles of this role state';`);
+		drop table if exists role_states;`);
 
 	await sql.unsafe(`
 		create table guild_settings (
@@ -175,7 +137,7 @@ export async function up(sql) {
 			from settings
 		);
 		
-		drop table settings;`);
+		drop table if exists settings;`);
 
-	await sql.unsafe(`drop table tags;`);
+	await sql.unsafe(`drop table if exists tags;`);
 }

@@ -30,7 +30,7 @@ export default class extends Command<typeof TimeoutCommand> {
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
-		const modLogChannel = await checkLogChannel(
+		const modLogChannel = checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);

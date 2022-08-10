@@ -22,7 +22,10 @@ export async function registerJobs() {
 					switch (message.op) {
 						case JobType.Case: {
 							try {
-								const guild = await client.guilds.fetch(message.d.guildId);
+								const guild = await client.guilds.resolve(message.d.guildId);
+								if (!guild) {
+									break;
+								}
 								const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
 								await upsertCaseLog(guild, client.user, case_);
 							} catch (e) {

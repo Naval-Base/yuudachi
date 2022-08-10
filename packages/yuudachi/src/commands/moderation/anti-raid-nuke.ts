@@ -13,7 +13,7 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 		args: ArgsParam<typeof AntiRaidNukeCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const modLogChannel = await checkLogChannel(
+		const modLogChannel = checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 		);
@@ -22,7 +22,7 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
 		}
 
-		const archiveChannel = await checkLogChannel(
+		const archiveChannel = checkLogChannel(
 			interaction.guild,
 			await getGuildSetting(interaction.guildId, SettingsKeys.AntiRaidNukeArchiveChannelId),
 		);

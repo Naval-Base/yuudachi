@@ -14,7 +14,7 @@ export async function upsertAntiRaidNukeReport(
 	dryRun = false,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-	const archiveChannel = await checkLogChannel(
+	const archiveChannel = checkLogChannel(
 		guild,
 		await getGuildSetting(guild.id, SettingsKeys.AntiRaidNukeArchiveChannelId),
 	);

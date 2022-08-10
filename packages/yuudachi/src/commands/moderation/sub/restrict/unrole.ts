@@ -17,7 +17,7 @@ export async function unrole(
 	args: ArgsParam<typeof RestrictCommand>['unrole'],
 	locale: LocaleParam,
 ): Promise<void> {
-	const modLogChannel = await checkLogChannel(
+	const modLogChannel = checkLogChannel(
 		interaction.guild,
 		await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId),
 	);

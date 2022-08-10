@@ -28,6 +28,7 @@ export async function resolveMessage(
 	locale: string,
 ) {
 	const client = container.resolve<Client<true>>(Client);
+
 	const guild = client.guilds.resolve(guildId);
 
 	if (!guild) {
@@ -66,7 +67,9 @@ export async function resolveMessage(
 		);
 	}
 
-	const message = await channel.messages.fetch(messageId).catch(() => {
+	try {
+		return await channel.messages.fetch(messageId);
+	} catch {
 		throw new Error(
 			i18next.t('command.common.errors.no_message', {
 				message_id: messageId,
@@ -75,7 +78,5 @@ export async function resolveMessage(
 				lng: locale,
 			}),
 		);
-	});
-
-	return message;
+	}
 }

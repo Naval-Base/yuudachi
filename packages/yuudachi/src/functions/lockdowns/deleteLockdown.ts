@@ -8,7 +8,7 @@ export async function deleteLockdown(channelId: Snowflake) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	try {
-		const channel = (await client.channels.fetch(channelId)) as GuildChannel;
+		const channel = (await client.channels.resolve(channelId)) as GuildChannel;
 
 		const [channelOverwrites] = await sql<[{ overwrites: PermissionOverwrites[] }?]>`
 			select overwrites

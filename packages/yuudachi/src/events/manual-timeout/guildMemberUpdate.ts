@@ -26,7 +26,7 @@ export default class implements Event {
 			[GuildMember, GuildMember]
 		>) {
 			try {
-				const modLogChannel = await checkLogChannel(
+				const modLogChannel = checkLogChannel(
 					oldMember.guild,
 					await getGuildSetting(oldMember.guild.id, SettingsKeys.ModLogChannelId),
 				);

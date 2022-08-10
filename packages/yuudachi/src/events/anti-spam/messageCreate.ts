@@ -49,7 +49,7 @@ export default class implements Event {
 						continue;
 					}
 
-					const modLogChannel = await checkLogChannel(
+					const modLogChannel = checkLogChannel(
 						message.guild,
 						await getGuildSetting(message.guildId, SettingsKeys.ModLogChannelId),
 					);
