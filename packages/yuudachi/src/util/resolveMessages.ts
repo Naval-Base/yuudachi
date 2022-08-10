@@ -54,10 +54,10 @@ export async function resolveMessage(
 	const ignoreChannels = await getGuildSetting(guild.id, SettingsKeys.LogIgnoreChannels);
 
 	if (
-		originChannelId !== channel.id ||
-		ignoreChannels.includes(channel.id) ||
-		(channel.parentId && ignoreChannels.includes(channel.parentId)) ||
-		(channel.parent?.parentId && ignoreChannels.includes(channel.parent.parentId))
+		originChannelId !== channel.id &&
+		(ignoreChannels.includes(channel.id) ||
+			(channel.parentId && ignoreChannels.includes(channel.parentId)) ||
+			(channel.parent?.parentId && ignoreChannels.includes(channel.parent.parentId)))
 	) {
 		throw new Error(
 			i18next.t('command.common.errors.ignored_channel', {
