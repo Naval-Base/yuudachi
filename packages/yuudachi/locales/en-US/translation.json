@@ -347,6 +347,11 @@
 				"reason": "Sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
+			},
+			"repost": {
+				"errors": {
+					"ignored_channel": "Reposting from an ignored channel is not allowed."
+				}
 			}
 		}
 	},

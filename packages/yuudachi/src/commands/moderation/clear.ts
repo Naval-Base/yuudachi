@@ -178,16 +178,6 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 
 			try {
 				const guildLogWebhookId = await getGuildSetting(firstMessage.guildId!, SettingsKeys.GuildLogWebhookId);
-				const ignoreChannels = await getGuildSetting(firstMessage.guildId!, SettingsKeys.LogIgnoreChannels);
-
-				if (
-					!firstMessage.inGuild() ||
-					ignoreChannels.includes(firstMessage.channelId) ||
-					(firstMessage.channel.parentId && ignoreChannels.includes(firstMessage.channel.parentId)) ||
-					(firstMessage.channel.parent?.parentId && ignoreChannels.includes(firstMessage.channel.parent.parentId))
-				) {
-					return;
-				}
 
 				if (!guildLogWebhookId) {
 					return;
@@ -196,6 +186,17 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 				const webhook = this.webhooks.get(guildLogWebhookId);
 
 				if (!webhook) {
+					return;
+				}
+
+				const ignoreChannels = await getGuildSetting(firstMessage.guildId!, SettingsKeys.LogIgnoreChannels);
+
+				if (
+					!firstMessage.inGuild() ||
+					ignoreChannels.includes(firstMessage.channelId) ||
+					(firstMessage.channel.parentId && ignoreChannels.includes(firstMessage.channel.parentId)) ||
+					(firstMessage.channel.parent?.parentId && ignoreChannels.includes(firstMessage.channel.parent.parentId))
+				) {
 					return;
 				}
 

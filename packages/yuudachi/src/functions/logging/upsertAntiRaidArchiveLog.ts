@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import type { Guild, User } from 'discord.js';
-import i18next from 'i18next';
 import { formatAntiRaidResultsToAttachment } from './formatMembersToAttachment.js';
 import { generateAntiRaidNukeReportEmbed } from './generateAntiRaidNukeReportEmbed.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
@@ -15,16 +14,15 @@ export async function upsertAntiRaidNukeReport(
 	dryRun = false,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-	const archiveChannel = await checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.AntiRaidArchive));
-
-	if (!archiveChannel) {
-		throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
-	}
+	const archiveChannel = await checkLogChannel(
+		guild,
+		await getGuildSetting(guild.id, SettingsKeys.AntiRaidNukeArchiveChannelId),
+	);
 
 	const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 	const embed = generateAntiRaidNukeReportEmbed(results.length, user, locale, dryRun);
 
-	await archiveChannel.send({
+	await archiveChannel!.send({
 		embeds: [embed],
 		files: [
 			{

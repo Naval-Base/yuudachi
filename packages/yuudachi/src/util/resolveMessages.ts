@@ -1,6 +1,7 @@
 import { type Snowflake, Client } from 'discord.js';
 import i18next from 'i18next';
 import { container } from 'tsyringe';
+import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
 
 export function parseMessageLink(link: string) {
 	const linkRegex =
@@ -22,6 +23,7 @@ export function validateSnowflake(id: Snowflake) {
 export async function resolveMessage(guildId: Snowflake, channelId: Snowflake, messageId: Snowflake, locale: string) {
 	const client = container.resolve<Client<true>>(Client);
 	const guild = client.guilds.resolve(guildId);
+
 	if (!guild) {
 		throw new Error(
 			i18next.t('command.common.errors.no_guild', {
@@ -32,11 +34,26 @@ export async function resolveMessage(guildId: Snowflake, channelId: Snowflake, m
 	}
 
 	const channel = guild.channels.resolve(channelId);
+
 	if (!channel?.isTextBased()) {
 		throw new Error(
 			i18next.t('command.common.errors.no_channel', {
 				channel_id: channelId,
 				guild: guild.name,
+				lng: locale,
+			}),
+		);
+	}
+
+	const ignoreChannels = await getGuildSetting(guild.id, SettingsKeys.LogIgnoreChannels);
+
+	if (
+		ignoreChannels.includes(channel.id) ||
+		(channel.parentId && ignoreChannels.includes(channel.parentId)) ||
+		(channel.parent?.parentId && ignoreChannels.includes(channel.parent.parentId))
+	) {
+		throw new Error(
+			i18next.t('command.utility.repost.errors.ignored_channel', {
 				lng: locale,
 			}),
 		);

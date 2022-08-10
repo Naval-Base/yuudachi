@@ -24,7 +24,6 @@ export default class implements Event {
 		for await (const [thread] of on(this.client, this.event) as AsyncIterableIterator<[ThreadChannel, boolean]>) {
 			try {
 				const guildLogWebhookId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
-				const ignoreChannels = await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels);
 
 				if (!guildLogWebhookId) {
 					continue;
@@ -35,6 +34,8 @@ export default class implements Event {
 				if (!webhook) {
 					continue;
 				}
+
+				const ignoreChannels = await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels);
 
 				if (
 					ignoreChannels.includes(thread.id) ||

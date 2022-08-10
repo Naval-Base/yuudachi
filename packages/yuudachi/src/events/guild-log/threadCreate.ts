@@ -30,7 +30,6 @@ export default class implements Event {
 				}
 
 				const guildLogWebhookId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
-				const ignoreChannels = await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels);
 
 				if (!guildLogWebhookId) {
 					continue;
@@ -41,6 +40,8 @@ export default class implements Event {
 				if (!webhook) {
 					continue;
 				}
+
+				const ignoreChannels = await getGuildSetting(thread.guild.id, SettingsKeys.LogIgnoreChannels);
 
 				if (
 					ignoreChannels.includes(thread.id) ||

@@ -24,7 +24,7 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 
 		const archiveChannel = await checkLogChannel(
 			interaction.guild,
-			await getGuildSetting(interaction.guildId, SettingsKeys.AntiRaidArchive),
+			await getGuildSetting(interaction.guildId, SettingsKeys.AntiRaidNukeArchiveChannelId),
 		);
 
 		if (!archiveChannel) {
