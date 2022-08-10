@@ -20,7 +20,8 @@
 				"not_message_link": "",
 				"no_message_resolvable": "",
 				"no_guild": "",
-				"no_channel": ""
+				"no_channel": "",
+				"ignored_channel": ""
 			},
 			"buttons": {
 				"cancel": ""
