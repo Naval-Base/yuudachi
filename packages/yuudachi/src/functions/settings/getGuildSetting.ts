@@ -16,7 +16,7 @@ export enum SettingsKeys {
 	AutomodIgnoreRoles = 'automod_ignore_roles',
 	SponsorRoleId = 'sponsor_role_id',
 	ForceLocale = 'force_locale',
-	AntiRaidNukeArchiveChannelId = 'anti_raid_archive_channel_id',
+	AntiRaidNukeArchiveChannelId = 'anti_raid_nuke_archive_channel_id',
 }
 
 export async function getGuildSetting<T = string>(guildId: Snowflake, prop: SettingsKeys, table = 'guild_settings') {
