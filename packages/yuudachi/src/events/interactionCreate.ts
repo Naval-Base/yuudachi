@@ -119,6 +119,12 @@ export default class implements Event {
 					} catch (err) {
 						const error = err as Error;
 						logger.error(error, error.message);
+
+						if (interaction.isAutocomplete()) {
+							return;
+						}
+
+						await interaction.editReply({ content: error.message, components: [] });
 					}
 				}
 			}

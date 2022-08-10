@@ -4,7 +4,7 @@ import { Color } from '../../Constants.js';
 import { truncateEmbed } from '../../util/embed.js';
 
 export function formatMessageToEmbed(message: Message<true>, locale: string) {
-	return truncateEmbed({
+	let embed = truncateEmbed({
 		author: {
 			name: `${message.author.tag} (${message.author.id})`,
 			url: message.url,
@@ -21,4 +21,18 @@ export function formatMessageToEmbed(message: Message<true>, locale: string) {
 		},
 		color: Color.DiscordEmbedBackground,
 	});
+
+	const attachment = message.attachments.first();
+	const attachmentIsImage = attachment?.contentType === 'image/jpeg' || attachment?.contentType === 'image/png';
+
+	if (attachmentIsImage) {
+		embed = {
+			...embed,
+			image: {
+				url: attachment.url,
+			},
+		};
+	}
+
+	return embed;
 }
