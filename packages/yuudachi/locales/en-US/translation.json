@@ -20,7 +20,8 @@
 				"not_message_link": "Provided value `{{-val}}` for argument `{{arg}}` is not a valid message link.",
 				"no_message_resolvable": "Provided value `{{-val}}` for argument `{{arg}}` is not a valid message link or id.",
 				"no_guild": "Could not find guild `{{guild_id}}`",
-				"no_channel": "Could not find channel `{{channel_id}}` in guild `{{- guild}}`"
+				"no_channel": "Could not find channel `{{channel_id}}` in guild `{{- guild}}`",
+				"ignored_channel": "Resolving a message from an ignored channel is not allowed."
 			},
 			"buttons": {
 				"cancel": "Cancel"
@@ -347,11 +348,6 @@
 				"reason": "Sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
-			},
-			"repost": {
-				"errors": {
-					"ignored_channel": "Reposting from an ignored channel is not allowed."
-				}
 			}
 		}
 	},

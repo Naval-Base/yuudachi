@@ -53,7 +53,7 @@ export async function resolveMessage(guildId: Snowflake, channelId: Snowflake, m
 		(channel.parent?.parentId && ignoreChannels.includes(channel.parent.parentId))
 	) {
 		throw new Error(
-			i18next.t('command.utility.repost.errors.ignored_channel', {
+			i18next.t('command.common.errors.ignored_channel', {
 				lng: locale,
 			}),
 		);
