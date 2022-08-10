@@ -12,12 +12,12 @@ export function createTextComponent({
 }: {
 	customId: string;
 	label: string;
-	style?: TextInputStyle;
-	maxLength?: number;
-	minLength?: number;
-	placeholder?: string;
-	required?: boolean;
-	value?: string;
+	style?: TextInputStyle | undefined;
+	maxLength?: number | undefined;
+	minLength?: number | undefined;
+	placeholder?: string | undefined;
+	required?: boolean | undefined;
+	value?: string | undefined;
 }): APITextInputComponent {
 	return {
 		type: ComponentType.TextInput,

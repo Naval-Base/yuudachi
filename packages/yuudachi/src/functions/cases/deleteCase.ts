@@ -8,14 +8,14 @@ import { generateCasePayload } from '../logging/generateCasePayload.js';
 
 interface DeleteCaseOptions {
 	guild: Guild;
-	user?: User | null;
-	messageId?: Snowflake;
-	target?: User;
-	caseId?: number;
-	reason?: string | null;
-	manual?: boolean;
-	skipAction?: boolean;
-	action?: CaseAction;
+	user?: User | undefined | null;
+	messageId?: Snowflake | undefined;
+	target?: User | undefined;
+	caseId?: number | undefined;
+	reason?: string | undefined | null;
+	manual?: boolean | undefined;
+	skipAction?: boolean | undefined;
+	action?: CaseAction | undefined;
 }
 
 export async function deleteCase({

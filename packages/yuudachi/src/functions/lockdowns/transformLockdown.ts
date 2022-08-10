@@ -7,7 +7,7 @@ export interface RawLockdown {
 	expiration: string;
 	mod_id: Snowflake;
 	mod_tag: string;
-	reason?: string | null;
+	reason?: string | undefined | null;
 	overwrites: PermissionOverwrites[];
 }
 

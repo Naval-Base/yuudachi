@@ -12,14 +12,14 @@ import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 export interface AntiRaidNukeResult {
 	member: GuildMember;
 	success: boolean;
-	error?: string;
+	error?: string | undefined;
 }
 
 interface AntiRaidNukeArgs {
 	days: number;
 	dryRun: boolean;
-	joinCutoff?: number | null;
-	accountCutoff?: number | null;
+	joinCutoff?: number | undefined | null;
+	accountCutoff?: number | undefined | null;
 }
 
 export async function blastOff(

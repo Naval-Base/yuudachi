@@ -64,8 +64,8 @@ export async function handleAntiRaidNuke(
 	members: Collection<Snowflake, GuildMember>,
 	locale: string,
 	parameterStrings: string[],
-	reason?: string,
-	days?: number,
+	reason?: string | undefined,
+	days?: number | undefined,
 ) {
 	const pruneDays = Math.min(Math.max(Number(days ?? 1), 0), 7);
 	const prefixedParameterStrings = [
@@ -174,6 +174,13 @@ export async function handleAntiRaidNuke(
 
 		const successResults = result.filter((r) => r.success);
 
+		const archiveMessage = await upsertAntiRaidNukeReport(
+			collectedInteraction.guild,
+			collectedInteraction.user,
+			successResults,
+			dryRunMode,
+		);
+
 		if (!dryRunMode && cases.length) {
 			await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guild,
@@ -184,12 +191,11 @@ export async function handleAntiRaidNuke(
 						count: successResults.length,
 						lng: locale,
 					}),
+				archiveMessage.url,
 			);
 		}
 
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
-
-		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, successResults, dryRunMode);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.common.success', {

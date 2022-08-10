@@ -9,7 +9,13 @@ import type { Case } from '../cases/createCase.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases: Case[], reason: string) {
+export async function insertAntiRaidNukeCaseLog(
+	guild: Guild,
+	user: User,
+	cases: Case[],
+	reason: string,
+	messageUrl: string,
+) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	const modLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
@@ -23,7 +29,7 @@ export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases:
 			name: `${user.tag} (${user.id})`,
 			icon_url: user.displayAvatarURL(),
 		},
-		description: generateAntiRaidNukeCaseLog(cases, reason, locale),
+		description: await generateAntiRaidNukeCaseLog(guild.id, cases, reason, messageUrl),
 		footer: {
 			text:
 				cases.length === 1

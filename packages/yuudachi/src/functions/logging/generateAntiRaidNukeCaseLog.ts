@@ -1,8 +1,16 @@
-import { time, TimestampStyles } from 'discord.js';
+import { type Snowflake, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import type { Case } from '../cases/createCase.js';
+import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export function generateAntiRaidNukeCaseLog(cases: Case[], reason: string, locale: string) {
+export async function generateAntiRaidNukeCaseLog(
+	guildId: Snowflake,
+	cases: Case[],
+	reason: string,
+	messageUrl?: string | undefined | null,
+) {
+	const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
+
 	const msg = [
 		i18next.t('log.mod_log.anti_raid_nuke.description', {
 			reason,
@@ -16,8 +24,13 @@ export function generateAntiRaidNukeCaseLog(cases: Case[], reason: string, local
 			i18next.t('log.mod_log.anti_raid_nuke.parameters.cutoff', {
 				joined_after: time(new Date(cases[0].joinCutoff), TimestampStyles.LongDateTime),
 				account_created_after: time(new Date(cases[0].accountCutoff), TimestampStyles.LongDateTime),
+				lng: locale,
 			}),
 		);
+	}
+
+	if (messageUrl) {
+		msg.push(i18next.t('log.mod_log.anti_raid_nuke.report_link', { message_link: messageUrl, lng: locale }));
 	}
 
 	return msg.join('\n');

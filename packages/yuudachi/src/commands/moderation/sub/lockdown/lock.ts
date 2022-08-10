@@ -19,7 +19,7 @@ import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 interface LockdownLockArgs {
 	channel: TextChannel;
 	duration: string;
-	reason?: string;
+	reason?: string | undefined;
 }
 
 export async function lock(

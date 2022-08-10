@@ -4,7 +4,7 @@ import RE2 from 're2';
  * @param input `/(hype)\s+(events?|messages?|apply|team|system)/i`
  * @returns `(hype)\s+(events?|messages?|apply|team|system)`
  */
-export function parseRegex(input?: string, insensitive = true, fullMatch = false) {
+export function parseRegex(input?: string | undefined | null, insensitive = true, fullMatch = false) {
 	if (!input) {
 		return null;
 	}

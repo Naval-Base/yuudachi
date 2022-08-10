@@ -1,11 +1,11 @@
 import { Collection, GuildTextBasedChannel, Message, Snowflake, SnowflakeUtil, TextBasedChannel } from 'discord.js';
 
 interface MessageOrder {
-	newest?: Message;
+	newest?: Message | undefined | null;
 	oldest: Message;
 }
 
-export function orderMessages(first: Message, second?: Message): MessageOrder {
+export function orderMessages(first: Message, second?: Message | undefined | null): MessageOrder {
 	if (first.id === second?.id || !second) {
 		return {
 			newest: undefined,
@@ -22,7 +22,7 @@ export function orderMessages(first: Message, second?: Message): MessageOrder {
 	};
 }
 
-export async function fetchMessages(channel: TextBasedChannel, from: Message, to?: Message) {
+export async function fetchMessages(channel: TextBasedChannel, from: Message, to?: Message | undefined | null) {
 	const { newest, oldest } = orderMessages(from, to);
 	const res = new Collection<Snowflake, Message>();
 

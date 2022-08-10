@@ -53,7 +53,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 		interaction: InteractionParam | InteractionParam<CommandMethod.MessageContext>,
 		locale: LocaleParam,
 		firstMessage: Message,
-		lastMessage?: Message,
+		lastMessage?: Message | undefined,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
 

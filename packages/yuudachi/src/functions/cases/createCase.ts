@@ -21,46 +21,46 @@ export interface Case {
 	caseId: number;
 	guildId: Snowflake;
 	action: CaseAction;
-	roleId?: Snowflake | null;
-	actionExpiration?: string | null;
-	reason?: string | null;
+	roleId?: Snowflake | undefined | null;
+	actionExpiration?: string | undefined | null;
+	reason?: string | undefined | null;
 	moderatorId: Snowflake;
 	moderatorTag: string;
 	targetId: Snowflake;
 	targetTag: string;
-	deleteMessageDays?: number;
-	contextMessageId?: Snowflake | null;
-	referenceId?: number | null;
-	logMessageId?: Snowflake | null;
+	deleteMessageDays?: number | undefined;
+	contextMessageId?: Snowflake | undefined | null;
+	referenceId?: number | undefined | null;
+	logMessageId?: Snowflake | undefined | null;
 	actionProcessed: boolean;
 	multi: boolean;
-	joinCutoff?: string | null;
-	accountCutoff?: string | null;
+	joinCutoff?: string | undefined | null;
+	accountCutoff?: string | undefined | null;
 	createdAt: string;
 }
 
 export interface CreateCase {
-	caseId?: number;
+	caseId?: number | undefined;
 	guildId: Snowflake;
 	action: CaseAction;
-	roleId?: Snowflake | null;
-	actionExpiration?: Date | null;
-	reason?: string | null;
-	moderatorId?: Snowflake;
-	moderatorTag?: string;
+	roleId?: Snowflake | undefined | null;
+	actionExpiration?: Date | undefined | null;
+	reason?: string | undefined | null;
+	moderatorId?: Snowflake | undefined;
+	moderatorTag?: string | undefined;
 	targetId: Snowflake;
 	targetTag: string;
 	deleteMessageDays?: number;
-	contextMessageId?: Snowflake | null;
-	referenceId?: number | null;
-	multi?: boolean | null;
-	joinCutoff?: Date | null;
-	accountCutoff?: Date | null;
+	contextMessageId?: Snowflake | undefined | null;
+	referenceId?: number | undefined | null;
+	multi?: boolean | undefined | null;
+	joinCutoff?: Date | undefined | null;
+	accountCutoff?: Date | undefined | null;
 }
 
 export async function createCase(
 	guild: Guild,
-	case_: CreateCase & { target?: GuildMember | null },
+	case_: CreateCase & { target?: GuildMember | undefined | null },
 	skipAction = false,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);

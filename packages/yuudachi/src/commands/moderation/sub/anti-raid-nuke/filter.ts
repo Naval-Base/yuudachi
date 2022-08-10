@@ -25,10 +25,10 @@ enum Confusables {
 }
 
 interface ParseDateParams {
-	createdAfter?: string;
-	createdBefore?: string;
-	joinAfter?: string;
-	joinBefore?: string;
+	createdAfter?: string | undefined;
+	createdBefore?: string | undefined;
+	joinAfter?: string | undefined;
+	joinBefore?: string | undefined;
 }
 
 function parseDates({ createdAfter, createdBefore, joinAfter, joinBefore }: ParseDateParams, locale: string) {

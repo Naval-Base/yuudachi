@@ -16,7 +16,7 @@ export function transformInteraction<T extends CommandPayload = CommandPayload>(
 	const opts: Record<
 		string,
 		| ArgumentsOf<T>
-		| { user?: User; member?: GuildMember }
+		| { user?: User | undefined; member?: GuildMember | undefined }
 		| GuildBasedChannel
 		| Role
 		| string

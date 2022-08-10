@@ -9,7 +9,11 @@ import type RE2 from 're2';
  * @param joinBefore Ceilling value for join timestamp, if any
  * @returns Whether the member should be kept in the set
  */
-export function joinFilter(member: GuildMember, joinAfter?: number | null, joinBefore?: number | null) {
+export function joinFilter(
+	member: GuildMember,
+	joinAfter?: number | undefined | null,
+	joinBefore?: number | undefined | null,
+) {
 	if (!member.joinedTimestamp) {
 		return true;
 	}
@@ -27,7 +31,11 @@ export function joinFilter(member: GuildMember, joinAfter?: number | null, joinB
  * @param joinBefore Ceilling value for creation timestamp, if any
  * @returns Whether the member should be kept in the set
  */
-export function ageFilter(member: GuildMember, ageAfter?: number | null, ageBefore?: number | null) {
+export function ageFilter(
+	member: GuildMember,
+	ageAfter?: number | undefined | null,
+	ageBefore?: number | undefined | null,
+) {
 	return (
 		member.user.createdTimestamp >= (ageAfter ?? Number.NEGATIVE_INFINITY) &&
 		member.user.createdTimestamp <= (ageBefore ?? Number.POSITIVE_INFINITY)
@@ -41,7 +49,7 @@ export function ageFilter(member: GuildMember, ageAfter?: number | null, ageBefo
  * @param confusables Whether the pattern should be resistent against confusables
  * @returns Whether the member should be kept in the set
  */
-export function patternFilter(member: GuildMember, pattern?: RegExp | RE2 | null, confusables = true) {
+export function patternFilter(member: GuildMember, pattern?: RegExp | RE2 | undefined | null, confusables = true) {
 	if (!pattern) {
 		return true;
 	}
@@ -61,7 +69,7 @@ export function patternFilter(member: GuildMember, pattern?: RegExp | RE2 | null
  * @param avatar The avatar to check against, if any
  * @returns Whether the member should be kept in the set
  */
-export function avatarFilter(member: GuildMember, avatar?: string | null) {
+export function avatarFilter(member: GuildMember, avatar?: string | undefined | null) {
 	if (!avatar) {
 		return true;
 	}

@@ -2,7 +2,7 @@ import { URL } from 'node:url';
 import { Client } from 'discord.js';
 import { container } from 'tsyringe';
 
-export async function parseAvatar(input?: string) {
+export async function parseAvatar(input?: string | undefined | null) {
 	if (!input) {
 		return null;
 	}

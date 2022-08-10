@@ -8,8 +8,8 @@ export function createButton({
 }: {
 	customId: string;
 	label: string;
-	style?: number;
-	disabled?: boolean;
+	style?: number | undefined;
+	disabled?: boolean | undefined;
 }): APIButtonComponent {
 	return {
 		type: ComponentType.Button,

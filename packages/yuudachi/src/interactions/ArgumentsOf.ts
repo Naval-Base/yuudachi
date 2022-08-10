@@ -12,26 +12,26 @@ import type {
 
 export type CommandPayload = Readonly<{
 	name: string;
-	options?: readonly Option[];
-	type?: ApplicationCommandType;
+	options?: readonly Option[] | undefined;
+	type?: ApplicationCommandType | undefined;
 }>;
 
 type Option = Readonly<
 	{
 		name: string;
-		required?: boolean;
+		required?: boolean | undefined;
 	} & (
 		| {
 				type: ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup;
-				options?: readonly Option[];
+				options?: readonly Option[] | undefined;
 		  }
 		| {
 				type: ApplicationCommandOptionType.String;
-				choices?: readonly Readonly<{ name: string; value: string }>[];
+				choices?: readonly Readonly<{ name: string; value: string }>[] | undefined;
 		  }
 		| {
 				type: ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number;
-				choices?: readonly Readonly<{ name: string; value: number }>[];
+				choices?: readonly Readonly<{ name: string; value: number }>[] | undefined;
 		  }
 		| {
 				type:
@@ -62,13 +62,16 @@ type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	: T extends ApplicationCommandOptionType.Boolean
 	? boolean
 	: T extends ApplicationCommandOptionType.User
-	? { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
+	? { user: User; member?: GuildMember | undefined /* | (APIGuildMember & { permissions: Permissions }) */ }
 	: T extends ApplicationCommandOptionType.Channel
 	? GuildChannel /* | (APIPartialChannel & { permissions: Permissions }) */
 	: T extends ApplicationCommandOptionType.Role
 	? Role /* | APIRole */
 	: T extends ApplicationCommandOptionType.Mentionable
-	? { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ } | Role /* | APIRole */
+	?
+			| { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
+			| Role
+			| undefined /* | APIRole */
 	: T extends ApplicationCommandOptionType.Attachment
 	? Attachment /* | APIAttachment */
 	: never;
@@ -76,16 +79,16 @@ type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 type OptionToObject<O> = O extends {
 	name: infer K;
 	type: infer T;
-	required?: infer R;
-	options?: infer O;
-	choices?: infer C;
+	required?: infer R | undefined;
+	options?: infer O | undefined;
+	choices?: infer C | undefined;
 }
 	? K extends string
 		? R extends true
 			? { [k in K]: TypeIdToType<T, O, C> }
 			: T extends ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup
 			? { [k in K]: TypeIdToType<T, O, C> }
-			: { [k in K]?: TypeIdToType<T, O, C> }
+			: { [k in K]?: TypeIdToType<T, O, C> | undefined }
 		: never
 	: never;
 
@@ -96,5 +99,5 @@ export type ArgumentsOf<C extends CommandPayload> = C extends { options: readonl
 	: C extends { type: ApplicationCommandType.Message }
 	? { message: Message<true> }
 	: C extends { type: ApplicationCommandType.User }
-	? { user: { user: User; member?: GuildMember } }
+	? { user: { user: User; member?: GuildMember | undefined } }
 	: never;

@@ -382,6 +382,7 @@
 				"parameters": {
 					"cutoff": "**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}"
 				},
+				"report_link": "**Report:** {{- message_link}}",
 				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {

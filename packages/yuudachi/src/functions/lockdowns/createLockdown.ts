@@ -14,17 +14,17 @@ export interface Lockdown {
 	guildId: Snowflake;
 	channelId: Snowflake;
 	expiration: string;
-	reason?: string | null;
+	reason?: string | undefined | null;
 	moderatorId: Snowflake;
 	moderatorTag: string;
-	overwrites?: PermissionOverwrites[];
+	overwrites?: PermissionOverwrites[] | undefined;
 }
 
 export interface CreateLockdown {
 	guildId: Snowflake;
 	channelId: Snowflake;
 	expiration: Date;
-	reason?: string | null;
+	reason?: string | undefined | null;
 	moderatorId: Snowflake;
 	moderatorTag: string;
 }

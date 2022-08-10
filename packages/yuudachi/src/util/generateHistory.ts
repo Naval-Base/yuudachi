@@ -26,18 +26,18 @@ import { kSQL } from '../tokens.js';
 dayjs.extend(relativeTime);
 
 interface CaseFooter {
-	warn?: number;
-	restriction?: number;
-	mute?: number;
-	kick?: number;
-	ban?: number;
-	timeout?: number;
+	warn?: number | undefined;
+	restriction?: number | undefined;
+	mute?: number | undefined;
+	kick?: number | undefined;
+	ban?: number | undefined;
+	timeout?: number | undefined;
 	[key: string]: number | undefined;
 }
 
 export async function generateHistory(
 	interaction: CommandInteraction<'cached'> | ButtonInteraction<'cached'> | SelectMenuInteraction<'cached'>,
-	target: { member?: GuildMember; user: User },
+	target: { user: User; member?: GuildMember | undefined },
 	locale: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
