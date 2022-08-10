@@ -47,4 +47,6 @@ export async function insertAntiRaidNukeCaseLog(
 		set log_message_id = ${logMessage.id}
 		where guild_id = ${guild.id}
 			and case_id in ${sql(cases.map((case_) => case_.caseId))}`;
+
+	return logMessage;
 }
