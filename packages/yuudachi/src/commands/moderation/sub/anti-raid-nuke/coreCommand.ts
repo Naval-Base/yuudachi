@@ -19,7 +19,7 @@ import {
 	formatMembersToAttachment,
 } from '../../../../functions/logging/formatMembersToAttachment.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
-import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertGeneralLog.js';
+import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertAntiRaidArchiveLog.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
