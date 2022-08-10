@@ -347,6 +347,11 @@
 				"reason": "",
 				"cancel": "{{- user}}に支援者ロールを与えることをキャンセルしました。",
 				"success": "{{- user}}に支援者ロールを与えることは成功しました"
+			},
+			"repost": {
+				"errors": {
+					"ignored_channel": ""
+				}
 			}
 		}
 	},
