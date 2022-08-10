@@ -22,13 +22,12 @@ export enum SettingsKeys {
 export async function getGuildSetting<T = string>(guildId: Snowflake, prop: SettingsKeys, table = 'guild_settings') {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const [data]: any = await sql.unsafe(
+	const [data] = await sql.unsafe<[{ value: string | boolean | null }?]>(
 		`select ${prop} as value
 		from ${table}
 		where guild_id = $1`,
 		[guildId],
 	);
 
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-	return (data?.value ?? null) as T;
+	return (data?.value ?? null) as unknown as T;
 }

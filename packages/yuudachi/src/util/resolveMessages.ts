@@ -20,7 +20,13 @@ export function validateSnowflake(id: Snowflake) {
 	return /^\d{17,20}$/.test(id);
 }
 
-export async function resolveMessage(guildId: Snowflake, channelId: Snowflake, messageId: Snowflake, locale: string) {
+export async function resolveMessage(
+	originChannelId: Snowflake,
+	guildId: Snowflake,
+	channelId: Snowflake,
+	messageId: Snowflake,
+	locale: string,
+) {
 	const client = container.resolve<Client<true>>(Client);
 	const guild = client.guilds.resolve(guildId);
 
@@ -48,6 +54,7 @@ export async function resolveMessage(guildId: Snowflake, channelId: Snowflake, m
 	const ignoreChannels = await getGuildSetting(guild.id, SettingsKeys.LogIgnoreChannels);
 
 	if (
+		originChannelId !== channel.id ||
 		ignoreChannels.includes(channel.id) ||
 		(channel.parentId && ignoreChannels.includes(channel.parentId)) ||
 		(channel.parent?.parentId && ignoreChannels.includes(channel.parent.parentId))

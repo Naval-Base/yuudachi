@@ -25,7 +25,7 @@ async function resolveSnowflakeOrLink(
 	argumentName: string,
 ) {
 	if (validateSnowflake(arg)) {
-		return resolveMessage(interaction.guildId, interaction.channelId, arg, locale);
+		return resolveMessage(interaction.channelId, interaction.guildId, interaction.channelId, arg, locale);
 	}
 
 	const parsedLink = parseMessageLink(arg);
@@ -39,7 +39,8 @@ async function resolveSnowflakeOrLink(
 		);
 	}
 
-	return resolveMessage(parsedLink.guildId!, parsedLink.channelId!, parsedLink.messageId!, locale);
+	const { guildId, channelId, messageId } = parsedLink;
+	return resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 }
 
 @injectable()
