@@ -1743,7 +1743,6 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     husky: ^8.0.1
     is-ci: ^3.0.1
-    kleur: ^4.1.5
     lint-staged: ^13.0.3
     prettier: ^2.7.1
     typescript: ^4.7.4
@@ -6480,7 +6479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kleur@npm:^4.0.3, kleur@npm:^4.1.0, kleur@npm:^4.1.5":
+"kleur@npm:^4.0.3, kleur@npm:^4.1.0":
   version: 4.1.5
   resolution: "kleur@npm:4.1.5"
   checksum: 1dc476e32741acf0b1b5b0627ffd0d722e342c1b0da14de3e8ae97821327ca08f9fb944542fb3c126d90ac5f27f9d804edbe7c585bf7d12ef495d115e0f22c12
