@@ -347,6 +347,11 @@
 				"reason": "",
 				"cancel": "Anwendung der Sponsorrolle auf {{- user}} abgebrochen",
 				"success": "Sponsorrolle erfolgreich auf {{- user}} angewendet"
+			},
+			"repost": {
+				"errors": {
+					"ignored_channel": ""
+				}
 			}
 		}
 	},
