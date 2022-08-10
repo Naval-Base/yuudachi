@@ -7,6 +7,7 @@ import { canBan } from './canBan.js';
 import { kRedis } from '../../tokens.js';
 import { type Case, CaseAction, createCase } from '../cases/createCase.js';
 import { generateCasePayload } from '../logging/generateCasePayload.js';
+import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export interface AntiRaidNukeResult {
 	member: GuildMember;
@@ -34,19 +35,21 @@ export async function blastOff(
 	const promises = [];
 
 	const result: AntiRaidNukeResult[] = [];
-
-	for (const member of members.values()) {
-		const authorization = await canBan(interaction.guildId, member, interaction.user.id);
-
+	const ignoreRoles = await getGuildSetting<string[]>(interaction.guildId, SettingsKeys.AutomodIgnoreRoles);
+	const targets = members.filter((member) => {
+		const authorization = canBan(member, interaction.user.id, ignoreRoles);
 		if (authorization) {
 			result.push({
 				member,
 				success: false,
 				error: i18next.t(`command.mod.anti_raid_nuke.common.errors.result.${authorization}`, { lng: locale }),
 			});
-			continue;
+			return false;
 		}
+		return true;
+	});
 
+	for (const member of targets.values()) {
 		if (args.dryRun) {
 			result.push({
 				member,
@@ -64,7 +67,7 @@ export async function blastOff(
 					args: {
 						reason: i18next.t('command.mod.anti_raid_nuke.common.reason', {
 							current: ++idx,
-							count: members.size,
+							count: targets.size,
 							lng: locale,
 						}),
 						user: {

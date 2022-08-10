@@ -25,7 +25,10 @@ export async function insertAntiRaidNukeCaseLog(guild: Guild, user: User, cases:
 		},
 		description: generateAntiRaidNukeCaseLog(cases, reason, locale),
 		footer: {
-			text: i18next.t('log.mod_log.anti_raid_nuke.footer', { from, to, lng: locale }),
+			text:
+				cases.length === 1
+					? i18next.t('log.mod_log.case_log.footer', { case_id: cases.length, lng: locale })
+					: i18next.t('log.mod_log.anti_raid_nuke.footer', { from, to, lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
 	});
