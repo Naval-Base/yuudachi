@@ -488,20 +488,20 @@
 				"title": "**Parameters**",
 				"avatar": "**Matching avatar:** `{{avatar}}`",
 				"pattern": {
-					"title": "**Pattern:** `{{-pattern}}`",
+					"title": "**Pattern:** `{{- pattern}}`",
 					"confusables": "Pattern is resistant to confusables",
 					"insensitive": "Pattern is case-insensitive",
 					"full_match": "Pattern is restricted to full matches"
 				},
 				"created": {
 					"title": "**Creation range:**",
-					"after": "Created after: `{{-after}}`",
-					"before": "Created before: `{{-before}}`"
+					"after": "Created after: `{{- after}}`",
+					"before": "Created before: `{{- before}}`"
 				},
 				"joined": {
 					"title": "**Join range:**",
-					"after": "Joined after: `{{-after}}`",
-					"before": "Joined before: `{{-before}}`"
+					"after": "Joined after: `{{- after}}`",
+					"before": "Joined before: `{{- before}}`"
 				},
 				"confusables": {
 					"title": "**Confusables mode:** `$t(formatters.anti_raid_nuke.parameters.confusables.{{mode}})`",
@@ -516,7 +516,7 @@
 				},
 				"days_zero": "Not deleting any messages",
 				"days_one": "Deleting messages sent in the last day",
-				"days_other": "Deleting messages sent in the last {{count}} days",
+				"days_other": "Deleting messages sent in the last `{{count}}` days",
 				"zalgo": "Filtering members with zalgo in their username",
 				"none": "Not specified"
 			},
@@ -530,12 +530,12 @@
 			"successes": {
 				"title": "**Successes**",
 				"none": "No successes, something went wrong",
-				"tables": ["Case Id", "Member Id", "Username"]
+				"tables": ["Case id", "Member id", "Username"]
 			},
 			"failures": {
 				"title": "**Failures**",
 				"none": "No failures, everything went fine",
-				"tables": ["Member Id", "Username", "Error"]
+				"tables": ["Member id", "Username", "Error"]
 			},
 			"raw_data": {
 				"title": "**Raw data**",

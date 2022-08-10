@@ -1,6 +1,6 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { codeBlock, Guild, hyperlink, User } from 'discord.js';
+import { codeBlock, type Guild, hyperlink, type User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -13,11 +13,11 @@ import { kSQL } from '../../tokens.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 import { formatAntiRaidResultsToAttachment } from '../logging/formatMembersToAttachment.js';
 
-export type AntiRaidArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'] &
+export type AntiRaidNukeArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'] &
 	ArgsParam<typeof AntiRaidNukeCommand>['filter'] &
 	ArgsParam<typeof AntiRaidNukeCommand>['modal'];
 
-export type FormatterArgs = Partial<AntiRaidArgsUnion> & {
+export type FormatterArgs = Partial<AntiRaidNukeArgsUnion> & {
 	mode: AntiRaidNukeMode;
 	timeTaken: number;
 	dryRun: boolean;

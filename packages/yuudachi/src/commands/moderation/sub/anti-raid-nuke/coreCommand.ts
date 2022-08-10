@@ -1,4 +1,4 @@
-import { performance } from 'perf_hooks';
+import { performance } from 'node:perf_hooks';
 import dayjs from 'dayjs';
 import {
 	type ButtonInteraction,
@@ -9,9 +9,9 @@ import {
 	type GuildMember,
 	type ModalSubmitInteraction,
 	type Snowflake,
-	ActionRowData,
-	ButtonComponent,
-	Message,
+	type ActionRowData,
+	type ButtonComponent,
+	type Message,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
@@ -19,7 +19,7 @@ import { DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../../../Const
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import type { Case } from '../../../../functions/cases/createCase.js';
-import type { AntiRaidArgsUnion } from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
+import type { AntiRaidNukeArgsUnion } from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
 import {
 	formatAntiRaidResultsToAttachment,
 	formatMembersToAttachment,
@@ -73,12 +73,8 @@ export async function validateMemberIds(
 	};
 }
 
-function parseDate(date: string | undefined) {
-	if (!date) {
-		return undefined;
-	}
-
-	return dayjs(resolveTimestamp(date)).format(DATE_FORMAT_WITH_SECONDS);
+function parseDate(date?: string | null | undefined) {
+	return date ? dayjs(resolveTimestamp(date)).format(DATE_FORMAT_WITH_SECONDS) : null;
 }
 
 export async function handleAntiRaidNuke(
@@ -86,7 +82,7 @@ export async function handleAntiRaidNuke(
 	members: Collection<Snowflake, GuildMember>,
 	mode: AntiRaidNukeMode,
 	parameterStrings: string[],
-	args: Partial<AntiRaidArgsUnion>,
+	args: Partial<AntiRaidNukeArgsUnion>,
 	locale: string,
 ) {
 	const pruneDays = Math.min(Math.max(Number(args.days ?? 1), 0), 7);
