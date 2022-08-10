@@ -20,7 +20,8 @@
 				"not_message_link": "",
 				"no_message_resolvable": "",
 				"no_guild": "",
-				"no_channel": ""
+				"no_channel": "",
+				"ignored_channel": ""
 			},
 			"buttons": {
 				"cancel": ""
@@ -347,11 +348,6 @@
 				"reason": "",
 				"cancel": "{{- user}}に支援者ロールを与えることをキャンセルしました。",
 				"success": "{{- user}}に支援者ロールを与えることは成功しました"
-			},
-			"repost": {
-				"errors": {
-					"ignored_channel": ""
-				}
 			}
 		}
 	},
