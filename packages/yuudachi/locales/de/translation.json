@@ -5,17 +5,17 @@
 			"no_anti_raid_archive_channel": "",
 			"no_content": ""
 		},
-		"moderator": ""
+		"moderator": "Moderator"
 	},
 	"command": {
 		"common": {
 			"errors": {
 				"generic": "Etwas ist schief gelaufen.",
-				"no_enabled_module": "",
+				"no_enabled_module": "Das `{{module}}` ist in dieser Gilde nicht aktiviert.",
 				"duration_format": "Falsches Dauerformat.",
 				"use_autocomplete": "Die angegebene Option konnte nicht aufgelöst werden. Stellen Sie sicher, dass Sie eine Option zur automatischen Vervollständigung auswählen.",
 				"target_not_found": "Das angegebene Mitglied ist nicht in dieser Gilde.",
-				"timed_out": "",
+				"timed_out": "Der Aktionstimer ist abgelaufen.",
 				"no_message": "",
 				"not_message_link": "",
 				"no_message_resolvable": "",
@@ -23,7 +23,7 @@
 				"no_channel": ""
 			},
 			"buttons": {
-				"cancel": ""
+				"cancel": "Abbrechen"
 			}
 		},
 		"config": {
@@ -36,17 +36,17 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "",
+					"max_length_reason": "Maximale Länge von `1900` für Grund überschritten.",
 					"not_a_text_channel": "{{- channel}} ist kein Textkanal.",
-					"no_case": "",
+					"no_case": "Kann den Fall `#{{case}}` nicht finden",
 					"no_case_range": "",
-					"case_lower_one": "",
-					"no_reference_case": ""
+					"case_lower_one": "Case ids müssen über `0` liegen",
+					"no_reference_case": "Kann den Referenzfall `#{{case}}` nicht finden"
 				}
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "",
+					"no_reason": "Kein Grund",
 					"show_history": "Historie für Benutzer {{- user}} anzeigen"
 				}
 			},
@@ -134,11 +134,11 @@
 							"reject_protected": "",
 							"reject_user": ""
 						},
-						"no_hits": ""
+						"no_hits": "Die Anti-Raid-Nuke wird niemanden treffen, Sie sollten die Parameter neu einstellen und es erneut versuchen."
 					},
 					"parameters": {
-						"heading": "",
-						"current_time": "",
+						"heading": "Parameter:",
+						"current_time": "• Aktuelle Zeit: {{- now}}",
 						"dry_run": "",
 						"days_zero": "",
 						"days_one": "",
