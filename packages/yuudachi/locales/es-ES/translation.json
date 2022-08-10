@@ -347,6 +347,11 @@
 				"reason": "",
 				"cancel": "Se canceló la aplicación del rol de patrocinadores a {{- user}}",
 				"success": "Se aplicó con éxito el rol de patrocinadores a {{- user}}"
+			},
+			"repost": {
+				"errors": {
+					"ignored_channel": ""
+				}
 			}
 		}
 	},
