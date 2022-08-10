@@ -1,6 +1,6 @@
 import { hyperlink } from 'discord.js';
 import i18next from 'i18next';
-import { handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
 import type { ArgsParam, InteractionParam, LocaleParam } from '../../../../Command.js';
 import { parseFile } from '../../../../functions/anti-raid/parseFile.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
@@ -35,5 +35,5 @@ export async function file(
 		}),
 	];
 
-	await handleAntiRaidNuke(interaction, validMembers, locale, parameterStrings, args.reason, args.days);
+	await handleAntiRaidNuke(interaction, validMembers, AntiRaidNukeMode.Modal, parameterStrings, args, locale);
 }
