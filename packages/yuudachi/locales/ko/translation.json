@@ -347,6 +347,11 @@
 				"reason": "",
 				"cancel": "",
 				"success": ""
+			},
+			"repost": {
+				"errors": {
+					"ignored_channel": ""
+				}
 			}
 		}
 	},
