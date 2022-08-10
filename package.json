@@ -17,8 +17,8 @@
 	"license": "AGPL-3.0",
 	"private": true,
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.32.0",
-		"@typescript-eslint/parser": "^5.32.0",
+		"@typescript-eslint/eslint-plugin": "^5.33.0",
+		"@typescript-eslint/parser": "^5.33.0",
 		"eslint": "^8.21.0",
 		"eslint-config-marine": "^9.4.1",
 		"eslint-config-prettier": "^8.5.0",
@@ -29,7 +29,7 @@
 		"lint-staged": "^13.0.3",
 		"prettier": "^2.7.1",
 		"typescript": "^4.7.4",
-		"vercel": "^27.3.3"
+		"vercel": "^27.4.0"
 	},
 	"engines": {
 		"node": ">=16.0.0"

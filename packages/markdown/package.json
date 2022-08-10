@@ -33,12 +33,12 @@
 		"remark-parse": "^10.0.1",
 		"remark-rehype": "^10.1.0",
 		"remark-stringify": "^10.0.2",
-		"undici": "^5.8.0",
+		"undici": "^5.8.2",
 		"unified": "^10.1.2",
 		"unist-util-visit": "^4.1.0"
 	},
 	"devDependencies": {
-		"@vercel/node": "^2.5.2",
+		"@vercel/node": "^2.5.7",
 		"eslint": "^8.21.0",
 		"mdast": "^3.0.0",
 		"prettier": "^2.7.1",
