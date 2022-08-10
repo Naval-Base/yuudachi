@@ -22,8 +22,7 @@ export async function upsertAntiRaidNukeReport(
 	}
 
 	const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
-	const successResults = results.filter((r) => r.success);
-	const embed = generateAntiRaidNukeReportEmbed(successResults.length, user, locale, dryRun);
+	const embed = generateAntiRaidNukeReportEmbed(results.length, user, locale, dryRun);
 
 	await archiveChannel.send({
 		embeds: [embed],

@@ -172,6 +172,8 @@ export async function handleAntiRaidNuke(
 			locale,
 		);
 
+		const successResults = result.filter((r) => r.success);
+
 		if (!dryRunMode && cases.length) {
 			await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guild,
@@ -179,7 +181,7 @@ export async function handleAntiRaidNuke(
 				cases,
 				reason ??
 					i18next.t('command.mod.anti_raid_nuke.common.success', {
-						count: result.filter((r) => r.success).length,
+						count: successResults.length,
 						lng: locale,
 					}),
 			);
@@ -187,17 +189,17 @@ export async function handleAntiRaidNuke(
 
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result, dryRunMode);
+		await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, successResults, dryRunMode);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.common.success', {
-				count: result.filter((r) => r.success).length,
+				count: successResults.length,
 				lng: locale,
 			}),
 			files: [
 				{
 					name: `${membersHitDate}-anti-raid-nuke-hits.txt`,
-					attachment: Buffer.from(formatAntiRaidResultsToAttachment(result, locale)),
+					attachment: Buffer.from(formatAntiRaidResultsToAttachment(successResults, locale)),
 				},
 			],
 			components: [],
