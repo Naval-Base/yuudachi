@@ -1,3 +1,4 @@
+import { performance } from 'perf_hooks';
 import dayjs from 'dayjs';
 import {
 	type ButtonInteraction,
@@ -8,12 +9,17 @@ import {
 	type GuildMember,
 	type ModalSubmitInteraction,
 	type Snowflake,
+	ActionRowData,
+	ButtonComponent,
+	Message,
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import { DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
+import { DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
+import type { Case } from '../../../../functions/cases/createCase.js';
+import type { AntiRaidArgsUnion } from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
 import {
 	formatAntiRaidResultsToAttachment,
 	formatMembersToAttachment,
@@ -23,12 +29,20 @@ import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertAn
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
+import { parseRegex } from '../../../../util/parseRegex.js';
+import { resolveTimestamp } from '../../../../util/timestamp.js';
 
 export interface IdValidationResult {
 	validMembers: Collection<string, GuildMember>;
 	validIdCount: number;
 	invalidIdCount: number;
 	totalIdCount: number;
+}
+
+export enum AntiRaidNukeMode {
+	File = 'file',
+	Filter = 'filter',
+	Modal = 'modal',
 }
 
 export async function validateMemberIds(
@@ -59,15 +73,23 @@ export async function validateMemberIds(
 	};
 }
 
+function parseDate(date: string | undefined) {
+	if (!date) {
+		return undefined;
+	}
+
+	return dayjs(resolveTimestamp(date)).format(DATE_FORMAT_WITH_SECONDS);
+}
+
 export async function handleAntiRaidNuke(
 	interaction: ChatInputCommandInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
 	members: Collection<Snowflake, GuildMember>,
-	locale: string,
+	mode: AntiRaidNukeMode,
 	parameterStrings: string[],
-	reason?: string | undefined,
-	days?: number | undefined,
+	args: Partial<AntiRaidArgsUnion>,
+	locale: string,
 ) {
-	const pruneDays = Math.min(Math.max(Number(days ?? 1), 0), 7);
+	const pruneDays = Math.min(Math.max(Number(args.days ?? 1), 0), 7);
 	const prefixedParameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', { lng: locale }),
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.days', {
@@ -83,6 +105,7 @@ export async function handleAntiRaidNuke(
 				lng: locale,
 			})}\n\n${prefixedParameterStrings.join('\n')}`,
 		});
+		return;
 	}
 
 	const banKey = nanoid();
@@ -117,7 +140,7 @@ export async function handleAntiRaidNuke(
 		})}\n\n${prefixedParameterStrings.join('\n')}`,
 		files: [
 			{
-				name: `${potentialHitsDate}-anti-raid-nuke-list.txt`,
+				name: `${potentialHitsDate}-anti-raid-nuke-list.ansi`,
 				attachment: Buffer.from(formatMembersToAttachment(members, locale)),
 			},
 		],
@@ -143,14 +166,19 @@ export async function handleAntiRaidNuke(
 			return undefined;
 		})) as ButtonInteraction<'cached'> | undefined;
 
-	if (collectedInteraction?.customId === cancelKey) {
-		await collectedInteraction.update({
-			content: i18next.t('command.mod.anti_raid_nuke.common.cancel', {
+	if (!collectedInteraction || collectedInteraction.customId === cancelKey) {
+		const payload = {
+			content: i18next.t(`command.mod.anti_raid_nuke.common.${collectedInteraction ? 'cancel' : 'timeout'}`, {
 				lng: locale,
 			}),
 			components: [],
-		});
-	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
+		};
+		if (!collectedInteraction) {
+			await interaction.editReply(payload);
+			return;
+		}
+		await collectedInteraction.update(payload);
+	} else if (collectedInteraction.customId === banKey || collectedInteraction.customId === dryRunKey) {
 		const dryRunMode = collectedInteraction.customId === dryRunKey;
 
 		const content =
@@ -162,7 +190,9 @@ export async function handleAntiRaidNuke(
 			components: [],
 		});
 
-		const { result, cases } = await blastOff(
+		const start = performance.now();
+
+		const result = await blastOff(
 			collectedInteraction,
 			{
 				days: pruneDays,
@@ -172,6 +202,11 @@ export async function handleAntiRaidNuke(
 			locale,
 		);
 
+		const cases = result.map((c) => c.case).filter(Boolean) as Case[];
+
+		const timeTaken = performance.now() - start;
+
+		let caseMessage: Message | null = null;
 		const successResults = result.filter((r) => r.success);
 
 		const archiveMessage = await upsertAntiRaidNukeReport(
@@ -182,11 +217,11 @@ export async function handleAntiRaidNuke(
 		);
 
 		if (!dryRunMode && cases.length) {
-			await insertAntiRaidNukeCaseLog(
+			caseMessage = await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guild,
 				collectedInteraction.user,
 				cases,
-				reason ??
+				args.reason ??
 					i18next.t('command.mod.anti_raid_nuke.common.success', {
 						count: successResults.length,
 						lng: locale,
@@ -197,6 +232,21 @@ export async function handleAntiRaidNuke(
 
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
+		const logMessage = await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result, {
+			...args,
+			dryRun: dryRunMode,
+			mode,
+			timeTaken,
+			created_after: parseDate(args.created_after),
+			created_before: parseDate(args.created_before),
+			join_after: parseDate(args.join_after),
+			join_before: parseDate(args.join_before),
+			pattern: args.pattern ? parseRegex(args.pattern, args.insensitive, args.full_match)?.toString() : undefined,
+			logMessageUrl: caseMessage?.url,
+		});
+
+		const row = logMessage!.components[0] as ActionRowData<ButtonComponent>;
+
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.common.success', {
 				count: successResults.length,
@@ -204,11 +254,11 @@ export async function handleAntiRaidNuke(
 			}),
 			files: [
 				{
-					name: `${membersHitDate}-anti-raid-nuke-hits.txt`,
+					name: `${membersHitDate}-anti-raid-nuke-hits.ansi`,
 					attachment: Buffer.from(formatAntiRaidResultsToAttachment(successResults, locale)),
 				},
 			],
-			components: [],
+			components: [row],
 		});
 	}
 }
