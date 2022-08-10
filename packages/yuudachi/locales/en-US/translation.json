@@ -495,13 +495,13 @@
 				},
 				"created": {
 					"title": "**Creation range:**",
-					"after": "Created after: `{{after}}`",
-					"before": "Created before: `{{before}}`"
+					"after": "Created after: `{{-after}}`",
+					"before": "Created before: `{{-before}}`"
 				},
 				"joined": {
 					"title": "**Join range:**",
-					"after": "Joined after: `{{after}}`",
-					"before": "Joined before: `{{before}}`"
+					"after": "Joined after: `{{-after}}`",
+					"before": "Joined before: `{{-before}}`"
 				},
 				"confusables": {
 					"title": "**Confusables mode:** `$t(formatters.anti_raid_nuke.parameters.confusables.{{mode}})`",
