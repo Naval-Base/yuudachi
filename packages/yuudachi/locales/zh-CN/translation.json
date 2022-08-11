@@ -354,7 +354,7 @@
 	"log": {
 		"common": {
 			"formatting": {
-				"guild_member": ""
+				"guildmember": ""
 			}
 		},
 		"history": {
