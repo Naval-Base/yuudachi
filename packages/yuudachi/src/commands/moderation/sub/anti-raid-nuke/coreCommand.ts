@@ -260,12 +260,7 @@ export async function handleAntiRaidNuke(
 			files: [
 				{
 					name: `${membersHitDate}-anti-raid-nuke-hits.ansi`,
-					attachment: Buffer.from(
-						formatAntiRaidResultsToAttachment(
-							result.filter((r) => r.success),
-							locale,
-						),
-					),
+					attachment: Buffer.from(formatAntiRaidResultsToAttachment(result, locale)),
 				},
 			],
 			components: row ? [row] : [],

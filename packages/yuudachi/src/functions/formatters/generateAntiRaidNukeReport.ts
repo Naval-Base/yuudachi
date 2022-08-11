@@ -88,18 +88,20 @@ export async function generateAntiRaidNukeReport(
 		emptyLine(),
 	);
 
-	const ratio = `${Math.round((result.filter((r) => r.success).length / result.length) * 100)}%`;
+	const successResults = result.filter((r) => r.success);
+	const failedResults = result.filter((r) => !r.success);
+	const ratio = `${Math.round((successResults.length / result.length) * 100)}%`;
 
 	parts.push(
 		heading(i18next.t('formatters.anti_raid_nuke.results.title', { lng: locale }), 2),
 		i18next.t('formatters.anti_raid_nuke.results.total', { count: result.length, lng: locale }),
 		list([
 			i18next.t('formatters.anti_raid_nuke.results.banned', {
-				count: result.filter((r) => r.success).length,
+				count: successResults.length,
 				lng: locale,
 			}),
 			i18next.t('formatters.anti_raid_nuke.results.failed', {
-				count: result.filter((r) => !r.success).length,
+				count: failedResults.length,
 				lng: locale,
 			}),
 		]),
