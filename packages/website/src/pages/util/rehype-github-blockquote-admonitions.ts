@@ -1,22 +1,13 @@
+import type { Root } from 'hast';
 import { hasProperty } from 'hast-util-has-property';
 import { isElement } from 'hast-util-is-element';
 import { select } from 'hast-util-select';
 import { toString } from 'hast-util-to-string';
 import { h, s } from 'hastscript';
-import { unified } from 'unified';
 import { CONTINUE, SKIP, visit } from 'unist-util-visit';
 
-/**
- * @typedef {import('hast').Root} Root
- * @typedef {import('hast').RootContent} RootContent
- * @typedef {import('unified').Plugin<[never], Root>} unified
- */
-
-/**
- * @type {unified}
- */
 export default function rehypeGithubBlockquoteAdmonitions() {
-	return (tree) => {
+	return (tree: Root) => {
 		visit(tree, 'element', (node) => {
 			if (!isElement(node, 'blockquote') && !hasProperty(node, 'className')) {
 				return CONTINUE;

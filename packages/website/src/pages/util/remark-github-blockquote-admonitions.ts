@@ -1,16 +1,8 @@
+import type { Root } from 'mdast';
 import { CONTINUE, SKIP, visit } from 'unist-util-visit';
 
-/**
- * @typedef {import('mdast').Blockquote} Blockquote
- * @typedef {import('mdast').Root} Root
- * @typedef {import('unified').Plugin<[never], Root>} unified
- */
-
-/**
- * @type {unified}
- */
 export default function remarkGithubBlockquoteAdmonitions() {
-	return (tree) => {
+	return (tree: Root) => {
 		visit(tree, (node) => {
 			if (node.type !== 'blockquote') {
 				return CONTINUE;

@@ -11,6 +11,7 @@
 		"mikestead.dotenv",
 		"lokalise.i18n-ally",
 		"visualstudioexptteam.vscodeintellicode",
-		"redhat.vscode-yaml"
+		"redhat.vscode-yaml",
+		"antfu.unocss"
 	]
 }

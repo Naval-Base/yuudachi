@@ -6,6 +6,7 @@
 		"source.organizeImports": false
 	},
 	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
+	"unocss.root": "./packages/markdown",
 	"i18n-ally.localesPaths": "./packages/yuudachi/locales",
 	"i18n-ally.enabledFrameworks": ["i18next"],
 	"i18n-ally.sourceLanguage": "en-US",

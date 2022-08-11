@@ -1,5 +1,6 @@
 // import { createStarryNight, common } from '@wooorm/starry-night';
 import Convert from 'ansi-to-html';
+import type { Root } from 'hast';
 import { hasProperty } from 'hast-util-has-property';
 import { isElement } from 'hast-util-is-element';
 import { select } from 'hast-util-select';
@@ -9,23 +10,14 @@ import rehypeParse from 'rehype-parse';
 import { unified } from 'unified';
 import { CONTINUE, SKIP, visit } from 'unist-util-visit';
 
-/**
- * @typedef {import('hast').Root} Root
- * @typedef {import('hast').RootContent} RootContent
- * @typedef {import('unified').Plugin<[never], Root>} unified
- */
-
 const { parse } = unified().use(rehypeParse, { fragment: true });
 const convert = new Convert();
 // const { flagToScope, highlight } = await createStarryNight(common);
 
-/**
- * @type {unified}
- */
-export default function rehypeHighlight() {
+export default function rehypeHighlightANSI() {
 	const prefix = 'language-';
 
-	return (tree) => {
+	return (tree: Root) => {
 		visit(tree, 'element', (node, index, parent) => {
 			if (!parent || index === null || !isElement(node, 'pre')) {
 				return CONTINUE;
