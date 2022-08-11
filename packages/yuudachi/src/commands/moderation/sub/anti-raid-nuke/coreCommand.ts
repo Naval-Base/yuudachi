@@ -254,7 +254,7 @@ export async function handleAntiRaidNuke(
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.common.success', {
-				count: cases.length,
+				count: result.filter((r) => r.success).length,
 				lng: locale,
 			}),
 			files: [
