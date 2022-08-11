@@ -32,10 +32,6 @@ export async function upsertAntiRaidNukeReport(
 	args: FormatterArgs,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-	const archiveChannel = await checkLogChannel(
-		guild,
-		await getGuildSetting(guild.id, SettingsKeys.AntiRaidNukeArchiveChannelId),
-	);
 
 	const embed = generateAntiRaidNukeReportEmbed(report.filter((r) => r.success).length, user, locale, args.dryRun);
 
@@ -60,7 +56,7 @@ export async function upsertAntiRaidNukeReport(
 
 	if (!attachment) return;
 
-	const resolvedMsg = await msg.edit({
+	return msg.edit({
 		components: [
 			createMessageActionRow([
 				{
@@ -72,6 +68,4 @@ export async function upsertAntiRaidNukeReport(
 			]),
 		],
 	});
-
-	return resolvedMsg;
 }

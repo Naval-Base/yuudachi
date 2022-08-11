@@ -203,18 +203,27 @@ export async function handleAntiRaidNuke(
 
 		const timeTaken = performance.now() - start;
 
-		const archiveMessage = await upsertAntiRaidNukePending(interaction.guild);
-
-		let caseMessage: Message | null = null;
-		const successResults = result.filter((r) => r.success);
+		const pendingArchiveMessage = await upsertAntiRaidNukePending(interaction.guild);
 
 		const archiveMessage = await upsertAntiRaidNukeReport(
 			collectedInteraction.guild,
 			collectedInteraction.user,
-			successResults,
-			dryRunMode,
+			pendingArchiveMessage,
+			result,
+			{
+				...args,
+				dryRun: dryRunMode,
+				mode,
+				timeTaken,
+				created_after: parseDate(args.created_after),
+				created_before: parseDate(args.created_before),
+				join_after: parseDate(args.join_after),
+				join_before: parseDate(args.join_before),
+				pattern: args.pattern ? parseRegex(args.pattern, args.insensitive, args.full_match)?.toString() : undefined,
+			},
 		);
 
+		let caseMessage: Message | null = null;
 		if (!dryRunMode && cases.length) {
 			caseMessage = await insertAntiRaidNukeCaseLog(
 				collectedInteraction.guild,
@@ -225,7 +234,7 @@ export async function handleAntiRaidNuke(
 						count: cases.length,
 						lng: locale,
 					}),
-				archiveMessage.url,
+				archiveMessage!.url,
 			);
 		}
 
@@ -234,7 +243,7 @@ export async function handleAntiRaidNuke(
 		const logMessage = await upsertAntiRaidNukeReport(
 			collectedInteraction.guild,
 			collectedInteraction.user,
-			archiveMessage,
+			archiveMessage!,
 			result,
 			{
 				...args,
@@ -260,7 +269,12 @@ export async function handleAntiRaidNuke(
 			files: [
 				{
 					name: `${membersHitDate}-anti-raid-nuke-hits.ansi`,
-					attachment: Buffer.from(formatAntiRaidResultsToAttachment(successResults, locale)),
+					attachment: Buffer.from(
+						formatAntiRaidResultsToAttachment(
+							result.filter((r) => r.success),
+							locale,
+						),
+					),
 				},
 			],
 			components: [row],

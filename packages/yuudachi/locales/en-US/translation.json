@@ -379,7 +379,7 @@
 				"parameters": {
 					"cutoff": "**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}"
 				},
-				"report_link": "**Report:** {{- message_link}}",
+				"report_link": "**Report:** [`Beam me up, Yuu`]({{- message_link}})",
 				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
@@ -453,6 +453,7 @@
 		},
 		"general_log": {
 			"anti_raid_nuke": {
+				"pending": "The report for the anti-raid-nuke is being processed",
 				"title": "Anti-Raid-Nuke launched",
 				"title_dryrun": "Anti-Raid-Nuke dry run",
 				"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
@@ -524,7 +525,7 @@
 				"title": "**Cases**",
 				"range": "From case `#{{from}}` to case `#{{to}}`",
 				"none": "No case created for this Nuke",
-				"log_message": "**Log message:** [Beam me up, Yuki]({{- message}})",
+				"log_message": "**Log message:** [Beam me up, Yuu]({{- message}})",
 				"log_message_none": "**Log message:** `No log message created`"
 			},
 			"successes": {
