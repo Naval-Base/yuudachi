@@ -25,7 +25,10 @@ import {
 	formatMembersToAttachment,
 } from '../../../../functions/logging/formatMembersToAttachment.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
-import { upsertAntiRaidNukeReport } from '../../../../functions/logging/upsertAntiRaidArchiveLog.js';
+import {
+	upsertAntiRaidNukeReport,
+	upsertAntiRaidNukePending,
+} from '../../../../functions/logging/upsertAntiRaidArchiveLog.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
@@ -200,6 +203,8 @@ export async function handleAntiRaidNuke(
 
 		const timeTaken = performance.now() - start;
 
+		const archiveMessage = await upsertAntiRaidNukePending(interaction.guild);
+
 		let caseMessage: Message | null = null;
 		const successResults = result.filter((r) => r.success);
 
@@ -226,18 +231,24 @@ export async function handleAntiRaidNuke(
 
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		const logMessage = await upsertAntiRaidNukeReport(collectedInteraction.guild, collectedInteraction.user, result, {
-			...args,
-			dryRun: dryRunMode,
-			mode,
-			timeTaken,
-			created_after: parseDate(args.created_after),
-			created_before: parseDate(args.created_before),
-			join_after: parseDate(args.join_after),
-			join_before: parseDate(args.join_before),
-			pattern: args.pattern ? parseRegex(args.pattern, args.insensitive, args.full_match)?.toString() : undefined,
-			logMessageUrl: caseMessage?.url,
-		});
+		const logMessage = await upsertAntiRaidNukeReport(
+			collectedInteraction.guild,
+			collectedInteraction.user,
+			archiveMessage,
+			result,
+			{
+				...args,
+				dryRun: dryRunMode,
+				mode,
+				timeTaken,
+				created_after: parseDate(args.created_after),
+				created_before: parseDate(args.created_before),
+				join_after: parseDate(args.join_after),
+				join_before: parseDate(args.join_before),
+				pattern: args.pattern ? parseRegex(args.pattern, args.insensitive, args.full_match)?.toString() : undefined,
+				logMessageUrl: caseMessage?.url,
+			},
+		);
 
 		const row = logMessage!.components[0] as ActionRowData<ButtonComponent>;
 
