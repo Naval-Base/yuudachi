@@ -5,6 +5,7 @@ import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import { Backend } from '@skyra/i18next-backend';
 import { GatewayIntentBits, Options, Partials } from 'discord.js';
 import i18next from 'i18next';
+import type { default as Redis } from 'ioredis';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
 import { type Command, commandInfo } from './Command.js';
@@ -12,6 +13,7 @@ import type { Event } from './Event.js';
 import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomains.js';
 import type { CommandPayload } from './interactions/ArgumentsOf.js';
 import { logger } from './logger.js';
+import { kCommands, kRedis } from './tokens.js';
 import { createBree } from './util/bree.js';
 import { createClient } from './util/client.js';
 import { createCommands } from './util/commands.js';
@@ -22,7 +24,7 @@ import { createWebhooks } from './util/webhooks.js';
 import { WebSocketConnection } from './websocket/WebSocketConnection.js';
 
 createPostgres();
-const redis = createRedis();
+createRedis();
 createBree();
 
 const client = createClient({
@@ -42,7 +44,7 @@ const client = createClient({
 	}),
 });
 
-const commands = createCommands();
+createCommands();
 createWebhooks();
 
 const commandFiles = readdirp(fileURLToPath(new URL('./commands', import.meta.url)), {
@@ -55,6 +57,9 @@ const eventFiles = readdirp(fileURLToPath(new URL('./events', import.meta.url)),
 });
 
 try {
+	const redis = container.resolve<Redis>(kRedis);
+	const commands = container.resolve<Map<string, Command<CommandPayload>>>(kCommands);
+
 	const shorteners = JSON.parse(
 		(await readFile(fileURLToPath(new URL('../linkshorteners.json', import.meta.url).href))).toString(),
 	) as string[];
@@ -88,8 +93,7 @@ try {
 			`Registering command: ${command.name?.join(', ') ?? cmdInfo.name}`,
 		);
 
-		command.name?.forEach((name) => (commands.has(name) ? null : commands.set(name.toLowerCase(), command))) ??
-			commands.set(cmdInfo.name, command);
+		command.name?.forEach((name) => commands.set(name.toLowerCase(), command)) ?? commands.set(cmdInfo.name, command);
 	}
 
 	for await (const dir of eventFiles) {

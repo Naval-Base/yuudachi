@@ -6,6 +6,4 @@ import { kCommands } from '../tokens.js';
 export function createCommands() {
 	const commands = new Map<string, Command<CommandPayload>>();
 	container.register(kCommands, { useValue: commands });
-
-	return commands;
 }
