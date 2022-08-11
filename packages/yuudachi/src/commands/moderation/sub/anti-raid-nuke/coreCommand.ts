@@ -74,7 +74,7 @@ export async function validateMemberIds(
 }
 
 function parseDate(date?: string | null | undefined) {
-	return date ? dayjs(resolveTimestamp(date)).format(DATE_FORMAT_WITH_SECONDS) : null;
+	return date ? dayjs(resolveTimestamp(date)).format(DATE_FORMAT_WITH_SECONDS) : undefined;
 }
 
 export async function handleAntiRaidNuke(
@@ -96,12 +96,11 @@ export async function handleAntiRaidNuke(
 	];
 
 	if (!members.size) {
-		await interaction.editReply({
-			content: `${i18next.t('command.mod.anti_raid_nuke.common.errors.no_hits', {
+		throw new Error(
+			`${i18next.t('command.mod.anti_raid_nuke.common.errors.no_hits', {
 				lng: locale,
 			})}\n\n${prefixedParameterStrings.join('\n')}`,
-		});
-		return;
+		);
 	}
 
 	const banKey = nanoid();
@@ -170,8 +169,7 @@ export async function handleAntiRaidNuke(
 			components: [],
 		};
 		if (!collectedInteraction) {
-			await interaction.editReply(payload);
-			return;
+			throw new Error(payload.content);
 		}
 		await collectedInteraction.update(payload);
 	} else if (collectedInteraction.customId === banKey || collectedInteraction.customId === dryRunKey) {
@@ -219,7 +217,7 @@ export async function handleAntiRaidNuke(
 				cases,
 				args.reason ??
 					i18next.t('command.mod.anti_raid_nuke.common.success', {
-						count: successResults.length,
+						count: cases.length,
 						lng: locale,
 					}),
 				archiveMessage.url,
@@ -245,7 +243,7 @@ export async function handleAntiRaidNuke(
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.common.success', {
-				count: successResults.length,
+				count: cases.length,
 				lng: locale,
 			}),
 			files: [
