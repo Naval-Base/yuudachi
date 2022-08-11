@@ -9,8 +9,6 @@ import {
 	type GuildMember,
 	type ModalSubmitInteraction,
 	type Snowflake,
-	type ActionRowData,
-	type ButtonComponent,
 	type Message,
 } from 'discord.js';
 import i18next from 'i18next';
@@ -18,7 +16,6 @@ import { nanoid } from 'nanoid';
 import { DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
-import type { Case } from '../../../../functions/cases/createCase.js';
 import type { AntiRaidNukeArgsUnion } from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
 import {
 	formatAntiRaidResultsToAttachment,
@@ -164,32 +161,26 @@ export async function handleAntiRaidNuke(
 			return undefined;
 		})) as ButtonInteraction<'cached'> | undefined;
 
-	if (!collectedInteraction || collectedInteraction.customId === cancelKey) {
-		const payload = {
-			content: i18next.t(`command.mod.anti_raid_nuke.common.${collectedInteraction ? 'cancel' : 'timeout'}`, {
+	if (collectedInteraction?.customId === cancelKey) {
+		await collectedInteraction.update({
+			content: i18next.t('command.mod.anti_raid_nuke.common.cancel', {
 				lng: locale,
 			}),
 			components: [],
-		};
-		if (!collectedInteraction) {
-			throw new Error(payload.content);
-		}
-		await collectedInteraction.update(payload);
-	} else if (collectedInteraction.customId === banKey || collectedInteraction.customId === dryRunKey) {
+		});
+	} else if (collectedInteraction?.customId === banKey || collectedInteraction?.customId === dryRunKey) {
 		const dryRunMode = collectedInteraction.customId === dryRunKey;
 
-		const content =
-			collectedInteraction.message.content +
-			(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.common.parameters.dry_run', { lng: locale })}` : '');
-
 		await collectedInteraction.update({
-			content,
+			content:
+				collectedInteraction.message.content +
+				(dryRunMode ? `\n\n${i18next.t('command.mod.anti_raid_nuke.common.parameters.dry_run', { lng: locale })}` : ''),
 			components: [],
 		});
 
 		const start = performance.now();
 
-		const result = await blastOff(
+		const { result, cases } = await blastOff(
 			collectedInteraction,
 			{
 				days: pruneDays,
@@ -198,8 +189,6 @@ export async function handleAntiRaidNuke(
 			members,
 			locale,
 		);
-
-		const cases = result.map((c) => c.case).filter(Boolean) as Case[];
 
 		const timeTaken = performance.now() - start;
 
@@ -210,6 +199,7 @@ export async function handleAntiRaidNuke(
 			collectedInteraction.user,
 			pendingArchiveMessage,
 			result,
+			cases,
 			{
 				...args,
 				dryRun: dryRunMode,
@@ -234,7 +224,7 @@ export async function handleAntiRaidNuke(
 						count: cases.length,
 						lng: locale,
 					}),
-				archiveMessage!.url,
+				archiveMessage.url,
 			);
 		}
 
@@ -243,8 +233,9 @@ export async function handleAntiRaidNuke(
 		const logMessage = await upsertAntiRaidNukeReport(
 			collectedInteraction.guild,
 			collectedInteraction.user,
-			archiveMessage!,
+			archiveMessage,
 			result,
+			cases,
 			{
 				...args,
 				dryRun: dryRunMode,
@@ -259,7 +250,7 @@ export async function handleAntiRaidNuke(
 			},
 		);
 
-		const row = logMessage!.components[0] as ActionRowData<ButtonComponent>;
+		const row = logMessage.components[0];
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.anti_raid_nuke.common.success', {
@@ -277,7 +268,7 @@ export async function handleAntiRaidNuke(
 					),
 				},
 			],
-			components: [row],
+			components: row ? [row] : [],
 		});
 	}
 }

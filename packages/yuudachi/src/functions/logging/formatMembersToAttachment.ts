@@ -22,8 +22,8 @@ export function formatMembersToAttachment(members: Collection<Snowflake, GuildMe
 	return members.map((member) => formatMemberSummary(member, locale)).join('\n');
 }
 
-export function formatAntiRaidResultSummary(r: AntiRaidNukeResult, locale: string) {
-	return formatMemberSummary(r.member, locale, r.success);
+export function formatAntiRaidResultSummary(report: AntiRaidNukeResult, locale: string) {
+	return formatMemberSummary(report.member, locale, report.success);
 }
 
 export function formatAntiRaidResultsToAttachment(results: AntiRaidNukeResult[], locale: string) {

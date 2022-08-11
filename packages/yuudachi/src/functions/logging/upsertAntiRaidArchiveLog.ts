@@ -5,6 +5,7 @@ import { generateAntiRaidNukeReportEmbed } from './generateAntiRaidNukeReportEmb
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
+import type { Case } from '../cases/createCase.js';
 import { type FormatterArgs, generateAntiRaidNukeReport } from '../formatters/generateAntiRaidNukeReport.js';
 import { generateFormatterUrl } from '../formatters/generateFormatterUrl.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
@@ -29,32 +30,31 @@ export async function upsertAntiRaidNukeReport(
 	user: User,
 	message: Message,
 	report: AntiRaidNukeResult[],
+	cases: Case[],
 	args: FormatterArgs,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 
 	const embed = generateAntiRaidNukeReportEmbed(report.filter((r) => r.success).length, user, locale, args.dryRun);
 
-	const markdown = await generateAntiRaidNukeReport(guild, user, report, args, locale);
-
-	const file = Buffer.from(markdown, 'utf8');
-
-	const reportDate = dayjs().format(DATE_FORMAT_LOGFILE);
-	const reportName = `${reportDate}-anti-raid-nuke-report.md`;
+	const markdown = await generateAntiRaidNukeReport(guild, user, report, cases, args, locale);
 
 	const msg = await message.edit({
 		content: null,
 		embeds: [embed],
 		files: [
 			{
-				name: reportName,
-				attachment: file,
+				name: `${dayjs().format(DATE_FORMAT_LOGFILE)}-anti-raid-nuke-report.md`,
+				attachment: Buffer.from(markdown, 'utf8'),
 			},
 		],
 	});
+
 	const attachment = msg.attachments.first();
 
-	if (!attachment) return;
+	if (!attachment) {
+		return msg;
+	}
 
 	return msg.edit({
 		components: [

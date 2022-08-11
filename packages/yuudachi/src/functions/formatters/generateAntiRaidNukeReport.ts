@@ -1,6 +1,6 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { codeBlock, type Guild, hyperlink, type User } from 'discord.js';
+import { codeBlock, type Guild, hyperlink, type User, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -11,6 +11,7 @@ import type { AntiRaidNukeMode } from '../../commands/moderation/sub/anti-raid-n
 import type { AntiRaidNukeCommand } from '../../interactions/index.js';
 import { kSQL } from '../../tokens.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
+import type { Case } from '../cases/createCase.js';
 import { formatAntiRaidResultsToAttachment } from '../logging/formatMembersToAttachment.js';
 
 export type AntiRaidNukeArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'] &
@@ -32,27 +33,23 @@ function sortByResultMember(a: AntiRaidNukeResult, b: AntiRaidNukeResult) {
 	return b.member.joinedTimestamp - a.member.joinedTimestamp;
 }
 
-function sortByResultCase(a: AntiRaidNukeResult, b: AntiRaidNukeResult) {
-	if (!a.case || !b.case) {
-		return 0;
-	}
-
-	return a.case.caseId - b.case.caseId;
+function findCase(userId: Snowflake, cases: Case[]) {
+	return cases.find((case_) => case_.targetId === userId)!;
 }
 
-function resultToTable(result: AntiRaidNukeResult[], dryRun: boolean): { successes: string[][]; failures: string[][] } {
+function resultToTable(result: AntiRaidNukeResult[], cases: Case[], dryRun: boolean) {
 	const failures: string[][] = [];
 	const successes: string[][] = [];
 
-	for (const { member, success, error, case: case_ } of result.sort(sortByResultCase)) {
+	for (const { member, success, error } of result) {
 		if (success) {
-			successes.push([dryRun ? 'Dry Run' : case_!.caseId.toString(), member.id, member.user.tag]);
+			successes.push([dryRun ? 'Dry Run' : findCase(member.id, cases).caseId.toString(), member.id, member.user.tag]);
 		} else {
 			failures.push([member.id, member.user.tag, error ?? 'Unknown']);
 		}
 	}
 
-	return { successes, failures };
+	return { successes, failures } as const;
 }
 
 function paramOrNone(param: string | undefined, locale: string): string {
@@ -63,30 +60,29 @@ export async function generateAntiRaidNukeReport(
 	guild: Guild,
 	user: User,
 	result: AntiRaidNukeResult[],
+	cases: Case[],
 	args: FormatterArgs,
 	locale: string,
 ) {
-	const parts = [];
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const cases = result.filter((r) => Boolean(r.case)).map((r) => r.case!);
-
-	parts.push(heading(i18next.t('formatters.anti_raid_nuke.title', { lng: locale, guild: guild.name }), 1));
+	const parts = [];
 
 	parts.push(
+		heading(i18next.t('formatters.anti_raid_nuke.title', { lng: locale, guild: guild.name }), 1),
 		heading(i18next.t('formatters.anti_raid_nuke.summary.title', { lng: locale }), 2),
 		list([
-			i18next.t('formatters.anti_raid_nuke.summary.mode', { lng: locale, mode: args.mode }),
+			i18next.t('formatters.anti_raid_nuke.summary.mode', { mode: args.mode, lng: locale }),
 			i18next.t('formatters.anti_raid_nuke.summary.current_time', {
-				lng: locale,
 				current_time: dayjs().format(DATE_FORMAT_WITH_SECONDS),
+				lng: locale,
 			}),
 			i18next.t('formatters.anti_raid_nuke.summary.time_taken', {
-				lng: locale,
 				time_taken: ms(Number(args.timeTaken.toFixed(2))),
+				lng: locale,
 			}),
-			i18next.t('formatters.anti_raid_nuke.summary.moderator', { lng: locale, moderator: user.tag }),
-			i18next.t('formatters.anti_raid_nuke.summary.reason', { lng: locale, reason: paramOrNone(args.reason, locale) }),
+			i18next.t('formatters.anti_raid_nuke.summary.moderator', { moderator: user.tag, lng: locale }),
+			i18next.t('formatters.anti_raid_nuke.summary.reason', { reason: paramOrNone(args.reason, locale), lng: locale }),
 			i18next.t(`formatters.anti_raid_nuke.summary.${args.dryRun ? 'dry_run' : 'blast_mode'}`, { lng: locale }),
 		]),
 		emptyLine(),
@@ -96,21 +92,21 @@ export async function generateAntiRaidNukeReport(
 
 	parts.push(
 		heading(i18next.t('formatters.anti_raid_nuke.results.title', { lng: locale }), 2),
-		i18next.t('formatters.anti_raid_nuke.results.total', { lng: locale, count: result.length }),
+		i18next.t('formatters.anti_raid_nuke.results.total', { count: result.length, lng: locale }),
 		list([
 			i18next.t('formatters.anti_raid_nuke.results.banned', {
-				lng: locale,
 				count: result.filter((r) => r.success).length,
+				lng: locale,
 			}),
 			i18next.t('formatters.anti_raid_nuke.results.failed', {
-				lng: locale,
 				count: result.filter((r) => !r.success).length,
+				lng: locale,
 			}),
 		]),
 		blockquote(
 			i18next.t('formatters.anti_raid_nuke.results.ratio', {
-				lng: locale,
 				ratio,
+				lng: locale,
 			}),
 		),
 		emptyLine(),
@@ -120,13 +116,14 @@ export async function generateAntiRaidNukeReport(
 
 	if (args.avatar) {
 		parts.push(
-			heading(i18next.t('formatters.anti_raid_nuke.parameters.avatar', { lng: locale, avatar: args.avatar }), 4),
+			heading(i18next.t('formatters.anti_raid_nuke.parameters.avatar', { avatar: args.avatar, lng: locale }), 4),
 		);
 	}
+
 	if (args.pattern) {
 		parts.push(
 			heading(
-				i18next.t('formatters.anti_raid_nuke.parameters.pattern.title', { lng: locale, pattern: args.pattern }),
+				i18next.t('formatters.anti_raid_nuke.parameters.pattern.title', { pattern: args.pattern, lng: locale }),
 				4,
 			),
 			checkbox(
@@ -140,69 +137,75 @@ export async function generateAntiRaidNukeReport(
 			checkbox(i18next.t('formatters.anti_raid_nuke.parameters.pattern.full_match', { lng: locale }), args.full_match),
 		);
 	}
+
 	if (typeof args.zalgo === 'boolean') {
 		parts.push(heading(i18next.t('formatters.anti_raid_nuke.parameters.zalgo', { lng: locale }), 4));
 	}
+
 	if (args.join_after || args.join_before) {
 		parts.push(
 			heading(i18next.t('formatters.anti_raid_nuke.parameters.joined.title', { lng: locale }), 4),
 			list([
 				i18next.t('formatters.anti_raid_nuke.parameters.joined.after', {
-					lng: locale,
 					after: paramOrNone(args.join_after, locale),
+					lng: locale,
 				}),
 				i18next.t('formatters.anti_raid_nuke.parameters.joined.before', {
-					lng: locale,
 					before: paramOrNone(args.join_before, locale),
+					lng: locale,
 				}),
 			]),
 		);
 	}
+
 	if (args.created_after || args.created_before) {
 		parts.push(
 			heading(i18next.t('formatters.anti_raid_nuke.parameters.created.title', { lng: locale }), 4),
 			list([
 				i18next.t('formatters.anti_raid_nuke.parameters.created.after', {
-					lng: locale,
 					after: paramOrNone(args.created_after, locale),
+					lng: locale,
 				}),
 				i18next.t('formatters.anti_raid_nuke.parameters.created.before', {
-					lng: locale,
 					before: paramOrNone(args.created_before, locale),
+					lng: locale,
 				}),
 			]),
 		);
 	}
+
 	if (typeof args.confusables === 'number') {
 		parts.push(
 			heading(
-				i18next.t('formatters.anti_raid_nuke.parameters.confusables.title', { lng: locale, mode: args.confusables }),
+				i18next.t('formatters.anti_raid_nuke.parameters.confusables.title', { mode: args.confusables, lng: locale }),
 				4,
 			),
 		);
 	}
+
 	if (args.days) {
 		parts.push(
 			heading(
 				i18next.t('formatters.anti_raid_nuke.parameters.days', {
-					lng: locale,
 					count: args.days,
+					lng: locale,
 				}),
 				4,
 			),
 		);
 	}
+
 	if (args.file) {
 		parts.push(
 			heading(
 				i18next.t('formatters.anti_raid_nuke.parameters.file.title', {
-					lng: locale,
 					file: hyperlink(
 						i18next.t('formatters.anti_raid_nuke.parameters.file.placeholder', {
 							lng: locale,
 						}),
 						args.file.proxyURL,
 					),
+					lng: locale,
 				}),
 				4,
 			),
@@ -216,15 +219,16 @@ export async function generateAntiRaidNukeReport(
 	const to = nextCase.next_case - 1;
 
 	parts.push(heading(i18next.t('formatters.anti_raid_nuke.cases.title', { lng: locale }), 2));
+
 	parts.push(
 		list([
 			cases.length
-				? i18next.t('formatters.anti_raid_nuke.cases.range', { lng: locale, from, to })
+				? i18next.t('formatters.anti_raid_nuke.cases.range', { from, to, lng: locale })
 				: i18next.t('formatters.anti_raid_nuke.cases.none', { lng: locale }),
 			args.logMessageUrl
 				? i18next.t('formatters.anti_raid_nuke.cases.log_message', {
-						lng: locale,
 						message: args.logMessageUrl,
+						lng: locale,
 				  })
 				: i18next.t('formatters.anti_raid_nuke.cases.log_message_none', {
 						lng: locale,
@@ -232,22 +236,30 @@ export async function generateAntiRaidNukeReport(
 		]),
 	);
 
-	parts.push(emptyLine(), horizontalRule(), emptyLine());
+	const { successes, failures } = resultToTable(result, cases, args.dryRun);
 
-	const { successes, failures } = resultToTable(result, args.dryRun);
+	parts.push(
+		emptyLine(),
+		horizontalRule(),
+		emptyLine(),
+		heading(i18next.t('formatters.anti_raid_nuke.successes.title', { lng: locale }), 2),
+	);
 
-	parts.push(heading(i18next.t('formatters.anti_raid_nuke.successes.title', { lng: locale }), 2));
 	if (successes.length) {
 		parts.push(
-			table(i18next.t('formatters.anti_raid_nuke.successes.tables', { lng: locale, returnObjects: true }), successes),
+			table(i18next.t('formatters.anti_raid_nuke.successes.tables', { returnObjects: true, lng: locale }), successes),
 		);
 	} else {
 		parts.push(blockquote(heading(i18next.t('formatters.anti_raid_nuke.successes.none', { lng: locale }), 3)));
 	}
 
-	parts.push(emptyLine(), horizontalRule(), emptyLine());
+	parts.push(
+		emptyLine(),
+		horizontalRule(),
+		emptyLine(),
+		heading(i18next.t('formatters.anti_raid_nuke.failures.title', { lng: locale }), 2),
+	);
 
-	parts.push(heading(i18next.t('formatters.anti_raid_nuke.failures.title', { lng: locale }), 2));
 	if (failures.length) {
 		parts.push(
 			table(i18next.t('formatters.anti_raid_nuke.failures.tables', { lng: locale, returnObjects: true }), failures),
@@ -256,12 +268,15 @@ export async function generateAntiRaidNukeReport(
 		parts.push(blockquote(heading(i18next.t('formatters.anti_raid_nuke.failures.none', { lng: locale }), 3)));
 	}
 
-	parts.push(emptyLine(), horizontalRule(), emptyLine());
-
-	parts.push(heading(i18next.t('formatters.anti_raid_nuke.raw_data.title', { lng: locale }), 2));
-	parts.push(i18next.t('formatters.anti_raid_nuke.raw_data.description', { lng: locale }));
-	parts.push(emptyLine());
-	parts.push(codeBlock('ansi', formatAntiRaidResultsToAttachment(result.sort(sortByResultMember), locale)));
+	parts.push(
+		emptyLine(),
+		horizontalRule(),
+		emptyLine(),
+		heading(i18next.t('formatters.anti_raid_nuke.raw_data.title', { lng: locale }), 2),
+		i18next.t('formatters.anti_raid_nuke.raw_data.description', { lng: locale }),
+		emptyLine(),
+		codeBlock('ansi', formatAntiRaidResultsToAttachment(result.sort(sortByResultMember), locale)),
+	);
 
 	return parts.join('\n');
 }

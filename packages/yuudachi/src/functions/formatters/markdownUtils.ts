@@ -7,7 +7,7 @@ export function checkbox(text: string, checked = false) {
 }
 
 export function list(items: string[], ordered = false) {
-	return items.map((item, i) => `${ordered ? `${i + 1}.` : '-'} ${item}`).join('\n');
+	return items.map((item) => `${ordered ? '1.' : '-'} ${item}`).join('\n');
 }
 
 export function table(headers: string[], rows: string[][]) {

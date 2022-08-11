@@ -154,8 +154,7 @@
 						"formatted": "Formatted report"
 					},
 					"cancel": "Canceled Anti-Raid-Nuke.",
-					"success": "Anti-Raid-Nuke hit `{{count}}` member.",
-					"timeout": "Anti-Raid-Nuke timed out."
+					"success": "Anti-Raid-Nuke hit `{{count}}` member."
 				},
 				"filter": {
 					"errors": {
@@ -379,7 +378,8 @@
 				"parameters": {
 					"cutoff": "**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}"
 				},
-				"report_link": "**Report:** [`Beam me up, Yuu`]({{- message_link}})",
+				"report": "**Report:** {{- link}}",
+				"report_sub": "Beam me up, Yuu",
 				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
@@ -453,7 +453,7 @@
 		},
 		"general_log": {
 			"anti_raid_nuke": {
-				"pending": "The report for the anti-raid-nuke is being processed",
+				"pending": "The report for the Anti-Raid-Nuke is being processed...",
 				"title": "Anti-Raid-Nuke launched",
 				"title_dryrun": "Anti-Raid-Nuke dry run",
 				"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"

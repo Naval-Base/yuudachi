@@ -12,7 +12,6 @@ import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 export interface AntiRaidNukeResult {
 	member: GuildMember;
 	success: boolean;
-	case?: Case;
 	error?: string | undefined;
 }
 
@@ -82,10 +81,9 @@ export async function blastOff(
 					action: CaseAction.Ban,
 					multi: true,
 				}),
-				true,
 			)
 				.then((case_) => {
-					result.push({ member, success: true, case: case_ });
+					result.push({ member, success: true });
 					return case_;
 				})
 				.catch((error: Error) => {
@@ -96,8 +94,12 @@ export async function blastOff(
 		);
 	}
 
-	await Promise.all(promises);
+	const resolvedCases = await Promise.all(promises);
+	const cases = resolvedCases.filter(Boolean) as Case[];
 	await redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 5);
 
-	return result;
+	return {
+		result,
+		cases,
+	} as const;
 }
