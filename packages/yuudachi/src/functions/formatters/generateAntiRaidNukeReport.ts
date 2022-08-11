@@ -69,7 +69,7 @@ export async function generateAntiRaidNukeReport(
 	const parts = [];
 
 	parts.push(
-		heading(i18next.t('formatters.anti_raid_nuke.title', { lng: locale, guild: guild.name }), 1),
+		heading(i18next.t('formatters.anti_raid_nuke.title', { guild: guild.name, lng: locale }), 1),
 		heading(i18next.t('formatters.anti_raid_nuke.summary.title', { lng: locale }), 2),
 		list([
 			i18next.t('formatters.anti_raid_nuke.summary.mode', { mode: args.mode, lng: locale }),
@@ -140,7 +140,7 @@ export async function generateAntiRaidNukeReport(
 		);
 	}
 
-	if (typeof args.zalgo === 'boolean') {
+	if (args.zalgo) {
 		parts.push(heading(i18next.t('formatters.anti_raid_nuke.parameters.zalgo', { lng: locale }), 4));
 	}
 
@@ -185,17 +185,15 @@ export async function generateAntiRaidNukeReport(
 		);
 	}
 
-	if (args.days) {
-		parts.push(
-			heading(
-				i18next.t('formatters.anti_raid_nuke.parameters.days', {
-					count: args.days,
-					lng: locale,
-				}),
-				4,
-			),
-		);
-	}
+	parts.push(
+		heading(
+			i18next.t('formatters.anti_raid_nuke.parameters.days', {
+				count: args.days,
+				lng: locale,
+			}),
+			4,
+		),
+	);
 
 	if (args.file) {
 		parts.push(
@@ -225,11 +223,16 @@ export async function generateAntiRaidNukeReport(
 	parts.push(
 		list([
 			cases.length
-				? i18next.t('formatters.anti_raid_nuke.cases.range', { from, to, lng: locale })
+				? cases.length === 1
+					? i18next.t('formatters.anti_raid_nuke.cases.single', { case_id: from, lng: locale })
+					: i18next.t('formatters.anti_raid_nuke.cases.range', { from, to, lng: locale })
 				: i18next.t('formatters.anti_raid_nuke.cases.none', { lng: locale }),
 			args.logMessageUrl
 				? i18next.t('formatters.anti_raid_nuke.cases.log_message', {
-						message: args.logMessageUrl,
+						link: hyperlink(
+							i18next.t('formatters.anti_raid_nuke.cases.log_message_sub', { lng: locale }),
+							args.logMessageUrl,
+						),
 						lng: locale,
 				  })
 				: i18next.t('formatters.anti_raid_nuke.cases.log_message_none', {

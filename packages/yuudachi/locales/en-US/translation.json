@@ -523,10 +523,12 @@
 			},
 			"cases": {
 				"title": "**Cases**",
+				"single": "Case `#{{case_id}}`",
 				"range": "From case `#{{from}}` to case `#{{to}}`",
-				"none": "No case created for this Nuke",
-				"log_message": "**Log message:** [Beam me up, Yuu]({{- message}})",
-				"log_message_none": "**Log message:** `No log message created`"
+				"none": "No case created for this blast",
+				"log_message": "**Log message:** {{- link}}",
+				"log_message_sub": "Beam me up, Yuu",
+				"log_message_none": "**Log message:** No log message created"
 			},
 			"successes": {
 				"title": "**Successes**",
