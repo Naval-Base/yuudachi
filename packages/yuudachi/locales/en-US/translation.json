@@ -461,7 +461,7 @@
 	},
 	"formatters": {
 		"formatting": {
-			"guildmember": "{{-id}}| Joined: {{-join}} | Created: {{-creation}} | {{-tag}}"
+			"guild_member": "{{- id}}| Joined: {{- join}} | Created: {{- creation}} | {{- tag}}"
 		},
 		"anti_raid_nuke": {
 			"title": "Anti-Raid-Nuke report for {{guild}}",

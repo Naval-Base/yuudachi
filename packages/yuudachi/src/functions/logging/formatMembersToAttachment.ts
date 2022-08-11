@@ -9,7 +9,7 @@ export function formatMemberSummary(member: GuildMember, locale: string, success
 	const memberAge = Date.now() - member.user.createdTimestamp;
 	const joinAge = Date.now() - member.joinedTimestamp!;
 
-	return i18next.t('formatters.formatting.guildmember', {
+	return i18next.t('formatters.formatting.guild_member', {
 		id: colorBasedOnBoolean(success, member.user.id.padEnd(19, ' ')),
 		join: colorBasedOnDifference(joinAge, dayjs(member.joinedTimestamp).format(DATE_FORMAT_WITH_SECONDS)),
 		creation: colorBasedOnDifference(memberAge, dayjs(member.user.createdTimestamp).format(DATE_FORMAT_WITH_SECONDS)),
