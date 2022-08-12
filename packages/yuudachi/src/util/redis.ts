@@ -3,12 +3,9 @@ import { default as Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { kRedis } from '../tokens.js';
 
-export function createRedis(register = true) {
-	const redis = new Redis(process.env.REDISHOST!);
-
-	if (register) {
-		container.register(kRedis, { useValue: redis });
-	}
+export function createRedis() {
+	const redis = new Redis(process.env.REDISHOST!, { maxRetriesPerRequest: null });
+	container.register(kRedis, { useValue: redis });
 
 	return redis;
 }
