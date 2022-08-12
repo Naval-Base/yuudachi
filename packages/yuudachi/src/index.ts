@@ -14,7 +14,6 @@ import { scamDomainRequestHeaders } from './functions/anti-scam/refreshScamDomai
 import type { CommandPayload } from './interactions/ArgumentsOf.js';
 import { logger } from './logger.js';
 import { kCommands, kRedis } from './tokens.js';
-import { createBree } from './util/bree.js';
 import { createClient } from './util/client.js';
 import { createCommands } from './util/commands.js';
 import { dynamicImport } from './util/dynamicImport.js';
@@ -25,7 +24,6 @@ import { WebSocketConnection } from './websocket/WebSocketConnection.js';
 
 createPostgres();
 createRedis();
-createBree();
 
 const client = createClient({
 	intents: [
