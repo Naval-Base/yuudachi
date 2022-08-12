@@ -490,15 +490,16 @@
 				"avatar": "**Matching avatar:** `{{avatar}}`",
 				"pattern": {
 					"title": "**Pattern:** `{{- pattern}}`",
-					"confusables": {
-						"title": "Pattern confusables mode: `$t(formatters.anti_raid_nuke.parameters.pattern.confusables.{{mode}})`",
-						"0": "Disabled",
-						"1": "Pattern resistance only",
-						"2": "Filtering members only",
-						"3": "Filtering members and pattern resistance"
-					},
+					"confusables": "Pattern confusables mode: `$t(formatters.anti_raid_nuke.parameters.confusables.{{mode}})`",
 					"insensitive": "Pattern is case-insensitive",
 					"full_match": "Pattern is restricted to full matches"
+				},
+				"confusables": {
+					"title": "Confusables mode: `$t(formatters.anti_raid_nuke.parameters.confusables.{{mode}})`",
+					"0": "Disabled",
+					"1": "Pattern resistance only",
+					"2": "Filtering members only",
+					"3": "Filtering members and pattern resistance"
 				},
 				"created": {
 					"title": "**Creation range:**",

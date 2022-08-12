@@ -1,6 +1,6 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { codeBlock, type Guild, hyperlink, type User, Snowflake } from 'discord.js';
+import { codeBlock, type Guild, hyperlink, type User, type Snowflake, type Attachment } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -8,6 +8,7 @@ import { blockquote, checkbox, emptyLine, heading, horizontalRule, list, table }
 import type { ArgsParam } from '../../Command.js';
 import { DATE_FORMAT_WITH_SECONDS } from '../../Constants.js';
 import type { AntiRaidNukeMode } from '../../commands/moderation/sub/anti-raid-nuke/coreCommand.js';
+import { Confusables } from '../../commands/moderation/sub/anti-raid-nuke/filter.js';
 import type { AntiRaidNukeCommand } from '../../interactions/index.js';
 import { kSQL } from '../../tokens.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
@@ -19,7 +20,8 @@ export type AntiRaidNukeArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'
 	ArgsParam<typeof AntiRaidNukeCommand>['filter'] &
 	ArgsParam<typeof AntiRaidNukeCommand>['modal'];
 
-export type FormatterArgs = Partial<AntiRaidNukeArgsUnion> & {
+export type FormatterArgs = Omit<AntiRaidNukeArgsUnion, 'file'> & {
+	file?: Attachment | undefined;
 	mode: AntiRaidNukeMode;
 	timeTaken: number;
 	dryRun: boolean;
@@ -100,8 +102,8 @@ export async function generateAntiRaidNukeReport(
 		heading(i18next.t('formatters.anti_raid_nuke.results.title', { lng: locale }), 2),
 		i18next.t('formatters.anti_raid_nuke.results.total', { count: result.length, lng: locale }),
 		list([
-			i18next.t('formatters.anti_raid_nuke.results.failed', {
-				count: failedResults.length,
+			i18next.t('formatters.anti_raid_nuke.results.banned', {
+				count: successResults.length,
 				lng: locale,
 			}),
 			i18next.t('formatters.anti_raid_nuke.results.failed', {
@@ -109,6 +111,7 @@ export async function generateAntiRaidNukeReport(
 				lng: locale,
 			}),
 		]),
+		emptyLine(),
 		i18next.t('formatters.anti_raid_nuke.results.ratio', {
 			ratio,
 			lng: locale,
@@ -125,24 +128,39 @@ export async function generateAntiRaidNukeReport(
 	}
 
 	if (args.pattern) {
+		const confusables =
+			args.confusables === Confusables.OnlyPattern || args.confusables === Confusables.PatternAndMembers;
 		parts.push(
 			heading(
 				i18next.t('formatters.anti_raid_nuke.parameters.pattern.title', { pattern: args.pattern, lng: locale }),
 				4,
 			),
-			typeof args.confusables === 'number' &&
+			confusables &&
 				checkbox(
-					i18next.t('formatters.anti_raid_nuke.parameters.pattern.confusables.title', {
+					i18next.t('formatters.anti_raid_nuke.parameters.pattern.confusables', {
 						mode: args.confusables,
 						lng: locale,
 					}),
-					typeof args.confusables === 'number',
+					confusables,
 				),
 			checkbox(
 				i18next.t('formatters.anti_raid_nuke.parameters.pattern.insensitive', { lng: locale }),
 				args.insensitive,
 			),
 			checkbox(i18next.t('formatters.anti_raid_nuke.parameters.pattern.full_match', { lng: locale }), args.full_match),
+		);
+	}
+
+	if (
+		args.confusables === Confusables.Off ||
+		args.confusables === Confusables.OnlyMembers ||
+		args.confusables === Confusables.PatternAndMembers
+	) {
+		parts.push(
+			heading(
+				i18next.t('formatters.anti_raid_nuke.parameters.confusables.title', { mode: args.confusables, lng: locale }),
+				4,
+			),
 		);
 	}
 

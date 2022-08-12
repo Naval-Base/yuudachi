@@ -13,6 +13,7 @@ import {
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
+import type { ArgsParam } from '../../../../Command.js';
 import { DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
@@ -26,6 +27,7 @@ import {
 	upsertAntiRaidArchiveLog,
 	upsertAntiRaidArchivePendingLog,
 } from '../../../../functions/logging/upsertAntiRaidArchiveLog.js';
+import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
@@ -220,6 +222,7 @@ export async function handleAntiRaidNuke(
 			cases,
 			{
 				...args,
+				days: pruneDays as ArgsParam<typeof AntiRaidNukeCommand>['filter']['days'],
 				dryRun: dryRunMode,
 				mode,
 				timeTaken,
