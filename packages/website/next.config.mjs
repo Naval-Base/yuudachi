@@ -3,7 +3,7 @@ const { REPORT_URL } = process.env;
 /**
  * @type {import('next').NextConfig}
  */
-module.exports = {
+export default {
 	reactStrictMode: true,
 	swcMinify: true,
 	eslint: {
