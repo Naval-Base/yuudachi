@@ -1,3 +1,5 @@
+const { REPORT_URL } = process.env;
+
 /**
  * @type {import('next').NextConfig}
  */
@@ -27,12 +29,12 @@ module.exports = {
 			{
 				source: '/report',
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-				destination: `${process.env.REPORT_URL}/report`,
+				destination: `${REPORT_URL}/report`,
 			},
 			{
 				source: '/report/:path*',
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-				destination: `${process.env.REPORT_URL}/report/:path*`,
+				destination: `${REPORT_URL}/report/:path*`,
 			},
 		];
 	},
