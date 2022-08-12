@@ -374,7 +374,7 @@
 				"footer": "Case {{case_id}}"
 			},
 			"anti_raid_nuke": {
-				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{reason}}\n**Hit count:** {{count}}",
+				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{- reason}}\n**Hit count:** {{count}}",
 				"parameters": {
 					"cutoff": "**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}"
 				},
@@ -451,13 +451,11 @@
 				"time": "• Timespan: {{time}}"
 			}
 		},
-		"general_log": {
-			"anti_raid_nuke": {
-				"pending": "The report for the Anti-Raid-Nuke is being processed...",
-				"title": "Anti-Raid-Nuke launched",
-				"title_dryrun": "Anti-Raid-Nuke dry run",
-				"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
-			}
+		"anti_raid_nuke": {
+			"pending": "The report for the Anti-Raid-Nuke is being processed...",
+			"title": "Anti-Raid-Nuke launched",
+			"title_dryrun": "Anti-Raid-Nuke dry run",
+			"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
 		}
 	},
 	"formatters": {
@@ -468,13 +466,13 @@
 			"title": "Anti-Raid-Nuke report for {{guild}}",
 			"summary": {
 				"title": "**Summary**",
-				"mode": "**Mode:** {{- mode}}",
-				"current_time": "**Current time:** {{- current_time}}",
-				"time_taken": "**Time taken:** {{- time_taken}}",
+				"mode": "**Mode:** `{{mode}}`",
+				"current_time": "**Current time:** `{{- current_time}}`",
+				"time_taken": "**Time taken:** `{{time_taken}}`",
 				"moderator": "**Moderator:** `{{- moderator}}`",
-				"reason": "**Reason:** {{- reason}}",
-				"dry_run": "**Operated in dry-run mode**",
-				"blast_mode": "**Operated in blast mode**"
+				"reason": "**Reason:** `{{- reason}}`",
+				"dry_run": "**Operated in `dry-run` mode**",
+				"blast_mode": "**Operated in `BLAST` mode**"
 			},
 			"results": {
 				"title": "**Results**",

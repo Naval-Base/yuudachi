@@ -84,7 +84,7 @@ export async function generateAntiRaidNukeReport(
 				time_taken: ms(Number(args.timeTaken.toFixed(2))),
 				lng: locale,
 			}),
-			i18next.t('formatters.anti_raid_nuke.summary.moderator', { moderator: user.tag, lng: locale }),
+			i18next.t('formatters.anti_raid_nuke.summary.moderator', { moderator: `${user.tag} (${user.id})`, lng: locale }),
 			i18next.t('formatters.anti_raid_nuke.summary.reason', {
 				reason: paramOrNone(args.reason, locale),
 				lng: locale,

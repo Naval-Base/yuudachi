@@ -19,7 +19,7 @@ export async function upsertAntiRaidArchivePendingLog(guild: Guild) {
 		await getGuildSetting(guild.id, SettingsKeys.AntiRaidNukeArchiveChannelId),
 	);
 
-	return archiveChannel!.send(i18next.t('log.general_log.anti_raid_nuke.pending', { lng: locale }));
+	return archiveChannel!.send(i18next.t('log.anti_raid_nuke.pending', { lng: locale }));
 }
 
 export async function upsertAntiRaidArchiveLog(
