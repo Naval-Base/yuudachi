@@ -36,8 +36,10 @@ export const getServerSideProps = async (context: Parameters<GetServerSideProps>
 
 export default function ReportRoute({ source }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	return (
-		<div className="markdown-body">
-			<MDXRemote {...source} />
-		</div>
+		<>
+			<div className="markdown-body">
+				<MDXRemote {...source} />
+			</div>
+		</>
 	);
 }

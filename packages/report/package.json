@@ -1,16 +1,13 @@
 {
-	"name": "@yuudachi/website",
+	"name": "@yuudachi/report",
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
 		"test": "vitest run",
 		"build": "yarn build:css && yarn build:next",
 		"build:next": "next build",
-		"build:css": "yarn generate:css",
-		"dev": "concurrently 'yarn dev:css' 'yarn dev:next'",
+		"dev": "yarn dev:next",
 		"dev:next": "next dev",
-		"dev:css": "yarn generate:css --watch",
-		"generate:css": "unocss 'src/**/*.tsx' --out-file ./src/styles/unocss.css",
 		"lint": "prettier --check . && eslint src --ext mjs,js,ts,tsx",
 		"format": "prettier --write . && eslint src --ext mjs,js,ts,tsx --fix",
 		"fmt": "yarn format"
@@ -52,11 +49,9 @@
 		"@types/node": "^18.7.1",
 		"@types/react-dom": "^18.0.6",
 		"@unocss/cli": "^0.45.5",
-		"@unocss/preset-web-fonts": "^0.45.5",
 		"@unocss/reset": "^0.45.5",
 		"@vercel/node": "^2.5.7",
 		"c8": "^7.12.0",
-		"concurrently": "^7.3.0",
 		"cypress": "^10.4.0",
 		"eslint": "^8.21.0",
 		"happy-dom": "^6.0.4",
@@ -65,7 +60,6 @@
 		"prettier": "^2.7.1",
 		"sass": "^1.54.4",
 		"typescript": "^4.7.4",
-		"unocss": "^0.45.5",
 		"vitest": "^0.21.1"
 	},
 	"engines": {

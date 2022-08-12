@@ -17,4 +17,23 @@ module.exports = {
 		dangerouslyAllowSVG: true,
 		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 	},
+	// eslint-disable-next-line @typescript-eslint/require-await
+	async rewrites() {
+		return [
+			{
+				source: '/:path*',
+				destination: `/:path*`,
+			},
+			{
+				source: '/report',
+				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+				destination: `${process.env.REPORT_URL}/report`,
+			},
+			{
+				source: '/report/:path*',
+				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+				destination: `${process.env.REPORT_URL}/report/:path*`,
+			},
+		];
+	},
 };

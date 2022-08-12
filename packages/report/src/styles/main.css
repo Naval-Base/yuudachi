@@ -15,10 +15,29 @@ body {
 	font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
+body {
+	box-sizing: border-box;
+	min-width: 200px;
+	max-width: 980px;
+	margin: 0 auto;
+	padding: 45px;
+	background-color: #0d1117;
+}
+
+@media (max-width: 767px) {
+	body {
+		padding: 15px;
+	}
+}
+
 pre {
 	font-family: 'JetBrains Mono';
 }
 
 code {
 	font-family: 'JetBrains Mono';
+}
+
+pre code.hljs {
+	padding: 0 !important;
 }

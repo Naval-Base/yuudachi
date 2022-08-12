@@ -614,6 +614,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@primer/css@npm:^20.4.2":
+  version: 20.4.2
+  resolution: "@primer/css@npm:20.4.2"
+  dependencies:
+    "@primer/primitives": ^7.9.0
+  checksum: 50a1280b3065e087ed2aefefa7b37088b64fa320b92c09fb2a16322ad23e88828a58f2223ccaad72a24bb4abd976c8d83a862e5660be9c75dcdd61d8371ffaab
+  languageName: node
+  linkType: hard
+
+"@primer/primitives@npm:^7.9.0":
+  version: 7.9.0
+  resolution: "@primer/primitives@npm:7.9.0"
+  checksum: 8e076b26975ec7fdeea211c62c5135eb8fc16dee319a61047654bbabcdfd7f13d5683355498b7f62bc81b9bf5ae71efc6af355c1aa6c416bf43ec7184c2c53c3
+  languageName: node
+  linkType: hard
+
 "@redis/bloom@npm:1.0.2":
   version: 1.0.2
   resolution: "@redis/bloom@npm:1.0.2"
@@ -1679,10 +1695,59 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@yuudachi/report@workspace:packages/report":
+  version: 0.0.0-use.local
+  resolution: "@yuudachi/report@workspace:packages/report"
+  dependencies:
+    "@primer/css": ^20.4.2
+    "@testing-library/cypress": ^8.0.3
+    "@testing-library/dom": ^8.17.1
+    "@testing-library/jest-dom": ^5.16.5
+    "@testing-library/react": ^13.3.0
+    "@testing-library/user-event": ^14.4.3
+    "@types/node": ^18.7.1
+    "@types/react-dom": ^18.0.6
+    "@unocss/cli": ^0.45.5
+    "@unocss/reset": ^0.45.5
+    "@vercel/node": ^2.5.7
+    ansi-to-html: ^0.7.2
+    c8: ^7.12.0
+    cypress: ^10.4.0
+    eslint: ^8.21.0
+    happy-dom: ^6.0.4
+    hast-util-has-property: ^2.0.0
+    hast-util-is-element: ^2.1.2
+    hast-util-select: ^5.0.2
+    hast-util-to-string: ^2.0.0
+    hastscript: ^7.0.2
+    mdast: ^3.0.0
+    msw: ^0.44.2
+    next: ^12.2.4
+    next-mdx-remote: ^4.1.0
+    prettier: ^2.7.1
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    rehype-highlight: ^5.0.2
+    rehype-ignore: ^1.0.1
+    rehype-parse: ^8.0.4
+    rehype-raw: ^6.1.1
+    rehype-slug: ^5.0.1
+    remark-gfm: ^3.0.1
+    sass: ^1.54.4
+    sharp: ^0.30.7
+    typescript: ^4.7.4
+    undici: ^5.8.2
+    unified: ^10.1.2
+    unist-util-visit: ^4.1.0
+    vitest: ^0.21.1
+  languageName: unknown
+  linkType: soft
+
 "@yuudachi/website@workspace:packages/website":
   version: 0.0.0-use.local
   resolution: "@yuudachi/website@workspace:packages/website"
   dependencies:
+    "@primer/css": ^20.4.2
     "@testing-library/cypress": ^8.0.3
     "@testing-library/dom": ^8.17.1
     "@testing-library/jest-dom": ^5.16.5
@@ -1718,6 +1783,7 @@ __metadata:
     rehype-raw: ^6.1.1
     rehype-slug: ^5.0.1
     remark-gfm: ^3.0.1
+    sass: ^1.54.4
     sharp: ^0.30.7
     typescript: ^4.7.4
     undici: ^5.8.2
@@ -2589,7 +2655,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.4.2, chokidar@npm:^3.5.3":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.2, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -5651,6 +5717,13 @@ __metadata:
   version: 5.2.0
   resolution: "ignore@npm:5.2.0"
   checksum: 6b1f926792d614f64c6c83da3a1f9c83f6196c2839aa41e1e32dd7b8d174cef2e329d75caabb62cb61ce9dc432f75e67d07d122a037312db7caa73166a1bdb77
+  languageName: node
+  linkType: hard
+
+"immutable@npm:^4.0.0":
+  version: 4.1.0
+  resolution: "immutable@npm:4.1.0"
+  checksum: b9bc1f14fb18eb382d48339c064b24a1f97ae4cf43102e0906c0a6e186a27afcd18b55ca4a0b63c98eefb58143e2b5ebc7755a5fb4da4a7ad84b7a6096ac5b13
   languageName: node
   linkType: hard
 
@@ -9662,6 +9735,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sass@npm:^1.54.4":
+  version: 1.54.4
+  resolution: "sass@npm:1.54.4"
+  dependencies:
+    chokidar: ">=3.0.0 <4.0.0"
+    immutable: ^4.0.0
+    source-map-js: ">=0.6.2 <2.0.0"
+  bin:
+    sass: sass.js
+  checksum: bb6aead09764de450a02b9a66e4ee538f0ba6bc8f2fc3905c71b2c302b5f47e089b510b86cfa7ef2d4139c210c8abf99fe157e7a5bd356c057f10d29e6c4b44c
+  languageName: node
+  linkType: hard
+
 "scheduler@npm:^0.23.0":
   version: 0.23.0
   resolution: "scheduler@npm:0.23.0"
@@ -9902,7 +9988,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.1, source-map-js@npm:^1.0.2":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.0.1, source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c
