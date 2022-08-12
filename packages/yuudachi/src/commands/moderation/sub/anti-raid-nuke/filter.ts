@@ -17,7 +17,7 @@ import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
 import { resolveTimestamp } from '../../../../util/timestamp.js';
 
-enum Confusables {
+export enum Confusables {
 	Off,
 	OnlyPattern,
 	OnlyMembers,
