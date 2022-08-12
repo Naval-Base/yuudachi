@@ -13,6 +13,7 @@ import { kSQL } from '../../tokens.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 import type { Case } from '../cases/createCase.js';
 import { formatAntiRaidResultsToAttachment } from '../logging/formatMembersToAttachment.js';
+import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export type AntiRaidNukeArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'] &
 	ArgsParam<typeof AntiRaidNukeCommand>['filter'] &
@@ -62,9 +63,9 @@ export async function generateAntiRaidNukeReport(
 	result: AntiRaidNukeResult[],
 	cases: Case[],
 	args: FormatterArgs,
-	locale: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
+	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 
 	const parts = [];
 

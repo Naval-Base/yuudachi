@@ -23,8 +23,8 @@ import {
 } from '../../../../functions/logging/formatMembersToAttachment.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import {
-	upsertAntiRaidNukeReport,
-	upsertAntiRaidNukePending,
+	upsertAntiRaidArchiveLog,
+	upsertAntiRaidArchivePendingLog,
 } from '../../../../functions/logging/upsertAntiRaidArchiveLog.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
@@ -86,6 +86,7 @@ export async function handleAntiRaidNuke(
 	locale: string,
 ) {
 	const pruneDays = Math.min(Math.max(Number(args.days ?? 1), 0), 7);
+
 	const prefixedParameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', { lng: locale }),
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.days', {
@@ -192,26 +193,7 @@ export async function handleAntiRaidNuke(
 
 		const timeTaken = performance.now() - start;
 
-		const pendingArchiveMessage = await upsertAntiRaidNukePending(interaction.guild);
-
-		const archiveMessage = await upsertAntiRaidNukeReport(
-			collectedInteraction.guild,
-			collectedInteraction.user,
-			pendingArchiveMessage,
-			result,
-			cases,
-			{
-				...args,
-				dryRun: dryRunMode,
-				mode,
-				timeTaken,
-				created_after: parseDate(args.created_after),
-				created_before: parseDate(args.created_before),
-				join_after: parseDate(args.join_after),
-				join_before: parseDate(args.join_before),
-				pattern: args.pattern ? parseRegex(args.pattern, args.insensitive, args.full_match)?.toString() : undefined,
-			},
-		);
+		const pendingArchiveMessage = await upsertAntiRaidArchivePendingLog(interaction.guild);
 
 		let caseMessage: Message | null = null;
 		if (!dryRunMode && cases.length) {
@@ -224,16 +206,16 @@ export async function handleAntiRaidNuke(
 						count: cases.length,
 						lng: locale,
 					}),
-				archiveMessage.url,
+				pendingArchiveMessage.url,
 			);
 		}
 
 		const membersHitDate = dayjs().format(DATE_FORMAT_LOGFILE);
 
-		const logMessage = await upsertAntiRaidNukeReport(
+		const logMessage = await upsertAntiRaidArchiveLog(
 			collectedInteraction.guild,
 			collectedInteraction.user,
-			archiveMessage,
+			pendingArchiveMessage,
 			result,
 			cases,
 			{

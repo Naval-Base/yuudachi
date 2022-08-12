@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import { Color } from '../../Constants.js';
 import { addFields } from '../../util/embed.js';
 
-export function generateAntiRaidNukeReportEmbed(hitCount: number, user: User, locale: string, dryRun = false) {
+export function generateAntiRaidNukeEmbed(hitCount: number, user: User, dryRun = false, locale: string) {
 	return addFields({
 		title: dryRun
 			? i18next.t('log.general_log.anti_raid_nuke.title_dryrun', { lng: locale })

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { ButtonStyle, ComponentType, Message, type Guild, type User } from 'discord.js';
 import i18next from 'i18next';
-import { generateAntiRaidNukeReportEmbed } from './generateAntiRaidNukeReportEmbed.js';
+import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
@@ -11,33 +11,29 @@ import { generateFormatterUrl } from '../formatters/generateFormatterUrl.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function upsertAntiRaidNukePending(guild: Guild) {
+export async function upsertAntiRaidArchivePendingLog(guild: Guild) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-	const archiveChannel = await checkLogChannel(
+	const archiveChannel = checkLogChannel(
 		guild,
 		await getGuildSetting(guild.id, SettingsKeys.AntiRaidNukeArchiveChannelId),
 	);
 
-	if (!archiveChannel) {
-		throw new Error(i18next.t('common.errors.no_anti_raid_archive_channel', { lng: locale }));
-	}
-
-	return archiveChannel.send(i18next.t('log.general_log.anti_raid_nuke.pending', { lng: locale }));
+	return archiveChannel!.send(i18next.t('log.general_log.anti_raid_nuke.pending', { lng: locale }));
 }
 
-export async function upsertAntiRaidNukeReport(
+export async function upsertAntiRaidArchiveLog(
 	guild: Guild,
 	user: User,
 	message: Message,
-	report: AntiRaidNukeResult[],
+	result: AntiRaidNukeResult[],
 	cases: Case[],
 	args: FormatterArgs,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 
-	const embed = generateAntiRaidNukeReportEmbed(report.filter((r) => r.success).length, user, locale, args.dryRun);
+	const embed = generateAntiRaidNukeEmbed(result.filter((r) => r.success).length, user, args.dryRun, locale);
 
-	const markdown = await generateAntiRaidNukeReport(guild, user, report, cases, args, locale);
+	const report = await generateAntiRaidNukeReport(guild, user, result, cases, args);
 
 	const msg = await message.edit({
 		content: null,
@@ -45,7 +41,7 @@ export async function upsertAntiRaidNukeReport(
 		files: [
 			{
 				name: `${dayjs().format(DATE_FORMAT_LOGFILE)}-anti-raid-nuke-report.md`,
-				attachment: Buffer.from(markdown, 'utf8'),
+				attachment: Buffer.from(report, 'utf8'),
 			},
 		],
 	});
