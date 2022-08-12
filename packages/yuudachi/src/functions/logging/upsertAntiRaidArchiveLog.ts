@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { ButtonStyle, ComponentType, Message, type Guild, type User } from 'discord.js';
+import { ButtonStyle, ComponentType, type Message, type Guild, type User } from 'discord.js';
 import i18next from 'i18next';
 import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
