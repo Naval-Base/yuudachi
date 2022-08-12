@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-import { ButtonStyle, ComponentType, type Message, type Guild, type User } from 'discord.js';
+import { ButtonStyle, type Message, type Guild, type User } from 'discord.js';
 import i18next from 'i18next';
 import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import { createButton } from '../../util/button.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
 import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 import type { Case } from '../cases/createCase.js';
@@ -55,12 +56,11 @@ export async function upsertAntiRaidArchiveLog(
 	return msg.edit({
 		components: [
 			createMessageActionRow([
-				{
-					type: ComponentType.Button,
+				createButton({
+					label: i18next.t('command.mod.anti_raid_nuke.common.buttons.formatted', { lng: locale }),
 					style: ButtonStyle.Link,
 					url: generateFormatterUrl(attachment.url),
-					label: i18next.t('command.mod.anti_raid_nuke.common.buttons.formatted', { lng: locale }),
-				},
+				}),
 			]),
 		],
 	});

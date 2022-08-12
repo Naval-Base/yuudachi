@@ -85,13 +85,13 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 		const cancelKey = nanoid();
 
 		const clearButton = createButton({
-			customId: clearKey,
 			label: i18next.t('command.mod.clear.buttons.execute', { count: messages.size, lng: locale }),
+			customId: clearKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

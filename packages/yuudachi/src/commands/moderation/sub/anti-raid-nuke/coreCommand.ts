@@ -109,18 +109,18 @@ export async function handleAntiRaidNuke(
 	const dryRunKey = nanoid();
 
 	const banButton = createButton({
-		customId: banKey,
 		label: i18next.t('command.mod.anti_raid_nuke.common.buttons.execute', { lng: locale }),
+		customId: banKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		customId: cancelKey,
 		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 	const dryRunButton = createButton({
-		customId: dryRunKey,
 		label: i18next.t('command.mod.anti_raid_nuke.common.buttons.dry_run', { lng: locale }),
+		customId: dryRunKey,
 		style: ButtonStyle.Primary,
 	});
 
