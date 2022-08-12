@@ -48,13 +48,13 @@ export default class extends Command<typeof WarnCommand> {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		const warnButton = createButton({
-			customId: warnKey,
 			label: i18next.t('command.mod.warn.buttons.execute', { lng: locale }),
+			customId: warnKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

@@ -72,13 +72,13 @@ export default class extends Command<typeof BanCommand> {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		const banButton = createButton({
-			customId: banKey,
 			label: i18next.t('command.mod.ban.buttons.execute', { lng: locale }),
+			customId: banKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

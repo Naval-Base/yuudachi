@@ -45,13 +45,13 @@ export default class extends Command<typeof SponsorCommand | typeof SponsorUserC
 		const cancelKey = nanoid();
 
 		const roleButton = createButton({
-			customId: sponsorKey,
 			label: i18next.t('command.utility.sponsor.buttons.execute', { lng: locale }),
+			customId: sponsorKey,
 			style: ButtonStyle.Success,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

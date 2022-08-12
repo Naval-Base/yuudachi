@@ -50,13 +50,13 @@ export async function lock(
 	const cancelKey = nanoid();
 
 	const lockButton = createButton({
-		customId: lockKey,
 		label: i18next.t('command.mod.lockdown.lock.buttons.execute', { lng: locale }),
+		customId: lockKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		customId: cancelKey,
 		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 

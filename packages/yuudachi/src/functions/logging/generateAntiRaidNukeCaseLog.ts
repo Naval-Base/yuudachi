@@ -1,4 +1,4 @@
-import { type Snowflake, time, TimestampStyles } from 'discord.js';
+import { type Snowflake, time, TimestampStyles, hyperlink } from 'discord.js';
 import i18next from 'i18next';
 import type { Case } from '../cases/createCase.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
@@ -30,7 +30,12 @@ export async function generateAntiRaidNukeCaseLog(
 	}
 
 	if (messageUrl) {
-		msg.push(i18next.t('log.mod_log.anti_raid_nuke.report_link', { message_link: messageUrl, lng: locale }));
+		msg.push(
+			i18next.t('log.mod_log.anti_raid_nuke.report', {
+				link: hyperlink(i18next.t('log.mod_log.anti_raid_nuke.report_sub', { lng: locale }), messageUrl),
+				lng: locale,
+			}),
+		);
 	}
 
 	return msg.join('\n');

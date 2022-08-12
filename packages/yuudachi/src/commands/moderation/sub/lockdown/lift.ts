@@ -29,13 +29,13 @@ export async function lift(
 	const cancelKey = nanoid();
 
 	const unlockButton = createButton({
-		customId: unlockKey,
 		label: i18next.t('command.mod.lockdown.lift.buttons.execute', { lng: locale }),
+		customId: unlockKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		customId: cancelKey,
 		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 

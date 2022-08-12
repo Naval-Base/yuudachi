@@ -55,13 +55,13 @@ export async function unrole(
 	const cancelKey = nanoid();
 
 	const roleButton = createButton({
-		customId: unroleKey,
 		label: i18next.t('command.mod.restrict.unrole.buttons.execute', { lng: locale }),
+		customId: unroleKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		customId: cancelKey,
 		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 

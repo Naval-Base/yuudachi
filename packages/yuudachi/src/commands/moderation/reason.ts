@@ -55,13 +55,13 @@ export default class extends Command<typeof ReasonCommand> {
 			const cancelKey = nanoid();
 
 			const changeButton = createButton({
-				customId: changeKey,
 				label: i18next.t('command.mod.reason.buttons.execute', { lng: locale }),
+				customId: changeKey,
 				style: ButtonStyle.Danger,
 			});
 			const cancelButton = createButton({
-				customId: cancelKey,
 				label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+				customId: cancelKey,
 				style: ButtonStyle.Secondary,
 			});
 

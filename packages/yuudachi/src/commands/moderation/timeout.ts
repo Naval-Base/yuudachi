@@ -79,13 +79,13 @@ export default class extends Command<typeof TimeoutCommand> {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		const timeoutButton = createButton({
-			customId: timeoutKey,
 			label: i18next.t('command.mod.timeout.buttons.execute', { lng: locale }),
+			customId: timeoutKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

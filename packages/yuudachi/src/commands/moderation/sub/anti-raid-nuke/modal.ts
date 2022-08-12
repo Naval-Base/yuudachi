@@ -1,7 +1,7 @@
 import { ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import { handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
@@ -78,5 +78,5 @@ export async function modal(
 		}),
 	];
 
-	await handleAntiRaidNuke(modalInteraction, validMembers, locale, parameterStrings, args.reason, args.days);
+	await handleAntiRaidNuke(modalInteraction, validMembers, AntiRaidNukeMode.Modal, parameterStrings, args, locale);
 }

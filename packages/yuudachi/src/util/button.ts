@@ -1,21 +1,39 @@
-import { type APIButtonComponent, ButtonStyle, ComponentType } from 'discord-api-types/v10';
+import {
+	type APIButtonComponent,
+	ButtonStyle,
+	ComponentType,
+	type APIButtonComponentBase,
+} from 'discord-api-types/v10';
 
 export function createButton({
-	customId,
 	label,
+	customId,
 	style,
+	url,
 	disabled,
 }: {
-	customId: string;
 	label: string;
-	style?: number | undefined;
+	customId?: string | undefined;
+	style?: ButtonStyle | undefined;
+	url?: string | undefined;
 	disabled?: boolean | undefined;
 }): APIButtonComponent {
-	return {
+	const button: APIButtonComponentBase<any> = {
 		type: ComponentType.Button,
-		custom_id: customId,
 		label,
 		style: style ?? ButtonStyle.Primary,
 		disabled,
-	} as const;
+	};
+
+	if (style === ButtonStyle.Link && url) {
+		return {
+			...button,
+			url,
+		};
+	}
+
+	return {
+		...button,
+		custom_id: customId!,
+	};
 }

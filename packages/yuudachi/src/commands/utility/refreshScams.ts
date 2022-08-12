@@ -39,13 +39,13 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 		const cancelKey = nanoid();
 
 		const refreshButton = createButton({
-			customId: refreshKey,
 			label: i18next.t('command.utility.refresh_scamlist.buttons.execute', { lng: locale }),
+			customId: refreshKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

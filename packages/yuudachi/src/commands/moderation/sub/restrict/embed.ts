@@ -73,13 +73,13 @@ export async function embed(
 	const embed = await generateHistory(interaction, args.user, locale);
 
 	const roleButton = createButton({
-		customId: roleKey,
 		label: i18next.t('command.mod.restrict.embed.buttons.execute', { lng: locale }),
+		customId: roleKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		customId: cancelKey,
 		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 
@@ -130,7 +130,7 @@ export async function embed(
 				duration: parsedDuration,
 			}),
 		);
-		void upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
+		await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.mod.restrict.embed.success', {

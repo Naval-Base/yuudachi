@@ -59,13 +59,13 @@ export default class extends Command<typeof SoftbanCommand> {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		const softbanButton = createButton({
-			customId: softbanKey,
 			label: i18next.t('command.mod.softban.buttons.execute', { lng: locale }),
+			customId: softbanKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

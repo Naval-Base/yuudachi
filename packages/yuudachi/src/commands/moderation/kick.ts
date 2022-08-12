@@ -65,13 +65,13 @@ export default class extends Command<typeof KickCommand> {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		const kickButton = createButton({
-			customId: kickKey,
 			label: i18next.t('command.mod.kick.buttons.execute', { lng: locale }),
+			customId: kickKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			customId: cancelKey,
 			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 

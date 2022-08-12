@@ -33,7 +33,7 @@ export async function insertAntiRaidNukeCaseLog(
 		footer: {
 			text:
 				cases.length === 1
-					? i18next.t('log.mod_log.case_log.footer', { case_id: cases.length, lng: locale })
+					? i18next.t('log.mod_log.case_log.footer', { case_id: from, lng: locale })
 					: i18next.t('log.mod_log.anti_raid_nuke.footer', { from, to, lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
@@ -47,4 +47,6 @@ export async function insertAntiRaidNukeCaseLog(
 		set log_message_id = ${logMessage.id}
 		where guild_id = ${guild.id}
 			and case_id in ${sql(cases.map((case_) => case_.caseId))}`;
+
+	return logMessage;
 }

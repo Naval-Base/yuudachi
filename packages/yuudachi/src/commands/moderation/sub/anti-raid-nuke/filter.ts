@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { codeBlock, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
-import { handleAntiRaidNuke } from './coreCommand.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import {
 	ageFilter,
@@ -17,7 +17,7 @@ import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
 import { resolveTimestamp } from '../../../../util/timestamp.js';
 
-enum Confusables {
+export enum Confusables {
 	Off,
 	OnlyPattern,
 	OnlyMembers,
@@ -189,5 +189,5 @@ export async function filter(
 		);
 	}
 
-	await handleAntiRaidNuke(interaction, members, locale, parameterStrings, args.reason, args.days);
+	await handleAntiRaidNuke(interaction, members, AntiRaidNukeMode.Filter, parameterStrings, args, locale);
 }
