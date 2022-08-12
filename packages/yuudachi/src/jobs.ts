@@ -57,30 +57,37 @@ export async function registerJobs() {
 		bree.workers.get(name)?.removeAllListeners();
 	});
 
-	logger.info({ job: { name: 'modActionTimers' } }, `Registering job: modActionTimers`);
-	await bree.add({
-		name: 'modActionTimers',
-		interval: '1m',
-		path: fileURLToPath(new URL('./jobs/modActionTimers.js', import.meta.url)),
-	});
+	try {
+		let jobs;
 
-	logger.info({ job: { name: 'modLockdownTimers' } }, `Registering job: modLockdownTimers`);
-	await bree.add({
-		name: 'modLockdownTimers',
-		interval: '1m',
-		path: fileURLToPath(new URL('./jobs/modLockdownTimers.js', import.meta.url)),
-	});
+		logger.info({ job: { name: 'modActionTimers' } }, `Registering job: modActionTimers`);
+		jobs = await bree.add({
+			name: 'modActionTimers',
+			interval: '1m',
+			path: fileURLToPath(new URL('./jobs/modActionTimers.js', import.meta.url)),
+		});
+		logger.info({ job: { name: 'modActionTimers' }, jobs }, `Registered job: modActionTimers`);
 
-	logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
-	await bree.add({
-		name: 'scamDomainUpdateTimers',
-		interval: '5m',
-		timeout: 0,
-		path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
-	});
-}
+		logger.info({ job: { name: 'modLockdownTimers' } }, `Registering job: modLockdownTimers`);
+		jobs = await bree.add({
+			name: 'modLockdownTimers',
+			interval: '1m',
+			path: fileURLToPath(new URL('./jobs/modLockdownTimers.js', import.meta.url)),
+		});
+		logger.info({ job: { name: 'modLockdownTimers' }, jobs }, `Registered job: modLockdownTimers`);
 
-export async function startJobs() {
-	const bree = container.resolve<Bree>(kBree);
+		logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
+		jobs = await bree.add({
+			name: 'scamDomainUpdateTimers',
+			interval: '5m',
+			timeout: 0,
+			path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
+		});
+		logger.info({ job: { name: 'scamDomainUpdateTimers' }, jobs }, 'Registered job: scamDomainUpdateTimers');
+	} catch (e) {
+		const error = e as Error;
+		logger.error(error, error.message);
+	}
+
 	await bree.start();
 }

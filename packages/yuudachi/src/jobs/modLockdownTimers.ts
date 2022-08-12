@@ -4,7 +4,7 @@ import type { Snowflake } from 'discord.js';
 import { JobType } from '../Constants.js';
 import { createPostgres } from '../util/postgres.js';
 
-const sql = createPostgres();
+const sql = createPostgres(false);
 
 const currentLockdowns = await sql<[{ channel_id: Snowflake; expiration: string }]>`
 	select channel_id, expiration
@@ -15,7 +15,11 @@ for (const lockdown of currentLockdowns) {
 		if (parentPort) {
 			parentPort.postMessage({ op: JobType.Lockdown, d: { channelId: lockdown.channel_id } });
 		}
+
+		continue;
 	}
+
+	continue;
 }
 
 if (parentPort) {

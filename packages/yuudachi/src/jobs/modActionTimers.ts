@@ -3,7 +3,7 @@ import type { Snowflake } from 'discord.js';
 import { JobType } from '../Constants.js';
 import { createPostgres } from '../util/postgres.js';
 
-const sql = createPostgres();
+const sql = createPostgres(false);
 
 const currentCases = await sql<[{ guild_id: Snowflake; case_id: number; action_expiration: string }]>`
 	select guild_id, case_id, action_expiration
@@ -15,7 +15,11 @@ for (const case_ of currentCases) {
 		if (parentPort) {
 			parentPort.postMessage({ op: JobType.Case, d: { guildId: case_.guild_id, caseId: case_.case_id } });
 		}
+
+		continue;
 	}
+
+	continue;
 }
 
 if (parentPort) {
