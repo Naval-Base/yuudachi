@@ -150,7 +150,8 @@
 					"pending": "",
 					"buttons": {
 						"execute": "",
-						"dry_run": ""
+						"dry_run": "",
+						"formatted": ""
 					},
 					"cancel": "",
 					"success": ""
@@ -352,11 +353,6 @@
 		}
 	},
 	"log": {
-		"common": {
-			"formatting": {
-				"guildmember": ""
-			}
-		},
 		"history": {
 			"title": "",
 			"user_details": "ユーザー情報",
@@ -382,7 +378,8 @@
 				"parameters": {
 					"cutoff": ""
 				},
-				"report_link": "",
+				"report": "",
+				"report_sub": "",
 				"footer": ""
 			},
 			"scam": {
@@ -454,10 +451,103 @@
 				"time": ""
 			}
 		},
-		"general_log": {
-			"anti_raid_nuke": {
+		"anti_raid_nuke": {
+			"pending": "",
+			"title": "",
+			"title_dryrun": "",
+			"description": ""
+		}
+	},
+	"formatters": {
+		"formatting": {
+			"guild_member": ""
+		},
+		"anti_raid_nuke": {
+			"title": "",
+			"summary": {
 				"title": "",
-				"title_dryrun": "",
+				"mode": "",
+				"current_time": "",
+				"time_taken": "",
+				"moderator": "",
+				"reason": "",
+				"dry_run": "",
+				"blast_mode": ""
+			},
+			"results": {
+				"title": "",
+				"total": "",
+				"banned": "",
+				"banned_zero": "",
+				"failed": "",
+				"failed_zero": "",
+				"ratio": ""
+			},
+			"parameters": {
+				"title": "",
+				"avatar": "",
+				"pattern": {
+					"title": "",
+					"confusables": "",
+					"insensitive": "",
+					"full_match": ""
+				},
+				"confusables": {
+					"title": "",
+					"0": "",
+					"1": "",
+					"2": "",
+					"3": ""
+				},
+				"created": {
+					"title": "",
+					"after": "",
+					"before": ""
+				},
+				"joined": {
+					"title": "",
+					"after": "",
+					"before": ""
+				},
+				"file": {
+					"title": "",
+					"placeholder": ""
+				},
+				"days_zero": "",
+				"days_one": "",
+				"days_other": "",
+				"zalgo": "",
+				"none": ""
+			},
+			"cases": {
+				"title": "",
+				"single": "",
+				"range": "",
+				"none": "",
+				"log_message": "",
+				"log_message_sub": "",
+				"log_message_none": ""
+			},
+			"successes": {
+				"title": "",
+				"none": "",
+				"tables": [
+					"",
+					"",
+					""
+				]
+			},
+			"failures": {
+				"title": "",
+				"none": "",
+				"tables": [
+					"",
+					"",
+					""
+				]
+			},
+			"raw_data": {
+				"title": "",
 				"description": ""
 			}
 		}
