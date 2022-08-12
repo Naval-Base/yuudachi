@@ -22,9 +22,9 @@ export async function registerJobs() {
 					switch (message.op) {
 						case JobType.Case: {
 							try {
-								const guild = await client.guilds.resolve(message.d.guildId);
+								const guild = client.guilds.resolve(message.d.guildId);
 								if (!guild) {
-									break;
+									return;
 								}
 								const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
 								await upsertCaseLog(guild, client.user, case_);
@@ -32,7 +32,7 @@ export async function registerJobs() {
 								const error = e as Error;
 								logger.error(error, error.message);
 							}
-							break;
+							return;
 						}
 
 						case JobType.Lockdown: {
