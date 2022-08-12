@@ -491,8 +491,7 @@
 				"pattern": {
 					"title": "**Pattern:** `{{- pattern}}`",
 					"confusables": {
-						"title": "Pattern confusables mode:",
-						"sub": "`$t(formatters.anti_raid_nuke.parameters.pattern.confusables.{{mode}})`",
+						"title": "Pattern confusables mode: `$t(formatters.anti_raid_nuke.parameters.pattern.confusables.{{mode}})`",
 						"0": "Disabled",
 						"1": "Pattern resistance only",
 						"2": "Filtering members only",

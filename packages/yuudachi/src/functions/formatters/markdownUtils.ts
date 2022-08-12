@@ -8,12 +8,12 @@ export function heading(text: string, level: number) {
 	return `${'#'.repeat(level)} ${text}`;
 }
 
-export function checkbox(text: string, checked = false, indent = 0) {
-	return `- [${checked ? 'x' : ' '}] ${text}`.padStart(indent * 2, ' ');
+export function checkbox(text: string, checked = false) {
+	return `- [${checked ? 'x' : ' '}] ${text}`;
 }
 
-export function list(items: [text: string, indent?: number][], ordered = false) {
-	return items.map(([text, indent = 0]) => `${ordered ? '1.' : '-'} ${text}`.padStart(indent * 2, ' ')).join('\n');
+export function list(items: string[], ordered = false) {
+	return items.map((text) => `${ordered ? '1.' : '-'} ${text}`).join('\n');
 }
 
 export function table(headers: string[], rows: string[][], alignment = TableAlignment.Left) {
