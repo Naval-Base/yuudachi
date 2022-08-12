@@ -15,42 +15,6 @@ export async function registerJobs() {
 	const bree = new Bree({
 		root: false,
 		logger: false,
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		workerMessageHandler: async (
-			message: string | { op: JobType; d: { guildId: Snowflake; channelId: Snowflake; caseId: number } },
-		) => {
-			if (typeof message !== 'string') {
-				switch (message.op) {
-					case JobType.Case: {
-						try {
-							const guild = client.guilds.resolve(message.d.guildId);
-							if (!guild) {
-								return;
-							}
-							const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
-							await upsertCaseLog(guild, client.user, case_);
-						} catch (e) {
-							const error = e as Error;
-							logger.error(error, error.message);
-						}
-						return;
-					}
-
-					case JobType.Lockdown: {
-						try {
-							await deleteLockdown(message.d.channelId);
-						} catch (e) {
-							const error = e as Error;
-							logger.error(error, error.message);
-						}
-						break;
-					}
-
-					default:
-						break;
-				}
-			}
-		},
 	});
 	container.register(kBree, { useValue: bree });
 
@@ -87,6 +51,46 @@ export async function registerJobs() {
 			path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
 		});
 		logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registered job: scamDomainUpdateTimers');
+
+		for (const [name] of bree.workers) {
+			bree.workers.get(name)?.on(
+				'message',
+				// eslint-disable-next-line @typescript-eslint/no-misused-promises
+				async (message: string | { op: JobType; d: { guildId: Snowflake; channelId: Snowflake; caseId: number } }) => {
+					if (typeof message !== 'string') {
+						switch (message.op) {
+							case JobType.Case: {
+								try {
+									const guild = client.guilds.resolve(message.d.guildId);
+									if (!guild) {
+										return;
+									}
+									const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
+									await upsertCaseLog(guild, client.user, case_);
+								} catch (e) {
+									const error = e as Error;
+									logger.error(error, error.message);
+								}
+								return;
+							}
+
+							case JobType.Lockdown: {
+								try {
+									await deleteLockdown(message.d.channelId);
+								} catch (e) {
+									const error = e as Error;
+									logger.error(error, error.message);
+								}
+								break;
+							}
+
+							default:
+								break;
+						}
+					}
+				},
+			);
+		}
 
 		await bree.start();
 	} catch (e) {
