@@ -1,98 +1,108 @@
-import { fileURLToPath, URL } from 'node:url';
-import Bree from 'bree';
+import { type Job, Queue, QueueScheduler, Worker } from 'bullmq';
 import { Client, type Snowflake } from 'discord.js';
+import type { default as Redis } from 'ioredis';
+import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { JobType } from './Constants.js';
+import { refreshScamDomains } from './functions/anti-scam/refreshScamDomains.js';
 import { deleteCase } from './functions/cases/deleteCase.js';
 import { deleteLockdown } from './functions/lockdowns/deleteLockdown.js';
 import { upsertCaseLog } from './functions/logging/upsertCaseLog.js';
 import { logger } from './logger.js';
-import { kBree } from './tokens.js';
+import { kRedis, kSQL } from './tokens.js';
 
 export async function registerJobs() {
 	const client = container.resolve<Client<true>>(Client);
+	const sql = container.resolve<Sql<any>>(kSQL);
+	const redis = container.resolve<Redis>(kRedis);
 
-	const bree = new Bree({
-		root: false,
-		logger: false,
-	});
-	container.register(kBree, { useValue: bree });
-
-	bree.on('worker created', (name: string) => {
-		logger.info({ job: { name: name } }, `Running job: ${name}`);
-	});
-
-	bree.on('worker deleted', (name: string) => {
-		logger.info({ job: { name: name } }, `Finished job: ${name}`);
-	});
+	new QueueScheduler('jobs', { connection: redis });
+	const queue = new Queue('jobs', { connection: redis });
 
 	try {
 		logger.info({ job: { name: 'modActionTimers' } }, 'Registering job: modActionTimers');
-		await bree.add({
-			name: 'modActionTimers',
-			interval: '1m',
-			path: fileURLToPath(new URL('./jobs/modActionTimers.js', import.meta.url)),
-		});
+		await queue.add('modActionTimers', {}, { repeat: { cron: '* * * * *' } });
 		logger.info({ job: { name: 'modActionTimers' } }, 'Registered job: modActionTimers');
 
 		logger.info({ job: { name: 'modLockdownTimers' } }, 'Registering job: modLockdownTimers');
-		await bree.add({
-			name: 'modLockdownTimers',
-			interval: '1m',
-			path: fileURLToPath(new URL('./jobs/modLockdownTimers.js', import.meta.url)),
-		});
+		await queue.add('modLockdownTimers', {}, { repeat: { cron: '* * * * *' } });
 		logger.info({ job: { name: 'modLockdownTimers' } }, 'Registered job: modLockdownTimers');
 
 		logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
-		await bree.add({
-			name: 'scamDomainUpdateTimers',
-			interval: '5m',
-			timeout: 0,
-			path: fileURLToPath(new URL('./jobs/scamDomainUpdateTimers.js', import.meta.url)),
-		});
+		await queue.add('scamDomainUpdateTimers', {}, { repeat: { cron: '*/5 * * * *' } });
 		logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registered job: scamDomainUpdateTimers');
 
-		for (const [name] of bree.workers) {
-			bree.workers.get(name)?.on(
-				'message',
-				// eslint-disable-next-line @typescript-eslint/no-misused-promises
-				async (message: string | { op: JobType; d: { guildId: Snowflake; channelId: Snowflake; caseId: number } }) => {
-					if (typeof message !== 'string') {
-						switch (message.op) {
-							case JobType.Case: {
+		new Worker(
+			'jobs',
+			async (job: Job) => {
+				switch (job.name) {
+					case 'modActionTimers': {
+						const currentCases = await sql<[{ guild_id: Snowflake; case_id: number; action_expiration: string }]>`
+							select guild_id, case_id, action_expiration
+							from cases
+							where action_processed = false`;
+
+						for (const case_ of currentCases) {
+							if (Date.parse(case_.action_expiration) <= Date.now()) {
+								const guild = client.guilds.resolve(case_.guild_id);
+
+								if (!guild) {
+									continue;
+								}
+
 								try {
-									const guild = client.guilds.resolve(message.d.guildId);
-									if (!guild) {
-										return;
-									}
-									const case_ = await deleteCase({ guild, user: client.user, caseId: message.d.caseId });
-									await upsertCaseLog(guild, client.user, case_);
+									const newCase = await deleteCase({ guild, user: client.user, caseId: case_.case_id });
+									await upsertCaseLog(guild, client.user, newCase);
 								} catch (e) {
 									const error = e as Error;
 									logger.error(error, error.message);
 								}
-								return;
+
+								continue;
 							}
 
-							case JobType.Lockdown: {
-								try {
-									await deleteLockdown(message.d.channelId);
-								} catch (e) {
-									const error = e as Error;
-									logger.error(error, error.message);
-								}
-								break;
-							}
-
-							default:
-								break;
+							continue;
 						}
-					}
-				},
-			);
-		}
 
-		await bree.start();
+						break;
+					}
+					case 'modLockdownTimers': {
+						const currentLockdowns = await sql<[{ channel_id: Snowflake; expiration: string }]>`
+							select channel_id, expiration
+							from lockdowns`;
+
+						for (const lockdown of currentLockdowns) {
+							if (Date.parse(lockdown.expiration) <= Date.now()) {
+								try {
+									await deleteLockdown(lockdown.channel_id);
+								} catch (e) {
+									const error = e as Error;
+									logger.error(error, error.message);
+								}
+
+								continue;
+							}
+
+							continue;
+						}
+
+						break;
+					}
+					case 'scamDomainUpdateTimers': {
+						try {
+							await refreshScamDomains();
+						} catch (e) {
+							const error = e as Error;
+							logger.error(error, error.message);
+						}
+
+						break;
+					}
+					default:
+						break;
+				}
+			},
+			{ connection: redis },
+		);
 	} catch (e) {
 		const error = e as Error;
 		logger.error(error, error.message);
