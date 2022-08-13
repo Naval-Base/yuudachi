@@ -22,10 +22,7 @@ export default class implements Event {
 
 	public event = Events.Raw as const;
 
-	public constructor(
-		public readonly client: Client<true>,
-		@inject(kRedis) public readonly redis: Redis,
-	) {}
+	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
 
 	public async execute(): Promise<void> {
 		for await (const [rawData] of on(this.client, this.event) as AsyncIterableIterator<
@@ -49,6 +46,11 @@ export default class implements Event {
 				}
 
 				const guild = this.client.guilds.resolve(autoModAction.guild_id);
+
+				if (!guild) {
+					continue;
+				}
+
 				const member = await guild.members.fetch(autoModAction.user_id);
 
 				await this.redis.setex(`guild:${member.guild.id}:user:${member.id}:auto_mod_timeout`, 15, '');

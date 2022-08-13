@@ -4,7 +4,10 @@ import { injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { handleAntiSpam } from '../../functions/anti-spam/handler.js';
 import { logger } from '../../logger.js';
-import { APIAutoModerationRuleActionType, type GatewayAutoModerationActionExecution } from '../../util/tempAutomodTypes.js';
+import {
+	APIAutoModerationRuleActionType,
+	type GatewayAutoModerationActionExecution,
+} from '../../util/tempAutomodTypes.js';
 
 @injectable()
 export default class implements Event {
@@ -36,6 +39,11 @@ export default class implements Event {
 				}
 
 				const guild = this.client.guilds.resolve(autoModAction.guild_id);
+
+				if (!guild) {
+					continue;
+				}
+
 				const member = await guild.members.fetch(autoModAction.user_id);
 
 				if (!autoModAction.content.length) {

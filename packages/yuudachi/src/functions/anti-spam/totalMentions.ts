@@ -12,11 +12,11 @@ export async function totalMentions(member: GuildMember, content: string) {
 
 	for (const mention of content.matchAll(/<@\d{17,20}>/g)) {
 		const id = mention[0]?.match(FormattingPatterns.User)?.[1];
-		
+
 		if (!id) {
 			continue;
 		}
-		
+
 		try {
 			const user = await member.client.users.fetch(id);
 			parsed.set(id, user);
