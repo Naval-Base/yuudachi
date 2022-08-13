@@ -66,7 +66,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 		}
 
 		const { oldest } = orderMessages(firstMessage, lastMessage);
-		const messages = await fetchMessages(interaction.channel!, firstMessage, lastMessage);
+		const messages = await fetchMessages(firstMessage, lastMessage);
 
 		if (messages.size < 1) {
 			throw new Error(
@@ -159,7 +159,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 			});
 
 			await collectedInteraction.deferUpdate();
-			const prunedMessages = await pruneMessages(interaction.channel!, messages);
+			const prunedMessages = await pruneMessages(messages);
 
 			const prunedUniqueAuthors = new Set(messages.map((m) => m.author.id));
 			const prunedLatest = messages.first()!;

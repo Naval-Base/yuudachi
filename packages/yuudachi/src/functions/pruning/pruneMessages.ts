@@ -1,4 +1,4 @@
-import { Collection, GuildTextBasedChannel, Message, Snowflake, SnowflakeUtil, TextBasedChannel } from 'discord.js';
+import { Collection, type GuildTextBasedChannel, type Message, type Snowflake, SnowflakeUtil } from 'discord.js';
 
 interface MessageOrder {
 	newest?: Message | undefined | null;
@@ -22,7 +22,7 @@ export function orderMessages(first: Message, second?: Message | undefined | nul
 	};
 }
 
-export async function fetchMessages(channel: TextBasedChannel, from: Message, to?: Message | undefined | null) {
+export async function fetchMessages(from: Message, to?: Message | undefined | null) {
 	const { newest, oldest } = orderMessages(from, to);
 	const res = new Collection<Snowflake, Message>();
 
@@ -36,7 +36,7 @@ export async function fetchMessages(channel: TextBasedChannel, from: Message, to
 	while (
 		pivot ? oldest.createdTimestamp < pivot.createdTimestamp && pivot.createdTimestamp > earliestPossiblePrune : true
 	) {
-		const messages = await channel.messages.fetch({
+		const messages = await oldest.channel.messages.fetch({
 			limit: 100,
 			before: pivot?.id,
 			cache: false,
@@ -73,8 +73,10 @@ export function chunkMessages(messages: Collection<Snowflake, Message>) {
 	return res;
 }
 
-export async function pruneMessages(channel: GuildTextBasedChannel, messages: Collection<Snowflake, Message>) {
+export async function pruneMessages(messages: Collection<Snowflake, Message>) {
 	const deletedMessages = new Set<Snowflake>();
+	const channel = messages.first()!.channel as GuildTextBasedChannel;
+
 	for (const chunk of chunkMessages(messages)) {
 		const deleted = await channel.bulkDelete(chunk, true);
 		deleted.forEach((_, id) => deletedMessages.add(id));
