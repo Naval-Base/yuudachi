@@ -277,7 +277,11 @@ export async function generateAntiRaidNukeReport(
 			table(i18next.t('formatters.anti_raid_nuke.successes.tables', { returnObjects: true, lng: locale }), successes),
 		);
 	} else {
-		parts.push(blockquote(heading(i18next.t('formatters.anti_raid_nuke.successes.none', { lng: locale }), 3)));
+		parts.push(
+			blockquote('**Note**'),
+			emptyLine(),
+			blockquote(heading(i18next.t('formatters.anti_raid_nuke.successes.none', { lng: locale }), 3)),
+		);
 	}
 
 	parts.push(
@@ -292,7 +296,11 @@ export async function generateAntiRaidNukeReport(
 			table(i18next.t('formatters.anti_raid_nuke.failures.tables', { lng: locale, returnObjects: true }), failures),
 		);
 	} else {
-		parts.push(blockquote(heading(i18next.t('formatters.anti_raid_nuke.failures.none', { lng: locale }), 3)));
+		parts.push(
+			blockquote('**Note**'),
+			emptyLine(),
+			blockquote(heading(i18next.t('formatters.anti_raid_nuke.failures.none', { lng: locale }), 3)),
+		);
 	}
 
 	parts.push(
