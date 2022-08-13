@@ -53,18 +53,22 @@ export default class implements Event {
 
 				const member = await guild.members.fetch(autoModAction.user_id);
 
-				await this.redis.setex(`guild:${member.guild.id}:user:${member.id}:auto_mod_timeout`, 15, '');
+				await this.redis.setex(
+					`guild:${autoModAction.guild_id}:user:${autoModAction.user_id}:auto_mod_timeout`,
+					15,
+					'',
+				);
 
-				const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
+				const locale = await getGuildSetting(autoModAction.guild_id, SettingsKeys.Locale);
 
 				logger.info(
 					{
 						event: { name: this.name, event: this.event },
-						guildId: member.guild.id,
-						memberId: member.id,
+						guildId: autoModAction.guild_id,
+						memberId: autoModAction.user_id,
 						manual: false,
 					},
-					`Member ${member.id} timed out (AutoMod)`,
+					`Member ${autoModAction.user_id} timed out (AutoMod)`,
 				);
 
 				let reasonType = 'default';
@@ -90,7 +94,7 @@ export default class implements Event {
 				const case_ = await createCase(
 					member.guild,
 					generateCasePayload({
-						guildId: member.guild.id,
+						guildId: autoModAction.guild_id,
 						user: this.client.user,
 						args: { user: { user: member.user }, reason },
 						action: CaseAction.Timeout,

@@ -38,19 +38,14 @@ export default class implements Event {
 					continue;
 				}
 
-				const guild = this.client.guilds.resolve(autoModAction.guild_id);
-
-				if (!guild) {
-					continue;
-				}
-
-				const member = await guild.members.fetch(autoModAction.user_id);
-
 				if (!autoModAction.content.length) {
 					continue;
 				}
 
-				await handleAntiSpam(member, autoModAction.content, { name: this.name, event: this.event });
+				await handleAntiSpam(autoModAction.guild_id, autoModAction.user_id, autoModAction.content, {
+					name: this.name,
+					event: this.event,
+				});
 			} catch (e) {
 				const error = e as Error;
 				logger.error(error, error.message);

@@ -9,7 +9,7 @@ export function createContentHash(content: string) {
 	return createHash('md5').update(content.toLowerCase()).digest('hex');
 }
 
-export async function totalContents(content: string, guildId: Snowflake, userId: Snowflake) {
+export async function totalContents(guildId: Snowflake, userId: Snowflake, content: string) {
 	const redis = container.resolve<Redis>(kRedis);
 
 	const contentHash = createContentHash(content);

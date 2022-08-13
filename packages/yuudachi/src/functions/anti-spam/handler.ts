@@ -1,4 +1,4 @@
-import type { GuildMember } from 'discord.js';
+import { Client, type Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { default as Redis } from 'ioredis';
 import { container } from 'tsyringe';
@@ -13,20 +13,30 @@ import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export async function handleAntiSpam(
-	member: GuildMember,
+	guildId: Snowflake,
+	userId: Snowflake,
 	content: string,
 	event: { name: string; event: string },
 ): Promise<void> {
+	const client = container.resolve<Client<true>>(Client);
 	const redis = container.resolve<Redis>(kRedis);
 
-	const ignoreRoles = await getGuildSetting<string[]>(member.guild.id, SettingsKeys.AutomodIgnoreRoles);
+	const guild = client.guilds.resolve(guildId);
+
+	if (!guild) {
+		return;
+	}
+
+	const member = await guild.members.fetch(userId);
+
+	const ignoreRoles = await getGuildSetting<string[]>(guildId, SettingsKeys.AutomodIgnoreRoles);
 
 	if (ignoreRoles.some((id) => member.roles.cache.has(id))) {
 		return;
 	}
 
-	const totalMentionCount = await totalMentions(member, content);
-	const totalContentCount = await totalContents(content, member.guild.id, member.id);
+	const totalMentionCount = await totalMentions(guildId, userId, content);
+	const totalContentCount = await totalContents(guildId, userId, content);
 
 	const mentionExceeded = totalMentionCount >= MENTION_THRESHOLD;
 	const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
@@ -36,35 +46,32 @@ export async function handleAntiSpam(
 			return;
 		}
 
-		const modLogChannel = await checkLogChannel(
-			member.guild,
-			await getGuildSetting(member.guild.id, SettingsKeys.ModLogChannelId),
-		);
+		const modLogChannel = checkLogChannel(member.guild, await getGuildSetting(guildId, SettingsKeys.ModLogChannelId));
 
 		if (!modLogChannel) {
 			return;
 		}
 
-		const locale = await getGuildSetting(member.guild.id, SettingsKeys.Locale);
+		const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
 
-		await redis.setex(`guild:${member.guild.id}:user:${member.id}:ban`, 15, '');
+		await redis.setex(`guild:${guildId}:user:${userId}:ban`, 15, '');
 
 		let case_: Case | null = null;
 		if (mentionExceeded) {
 			logger.info(
 				{
 					event: { event },
-					guildId: member.guild.id,
-					userId: member.client.user!.id,
-					memberId: member.id,
+					guildId: guildId,
+					userId: client.user.id,
+					memberId: userId,
 					mentionExceeded,
 				},
-				`Member ${member.id} banned (mention spam)`,
+				`Member ${userId} banned (mention spam)`,
 			);
 
-			case_ = await createCase(member.guild, {
-				targetId: member.id,
-				guildId: member.guild.id,
+			case_ = await createCase(guild, {
+				targetId: userId,
+				guildId: guildId,
 				action: CaseAction.Ban,
 				targetTag: member.user.tag,
 				reason: i18next.t('log.mod_log.spam.reason_mentions', {
@@ -73,23 +80,23 @@ export async function handleAntiSpam(
 				deleteMessageDays: 1,
 			});
 
-			await redis.del(`guild:${member.guild.id}:user:${member.id}:mentions`);
+			await redis.del(`guild:${guildId}:user:${userId}:mentions`);
 		} else if (contentExceeded) {
 			logger.info(
 				{
 					event: { event },
-					guildId: member.guild.id,
-					userId: member.client.user!.id,
-					memberId: member.id,
+					guildId: guildId,
+					userId: client.user.id,
+					memberId: userId,
 				},
-				`Member ${member.id} softbanned (spam)`,
+				`Member ${userId} softbanned (spam)`,
 			);
 
-			await redis.setex(`guild:${member.guild.id}:user:${member.id}:unban`, 15, '');
+			await redis.setex(`guild:${guildId}:user:${userId}:unban`, 15, '');
 
 			case_ = await createCase(member.guild, {
-				targetId: member.id,
-				guildId: member.guild.id,
+				targetId: userId,
+				guildId: guildId,
 				action: CaseAction.Softban,
 				targetTag: member.user.tag,
 				reason: i18next.t('log.mod_log.spam.reason', { lng: locale }),
@@ -98,9 +105,9 @@ export async function handleAntiSpam(
 
 			const contentHash = createContentHash(content);
 
-			await redis.del(`guild:${member.guild.id}:user:${member.id}:contenthash:${contentHash}`);
+			await redis.del(`guild:${guildId}:user:${userId}:contenthash:${contentHash}`);
 		}
 
-		await upsertCaseLog(member.guild, member.client.user, case_!);
+		await upsertCaseLog(guild, client.user, case_!);
 	}
 }
