@@ -388,6 +388,13 @@
 			"spam": {
 				"reason": "Detección de spam",
 				"reason_mentions": "Detección de exceso de menciones"
+			},
+			"auto_mod": {
+				"keyword": "",
+				"keyword_preset": "",
+				"harmful_link": "",
+				"spam": "",
+				"default": ""
 			}
 		},
 		"member_log": {
