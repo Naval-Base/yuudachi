@@ -2,7 +2,7 @@
 export async function up(sql) {
 	await sql.unsafe(`
 		alter table cases
-			drop join_cuttof,
+			drop join_cutof,
 			drop account_cutoff
 	`);
 }
