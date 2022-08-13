@@ -88,6 +88,7 @@ export async function handleAntiRaidNuke(
 	locale: string,
 ) {
 	const pruneDays = Math.min(Math.max(Number(args.days ?? 1), 0), 7);
+	const insensitive = args.insensitive ?? true;
 
 	const prefixedParameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', { lng: locale }),
@@ -222,6 +223,7 @@ export async function handleAntiRaidNuke(
 			cases,
 			{
 				...args,
+				insensitive,
 				days: pruneDays as ArgsParam<typeof AntiRaidNukeCommand>['filter']['days'],
 				dryRun: dryRunMode,
 				mode,
@@ -230,7 +232,7 @@ export async function handleAntiRaidNuke(
 				created_before: parseDate(args.created_before),
 				join_after: parseDate(args.join_after),
 				join_before: parseDate(args.join_before),
-				pattern: args.pattern ? parseRegex(args.pattern, args.insensitive, args.full_match)?.toString() : undefined,
+				pattern: args.pattern ? parseRegex(args.pattern, insensitive, args.full_match)?.toString() : undefined,
 				logMessageUrl: caseMessage?.url,
 			},
 		);

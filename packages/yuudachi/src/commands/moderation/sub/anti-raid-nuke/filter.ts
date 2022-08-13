@@ -103,7 +103,7 @@ export async function filter(
 
 	if (parsedCreatedAfter || parsedCreatedBefore || parsedJoinAfter || parsedJoinBefore) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.common.parameters.current_time', {
+			i18next.t('command.mod.anti_raid_nuke.common.parameters.launch_time', {
 				now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 				lng: locale,
 			}),

@@ -76,8 +76,8 @@ export async function generateAntiRaidNukeReport(
 		heading(i18next.t('formatters.anti_raid_nuke.summary.title', { lng: locale }), 2),
 		list([
 			i18next.t('formatters.anti_raid_nuke.summary.mode', { mode: args.mode, lng: locale }),
-			i18next.t('formatters.anti_raid_nuke.summary.current_time', {
-				current_time: dayjs().format(DATE_FORMAT_WITH_SECONDS),
+			i18next.t('formatters.anti_raid_nuke.summary.launch_time', {
+				launch_time: dayjs().format(DATE_FORMAT_WITH_SECONDS),
 				lng: locale,
 			}),
 			i18next.t('formatters.anti_raid_nuke.summary.time_taken', {
@@ -135,14 +135,21 @@ export async function generateAntiRaidNukeReport(
 				i18next.t('formatters.anti_raid_nuke.parameters.pattern.title', { pattern: args.pattern, lng: locale }),
 				4,
 			),
-			confusables &&
+		);
+
+		if (confusables) {
+			parts.push(
 				checkbox(
 					i18next.t('formatters.anti_raid_nuke.parameters.pattern.confusables', {
 						mode: args.confusables,
 						lng: locale,
 					}),
-					confusables,
+					true,
 				),
+			);
+		}
+
+		parts.push(
 			checkbox(
 				i18next.t('formatters.anti_raid_nuke.parameters.pattern.insensitive', { lng: locale }),
 				args.insensitive,

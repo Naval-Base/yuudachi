@@ -139,7 +139,7 @@
 					},
 					"parameters": {
 						"heading": "Parameters:",
-						"current_time": "• Current time: {{- now}}",
+						"launch_time": "• Time of launch: {{- now}}",
 						"dry_run": "• Operating in **dry-run** mode, no members will be banned",
 						"days_zero": "• Not deleting any messages",
 						"days_one": "• Deleting messages sent in the last day",
@@ -467,7 +467,7 @@
 			"summary": {
 				"title": "**Summary**",
 				"mode": "**Mode:** `{{mode}}`",
-				"current_time": "**Current time:** `{{- current_time}}`",
+				"launch_time": "**Time of launch:** `{{- launch_time}}`",
 				"time_taken": "**Time taken:** `{{time_taken}}`",
 				"moderator": "**Moderator:** `{{- moderator}}`",
 				"reason": "**Reason:** `{{- reason}}`",
