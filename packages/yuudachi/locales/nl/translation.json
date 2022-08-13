@@ -388,6 +388,13 @@
 			"spam": {
 				"reason": "",
 				"reason_mentions": ""
+			},
+			"auto_mod": {
+				"keyword": "",
+				"keyword_preset": "",
+				"harmful_link": "",
+				"spam": "",
+				"default": ""
 			}
 		},
 		"member_log": {
