@@ -375,9 +375,6 @@
 			},
 			"anti_raid_nuke": {
 				"description": "",
-				"parameters": {
-					"cutoff": ""
-				},
 				"report": "",
 				"report_sub": "",
 				"footer": ""
