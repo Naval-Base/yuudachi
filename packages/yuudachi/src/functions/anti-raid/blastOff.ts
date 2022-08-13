@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import type { ButtonInteraction, Collection, GuildMember } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
@@ -18,8 +17,6 @@ export interface AntiRaidNukeResult {
 interface AntiRaidNukeArgs {
 	days: number;
 	dryRun: boolean;
-	joinCutoff?: number | undefined | null;
-	accountCutoff?: number | undefined | null;
 }
 
 export async function blastOff(
@@ -75,8 +72,6 @@ export async function blastOff(
 							user: member.user,
 						},
 						days: args.days,
-						joinCutoff: args.joinCutoff ? dayjs(args.joinCutoff).toDate() : undefined,
-						accountCutoff: args.accountCutoff ? dayjs(args.accountCutoff).toDate() : undefined,
 					},
 					action: CaseAction.Ban,
 					multi: true,

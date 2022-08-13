@@ -9830,6 +9830,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"type-fest@npm:^2.18.0":
+  version: 2.18.0
+  resolution: "type-fest@npm:2.18.0"
+  checksum: 0737128d9d77b93793c6ee443e304462a792f5b723a6be035d6cb488c5610a8baa00522805421341c04324c80efba9849885bbfbc5a9623d0672fe8712969f62
+  languageName: node
+  linkType: hard
+
 "typedarray-to-buffer@npm:^3.1.5":
   version: 3.1.5
   resolution: "typedarray-to-buffer@npm:3.1.5"
@@ -10648,6 +10655,7 @@ __metadata:
     rimraf: ^3.0.2
     tslib: ^2.4.0
     tsyringe: ^4.7.0
+    type-fest: ^2.18.0
     typescript: ^4.7.4
     undici: ^5.8.2
     utf-8-validate: ^5.0.9

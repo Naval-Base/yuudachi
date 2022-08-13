@@ -65,16 +65,16 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 		msg += i18next.t('log.mod_log.case_log.reason_fallback', { case_id: case_.caseId, lng: locale });
 	}
 
-	if (case_.referenceId) {
+	if (case_.refId) {
 		const [reference] = await sql<[{ log_message_id: Snowflake | null }?]>`
 			select log_message_id
 			from cases
 			where guild_id = ${case_.guildId}
-				and case_id = ${case_.referenceId}`;
+				and case_id = ${case_.refId}`;
 
 		if (Reflect.has(reference ?? {}, 'log_message_id')) {
 			msg += i18next.t('log.mod_log.case_log.reference', {
-				ref: hyperlink(`#${case_.referenceId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
+				ref: hyperlink(`#${case_.refId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
 				lng: locale,
 			});
 		}

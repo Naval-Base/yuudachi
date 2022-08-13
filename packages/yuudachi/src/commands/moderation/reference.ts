@@ -45,7 +45,7 @@ export default class extends Command<typeof ReferenceCommand> {
 		const case_ = await updateCase({
 			caseId: originalCase.caseId,
 			guildId: interaction.guildId,
-			referenceId: referenceCase.caseId,
+			refId: referenceCase.caseId,
 		});
 		await upsertCaseLog(interaction.guild, interaction.user, case_);
 

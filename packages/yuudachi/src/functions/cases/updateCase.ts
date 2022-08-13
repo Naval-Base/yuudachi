@@ -6,7 +6,7 @@ import { kSQL } from '../../tokens.js';
 
 export type PatchCase = Pick<
 	CreateCase,
-	'guildId' | 'caseId' | 'actionExpiration' | 'reason' | 'contextMessageId' | 'referenceId'
+	'guildId' | 'caseId' | 'actionExpiration' | 'reason' | 'contextMessageId' | 'refId'
 >;
 
 export async function updateCase(case_: PatchCase) {
@@ -36,10 +36,10 @@ export async function updateCase(case_: PatchCase) {
 				and case_id = ${case_.caseId!}`;
 	}
 
-	if (case_.referenceId) {
+	if (case_.refId) {
 		await sql`
 			update cases
-			set ref_id = ${case_.referenceId}
+			set ref_id = ${case_.refId}
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.caseId!}`;
 	}

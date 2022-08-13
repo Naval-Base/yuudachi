@@ -17,8 +17,8 @@ export function transformLockdown(case_: RawLockdown): Lockdown {
 		channelId: case_.channel_id,
 		expiration: case_.expiration,
 		reason: case_.reason,
-		moderatorId: case_.mod_id,
-		moderatorTag: case_.mod_tag,
+		modId: case_.mod_id,
+		modTag: case_.mod_tag,
 		overwrites: case_.overwrites,
 	} as const;
 }

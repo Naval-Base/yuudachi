@@ -104,8 +104,8 @@ export async function lock(
 			channel: args.channel,
 			expiration: duration,
 			reason: args.reason,
-			moderatorId: interaction.user.id,
-			moderatorTag: interaction.user.tag,
+			modId: interaction.user.id,
+			modTag: interaction.user.tag,
 		});
 
 		await args.channel.send({

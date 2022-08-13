@@ -375,9 +375,6 @@
 			},
 			"anti_raid_nuke": {
 				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{- reason}}\n**Hit count:** {{count}}",
-				"parameters": {
-					"cutoff": "**Joined after:** {{- joined_after}}\n**Account created after:** {{- account_created_after}}"
-				},
 				"report": "**Report:** {{- link}}",
 				"report_sub": "Beam me up, Yuu",
 				"footer": "Cases {{from}}-{{to}}"

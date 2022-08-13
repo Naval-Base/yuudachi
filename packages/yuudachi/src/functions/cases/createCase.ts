@@ -1,9 +1,11 @@
 import type { Guild, GuildMember, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import type { CamelCasedProperties } from 'type-fest';
 import { type RawCase, transformCase } from './transformCase.js';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
+import type { PartialAndUndefinedOnNull } from '../../util/types.js';
 
 export enum CaseAction {
 	Role,
@@ -17,46 +19,21 @@ export enum CaseAction {
 	TimeoutEnd,
 }
 
-export interface Case {
-	caseId: number;
-	guildId: Snowflake;
-	action: CaseAction;
-	roleId?: Snowflake | undefined | null;
-	actionExpiration?: string | undefined | null;
-	reason?: string | undefined | null;
-	moderatorId: Snowflake;
-	moderatorTag: string;
-	targetId: Snowflake;
-	targetTag: string;
-	deleteMessageDays?: number | undefined;
-	contextMessageId?: Snowflake | undefined | null;
-	referenceId?: number | undefined | null;
-	logMessageId?: Snowflake | undefined | null;
-	actionProcessed: boolean;
-	multi: boolean;
-	joinCutoff?: string | undefined | null;
-	accountCutoff?: string | undefined | null;
-	createdAt: string;
-}
+export type Case = PartialAndUndefinedOnNull<CamelCasedProperties<RawCase>>;
 
-export interface CreateCase {
-	caseId?: number | undefined;
-	guildId: Snowflake;
-	action: CaseAction;
-	roleId?: Snowflake | undefined | null;
+export type CreateCase = Omit<
+	Case,
+	'caseId' | 'actionExpiration' | 'modId' | 'modTag' | 'logMessageId' | 'actionProcessed' | 'multi' | 'createdAt'
+> & {
+	caseId?: number | undefined | null;
 	actionExpiration?: Date | undefined | null;
-	reason?: string | undefined | null;
-	moderatorId?: Snowflake | undefined;
-	moderatorTag?: string | undefined;
-	targetId: Snowflake;
-	targetTag: string;
-	deleteMessageDays?: number;
-	contextMessageId?: Snowflake | undefined | null;
-	referenceId?: number | undefined | null;
+	modId?: Snowflake | undefined | null;
+	modTag?: string | undefined | null;
 	multi?: boolean | undefined | null;
-	joinCutoff?: Date | undefined | null;
-	accountCutoff?: Date | undefined | null;
-}
+
+	target?: GuildMember | undefined | null;
+	deleteMessageDays?: number | undefined | null;
+};
 
 export async function createCase(
 	guild: Guild,
@@ -65,8 +42,8 @@ export async function createCase(
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const reason = case_.moderatorTag
-		? `Mod: ${case_.moderatorTag}${case_.reason ? ` | ${case_.reason.replace(/`/g, '')}` : ''}`
+	const reason = case_.modTag
+		? `Mod: ${case_.modTag}${case_.reason ? ` | ${case_.reason.replace(/`/g, '')}` : ''}`
 		: case_.reason ?? undefined;
 
 	try {
@@ -97,7 +74,7 @@ export async function createCase(
 					await guild.bans.remove(case_.targetId, reason);
 					break;
 				case CaseAction.Timeout:
-					await case_.target!.disableCommunicationUntil(case_.actionExpiration!, reason);
+					await case_.target!.disableCommunicationUntil(case_.actionExpiration ?? null, reason);
 					break;
 			}
 		}
@@ -121,14 +98,12 @@ export async function createCase(
 			reason,
 			context_message_id,
 			ref_id,
-			multi,
-			join_cutoff,
-			account_cutoff
+			multi
 		) values (
 			next_case(${case_.guildId}),
 			${case_.guildId},
-			${case_.moderatorId ?? null},
-			${case_.moderatorTag ?? null},
+			${case_.modId ?? null},
+			${case_.modTag ?? null},
 			${case_.targetId},
 			${case_.targetTag},
 			${case_.action},
@@ -137,10 +112,8 @@ export async function createCase(
 			${case_.actionExpiration ? false : true},
 			${case_.reason ?? null},
 			${case_.contextMessageId ?? null},
-			${case_.referenceId ?? null},
-			${case_.multi ?? false},
-			${case_.joinCutoff ?? null},
-			${case_.accountCutoff ?? null}
+			${case_.refId ?? null},
+			${case_.multi ?? false}
 		)
 		returning *`;
 

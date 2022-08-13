@@ -9,8 +9,6 @@ interface CasePayloadArgs {
 	};
 	days?: number | undefined;
 	reference?: number | undefined | null;
-	joinCutoff?: Date | undefined | null;
-	accountCutoff?: Date | undefined | null;
 }
 
 interface GenerateCasePayloadOptions {
@@ -38,18 +36,16 @@ export function generateCasePayload({
 		guildId,
 		action,
 		roleId,
-		actionExpiration: duration ? new Date(Date.now() + duration) : undefined,
+		actionExpiration: duration ? new Date(Date.now() + duration) : null,
 		reason: args.reason,
-		moderatorId: user?.id,
-		moderatorTag: user?.tag,
+		modId: user?.id,
+		modTag: user?.tag,
 		target: args.user.member,
 		targetId: args.user.user.id,
 		targetTag: args.user.user.tag,
 		deleteMessageDays: args.days,
 		contextMessageId: messageId,
-		referenceId: args.reference ? Number(args.reference) : undefined,
+		refId: args.reference ? Number(args.reference) : undefined,
 		multi,
-		joinCutoff: args.joinCutoff,
-		accountCutoff: args.accountCutoff,
 	} as const;
 }

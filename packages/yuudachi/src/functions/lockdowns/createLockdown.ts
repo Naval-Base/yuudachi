@@ -1,33 +1,16 @@
-import {
-	type GuildChannel,
-	type PermissionOverwrites,
-	type Snowflake,
-	OverwriteType,
-	PermissionFlagsBits,
-} from 'discord.js';
+import { type GuildChannel, OverwriteType, PermissionFlagsBits } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import type { CamelCasedProperties } from 'type-fest';
 import { type RawLockdown, transformLockdown } from './transformLockdown.js';
 import { kSQL } from '../../tokens.js';
+import type { PartialAndUndefinedOnNull } from '../../util/types.js';
 
-export interface Lockdown {
-	guildId: Snowflake;
-	channelId: Snowflake;
-	expiration: string;
-	reason?: string | undefined | null;
-	moderatorId: Snowflake;
-	moderatorTag: string;
-	overwrites?: PermissionOverwrites[] | undefined;
-}
+export type Lockdown = PartialAndUndefinedOnNull<CamelCasedProperties<RawLockdown>>;
 
-export interface CreateLockdown {
-	guildId: Snowflake;
-	channelId: Snowflake;
+export type CreateLockdown = Omit<Lockdown, 'expiration' | 'overwrites'> & {
 	expiration: Date;
-	reason?: string | undefined | null;
-	moderatorId: Snowflake;
-	moderatorTag: string;
-}
+};
 
 export async function createLockdown(lockdown: CreateLockdown & { channel: GuildChannel }) {
 	const sql = container.resolve<Sql<any>>(kSQL);
@@ -66,8 +49,8 @@ export async function createLockdown(lockdown: CreateLockdown & { channel: Guild
 			${lockdown.guildId},
 			${lockdown.channelId},
 			${lockdown.expiration},
-			${lockdown.moderatorId},
-			${lockdown.moderatorTag},
+			${lockdown.modId},
+			${lockdown.modTag},
 			${lockdown.reason ?? null},
 			${sql.json(overwrites)}
 		)
