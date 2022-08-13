@@ -1,9 +1,6 @@
 import type { Snowflake } from 'discord.js';
 
-// So yeah, I worked on an Automod PR some time ago so I have all the types lying around...
 // https://github.com/discordjs/discord-api-types/pull/497
-
-export const AutoModActionExecutionIntentBits = 1 << 21;
 
 /**
  * https://discord.com/developers/docs/topics/gateway#auto-moderation-action-execution-auto-moderation-action-execution-event-fields

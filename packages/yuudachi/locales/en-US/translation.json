@@ -391,10 +391,10 @@
 			},
 			"auto_mod": {
 				"keyword": "Message contained a keyword defined in AutoMod rule",
-				"keyword_preset": "Message flagged by the AutoMod",
+				"keyword_preset": "Message flagged by AutoMod",
 				"harmful_link": "Message contained a harmful link",
 				"spam": "Message was detected as spam",
-				"default": "Message flagged by the AutoMod"
+				"default": "Message flagged by AutoMod"
 			}
 		},
 		"member_log": {

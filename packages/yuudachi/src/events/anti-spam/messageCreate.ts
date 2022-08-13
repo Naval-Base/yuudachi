@@ -1,6 +1,6 @@
 import { on } from 'node:events';
 import { Client, Events, type Message } from 'discord.js';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { handleAntiSpam } from '../../functions/anti-spam/handler.js';
 import { logger } from '../../logger.js';
@@ -10,7 +10,7 @@ export default class implements Event {
 
 	public event = Events.MessageCreate as const;
 
-	public constructor(@inject(Client) public readonly client: Client<true>) {}
+	public constructor(public readonly client: Client<true>) {}
 
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {

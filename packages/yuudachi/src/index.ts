@@ -19,7 +19,6 @@ import { createCommands } from './util/commands.js';
 import { dynamicImport } from './util/dynamicImport.js';
 import { createPostgres } from './util/postgres.js';
 import { createRedis } from './util/redis.js';
-import { AutoModActionExecutionIntentBits } from './util/tempAutomodTypes.js';
 import { createWebhooks } from './util/webhooks.js';
 import { WebSocketConnection } from './websocket/WebSocketConnection.js';
 
@@ -34,7 +33,7 @@ const client = createClient({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildVoiceStates,
 		GatewayIntentBits.MessageContent,
-		AutoModActionExecutionIntentBits,
+		1 << 21, // AutoModActionExecution
 	],
 	partials: [Partials.GuildMember],
 	makeCache: Options.cacheWithLimits({

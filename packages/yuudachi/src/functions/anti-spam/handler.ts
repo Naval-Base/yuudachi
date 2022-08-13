@@ -1,13 +1,13 @@
 import type { GuildMember } from 'discord.js';
 import i18next from 'i18next';
-import type { Redis } from 'ioredis';
+import type { default as Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { createContentHash, totalContents } from './totalContents.js';
 import { totalMentions } from './totalMentions.js';
 import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants.js';
 import { logger } from '../../logger.js';
 import { kRedis } from '../../tokens.js';
-import { Case, CaseAction, createCase } from '../cases/createCase.js';
+import { type Case, CaseAction, createCase } from '../cases/createCase.js';
 import { upsertCaseLog } from '../logging/upsertCaseLog.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
@@ -48,8 +48,8 @@ export async function handleAntiSpam(
 		const locale = await getGuildSetting(member.guild.id, SettingsKeys.Locale);
 
 		await redis.setex(`guild:${member.guild.id}:user:${member.id}:ban`, 15, '');
-		let case_: Case | null = null;
 
+		let case_: Case | null = null;
 		if (mentionExceeded) {
 			logger.info(
 				{
@@ -72,8 +72,8 @@ export async function handleAntiSpam(
 				}),
 				deleteMessageDays: 1,
 			});
-			const mentionCountKey = `guild:${member.guild.id}:user:${member.id}:mentions`;
-			await redis.del(mentionCountKey);
+
+			await redis.del(`guild:${member.guild.id}:user:${member.id}:mentions`);
 		} else if (contentExceeded) {
 			logger.info(
 				{
@@ -86,6 +86,7 @@ export async function handleAntiSpam(
 			);
 
 			await redis.setex(`guild:${member.guild.id}:user:${member.id}:unban`, 15, '');
+
 			case_ = await createCase(member.guild, {
 				targetId: member.id,
 				guildId: member.guild.id,
@@ -96,8 +97,8 @@ export async function handleAntiSpam(
 			});
 
 			const contentHash = createContentHash(content);
-			const channelSpamKey = `guild:${member.guild.id}:user:${member.id}:contenthash:${contentHash}`;
-			await redis.del(channelSpamKey);
+
+			await redis.del(`guild:${member.guild.id}:user:${member.id}:contenthash:${contentHash}`);
 		}
 
 		await upsertCaseLog(member.guild, member.client.user, case_!);

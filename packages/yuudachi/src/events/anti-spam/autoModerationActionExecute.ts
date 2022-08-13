@@ -1,18 +1,18 @@
 import { on } from 'events';
 import { Client, Events } from 'discord.js';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { handleAntiSpam } from '../../functions/anti-spam/handler.js';
 import { logger } from '../../logger.js';
-import { APIAutoModerationRuleActionType, GatewayAutoModerationActionExecution } from '../../util/tempAutomodTypes.js';
+import { APIAutoModerationRuleActionType, type GatewayAutoModerationActionExecution } from '../../util/tempAutomodTypes.js';
 
 @injectable()
 export default class implements Event {
-	public name = 'Auto-mod spam handler';
+	public name = 'AutoMod spam handler';
 
 	public event = Events.Raw as const;
 
-	public constructor(@inject(Client) public readonly client: Client<true>) {}
+	public constructor(public readonly client: Client<true>) {}
 
 	public async execute(): Promise<void> {
 		for await (const [rawData] of on(this.client, this.event) as AsyncIterableIterator<
@@ -20,7 +20,7 @@ export default class implements Event {
 				{
 					op: number;
 					t: string;
-					d: any;
+					d: GatewayAutoModerationActionExecution;
 				},
 			]
 		>) {
@@ -29,18 +29,20 @@ export default class implements Event {
 					continue;
 				}
 
-				const automodAction = rawData.d as GatewayAutoModerationActionExecution;
+				const autoModAction = rawData.d;
 
-				if (automodAction.action.type !== APIAutoModerationRuleActionType.BlockMessage) continue;
-
-				const guild = await this.client.guilds.fetch(automodAction.guild_id);
-				const member = await guild.members.fetch(automodAction.user_id);
-
-				if (!automodAction.content.length) {
+				if (autoModAction.action.type !== APIAutoModerationRuleActionType.BlockMessage) {
 					continue;
 				}
 
-				await handleAntiSpam(member, automodAction.content, { name: this.name, event: this.event });
+				const guild = this.client.guilds.resolve(autoModAction.guild_id);
+				const member = await guild.members.fetch(autoModAction.user_id);
+
+				if (!autoModAction.content.length) {
+					continue;
+				}
+
+				await handleAntiSpam(member, autoModAction.content, { name: this.name, event: this.event });
 			} catch (e) {
 				const error = e as Error;
 				logger.error(error, error.message);
