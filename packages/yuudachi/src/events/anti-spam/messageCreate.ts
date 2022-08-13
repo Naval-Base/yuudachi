@@ -23,7 +23,10 @@ export default class implements Event {
 					continue;
 				}
 
-				await handleAntiSpam(message.member, message.content, { name: this.name, event: this.event });
+				await handleAntiSpam(message.guildId, message.member.id, message.content, {
+					name: this.name,
+					event: this.event,
+				});
 			} catch (e) {
 				const error = e as Error;
 				logger.error(error, error.message);
