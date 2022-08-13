@@ -278,9 +278,7 @@ export async function generateAntiRaidNukeReport(
 		);
 	} else {
 		parts.push(
-			blockquote('**Note**'),
-			emptyLine(),
-			blockquote(heading(i18next.t('formatters.anti_raid_nuke.successes.none', { lng: locale }), 3)),
+			blockquote(`**Note**\n${heading(i18next.t('formatters.anti_raid_nuke.successes.none', { lng: locale }), 3)}`),
 		);
 	}
 
@@ -297,9 +295,7 @@ export async function generateAntiRaidNukeReport(
 		);
 	} else {
 		parts.push(
-			blockquote('**Note**'),
-			emptyLine(),
-			blockquote(heading(i18next.t('formatters.anti_raid_nuke.failures.none', { lng: locale }), 3)),
+			blockquote(`**Note**\n${heading(i18next.t('formatters.anti_raid_nuke.failures.none', { lng: locale }), 3)}`),
 		);
 	}
 
