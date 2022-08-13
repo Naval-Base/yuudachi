@@ -31,6 +31,8 @@ export const getServerSideProps = async (context: Parameters<GetServerSideProps>
 		},
 	});
 
+	context.res.setHeader('Cache-Control', 'public, max-age=604800, s-maxage=31536000');
+
 	return { props: { source: mdxSource } };
 };
 
