@@ -6,17 +6,14 @@ import { kRedis } from '../../tokens.js';
 
 export async function totalMentions(guildId: Snowflake, userId: Snowflake, content: string) {
 	const redis = container.resolve<Redis>(kRedis);
-
 	const parsed = new Set<Snowflake>();
 
 	for (const mention of content.matchAll(/<@(?<userId>\d{17,20})>/g)) {
 		const id = mention.groups?.userId;
 
-		if (!id) {
-			continue;
+		if (id) {
+			parsed.add(id);
 		}
-
-		parsed.add(id);
 	}
 
 	const attemptAtEveryoneOrHere = ['@everyone', '@here'].some((pattern) => content.includes(pattern));

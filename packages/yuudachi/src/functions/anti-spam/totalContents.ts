@@ -13,9 +13,9 @@ export async function totalContents(guildId: Snowflake, userId: Snowflake, conte
 	const redis = container.resolve<Redis>(kRedis);
 
 	const contentHash = createContentHash(content);
+
 	const channelSpamKey = `guild:${guildId}:user:${userId}:contenthash:${contentHash}`;
 	const total = await redis.incr(channelSpamKey);
-
 	await redis.expire(channelSpamKey, SPAM_EXPIRE_SECONDS);
 
 	return total;

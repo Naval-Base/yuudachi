@@ -27,7 +27,17 @@ export async function handleAntiSpam(
 		return;
 	}
 
+	const modLogChannel = checkLogChannel(guild, await getGuildSetting(guildId, SettingsKeys.ModLogChannelId));
+
+	if (!modLogChannel) {
+		return;
+	}
+
 	const member = await guild.members.fetch(userId);
+
+	if (!member.bannable) {
+		return;
+	}
 
 	const ignoreRoles = await getGuildSetting<string[]>(guildId, SettingsKeys.AutomodIgnoreRoles);
 
@@ -42,16 +52,6 @@ export async function handleAntiSpam(
 	const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
 
 	if (mentionExceeded || contentExceeded) {
-		if (!member.bannable) {
-			return;
-		}
-
-		const modLogChannel = checkLogChannel(member.guild, await getGuildSetting(guildId, SettingsKeys.ModLogChannelId));
-
-		if (!modLogChannel) {
-			return;
-		}
-
 		const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
 
 		await redis.setex(`guild:${guildId}:user:${userId}:ban`, 15, '');
@@ -60,7 +60,7 @@ export async function handleAntiSpam(
 		if (mentionExceeded) {
 			logger.info(
 				{
-					event: { event },
+					event,
 					guildId: guildId,
 					userId: client.user.id,
 					memberId: userId,
@@ -84,7 +84,7 @@ export async function handleAntiSpam(
 		} else if (contentExceeded) {
 			logger.info(
 				{
-					event: { event },
+					event,
 					guildId: guildId,
 					userId: client.user.id,
 					memberId: userId,
@@ -94,7 +94,7 @@ export async function handleAntiSpam(
 
 			await redis.setex(`guild:${guildId}:user:${userId}:unban`, 15, '');
 
-			case_ = await createCase(member.guild, {
+			case_ = await createCase(guild, {
 				targetId: userId,
 				guildId: guildId,
 				action: CaseAction.Softban,
