@@ -139,7 +139,7 @@
 					},
 					"parameters": {
 						"heading": "Parameter:",
-						"current_time": "• Aktuelle Zeit: {{- now}}",
+						"launch_time": "",
 						"dry_run": "",
 						"days_zero": "",
 						"days_one": "",
@@ -467,7 +467,7 @@
 			"summary": {
 				"title": "",
 				"mode": "",
-				"current_time": "",
+				"launch_time": "",
 				"time_taken": "",
 				"moderator": "",
 				"reason": "",
