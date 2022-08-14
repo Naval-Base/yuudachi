@@ -16,8 +16,8 @@ export const UnbanCommand = {
 			type: ApplicationCommandOptionType.String,
 		},
 		{
-			name: "reference",
-			description: "The reference case",
+			name: "report_reference",
+			description: "The reference report",
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],

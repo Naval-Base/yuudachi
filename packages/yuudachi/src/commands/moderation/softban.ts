@@ -121,6 +121,8 @@ export default class extends Command<typeof SoftbanCommand> {
 						user: collectedInteraction.user,
 						args: {
 							...args,
+							caseReference: args.case_reference ?? null,
+							reportReference: args.report_reference ?? null,
 							days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 						},
 						action: CaseAction.Softban,

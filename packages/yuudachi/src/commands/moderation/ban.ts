@@ -131,6 +131,8 @@ export default class extends Command<typeof BanCommand> {
 					user: collectedInteraction.user,
 					args: {
 						...args,
+						caseReference: args.case_reference ?? null,
+						reportReference: args.report_reference ?? null,
 						days: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
 					},
 					action: CaseAction.Ban,

@@ -128,7 +128,11 @@ export async function react(
 				guildId: collectedInteraction.guildId,
 				user: collectedInteraction.user,
 				roleId: roles.reaction_role_id,
-				args,
+				args: {
+					...args,
+					caseReference: args.case_reference ?? null,
+					reportReference: args.report_reference ?? null,
+				},
 				action: CaseAction.Role,
 				duration: parsedDuration,
 			}),

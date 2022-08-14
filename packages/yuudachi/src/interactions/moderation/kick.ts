@@ -16,8 +16,13 @@ export const KickCommand = {
 			type: ApplicationCommandOptionType.String,
 		},
 		{
-			name: "reference",
+			name: "case_reference",
 			description: "The reference case",
+			type: ApplicationCommandOptionType.Integer,
+		},
+		{
+			name: "report_reference",
+			description: "The reference report",
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],

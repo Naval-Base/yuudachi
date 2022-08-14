@@ -122,7 +122,11 @@ export default class extends Command<typeof KickCommand> {
 				generateCasePayload({
 					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,
-					args,
+					args: {
+						...args,
+						caseReference: args.case_reference ?? null,
+						reportReference: args.report_reference ?? null,
+					},
 					action: CaseAction.Kick,
 				}),
 			);
