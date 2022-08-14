@@ -48,7 +48,7 @@ export function generateCasePayload({
 		targetTag: args.user.user.tag,
 		deleteMessageDays: args.days,
 		contextMessageId: messageId,
-		caseReferenceId: args.caseReference ? Number(args.caseReference) : undefined,
+		caseRefId: args.caseReference ? Number(args.caseReference) : undefined,
 		reportRefId: args.reportReference ? Number(args.reportReference) : undefined,
 		multi,
 	} as const;

@@ -30,7 +30,7 @@ export async function reportReference(
 	const case_ = await updateCase({
 		caseId: originalCase.caseId,
 		guildId: interaction.guildId,
-		reportReferenceId: referenceReport.reportId,
+		reportRefId: referenceReport.reportId,
 	});
 	await upsertCaseLog(interaction.guild, interaction.user, case_);
 

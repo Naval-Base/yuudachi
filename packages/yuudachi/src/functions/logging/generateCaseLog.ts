@@ -77,29 +77,26 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 
 		if (Reflect.has(reference ?? {}, "log_message_id")) {
 			msg += i18next.t("log.mod_log.case_log.case_reference", {
-				ref: hyperlink(
-					`#${case_.caseReferenceId}`,
-					messageLink(logChannelId, reference!.log_message_id!, case_.guildId),
-				),
+				ref: hyperlink(`#${case_.caseRefId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
 				lng: locale,
 			});
 		}
 	}
 
-	if (case_.reportReferenceId) {
+	if (case_.reportRefId) {
 		const reportsChannelId = await getGuildSetting(case_.guildId, SettingsKeys.ReportChannelId);
 
 		const [reference] = await sql<[{ log_message_id: Snowflake | null }?]>`
 			select log_message_id
 			from reports
 			where guild_id = ${case_.guildId}
-				and report_id = ${case_.reportReferenceId}
+				and report_id = ${case_.reportRefId}
 		`;
 
 		if (reportsChannelId && Reflect.has(reference ?? {}, "log_message_id")) {
 			msg += i18next.t("log.mod_log.case_log.report_reference", {
 				report_ref: hyperlink(
-					`#${case_.reportReferenceId}`,
+					`#${case_.reportRefId}`,
 					messageLink(reportsChannelId, reference!.log_message_id!, case_.guildId),
 				),
 				lng: locale,

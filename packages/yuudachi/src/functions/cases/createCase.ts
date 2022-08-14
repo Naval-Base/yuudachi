@@ -50,15 +50,13 @@ export type CreateCase = Omit<
 	caseId?: number | null | undefined;
 	caseReferenceId?: number | null | undefined;
 	contextMessageId?: Snowflake | null | undefined;
-	deleteMessageDays?: number;
-	moderatorId?: Snowflake | undefined;
-	moderatorTag?: string | undefined;
-	multi?: boolean | null | undefined;
+	deleteMessageDays?: number | null | undefined;
+	modId?: Snowflake | undefined;
+	modTag?: string | undefined;
 	multi?: boolean | null | undefined;
 	reason?: string | null | undefined;
 	reportReferenceId?: number | null | undefined;
 	target?: GuildMember | null | undefined;
-
 	targetId: Snowflake;
 	targetTag: string;
 };
@@ -138,7 +136,9 @@ export async function createCase(
 			context_message_id,
 			case_ref_id,
 			report_ref_id,
-			multi
+			multi,
+			join_cutoff,
+			account_cutoff
 		) values (
 			next_case(${case_.guildId}),
 			${case_.guildId},
@@ -152,7 +152,7 @@ export async function createCase(
 			${!case_.actionExpiration},
 			${case_.reason ?? null},
 			${case_.contextMessageId ?? null},
-			${case_.caseReferenceId ?? null},
+			${case_.caseRefId ?? null},
 			${case_.reportRefId ?? null},
 			${case_.multi ?? false}
 		)
