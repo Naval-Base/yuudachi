@@ -25,12 +25,14 @@ import {
 	RefreshScamlistCommand,
 	SponsorCommand,
 	RepostCommand,
+	ReportCommand,
 
 	// Context Menu
 	HistoryUserContextCommand,
 	SponsorUserContextCommand,
 	RepostMessageContextCommand,
 	ClearContextCommand,
+	ReportMessageContextCommand,
 } from "./interactions/index.js";
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
@@ -63,12 +65,14 @@ try {
 			RefreshScamlistCommand,
 			SponsorCommand,
 			RepostCommand,
+			ReportCommand,
 
 			// Context Menu
 			HistoryUserContextCommand,
 			SponsorUserContextCommand,
 			RepostMessageContextCommand,
 			ClearContextCommand,
+			ReportMessageContextCommand,
 		],
 	});
 	console.log("Successfully reloaded interaction (/) commands.");
