@@ -15,7 +15,8 @@ export default class extends Command<typeof ReferenceCommand> {
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
 
-		const caseId = args.case?.case || args.report?.case;
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		const caseId = args.case?.case ?? args.report.case;
 
 		const modLogChannel = checkLogChannel(
 			interaction.guild,

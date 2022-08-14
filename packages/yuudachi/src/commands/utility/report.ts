@@ -7,13 +7,13 @@ import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type 
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ReportCommand, ReportMessageContextCommand } from '../../interactions/index.js';
+import { logger } from '../../logger.js';
 import { createModal } from '../../util/modal.js';
 import { createModalActionRow } from '../../util/modalActionRow.js';
 import { createTextComponent } from '../../util/textComponent.js';
-import { logger } from '../../logger.js';
 
 export default class extends Command<typeof ReportCommand | typeof ReportMessageContextCommand> {
-	constructor() {
+	public constructor() {
 		super(['report', 'Report message']);
 	}
 

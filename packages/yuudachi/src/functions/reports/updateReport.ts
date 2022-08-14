@@ -1,8 +1,8 @@
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { kSQL } from '../../tokens.js';
 import type { CreateReport } from './createReport.js';
 import { type RawReport, transformReport } from './transformReport.js';
+import { kSQL } from '../../tokens.js';
 
 export type PatchCase = Pick<
 	Partial<CreateReport>,

@@ -1,14 +1,14 @@
 import type { Guild, Message, User } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import { formatMessageToEmbed } from './formatMessageToEmbed.js';
+import { generateReportEmbed } from './generateReportEmbed.js';
 import { kSQL } from '../../tokens.js';
 import type { Report } from '../reports/createReport.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
-import { formatMessageToEmbed } from './formatMessageToEmbed.js';
-import { generateReportEmbed } from './generateReportEmbed.js';
 
-export async function upsertReportLog(guild: Guild, user: User, report: Report, message?: Message<boolean>) {
+export async function upsertReportLog(guild: Guild, user: User, report: Report, message?: Message) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const modLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);

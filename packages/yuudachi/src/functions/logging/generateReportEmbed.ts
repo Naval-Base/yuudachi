@@ -35,7 +35,7 @@ export async function generateReportEmbed(
 	user: User,
 	report: Report,
 	locale: string,
-	message?: Message<boolean>,
+	message?: Message,
 ): Promise<APIEmbed> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
@@ -75,6 +75,8 @@ export async function generateReportEmbed(
 		descParts.push(
 			i18next.t('log.report_log.message', {
 				message_link: hyperlink(i18next.t('log.report_log.message_sub', { lng: locale }), message.url),
+				// TextChannels have an custom `.toString()` method that returns the channel's mention.
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: message.channel.toString(),
 				lng: locale,
 			}),

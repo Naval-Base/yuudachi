@@ -1,10 +1,12 @@
 import type { ArgsParam, InteractionParam } from '../../../../Command.js';
 import type { ReportCommand } from '../../../../interactions/index.js';
 export async function user(
-	// @ts-ignore
+	// @ts-expect-error
 	interaction: InteractionParam,
-	// @ts-ignore
+	// @ts-expect-error
 	args: ArgsParam<typeof ReportCommand>['user'],
-	// @ts-ignore
+	// @ts-expect-error
 	locale: string,
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
 ) {}

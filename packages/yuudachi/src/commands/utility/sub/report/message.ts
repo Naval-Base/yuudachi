@@ -49,6 +49,10 @@ export async function message(
 		resolvedMessage = args.message;
 	}
 
+	if (!resolvedMessage) {
+		return;
+	}
+
 	const reportKey = nanoid();
 	const cancelKey = nanoid();
 
@@ -67,7 +71,7 @@ export async function message(
 		i18next.t('command.utility.report.message.pending', {
 			message_link: hyperlink(
 				i18next.t('command.utility.report.message.pending_sub', { lng: locale }),
-				resolvedMessage?.url!,
+				resolvedMessage.url,
 			),
 			reason: args.reason,
 			lng: locale,
@@ -123,13 +127,13 @@ export async function message(
 			authorId: interaction.user.id,
 			authorTag: interaction.user.tag,
 			reason: args.reason,
-			targetId: resolvedMessage?.author.id!,
-			targetTag: resolvedMessage?.author.tag!,
-			message: resolvedMessage!,
+			targetId: resolvedMessage.author.id,
+			targetTag: resolvedMessage.author.tag,
+			message: resolvedMessage,
 			type: ReportType.Message,
 		});
 
-		await upsertReportLog(interaction.guild!, interaction.user, report, resolvedMessage!);
+		await upsertReportLog(interaction.guild!, interaction.user, report, resolvedMessage);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.utility.report.message.success', { lng: locale }),

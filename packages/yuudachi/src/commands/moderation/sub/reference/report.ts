@@ -40,7 +40,7 @@ export async function reportReference(
 		referenceId: originalCase.caseId,
 	});
 	const message = report.messageId
-		? await resolveMessage(interaction.channel?.id!, report.guildId, report.channelId, report.messageId, locale)
+		? await resolveMessage(interaction.channel!.id, report.guildId, report.channelId, report.messageId, locale)
 		: undefined;
 	await upsertReportLog(interaction.guild, interaction.user, report, message);
 

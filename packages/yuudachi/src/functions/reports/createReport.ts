@@ -27,7 +27,7 @@ export interface CreateReport {
 	reportId?: number;
 	type?: ReportType;
 	status?: ReportStatus;
-	message?: Message<boolean>;
+	message?: Message;
 	targetId: Snowflake;
 	targetTag: string;
 	authorId: Snowflake;
