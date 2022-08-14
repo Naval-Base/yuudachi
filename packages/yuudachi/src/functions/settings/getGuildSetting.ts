@@ -16,6 +16,7 @@ export enum SettingsKeys {
 	ModLogChannelId = "mod_log_channel_id",
 	ModRoleId = "mod_role_id",
 	ReactionRoleId = "reaction_role_id",
+	ReportChannelId = "report_channel_id",
 	SponsorRoleId = "sponsor_role_id",
 }
 
