@@ -355,12 +355,23 @@
 				"success": "Successfully applied sponsor role to {{- user}}"
 			},
 			"report": {
+				"commons": {
+					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
+					"trust_and_safety_sub": "trust and safety",
+					"buttons": {
+						"execute": "Create Report",
+						"cancel": "Cancel"
+					}
+				},
 				"message": {
 					"modal": {
 						"title": "Message report for {{- user}}",
 						"label": "The reason for the report",
 						"placeholder": "Please enter an detailed reason for the report"
 					},
+					"pending": "Are you sure you want to report {{- message_link}}?\n**Reason:** {{- reason}}",
+					"pending_sub": "this message",
+					"cancel": "Message report canceled.",
 					"success": "Successfully reported message."
 				},
 				"user": {}
@@ -586,14 +597,21 @@
 			"author": "Report by {{- author}}",
 			"reason": "**Reason:**\n{{- reason}}",
 			"target": "**Target:** {{- target}}",
-			"created_at": "**Created at:** {{- created_at}}",
 			"message": "**Message Reported:** {{- message_link}} ({{- channel}})",
 			"message_sub": "Beam me up, Yuu",
 			"case_reference": "**Case Reference:** {{- ref}}",
+			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
+			"created_at": "**Created at:** {{- created_at}}",
 			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
 			"report_type": {
-				"message": "Message",
-				"user": "User"
+				"0": "Message",
+				"1": "User"
+			},
+			"report_status": {
+				"0": "Pending",
+				"1": "Approved",
+				"2": "Rejected",
+				"3": "False"
 			}
 		}
 	}

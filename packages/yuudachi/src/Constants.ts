@@ -47,3 +47,5 @@ export const SNOWFLAKE_MIN_LENGTH = 17;
 export const AUTOMOD_FLAG_INDICATOR_FIELD_NAME = "flagged_message_id";
 export const AUTOCOMPLETE_CHOICE_LIMIT = 25;
 export const AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT = 100;
+
+export const TRUST_AND_SAFETY_URL = 'https://support.discord.com/hc/en-us/requests/new';
