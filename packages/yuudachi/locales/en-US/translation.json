@@ -360,7 +360,8 @@
 					"trust_and_safety_sub": "trust and safety",
 					"buttons": {
 						"execute": "Create Report",
-						"cancel": "Cancel"
+						"cancel": "Cancel",
+						"trust_and_safety": "Report to Trust and Safety"
 					}
 				},
 				"message": {
@@ -369,7 +370,7 @@
 						"label": "The reason for the report",
 						"placeholder": "Please enter an detailed reason for the report"
 					},
-					"pending": "Are you sure you want to report {{- message_link}}?\n**Reason:** {{- reason}}",
+					"pending": "Are you sure you want to report {{- message_link}} to the server moderators?\n**Reason:** {{- reason}}",
 					"pending_sub": "this message",
 					"cancel": "Message report canceled.",
 					"success": "Successfully reported message."
