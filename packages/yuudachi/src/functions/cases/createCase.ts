@@ -19,7 +19,28 @@ export enum CaseAction {
 	TimeoutEnd,
 }
 
-export type Case = PartialAndUndefinedOnNull<CamelCasedProperties<RawCase>>;
+export type Case = {
+	accountCutoff?: string | null | undefined;
+	action: CaseAction;
+	actionExpiration?: string | null | undefined;
+	actionProcessed: boolean;
+	caseId: number;
+	caseReferenceId?: number | null | undefined;
+	contextMessageId?: Snowflake | null | undefined;
+	createdAt: string;
+	deleteMessageDays?: number | undefined;
+	guildId: Snowflake;
+	joinCutoff?: string | null | undefined;
+	logMessageId?: Snowflake | null | undefined;
+	moderatorId: Snowflake;
+	moderatorTag: string;
+	multi: boolean;
+	reason?: string | null | undefined;
+	reportReferenceId?: number | null | undefined;
+	roleId?: Snowflake | null | undefined;
+	targetId: Snowflake;
+	targetTag: string;
+};
 
 export type CreateCase = Omit<
 	Case,
@@ -27,12 +48,19 @@ export type CreateCase = Omit<
 > & {
 	actionExpiration?: Date | null | undefined;
 	caseId?: number | null | undefined;
-	deleteMessageDays?: number | null | undefined;
-	modId?: Snowflake | null | undefined;
-	modTag?: string | null | undefined;
-
+	caseReferenceId?: number | null | undefined;
+	contextMessageId?: Snowflake | null | undefined;
+	deleteMessageDays?: number;
+	moderatorId?: Snowflake | undefined;
+	moderatorTag?: string | undefined;
 	multi?: boolean | null | undefined;
+	multi?: boolean | null | undefined;
+	reason?: string | null | undefined;
+	reportReferenceId?: number | null | undefined;
 	target?: GuildMember | null | undefined;
+
+	targetId: Snowflake;
+	targetTag: string;
 };
 
 export async function createCase(
@@ -108,7 +136,8 @@ export async function createCase(
 			action_processed,
 			reason,
 			context_message_id,
-			ref_id,
+			case_ref_id,
+			report_ref_id,
 			multi
 		) values (
 			next_case(${case_.guildId}),
@@ -123,7 +152,8 @@ export async function createCase(
 			${!case_.actionExpiration},
 			${case_.reason ?? null},
 			${case_.contextMessageId ?? null},
-			${case_.refId ?? null},
+			${case_.caseReferenceId ?? null},
+			${case_.reportRefId ?? null},
 			${case_.multi ?? false}
 		)
 		returning *
