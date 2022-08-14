@@ -3,6 +3,7 @@
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
 			"no_anti_raid_archive_channel": "No Anti-Raid-Nuke archive channel has been initialized yet.",
+			"no_report_channel": "No report channel has been initialized yet.",
 			"no_content": "<No message content>"
 		},
 		"moderator": "Moderator"
@@ -43,7 +44,8 @@
 					"no_case_range": "Invalid case range `#{{lower_case}}` to `#{{upper_case}}`",
 					"case_lower_one": "Case ids have to be above `0`",
 					"no_reference_case": "Cannot find reference case `#{{case}}`",
-					"already_processed": "{{- user}} with case {{- case}} has no running restrictions."
+					"already_processed": "{{- user}} with case {{- case}} has no running restrictions.",
+					"no_reference_report": "Cannot find reference report `#{{report}}`"
 				}
 			},
 			"case": {
@@ -288,7 +290,8 @@
 				"cancel": "Canceled setting reason."
 			},
 			"reference": {
-				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
+				"case": "Successfully set the **case reference** for case {{- case}} to {{- ref}}",
+				"report": "Successfully set the **report reference** for case {{- case}} to {{- ref}}"
 			},
 			"duration": {
 				"errors": {
@@ -350,6 +353,17 @@
 				"reason": "Sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
+			},
+			"report": {
+				"message": {
+					"modal": {
+						"title": "Message report for {{- user}}",
+						"label": "The reason for the report",
+						"placeholder": "Please enter an detailed reason for the report"
+					},
+					"success": "Successfully reported message."
+				},
+				"user": {}
 			}
 		}
 	},
@@ -371,7 +385,8 @@
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
 				"reason_fallback": "\n**Reason:** Use `/reason {{case_id}} <...reason>` to set a reason for this case",
-				"reference": "\n**Reference:** {{- ref}}",
+				"case_reference": "\n**Case Reference:** {{- ref}}",
+				"report_reference": "\n**Report Reference:** {{- report_ref}}",
 				"footer": "Case {{case_id}}"
 			},
 			"anti_raid_nuke": {
@@ -565,6 +580,20 @@
 			"table": {
 				"success_titles": ["Case id", "Member id", "Username"],
 				"fail_titles": ["Member id", "Username", "Error"]
+			}
+		},
+		"report_log": {
+			"author": "Report by {{- author}}",
+			"reason": "**Reason:**\n{{- reason}}",
+			"target": "**Target:** {{- target}}",
+			"created_at": "**Created at:** {{- created_at}}",
+			"message": "**Message Reported:** {{- message_link}} ({{- channel}})",
+			"message_sub": "Beam me up, Yuu",
+			"case_reference": "**Case Reference:** {{- ref}}",
+			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
+			"report_type": {
+				"message": "Message",
+				"user": "User"
 			}
 		}
 	}
