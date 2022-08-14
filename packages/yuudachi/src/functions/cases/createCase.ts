@@ -136,9 +136,7 @@ export async function createCase(
 			context_message_id,
 			case_ref_id,
 			report_ref_id,
-			multi,
-			join_cutoff,
-			account_cutoff
+			multi
 		) values (
 			next_case(${case_.guildId}),
 			${case_.guildId},
