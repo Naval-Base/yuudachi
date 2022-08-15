@@ -6,6 +6,9 @@ import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
 import type { PartialAndUndefinedOnNull } from "../../util/types.js";
 import { type RawCase, transformCase } from "./transformCase.js";
+import { upsertReportLog } from "../logging/upsertReportLog.js";
+import { ReportStatus } from "../reports/createReport.js";
+import { updateReport } from "../reports/updateReport.js";
 
 export enum CaseAction {
 	Role,
@@ -156,6 +159,22 @@ export async function createCase(
 		)
 		returning *
 	`;
+
+	try {
+		if (case_.reportRefId) {
+			const report = await updateReport({
+				guildId: case_.guildId,
+				reportId: case_.reportRefId,
+				referenceId: newCase.case_id,
+				status: ReportStatus.Approved,
+			});
+
+			await upsertReportLog(guild, guild.client.users.cache.get(case_.modId!)!, report);
+		}
+	} catch (e) {
+		const error = e as Error;
+		logger.error(error, error.message);
+	}
 
 	return transformCase(newCase);
 }

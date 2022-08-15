@@ -5,6 +5,7 @@ import type { Case } from '../../../../functions/cases/createCase.js';
 import { updateCase } from '../../../../functions/cases/updateCase.js';
 import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
 import { upsertReportLog } from '../../../../functions/logging/upsertReportLog.js';
+import { ReportStatus } from '../../../../functions/reports/createReport.js';
 import { getReport } from '../../../../functions/reports/getReport.js';
 import { updateReport } from '../../../../functions/reports/updateReport.js';
 import { resolveMessage } from '../../../../util/resolveMessage.js';
@@ -38,6 +39,7 @@ export async function reportReference(
 		guildId: interaction.guildId,
 		reportId,
 		referenceId: originalCase.caseId,
+		status: ReportStatus.Approved,
 	});
 	const message = report.messageId
 		? await resolveMessage(interaction.channel!.id, report.guildId, report.channelId, report.messageId, locale)

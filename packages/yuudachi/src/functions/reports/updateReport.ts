@@ -6,11 +6,19 @@ import { kSQL } from '../../tokens.js';
 
 export type PatchCase = Pick<
 	Partial<CreateReport>,
-	'guildId' | 'reportId' | 'reason' | 'message' | 'referenceId' | 'attachmentUrl'
+	'guildId' | 'reportId' | 'reason' | 'message' | 'referenceId' | 'attachmentUrl' | 'status'
 >;
 
 export async function updateReport(report: PatchCase) {
 	const sql = container.resolve<Sql<any>>(kSQL);
+
+	if (report.status) {
+		await sql`
+			update reports
+			set status = ${report.status}
+			where guild_id = ${report.guildId}
+				and report_id = ${report.reportId!}`;
+	}
 
 	if (report.attachmentUrl) {
 		await sql`
