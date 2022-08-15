@@ -37,7 +37,7 @@ type CaseFooter = {
 	warn?: number | undefined;
 };
 
-export async function generateHistory(
+export async function generateCaseHistory(
 	interaction: ButtonInteraction<"cached"> | CommandInteraction<"cached"> | SelectMenuInteraction<"cached">,
 	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
@@ -259,4 +259,15 @@ export async function generateReportHistory(
 	}
 
 	return truncateEmbed(embed);
+}
+
+export async function generateHistory(
+	interaction: CommandInteraction<"cached"> | ButtonInteraction<"cached"> | SelectMenuInteraction<"cached">,
+	target: { user: User; member?: GuildMember | undefined },
+	locale: string,
+) {
+	return [
+		await generateCaseHistory(interaction, target, locale),
+		await generateReportHistory(interaction, target, locale),
+	];
 }

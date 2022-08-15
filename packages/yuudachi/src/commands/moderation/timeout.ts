@@ -77,8 +77,6 @@ export default class extends Command<typeof TimeoutCommand> {
 		const timeoutKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user, locale);
-
 		const timeoutButton = createButton({
 			label: i18next.t("command.mod.timeout.buttons.execute", { lng: locale }),
 			customId: timeoutKey,
@@ -95,7 +93,7 @@ export default class extends Command<typeof TimeoutCommand> {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: [embed],
+			embeds: await generateHistory(interaction, args.user, locale),
 			components: [createMessageActionRow([cancelButton, timeoutButton])],
 		});
 

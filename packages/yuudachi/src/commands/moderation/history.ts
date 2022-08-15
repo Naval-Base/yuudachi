@@ -1,6 +1,6 @@
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import type { HistoryCommand, HistoryUserContextCommand } from "../../interactions/index.js";
-import { generateHistory, generateReportHistory } from "../../util/generateHistory.js";
+import { generateHistory } from "../../util/generateHistory.js";
 
 export default class extends Command<typeof HistoryCommand | typeof HistoryUserContextCommand> {
 	public constructor() {
@@ -12,11 +12,8 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		args: ArgsParam<typeof HistoryCommand | typeof HistoryUserContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const embed = await generateHistory(interaction, args.user, locale);
-		const reports = await generateReportHistory(interaction, args.user, locale);
-
 		await interaction.editReply({
-			embeds: [reports, embed],
+			embeds: await generateHistory(interaction, args.user, locale),
 		});
 	}
 

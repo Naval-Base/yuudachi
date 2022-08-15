@@ -56,8 +56,6 @@ export default class extends Command<typeof UnbanCommand> {
 		const unbanKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user, locale);
-
 		const unbanButton = createButton({
 			label: i18next.t("command.mod.unban.buttons.execute", { lng: locale }),
 			customId: unbanKey,
@@ -74,7 +72,7 @@ export default class extends Command<typeof UnbanCommand> {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: [embed],
+			embeds: await generateHistory(interaction, args.user, locale),
 			components: [createMessageActionRow([cancelButton, unbanButton])],
 		});
 

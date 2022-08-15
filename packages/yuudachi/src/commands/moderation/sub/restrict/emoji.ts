@@ -72,8 +72,6 @@ export async function emoji(
 	const roleKey = nanoid();
 	const cancelKey = nanoid();
 
-	const embed = await generateHistory(interaction, args.user, locale);
-
 	const roleButton = createButton({
 		label: i18next.t("command.mod.restrict.emoji.buttons.execute", { lng: locale }),
 		customId: roleKey,
@@ -90,7 +88,7 @@ export async function emoji(
 			user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 			lng: locale,
 		}),
-		embeds: [embed],
+		embeds: await generateHistory(interaction, args.user, locale),
 		components: [createMessageActionRow([cancelButton, roleButton])],
 	});
 

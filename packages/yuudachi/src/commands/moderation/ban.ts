@@ -70,8 +70,6 @@ export default class extends Command<typeof BanCommand> {
 		const banKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user, locale);
-
 		const banButton = createButton({
 			label: i18next.t("command.mod.ban.buttons.execute", { lng: locale }),
 			customId: banKey,
@@ -88,7 +86,7 @@ export default class extends Command<typeof BanCommand> {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: [embed],
+			embeds: await generateHistory(interaction, args.user, locale),
 			components: [createMessageActionRow([cancelButton, banButton])],
 		});
 

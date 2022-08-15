@@ -57,8 +57,6 @@ export default class extends Command<typeof SoftbanCommand> {
 		const softbanKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user, locale);
-
 		const softbanButton = createButton({
 			label: i18next.t("command.mod.softban.buttons.execute", { lng: locale }),
 			customId: softbanKey,
@@ -75,7 +73,7 @@ export default class extends Command<typeof SoftbanCommand> {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: isStillMember ? [embed] : [],
+			embeds: isStillMember ? await generateHistory(interaction, args.user, locale) : [],
 			components: [createMessageActionRow([cancelButton, softbanButton])],
 		});
 

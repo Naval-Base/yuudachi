@@ -63,8 +63,6 @@ export default class extends Command<typeof KickCommand> {
 		const kickKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user, locale);
-
 		const kickButton = createButton({
 			label: i18next.t("command.mod.kick.buttons.execute", { lng: locale }),
 			customId: kickKey,
@@ -81,7 +79,7 @@ export default class extends Command<typeof KickCommand> {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: [embed],
+			embeds: await generateHistory(interaction, args.user, locale),
 			components: [createMessageActionRow([cancelButton, kickButton])],
 		});
 

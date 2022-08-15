@@ -104,7 +104,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 		if (cmd === "history" && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
 			await interaction.editReply({
-				embeds: [truncateEmbed(await generateHistory(interaction, data, locale))],
+				embeds: await generateHistory(interaction, data, locale),
 			});
 			return;
 		}
