@@ -16,11 +16,13 @@ import {
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
-import { ThreatLevelColor } from "../Constants.js";
+import { Color, ThreatLevelColor } from "../Constants.js";
 import type { RawCase } from "../functions/cases/transformCase.js";
+import { ReportStatus } from "../functions/reports/createReport.js";
+import type { RawReport } from "../functions/reports/transformReport.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 import { kSQL } from "../tokens.js";
-import { ACTION_KEYS } from "./actionKeys.js";
+import { ACTION_KEYS, REPORT_KEYS } from "./actionKeys.js";
 import { addFields, truncateEmbed } from "./embed.js";
 
 dayjs.extend(relativeTime);
@@ -137,33 +139,123 @@ export async function generateHistory(
 		...embed,
 	};
 
-	const summary: string[] = [];
-	let truncated = false;
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (cases.length > 0) {
+		const summary: string[] = [];
+		let truncated = false;
 
-	for (const case_ of cases) {
-		const dateFormatted = time(dayjs(case_.created_at).unix(), TimestampStyles.ShortDate);
-		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[case_.action]!.toUpperCase()}`)} ${
-			case_.log_message_id
-				? hyperlink(`#${case_.case_id}`, messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id))
-				: `#${case_.case_id}`
-		} ${case_.reason?.replace(/\*/g, "") ?? ""}`;
+		for (const case_ of cases) {
+			const dateFormatted = time(dayjs(case_.created_at).unix(), TimestampStyles.ShortDate);
+			const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[case_.action]!.toUpperCase()}`)} ${
+				case_.log_message_id
+					? hyperlink(`#${case_.case_id}`, messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id))
+					: `#${case_.case_id}`
+			} ${case_.reason?.replace(/\*/g, "") ?? ""}`;
 
-		if (summary.join("\n").length + caseString.length + 1 < 4_060) {
-			summary.push(caseString);
-			continue;
+			if (summary.join("\n").length + caseString.length + 1 < 4_060) {
+				summary.push(caseString);
+				continue;
+			}
+
+			truncated = true;
+			break;
 		}
 
-		truncated = true;
-		break;
-	}
-
-	if (truncated) {
+		if (truncated) {
+			embed = {
+				description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
+				...embed,
+			};
+		} else {
+			embed = { description: summary.join("\n"), ...embed };
+		}
+	} else {
 		embed = {
-			description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
+			description: i18next.t("log.history.none", { lng: locale }),
 			...embed,
 		};
+	}
+
+	return truncateEmbed(embed);
+}
+
+export async function generateReportHistory(
+	interaction: ButtonInteraction<"cached"> | CommandInteraction<"cached"> | SelectMenuInteraction<"cached">,
+	target: { member?: GuildMember | undefined; user: User },
+	locale: string,
+) {
+	const sql = container.resolve<Sql<any>>(kSQL);
+	const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
+
+	let embed = addFields({
+		author: {
+			name: `${target.user.tag} (${target.user.id})`,
+			icon_url: target.user.displayAvatarURL(),
+		},
+		title: i18next.t("log.history.report_title", { lng: locale }),
+		color: Color.DiscordPrimary,
+	});
+
+	const targetReports = await sql<[RawReport]>`
+		select *
+		from reports
+		where guild_id = ${interaction.guildId}
+			and target_id = ${target.user.id}
+			and status not in (${ReportStatus.Rejected}, ${ReportStatus.False})
+		order by created_at desc
+	`;
+
+	const falseReports = await sql<[RawReport]>`
+		select *
+		from reports
+		where guild_id = ${interaction.guildId}
+			and author_id = ${target.user.id}
+			and status = ${ReportStatus.False}
+		order by created_at desc
+	`;
+
+	const reports = [...targetReports, ...falseReports];
+
+	if (reports.length > 0) {
+		const summary: string[] = [];
+		let truncated = false;
+
+		for (const report of reports) {
+			const dateFormatted = time(dayjs(report.created_at).unix(), TimestampStyles.ShortDate);
+
+			const typeString = report.author_id === target.user.id ? "author" : "target";
+			const reportString = `${dateFormatted} ${inlineCode(REPORT_KEYS[report.status]!.toUpperCase())} ${
+				report.log_message_id
+					? hyperlink(`#${report.report_id}`, messageLink(reportChannelId, report.log_message_id), report.guild_id)
+					: `#${report.report_id}`
+			} ${i18next.t(`log.history.report_details`, {
+				author: typeString,
+				type: report.type,
+				lng: locale,
+			})} | ${report.reason.replaceAll("*", "")}`;
+
+			if (summary.join("\n").length + reportString.length + 1 < 4_060) {
+				summary.push(reportString);
+				continue;
+			}
+
+			truncated = true;
+			break;
+		}
+
+		if (truncated) {
+			embed = {
+				description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
+				...embed,
+			};
+		} else {
+			embed = { description: summary.join("\n"), ...embed };
+		}
 	} else {
-		embed = { description: summary.join("\n"), ...embed };
+		embed = {
+			description: i18next.t("log.history.none", { lng: locale }),
+			...embed,
+		};
 	}
 
 	return truncateEmbed(embed);
