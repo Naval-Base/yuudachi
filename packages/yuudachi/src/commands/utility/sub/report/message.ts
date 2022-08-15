@@ -10,11 +10,9 @@ import type { ReportCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
-import { parseMessageLink, resolveMessage } from '../../../../util/resolveMessage.js';
 
 type MessageReportArgs = Omit<ArgsParam<typeof ReportCommand>['message'], 'message_link'> & {
-	message?: Message;
-	message_link?: string;
+	message: Message;
 };
 
 export async function message(
@@ -22,38 +20,7 @@ export async function message(
 	args: MessageReportArgs,
 	locale: string,
 ) {
-	let resolvedMessage: Message | null | undefined = null;
-
-	if (args.message_link) {
-		const parsedLink = parseMessageLink(args.message_link);
-
-		if (!parsedLink) {
-			throw new Error(
-				i18next.t('command.common.errors.not_message_link', {
-					val: args.message_link,
-					arg: 'message_link',
-					lng: locale,
-				}),
-			);
-		}
-
-		const { guildId, channelId, messageId } = parsedLink;
-		resolvedMessage = (await resolveMessage(
-			interaction.channelId!,
-			guildId!,
-			channelId!,
-			messageId!,
-			locale,
-		)) as Message<true>;
-	} else {
-		resolvedMessage = args.message;
-	}
-
-	if (!resolvedMessage) {
-		return;
-	}
-
-	if (resolvedMessage.author.id === interaction.user.id) {
+	if (args.message.author.id === interaction.user.id) {
 		await interaction.editReply(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
 		return;
 	}
@@ -81,7 +48,7 @@ export async function message(
 		i18next.t('command.utility.report.message.pending', {
 			message_link: hyperlink(
 				i18next.t('command.utility.report.message.pending_sub', { lng: locale }),
-				resolvedMessage.url,
+				args.message.url,
 			),
 			reason: args.reason,
 			lng: locale,
@@ -98,7 +65,7 @@ export async function message(
 
 	const reply = await interaction.editReply({
 		content: contentParts.join('\n'),
-		embeds: [formatMessageToEmbed(resolvedMessage as Message<true>, locale)],
+		embeds: [formatMessageToEmbed(args.message as Message<true>, locale)],
 		components: [createMessageActionRow([cancelButton, reportButton, trustAndSafetyButton])],
 	});
 
@@ -137,13 +104,13 @@ export async function message(
 			authorId: interaction.user.id,
 			authorTag: interaction.user.tag,
 			reason: args.reason,
-			targetId: resolvedMessage.author.id,
-			targetTag: resolvedMessage.author.tag,
-			message: resolvedMessage,
+			targetId: args.message.author.id,
+			targetTag: args.message.author.tag,
+			message: args.message,
 			type: ReportType.Message,
 		});
 
-		await upsertReportLog(interaction.guild!, interaction.user, report, resolvedMessage);
+		await upsertReportLog(interaction.guild!, interaction.user, report, args.message);
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.utility.report.message.success', { lng: locale }),

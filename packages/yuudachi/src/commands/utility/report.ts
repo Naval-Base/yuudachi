@@ -10,6 +10,7 @@ import type { ReportCommand, ReportMessageContextCommand } from '../../interacti
 import { logger } from '../../logger.js';
 import { createModal } from '../../util/modal.js';
 import { createModalActionRow } from '../../util/modalActionRow.js';
+import { parseMessageLink, resolveMessage } from '../../util/resolveMessage.js';
 import { createTextComponent } from '../../util/textComponent.js';
 
 export default class extends Command<typeof ReportCommand | typeof ReportMessageContextCommand> {
@@ -30,15 +31,32 @@ export default class extends Command<typeof ReportCommand | typeof ReportMessage
 			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
 		}
 
-		switch (Object.keys(args)[0]) {
-			case 'message':
-				await message(interaction, args.message, locale);
-				break;
-			case 'user':
-				await user(interaction, args.user, locale);
-				break;
-			default:
-				break;
+		if (Object.keys(args)[0] === 'message') {
+			const parsedLink = parseMessageLink(args.message.message_link);
+
+			if (!parsedLink) {
+				throw new Error(
+					i18next.t('command.common.errors.not_message_link', {
+						val: args.message.message_link,
+						arg: 'message_link',
+						lng: locale,
+					}),
+				);
+			}
+
+			const { guildId, channelId, messageId } = parsedLink;
+			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
+
+			await message(
+				interaction,
+				{
+					reason: args.message.reason,
+					message: messageArg,
+				},
+				locale,
+			);
+		} else if (Object.keys(args)[0] === 'user') {
+			await user(interaction, args.user, locale);
 		}
 	}
 
