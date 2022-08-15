@@ -44,7 +44,9 @@ export async function up(sql) {
 		comment on column reports.message_id is 'The id of the message thats been reported';
 		comment on column reports.channel_id is 'The id of the channel thats been reported';
 		comment on column reports.target_id is 'The id of the target thats been reported';
+		comment on column reports.target_tag is 'The tag of the target thats been reported';
 		comment on column reports.author_id is 'The id of the author that reported the target';
+		comment on column reports.author_tag is 'The tag of the author that reported the target';
 		comment on column reports.reason is 'The reason for the report';
 		comment on column reports.log_message_id is 'The id of the log message sent';
 		comment on column reports.ref_id is 'The case id associated with this report';
