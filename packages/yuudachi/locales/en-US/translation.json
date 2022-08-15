@@ -357,7 +357,8 @@
 			"report": {
 				"commons": {
 					"errors": {
-						"no_self": "You cannot report yourself."
+						"no_self": "You cannot report yourself.",
+						"invalid_attachment": "Invalid attachment, only images are allowed."
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "trust and safety",
@@ -378,7 +379,11 @@
 					"cancel": "Message report canceled.",
 					"success": "Successfully reported message."
 				},
-				"user": {}
+				"user": {
+					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
+					"cancel": "User report canceled.",
+					"success": "Successfully reported user."
+				}
 			}
 		}
 	},
