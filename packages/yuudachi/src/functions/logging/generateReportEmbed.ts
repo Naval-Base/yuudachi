@@ -44,7 +44,7 @@ export async function generateReportEmbed(
 	const embed: APIEmbed = {
 		author: {
 			name: i18next.t('log.report_log.author', {
-				author: `\`${user.tag}\` (${user.id})`,
+				author: `${user.tag} (${user.id})`,
 				lng: locale,
 			}),
 			icon_url: user.avatarURL()!,

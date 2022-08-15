@@ -53,6 +53,11 @@ export async function message(
 		return;
 	}
 
+	if (resolvedMessage.author.id === interaction.user.id) {
+		await interaction.editReply(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
+		return;
+	}
+
 	const reportKey = nanoid();
 	const cancelKey = nanoid();
 
@@ -65,6 +70,11 @@ export async function message(
 		customId: cancelKey,
 		label: i18next.t('command.utility.report.commons.buttons.cancel', { lng: locale }),
 		style: ButtonStyle.Secondary,
+	});
+	const trustAndSafetyButton = createButton({
+		label: i18next.t('command.utility.report.commons.buttons.trust_and_safety', { lng: locale }),
+		url: TRUST_AND_SAFETY_URL,
+		style: ButtonStyle.Link,
 	});
 
 	const contentParts = [
@@ -89,7 +99,7 @@ export async function message(
 	const reply = await interaction.editReply({
 		content: contentParts.join('\n'),
 		embeds: [formatMessageToEmbed(resolvedMessage as Message<true>, locale)],
-		components: [createMessageActionRow([cancelButton, reportButton])],
+		components: [createMessageActionRow([cancelButton, reportButton, trustAndSafetyButton])],
 	});
 
 	const collectedInteraction = await reply
@@ -137,7 +147,7 @@ export async function message(
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.utility.report.message.success', { lng: locale }),
-			components: [],
+			components: [createMessageActionRow([trustAndSafetyButton])],
 		});
 	}
 }

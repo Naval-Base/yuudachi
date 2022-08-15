@@ -356,6 +356,9 @@
 			},
 			"report": {
 				"commons": {
+					"errors": {
+						"no_self": "You cannot report yourself."
+					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "trust and safety",
 					"buttons": {
@@ -382,12 +385,19 @@
 	"log": {
 		"history": {
 			"title": "Case History",
+			"report_title": "Report History",
+			"none": "`No history found`",
 			"user_details": "User details",
 			"user_details_description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})",
 			"member_details": "Member details",
 			"member_details_description": "• Nickname: {{- member_nickname}}\n• Roles: {{- member_roles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
 			"member_details_no_nickname": "No nickname",
-			"summary_truncated": "{{- summary}}\nand more..."
+			"summary_truncated": "{{- summary}}\nand more...",
+			"report_details": "$t(log.history.report.{{author}}) | $t(log.report_log.report_type.{{type}})",
+			"report": {
+				"author": "Author",
+				"target": "Target"
+			}
 		},
 		"mod_log": {
 			"case_log": {
@@ -487,6 +497,27 @@
 			"pending": "The report for the Anti-Raid-Nuke is being processed...",
 			"title": "Anti-Raid-Nuke launched",
 			"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
+		},
+		"report_log": {
+			"author": "Report by {{- author}}",
+			"reason": "**Reason:**\n{{- reason}}",
+			"target": "**Target:** {{- target}}",
+			"message": "**Message Reported:** {{- message_link}} ({{- channel}})",
+			"message_sub": "Beam me up, Yuu",
+			"case_reference": "**Case Reference:** {{- ref}}",
+			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
+			"created_at": "**Created at:** {{- created_at}}",
+			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
+			"report_type": {
+				"0": "Message",
+				"1": "User"
+			},
+			"report_status": {
+				"0": "Pending",
+				"1": "Approved",
+				"2": "Rejected",
+				"3": "False"
+			}
 		}
 	},
 	"formatters": {
@@ -569,25 +600,15 @@
 				"log_message_sub": "Beam me up, Yuu",
 				"log_message_none": "**Case log:** No case log created"
 			},
-			"preliminary": {
-				"successes": {
-					"title": "**Projected Hits**",
-					"none": "No potential hits"
-				},
-				"fails": {
-					"title": "**Projected Failures**",
-					"none": "No early detectable failures"
-				}
+			"successes": {
+				"title": "**Successes**",
+				"none": "No successes, something went wrong",
+				"tables": ["Case id", "Member id", "Username"]
 			},
-			"blast": {
-				"successes": {
-					"title": "**Confirmed hits**",
-					"none": "No confirmed hits, something went wrong"
-				},
-				"fails": {
-					"title": "**Failures**",
-					"none": "No failures, everything went fine"
-				}
+			"failures": {
+				"title": "**Failures**",
+				"none": "No failures, everything went fine",
+				"tables": ["Member id", "Username", "Error"]
 			},
 			"table": {
 				"success_titles": ["Case id", "Member id", "Username"],
