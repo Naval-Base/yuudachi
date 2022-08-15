@@ -41,6 +41,7 @@
 					"max_length_reason": "Maximum length of `1900` for reason exceeded.",
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
 					"no_case": "Cannot find case `#{{case}}`",
+					"no_report": "Cannot find report `#{{report}}`",
 					"no_case_range": "Invalid case range `#{{lower_case}}` to `#{{upper_case}}`",
 					"case_lower_one": "Case ids have to be above `0`",
 					"no_reference_case": "Cannot find reference case `#{{case}}`",
@@ -316,6 +317,9 @@
 					"execute_other": "Clear {{count}} messages"
 				},
 				"cancel": "Cancelled clearing messages."
+			},
+			"status": {
+				"errors": {}
 			}
 		},
 		"utility": {
