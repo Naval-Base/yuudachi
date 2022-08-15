@@ -4,12 +4,12 @@ import type { CreateReport } from './createReport.js';
 import { type RawReport, transformReport } from './transformReport.js';
 import { kSQL } from '../../tokens.js';
 
-export type PatchCase = Pick<
+export type PatchReport = Pick<
 	Partial<CreateReport>,
 	'guildId' | 'reportId' | 'reason' | 'message' | 'referenceId' | 'attachmentUrl' | 'status'
 >;
 
-export async function updateReport(report: PatchCase) {
+export async function updateReport(report: PatchReport) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	if (report.status) {

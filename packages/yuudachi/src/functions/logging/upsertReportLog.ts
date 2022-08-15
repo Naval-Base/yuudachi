@@ -24,9 +24,13 @@ export async function upsertReportLog(guild: Guild, user: User, report: Report, 
 	}
 
 	if (report.logMessageId) {
-		const message = await reportLogChannel!.messages.fetch(report.logMessageId);
+		const logMessage = await reportLogChannel!.messages.fetch(report.logMessageId);
 
-		await message.edit({
+		if (logMessage.embeds.length > 1 && embeds.length < 2) {
+			embeds.push(logMessage.embeds[1]!);
+		}
+
+		await logMessage.edit({
 			embeds,
 		});
 	} else {
