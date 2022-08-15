@@ -1,5 +1,4 @@
-import dayjs from 'dayjs';
-import { type Message, type Snowflake, codeBlock, hyperlink, time, TimestampStyles, messageLink } from 'discord.js';
+import { type Message, type Snowflake, codeBlock, hyperlink, messageLink, userMention } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -14,7 +13,7 @@ export async function generateReportLog(report: Report, locale: string, message?
 
 	parts.push(
 		i18next.t('log.report_log.target', {
-			target: `\`${report.targetTag}\` (${report.targetId})`,
+			target: `${userMention(report.targetId)} - \`${report.targetTag}\` (${report.targetId})`,
 			lng: locale,
 		}),
 		i18next.t('log.report_log.reason', {
@@ -58,13 +57,8 @@ export async function generateReportLog(report: Report, locale: string, message?
 	}
 
 	parts.push(
-		'',
 		i18next.t('log.report_log.status', {
 			status: report.status,
-			lng: locale,
-		}),
-		i18next.t('log.report_log.created_at', {
-			created_at: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 			lng: locale,
 		}),
 	);

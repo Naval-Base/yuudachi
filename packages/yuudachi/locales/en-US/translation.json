@@ -319,7 +319,7 @@
 				"cancel": "Cancelled clearing messages."
 			},
 			"status": {
-				"errors": {}
+				"success": "Successfully set status of the report {{- report}} to `$t(log.report_log.report_status.{{status}})`"
 			}
 		},
 		"utility": {
@@ -632,7 +632,6 @@
 			"message_sub": "Beam me up, Yuu",
 			"case_reference": "**Case Reference:** {{- ref}}",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
-			"created_at": "**Created at:** {{- created_at}}",
 			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
 			"report_type": {
 				"0": "Message",

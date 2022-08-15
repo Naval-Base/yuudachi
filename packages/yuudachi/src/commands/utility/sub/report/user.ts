@@ -29,7 +29,7 @@ export async function user(
 		throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
 	}
 
-	const attachmentIsImage = attachment?.contentType === 'image/jpeg' || attachment?.contentType === 'image/png';
+	const attachmentIsImage = attachment.contentType === 'image/jpeg' || attachment.contentType === 'image/png';
 
 	if (!attachmentIsImage) {
 		throw new Error(i18next.t('command.utility.report.commons.errors.invalid_attachment', { lng: locale }));
@@ -55,7 +55,7 @@ export async function user(
 	});
 
 	const contentParts = [
-		i18next.t('command.utility.report.message.pending', {
+		i18next.t('command.utility.report.user.pending', {
 			user: `${member.user.toString()} - ${member.user.tag} (${member.user.id})`,
 			reason: args.reason,
 			lng: locale,
@@ -80,7 +80,14 @@ export async function user(
 
 	const reply = await interaction.editReply({
 		content: contentParts.join('\n'),
-		embeds: [embed],
+		embeds: [
+			{
+				...embed,
+				image: {
+					url: attachment.url,
+				},
+			},
+		],
 		components: [createMessageActionRow([cancelButton, reportButton, trustAndSafetyButton])],
 	});
 
@@ -129,6 +136,7 @@ export async function user(
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.utility.report.user.success', { lng: locale }),
+			embeds: [embed],
 			components: [createMessageActionRow([trustAndSafetyButton])],
 		});
 	}

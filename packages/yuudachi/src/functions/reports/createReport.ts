@@ -25,7 +25,7 @@ export interface Report {
 export interface CreateReport {
 	guildId: Snowflake;
 	reportId?: number;
-	type?: ReportType;
+	type: ReportType;
 	status?: ReportStatus;
 	message?: Message;
 	targetId: Snowflake;
@@ -72,7 +72,7 @@ export async function createReport(report: CreateReport): Promise<Report> {
 		) values (
 			next_report(${report.guildId}),
 			${report.guildId},
-			${report.type ?? report.message?.id ? ReportType.Message : ReportType.User},
+			${report.type},
 			${report.status ?? ReportStatus.Pending},
 			${report.message?.id ?? null},
 			${report.message?.channelId ?? null},

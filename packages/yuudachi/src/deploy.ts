@@ -18,6 +18,7 @@ import {
 	WarnCommand,
 	TimeoutCommand,
 	ClearCommand,
+	StatusCommand,
 
 	// Utility
 	PingCommand,
@@ -58,6 +59,7 @@ try {
 			LockdownCommand,
 			TimeoutCommand,
 			ClearCommand,
+			StatusCommand,
 
 			// Utility
 			PingCommand,
