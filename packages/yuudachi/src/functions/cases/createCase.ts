@@ -8,6 +8,7 @@ import type { PartialAndUndefinedOnNull } from "../../util/types.js";
 import { type RawCase, transformCase } from "./transformCase.js";
 import { upsertReportLog } from "../logging/upsertReportLog.js";
 import { ReportStatus } from "../reports/createReport.js";
+import { getReport } from "../reports/getReport.js";
 import { updateReport } from "../reports/updateReport.js";
 
 export enum CaseAction {
@@ -162,11 +163,13 @@ export async function createCase(
 
 	try {
 		if (case_.reportRefId) {
+			const preReport = await getReport(case_.guildId, case_.reportRefId);
+
 			const report = await updateReport({
 				guildId: case_.guildId,
 				reportId: case_.reportRefId,
 				referenceId: newCase.case_id,
-				status: ReportStatus.Approved,
+				status: preReport!.authorId === case_.targetId ? ReportStatus.False : ReportStatus.Approved,
 			});
 
 			await upsertReportLog(guild, report, undefined, guild.client.users.cache.get(case_.modId!));
