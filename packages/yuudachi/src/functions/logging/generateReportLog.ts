@@ -1,4 +1,4 @@
-import { type Message, type Snowflake, codeBlock, hyperlink, messageLink, userMention, User } from 'discord.js';
+import { type Message, type Snowflake, codeBlock, hyperlink, messageLink, userMention, type User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
