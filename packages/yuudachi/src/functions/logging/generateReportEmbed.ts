@@ -22,6 +22,7 @@ export async function generateReportEmbed(
 	report: Report,
 	locale: string,
 	message?: Message,
+	moderator?: User,
 ): Promise<APIEmbed> {
 	const embed: APIEmbed = {
 		author: {
@@ -32,7 +33,7 @@ export async function generateReportEmbed(
 			icon_url: user.avatarURL()!,
 		},
 		color: statusToColor(report.status),
-		description: await generateReportLog(report, locale, message),
+		description: await generateReportLog(report, locale, message, moderator),
 		timestamp: new Date().toISOString(),
 		footer: {
 			text: i18next.t('log.report_log.footer', {

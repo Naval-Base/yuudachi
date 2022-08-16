@@ -42,7 +42,7 @@ export async function reportReference(
 	]);
 
 	await upsertCaseLog(interaction.guild, interaction.user, case_);
-	await upsertReportLog(interaction.guild, interaction.user, report);
+	await upsertReportLog(interaction.guild, report, undefined, interaction.user);
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.reference.report', {

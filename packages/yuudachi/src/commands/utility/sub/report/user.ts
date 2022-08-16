@@ -142,7 +142,7 @@ export async function user(
 			type: ReportType.User,
 		});
 
-		await upsertReportLog(interaction.guild, interaction.user, report);
+		await upsertReportLog(interaction.guild, report);
 		await redis.setex(key, REPORT_USER_EXPIRE_SECONDS, '');
 
 		await collectedInteraction.editReply({

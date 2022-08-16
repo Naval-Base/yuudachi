@@ -406,6 +406,14 @@
 			"member_details_description": "• Nickname: {{- member_nickname}}\n• Roles: {{- member_roles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
 			"member_details_no_nickname": "No nickname",
 			"summary_truncated": "{{- summary}}\nand more...",
+			"report_footer": {
+				"target_zero": "Never reported",
+				"target_one": "Target of 1 report",
+				"target_other": "Targets of {{count}} reports",
+				"false_zero": "Never false reported",
+				"false_one": "False reported once",
+				"false_other": "False reported {{count}} times"
+			},
 			"report_details": "$t(log.history.report.{{author}}) | $t(log.report_log.report_type.{{type}})",
 			"report": {
 				"author": "Author",
@@ -519,7 +527,7 @@
 			"message_sub": "Beam me up, Yuu",
 			"case_reference": "**Case Reference:** {{- ref}}",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
-			"created_at": "**Created at:** {{- created_at}}",
+			"moderator": "**Last update by:** {{- mod}}",
 			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
 			"report_type": {
 				"0": "Message",

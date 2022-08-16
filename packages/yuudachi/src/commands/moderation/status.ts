@@ -37,7 +37,7 @@ export default class extends Command<typeof StatusCommand> {
 			guildId: interaction.guildId,
 			status: args.status as ReportStatus,
 		});
-		await upsertReportLog(interaction.guild, interaction.user, report);
+		await upsertReportLog(interaction.guild, report, undefined, interaction.user);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.status.success', {

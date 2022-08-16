@@ -169,7 +169,7 @@ export async function createCase(
 				status: ReportStatus.Approved,
 			});
 
-			await upsertReportLog(guild, guild.client.users.cache.get(case_.modId!)!, report);
+			await upsertReportLog(guild, report, undefined, guild.client.users.cache.get(case_.modId!));
 		}
 	} catch (e) {
 		const error = e as Error;

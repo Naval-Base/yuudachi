@@ -1,4 +1,4 @@
-import { type Message, type Snowflake, codeBlock, hyperlink, messageLink, userMention } from 'discord.js';
+import { type Message, type Snowflake, codeBlock, hyperlink, messageLink, userMention, User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -6,7 +6,12 @@ import { kSQL } from '../../tokens.js';
 import type { Report } from '../reports/createReport.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function generateReportLog(report: Report, locale: string, message?: Message): Promise<string> {
+export async function generateReportLog(
+	report: Report,
+	locale: string,
+	message?: Message,
+	moderator?: User,
+): Promise<string> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const parts = [];
@@ -62,6 +67,16 @@ export async function generateReportLog(report: Report, locale: string, message?
 			lng: locale,
 		}),
 	);
+
+	if (moderator) {
+		parts.push(
+			'',
+			i18next.t('log.report_log.moderator', {
+				mod: `\`${moderator.tag}\` (${moderator.id})`,
+				lng: locale,
+			}),
+		);
+	}
 
 	return parts.join('\n');
 }

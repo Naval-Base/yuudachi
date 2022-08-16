@@ -9,7 +9,7 @@ import type { Report } from '../reports/createReport.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function upsertReportLog(guild: Guild, user: User, report: Report, message?: Message) {
+export async function upsertReportLog(guild: Guild, report: Report, message?: Message, moderator?: User) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const reportLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
@@ -18,7 +18,9 @@ export async function upsertReportLog(guild: Guild, user: User, report: Report, 
 		message = await resolveMessage(reportLogChannel!.id, report.guildId, report.channelId, report.messageId, locale);
 	}
 
-	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(user, report, locale, message)];
+	const author = message?.author ?? (await guild.client.users.fetch(report.authorId));
+
+	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, message, moderator)];
 	if (message) {
 		embeds.push(formatMessageToEmbed(message as Message<true>, locale));
 	}
@@ -30,17 +32,19 @@ export async function upsertReportLog(guild: Guild, user: User, report: Report, 
 			embeds.push(logMessage.embeds[1]!);
 		}
 
-		await logMessage.edit({
+		return logMessage.edit({
 			embeds,
 		});
-	} else {
-		const logMessage = await reportLogChannel!.send({
-			embeds,
-		});
+	}
 
-		await sql`update reports
+	const logMessage = await reportLogChannel!.send({
+		embeds,
+	});
+
+	await sql`update reports
 			set log_message_id = ${logMessage.id}
 			where guild_id = ${report.guildId}
 				and report_id = ${report.reportId}`;
-	}
+
+	return logMessage;
 }

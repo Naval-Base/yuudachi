@@ -123,7 +123,7 @@ export async function message(
 			type: ReportType.Message,
 		});
 
-		await upsertReportLog(interaction.guild!, interaction.user, report, args.message);
+		await upsertReportLog(interaction.guild!, report, args.message);
 		await redis.setex(key, REPORT_MESSAGE_EXPIRE_SECONDS, '');
 
 		await collectedInteraction.editReply({
