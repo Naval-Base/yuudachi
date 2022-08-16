@@ -165,14 +165,17 @@ export async function createCase(
 		if (case_.reportRefId) {
 			const preReport = await getReport(case_.guildId, case_.reportRefId);
 
-			const report = await updateReport({
-				guildId: case_.guildId,
-				reportId: case_.reportRefId,
-				refId: newCase.case_id,
-				status: preReport!.authorId === case_.targetId ? ReportStatus.False : ReportStatus.Approved,
-			});
+			const report = await updateReport(
+				{
+					guildId: case_.guildId,
+					reportId: case_.reportRefId,
+					refId: newCase.case_id,
+					status: preReport!.authorId === case_.targetId ? ReportStatus.False : ReportStatus.Approved,
+				},
+				guild.client.users.cache.get(case_.modId!),
+			);
 
-			await upsertReportLog(guild, report, undefined, guild.client.users.cache.get(case_.modId!));
+			await upsertReportLog(guild, report);
 		}
 	} catch (e) {
 		const error = e as Error;

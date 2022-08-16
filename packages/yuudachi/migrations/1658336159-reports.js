@@ -30,6 +30,8 @@ export async function up(sql) {
 			target_tag text,
 			author_id text,
 			author_tag text,
+			mod_id text,
+			mod_tag text,
 			reason text,
 			attachment_url text,
 			log_message_id text,
@@ -47,6 +49,8 @@ export async function up(sql) {
 		comment on column reports.target_tag is 'The tag of the target thats been reported';
 		comment on column reports.author_id is 'The id of the author that reported the target';
 		comment on column reports.author_tag is 'The tag of the author that reported the target';
+		comment on column reports.mod_id is 'The id of the moderator that handled the report';
+		comment on column reports.mod_tag is 'The tag of the moderator that handled the report';
 		comment on column reports.reason is 'The reason for the report';
 		comment on column reports.log_message_id is 'The id of the log message sent';
 		comment on column reports.ref_id is 'The case id associated with this report';

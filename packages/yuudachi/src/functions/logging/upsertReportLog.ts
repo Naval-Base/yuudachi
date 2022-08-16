@@ -1,4 +1,4 @@
-import type { APIEmbed, Embed, Guild, Message, User } from 'discord.js';
+import type { APIEmbed, Embed, Guild, Message } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { formatMessageToEmbed } from './formatMessageToEmbed.js';
@@ -9,18 +9,18 @@ import type { Report } from '../reports/createReport.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
-export async function upsertReportLog(guild: Guild, report: Report, message?: Message, moderator?: User) {
+export async function upsertReportLog(guild: Guild, report: Report, message?: Message) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const reportLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 
 	if (!message && report.messageId) {
-		message = await resolveMessage(reportLogChannel!.id, report.guildId, report.channelId, report.messageId, locale);
+		message = await resolveMessage(reportLogChannel!.id, report.guildId, report.channelId!, report.messageId, locale);
 	}
 
 	const author = await guild.client.users.fetch(report.authorId);
 
-	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, message, moderator)];
+	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, message)];
 	if (message) {
 		embeds.push(formatMessageToEmbed(message as Message<true>, locale));
 	}

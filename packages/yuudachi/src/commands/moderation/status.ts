@@ -32,12 +32,15 @@ export default class extends Command<typeof StatusCommand> {
 			throw new Error(i18next.t('command.mod.common.errors.no_report', { report: args.report, lng: locale }));
 		}
 
-		const report = await updateReport({
-			reportId: originalReport.reportId,
-			guildId: interaction.guildId,
-			status: args.status as ReportStatus,
-		});
-		await upsertReportLog(interaction.guild, report, undefined, interaction.user);
+		const report = await updateReport(
+			{
+				reportId: originalReport.reportId,
+				guildId: interaction.guildId,
+				status: args.status as ReportStatus,
+			},
+			interaction.user,
+		);
+		await upsertReportLog(interaction.guild, report);
 
 		await interaction.editReply({
 			content: i18next.t('command.mod.status.success', {

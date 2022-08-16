@@ -33,16 +33,19 @@ export async function reportReference(
 			guildId: interaction.guildId,
 			reportRefId: referenceReport.reportId,
 		}),
-		updateReport({
-			guildId: interaction.guildId,
-			reportId,
-			refId: originalCase.caseId,
-			status: ReportStatus.Approved,
-		}),
+		updateReport(
+			{
+				guildId: interaction.guildId,
+				reportId,
+				refId: originalCase.caseId,
+				status: ReportStatus.Approved,
+			},
+			interaction.user,
+		),
 	]);
 
 	await upsertCaseLog(interaction.guild, interaction.user, case_);
-	await upsertReportLog(interaction.guild, report, undefined, interaction.user);
+	await upsertReportLog(interaction.guild, report);
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.reference.report', {

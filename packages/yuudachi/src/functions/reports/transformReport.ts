@@ -7,11 +7,13 @@ export interface RawReport {
 	type: number;
 	status: number;
 	message_id?: Snowflake | undefined | null;
-	channel_id: Snowflake;
+	channel_id?: Snowflake;
 	target_id: Snowflake;
 	target_tag: string;
 	author_id: Snowflake;
 	author_tag: string;
+	mod_id?: Snowflake | undefined | null;
+	mod_tag?: string | undefined | null;
 	reason: string;
 	attachment_url?: string | undefined | null;
 	log_message_id?: Snowflake | undefined | null;
@@ -31,6 +33,8 @@ export function transformReport(report: RawReport): Report {
 		targetTag: report.target_tag,
 		authorId: report.author_id,
 		authorTag: report.author_tag,
+		modId: report.mod_id,
+		modTag: report.mod_tag,
 		reason: report.reason,
 		attachmentUrl: report.attachment_url,
 		logMessageId: report.log_message_id,

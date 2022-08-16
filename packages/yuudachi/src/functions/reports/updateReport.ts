@@ -1,3 +1,4 @@
+import type { User } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import type { CreateReport } from './createReport.js';
@@ -9,7 +10,7 @@ export type PatchReport = Pick<
 	'guildId' | 'reportId' | 'reason' | 'message' | 'refId' | 'attachmentUrl' | 'status'
 >;
 
-export async function updateReport(report: PatchReport) {
+export async function updateReport(report: PatchReport, moderator?: User) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	if (report.status) {
@@ -49,6 +50,15 @@ export async function updateReport(report: PatchReport) {
 		await sql`
 			update reports
 			set ref_id = ${report.refId}
+			where guild_id = ${report.guildId}
+				and report_id = ${report.reportId!}`;
+	}
+
+	if (moderator) {
+		await sql`
+			update reports
+			set mod_id = ${moderator.id},
+				mod_tag = ${moderator.tag}
 			where guild_id = ${report.guildId}
 				and report_id = ${report.reportId!}`;
 	}
