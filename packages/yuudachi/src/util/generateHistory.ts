@@ -34,57 +34,39 @@ type CaseFooter = {
 	mute?: number | undefined;
 	restriction?: number | undefined;
 	timeout?: number | undefined;
-	warn?: number | undefined;
-};
+	[key: string]: number | undefined;
+}
+
+const colors = [
+	ThreatLevelColor.Level0,
+	ThreatLevelColor.Level1,
+	ThreatLevelColor.Level2,
+	ThreatLevelColor.Level3,
+	ThreatLevelColor.Level4,
+	ThreatLevelColor.Level5,
+	ThreatLevelColor.Level6,
+	ThreatLevelColor.Level7,
+];
 
 export async function generateCaseHistory(
 	interaction: ButtonInteraction<"cached"> | CommandInteraction<"cached"> | SelectMenuInteraction<"cached">,
 	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
+	omitAuthor = false,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const moduleLogChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
 
-	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
-	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
-
-	let embed = addFields(
-		{
-			author: {
-				name: `${target.user.tag} (${target.user.id})`,
-				icon_url: target.user.displayAvatarURL(),
-			},
-			title: i18next.t("log.history.title", { lng: locale }),
-		},
-		{
-			name: i18next.t("log.history.user_details", { lng: locale }),
-			value: i18next.t("log.history.user_details_description", {
-				user_mention: target.user.toString(),
-				user_tag: target.user.tag,
-				user_id: target.user.id,
-				created_at: creationFormatted,
-				created_at_since: sinceCreationFormatted,
-				lng: locale,
-			}),
-		},
-	);
-
-	if (target.member?.joinedTimestamp) {
-		const sinceJoinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
-		const joinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
-
-		embed = addFields(embed, {
-			name: i18next.t("log.history.member_details", { lng: locale }),
-			value: i18next.t("log.history.member_details_description", {
-				member_nickname: target.member.nickname ?? i18next.t("log.history.member_details_no_nickname", { lng: locale }),
-				member_roles: target.member.roles.cache.map((role) => role.name).join(", "),
-				joined_at: joinFormatted,
-				joined_at_since: sinceJoinFormatted,
-				lng: locale,
-			}),
-		});
-	}
+	let embed = addFields({
+		author: omitAuthor
+			? undefined
+			: {
+					name: `${target.user.tag} (${target.user.id})`,
+					icon_url: target.user.displayAvatarURL(),
+			  },
+		title: i18next.t('log.history.title', { lng: locale }),
+	});
 
 	const cases = await sql<[RawCase]>`
 		select *
@@ -100,16 +82,7 @@ export async function generateCaseHistory(
 		count[action] = (count[action] ?? 0) + 1;
 		return count;
 	}, {});
-	const colors = [
-		ThreatLevelColor.Level0,
-		ThreatLevelColor.Level1,
-		ThreatLevelColor.Level2,
-		ThreatLevelColor.Level3,
-		ThreatLevelColor.Level4,
-		ThreatLevelColor.Level5,
-		ThreatLevelColor.Level6,
-		ThreatLevelColor.Level7,
-	];
+
 	const values: [number, number, number, number, number, number, number] = [
 		footer.unban ?? 0,
 		footer.warn ?? 0,
@@ -183,17 +156,19 @@ export async function generateReportHistory(
 	interaction: ButtonInteraction<"cached"> | CommandInteraction<"cached"> | SelectMenuInteraction<"cached">,
 	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
+	omitAuthor = false,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
 
 	let embed = addFields({
-		author: {
-			name: `${target.user.tag} (${target.user.id})`,
-			icon_url: target.user.displayAvatarURL(),
-		},
+		author: omitAuthor
+			? undefined
+			: {
+					name: `${target.user.tag} (${target.user.id})`,
+					icon_url: target.user.displayAvatarURL(),
+			  },
 		title: i18next.t("log.history.report_title", { lng: locale }),
-		color: Color.DiscordPrimary,
 	});
 
 	const targetReports = await sql<[RawReport]>`
@@ -215,6 +190,16 @@ export async function generateReportHistory(
 	`;
 
 	const reports = [...targetReports, ...falseReports];
+
+	const colorIndex = Math.min(
+		targetReports.filter((r) => r.status === ReportStatus.Approved).length + falseReports.length,
+		colors.length - 1,
+	);
+
+	embed = {
+		color: colors[colorIndex],
+		...embed,
+	};
 
 	if (reports.length > 0) {
 		const summary: string[] = [];
@@ -253,9 +238,109 @@ export async function generateReportHistory(
 		}
 	} else {
 		embed = {
-			description: i18next.t("log.history.none", { lng: locale }),
+			description: i18next.t('log.history.none', { lng: locale }),
 			...embed,
 		};
+
+	return truncateEmbed(embed);
+}
+
+export function generateUserInfo(target: { user: User; member?: GuildMember | undefined }, locale: string) {
+	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
+	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
+
+	let embed = addFields(
+		{
+			author: {
+				name: `${target.user.tag} (${target.user.id})`,
+				icon_url: target.user.displayAvatarURL(),
+			},
+			color: Color.DiscordEmbedBackground,
+		},
+		{
+			name: i18next.t("log.history.user_details", { lng: locale }),
+			value: i18next.t("log.history.user_details_description", {
+				user_mention: target.user.toString(),
+				user_tag: target.user.tag,
+				user_id: target.user.id,
+				created_at: creationFormatted,
+				created_at_since: sinceCreationFormatted,
+				lng: locale,
+			}),
+		},
+	);
+
+	if (target.member?.joinedTimestamp) {
+		const sinceJoinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
+		const joinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
+
+		embed = addFields(embed, {
+			name: i18next.t("log.history.member_details", { lng: locale }),
+			value: i18next.t("log.history.member_details_description", {
+				member_nickname: target.member.nickname ?? i18next.t("log.history.member_details_no_nickname", { lng: locale }),
+				member_roles: target.member.roles.cache.map((role) => role.name).join(", "),
+				joined_at: joinFormatted,
+				joined_at_since: sinceJoinFormatted,
+				lng: locale,
+			}),
+		});
+	}
+
+	embed = {
+		footer: {
+			text: [
+				i18next.t('log.history.report_footer.target', {
+					lng: locale,
+					count: targetReports.filter((r) => r.status === ReportStatus.Approved).length,
+				}),
+				i18next.t('log.history.report_footer.false', { lng: locale, count: falseReports.length }),
+			].join(' | '),
+		},
+		...embed,
+	};
+
+	return truncateEmbed(embed);
+}
+
+export function generateUserInfo(target: { user: User; member?: GuildMember | undefined }, locale: string) {
+	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
+	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
+
+	let embed = addFields(
+		{
+			author: {
+				name: `${target.user.tag} (${target.user.id})`,
+				icon_url: target.user.displayAvatarURL(),
+			},
+			color: Color.DiscordEmbedBackground,
+		},
+		{
+			name: i18next.t('log.history.user_details', { lng: locale }),
+			value: i18next.t('log.history.user_details_description', {
+				user_mention: target.user.toString(),
+				user_tag: target.user.tag,
+				user_id: target.user.id,
+				created_at: creationFormatted,
+				created_at_since: sinceCreationFormatted,
+				lng: locale,
+			}),
+		},
+	);
+
+	if (target.member?.joinedTimestamp) {
+		const sinceJoinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
+		const joinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
+
+		embed = addFields(embed, {
+			name: i18next.t('log.history.member_details', { lng: locale }),
+			value: i18next.t('log.history.member_details_description', {
+				member_nickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
+				member_roles: target.member.roles.cache.map((role) => role.name).join(', '),
+				joined_at: joinFormatted,
+				joined_at_since: sinceJoinFormatted,
+				lng: locale,
+			}),
+		});
 	}
 
 	return truncateEmbed(embed);
@@ -267,7 +352,8 @@ export async function generateHistory(
 	locale: string,
 ) {
 	return [
-		await generateCaseHistory(interaction, target, locale),
-		await generateReportHistory(interaction, target, locale),
+		generateUserInfo(target, locale),
+		await generateReportHistory(interaction, target, locale, true),
+		await generateCaseHistory(interaction, target, locale, true),
 	];
 }
