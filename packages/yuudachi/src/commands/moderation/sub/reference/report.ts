@@ -8,7 +8,6 @@ import { upsertReportLog } from '../../../../functions/logging/upsertReportLog.j
 import { ReportStatus } from '../../../../functions/reports/createReport.js';
 import { getReport } from '../../../../functions/reports/getReport.js';
 import { updateReport } from '../../../../functions/reports/updateReport.js';
-import { resolveMessage } from '../../../../util/resolveMessage.js';
 
 export async function reportReference(
 	interaction: InteractionParam,
@@ -28,23 +27,22 @@ export async function reportReference(
 		);
 	}
 
-	const case_ = await updateCase({
-		caseId: originalCase.caseId,
-		guildId: interaction.guildId,
-		reportRefId: referenceReport.reportId,
-	});
-	await upsertCaseLog(interaction.guild, interaction.user, case_);
+	const [case_, report] = await Promise.all([
+		updateCase({
+			caseId: originalCase.caseId,
+			guildId: interaction.guildId,
+			reportRefId: referenceReport.reportId,
+		}),
+		updateReport({
+			guildId: interaction.guildId,
+			reportId,
+			referenceId: originalCase.caseId,
+			status: ReportStatus.Approved,
+		}),
+	]);
 
-	const report = await updateReport({
-		guildId: interaction.guildId,
-		reportId,
-		referenceId: originalCase.caseId,
-		status: ReportStatus.Approved,
-	});
-	const message = report.messageId
-		? await resolveMessage(interaction.channel!.id, report.guildId, report.channelId, report.messageId, locale)
-		: undefined;
-	await upsertReportLog(interaction.guild, interaction.user, report, message);
+	await upsertCaseLog(interaction.guild, interaction.user, case_);
+	await upsertReportLog(interaction.guild, interaction.user, report);
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.reference.report', {
