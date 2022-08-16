@@ -65,13 +65,11 @@ export default class extends Command<typeof ReportCommand | typeof ReportMessage
 		args: ArgsParam<typeof ReportMessageContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const user = interaction.targetMessage.author;
-
 		const modalKey = nanoid();
 
 		const modal = createModal({
 			customId: modalKey,
-			title: i18next.t('command.utility.report.message.modal.title', { lng: locale, user: user.tag }),
+			title: i18next.t('command.utility.report.message.modal.title', { lng: locale }),
 			components: [
 				createModalActionRow([
 					createTextComponent({

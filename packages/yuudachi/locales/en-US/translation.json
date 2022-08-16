@@ -378,7 +378,7 @@
 				},
 				"message": {
 					"modal": {
-						"title": "Message report reason",
+						"title": "Message report",
 						"label": "The reason for the report",
 						"placeholder": "Please enter an detailed reason for the report"
 					},
@@ -636,7 +636,7 @@
 			"message_sub": "Beam me up, Yuu",
 			"case_reference": "**Case Reference:** {{- ref}}",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
-			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
+			"footer": "Report {{report_id}} | $t(log.report_log.report_type.{{type}})",
 			"report_type": {
 				"0": "Message",
 				"1": "User"
