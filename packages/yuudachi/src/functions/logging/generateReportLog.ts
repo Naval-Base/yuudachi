@@ -39,22 +39,19 @@ export async function generateReportLog(
 		);
 	}
 
-	if (report.referenceId) {
+	if (report.refId) {
 		const [reference] = await sql<[{ log_message_id: Snowflake | null }?]>`
 		select log_message_id
 		from cases
 		where guild_id = ${report.guildId}
-			and case_id = ${report.referenceId}`;
+			and case_id = ${report.refId}`;
 
 		const modLogChannelId = await getGuildSetting(report.guildId, SettingsKeys.ModLogChannelId);
 
 		if (modLogChannelId && Reflect.has(reference ?? {}, 'log_message_id')) {
 			parts.push(
 				i18next.t('log.report_log.case_reference', {
-					ref: hyperlink(
-						`#${report.referenceId}`,
-						messageLink(modLogChannelId, reference!.log_message_id!, report.guildId),
-					),
+					ref: hyperlink(`#${report.refId}`, messageLink(modLogChannelId, reference!.log_message_id!, report.guildId)),
 					lng: locale,
 				}),
 			);

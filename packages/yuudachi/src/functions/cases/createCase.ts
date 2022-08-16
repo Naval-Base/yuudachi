@@ -168,7 +168,7 @@ export async function createCase(
 			const report = await updateReport({
 				guildId: case_.guildId,
 				reportId: case_.reportRefId,
-				referenceId: newCase.case_id,
+				refId: newCase.case_id,
 				status: preReport!.authorId === case_.targetId ? ReportStatus.False : ReportStatus.Approved,
 			});
 

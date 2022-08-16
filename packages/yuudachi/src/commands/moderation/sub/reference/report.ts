@@ -36,7 +36,7 @@ export async function reportReference(
 		updateReport({
 			guildId: interaction.guildId,
 			reportId,
-			referenceId: originalCase.caseId,
+			refId: originalCase.caseId,
 			status: ReportStatus.Approved,
 		}),
 	]);

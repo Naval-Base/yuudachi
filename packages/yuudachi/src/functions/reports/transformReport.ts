@@ -34,7 +34,7 @@ export function transformReport(report: RawReport): Report {
 		reason: report.reason,
 		attachmentUrl: report.attachment_url,
 		logMessageId: report.log_message_id,
-		referenceId: report.ref_id,
+		refId: report.ref_id,
 		createdAt: report.created_at,
 	} as const;
 }

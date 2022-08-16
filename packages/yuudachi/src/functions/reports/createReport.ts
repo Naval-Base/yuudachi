@@ -1,27 +1,15 @@
 import type { Message, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import type { CamelCasedProperties } from 'type-fest';
 import { type RawReport, transformReport } from './transformReport.js';
 import { kSQL } from '../../tokens.js';
+import type { PartialAndUndefinedOnNull } from '../../util/types.js';
 
-export interface Report {
-	guildId: Snowflake;
-	reportId: number;
+export type Report = PartialAndUndefinedOnNull<CamelCasedProperties<RawReport>> & {
 	type: ReportType;
 	status: ReportStatus;
-	messageId?: Snowflake | undefined | null;
-	channelId: Snowflake;
-	targetId: Snowflake;
-	targetTag: string;
-	authorId: Snowflake;
-	authorTag: string;
-	reason: string;
-	attachmentUrl?: string | undefined | null;
-	logMessageId?: Snowflake | undefined | null;
-	referenceId?: number | undefined | null;
-	createdAt: string;
-}
-
+};
 export interface CreateReport {
 	guildId: Snowflake;
 	reportId?: number;
@@ -35,7 +23,7 @@ export interface CreateReport {
 	reason: string;
 	attachmentUrl?: string | undefined | null;
 	logMessageId?: Snowflake | undefined | null;
-	referenceId?: number | undefined | null;
+	refId?: number | undefined | null;
 }
 
 export enum ReportType {
@@ -83,7 +71,7 @@ export async function createReport(report: CreateReport): Promise<Report> {
 			${report.reason},
 			${report.attachmentUrl ?? null},
 			${report.logMessageId ?? null},
-			${report.referenceId ?? null}
+			${report.refId ?? null}
 		) returning *;
 	`;
 

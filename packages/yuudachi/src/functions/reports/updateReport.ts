@@ -6,7 +6,7 @@ import { kSQL } from '../../tokens.js';
 
 export type PatchReport = Pick<
 	Partial<CreateReport>,
-	'guildId' | 'reportId' | 'reason' | 'message' | 'referenceId' | 'attachmentUrl' | 'status'
+	'guildId' | 'reportId' | 'reason' | 'message' | 'refId' | 'attachmentUrl' | 'status'
 >;
 
 export async function updateReport(report: PatchReport) {
@@ -45,10 +45,10 @@ export async function updateReport(report: PatchReport) {
 				and report_id = ${report.reportId!}`;
 	}
 
-	if (report.referenceId) {
+	if (report.refId) {
 		await sql`
 			update reports
-			set ref_id = ${report.referenceId}
+			set ref_id = ${report.refId}
 			where guild_id = ${report.guildId}
 				and report_id = ${report.reportId!}`;
 	}
