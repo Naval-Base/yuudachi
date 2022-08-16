@@ -1,13 +1,16 @@
 import { ButtonStyle, ComponentType, hyperlink, type Message, type ModalSubmitInteraction } from 'discord.js';
 import i18next from 'i18next';
+import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
+import { container } from 'tsyringe';
 import type { ArgsParam, InteractionParam } from '../../../../Command.js';
-import { TRUST_AND_SAFETY_URL } from '../../../../Constants.js';
+import { REPORT_MESSAGE_EXPIRE_SECONDS, TRUST_AND_SAFETY_URL } from '../../../../Constants.js';
 import { formatMessageToEmbed } from '../../../../functions/logging/formatMessageToEmbed.js';
 import { upsertReportLog } from '../../../../functions/logging/upsertReportLog.js';
 import { createReport, ReportType } from '../../../../functions/reports/createReport.js';
 import type { ReportCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
+import { kRedis } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
@@ -20,8 +23,18 @@ export async function message(
 	args: MessageReportArgs,
 	locale: string,
 ) {
+	const redis = container.resolve<Redis>(kRedis);
+	const key = `guild:${interaction.guildId!}:report:channel:${interaction.channelId!}:message:${args.message.id}`;
+
 	if (args.message.author.id === interaction.user.id) {
 		await interaction.editReply(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
+		return;
+	}
+
+	if (await redis.exists(key)) {
+		await interaction.editReply(
+			i18next.t('command.utility.report.commons.errors.recently_reported.message', { lng: locale }),
+		);
 		return;
 	}
 
@@ -111,6 +124,7 @@ export async function message(
 		});
 
 		await upsertReportLog(interaction.guild!, interaction.user, report, args.message);
+		await redis.setex(key, REPORT_MESSAGE_EXPIRE_SECONDS, '');
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.utility.report.message.success', { lng: locale }),

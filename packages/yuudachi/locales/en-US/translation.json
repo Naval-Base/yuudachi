@@ -361,6 +361,10 @@
 			"report": {
 				"commons": {
 					"errors": {
+						"recently_reported": {
+							"message": "This message has already been recently reported, thanks for making our community a better place!",
+							"user": "This user has already been recently reported, thanks for making our community a better place!"
+						},
 						"no_self": "You cannot report yourself.",
 						"invalid_attachment": "Invalid attachment, only images are allowed."
 					},
@@ -374,19 +378,19 @@
 				},
 				"message": {
 					"modal": {
-						"title": "Message report for {{- user}}",
+						"title": "Message report reason",
 						"label": "The reason for the report",
 						"placeholder": "Please enter an detailed reason for the report"
 					},
 					"pending": "Are you sure you want to report {{- message_link}} to the server moderators?\n**Reason:** {{- reason}}",
 					"pending_sub": "this message",
 					"cancel": "Message report canceled.",
-					"success": "Successfully reported message."
+					"success": "Successfully reported message, thanks for making our community a better place!"
 				},
 				"user": {
 					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
 					"cancel": "User report canceled.",
-					"success": "Successfully reported user."
+					"success": "Successfully reported user, thanks for making our community a better place!"
 				}
 			}
 		}

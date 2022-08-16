@@ -1,12 +1,15 @@
 import { type APIEmbed, ButtonStyle, ComponentType, hyperlink } from 'discord.js';
 import i18next from 'i18next';
+import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
+import { container } from 'tsyringe';
 import type { ArgsParam, InteractionParam } from '../../../../Command.js';
-import { Color, TRUST_AND_SAFETY_URL } from '../../../../Constants.js';
+import { Color, REPORT_USER_EXPIRE_SECONDS, TRUST_AND_SAFETY_URL } from '../../../../Constants.js';
 import { upsertReportLog } from '../../../../functions/logging/upsertReportLog.js';
 import { createReport, ReportType } from '../../../../functions/reports/createReport.js';
 import type { ReportCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
+import { kRedis } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
@@ -15,6 +18,9 @@ export async function user(
 	args: ArgsParam<typeof ReportCommand>['user'],
 	locale: string,
 ) {
+	const redis = container.resolve<Redis>(kRedis);
+	const key = `guild:${interaction.guildId}:report:user:${args.user.user.id}`;
+
 	const {
 		user: { member },
 		reason,
@@ -27,6 +33,10 @@ export async function user(
 
 	if (member.id === interaction.user.id) {
 		throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
+	}
+
+	if (await redis.exists(key)) {
+		throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.user', { lng: locale }));
 	}
 
 	const attachmentIsImage = attachment.contentType === 'image/jpeg' || attachment.contentType === 'image/png';
@@ -133,6 +143,7 @@ export async function user(
 		});
 
 		await upsertReportLog(interaction.guild, interaction.user, report);
+		await redis.setex(key, REPORT_USER_EXPIRE_SECONDS, '');
 
 		await collectedInteraction.editReply({
 			content: i18next.t('command.utility.report.user.success', { lng: locale }),
