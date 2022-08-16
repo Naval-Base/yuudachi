@@ -18,7 +18,7 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 		message = await resolveMessage(reportLogChannel!.id, report.guildId, report.channelId, report.messageId, locale);
 	}
 
-	const author = message?.author ?? (await guild.client.users.fetch(report.authorId));
+	const author = await guild.client.users.fetch(report.authorId);
 
 	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, message, moderator)];
 	if (message) {
