@@ -16,7 +16,7 @@ export const StatusCommand = {
 			type: ApplicationCommandOptionType.Integer,
 			choices: [
 				{ name: 'Pending', value: 0 },
-				{ name: 'Accepted', value: 1 },
+				{ name: 'Approved', value: 1 },
 				{ name: 'Rejected', value: 2 },
 				{ name: 'False', value: 3 },
 			],
