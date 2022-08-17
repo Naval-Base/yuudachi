@@ -4,13 +4,14 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { container } from 'tsyringe';
 import type { ArgsParam, InteractionParam } from '../../../../Command.js';
-import { Color, REPORT_USER_EXPIRE_SECONDS, TRUST_AND_SAFETY_URL } from '../../../../Constants.js';
+import { Color, REPORT_USER_EXPIRE_SECONDS } from '../../../../Constants.js';
 import { upsertReportLog } from '../../../../functions/logging/upsertReportLog.js';
 import { createReport, ReportType } from '../../../../functions/reports/createReport.js';
 import type { ReportCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { kRedis } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
+import { localeTrustAndSafety } from '../../../../util/localizeTrustAndSafety.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function user(
@@ -60,7 +61,7 @@ export async function user(
 	});
 	const trustAndSafetyButton = createButton({
 		label: i18next.t('command.utility.report.commons.buttons.trust_and_safety', { lng: locale }),
-		url: TRUST_AND_SAFETY_URL,
+		url: localeTrustAndSafety(locale),
 		style: ButtonStyle.Link,
 	});
 
@@ -74,7 +75,7 @@ export async function user(
 		i18next.t('command.utility.report.commons.warnings', {
 			trust_and_safety: hyperlink(
 				i18next.t('command.utility.report.commons.trust_and_safety_sub', { lng: locale }),
-				TRUST_AND_SAFETY_URL,
+				localeTrustAndSafety(locale),
 			),
 			lng: locale,
 		}),
