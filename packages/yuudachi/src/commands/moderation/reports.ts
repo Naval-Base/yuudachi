@@ -1,4 +1,4 @@
-import { Collection, Message, type Guild, type Snowflake } from 'discord.js';
+import { Collection, type Message, type Guild, type Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -8,7 +8,7 @@ import { formatMessageToEmbed } from '../../functions/logging/formatMessageToEmb
 import { generateReportEmbed } from '../../functions/logging/generateReportEmbed.js';
 import { ReportType } from '../../functions/reports/createReport.js';
 import { findReports } from '../../functions/reports/findReports.js';
-import { RawReport, transformReport } from '../../functions/reports/transformReport.js';
+import { type RawReport, transformReport } from '../../functions/reports/transformReport.js';
 import type { ReportLookupCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
@@ -123,10 +123,10 @@ export default class extends Command<typeof ReportLookupCommand> {
 
 		if (!isNaN(parseInt(args.phrase, 10))) {
 			const [report] = await sql<RawReport[]>`
-			select *
-			from reports
-			where guild_id = ${interaction.guildId}
-			and report_id = ${args.phrase}`;
+				select *
+				from reports
+				where guild_id = ${interaction.guildId}
+				and report_id = ${args.phrase}`;
 
 			if (!report) {
 				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
