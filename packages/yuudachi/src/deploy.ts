@@ -19,6 +19,7 @@ import {
 	TimeoutCommand,
 	ClearCommand,
 	StatusCommand,
+	ReportLookupCommand,
 
 	// Utility
 	PingCommand,
@@ -60,6 +61,7 @@ try {
 			TimeoutCommand,
 			ClearCommand,
 			StatusCommand,
+			ReportLookupCommand,
 
 			// Utility
 			PingCommand,

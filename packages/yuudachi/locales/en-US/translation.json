@@ -55,6 +55,13 @@
 					"show_history": "Show history for user {{- user}}"
 				}
 			},
+			"reports": {
+				"autocomplete": {
+					"no_reason": "No reason",
+					"show_history_target": "Show history for target {{- user}}",
+					"show_history_author": "Show history for author {{- user}}"
+				}
+			},
 			"warn": {
 				"pending": "Do you really want to warn {{- user}}?",
 				"buttons": {

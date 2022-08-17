@@ -14,6 +14,7 @@ export * from "./moderation/warn.js";
 export * from "./moderation/timeout.js";
 export * from "./moderation/clear.js";
 export * from "./moderation/status.js";
+export * from "./moderation/reports.js";
 export * from "./utility/ping.js";
 export * from "./utility/checkScam.js";
 export * from "./utility/refreshScams.js";

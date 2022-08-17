@@ -4,6 +4,7 @@ import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from "../../Constants.js";
+import { findCases } from "../../functions/cases/findCases.js";
 import { type RawCase, transformCase } from "../../functions/cases/transformCase.js";
 import { generateCaseEmbed } from "../../functions/logging/generateCaseEmbed.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -13,8 +14,7 @@ import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
 import { ACTION_KEYS } from "../../util/actionKeys.js";
 import { ellipsis, truncateEmbed } from "../../util/embed.js";
-import { findCases } from "../../util/findCases.js";
-import { generateHistory } from "../../util/generateHistory.js";
+import { generateHistory, HistoryType } from "../../util/generateHistory.js";
 
 const OP_DELIMITER = "-" as const;
 
@@ -104,7 +104,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 		if (cmd === "history" && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
 			await interaction.editReply({
-				embeds: await generateHistory(interaction, data, locale),
+				embeds: await generateHistory(interaction, data, locale, HistoryType.Case),
 			});
 			return;
 		}
