@@ -49,7 +49,7 @@ export const AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT = 100;
 
 export const TRUST_AND_SAFETY_URL_BASE = "https://support.discord.com/hc/en-us/requests/new";
 
-export const DiscordLocales = {
+export const DiscordLocales: { [key: string]: string } = {
 	"en-US": "en-us",
 	"en-GB": "en-gb",
 	"es-ES": "es",
