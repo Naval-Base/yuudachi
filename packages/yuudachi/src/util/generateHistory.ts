@@ -171,28 +171,20 @@ export async function generateReportHistory(
 		title: i18next.t("log.history.report_title", { lng: locale }),
 	});
 
-	const targetReports = await sql<[RawReport]>`
+	const reports = await sql<[RawReport]>`
 		select *
 		from reports
 		where guild_id = ${interaction.guildId}
-			and target_id = ${target.user.id}
-			and status not in (${ReportStatus.Rejected}, ${ReportStatus.False})
+			and (
+					author_id = ${target.user.id}
+					or target_id = ${target.user.id}
+			)
+				and status != ${ReportStatus.Rejected}
 		order by created_at desc
 	`;
-
-	const falseReports = await sql<[RawReport]>`
-		select *
-		from reports
-		where guild_id = ${interaction.guildId}
-			and author_id = ${target.user.id}
-			and status = ${ReportStatus.False}
-		order by created_at desc
-	`;
-
-	const reports = [...targetReports, ...falseReports];
 
 	const colorIndex = Math.min(
-		targetReports.filter((r) => r.status === ReportStatus.Approved).length + falseReports.length,
+		reports.filter((r) => r.status === ReportStatus.Approved || r.status === ReportStatus.False).length,
 		colors.length - 1,
 	);
 
@@ -201,6 +193,7 @@ export async function generateReportHistory(
 		...embed,
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (reports.length > 0) {
 		const summary: string[] = [];
 		let truncated = false;
@@ -291,9 +284,12 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 			text: [
 				i18next.t('log.history.report_footer.target', {
 					lng: locale,
-					count: targetReports.filter((r) => r.status === ReportStatus.Approved).length,
+					count: reports.filter((r) => r.status === ReportStatus.Approved).length,
 				}),
-				i18next.t('log.history.report_footer.false', { lng: locale, count: falseReports.length }),
+				i18next.t('log.history.report_footer.false', {
+					lng: locale,
+					count: reports.filter((r) => r.status === ReportStatus.False).length,
+				}),
 			].join(' | '),
 		},
 		...embed,
