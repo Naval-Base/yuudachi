@@ -121,9 +121,13 @@ export default class extends Command<typeof ReportLookupCommand> {
 				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
 			}
 
-			const message = report.message_id
-				? await resolveMessage(interaction.channelId, report.guild_id, report.channel_id!, report.message_id, locale)
-				: undefined;
+			let message: Message | undefined = undefined;
+
+			try {
+				message = report.message_id
+					? await resolveMessage(interaction.channelId, report.guild_id, report.channel_id!, report.message_id, locale)
+					: undefined;
+			} catch {}
 
 			const author = await interaction.client.users.fetch(report.author_id);
 

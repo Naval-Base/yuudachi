@@ -1,4 +1,12 @@
-import { type Message, type Snowflake, codeBlock, hyperlink, messageLink, userMention } from 'discord.js';
+import {
+	type Message,
+	type Snowflake,
+	codeBlock,
+	hyperlink,
+	messageLink,
+	userMention,
+	channelMention,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -22,13 +30,15 @@ export async function generateReportLog(report: Report, locale: string, message?
 		}),
 	);
 
-	if (message) {
+	if (message || report.messageId) {
 		parts.push(
 			i18next.t('log.report_log.message', {
-				message_link: hyperlink(i18next.t('log.report_log.message_sub', { lng: locale }), message.url),
+				message_link: message
+					? hyperlink(i18next.t('log.report_log.message_sub', { lng: locale }), message.url)
+					: i18next.t('log.report_log.message_fallback', { lng: locale }),
 				// TextChannels have an custom `.toString()` method that returns the channel's mention.
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
-				channel: message.channel.toString(),
+				channel: channelMention(report.channelId!),
 				lng: locale,
 			}),
 		);

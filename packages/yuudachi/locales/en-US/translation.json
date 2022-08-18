@@ -532,6 +532,7 @@
 			"target": "**Target:** {{- target}}",
 			"message": "**Message Reported:** {{- message_link}} ({{- channel}})",
 			"message_sub": "Beam me up, Yuu",
+			"message_fallback": "`Message deleted`",
 			"case_reference": "**Case Reference:** {{- ref}}",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
 			"moderator": "**Last update by:** {{- mod}}",

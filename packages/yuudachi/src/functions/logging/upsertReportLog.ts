@@ -14,9 +14,11 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 	const reportLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 
-	if (!message && report.messageId) {
-		message = await resolveMessage(reportLogChannel!.id, report.guildId, report.channelId!, report.messageId, locale);
-	}
+	try {
+		if (!message && report.messageId) {
+			message = await resolveMessage(reportLogChannel!.id, report.guildId, report.channelId!, report.messageId, locale);
+		}
+	} catch {}
 
 	const author = await guild.client.users.fetch(report.authorId);
 
