@@ -1,4 +1,4 @@
-import { Collection, type Message, type Guild, type Snowflake } from 'discord.js';
+import { Collection, type Message, type Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -15,21 +15,10 @@ import { kSQL } from '../../tokens.js';
 import { REPORT_KEYS } from '../../util/actionKeys.js';
 import { ellipsis, truncateEmbed } from '../../util/embed.js';
 import { generateHistory, generateUserInfo, HistoryType } from '../../util/generateHistory.js';
+import { resolveMemberAndUser } from '../../util/resolveMemberAndUser.js';
 import { resolveMessage } from '../../util/resolveMessage.js';
 
 const OP_DELIMITER = '-' as const;
-
-async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
-	try {
-		const member = await guild.members.fetch(id);
-
-		return { member, user: member.user } as const;
-	} catch {
-		const user = await guild.client.users.fetch(id);
-
-		return { user } as const;
-	}
-}
 
 export default class extends Command<typeof ReportLookupCommand> {
 	public override async autocomplete(
