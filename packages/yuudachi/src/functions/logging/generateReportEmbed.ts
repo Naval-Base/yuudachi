@@ -33,7 +33,7 @@ export async function generateReportEmbed(
 		},
 		color: statusToColor(report.status),
 		description: await generateReportLog(report, locale, message),
-		timestamp: new Date().toISOString(),
+		timestamp: report.createdAt,
 		footer: {
 			text: i18next.t('log.report_log.footer', {
 				report_id: report.reportId,

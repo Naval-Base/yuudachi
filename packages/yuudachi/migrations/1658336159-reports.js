@@ -50,7 +50,7 @@ export async function up(sql) {
 			log_message_id text,
 			ref_id integer,
 			updated_at timestamp with time zone,
-			created_at timestamp with time zone default now() not null,
+			created_at timestamp with time zone default now() not null
 		);
 
 		comment on column reports.guild_id is 'The id of the guild this report belongs to';
