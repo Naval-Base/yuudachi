@@ -18,6 +18,7 @@ export interface RawReport {
 	attachment_url?: string | undefined | null;
 	log_message_id?: Snowflake | undefined | null;
 	ref_id?: number | undefined | null;
+	updated_at?: string | undefined | null;
 	created_at: string;
 }
 
@@ -39,6 +40,7 @@ export function transformReport(report: RawReport): Report {
 		attachmentUrl: report.attachment_url,
 		logMessageId: report.log_message_id,
 		refId: report.ref_id,
+		updatedAt: report.updated_at,
 		createdAt: report.created_at,
 	} as const;
 }

@@ -6,6 +6,8 @@ import {
 	messageLink,
 	userMention,
 	channelMention,
+	time,
+	TimestampStyles,
 } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
@@ -75,6 +77,10 @@ export async function generateReportLog(report: Report, locale: string, message?
 			'',
 			i18next.t('log.report_log.moderator', {
 				mod: `\`${report.modTag}\` (${report.modId})`,
+				lng: locale,
+			}),
+			i18next.t('log.report_log.updated_at', {
+				updated_at: time(new Date(report.updatedAt ?? report.createdAt), TimestampStyles.ShortDateTime),
 				lng: locale,
 			}),
 		);

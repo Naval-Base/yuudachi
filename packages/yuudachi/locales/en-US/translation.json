@@ -535,7 +535,8 @@
 			"message_fallback": "`Message deleted`",
 			"case_reference": "**Case Reference:** {{- ref}}",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
-			"moderator": "**Last update by:** {{- mod}}",
+			"moderator": "**Moderator:** {{- mod}}",
+			"updated_at": "**Last update:** {{- updated_at}}",
 			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
 			"report_type": {
 				"0": "Message",
