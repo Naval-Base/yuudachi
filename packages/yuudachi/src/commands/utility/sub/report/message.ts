@@ -28,15 +28,11 @@ export async function message(
 	const key = `guild:${interaction.guildId!}:report:channel:${interaction.channelId!}:message:${args.message.id}`;
 
 	if (args.message.author.id === interaction.user.id) {
-		await interaction.editReply(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
-		return;
+		throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
 	}
 
 	if (await redis.exists(key)) {
-		await interaction.editReply(
-			i18next.t('command.utility.report.commons.errors.recently_reported.message', { lng: locale }),
-		);
-		return;
+		throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.message', { lng: locale }));
 	}
 
 	const reportKey = nanoid();

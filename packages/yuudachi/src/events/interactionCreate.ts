@@ -124,12 +124,7 @@ export default class implements Event {
 							return;
 						}
 
-						if (subError.message.includes("Unknown Message")) {
-							await interaction.followUp({ content: error.message, components: [], ephemeral: true });
-							return;
-						}
-
-						await interaction.editReply({ content: subError.message, components: [] });
+						await interaction.followUp({ content: error.message, components: [], ephemeral: true });
 					}
 				}
 			}
