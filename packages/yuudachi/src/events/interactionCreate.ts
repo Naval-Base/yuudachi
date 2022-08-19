@@ -116,9 +116,20 @@ export default class implements Event {
 						}
 
 						await interaction.editReply({ content: error.message, components: [] });
-					} catch (error__) {
-						const err = error__ as Error;
-						logger.error(err, error.message);
+					} catch (err) {
+						const subError = err as Error;
+						logger.error(subError, subError.message);
+
+						if (interaction.isAutocomplete()) {
+							return;
+						}
+
+						if (subError.message.includes("Unknown Message")) {
+							await interaction.followUp({ content: error.message, components: [], ephemeral: true });
+							return;
+						}
+
+						await interaction.editReply({ content: subError.message, components: [] });
 					}
 				}
 			}
