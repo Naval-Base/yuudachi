@@ -112,10 +112,10 @@ export default class extends Command<typeof ReportLookupCommand> {
 
 		if (!isNaN(parseInt(args.phrase, 10))) {
 			const [report] = await sql<RawReport[]>`
-				select *
-				from reports
-				where guild_id = ${interaction.guildId}
-				and report_id = ${args.phrase}`;
+			select *
+			from reports
+			where guild_id = ${interaction.guildId}
+			and report_id = ${args.phrase}`;
 
 			if (!report) {
 				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
