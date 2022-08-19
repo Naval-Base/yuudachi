@@ -31,7 +31,7 @@ export async function reportReference(
 		updateCase({
 			caseId: originalCase.caseId,
 			guildId: interaction.guildId,
-			reportRefId: referenceReport.reportId,
+			reportRef: referenceReport.reportId,
 		}),
 		updateReport(
 			{
@@ -44,8 +44,10 @@ export async function reportReference(
 		),
 	]);
 
-	await upsertCaseLog(interaction.guild, interaction.user, case_);
-	await upsertReportLog(interaction.guild, report);
+	await Promise.all([
+		upsertCaseLog(interaction.guild, interaction.user, case_),
+		upsertReportLog(interaction.guild, report),
+	]);
 
 	await interaction.editReply({
 		content: i18next.t('command.mod.reference.report', {

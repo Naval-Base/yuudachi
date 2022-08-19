@@ -80,8 +80,6 @@ export async function up(sql) {
 
 	await sql.unsafe(`
 		alter table cases
-			rename ref_id to case_ref_id;
-		alter table cases
-			add report_ref_id integer;
+			add report_ref integer;
 	`);
 }

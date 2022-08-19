@@ -6,7 +6,7 @@ import { type RawCase, transformCase } from "./transformCase.js";
 
 export type PatchCase = Pick<
 	CreateCase,
-	"actionExpiration" | "caseId" | "caseRefId' | 'reportRefId" | "contextMessageId" | "guildId" | "reason"
+	"actionExpiration" | "caseId" | "contextMessageId" | "guildId" | "reason" | "refId" | "reportRef"
 >;
 
 export async function updateCase(case_: PatchCase) {
@@ -39,19 +39,19 @@ export async function updateCase(case_: PatchCase) {
 		`;
 	}
 
-	if (case_.caseRefId) {
+	if (case_.refId) {
 		await sql`
 			update cases
-			set case_ref_id = ${case_.caseRefId}
+			set ref_id = ${case_.refId}
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.caseId!}
 		`;
 	}
 
-	if (case_.reportRefId) {
+	if (case_.reportRef) {
 		await sql`
 			update cases
-			set report_ref_id = ${case_.reportRefId}
+			set report_ref = ${case_.reportRef}
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.caseId!}
 		`;
