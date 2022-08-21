@@ -32,10 +32,6 @@ export async function user(
 		throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
 	}
 
-	if (member.id === interaction.user.id) {
-		throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
-	}
-
 	if (await redis.exists(key)) {
 		throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.user', { lng: locale }));
 	}
@@ -106,12 +102,12 @@ export async function user(
 		.awaitMessageComponent({
 			componentType: ComponentType.Button,
 			filter: (i) => i.user.id === interaction.user.id,
-			time: 20000,
+			time: 120000,
 		})
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+					content: i18next.t('command.utility.report.commons.errors.timed_out', { lng: locale }),
 					components: [],
 				});
 			} catch (e) {

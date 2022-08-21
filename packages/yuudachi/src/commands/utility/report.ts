@@ -47,6 +47,10 @@ export default class extends Command<typeof ReportCommand | typeof ReportMessage
 			const { guildId, channelId, messageId } = parsedLink;
 			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
+			if (messageArg.author.id === interaction.user.id) {
+				throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
+			}
+
 			await message(
 				interaction,
 				{
@@ -56,6 +60,10 @@ export default class extends Command<typeof ReportCommand | typeof ReportMessage
 				locale,
 			);
 		} else if (Object.keys(args)[0] === 'user') {
+			if (args.user.user.user.id === interaction.user.id) {
+				throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
+			}
+
 			await user(interaction, args.user, locale);
 		}
 	}
@@ -66,6 +74,10 @@ export default class extends Command<typeof ReportCommand | typeof ReportMessage
 		locale: LocaleParam,
 	): Promise<void> {
 		const modalKey = nanoid();
+
+		if (args.message.author.id === interaction.user.id) {
+			throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
+		}
 
 		const modal = createModal({
 			customId: modalKey,

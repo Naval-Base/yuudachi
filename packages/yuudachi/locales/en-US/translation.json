@@ -373,7 +373,8 @@
 							"user": "This user has already been recently reported, thanks for making our community a better place!"
 						},
 						"no_self": "You cannot report yourself.",
-						"invalid_attachment": "Invalid attachment, only images are allowed."
+						"invalid_attachment": "Invalid attachment, only images are allowed.",
+						"timed_out": "The report has timed out, please try again."
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "trust and safety",
