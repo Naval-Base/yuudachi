@@ -35,7 +35,7 @@ export enum ReportStatus {
 	Pending,
 	Approved,
 	Rejected,
-	False,
+	Spam,
 }
 
 export async function createReport(report: CreateReport): Promise<Report> {

@@ -171,7 +171,7 @@ export async function createCase(
 					guildId: case_.guildId,
 					reportId: case_.reportRef,
 					refId: newCase.case_id,
-					status: preReport!.authorId === case_.targetId ? ReportStatus.False : ReportStatus.Approved,
+					status: preReport!.authorId === case_.targetId ? ReportStatus.Spam : ReportStatus.Approved,
 				},
 				guild.client.users.cache.get(case_.modId!),
 			);

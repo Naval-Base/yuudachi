@@ -18,7 +18,7 @@ export const StatusCommand = {
 				{ name: 'Pending', value: 0 },
 				{ name: 'Approved', value: 1 },
 				{ name: 'Rejected', value: 2 },
-				{ name: 'False', value: 3 },
+				{ name: 'Spam', value: 3 },
 			],
 			required: true,
 		},

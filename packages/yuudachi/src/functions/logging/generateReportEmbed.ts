@@ -12,7 +12,7 @@ function statusToColor(status: ReportStatus): Color {
 			return Color.DiscordSuccess;
 		case ReportStatus.Rejected:
 			return Color.DiscordWarning;
-		case ReportStatus.False:
+		case ReportStatus.Spam:
 			return Color.DiscordDanger;
 	}
 }

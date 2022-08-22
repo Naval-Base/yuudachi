@@ -184,7 +184,7 @@ export async function generateReportHistory(
 	`;
 
 	const colorIndex = Math.min(
-		reports.filter((r) => r.status === ReportStatus.Approved || r.status === ReportStatus.False).length,
+		reports.filter((r) => r.status === ReportStatus.Approved || r.status === ReportStatus.Spam).length,
 		colors.length - 1,
 	);
 
@@ -286,9 +286,9 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 					lng: locale,
 					count: reports.filter((r) => r.target_id === target.user.id && r.status === ReportStatus.Approved).length,
 				}),
-				i18next.t('log.history.report_footer.false', {
+				i18next.t('log.history.report_footer.spam', {
 					lng: locale,
-					count: reports.filter((r) => r.author_id === target.user.id && r.status === ReportStatus.False).length,
+					count: reports.filter((r) => r.author_id === target.user.id && r.status === ReportStatus.Spam).length,
 				}),
 			].join(' | '),
 		},

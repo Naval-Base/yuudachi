@@ -418,9 +418,9 @@
 				"target_zero": "Never reported",
 				"target_one": "Target of 1 report",
 				"target_other": "Targets of {{count}} reports",
-				"false_zero": "Never false reported",
-				"false_one": "False reported once",
-				"false_other": "False reported {{count}} times"
+				"spam_zero": "Never spam reported",
+				"spam_one": "Spam reported once",
+				"spam_other": "Spam reported {{count}} times"
 			},
 			"report_details": "$t(log.history.report.{{author}}) | {{type}}",
 			"report": {
@@ -547,7 +547,7 @@
 				"0": "Pending",
 				"1": "Approved",
 				"2": "Rejected",
-				"3": "False"
+				"3": "Spam"
 			}
 		}
 	},
