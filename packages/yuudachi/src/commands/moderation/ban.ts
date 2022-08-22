@@ -129,7 +129,10 @@ export default class extends Command<typeof BanCommand> {
 				generateCasePayload({
 					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,
-					args,
+					args: {
+						...args,
+						days: Math.min(Math.max(Number(args.days), 0), 7),
+					},
 					action: CaseAction.Ban,
 				}),
 			);

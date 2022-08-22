@@ -44,7 +44,7 @@ export function generateCasePayload({
 		target: args.user.member,
 		targetId: args.user.user.id,
 		targetTag: args.user.user.tag,
-		deleteMessageDays: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
+		deleteMessageDays: args.days,
 		contextMessageId: messageId,
 		refId: args.case_reference ? Number(args.case_reference) : undefined,
 		reportRef: args.report_reference ? Number(args.report_reference) : undefined,
