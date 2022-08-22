@@ -12,8 +12,10 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		args: ArgsParam<typeof HistoryCommand | typeof HistoryUserContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
+		const embed = await generateHistory(interaction, args.user, locale);
+
 		await interaction.editReply({
-			embeds: await generateHistory(interaction, args.user, locale),
+			embeds: [embed],
 		});
 	}
 

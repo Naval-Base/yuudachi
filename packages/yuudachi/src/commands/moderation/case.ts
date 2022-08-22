@@ -14,7 +14,7 @@ import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
 import { ACTION_KEYS } from "../../util/actionKeys.js";
 import { ellipsis, truncateEmbed } from "../../util/embed.js";
-import { generateHistory, HistoryType } from "../../util/generateHistory.js";
+import { generateHistory } from "../../util/generateHistory.js";
 
 const OP_DELIMITER = "-" as const;
 
@@ -91,8 +91,10 @@ export default class extends Command<typeof CaseLookupCommand> {
 
 		if (cmd === "history" && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
+			const embed = await generateHistory(interaction, data, locale);
+
 			await interaction.editReply({
-				embeds: await generateHistory(interaction, data, locale, HistoryType.Case),
+				embeds: [embed],
 			});
 			return;
 		}

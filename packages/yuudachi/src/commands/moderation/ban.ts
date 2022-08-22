@@ -81,12 +81,14 @@ export default class extends Command<typeof BanCommand> {
 			style: ButtonStyle.Secondary,
 		});
 
+		const embed = await generateHistory(interaction, args.user, locale);
+
 		await interaction.editReply({
 			content: i18next.t("command.mod.ban.pending", {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: await generateHistory(interaction, args.user, locale),
+			embeds: [embed],
 			components: [createMessageActionRow([cancelButton, banButton])],
 		});
 

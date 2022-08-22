@@ -68,12 +68,14 @@ export default class extends Command<typeof SoftbanCommand> {
 			style: ButtonStyle.Secondary,
 		});
 
+		const embeds = isStillMember ? [await generateHistory(interaction, args.user, locale)] : [];
+
 		await interaction.editReply({
 			content: i18next.t(isStillMember ? "command.mod.softban.pending" : "command.mod.softban.not_member", {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds: isStillMember ? await generateHistory(interaction, args.user, locale) : [],
+			embeds,
 			components: [createMessageActionRow([cancelButton, softbanButton])],
 		});
 

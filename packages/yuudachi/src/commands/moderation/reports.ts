@@ -104,8 +104,11 @@ export default class extends Command<typeof ReportLookupCommand> {
 
 		if (cmd === 'history' && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
+
+			const embed = await generateHistory(interaction, data, locale, HistoryType.Report);
+
 			await interaction.editReply({
-				embeds: await generateHistory(interaction, data, locale, HistoryType.Report),
+				embeds: [embed],
 			});
 			return;
 		}

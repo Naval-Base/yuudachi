@@ -343,7 +343,6 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 }
 
 export enum HistoryType {
-	All,
 	Case,
 	Report,
 }
@@ -352,19 +351,21 @@ export async function generateHistory(
 	interaction: CommandInteraction<"cached"> | ButtonInteraction<"cached"> | SelectMenuInteraction<"cached">,
 	target: { user: User; member?: GuildMember | undefined },
 	locale: string,
-	type = HistoryType.All,
+	type = HistoryType.Case,
 ) {
-	const shouldShowCase = type === HistoryType.All || type === HistoryType.Case;
-	const shouldShowReport = type === HistoryType.All || type === HistoryType.Report;
+	let embed = generateUserInfo(target, locale);
 
-	const embeds = [generateUserInfo(target, locale)];
-
-	if (shouldShowCase) {
-		embeds.push(await generateCaseHistory(interaction, target, locale, true));
+	if (type === HistoryType.Case) {
+		embed = {
+			...embed,
+			...(await generateCaseHistory(interaction, target, locale, true)),
+		};
+	} else {
+		embed = {
+			...embed,
+			...(await generateReportHistory(interaction, target, locale, true)),
+		};
 	}
-	if (shouldShowReport) {
-		embeds.push(await generateReportHistory(interaction, target, locale, true));
-	}
 
-	return embeds;
+	return embed;
 }
