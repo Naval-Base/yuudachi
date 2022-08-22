@@ -149,7 +149,7 @@ export async function generateCaseHistory(
 		};
 	}
 
-	return truncateEmbed(embed);
+	return embed;
 }
 
 export async function generateReportHistory(
@@ -295,7 +295,7 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 		...embed,
 	};
 
-	return truncateEmbed(embed);
+	return embed;
 }
 
 export function generateUserInfo(target: { user: User; member?: GuildMember | undefined }, locale: string) {
@@ -308,7 +308,6 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 				name: `${target.user.tag} (${target.user.id})`,
 				icon_url: target.user.displayAvatarURL(),
 			},
-			color: Color.DiscordEmbedBackground,
 		},
 		{
 			name: i18next.t('log.history.user_details', { lng: locale }),
@@ -339,7 +338,7 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 		});
 	}
 
-	return truncateEmbed(embed);
+	return embed;
 }
 
 export enum HistoryType {
@@ -357,15 +356,19 @@ export async function generateHistory(
 
 	if (type === HistoryType.Case) {
 		embed = {
-			...embed,
 			...(await generateCaseHistory(interaction, target, locale, true)),
+			...embed,
 		};
 	} else {
 		embed = {
-			...embed,
 			...(await generateReportHistory(interaction, target, locale, true)),
+			...embed,
 		};
 	}
 
-	return embed;
+	if (!embed.color) {
+		embed.color = Color.DiscordEmbedBackground;
+	}
+
+	return truncateEmbed(embed);
 }
