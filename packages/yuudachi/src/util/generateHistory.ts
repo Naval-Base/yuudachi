@@ -284,11 +284,11 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 			text: [
 				i18next.t('log.history.report_footer.target', {
 					lng: locale,
-					count: reports.filter((r) => r.status === ReportStatus.Approved).length,
+					count: reports.filter((r) => r.target_id === target.user.id && r.status === ReportStatus.Approved).length,
 				}),
 				i18next.t('log.history.report_footer.false', {
 					lng: locale,
-					count: reports.filter((r) => r.status === ReportStatus.False).length,
+					count: reports.filter((r) => r.author_id === target.user.id && r.status === ReportStatus.False).length,
 				}),
 			].join(' | '),
 		},
