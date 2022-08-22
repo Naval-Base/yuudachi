@@ -6,19 +6,19 @@ export interface RawReport {
 	report_id: number;
 	type: number;
 	status: number;
-	message_id?: Snowflake | undefined | null;
-	channel_id?: Snowflake;
+	message_id: Snowflake | null;
+	channel_id: Snowflake;
 	target_id: Snowflake;
 	target_tag: string;
 	author_id: Snowflake;
 	author_tag: string;
-	mod_id?: Snowflake | undefined | null;
-	mod_tag?: string | undefined | null;
+	mod_id: Snowflake | null;
+	mod_tag: string | null;
 	reason: string;
-	attachment_url?: string | undefined | null;
-	log_message_id?: Snowflake | undefined | null;
-	ref_id?: number | undefined | null;
-	updated_at?: string | undefined | null;
+	attachment_url: string | null;
+	log_message_id: Snowflake | null;
+	ref_id: number | null;
+	updated_at: string | null;
 	created_at: string;
 }
 
