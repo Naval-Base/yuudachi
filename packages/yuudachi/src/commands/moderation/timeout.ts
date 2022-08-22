@@ -15,6 +15,7 @@ import type { TimeoutCommand } from "../../interactions/moderation/timeout.js";
 import { logger } from "../../logger.js";
 import { kRedis } from "../../tokens.js";
 import { createButton } from "../../util/button.js";
+import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory } from "../../util/generateHistory.js";
 import { createMessageActionRow } from "../../util/messageActionRow.js";
 
@@ -88,7 +89,7 @@ export default class extends Command<typeof TimeoutCommand> {
 			style: ButtonStyle.Secondary,
 		});
 
-		const embed = await generateHistory(interaction, args.user, locale);
+		const embed = truncateEmbed(await generateHistory(interaction, args.user, locale));
 
 		await interaction.editReply({
 			content: i18next.t("command.mod.timeout.pending", {

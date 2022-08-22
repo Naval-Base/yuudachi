@@ -1,5 +1,6 @@
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import type { HistoryCommand, HistoryUserContextCommand } from "../../interactions/index.js";
+import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory, HistoryType } from "../../util/generateHistory.js";
 
 export default class extends Command<typeof HistoryCommand | typeof HistoryUserContextCommand> {
@@ -13,7 +14,7 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		type: HistoryType,
 		locale: LocaleParam,
 	): Promise<void> {
-		const embed = await generateHistory(interaction, args.user, locale, type);
+		const embed = truncateEmbed(await generateHistory(interaction, args.user, locale, type));
 
 		await interaction.editReply({
 			embeds: [embed],

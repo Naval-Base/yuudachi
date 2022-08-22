@@ -14,6 +14,7 @@ import type { SoftbanCommand } from "../../interactions/index.js";
 import { logger } from "../../logger.js";
 import { kRedis } from "../../tokens.js";
 import { createButton } from "../../util/button.js";
+import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory } from "../../util/generateHistory.js";
 import { createMessageActionRow } from "../../util/messageActionRow.js";
 
@@ -68,7 +69,7 @@ export default class extends Command<typeof SoftbanCommand> {
 			style: ButtonStyle.Secondary,
 		});
 
-		const embeds = isStillMember ? [await generateHistory(interaction, args.user, locale)] : [];
+		const embeds = isStillMember ? [truncateEmbed(await generateHistory(interaction, args.user, locale))] : [];
 
 		await interaction.editReply({
 			content: i18next.t(isStillMember ? "command.mod.softban.pending" : "command.mod.softban.not_member", {
@@ -121,7 +122,7 @@ export default class extends Command<typeof SoftbanCommand> {
 						user: collectedInteraction.user,
 						args: {
 							...args,
-							days: Math.min(Math.max(Number(args.days), 0), 7),
+							days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
 						},
 						action: CaseAction.Softban,
 					}),

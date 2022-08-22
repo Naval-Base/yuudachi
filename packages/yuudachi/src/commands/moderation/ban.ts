@@ -14,6 +14,7 @@ import type { BanCommand } from "../../interactions/index.js";
 import { logger } from "../../logger.js";
 import { kRedis } from "../../tokens.js";
 import { createButton } from "../../util/button.js";
+import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory } from "../../util/generateHistory.js";
 import { createMessageActionRow } from "../../util/messageActionRow.js";
 
@@ -81,7 +82,7 @@ export default class extends Command<typeof BanCommand> {
 			style: ButtonStyle.Secondary,
 		});
 
-		const embed = await generateHistory(interaction, args.user, locale);
+		const embed = truncateEmbed(await generateHistory(interaction, args.user, locale));
 
 		await interaction.editReply({
 			content: i18next.t("command.mod.ban.pending", {
@@ -131,7 +132,7 @@ export default class extends Command<typeof BanCommand> {
 					user: collectedInteraction.user,
 					args: {
 						...args,
-						days: Math.min(Math.max(Number(args.days), 0), 7),
+						days: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
 					},
 					action: CaseAction.Ban,
 				}),

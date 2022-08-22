@@ -14,6 +14,7 @@ import type { KickCommand } from "../../interactions/index.js";
 import { logger } from "../../logger.js";
 import { kRedis } from "../../tokens.js";
 import { createButton } from "../../util/button.js";
+import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory } from "../../util/generateHistory.js";
 import { createMessageActionRow } from "../../util/messageActionRow.js";
 
@@ -74,7 +75,7 @@ export default class extends Command<typeof KickCommand> {
 			style: ButtonStyle.Secondary,
 		});
 
-		const embed = await generateHistory(interaction, args.user, locale);
+		const embed = truncateEmbed(await generateHistory(interaction, args.user, locale));
 
 		await interaction.editReply({
 			content: i18next.t("command.mod.kick.pending", {

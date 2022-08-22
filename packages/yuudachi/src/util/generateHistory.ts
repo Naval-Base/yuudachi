@@ -12,18 +12,18 @@ import {
 	time,
 	TimestampStyles,
 	messageLink,
-} from "discord.js";
-import i18next from "i18next";
-import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import { Color, ThreatLevelColor } from "../Constants.js";
-import type { RawCase } from "../functions/cases/transformCase.js";
-import { ReportStatus, ReportType } from "../functions/reports/createReport.js";
-import type { RawReport } from "../functions/reports/transformReport.js";
-import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
-import { kSQL } from "../tokens.js";
-import { ACTION_KEYS, REPORT_KEYS } from "./actionKeys.js";
-import { addFields, truncateEmbed } from "./embed.js";
+} from 'discord.js';
+import i18next from 'i18next';
+import type { Sql } from 'postgres';
+import { container } from 'tsyringe';
+import { ACTION_KEYS, REPORT_KEYS } from './actionKeys.js';
+import { addFields } from './embed.js';
+import { Color, ThreatLevelColor } from '../Constants.js';
+import type { RawCase } from '../functions/cases/transformCase.js';
+import { ReportStatus, ReportType } from '../functions/reports/createReport.js';
+import type { RawReport } from '../functions/reports/transformReport.js';
+import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
+import { kSQL } from '../tokens.js';
 
 dayjs.extend(relativeTime);
 
@@ -370,5 +370,5 @@ export async function generateHistory(
 		embed.color = Color.DiscordEmbedBackground;
 	}
 
-	return truncateEmbed(embed);
+	return embed;
 }
