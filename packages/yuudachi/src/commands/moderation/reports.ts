@@ -34,9 +34,9 @@ export default class extends Command<typeof ReportLookupCommand> {
 			const trimmedPhrase = args.phrase.trim();
 			const reports = await findReports(trimmedPhrase, interaction.guildId);
 			let choices = reports.map((r) => {
-				const choiceName = `#${r.report_id} ${i18next.t(`log.report_log.report_type.${r.type}`, {
-					lng: locale,
-				})} ${REPORT_KEYS[r.status]!.toUpperCase()} ${r.author_tag} ➜ ${r.target_tag}: ${r.reason}`;
+				const choiceName = `#${r.report_id} ${r.type === ReportType.Message ? '✉️' : '👤'} ${REPORT_KEYS[
+					r.status
+				]!.toUpperCase()} ${r.author_tag} ➜ ${r.target_tag}: ${r.reason}`;
 
 				return {
 					name: ellipsis(choiceName, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT),

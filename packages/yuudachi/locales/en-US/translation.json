@@ -422,7 +422,7 @@
 				"false_one": "False reported once",
 				"false_other": "False reported {{count}} times"
 			},
-			"report_details": "$t(log.history.report.{{author}}) | $t(log.report_log.report_type.{{type}})",
+			"report_details": "$t(log.history.report.{{author}}) | {{type}}",
 			"report": {
 				"author": "Author",
 				"target": "Target"

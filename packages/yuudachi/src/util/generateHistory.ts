@@ -18,7 +18,7 @@ import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import { Color, ThreatLevelColor } from "../Constants.js";
 import type { RawCase } from "../functions/cases/transformCase.js";
-import { ReportStatus } from "../functions/reports/createReport.js";
+import { ReportStatus, ReportType } from "../functions/reports/createReport.js";
 import type { RawReport } from "../functions/reports/transformReport.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 import { kSQL } from "../tokens.js";
@@ -208,9 +208,9 @@ export async function generateReportHistory(
 					: `#${report.report_id}`
 			} ${i18next.t(`log.history.report_details`, {
 				author: typeString,
-				type: report.type,
+				type: report.type === ReportType.Message ? '✉️' : '👤',
 				lng: locale,
-			})} | ${report.reason.replaceAll("*", "")}`;
+			})}: ${report.reason.replace(/\*/g, '')}`;
 
 			if (summary.join("\n").length + reportString.length + 1 < 4_060) {
 				summary.push(reportString);
