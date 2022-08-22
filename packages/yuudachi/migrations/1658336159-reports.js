@@ -14,19 +14,6 @@ export async function up(sql) {
 		$$;`);
 
 	await sql.unsafe(`
-		create function set_updated_at() returns trigger
-		language plpgsql
-		as $$
-		declare
-		_new record;
-		begin
-			_new := new;
-			_new."updated_at" = now();
-			return _new;
-		end;
-		$$;`);
-
-	await sql.unsafe(`
 		alter table guild_settings
 			add report_channel_id text;
 	`);
@@ -74,7 +61,7 @@ export async function up(sql) {
 		alter table reports
 			add constraint reports_pkey primary key (guild_id, report_id);
 
-		create trigger set_updated_at before update on reports for each row execute function set_updated_at();
+		create trigger set_updated_at before update on reports for each row execute function set_current_timestamp_updated_at();
 		comment on trigger set_updated_at on reports is 'Sets the updated_at field to the current time';		
 	`);
 
