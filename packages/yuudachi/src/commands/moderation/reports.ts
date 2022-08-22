@@ -3,7 +3,11 @@ import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
-import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from '../../Constants.js';
+import {
+	AUTOCOMPLETE_CHOICE_LIMIT,
+	AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
+	SNOWFLAKE_MIN_LENGTH,
+} from '../../Constants.js';
 import { formatMessageToEmbed } from '../../functions/logging/formatMessageToEmbed.js';
 import { generateReportEmbed } from '../../functions/logging/generateReportEmbed.js';
 import { ReportType } from '../../functions/reports/createReport.js';
@@ -53,9 +57,10 @@ export default class extends Command<typeof ReportLookupCommand> {
 				}
 			}
 
-			if (uniqueTargets.size === 1 && uniqueAuthors.size === 1) {
+			let historyAdded = false;
+
+			if (uniqueTargets.size === 1) {
 				const target = uniqueTargets.first()!;
-				const author = uniqueAuthors.first()!;
 				choices = [
 					{
 						name: ellipsis(
@@ -67,6 +72,14 @@ export default class extends Command<typeof ReportLookupCommand> {
 						),
 						value: `history${OP_DELIMITER}${target.id}`,
 					},
+					...choices,
+				];
+				historyAdded = true;
+			}
+
+			if (uniqueAuthors.size === 1) {
+				const author = uniqueAuthors.first()!;
+				choices = [
 					{
 						name: ellipsis(
 							i18next.t('command.mod.reports.autocomplete.show_history_author', {
@@ -79,13 +92,30 @@ export default class extends Command<typeof ReportLookupCommand> {
 					},
 					...choices,
 				];
+				historyAdded = true;
+			}
 
-				if (choices.length > AUTOCOMPLETE_CHOICE_LIMIT) {
-					choices.length = AUTOCOMPLETE_CHOICE_LIMIT;
+			if (!historyAdded && !isNaN(parseInt(trimmedPhrase, 10)) && trimmedPhrase.length >= SNOWFLAKE_MIN_LENGTH) {
+				const user = interaction.client.users.cache.get(trimmedPhrase);
+
+				if (user) {
+					choices = [
+						{
+							name: ellipsis(
+								i18next.t('command.mod.reports.autocomplete.show_history_target', {
+									user: user.tag,
+									lng: locale,
+								})!,
+								AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
+							),
+							value: `history${OP_DELIMITER}${user.id}`,
+						},
+						...choices,
+					];
 				}
 			}
 
-			await interaction.respond(choices.slice(0, 25));
+			await interaction.respond(choices.slice(0, AUTOCOMPLETE_CHOICE_LIMIT));
 		} catch (err) {
 			const error = err as Error;
 			logger.error(error, error.message);
