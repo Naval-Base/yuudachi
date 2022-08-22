@@ -1,4 +1,11 @@
-import { type APIEmbed, ButtonStyle, ComponentType, hyperlink, type ModalSubmitInteraction } from 'discord.js';
+import {
+	type APIEmbed,
+	type ModalSubmitInteraction,
+	type GuildMember,
+	ButtonStyle,
+	ComponentType,
+	hyperlink,
+} from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -14,6 +21,8 @@ import { createButton } from '../../../../util/button.js';
 import { localeTrustAndSafety } from '../../../../util/localizeTrustAndSafety.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
+type MemberAssuredReportArgs = ArgsParam<typeof ReportCommand>['user'] & { user: { member: GuildMember } };
+
 export async function user(
 	interaction: InteractionParam | ModalSubmitInteraction<'cached'>,
 	args: ArgsParam<typeof ReportCommand>['user'],
@@ -26,15 +35,7 @@ export async function user(
 		user: { member },
 		reason,
 		attachment,
-	} = args;
-
-	if (!member) {
-		throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
-	}
-
-	if (await redis.exists(key)) {
-		throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.user', { lng: locale }));
-	}
+	} = args as MemberAssuredReportArgs;
 
 	if (attachment) {
 		const attachmentIsImage = attachment.contentType === 'image/jpeg' || attachment.contentType === 'image/png';

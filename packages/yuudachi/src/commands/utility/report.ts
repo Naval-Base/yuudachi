@@ -82,6 +82,10 @@ export default class extends Command<
 				throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.message', { lng: locale }));
 			}
 
+			if (!args.user.user.member) {
+				throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
+			}
+
 			await user(interaction, args.user, locale);
 		}
 	}
@@ -101,6 +105,10 @@ export default class extends Command<
 
 		if (await this.redis.exists(key)) {
 			throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.user', { lng: locale }));
+		}
+
+		if (!args.user.member) {
+			throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
 		}
 
 		const modal = createModal({
