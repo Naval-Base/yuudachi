@@ -1,6 +1,6 @@
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import type { HistoryCommand, HistoryUserContextCommand } from "../../interactions/index.js";
-import { generateHistory } from "../../util/generateHistory.js";
+import { generateHistory, HistoryType } from "../../util/generateHistory.js";
 
 export default class extends Command<typeof HistoryCommand | typeof HistoryUserContextCommand> {
 	public constructor() {
@@ -10,9 +10,10 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 	private async handle(
 		interaction: InteractionParam | InteractionParam<CommandMethod.UserContext>,
 		args: ArgsParam<typeof HistoryCommand | typeof HistoryUserContextCommand>,
+		type: HistoryType,
 		locale: LocaleParam,
 	): Promise<void> {
-		const embed = await generateHistory(interaction, args.user, locale);
+		const embed = await generateHistory(interaction, args.user, locale, type);
 
 		await interaction.editReply({
 			embeds: [embed],
@@ -25,7 +26,7 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		locale: LocaleParam,
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
-		await this.handle(interaction, args, locale);
+		await this.handle(interaction, args, args.type ?? HistoryType.Case, locale);
 	}
 
 	public override async userContext(
@@ -34,6 +35,6 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		locale: LocaleParam,
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
-		await this.handle(interaction, args, locale);
+		await this.handle(interaction, args, HistoryType.Case, locale);
 	}
 }
