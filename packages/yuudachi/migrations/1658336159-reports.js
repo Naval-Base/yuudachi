@@ -67,6 +67,8 @@ export async function up(sql) {
 
 	await sql.unsafe(`
 		alter table cases
-			add report_ref integer;
+			add report_ref_id integer;
+
+		comment on column cases.report_ref_id is 'The report id that this case is associated with';
 	`);
 }

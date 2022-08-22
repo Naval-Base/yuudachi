@@ -36,7 +36,7 @@ export function transformCase(case_: RawCase): Case {
 		targetTag: case_.target_tag,
 		contextMessageId: case_.context_message_id,
 		refId: case_.ref_id,
-		reportRef: case_.report_ref,
+		reportRefId: case_.report_ref_id,
 		logMessageId: case_.log_message_id,
 		actionProcessed: case_.action_processed,
 		multi: case_.multi,

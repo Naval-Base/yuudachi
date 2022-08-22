@@ -158,7 +158,7 @@ export default class extends Command<typeof ReportLookupCommand> {
 
 			try {
 				message = report.message_id
-					? await resolveMessage(interaction.channelId, report.guild_id, report.channel_id!, report.message_id, locale)
+					? await resolveMessage(interaction.channelId, report.guild_id, report.channel_id, report.message_id, locale)
 					: undefined;
 			} catch {}
 

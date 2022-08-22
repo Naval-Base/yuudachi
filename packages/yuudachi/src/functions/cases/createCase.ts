@@ -54,12 +54,14 @@ export type CreateCase = Omit<
 	caseId?: number | null | undefined;
 	caseReferenceId?: number | null | undefined;
 	contextMessageId?: Snowflake | null | undefined;
+	deleteMessageDays?: number | null | undefined;
 	modId?: Snowflake | undefined;
 	modTag?: string | undefined;
 	multi?: boolean | null | undefined;
 	reason?: string | null | undefined;
 	refId?: number | null | undefined;
 	reportRef?: number | null | undefined;
+	reportRefId?: number | null | undefined;
 	reportReferenceId?: number | null | undefined;
 	target?: GuildMember | null | undefined;
 	targetId: Snowflake;
@@ -140,7 +142,7 @@ export async function createCase(
 			reason,
 			context_message_id,
 			ref_id,
-			report_ref,
+			report_ref_id,
 			multi
 		) values (
 			next_case(${case_.guildId}),
@@ -156,20 +158,20 @@ export async function createCase(
 			${case_.reason ?? null},
 			${case_.contextMessageId ?? null},
 			${case_.refId ?? null},
-			${case_.reportRef ?? null},
+			${case_.reportRefId ?? null},
 			${case_.multi ?? false}
 		)
 		returning *
 	`;
 
 	try {
-		if (case_.reportRef) {
-			const preReport = await getReport(case_.guildId, case_.reportRef);
+		if (case_.reportRefId) {
+			const preReport = await getReport(case_.guildId, case_.reportRefId);
 
 			const report = await updateReport(
 				{
 					guildId: case_.guildId,
-					reportId: case_.reportRef,
+					reportId: case_.reportRefId,
 					refId: newCase.case_id,
 					status: preReport!.authorId === case_.targetId ? ReportStatus.Spam : ReportStatus.Approved,
 				},
