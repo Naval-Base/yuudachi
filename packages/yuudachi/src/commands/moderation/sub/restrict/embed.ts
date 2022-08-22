@@ -128,11 +128,7 @@ export async function embed(
 				guildId: collectedInteraction.guildId,
 				user: collectedInteraction.user,
 				roleId: roles.embed_role_id,
-				args: {
-					...args,
-					caseReference: args.case_reference ?? null,
-					reportReference: args.report_reference ?? null,
-				},
+				args,
 				action: CaseAction.Role,
 				duration: parsedDuration,
 			}),

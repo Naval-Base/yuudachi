@@ -2,12 +2,10 @@ import type { GuildMember, Snowflake, User } from "discord.js";
 import type { CaseAction } from "../cases/createCase.js";
 
 type CasePayloadArgs = {
-	caseReference?: number | null | undefined;
-	days?: number | undefined;
+	case_reference?: number | null | undefined;
 	days?: number | undefined;
 	reason?: string | null | undefined;
-	reference?: number | null | undefined;
-	reportReference?: number | null | undefined;
+	report_reference?: number | null | undefined;
 	user: {
 		member?: GuildMember | null | undefined;
 		user: User;
@@ -46,10 +44,10 @@ export function generateCasePayload({
 		target: args.user.member,
 		targetId: args.user.user.id,
 		targetTag: args.user.user.tag,
-		deleteMessageDays: args.days,
+		deleteMessageDays: Math.min(Math.max(Number(args.days ?? 0), 0), 7),
 		contextMessageId: messageId,
-		refId: args.caseReference ? Number(args.caseReference) : undefined,
-		reportRef: args.reportReference ? Number(args.reportReference) : undefined,
+		refId: args.case_reference ? Number(args.case_reference) : undefined,
+		reportRef: args.report_reference ? Number(args.report_reference) : undefined,
 		multi,
 	} as const;
 }

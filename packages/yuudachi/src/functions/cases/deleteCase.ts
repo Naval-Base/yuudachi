@@ -100,8 +100,8 @@ export async function deleteCase({
 					user: await guild.client.users.fetch(case_?.target_id ?? target!.id),
 					member: await guild.members.fetch(case_?.target_id ?? target!.id).catch(() => null),
 				},
-				caseReference: case_?.case_id,
-				reportReference,
+				case_reference: case_?.case_id,
+				report_reference: reportReference,
 			},
 			action:
 				case_action === CaseAction.Ban

@@ -119,12 +119,7 @@ export default class extends Command<typeof SoftbanCommand> {
 					generateCasePayload({
 						guildId: collectedInteraction.guildId,
 						user: collectedInteraction.user,
-						args: {
-							...args,
-							caseReference: args.case_reference ?? null,
-							reportReference: args.report_reference ?? null,
-							days: Math.min(Math.max(Number(args.days ?? 1), 0), 7),
-						},
+						args,
 						action: CaseAction.Softban,
 					}),
 				);

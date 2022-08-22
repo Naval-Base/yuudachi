@@ -136,11 +136,7 @@ export default class extends Command<typeof TimeoutCommand> {
 				generateCasePayload({
 					guildId: collectedInteraction.guildId,
 					user: collectedInteraction.user,
-					args: {
-						...args,
-						caseReference: args.case_reference ?? null,
-						reportReference: args.report_reference ?? null,
-					},
+					args,
 					duration: ms(args.duration),
 					action: CaseAction.Timeout,
 				}),
