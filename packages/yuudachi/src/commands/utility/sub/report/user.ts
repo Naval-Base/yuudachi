@@ -36,10 +36,12 @@ export async function user(
 		throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.user', { lng: locale }));
 	}
 
-	const attachmentIsImage = attachment.contentType === 'image/jpeg' || attachment.contentType === 'image/png';
+	if (attachment) {
+		const attachmentIsImage = attachment.contentType === 'image/jpeg' || attachment.contentType === 'image/png';
 
-	if (!attachmentIsImage) {
-		throw new Error(i18next.t('command.utility.report.commons.errors.invalid_attachment', { lng: locale }));
+		if (!attachmentIsImage) {
+			throw new Error(i18next.t('command.utility.report.commons.errors.invalid_attachment', { lng: locale }));
+		}
 	}
 
 	const reportKey = nanoid();
@@ -90,9 +92,7 @@ export async function user(
 		embeds: [
 			{
 				...embed,
-				image: {
-					url: attachment.url,
-				},
+				image: attachment ? { url: attachment.url } : undefined,
 			},
 		],
 		components: [createMessageActionRow([cancelButton, reportButton, trustAndSafetyButton])],
@@ -135,7 +135,7 @@ export async function user(
 			reason,
 			targetId: member.id,
 			targetTag: member.user.tag,
-			attachmentUrl: attachment.proxyURL,
+			attachmentUrl: attachment?.proxyURL,
 			type: ReportType.User,
 		});
 

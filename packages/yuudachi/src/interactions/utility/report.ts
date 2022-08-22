@@ -44,7 +44,7 @@ export const ReportCommand = {
 					name: 'attachment',
 					description: 'Attachment to the report (image only)',
 					type: ApplicationCommandOptionType.Attachment,
-					required: true,
+					required: false,
 				},
 			],
 		},
