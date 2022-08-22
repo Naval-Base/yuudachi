@@ -1,4 +1,4 @@
-import { type APIEmbed, ButtonStyle, ComponentType, hyperlink } from 'discord.js';
+import { type APIEmbed, ButtonStyle, ComponentType, hyperlink, type ModalSubmitInteraction } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
@@ -15,7 +15,7 @@ import { localeTrustAndSafety } from '../../../../util/localizeTrustAndSafety.js
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
 export async function user(
-	interaction: InteractionParam,
+	interaction: InteractionParam | ModalSubmitInteraction<'cached'>,
 	args: ArgsParam<typeof ReportCommand>['user'],
 	locale: string,
 ) {

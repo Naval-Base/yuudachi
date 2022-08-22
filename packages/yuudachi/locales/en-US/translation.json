@@ -382,13 +382,15 @@
 						"execute": "Create Report",
 						"cancel": "Cancel",
 						"trust_and_safety": "Report to Trust and Safety"
+					},
+					"modal": {
+						"label": "The reason for the report",
+						"placeholder": "Please enter an detailed reason for the report"
 					}
 				},
 				"message": {
 					"modal": {
-						"title": "Message report",
-						"label": "The reason for the report",
-						"placeholder": "Please enter an detailed reason for the report"
+						"title": "Message report"
 					},
 					"pending": "Are you sure you want to report {{- message_link}} to the server moderators?\n**Reason:** {{- reason}}",
 					"pending_sub": "this message",
@@ -396,6 +398,9 @@
 					"success": "Successfully reported message, thanks for making our community a better place!"
 				},
 				"user": {
+					"modal": {
+						"title": "User report"
+					},
 					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
 					"cancel": "User report canceled.",
 					"success": "Successfully reported user, thanks for making our community a better place!"

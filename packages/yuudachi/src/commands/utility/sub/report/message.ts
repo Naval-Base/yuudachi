@@ -20,16 +20,12 @@ type MessageReportArgs = Omit<ArgsParam<typeof ReportCommand>['message'], 'messa
 };
 
 export async function message(
-	interaction: InteractionParam | ModalSubmitInteraction,
+	interaction: InteractionParam | ModalSubmitInteraction<'cached'>,
 	args: MessageReportArgs,
 	locale: string,
 ) {
 	const redis = container.resolve<Redis>(kRedis);
-	const key = `guild:${interaction.guildId!}:report:channel:${interaction.channelId!}:message:${args.message.id}`;
-
-	if (await redis.exists(key)) {
-		throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.message', { lng: locale }));
-	}
+	const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId!}:message:${args.message.id}`;
 
 	const reportKey = nanoid();
 	const cancelKey = nanoid();
@@ -106,7 +102,7 @@ export async function message(
 		await collectedInteraction.deferUpdate();
 
 		const report = await createReport({
-			guildId: interaction.guildId!,
+			guildId: interaction.guildId,
 			authorId: interaction.user.id,
 			authorTag: interaction.user.tag,
 			reason: args.reason,
@@ -116,7 +112,7 @@ export async function message(
 			type: ReportType.Message,
 		});
 
-		await upsertReportLog(interaction.guild!, report, args.message);
+		await upsertReportLog(interaction.guild, report, args.message);
 		await redis.setex(key, REPORT_MESSAGE_EXPIRE_SECONDS, '');
 
 		await collectedInteraction.editReply({

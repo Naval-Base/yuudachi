@@ -35,6 +35,7 @@ import {
 	RepostMessageContextCommand,
 	ClearContextCommand,
 	ReportMessageContextCommand,
+	ReportUserContextCommand,
 } from "./interactions/index.js";
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
@@ -77,6 +78,7 @@ try {
 			RepostMessageContextCommand,
 			ClearContextCommand,
 			ReportMessageContextCommand,
+			ReportUserContextCommand,
 		],
 	});
 	console.log("Successfully reloaded interaction (/) commands.");
