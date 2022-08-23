@@ -51,7 +51,7 @@ export default class implements Event {
 
 				let description = '';
 
-				if ((!oldState || !oldState.channel || ignoreChannels.includes(oldState.channelId ?? '')) && newState.channel) {
+				if ((!oldState?.channel || ignoreChannels.includes(oldState.channelId ?? '')) && newState.channel) {
 					if (ignoreChannels.includes(newState.channelId)) {
 						continue;
 					}

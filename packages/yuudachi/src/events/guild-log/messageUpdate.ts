@@ -76,13 +76,13 @@ export default class implements Event {
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
 					const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
 
-					if (!strippedOldMessage || !strippedOldMessage[2]) {
+					if (!strippedOldMessage?.[2]) {
 						continue;
 					}
 
 					const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
 
-					if (!strippedNewMessage || !strippedNewMessage[2]) {
+					if (!strippedNewMessage?.[2]) {
 						continue;
 					}
 

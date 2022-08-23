@@ -1702,9 +1702,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/node@npm:2.5.8, @vercel/node@npm:^2.5.8":
-  version: 2.5.8
-  resolution: "@vercel/node@npm:2.5.8"
+"@vercel/node@npm:2.5.9, @vercel/node@npm:^2.5.9":
+  version: 2.5.9
+  resolution: "@vercel/node@npm:2.5.9"
   dependencies:
     "@edge-runtime/vm": 1.1.0-beta.23
     "@types/node": "*"
@@ -1717,7 +1717,7 @@ __metadata:
     node-fetch: 2.6.7
     ts-node: 8.9.1
     typescript: 4.3.4
-  checksum: 2032cfc277cf38fbd65083d3d5d57f0a85fbc48df6daa7687759fea451faf014e90830d528d86dea09cd03cc5e85b869a5a6201239cbd9bc04ea1e0ece451217
+  checksum: 6847426006e9a183c3d51139130258f2d80839ac117c59d1df02d5d7ec81cf6a4969aa3f8b8810f6f3d00fd2a3198571c456b3cf944c3c6c96922be47aea615f
   languageName: node
   linkType: hard
 
@@ -1810,15 +1810,23 @@ __metadata:
     "@testing-library/react": ^13.3.0
     "@types/node": ^18.7.11
     "@types/react-dom": ^18.0.6
+    "@typescript-eslint/eslint-plugin": ^5.34.0
+    "@typescript-eslint/parser": ^5.34.0
     "@unocss/cli": ^0.45.12
     "@unocss/preset-web-fonts": ^0.45.12
     "@unocss/reset": ^0.45.12
-    "@vercel/node": ^2.5.8
+    "@vercel/node": ^2.5.9
     "@vitejs/plugin-react": ^2.0.1
     ansi-to-html: ^0.7.2
     c8: ^7.12.0
     concurrently: ^7.3.0
     eslint: ^8.22.0
+    eslint-config-marine: ^9.4.1
+    eslint-config-prettier: ^8.5.0
+    eslint-import-resolver-typescript: ^3.5.0
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-react: ^7.30.1
+    eslint-plugin-react-hooks: ^4.6.0
     happy-dom: ^6.0.4
     hast-util-has-property: ^2.0.0
     hast-util-is-element: ^2.1.2
@@ -1839,7 +1847,7 @@ __metadata:
     remark-gfm: ^3.0.1
     sharp: ^0.30.7
     typescript: ^4.7.4
-    undici: ^5.9.1
+    undici: ^5.10.0
     unified: ^10.1.2
     unist-util-visit: ^4.1.1
     unocss: ^0.45.12
@@ -1854,14 +1862,22 @@ __metadata:
     "@testing-library/react": ^13.3.0
     "@types/node": ^18.7.11
     "@types/react-dom": ^18.0.6
+    "@typescript-eslint/eslint-plugin": ^5.34.0
+    "@typescript-eslint/parser": ^5.34.0
     "@unocss/cli": ^0.45.12
     "@unocss/preset-web-fonts": ^0.45.12
     "@unocss/reset": ^0.45.12
-    "@vercel/node": ^2.5.8
+    "@vercel/node": ^2.5.9
     "@vitejs/plugin-react": ^2.0.1
     c8: ^7.12.0
     concurrently: ^7.3.0
     eslint: ^8.22.0
+    eslint-config-marine: ^9.4.1
+    eslint-config-prettier: ^8.5.0
+    eslint-import-resolver-typescript: ^3.5.0
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-react: ^7.30.1
+    eslint-plugin-react-hooks: ^4.6.0
     happy-dom: ^6.0.4
     next: ^12.2.5
     prettier: ^2.7.1
@@ -1878,21 +1894,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yuudachi/yuudachi@workspace:."
   dependencies:
-    "@typescript-eslint/eslint-plugin": ^5.34.0
-    "@typescript-eslint/parser": ^5.34.0
-    eslint: ^8.22.0
-    eslint-config-marine: ^9.4.1
-    eslint-config-prettier: ^8.5.0
-    eslint-import-resolver-typescript: ^3.5.0
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-react: ^7.30.1
-    eslint-plugin-react-hooks: ^4.6.0
     husky: ^8.0.1
     is-ci: ^3.0.1
     lint-staged: ^13.0.3
-    prettier: ^2.7.1
     typescript: ^4.7.4
-    vercel: ^28.1.2
+    vercel: ^28.1.3
   languageName: unknown
   linkType: soft
 
@@ -9911,6 +9917,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici@npm:^5.10.0":
+  version: 5.10.0
+  resolution: "undici@npm:5.10.0"
+  checksum: 7ba2b71dccc74cd2bdf645b83e9aaef374ae04855943d0a2f42a3d0b9e5556f37cc9b5156fb5288277a2fa95fd46a56f3ae0d5cf73db3f008d75ec41104b136c
+  languageName: node
+  linkType: hard
+
 "undici@npm:^5.2.0":
   version: 5.8.2
   resolution: "undici@npm:5.8.2"
@@ -10254,15 +10267,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vercel@npm:^28.1.2":
-  version: 28.1.2
-  resolution: "vercel@npm:28.1.2"
+"vercel@npm:^28.1.3":
+  version: 28.1.3
+  resolution: "vercel@npm:28.1.3"
   dependencies:
     "@vercel/build-utils": 5.3.1
     "@vercel/go": 2.2.1
     "@vercel/hydrogen": 0.0.14
     "@vercel/next": 3.1.20
-    "@vercel/node": 2.5.8
+    "@vercel/node": 2.5.9
     "@vercel/python": 3.1.10
     "@vercel/redwood": 1.0.18
     "@vercel/remix": 1.0.19
@@ -10272,7 +10285,7 @@ __metadata:
   bin:
     vc: dist/index.js
     vercel: dist/index.js
-  checksum: 9b642312ae81f9f7e2848f2d5ef28b680325ccfa7b37376608879666062d82e93f7d5e3baacc1fe7a42d78a339dce90dd6288f7e6336c697e6c6a3335bb7851d
+  checksum: 1474b5da4da395258f4f398c1556d09c1709ff49356461bbd7d58c2555f1a5b30e35872604eced733e0cdd916a9b8b614abd80b24a7ed4346aae6211187ea758
   languageName: node
   linkType: hard
 
@@ -10638,6 +10651,8 @@ __metadata:
     "@types/diff": ^5.0.2
     "@types/node": ^18.7.11
     "@types/ws": ^8.5.3
+    "@typescript-eslint/eslint-plugin": ^5.34.0
+    "@typescript-eslint/parser": ^5.34.0
     bufferutil: ^4.0.6
     bullmq: ^1.89.2
     common-tags: ^1.8.2
@@ -10648,6 +10663,10 @@ __metadata:
     discord.js: ^14.3.0
     env-cmd: ^10.1.0
     eslint: ^8.22.0
+    eslint-config-marine: ^9.4.1
+    eslint-config-prettier: ^8.5.0
+    eslint-import-resolver-typescript: ^3.5.0
+    eslint-plugin-import: ^2.26.0
     i18next: ^21.9.1
     ioredis: ^5.2.3
     ley: ^0.7.1
@@ -10664,7 +10683,7 @@ __metadata:
     tsyringe: ^4.7.0
     type-fest: ^2.19.0
     typescript: ^4.7.4
-    undici: ^5.9.1
+    undici: ^5.10.0
     utf-8-validate: ^5.0.9
     ws: ^8.8.1
   languageName: unknown
