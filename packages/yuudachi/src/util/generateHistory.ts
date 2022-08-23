@@ -112,37 +112,36 @@ export async function generateCaseHistory(
 		...embed,
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	if (cases.length > 0) {
-		const summary: string[] = [];
-		let truncated = false;
+	const summary: string[] = [];
+	let truncated = false;
 
-		for (const case_ of cases) {
-			const dateFormatted = time(dayjs(case_.created_at).unix(), TimestampStyles.ShortDate);
-			const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[case_.action]!.toUpperCase()}`)} ${
-				case_.log_message_id
-					? hyperlink(`#${case_.case_id}`, messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id))
-					: `#${case_.case_id}`
-			} ${case_.reason?.replace(/\*/g, "") ?? ""}`;
+	for (const case_ of cases) {
+		const dateFormatted = time(dayjs(case_.created_at).unix(), TimestampStyles.ShortDate);
+		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[case_.action]!.toUpperCase()}`)} ${
+			case_.log_message_id
+				? hyperlink(`#${case_.case_id}`, messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id))
+				: `#${case_.case_id}`
+		} ${case_.reason?.replace(/\*/g, "") ?? ""}`;
 
-			if (summary.join("\n").length + caseString.length + 1 < 4_060) {
-				summary.push(caseString);
-				continue;
-			}
-
-			truncated = true;
-			break;
+		if (summary.join("\n").length + caseString.length + 1 < 4_060) {
+			summary.push(caseString);
+			continue;
 		}
 
-		if (truncated) {
-			embed = {
-				description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
-				...embed,
-			};
-		} else {
-			embed = { description: summary.join("\n"), ...embed };
-		}
+		truncated = true;
+		break;
+	}
+
+	if (truncated) {
+		embed = {
+			description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
+			...embed,
+		};
 	} else {
+		embed = { description: summary.join("\n"), ...embed };
+	}
+
+	if (!embed.description?.length) {
 		embed = {
 			description: i18next.t("log.history.none", { lng: locale }),
 			...embed,
@@ -193,43 +192,42 @@ export async function generateReportHistory(
 		...embed,
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	if (reports.length > 0) {
-		const summary: string[] = [];
-		let truncated = false;
+	const summary: string[] = [];
+	let truncated = false;
 
-		for (const report of reports) {
-			const dateFormatted = time(dayjs(report.created_at).unix(), TimestampStyles.ShortDate);
+	for (const report of reports) {
+		const dateFormatted = time(dayjs(report.created_at).unix(), TimestampStyles.ShortDate);
 
-			const typeString = report.author_id === target.user.id ? "author" : "target";
-			const reportString = `${dateFormatted} ${inlineCode(REPORT_KEYS[report.status]!.toUpperCase())} ${
-				report.log_message_id
-					? hyperlink(`#${report.report_id}`, messageLink(reportChannelId, report.log_message_id), report.guild_id)
-					: `#${report.report_id}`
-			} ${i18next.t(`log.history.report_details`, {
-				author: typeString,
-				type: report.type === ReportType.Message ? '✉️' : '👤',
-				lng: locale,
-			})}: ${report.reason.replace(/\*/g, '')}`;
+		const typeString = report.author_id === target.user.id ? 'author' : 'target';
+		const reportString = `${dateFormatted} ${inlineCode(REPORT_KEYS[report.status]!.toUpperCase())} ${
+			report.log_message_id
+				? hyperlink(`#${report.report_id}`, messageLink(reportChannelId, report.log_message_id), report.guild_id)
+				: `#${report.report_id}`
+		} ${i18next.t(`log.history.report_details`, {
+			author: typeString,
+			type: report.type === ReportType.Message ? '✉️' : '👤',
+			lng: locale,
+		})}: ${report.reason.replace(/\*/g, '')}`;
 
-			if (summary.join("\n").length + reportString.length + 1 < 4_060) {
-				summary.push(reportString);
-				continue;
-			}
-
-			truncated = true;
-			break;
+		if (summary.join('\n').length + reportString.length + 1 < 4060) {
+			summary.push(reportString);
+			continue;
 		}
 
-		if (truncated) {
-			embed = {
-				description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
-				...embed,
-			};
-		} else {
-			embed = { description: summary.join("\n"), ...embed };
-		}
+		truncated = true;
+		break;
+	}
+
+	if (truncated) {
+		embed = {
+			description: i18next.t('log.history.summary_truncated', { summary: summary.join('\n'), lng: locale }),
+			...embed,
+		};
 	} else {
+		embed = { description: summary.join('\n'), ...embed };
+	}
+
+	if (!embed.description?.length) {
 		embed = {
 			description: i18next.t('log.history.none', { lng: locale }),
 			...embed,
