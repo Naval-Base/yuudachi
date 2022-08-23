@@ -6,6 +6,7 @@ import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type 
 import {
 	AUTOCOMPLETE_CHOICE_LIMIT,
 	AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
+	OP_DELIMITER,
 	SNOWFLAKE_MIN_LENGTH,
 } from '../../Constants.js';
 import { ReportType } from '../../functions/reports/createReport.js';
@@ -14,8 +15,6 @@ import type { ReportUtilsCommand } from '../../interactions/index.js';
 import { logger } from '../../logger.js';
 import { REPORT_KEYS } from '../../util/actionKeys.js';
 import { ellipsis } from '../../util/embed.js';
-
-const OP_DELIMITER = '-' as const;
 
 export default class extends Command<typeof ReportUtilsCommand> {
 	public override async autocomplete(

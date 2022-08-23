@@ -20,6 +20,8 @@ export const enum ThreatLevelColor {
 	Level7 = 0xfb3244,
 }
 
+export const OP_DELIMITER = "-";
+
 export const MAX_TRUST_ACCOUNT_AGE = 1_000 * 60 * 60 * 24 * 7 * 4;
 export const SPAM_THRESHOLD = 4;
 export const SPAM_EXPIRE_SECONDS = 30;

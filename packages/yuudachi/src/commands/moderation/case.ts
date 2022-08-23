@@ -3,7 +3,7 @@ import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
-import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from "../../Constants.js";
+import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT, OP_DELIMITER } from "../../Constants.js";
 import { findCases } from "../../functions/cases/findCases.js";
 import { type RawCase, transformCase } from "../../functions/cases/transformCase.js";
 import { generateCaseEmbed } from "../../functions/logging/generateCaseEmbed.js";
