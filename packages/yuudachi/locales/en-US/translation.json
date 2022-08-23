@@ -385,7 +385,7 @@
 					},
 					"modal": {
 						"label": "The reason for the report",
-						"placeholder": "Please enter an detailed reason for the report"
+						"placeholder": "Please enter a detailed reason for the report"
 					}
 				},
 				"message": {
