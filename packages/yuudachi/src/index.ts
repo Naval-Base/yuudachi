@@ -92,7 +92,8 @@ try {
 			`Registering command: ${command.name?.join(', ') ?? cmdInfo.name}`,
 		);
 
-		command.name?.forEach((name) => commands.set(name.toLowerCase(), command)) ?? commands.set(cmdInfo.name, command);
+		command.name?.forEach((name) => commands.set(name.toLowerCase(), command)) ??
+			commands.set(cmdInfo.name.toLowerCase(), command);
 	}
 
 	for await (const dir of eventFiles) {
