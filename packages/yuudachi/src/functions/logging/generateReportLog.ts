@@ -19,9 +19,7 @@ import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 export async function generateReportLog(report: Report, locale: string, message?: Message): Promise<string> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const parts = [];
-
-	parts.push(
+	const parts = [
 		i18next.t('log.report_log.target', {
 			target: `${userMention(report.targetId)} - \`${report.targetTag}\` (${report.targetId})`,
 			lng: locale,
@@ -30,7 +28,7 @@ export async function generateReportLog(report: Report, locale: string, message?
 			reason: codeBlock(report.reason),
 			lng: locale,
 		}),
-	);
+	];
 
 	if (message || report.messageId) {
 		parts.push(

@@ -71,7 +71,7 @@ export default class extends Command<
 				},
 				locale,
 			);
-		} else if (Object.keys(args)[0] === 'user') {
+		} else {
 			if (args.user.user.user.id === interaction.user.id) {
 				throw new Error(i18next.t('command.utility.report.commons.errors.no_self', { lng: locale }));
 			}
@@ -109,6 +109,12 @@ export default class extends Command<
 
 		if (!args.user.member) {
 			throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
+		}
+
+		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
+		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
+		if (!reportChannel) {
+			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
 		}
 
 		const modal = createModal({
@@ -156,12 +162,6 @@ export default class extends Command<
 
 		await modalInteraction.deferReply({ ephemeral: true });
 
-		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
-		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
-		if (!reportChannel) {
-			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
-		}
-
 		const reason = modalInteraction.components
 			.map((row) => row.components)
 			.flat()
@@ -192,6 +192,12 @@ export default class extends Command<
 
 		if (await this.redis.exists(key)) {
 			throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.message', { lng: locale }));
+		}
+
+		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
+		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
+		if (!reportChannel) {
+			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
 		}
 
 		const modal = createModal({
@@ -238,12 +244,6 @@ export default class extends Command<
 		}
 
 		await modalInteraction.deferReply({ ephemeral: true });
-
-		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
-		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
-		if (!reportChannel) {
-			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
-		}
 
 		const reason = modalInteraction.components
 			.map((row) => row.components)

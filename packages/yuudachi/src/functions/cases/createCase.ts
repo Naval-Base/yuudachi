@@ -54,8 +54,8 @@ export type CreateCase = Omit<
 	caseId?: number | null | undefined;
 	contextMessageId?: Snowflake | null | undefined;
 	deleteMessageDays?: number | null | undefined;
-	modId?: Snowflake | undefined;
-	modTag?: string | undefined;
+	modId?: Snowflake | null | undefined;
+	modTag?: string | null | undefined;
 	multi?: boolean | null | undefined;
 	target?: GuildMember | null | undefined;
 };
