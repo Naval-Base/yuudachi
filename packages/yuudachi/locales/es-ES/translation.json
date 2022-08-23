@@ -154,7 +154,8 @@
 						"formatted": ""
 					},
 					"cancel": "",
-					"success": ""
+					"success_one": "",
+					"success_other": ""
 				},
 				"filter": {
 					"errors": {
