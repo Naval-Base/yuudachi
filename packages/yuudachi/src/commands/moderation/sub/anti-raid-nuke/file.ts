@@ -35,5 +35,5 @@ export async function file(
 		}),
 	];
 
-	await handleAntiRaidNuke(interaction, validMembers, AntiRaidNukeMode.Modal, parameterStrings, args, locale);
+	await handleAntiRaidNuke(interaction, validMembers, AntiRaidNukeMode.File, parameterStrings, args, locale);
 }

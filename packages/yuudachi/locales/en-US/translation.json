@@ -154,7 +154,8 @@
 						"formatted": "Formatted report"
 					},
 					"cancel": "Canceled Anti-Raid-Nuke.",
-					"success": "Anti-Raid-Nuke hit `{{count}}` member."
+					"success_one": "Anti-Raid-Nuke hit `1` member.",
+					"success_other": "Anti-Raid-Nuke hit `{{count}}` members."
 				},
 				"filter": {
 					"errors": {
@@ -514,7 +515,7 @@
 					"before": "Joined before: `{{- before}}`"
 				},
 				"file": {
-					"title": "**File:** `{{file}}`",
+					"title": "**File:** `{{- file}}`",
 					"placeholder": "<CDN link>"
 				},
 				"days_zero": "Not deleting any messages",
