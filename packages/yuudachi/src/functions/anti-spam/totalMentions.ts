@@ -1,5 +1,5 @@
 import type { Snowflake } from 'discord.js';
-import type { default as Redis } from 'ioredis';
+import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { MENTION_EXPIRE_SECONDS } from '../../Constants.js';
 import { kRedis } from '../../tokens.js';

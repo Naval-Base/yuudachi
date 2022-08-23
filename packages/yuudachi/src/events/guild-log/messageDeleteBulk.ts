@@ -3,7 +3,7 @@ import { on } from 'node:events';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import utc from 'dayjs/plugin/utc.js';
-import { Client, type Collection, Events, type Message, type Snowflake, type Webhook } from 'discord.js';
+import { Client, Events, type Snowflake, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import { Color } from '../../Constants.js';
@@ -29,10 +29,8 @@ export default class implements Event {
 	) {}
 
 	public async execute(): Promise<void> {
-		for await (const [messages] of on(this.client, this.event) as AsyncIterableIterator<
-			[Collection<Snowflake, Message>]
-		>) {
-			const userMessages = messages.filter((msg) => !msg.author.bot);
+		for await (const [messages] of on(this.client, this.event)) {
+			const userMessages = messages.filter((msg) => !msg.author?.bot);
 			const firstMessage = userMessages.first();
 
 			if (!firstMessage?.inGuild()) {
@@ -64,7 +62,9 @@ export default class implements Event {
 
 				const uniqueAuthors = new Set<Snowflake>();
 				for (const message of userMessages.values()) {
-					uniqueAuthors.add(message.author.id);
+					if (message.author) {
+						uniqueAuthors.add(message.author.id);
+					}
 				}
 
 				const locale = await getGuildSetting(firstMessage.guild.id, SettingsKeys.Locale);

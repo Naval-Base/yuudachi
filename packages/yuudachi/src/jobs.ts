@@ -1,6 +1,6 @@
 import { type Job, Queue, QueueScheduler, Worker } from 'bullmq';
 import { Client, type Snowflake } from 'discord.js';
-import type { default as Redis } from 'ioredis';
+import type { Redis } from 'ioredis';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import { refreshScamDomains } from './functions/anti-scam/refreshScamDomains.js';
@@ -15,7 +15,9 @@ export async function registerJobs() {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const redis = container.resolve<Redis>(kRedis);
 
+	// @ts-expect-error: This works
 	new QueueScheduler('jobs', { connection: redis });
+	// @ts-expect-error: This works
 	const queue = new Queue('jobs', { connection: redis });
 
 	try {
@@ -101,6 +103,7 @@ export async function registerJobs() {
 						break;
 				}
 			},
+			// @ts-expect-error: This works
 			{ connection: redis },
 		);
 	} catch (e) {

@@ -1,7 +1,7 @@
 import { on } from 'events';
 import { Client, Events } from 'discord.js';
 import i18next from 'i18next';
-import type { default as Redis } from 'ioredis';
+import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { CaseAction, createCase } from '../../functions/cases/createCase.js';

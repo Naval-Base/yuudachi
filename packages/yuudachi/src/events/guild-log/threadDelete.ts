@@ -1,5 +1,5 @@
 import { on } from 'node:events';
-import { Client, Events, type ThreadChannel, type Webhook } from 'discord.js';
+import { Client, Events, type Webhook } from 'discord.js';
 import i18next from 'i18next';
 import { inject, injectable } from 'tsyringe';
 import { Color } from '../../Constants.js';
@@ -21,7 +21,7 @@ export default class implements Event {
 	) {}
 
 	public async execute(): Promise<void> {
-		for await (const [thread] of on(this.client, this.event) as AsyncIterableIterator<[ThreadChannel, boolean]>) {
+		for await (const [thread] of on(this.client, this.event)) {
 			try {
 				const guildLogWebhookId = await getGuildSetting(thread.guild.id, SettingsKeys.GuildLogWebhookId);
 

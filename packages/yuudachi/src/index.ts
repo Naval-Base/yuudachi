@@ -5,7 +5,7 @@ import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 import { Backend } from '@skyra/i18next-backend';
 import { GatewayIntentBits, Options, Partials } from 'discord.js';
 import i18next from 'i18next';
-import type { default as Redis } from 'ioredis';
+import type { Redis } from 'ioredis';
 import readdirp from 'readdirp';
 import { container } from 'tsyringe';
 import { type Command, commandInfo } from './Command.js';

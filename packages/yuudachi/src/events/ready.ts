@@ -19,7 +19,7 @@ export default class implements Event {
 	) {}
 
 	public async execute(): Promise<void> {
-		for await (const _ of on(this.client, this.event) as AsyncIterableIterator<[void]>) {
+		for await (const _ of on(this.client, this.event)) {
 			logger.info({ event: { name: this.name, event: this.event } }, 'Caching webhooks');
 			for (const guild of this.client.guilds.cache.values()) {
 				if (!guild.members.me?.permissions.has(PermissionFlagsBits.ManageWebhooks, true)) {

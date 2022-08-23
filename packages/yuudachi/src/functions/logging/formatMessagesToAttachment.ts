@@ -1,15 +1,24 @@
 import dayjs from 'dayjs';
-import { Collection, Message, messageLink, MessageType, Snowflake } from 'discord.js';
+import {
+	type Collection,
+	type Message,
+	messageLink,
+	MessageType,
+	type PartialMessage,
+	type Snowflake,
+} from 'discord.js';
 import i18next from 'i18next';
 import { DATE_FORMAT_WITH_SECONDS } from '../../Constants.js';
 
-export function formatMessagesToAttachment(messages: Collection<Snowflake, Message>, locale: string) {
+export function formatMessagesToAttachment(messages: Collection<Snowflake, Message | PartialMessage>, locale: string) {
 	return messages
 		.map((message) => {
 			const outParts = [
-				`[${dayjs(message.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${message.author.tag} (${
-					message.author.id
-				}): ${message.cleanContent ? message.cleanContent.replace(/\n/g, '\n') : ''}`,
+				`[${dayjs(message.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${
+					message.author?.tag ?? 'Unknown author'
+				} (${message.author?.id ?? 'Unknown author'}): ${
+					message.cleanContent ? message.cleanContent.replace(/\n/g, '\n') : ''
+				}`,
 			];
 
 			if (message.attachments.size) {

@@ -35,7 +35,7 @@ export default class extends Command<typeof RepostCommand | typeof RepostMessage
 		const { guildId, channelId, messageId } = parsedLink;
 		const message = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
-		await this.handle(interaction, message as Message<true>, locale);
+		await this.handle(interaction, message, locale);
 	}
 
 	public override async messageContext(

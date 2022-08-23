@@ -1,6 +1,6 @@
 import { Client, type Snowflake } from 'discord.js';
 import i18next from 'i18next';
-import type { default as Redis } from 'ioredis';
+import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { createContentHash, totalContents } from './totalContents.js';
 import { totalMentions } from './totalMentions.js';
