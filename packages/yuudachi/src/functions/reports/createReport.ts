@@ -10,21 +10,13 @@ export type Report = PartialAndUndefinedOnNull<CamelCasedProperties<RawReport>> 
 	type: ReportType;
 	status: ReportStatus;
 };
-export interface CreateReport {
-	guildId: Snowflake;
-	reportId?: number;
-	type: ReportType;
-	status?: ReportStatus;
-	message?: Message;
-	targetId: Snowflake;
-	targetTag: string;
-	authorId: Snowflake;
-	authorTag: string;
-	reason: string;
-	attachmentUrl?: string | undefined | null;
-	logMessageId?: Snowflake | undefined | null;
-	refId?: number | undefined | null;
-}
+export type CreateReport = Omit<Report, 'status' | 'channelId' | 'reportId' | 'createdAt'> & {
+	reportId?: number | undefined | null;
+	status?: ReportStatus | undefined | null;
+	message?: Message | undefined | null;
+	channelId?: Snowflake | undefined | null;
+	createdAt?: Date | undefined | null;
+};
 
 export enum ReportType {
 	Message,
@@ -62,8 +54,8 @@ export async function createReport(report: CreateReport): Promise<Report> {
 			${report.guildId},
 			${report.type},
 			${report.status ?? ReportStatus.Pending},
-			${report.message?.id ?? null},
-			${report.message?.channelId ?? null},
+			${report.message?.id ?? report.messageId ?? null},
+			${report.message?.channelId ?? report.channelId ?? null},
 			${report.targetId},
 			${report.targetTag},
 			${report.authorId},

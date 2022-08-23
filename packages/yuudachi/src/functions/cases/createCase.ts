@@ -52,20 +52,12 @@ export type CreateCase = Omit<
 > & {
 	actionExpiration?: Date | null | undefined;
 	caseId?: number | null | undefined;
-	caseReferenceId?: number | null | undefined;
 	contextMessageId?: Snowflake | null | undefined;
 	deleteMessageDays?: number | null | undefined;
 	modId?: Snowflake | undefined;
 	modTag?: string | undefined;
 	multi?: boolean | null | undefined;
-	reason?: string | null | undefined;
-	refId?: number | null | undefined;
-	reportRef?: number | null | undefined;
-	reportRefId?: number | null | undefined;
-	reportReferenceId?: number | null | undefined;
 	target?: GuildMember | null | undefined;
-	targetId: Snowflake;
-	targetTag: string;
 };
 
 export async function createCase(
