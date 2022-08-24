@@ -294,7 +294,8 @@
 				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
 			},
 			"duration": {
-				"success": "Successfully set duration for case {{- case}}"
+				"success": "Successfully set duration for case {{- case}}",
+				"error": "Could not change the duration of the timeout for case {{- case}}"
 			},
 			"clear": {
 				"errors": {

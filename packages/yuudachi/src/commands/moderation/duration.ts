@@ -2,6 +2,7 @@ import { ms } from '@naval-base/ms';
 import { hyperlink, messageLink } from 'discord.js';
 import i18next from 'i18next';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
+import { CaseAction } from '../../functions/cases/createCase.js';
 import { getCase } from '../../functions/cases/getCase.js';
 import { updateCase } from '../../functions/cases/updateCase.js';
 import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
@@ -34,14 +35,33 @@ export default class extends Command<typeof DurationCommand> {
 
 		const parsedDuration = ms(args.duration);
 
-		if (parsedDuration < 300000 || isNaN(parsedDuration)) {
+		if (parsedDuration < 300000 || parsedDuration > 2419200000 || isNaN(parsedDuration)) {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
+		}
+
+		const actionExpiration = Date.now() + parsedDuration;
+
+		if (originalCase.action === CaseAction.Timeout) {
+			try {
+				const member = await interaction.guild.members.fetch(originalCase.targetId);
+				await member.disableCommunicationUntil(actionExpiration);
+			} catch {
+				throw new Error(
+					i18next.t('command.mod.duration.error', {
+						case: hyperlink(
+							`#${originalCase.caseId}`,
+							messageLink(interaction.guildId, modLogChannel.id, originalCase.logMessageId!),
+						),
+						lng: locale,
+					}),
+				);
+			}
 		}
 
 		const case_ = await updateCase({
 			caseId: originalCase.caseId,
 			guildId: interaction.guildId,
-			actionExpiration: new Date(Date.now() + parsedDuration),
+			actionExpiration: new Date(actionExpiration),
 		});
 		await upsertCaseLog(interaction.guild, interaction.user, case_);
 
