@@ -42,7 +42,8 @@
 					"no_case": "Kann den Fall `#{{case}}` nicht finden",
 					"no_case_range": "",
 					"case_lower_one": "Case ids müssen über `0` liegen",
-					"no_reference_case": "Kann den Referenzfall `#{{case}}` nicht finden"
+					"no_reference_case": "Kann den Referenzfall `#{{case}}` nicht finden",
+					"already_processed": ""
 				}
 			},
 			"case": {
@@ -240,8 +241,7 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "",
-						"already_processed": ""
+						"missing_permissions": ""
 					},
 					"pending": "",
 					"buttons": {
@@ -294,6 +294,9 @@
 				"success": "Erfolgreich Referenz für Fall {{- case}} auf {{- ref}} gesetzt"
 			},
 			"duration": {
+				"errors": {
+					"timeout": ""
+				},
 				"success": "Erfolgreich Dauer für Fall {{- case}} gesetzt"
 			},
 			"clear": {
