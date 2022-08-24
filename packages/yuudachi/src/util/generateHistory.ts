@@ -143,7 +143,7 @@ export async function generateHistory(
 		const dateFormatted = time(dayjs(c.created_at).unix(), TimestampStyles.ShortDate);
 		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
 			c.log_message_id
-				? hyperlink(`#${c.case_id}`, messageLink(modLogChannelId, c.log_message_id), c.guild_id)
+				? hyperlink(`#${c.case_id}`, messageLink(modLogChannelId, c.log_message_id, c.guild_id))
 				: `#${c.case_id}`
 		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
 

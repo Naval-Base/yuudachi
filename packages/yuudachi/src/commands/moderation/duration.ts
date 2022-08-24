@@ -33,6 +33,20 @@ export default class extends Command<typeof DurationCommand> {
 			throw new Error(i18next.t('command.mod.common.errors.no_case', { case: args.case, lng: locale }));
 		}
 
+		if (originalCase.actionProcessed) {
+			const user = await interaction.client.users.fetch(originalCase.targetId);
+			throw new Error(
+				i18next.t('command.mod.common.errors.already_processed', {
+					user: `${user.toString()} - ${user.tag} (${user.id})`,
+					case: hyperlink(
+						`#${originalCase.caseId}`,
+						messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),
+					),
+					lng: locale,
+				}),
+			);
+		}
+
 		const parsedDuration = ms(args.duration);
 
 		if (parsedDuration < 300000 || parsedDuration > 2419200000 || isNaN(parsedDuration)) {
@@ -47,10 +61,10 @@ export default class extends Command<typeof DurationCommand> {
 				await member.disableCommunicationUntil(actionExpiration);
 			} catch {
 				throw new Error(
-					i18next.t('command.mod.duration.error', {
+					i18next.t('command.mod.duration.errors.timeout', {
 						case: hyperlink(
 							`#${originalCase.caseId}`,
-							messageLink(interaction.guildId, modLogChannel.id, originalCase.logMessageId!),
+							messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),
 						),
 						lng: locale,
 					}),
@@ -69,7 +83,7 @@ export default class extends Command<typeof DurationCommand> {
 			content: i18next.t('command.mod.duration.success', {
 				case: hyperlink(
 					`#${originalCase.caseId}`,
-					messageLink(interaction.guildId, modLogChannel.id, originalCase.logMessageId!),
+					messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),
 				),
 				lng: locale,
 			}),

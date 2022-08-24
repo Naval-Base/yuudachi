@@ -15,7 +15,7 @@ export async function updateCase(case_: PatchCase) {
 	if (case_.actionExpiration) {
 		await sql`
 			update cases
-			set action_expiration = ${case_.actionExpiration.toISOString()}
+			set action_expiration = ${case_.actionExpiration}
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.caseId!}`;
 	}

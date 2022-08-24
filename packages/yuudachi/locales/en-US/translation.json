@@ -42,7 +42,8 @@
 					"no_case": "Cannot find case `#{{case}}`",
 					"no_case_range": "Invalid case range `#{{lower_case}}` to `#{{upper_case}}`",
 					"case_lower_one": "Case ids have to be above `0`",
-					"no_reference_case": "Cannot find reference case `#{{case}}`"
+					"no_reference_case": "Cannot find reference case `#{{case}}`",
+					"already_processed": "{{- user}} with case {{- case}} has no running restrictions."
 				}
 			},
 			"case": {
@@ -240,8 +241,7 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "Missing permissions to unrole `#{{case}}`",
-						"already_processed": "{{- user}} with case {{- case}} has no running restrictions."
+						"missing_permissions": "Missing permissions to unrole `#{{case}}`"
 					},
 					"pending": "Do you really want to unrole {{- user}} from `{{- role}}` with case {{- case}}?",
 					"buttons": {
@@ -294,8 +294,10 @@
 				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
 			},
 			"duration": {
-				"success": "Successfully set duration for case {{- case}}",
-				"error": "Could not change the duration of the timeout for case {{- case}}"
+				"errors": {
+					"timeout": "Could not change the duration of the timeout for case {{- case}}"
+				},
+				"success": "Successfully set duration for case {{- case}}"
 			},
 			"clear": {
 				"errors": {

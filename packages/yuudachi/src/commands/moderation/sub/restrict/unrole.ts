@@ -34,7 +34,7 @@ export async function unrole(
 	if (originalCase.actionProcessed) {
 		const user = await interaction.client.users.fetch(originalCase.targetId);
 		throw new Error(
-			i18next.t('command.mod.restrict.unrole.errors.already_processed', {
+			i18next.t('command.mod.common.errors.already_processed', {
 				user: `${user.toString()} - ${user.tag} (${user.id})`,
 				case: hyperlink(
 					`#${originalCase.caseId}`,
