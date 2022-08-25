@@ -57,7 +57,7 @@ export async function modal(
 		return;
 	}
 
-	await modalInteraction.deferReply({ ephemeral: args.hide ?? true });
+	await modalInteraction.deferReply({ ephemeral: args.hide ?? false });
 	const fullContent = modalInteraction.components
 		.map((row) => row.components)
 		.flat()
