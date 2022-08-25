@@ -12,11 +12,7 @@ export async function file(
 ): Promise<void> {
 	await interaction.deferReply({ ephemeral: args.hide ?? false });
 	const ids = await parseFile(args.file);
-	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(
-		interaction,
-		ids,
-		i18next.t('command.mod.anti_raid_nuke.file.errors.no_ids', { lng: locale }),
-	);
+	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(interaction, ids, locale);
 
 	const parameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.parsed_ids', {

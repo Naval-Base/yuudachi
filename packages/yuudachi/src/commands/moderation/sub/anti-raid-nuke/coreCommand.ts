@@ -50,7 +50,7 @@ export enum AntiRaidNukeMode {
 export async function validateMemberIds(
 	interaction: ChatInputCommandInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
 	ids: Set<Snowflake>,
-	emptyResultErrorText: string,
+	locale: string,
 ): Promise<IdValidationResult> {
 	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
 	const result = new Collection<string, GuildMember>();
@@ -64,7 +64,11 @@ export async function validateMemberIds(
 	}
 
 	if (!result.size) {
-		throw new Error(emptyResultErrorText);
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_ids', { lng: locale }));
+	}
+
+	if (result.size === fetchedMembers.size) {
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_filter', { lng: locale }));
 	}
 
 	return {

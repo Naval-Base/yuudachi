@@ -64,11 +64,7 @@ export async function modal(
 		.map((component) => (component.type === ComponentType.TextInput ? component.value || '' : ''));
 
 	const ids = new Set(fullContent.join(' ').match(/\d{17,20}/g) ?? []);
-	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(
-		modalInteraction,
-		ids,
-		i18next.t('command.mod.anti_raid_nuke.modal.errors.no_ids', { lng: locale }),
-	);
+	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(modalInteraction, ids, locale);
 
 	const parameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.parsed_ids', {
