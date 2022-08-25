@@ -150,14 +150,15 @@
 						"parsed_ids": "• Valid members of this guild: `{{valid}}` of `{{total}}` total parsed ids."
 					},
 					"reason": "Anti-Raid-Nuke `({{current}}/{{count}})`",
-					"pending": "Anti-Raid-Nuke is projected to hit `{{count}}` members.\n• Created within `{{creation_range}}`\n• Joined within `{{join_range}}`",
+					"pending_one": "Anti-Raid-Nuke is projected to hit `{{count}}` member.",
+					"pending_other": "Anti-Raid-Nuke is projected to hit `{{count}}` members.\n• Created within `{{creation_range}}`\n• Joined within `{{join_range}}`",
 					"buttons": {
 						"execute": "Launch",
 						"dry_run": "Dry run",
 						"formatted": "Formatted report"
 					},
 					"cancel": "Canceled Anti-Raid-Nuke.",
-					"success_one": "Anti-Raid-Nuke hit `1` member.",
+					"success_one": "Anti-Raid-Nuke hit `{{count}}` member.",
 					"success_other": "Anti-Raid-Nuke hit `{{count}}` members."
 				},
 				"filter": {
