@@ -147,7 +147,8 @@
 						"days_zero": "• Not deleting any messages",
 						"days_one": "• Deleting messages sent in the last day",
 						"days_other": "• Deleting messages sent in the last `{{count}}` days",
-						"parsed_ids": "• Valid members of this guild: `{{valid}}` of `{{total}}` total parsed ids."
+						"parsed_ids": "• Valid members of this guild: `{{valid}}` of `{{total}}` total parsed ids.",
+						"hide": "• Hidden command execution only allows dry-run to be executed. Execute publicly to launch nuke."
 					},
 					"reason": "Anti-Raid-Nuke `({{current}}/{{count}})`",
 					"pending_one": "Anti-Raid-Nuke is projected to hit `{{count}}` member.",

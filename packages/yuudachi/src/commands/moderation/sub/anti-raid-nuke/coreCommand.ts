@@ -93,6 +93,7 @@ export async function handleAntiRaidNuke(
 ) {
 	const pruneDays = Math.min(Math.max(Number(args.days ?? 1), 0), 7);
 	const insensitive = args.insensitive ?? true;
+	const hide = args.hide ?? false;
 
 	const prefixedParameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.heading', { lng: locale }),
@@ -102,6 +103,10 @@ export async function handleAntiRaidNuke(
 		}),
 		...parameterStrings,
 	];
+
+	if (hide) {
+		prefixedParameterStrings.push(i18next.t('command.mod.anti_raid_nuke.common.parameters.hide', { lng: locale }));
+	}
 
 	if (!members.size) {
 		throw new Error(
@@ -134,6 +139,12 @@ export async function handleAntiRaidNuke(
 	const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
 	const { creationRange, joinRange } = formatMemberTimestamps(members);
 
+	const row = createMessageActionRow([cancelButton]);
+	if (!hide) {
+		row.components.push(banButton);
+	}
+	row.components.push(dryRunButton);
+
 	const reply = await interaction.editReply({
 		content: `${i18next.t('command.mod.anti_raid_nuke.common.pending', {
 			count: members.size,
@@ -147,7 +158,7 @@ export async function handleAntiRaidNuke(
 				attachment: Buffer.from(formatMembersToAttachment(members, locale)),
 			},
 		],
-		components: [createMessageActionRow([cancelButton, banButton, dryRunButton])],
+		components: [row],
 	});
 
 	const collectedInteraction = (await reply
