@@ -136,7 +136,9 @@
 							"reject_protected": "This user has a role ignored by the Anti-Raid-Nuke.",
 							"reject_user": "This user is not in the guild."
 						},
-						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you may want to re-adjust the parameters and try again."
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you may want to re-adjust the parameters and try again.",
+						"no_ids": "The provided content does not contain any valid member ids.",
+						"no_filter": "Anti-Raid-Nuke is projected to hit all members. Protocol aborted."
 					},
 					"parameters": {
 						"heading": "Parameters:",
@@ -180,18 +182,12 @@
 					}
 				},
 				"file": {
-					"errors": {
-						"no_ids": "This file does not contain any ids."
-					},
 					"parameters": {
 						"file": "• File: {{- file_link}}",
 						"link_label": "<CDN url>"
 					}
 				},
 				"modal": {
-					"errors": {
-						"no_ids": "The content does not contain any ids."
-					},
 					"title": "Anti-Raid-Nuke Entry",
 					"components": {
 						"label": "{{i}}- Enter valid ids",

@@ -99,6 +99,10 @@ export async function filter(
 			(!parsedConfusables.members || confusablesFilter(member)),
 	);
 
+	if (members.size === fetchedMembers.size) {
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_filter', { locale }));
+	}
+
 	const parameterStrings = [];
 
 	if (parsedCreatedAfter || parsedCreatedBefore || parsedJoinAfter || parsedJoinBefore) {
