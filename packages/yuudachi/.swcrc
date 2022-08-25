@@ -1,0 +1,24 @@
+{
+	"jsc": {
+		"parser": {
+			"syntax": "typescript",
+			"tsx": false,
+			"decorators": true
+		},
+		"transform": {
+			"legacyDecorator": true,
+			"decoratorMetadata": true,
+			"treatConstEnumAsEnum": true,
+			"useDefineForClassFields": true
+		},
+		"target": "es2022",
+		"keepClassNames": true,
+		"preserveAllComments": false,
+		"externalHelpers": true
+	},
+	"module": {
+		"type": "nodenext"
+	},
+	"sourceMaps": true,
+	"isModule": true
+}
