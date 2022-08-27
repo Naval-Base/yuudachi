@@ -2,7 +2,7 @@
 	"common": {
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
-			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet.",
+			"no_anti_raid_archive_channel": "No Anti-Raid-Nuke archive channel has been initialized yet.",
 			"no_content": "<No message content>"
 		},
 		"moderator": "Moderator"
