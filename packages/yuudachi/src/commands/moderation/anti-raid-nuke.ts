@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import { acquireNukeLock, releaseNukeLock } from './sub/anti-raid-nuke/coreCommand.js';
 import { file } from './sub/anti-raid-nuke/file.js';
 import { filter } from './sub/anti-raid-nuke/filter.js';
 import { modal } from './sub/anti-raid-nuke/modal.js';
@@ -31,21 +32,35 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 			throw new Error(i18next.t('common.errors.no_anti_raid_archive_channel', { lng: locale }));
 		}
 
-		switch (Object.keys(args)[0]) {
-			case 'file': {
-				return file(interaction, args.file, locale);
-			}
+		const acquiredLock = await acquireNukeLock(interaction.guildId);
+		if (!acquiredLock) {
+			throw new Error(
+				i18next.t('command.mod.anti_raid_nuke.common.errors.no_concurrent_use', {
+					lng: locale,
+				}),
+			);
+		}
 
-			case 'modal': {
-				return modal(interaction, args.modal, locale);
-			}
+		try {
+			switch (Object.keys(args)[0]) {
+				case 'file': {
+					return await file(interaction, args.file, locale);
+				}
 
-			case 'filter': {
-				return filter(interaction, args.filter, locale);
-			}
+				case 'modal': {
+					return await modal(interaction, args.modal, locale);
+				}
 
-			default:
-				break;
+				case 'filter': {
+					return await filter(interaction, args.filter, locale);
+				}
+
+				default:
+					break;
+			}
+		} catch (error) {
+			await releaseNukeLock(interaction.guildId);
+			throw error;
 		}
 	}
 }

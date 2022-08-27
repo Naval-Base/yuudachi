@@ -12,9 +12,16 @@ import {
 	type Message,
 } from 'discord.js';
 import i18next from 'i18next';
+import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
+import { container } from 'tsyringe';
 import type { ArgsParam } from '../../../../Command.js';
-import { DATE_FORMAT_LOGFILE, DATE_FORMAT_WITH_SECONDS } from '../../../../Constants.js';
+import {
+	ANTI_RAID_NUKE_COLLECTOR_TIMEOUT_SECONDS,
+	ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS,
+	DATE_FORMAT_LOGFILE,
+	DATE_FORMAT_WITH_SECONDS,
+} from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
 import type { AntiRaidNukeArgsUnion } from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
@@ -30,6 +37,7 @@ import {
 } from '../../../../functions/logging/upsertAntiRaidArchiveLog.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
+import { kRedis } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
@@ -46,6 +54,38 @@ export enum AntiRaidNukeMode {
 	File = 'file',
 	Filter = 'filter',
 	Modal = 'modal',
+}
+
+/**
+ * Acquire an anti-raid-nuke lock for a guild
+ * @param guildId Id representing the guild the lock is for
+ * @returns True, if the lock was acquired, false if already locked
+ */
+export async function acquireNukeLock(guildId: Snowflake) {
+	const redis = container.resolve<Redis>(kRedis);
+	const key = `guild:${guildId}:anti_raid_nuke`;
+	const res = await redis.get(key);
+	if (res) {
+		return false;
+	}
+	await redis.set(key, Date.now(), 'EX', ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS);
+	return true;
+}
+
+/**
+ * Release an anti-raid-nuke lock for a guild
+ * @param guildId Id representing the guild the lock is for
+ * @returns True, if the lock was released, false if there was no lock
+ */
+export async function releaseNukeLock(guildId: Snowflake) {
+	const redis = container.resolve<Redis>(kRedis);
+	const key = `guild:${guildId}:anti_raid_nuke`;
+	const res = await redis.get(key);
+	if (res) {
+		await redis.del(key);
+		return true;
+	}
+	return false;
 }
 
 export async function validateMemberIds(
@@ -164,6 +204,8 @@ async function launchNuke(
 		],
 		components: row ? [row] : [],
 	});
+
+	await releaseNukeLock(collectedInteraction.guildId);
 }
 
 async function sendDryRunResult(
@@ -289,7 +331,7 @@ export async function handleAntiRaidNuke(
 		.createMessageComponentCollector({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 60000,
+			time: ANTI_RAID_NUKE_COLLECTOR_TIMEOUT_SECONDS * 1000,
 		})
 		.on('collect', async (collectedInteraction: ButtonInteraction<'cached'>) => {
 			switch (collectedInteraction.customId) {
@@ -316,6 +358,7 @@ export async function handleAntiRaidNuke(
 			}
 		})
 		.on('end', async (_, reason) => {
+			await releaseNukeLock(interaction.guildId);
 			try {
 				if (reason === 'time') {
 					await interaction.editReply({

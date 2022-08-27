@@ -138,7 +138,8 @@
 						},
 						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you may want to re-adjust the parameters and try again.",
 						"no_ids": "The provided content does not contain any valid member ids.",
-						"no_filter": "Anti-Raid-Nuke is projected to hit all members. Protocol aborted."
+						"no_filter": "Anti-Raid-Nuke is projected to hit all members. Protocol aborted.",
+						"no_concurrent_use": "Cannot execute more than one Anti-Raid-Nuke for the same server at a time."
 					},
 					"parameters": {
 						"heading": "Parameters:",
