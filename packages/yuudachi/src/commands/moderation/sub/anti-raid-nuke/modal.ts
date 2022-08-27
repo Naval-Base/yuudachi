@@ -1,7 +1,8 @@
 import { ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import { AntiRaidNukeMode, handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
+import { validateMemberIds } from './utils.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';

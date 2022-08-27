@@ -1,8 +1,8 @@
 import i18next from 'i18next';
-import { acquireNukeLock, releaseNukeLock } from './sub/anti-raid-nuke/coreCommand.js';
 import { file } from './sub/anti-raid-nuke/file.js';
 import { filter } from './sub/anti-raid-nuke/filter.js';
 import { modal } from './sub/anti-raid-nuke/modal.js';
+import { acquireNukeLock, releaseNukeLock } from './sub/anti-raid-nuke/utils.js';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';

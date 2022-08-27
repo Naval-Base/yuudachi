@@ -1,6 +1,7 @@
 import { hyperlink } from 'discord.js';
 import i18next from 'i18next';
-import { AntiRaidNukeMode, handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
+import { validateMemberIds } from './utils.js';
 import type { ArgsParam, InteractionParam, LocaleParam } from '../../../../Command.js';
 import { parseFile } from '../../../../functions/anti-raid/parseFile.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
