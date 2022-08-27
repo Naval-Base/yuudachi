@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { ButtonStyle, type Message, type Guild, type User } from 'discord.js';
+import { ButtonStyle, type Message, type Guild, type User, ButtonInteraction } from 'discord.js';
 import i18next from 'i18next';
 import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
@@ -31,9 +31,7 @@ export async function upsertAntiRaidArchiveLog(
 	args: FormatterArgs,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-
 	const embed = generateAntiRaidNukeEmbed(result.filter((r) => r.success).length, user, args.dryRun, locale);
-
 	const report = await generateAntiRaidNukeReport(guild, user, result, cases, args);
 
 	const msg = await message.edit({
@@ -54,6 +52,53 @@ export async function upsertAntiRaidArchiveLog(
 	}
 
 	return msg.edit({
+		components: [
+			createMessageActionRow([
+				createButton({
+					label: i18next.t('command.mod.anti_raid_nuke.common.buttons.formatted', { lng: locale }),
+					style: ButtonStyle.Link,
+					url: generateFormatterUrl(attachment.url),
+				}),
+			]),
+		],
+	});
+}
+
+export async function sendDryRunAntiRaidArchiveLog(
+	interaction: ButtonInteraction<'cached'>,
+	result: AntiRaidNukeResult[],
+	cases: Case[],
+	args: FormatterArgs,
+) {
+	const locale = await getGuildSetting(interaction.guild.id, SettingsKeys.Locale);
+	const embed = generateAntiRaidNukeEmbed(
+		result.filter((r) => r.success).length,
+		interaction.user,
+		args.dryRun,
+		locale,
+	);
+	const report = await generateAntiRaidNukeReport(interaction.guild, interaction.user, result, cases, args);
+
+	const res = await interaction.reply({
+		content: null,
+		embeds: [embed],
+		files: [
+			{
+				name: `${dayjs().format(DATE_FORMAT_LOGFILE)}-anti-raid-nuke-report.md`,
+				attachment: Buffer.from(report, 'utf8'),
+			},
+		],
+		ephemeral: true,
+		fetchReply: true,
+	});
+
+	const attachment = res.attachments.first();
+
+	if (!attachment) {
+		return res;
+	}
+
+	return interaction.editReply({
 		components: [
 			createMessageActionRow([
 				createButton({
