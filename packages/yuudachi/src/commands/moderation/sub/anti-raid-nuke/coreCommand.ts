@@ -139,11 +139,12 @@ export async function handleAntiRaidNuke(
 	const potentialHitsDate = dayjs().format(DATE_FORMAT_LOGFILE);
 	const { creationRange, joinRange } = formatMemberTimestamps(members);
 
-	const row = createMessageActionRow([cancelButton]);
+	let buttons = [cancelButton];
 	if (!hide) {
-		row.components.push(banButton);
+		buttons = [...buttons, banButton];
 	}
-	row.components.push(dryRunButton);
+
+	const row = createMessageActionRow([...buttons, dryRunButton]);
 
 	const reply = await interaction.editReply({
 		content: `${i18next.t('command.mod.anti_raid_nuke.common.pending', {
