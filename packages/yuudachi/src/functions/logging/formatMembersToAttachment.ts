@@ -3,7 +3,6 @@ import type { Collection, GuildMember, Snowflake } from 'discord.js';
 import i18next from 'i18next';
 import { DATE_FORMAT_WITH_SECONDS } from '../../Constants.js';
 import { colorBasedOnBoolean, colorBasedOnDifference } from '../../util/colors.js';
-import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 
 export function formatMemberSummary(member: GuildMember, locale: string, success = true) {
 	const memberAge = Date.now() - member.user.createdTimestamp;
@@ -20,12 +19,4 @@ export function formatMemberSummary(member: GuildMember, locale: string, success
 
 export function formatMembersToAttachment(members: Collection<Snowflake, GuildMember>, locale: string) {
 	return members.map((member) => formatMemberSummary(member, locale)).join('\n');
-}
-
-export function formatAntiRaidResultSummary(report: AntiRaidNukeResult, locale: string) {
-	return formatMemberSummary(report.member, locale, report.success);
-}
-
-export function formatAntiRaidResultsToAttachment(results: AntiRaidNukeResult[], locale: string) {
-	return results.map((result) => formatAntiRaidResultSummary(result, locale)).join('\n');
 }

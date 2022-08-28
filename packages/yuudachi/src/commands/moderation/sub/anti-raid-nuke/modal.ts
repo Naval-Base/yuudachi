@@ -2,7 +2,7 @@ import { ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
 import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
-import { validateMemberIds } from './utils.js';
+import { acquireLockIfPublic, validateMemberIds } from './utils.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
@@ -15,6 +15,7 @@ export async function modal(
 	args: ArgsParam<typeof AntiRaidNukeCommand>['modal'],
 	locale: LocaleParam,
 ): Promise<void> {
+	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
 	const modalKey = nanoid();
 
 	const textComponents = new Array(5).fill(0).map((_, i) =>

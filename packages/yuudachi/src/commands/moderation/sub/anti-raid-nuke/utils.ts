@@ -10,6 +10,7 @@ import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
 import { ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS, DATE_FORMAT_WITH_SECONDS } from '../../../../Constants.js';
+import { canBan } from '../../../../functions/anti-raid/canBan.js';
 import { kRedis } from '../../../../tokens.js';
 import { resolveTimestamp } from '../../../../util/timestamp.js';
 
@@ -43,6 +44,45 @@ export async function releaseNukeLock(guildId: Snowflake) {
 		return true;
 	}
 	return false;
+}
+
+export async function acquireLockIfPublic(guildId: Snowflake, locale: string, hidden = false) {
+	if (!hidden) {
+		const acquiredLock = await acquireNukeLock(guildId);
+		if (!acquiredLock) {
+			throw new Error(
+				i18next.t('command.mod.anti_raid_nuke.common.errors.no_concurrent_use', {
+					lng: locale,
+				}),
+			);
+		}
+	}
+}
+
+export interface TargetRejection {
+	member: GuildMember;
+	reason: string;
+}
+
+export function partitionNukeTargets(
+	members: Collection<string, GuildMember>,
+	executorId: Snowflake,
+	ignoredRoles: Snowflake[],
+	locale: string,
+): [GuildMember[], TargetRejection[]] {
+	const confirmations = [];
+	const rejections = [];
+
+	for (const member of members.values()) {
+		const reason = canBan(member, executorId, ignoredRoles, locale);
+		if (reason) {
+			rejections.push({ member, reason });
+		} else {
+			confirmations.push(member);
+		}
+	}
+
+	return [confirmations, rejections];
 }
 
 export interface IdValidationResult {

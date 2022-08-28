@@ -2,7 +2,7 @@ import i18next from 'i18next';
 import { file } from './sub/anti-raid-nuke/file.js';
 import { filter } from './sub/anti-raid-nuke/filter.js';
 import { modal } from './sub/anti-raid-nuke/modal.js';
-import { acquireNukeLock, releaseNukeLock } from './sub/anti-raid-nuke/utils.js';
+import { releaseNukeLock } from './sub/anti-raid-nuke/utils.js';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
@@ -32,15 +32,6 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 			throw new Error(i18next.t('common.errors.no_anti_raid_archive_channel', { lng: locale }));
 		}
 
-		const acquiredLock = await acquireNukeLock(interaction.guildId);
-		if (!acquiredLock) {
-			throw new Error(
-				i18next.t('command.mod.anti_raid_nuke.common.errors.no_concurrent_use', {
-					lng: locale,
-				}),
-			);
-		}
-
 		try {
 			switch (Object.keys(args)[0]) {
 				case 'file': {
@@ -58,8 +49,15 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 				default:
 					break;
 			}
-		} catch (error) {
-			await releaseNukeLock(interaction.guildId);
+		} catch (err) {
+			const error = err as Error;
+			const keepLockRejection = i18next.t('command.mod.anti_raid_nuke.common.errors.no_concurrent_use', {
+				lng: locale,
+			});
+
+			if (keepLockRejection !== error.message) {
+				await releaseNukeLock(interaction.guildId);
+			}
 			throw error;
 		}
 	}

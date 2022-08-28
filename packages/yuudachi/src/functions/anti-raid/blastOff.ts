@@ -1,28 +1,17 @@
-import type { ButtonInteraction, Collection, GuildMember } from 'discord.js';
+import type { ButtonInteraction, GuildMember } from 'discord.js';
 import i18next from 'i18next';
 import type { Redis } from 'ioredis';
 import { container } from 'tsyringe';
-import { canBan } from './canBan.js';
+import type { TargetRejection } from '../../commands/moderation/sub/anti-raid-nuke/utils.js';
 import { kRedis } from '../../tokens.js';
 import { type Case, CaseAction, createCase } from '../cases/createCase.js';
 import { generateCasePayload } from '../logging/generateCasePayload.js';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
-
-export interface AntiRaidNukeResult {
-	member: GuildMember;
-	success: boolean;
-	error?: string | undefined;
-}
-
-interface AntiRaidNukeArgs {
-	days: number;
-	dryRun: boolean;
-}
 
 export async function blastOff(
 	interaction: ButtonInteraction<'cached'>,
-	args: AntiRaidNukeArgs,
-	members: Collection<string, GuildMember>,
+	days: number,
+	confirmations: GuildMember[],
+	rejections: TargetRejection[],
 	locale: string,
 ) {
 	const redis = container.resolve<Redis>(kRedis);
@@ -31,30 +20,8 @@ export async function blastOff(
 	let idx = 0;
 	const promises = [];
 
-	const result: AntiRaidNukeResult[] = [];
-	const ignoreRoles = await getGuildSetting<string[]>(interaction.guildId, SettingsKeys.AutomodIgnoreRoles);
-	const targets = members.filter((member) => {
-		const authorization = canBan(member, interaction.user.id, ignoreRoles);
-		if (authorization) {
-			result.push({
-				member,
-				success: false,
-				error: i18next.t(`command.mod.anti_raid_nuke.common.errors.result.${authorization}`, { lng: locale }),
-			});
-			return false;
-		}
-		return true;
-	});
-
-	for (const member of targets.values()) {
-		if (args.dryRun) {
-			result.push({
-				member,
-				success: true,
-			});
-			continue;
-		}
-
+	const confirmedHits: GuildMember[] = [];
+	for (const member of confirmations) {
 		promises.push(
 			createCase(
 				interaction.guild,
@@ -64,24 +31,24 @@ export async function blastOff(
 					args: {
 						reason: i18next.t('command.mod.anti_raid_nuke.common.reason', {
 							current: ++idx,
-							count: targets.size,
+							count: confirmations.length,
 							lng: locale,
 						}),
 						user: {
 							member: member,
 							user: member.user,
 						},
-						days: args.days,
+						days,
 					},
 					action: CaseAction.Ban,
 					multi: true,
 				}),
 			)
 				.then((case_) => {
-					result.push({ member, success: true });
+					confirmedHits.push(member);
 					return case_;
 				})
-				.catch((error: Error) => void result.push({ member, success: false, error: error.message }))
+				.catch((error: Error) => void rejections.push({ member, reason: error.message }))
 				.finally(() => void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15)),
 		);
 	}
@@ -91,7 +58,8 @@ export async function blastOff(
 	await redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 5);
 
 	return {
-		result,
+		confirmedHits,
+		rejections,
 		cases,
 	} as const;
 }

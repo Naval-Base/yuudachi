@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import { ButtonStyle, type Message, type Guild, type User, ButtonInteraction } from 'discord.js';
+import { ButtonStyle, type Message, type Guild, type User, GuildMember } from 'discord.js';
 import i18next from 'i18next';
 import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
+import type { TargetRejection } from '../../commands/moderation/sub/anti-raid-nuke/utils.js';
 import { createButton } from '../../util/button.js';
 import { createMessageActionRow } from '../../util/messageActionRow.js';
-import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 import type { Case } from '../cases/createCase.js';
 import { type FormatterArgs, generateAntiRaidNukeReport } from '../formatters/generateAntiRaidNukeReport.js';
 import { generateFormatterUrl } from '../formatters/generateFormatterUrl.js';
@@ -24,15 +24,16 @@ export async function upsertAntiRaidArchivePendingLog(guild: Guild) {
 
 export async function upsertAntiRaidArchiveLog(
 	guild: Guild,
-	user: User,
+	executor: User,
 	message: Message,
-	result: AntiRaidNukeResult[],
+	successes: GuildMember[],
+	failures: TargetRejection[],
 	cases: Case[],
 	args: FormatterArgs,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-	const embed = generateAntiRaidNukeEmbed(result.filter((r) => r.success).length, user, args.dryRun, locale);
-	const report = await generateAntiRaidNukeReport(guild, user, result, cases, args);
+	const embed = generateAntiRaidNukeEmbed(successes.length, executor, args.dryRun, locale);
+	const report = await generateAntiRaidNukeReport(guild, executor, successes, failures, cases, args);
 
 	const msg = await message.edit({
 		content: null,
@@ -52,53 +53,6 @@ export async function upsertAntiRaidArchiveLog(
 	}
 
 	return msg.edit({
-		components: [
-			createMessageActionRow([
-				createButton({
-					label: i18next.t('command.mod.anti_raid_nuke.common.buttons.formatted', { lng: locale }),
-					style: ButtonStyle.Link,
-					url: generateFormatterUrl(attachment.url),
-				}),
-			]),
-		],
-	});
-}
-
-export async function sendDryRunAntiRaidArchiveLog(
-	interaction: ButtonInteraction<'cached'>,
-	result: AntiRaidNukeResult[],
-	cases: Case[],
-	args: FormatterArgs,
-) {
-	const locale = await getGuildSetting(interaction.guild.id, SettingsKeys.Locale);
-	const embed = generateAntiRaidNukeEmbed(
-		result.filter((r) => r.success).length,
-		interaction.user,
-		args.dryRun,
-		locale,
-	);
-	const report = await generateAntiRaidNukeReport(interaction.guild, interaction.user, result, cases, args);
-
-	const res = await interaction.reply({
-		content: null,
-		embeds: [embed],
-		files: [
-			{
-				name: `${dayjs().format(DATE_FORMAT_LOGFILE)}-anti-raid-nuke-report.md`,
-				attachment: Buffer.from(report, 'utf8'),
-			},
-		],
-		ephemeral: true,
-		fetchReply: true,
-	});
-
-	const attachment = res.attachments.first();
-
-	if (!attachment) {
-		return res;
-	}
-
-	return interaction.editReply({
 		components: [
 			createMessageActionRow([
 				createButton({

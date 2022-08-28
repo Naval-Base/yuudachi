@@ -156,7 +156,6 @@
 					"pending_other": "Anti-Raid-Nuke is projected to hit `{{count}}` members.\n• Created within `{{creation_range}}`\n• Joined within `{{join_range}}`",
 					"buttons": {
 						"execute": "Launch",
-						"dry_run": "Dry run",
 						"formatted": "Formatted report"
 					},
 					"cancel": "Canceled Anti-Raid-Nuke.",
@@ -544,10 +543,6 @@
 				"title": "**Failures**",
 				"none": "No failures, everything went fine",
 				"tables": ["Member id", "Username", "Error"]
-			},
-			"raw_data": {
-				"title": "**Raw data**",
-				"description": "Sorted by join date descending, highlight based on account age and success/failure"
 			}
 		}
 	}

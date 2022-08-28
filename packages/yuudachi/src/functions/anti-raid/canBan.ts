@@ -1,28 +1,21 @@
 import { type GuildMember, PermissionFlagsBits, type Snowflake } from 'discord.js';
+import i18next from 'i18next';
 
-enum BanRejectReason {
-	Self = 'reject_self',
-	TargetUnbanable = 'reject_unbanable',
-	TargetIsBot = 'reject_bot',
-	HasAutomodIgnoreRole = 'reject_protected',
-	HasHigherPerms = 'reject_perms',
-}
-
-export function canBan(target: GuildMember, userId: Snowflake, ignoreRoles: string[]) {
-	if (target.id === userId) {
-		return BanRejectReason.Self;
+export function canBan(target: GuildMember, executorId: Snowflake, ignoreRoles: string[], locale: string) {
+	if (target.id === executorId) {
+		return i18next.t(`command.mod.anti_raid_nuke.common.errors.result.reject_self`, { lng: locale });
 	}
 
 	if (!target.bannable) {
-		return BanRejectReason.TargetUnbanable;
+		return i18next.t(`command.mod.anti_raid_nuke.common.errors.result.reject_unbanable`, { lng: locale });
 	}
 
 	if (target.user.bot) {
-		return BanRejectReason.TargetIsBot;
+		// TODO: REMOVE COMMENT return i18next.t(`command.mod.anti_raid_nuke.common.errors.result.reject_bot`, { lng: locale });
 	}
 
 	if (target.roles.cache.hasAny(...ignoreRoles)) {
-		return BanRejectReason.HasAutomodIgnoreRole;
+		return i18next.t(`command.mod.anti_raid_nuke.common.errors.result.reject_protected`, { lng: locale });
 	}
 
 	if (
@@ -36,7 +29,7 @@ export function canBan(target: GuildMember, userId: Snowflake, ignoreRoles: stri
 			PermissionFlagsBits.ManageGuild,
 		])
 	) {
-		return BanRejectReason.HasHigherPerms;
+		return i18next.t(`command.mod.anti_raid_nuke.common.errors.result.reject_perms`, { lng: locale });
 	}
 
 	return null;
