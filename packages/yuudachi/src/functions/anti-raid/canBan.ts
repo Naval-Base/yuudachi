@@ -11,7 +11,7 @@ export function canBan(target: GuildMember, executorId: Snowflake, ignoreRoles: 
 	}
 
 	if (target.user.bot) {
-		// TODO: REMOVE COMMENT return i18next.t(`command.mod.anti_raid_nuke.common.errors.result.reject_bot`, { lng: locale });
+		return i18next.t(`command.mod.anti_raid_nuke.common.errors.result.reject_bot`, { lng: locale });
 	}
 
 	if (target.roles.cache.hasAny(...ignoreRoles)) {
