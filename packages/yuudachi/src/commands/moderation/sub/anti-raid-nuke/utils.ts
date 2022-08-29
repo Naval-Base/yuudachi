@@ -22,8 +22,7 @@ import { resolveTimestamp } from '../../../../util/timestamp.js';
 export async function acquireNukeLock(guildId: Snowflake) {
 	const redis = container.resolve<Redis>(kRedis);
 	const key = `guild:${guildId}:anti_raid_nuke`;
-	const res = await redis.get(key);
-	if (res) {
+	if (await redis.exists(key)) {
 		return false;
 	}
 	await redis.set(key, Date.now(), 'EX', ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS);
@@ -38,8 +37,7 @@ export async function acquireNukeLock(guildId: Snowflake) {
 export async function releaseNukeLock(guildId: Snowflake) {
 	const redis = container.resolve<Redis>(kRedis);
 	const key = `guild:${guildId}:anti_raid_nuke`;
-	const res = await redis.get(key);
-	if (res) {
+	if (await redis.exists(key)) {
 		await redis.del(key);
 		return true;
 	}
