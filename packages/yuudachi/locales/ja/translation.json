@@ -42,7 +42,8 @@
 					"no_case": "",
 					"no_case_range": "",
 					"case_lower_one": "",
-					"no_reference_case": ""
+					"no_reference_case": "",
+					"already_processed": ""
 				}
 			},
 			"case": {
@@ -135,26 +136,30 @@
 							"reject_protected": "",
 							"reject_user": ""
 						},
-						"no_hits": ""
+						"no_hits": "",
+						"no_ids": "",
+						"no_filter": "",
+						"no_concurrent_use": ""
 					},
 					"parameters": {
 						"heading": "",
 						"launch_time": "",
-						"dry_run": "",
 						"days_zero": "",
 						"days_one": "",
 						"days_other": "",
-						"parsed_ids": ""
+						"parsed_ids": "",
+						"hide": ""
 					},
 					"reason": "",
-					"pending": "",
+					"pending_one": "",
+					"pending_other": "",
 					"buttons": {
 						"execute": "",
-						"dry_run": "",
 						"formatted": ""
 					},
 					"cancel": "",
-					"success": ""
+					"success_one": "",
+					"success_other": ""
 				},
 				"filter": {
 					"errors": {
@@ -178,18 +183,12 @@
 					}
 				},
 				"file": {
-					"errors": {
-						"no_ids": ""
-					},
 					"parameters": {
 						"file": "",
 						"link_label": ""
 					}
 				},
 				"modal": {
-					"errors": {
-						"no_ids": ""
-					},
 					"title": "",
 					"components": {
 						"label": "",
@@ -239,8 +238,7 @@
 				},
 				"unrole": {
 					"errors": {
-						"missing_permissions": "",
-						"already_processed": ""
+						"missing_permissions": ""
 					},
 					"pending": "",
 					"buttons": {
@@ -293,6 +291,9 @@
 				"success": ""
 			},
 			"duration": {
+				"errors": {
+					"timeout": ""
+				},
 				"success": ""
 			},
 			"clear": {
@@ -458,7 +459,6 @@
 		"anti_raid_nuke": {
 			"pending": "",
 			"title": "",
-			"title_dryrun": "",
 			"description": ""
 		}
 	},
@@ -467,7 +467,9 @@
 			"guild_member": ""
 		},
 		"anti_raid_nuke": {
+			"case_placeholder": "",
 			"title": "",
+			"title_preliminary": "",
 			"summary": {
 				"title": "",
 				"mode": "",
@@ -475,16 +477,24 @@
 				"time_taken": "",
 				"moderator": "",
 				"reason": "",
-				"dry_run": "",
-				"blast_mode": ""
+				"preliminary": "",
+				"preliminary_hidden": ""
 			},
 			"results": {
 				"title": "",
 				"total": "",
-				"banned": "",
-				"banned_zero": "",
-				"failed": "",
-				"failed_zero": "",
+				"preliminary": {
+					"banned_one": "",
+					"banned_other": "",
+					"failed_one": "",
+					"failed_other": ""
+				},
+				"blast": {
+					"banned_one": "",
+					"banned_other": "",
+					"failed_one": "",
+					"failed_other": ""
+				},
 				"ratio": ""
 			},
 			"parameters": {
@@ -532,27 +542,37 @@
 				"log_message_sub": "",
 				"log_message_none": ""
 			},
-			"successes": {
-				"title": "",
-				"none": "",
-				"tables": [
+			"preliminary": {
+				"successes": {
+					"title": "",
+					"none": ""
+				},
+				"fails": {
+					"title": "",
+					"none": ""
+				}
+			},
+			"blast": {
+				"successes": {
+					"title": "",
+					"none": ""
+				},
+				"fails": {
+					"title": "",
+					"none": ""
+				}
+			},
+			"table": {
+				"success_titles": [
+					"",
+					"",
+					""
+				],
+				"fail_titles": [
 					"",
 					"",
 					""
 				]
-			},
-			"failures": {
-				"title": "",
-				"none": "",
-				"tables": [
-					"",
-					"",
-					""
-				]
-			},
-			"raw_data": {
-				"title": "",
-				"description": ""
 			}
 		}
 	}
