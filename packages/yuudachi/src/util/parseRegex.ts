@@ -17,7 +17,7 @@ export function parseRegex(input?: string | undefined | null, insensitive = true
 			return new RE2(input.replace(regex, fullMatch ? '^$1$' : '$1'), options);
 		}
 
-		return new RE2(input, options);
+		return new RE2(fullMatch ? `^${input}$` : input, options);
 	} catch {
 		return null;
 	}
