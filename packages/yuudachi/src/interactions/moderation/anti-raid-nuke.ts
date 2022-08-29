@@ -87,7 +87,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'hide',
-					description: 'Hides the output (only enables dry-run)',
+					description: 'Hides the output (preliminary report only)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 			],
@@ -125,7 +125,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'hide',
-					description: 'Hides the output (only enables dry-run)',
+					description: 'Hides the output (preliminary report only)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 			],
@@ -157,7 +157,7 @@ export const AntiRaidNukeCommand = {
 				},
 				{
 					name: 'hide',
-					description: 'Hides the output (only enables dry-run)',
+					description: 'Hides the output (preliminary report only)',
 					type: ApplicationCommandOptionType.Boolean,
 				},
 			],

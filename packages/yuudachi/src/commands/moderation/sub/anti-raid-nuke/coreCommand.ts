@@ -81,7 +81,7 @@ async function launchNuke(
 		...args,
 		insensitive,
 		days: pruneDays as ArgsParam<typeof AntiRaidNukeCommand>['filter']['days'],
-		dryRun: false,
+		preliminary: false,
 		mode,
 		timeTaken,
 		created_after: parseDate(args.created_after),
@@ -157,7 +157,6 @@ export async function handleAntiRaidNuke(
 		...args,
 		insensitive,
 		days: pruneDays as ArgsParam<typeof AntiRaidNukeCommand>['filter']['days'],
-		dryRun: false,
 		mode,
 		timeTaken: 0,
 		created_after: parseDate(args.created_after),
@@ -166,6 +165,7 @@ export async function handleAntiRaidNuke(
 		join_before: parseDate(args.join_before),
 		pattern: args.pattern ? parseRegex(args.pattern, insensitive, args.full_match)?.toString() : undefined,
 		logMessageUrl: undefined,
+		preliminary: true,
 	};
 
 	const banKey = nanoid();
@@ -193,7 +193,6 @@ export async function handleAntiRaidNuke(
 		rejections,
 		[],
 		formatterArgs,
-		true,
 	);
 
 	const reply = await interaction.editReply({

@@ -32,7 +32,7 @@ export async function upsertAntiRaidArchiveLog(
 	args: FormatterArgs,
 ) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
-	const embed = generateAntiRaidNukeEmbed(successes.length, executor, args.dryRun, locale);
+	const embed = generateAntiRaidNukeEmbed(successes.length, executor, locale);
 	const report = await generateAntiRaidNukeReport(guild, executor, successes, failures, cases, args);
 
 	const msg = await message.edit({
