@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { codeBlock, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
 import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
+import { acquireLockIfPublic } from './utils.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import {
 	ageFilter,
@@ -59,7 +60,9 @@ export async function filter(
 	args: ArgsParam<typeof AntiRaidNukeCommand>['filter'],
 	locale: LocaleParam,
 ): Promise<void> {
-	await interaction.deferReply({ ephemeral: args.hide ?? true });
+	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
+
+	await interaction.deferReply({ ephemeral: args.hide ?? false });
 
 	const { parsedCreatedAfter, parsedCreatedBefore, parsedJoinAfter, parsedJoinBefore } = parseDates(
 		{
@@ -98,6 +101,10 @@ export async function filter(
 			(!args.zalgo || zalgoFilter(member)) &&
 			(!parsedConfusables.members || confusablesFilter(member)),
 	);
+
+	if (members.size === fetchedMembers.size) {
+		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_filter', { locale }));
+	}
 
 	const parameterStrings = [];
 

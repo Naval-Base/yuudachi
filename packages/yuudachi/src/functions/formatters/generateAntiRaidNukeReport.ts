@@ -1,6 +1,6 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { codeBlock, type Guild, hyperlink, type User, type Snowflake, type Attachment } from 'discord.js';
+import { type Guild, hyperlink, type User, type Snowflake, type Attachment, GuildMember } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
@@ -9,11 +9,10 @@ import type { ArgsParam } from '../../Command.js';
 import { DATE_FORMAT_WITH_SECONDS } from '../../Constants.js';
 import type { AntiRaidNukeMode } from '../../commands/moderation/sub/anti-raid-nuke/coreCommand.js';
 import { Confusables } from '../../commands/moderation/sub/anti-raid-nuke/filter.js';
+import type { TargetRejection } from '../../commands/moderation/sub/anti-raid-nuke/utils.js';
 import type { AntiRaidNukeCommand } from '../../interactions/index.js';
 import { kSQL } from '../../tokens.js';
-import type { AntiRaidNukeResult } from '../anti-raid/blastOff.js';
 import type { Case } from '../cases/createCase.js';
-import { formatAntiRaidResultsToAttachment } from '../logging/formatMembersToAttachment.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
 export type AntiRaidNukeArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'] &
@@ -24,35 +23,26 @@ export type FormatterArgs = Omit<AntiRaidNukeArgsUnion, 'file'> & {
 	file?: Attachment | undefined;
 	mode: AntiRaidNukeMode;
 	timeTaken: number;
-	dryRun: boolean;
+	preliminary: boolean;
 	logMessageUrl?: string;
 };
-
-function sortByResultMember(a: AntiRaidNukeResult, b: AntiRaidNukeResult) {
-	if (!a.member.joinedTimestamp || !b.member.joinedTimestamp) {
-		return 0;
-	}
-
-	return b.member.joinedTimestamp - a.member.joinedTimestamp;
-}
 
 function findCase(userId: Snowflake, cases: Case[]) {
 	return cases.find((case_) => case_.targetId === userId)!;
 }
 
-function resultToTable(result: AntiRaidNukeResult[], cases: Case[], dryRun: boolean) {
-	const failures: string[][] = [];
-	const successes: string[][] = [];
+function successTableRows(members: GuildMember[], cases: Case[], preliminary: boolean, locale: string) {
+	return members.map((member) => [
+		preliminary
+			? i18next.t('formatters.anti_raid_nuke.case_placeholder', { lng: locale })
+			: findCase(member.id, cases).caseId.toString(),
+		member.id,
+		member.user.tag,
+	]);
+}
 
-	for (const { member, success, error } of result) {
-		if (success) {
-			successes.push([dryRun ? 'Dry Run' : findCase(member.id, cases).caseId.toString(), member.id, member.user.tag]);
-		} else {
-			failures.push([member.id, member.user.tag, error ?? 'Unknown']);
-		}
-	}
-
-	return { successes, failures } as const;
+function failTableRows(rejections: TargetRejection[]) {
+	return rejections.map((rejection) => [rejection.member.id, rejection.member.user.tag, rejection.reason]);
 }
 
 function paramOrNone(param: string | undefined, locale: string): string {
@@ -61,55 +51,96 @@ function paramOrNone(param: string | undefined, locale: string): string {
 
 export async function generateAntiRaidNukeReport(
 	guild: Guild,
-	user: User,
-	result: AntiRaidNukeResult[],
+	executor: User,
+	successes: GuildMember[],
+	failures: TargetRejection[],
 	cases: Case[],
 	args: FormatterArgs,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
+	const isPreliminary = Boolean(args.preliminary || args.hide);
 
-	const parts = [];
-
-	parts.push(
-		heading(i18next.t('formatters.anti_raid_nuke.title', { guild: guild.name, lng: locale }), 1),
+	const parts = [
+		heading(
+			args.preliminary
+				? i18next.t('formatters.anti_raid_nuke.title_preliminary', { guild: guild.name, lng: locale })
+				: i18next.t('formatters.anti_raid_nuke.title', { guild: guild.name, lng: locale }),
+			1,
+		),
 		heading(i18next.t('formatters.anti_raid_nuke.summary.title', { lng: locale }), 2),
-		list([
-			i18next.t('formatters.anti_raid_nuke.summary.mode', { mode: args.mode, lng: locale }),
-			i18next.t('formatters.anti_raid_nuke.summary.launch_time', {
-				launch_time: dayjs().format(DATE_FORMAT_WITH_SECONDS),
-				lng: locale,
-			}),
-			i18next.t('formatters.anti_raid_nuke.summary.time_taken', {
-				time_taken: ms(Number(args.timeTaken.toFixed(2))),
-				lng: locale,
-			}),
-			i18next.t('formatters.anti_raid_nuke.summary.moderator', { moderator: `${user.tag} (${user.id})`, lng: locale }),
-			i18next.t('formatters.anti_raid_nuke.summary.reason', {
-				reason: paramOrNone(args.reason, locale),
-				lng: locale,
-			}),
-			i18next.t(`formatters.anti_raid_nuke.summary.${args.dryRun ? 'dry_run' : 'blast_mode'}`, { lng: locale }),
-		]),
-		emptyLine(),
-	);
+	];
 
-	const successResults = result.filter((r) => r.success);
-	const failedResults = result.filter((r) => !r.success);
-	const ratio = `${Math.round((successResults.length / result.length) * 100)}%`;
+	if (args.hide) {
+		parts.push(
+			blockquote('**Note**'),
+			blockquote(
+				i18next.t(`formatters.anti_raid_nuke.summary.preliminary_hidden`, {
+					lng: locale,
+				}),
+			),
+		);
+	} else if (args.preliminary) {
+		parts.push(
+			blockquote('**Warning**'),
+			blockquote(
+				i18next.t(`formatters.anti_raid_nuke.summary.preliminary`, {
+					lng: locale,
+				}),
+			),
+		);
+	}
+
+	if (!isPreliminary) {
+		parts.push(
+			list([
+				i18next.t('formatters.anti_raid_nuke.summary.mode', { mode: args.mode, lng: locale }),
+				i18next.t('formatters.anti_raid_nuke.summary.launch_time', {
+					launch_time: dayjs().format(DATE_FORMAT_WITH_SECONDS),
+					lng: locale,
+				}),
+				i18next.t('formatters.anti_raid_nuke.summary.time_taken', {
+					time_taken: ms(Number(args.timeTaken.toFixed(2))),
+					lng: locale,
+				}),
+				i18next.t('formatters.anti_raid_nuke.summary.moderator', {
+					moderator: `${executor.tag} (${executor.id})`,
+					lng: locale,
+				}),
+				i18next.t('formatters.anti_raid_nuke.summary.reason', {
+					reason: paramOrNone(args.reason, locale),
+					lng: locale,
+				}),
+			]),
+			emptyLine(),
+		);
+	}
+
+	const totalResults = successes.length + failures.length;
+	const ratio = `${Math.round((successes.length / totalResults) * 100)}%`;
 
 	parts.push(
 		heading(i18next.t('formatters.anti_raid_nuke.results.title', { lng: locale }), 2),
-		i18next.t('formatters.anti_raid_nuke.results.total', { count: result.length, lng: locale }),
+		i18next.t('formatters.anti_raid_nuke.results.total', { count: totalResults, lng: locale }),
 		list([
-			i18next.t('formatters.anti_raid_nuke.results.banned', {
-				count: successResults.length,
-				lng: locale,
-			}),
-			i18next.t('formatters.anti_raid_nuke.results.failed', {
-				count: failedResults.length,
-				lng: locale,
-			}),
+			isPreliminary
+				? i18next.t('formatters.anti_raid_nuke.results.preliminary.banned', {
+						count: successes.length,
+						lng: locale,
+				  })
+				: i18next.t('formatters.anti_raid_nuke.results.blast.banned', {
+						count: successes.length,
+						lng: locale,
+				  }),
+			isPreliminary
+				? i18next.t('formatters.anti_raid_nuke.results.preliminary.failed', {
+						count: failures.length,
+						lng: locale,
+				  })
+				: i18next.t('formatters.anti_raid_nuke.results.blast.failed', {
+						count: failures.length,
+						lng: locale,
+				  }),
 		]),
 		emptyLine(),
 		i18next.t('formatters.anti_raid_nuke.results.ratio', {
@@ -236,50 +267,62 @@ export async function generateAntiRaidNukeReport(
 
 	parts.push(emptyLine());
 
-	const [nextCase] = await sql<[{ next_case: number }]>`select next_case(${guild.id});`;
-	const from = nextCase.next_case - cases.length;
-	const to = nextCase.next_case - 1;
+	if (!isPreliminary) {
+		const [nextCase] = await sql<[{ next_case: number }]>`select next_case(${guild.id});`;
+		const from = nextCase.next_case - cases.length;
+		const to = nextCase.next_case - 1;
 
-	parts.push(heading(i18next.t('formatters.anti_raid_nuke.cases.title', { lng: locale }), 2));
+		parts.push(heading(i18next.t('formatters.anti_raid_nuke.cases.title', { lng: locale }), 2));
 
-	parts.push(
-		list([
-			cases.length
-				? cases.length === 1
-					? i18next.t('formatters.anti_raid_nuke.cases.single', { case_id: from, lng: locale })
-					: i18next.t('formatters.anti_raid_nuke.cases.range', { from, to, lng: locale })
-				: i18next.t('formatters.anti_raid_nuke.cases.none', { lng: locale }),
-			args.logMessageUrl
-				? i18next.t('formatters.anti_raid_nuke.cases.log_message', {
-						link: hyperlink(
-							i18next.t('formatters.anti_raid_nuke.cases.log_message_sub', { lng: locale }),
-							args.logMessageUrl,
-						),
-						lng: locale,
-				  })
-				: i18next.t('formatters.anti_raid_nuke.cases.log_message_none', {
-						lng: locale,
-				  }),
-		]),
-	);
-
-	const { successes, failures } = resultToTable(result, cases, args.dryRun);
+		parts.push(
+			list([
+				cases.length
+					? cases.length === 1
+						? i18next.t('formatters.anti_raid_nuke.cases.single', { case_id: from, lng: locale })
+						: i18next.t('formatters.anti_raid_nuke.cases.range', { from, to, lng: locale })
+					: i18next.t('formatters.anti_raid_nuke.cases.none', { lng: locale }),
+				args.logMessageUrl
+					? i18next.t('formatters.anti_raid_nuke.cases.log_message', {
+							link: hyperlink(
+								i18next.t('formatters.anti_raid_nuke.cases.log_message_sub', { lng: locale }),
+								args.logMessageUrl,
+							),
+							lng: locale,
+					  })
+					: i18next.t('formatters.anti_raid_nuke.cases.log_message_none', {
+							lng: locale,
+					  }),
+			]),
+		);
+	}
 
 	parts.push(
 		emptyLine(),
 		horizontalRule(),
 		emptyLine(),
-		heading(i18next.t('formatters.anti_raid_nuke.successes.title', { lng: locale }), 2),
+		heading(
+			isPreliminary
+				? i18next.t('formatters.anti_raid_nuke.preliminary.successes.title', { lng: locale })
+				: i18next.t('formatters.anti_raid_nuke.blast.successes.title', { lng: locale }),
+			2,
+		),
 	);
 
 	if (successes.length) {
 		parts.push(
-			table(i18next.t('formatters.anti_raid_nuke.successes.tables', { returnObjects: true, lng: locale }), successes),
+			table(
+				i18next.t('formatters.anti_raid_nuke.table.success_titles', { returnObjects: true, lng: locale }),
+				successTableRows(successes, cases, isPreliminary, locale),
+			),
 		);
 	} else {
 		parts.push(
-			blockquote(`**Note**`),
-			blockquote(heading(i18next.t('formatters.anti_raid_nuke.successes.none', { lng: locale }), 3)),
+			blockquote(`**Warning**`),
+			blockquote(
+				isPreliminary
+					? i18next.t('formatters.anti_raid_nuke.preliminary.successes.none', { lng: locale })
+					: i18next.t('formatters.anti_raid_nuke.blast.successes.none', { lng: locale }),
+			),
 		);
 	}
 
@@ -287,29 +330,31 @@ export async function generateAntiRaidNukeReport(
 		emptyLine(),
 		horizontalRule(),
 		emptyLine(),
-		heading(i18next.t('formatters.anti_raid_nuke.failures.title', { lng: locale }), 2),
+		heading(
+			isPreliminary
+				? i18next.t('formatters.anti_raid_nuke.preliminary.fails.title', { lng: locale })
+				: i18next.t('formatters.anti_raid_nuke.blast.fails.title', { lng: locale }),
+			2,
+		),
 	);
 
 	if (failures.length) {
 		parts.push(
-			table(i18next.t('formatters.anti_raid_nuke.failures.tables', { lng: locale, returnObjects: true }), failures),
+			table(
+				i18next.t('formatters.anti_raid_nuke.table.fail_titles', { lng: locale, returnObjects: true }),
+				failTableRows(failures),
+			),
 		);
 	} else {
 		parts.push(
 			blockquote(`**Note**`),
-			blockquote(heading(i18next.t('formatters.anti_raid_nuke.failures.none', { lng: locale }), 3)),
+			blockquote(
+				isPreliminary
+					? i18next.t('formatters.anti_raid_nuke.preliminary.fails.none', { lng: locale })
+					: i18next.t('formatters.anti_raid_nuke.blast.fails.none', { lng: locale }),
+			),
 		);
 	}
-
-	parts.push(
-		emptyLine(),
-		horizontalRule(),
-		emptyLine(),
-		heading(i18next.t('formatters.anti_raid_nuke.raw_data.title', { lng: locale }), 2),
-		i18next.t('formatters.anti_raid_nuke.raw_data.description', { lng: locale }),
-		emptyLine(),
-		codeBlock('ansi', formatAntiRaidResultsToAttachment(result.sort(sortByResultMember), locale)),
-	);
 
 	return parts.join('\n');
 }

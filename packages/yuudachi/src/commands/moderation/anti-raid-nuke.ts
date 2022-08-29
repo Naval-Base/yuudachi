@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import { file } from './sub/anti-raid-nuke/file.js';
 import { filter } from './sub/anti-raid-nuke/filter.js';
 import { modal } from './sub/anti-raid-nuke/modal.js';
+import { releaseNukeLock } from './sub/anti-raid-nuke/utils.js';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
@@ -31,21 +32,33 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 			throw new Error(i18next.t('common.errors.no_anti_raid_archive_channel', { lng: locale }));
 		}
 
-		switch (Object.keys(args)[0]) {
-			case 'file': {
-				return file(interaction, args.file, locale);
-			}
+		try {
+			switch (Object.keys(args)[0]) {
+				case 'file': {
+					return await file(interaction, args.file, locale);
+				}
 
-			case 'modal': {
-				return modal(interaction, args.modal, locale);
-			}
+				case 'modal': {
+					return await modal(interaction, args.modal, locale);
+				}
 
-			case 'filter': {
-				return filter(interaction, args.filter, locale);
-			}
+				case 'filter': {
+					return await filter(interaction, args.filter, locale);
+				}
 
-			default:
-				break;
+				default:
+					break;
+			}
+		} catch (err) {
+			const error = err as Error;
+			const keepLockRejection = i18next.t('command.mod.anti_raid_nuke.common.errors.no_concurrent_use', {
+				lng: locale,
+			});
+
+			if (keepLockRejection !== error.message) {
+				await releaseNukeLock(interaction.guildId);
+			}
+			throw error;
 		}
 	}
 }

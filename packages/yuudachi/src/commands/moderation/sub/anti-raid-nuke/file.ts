@@ -1,6 +1,7 @@
 import { hyperlink } from 'discord.js';
 import i18next from 'i18next';
-import { AntiRaidNukeMode, handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
+import { acquireLockIfPublic, validateMemberIds } from './utils.js';
 import type { ArgsParam, InteractionParam, LocaleParam } from '../../../../Command.js';
 import { parseFile } from '../../../../functions/anti-raid/parseFile.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
@@ -10,13 +11,11 @@ export async function file(
 	args: ArgsParam<typeof AntiRaidNukeCommand>['file'],
 	locale: LocaleParam,
 ): Promise<void> {
-	await interaction.deferReply({ ephemeral: args.hide ?? true });
+	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
+
+	await interaction.deferReply({ ephemeral: args.hide ?? false });
 	const ids = await parseFile(args.file);
-	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(
-		interaction,
-		ids,
-		i18next.t('command.mod.anti_raid_nuke.file.errors.no_ids', { lng: locale }),
-	);
+	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(interaction, ids, locale);
 
 	const parameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.parsed_ids', {

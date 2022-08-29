@@ -1,7 +1,8 @@
 import { ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import { AntiRaidNukeMode, handleAntiRaidNuke, validateMemberIds } from './coreCommand.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
+import { acquireLockIfPublic, validateMemberIds } from './utils.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
@@ -14,6 +15,7 @@ export async function modal(
 	args: ArgsParam<typeof AntiRaidNukeCommand>['modal'],
 	locale: LocaleParam,
 ): Promise<void> {
+	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
 	const modalKey = nanoid();
 
 	const textComponents = new Array(5).fill(0).map((_, i) =>
@@ -57,18 +59,14 @@ export async function modal(
 		return;
 	}
 
-	await modalInteraction.deferReply({ ephemeral: args.hide ?? true });
+	await modalInteraction.deferReply({ ephemeral: args.hide ?? false });
 	const fullContent = modalInteraction.components
 		.map((row) => row.components)
 		.flat()
 		.map((component) => (component.type === ComponentType.TextInput ? component.value || '' : ''));
 
 	const ids = new Set(fullContent.join(' ').match(/\d{17,20}/g) ?? []);
-	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(
-		modalInteraction,
-		ids,
-		i18next.t('command.mod.anti_raid_nuke.modal.errors.no_ids', { lng: locale }),
-	);
+	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(modalInteraction, ids, locale);
 
 	const parameterStrings = [
 		i18next.t('command.mod.anti_raid_nuke.common.parameters.parsed_ids', {

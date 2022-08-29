@@ -2,7 +2,7 @@
 	"common": {
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
-			"no_anti_raid_archive_channel": "No anti-raid archive channel has been initialized yet.",
+			"no_anti_raid_archive_channel": "No Anti-Raid-Nuke archive channel has been initialized yet.",
 			"no_content": "<No message content>"
 		},
 		"moderator": "Moderator"
@@ -136,26 +136,29 @@
 							"reject_protected": "This user has a role ignored by the Anti-Raid-Nuke.",
 							"reject_user": "This user is not in the guild."
 						},
-						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you may want to re-adjust the parameters and try again."
+						"no_hits": "The Anti-Raid-Nuke will not hit anyone, you may want to re-adjust the parameters and try again.",
+						"no_ids": "The provided content does not contain any valid member ids.",
+						"no_filter": "Anti-Raid-Nuke is projected to hit all members. Protocol aborted.",
+						"no_concurrent_use": "Cannot execute more than one Anti-Raid-Nuke for the same server at a time."
 					},
 					"parameters": {
 						"heading": "Parameters:",
 						"launch_time": "• Time of launch: {{- now}}",
-						"dry_run": "• Operating in **dry-run** mode, no members will be banned",
 						"days_zero": "• Not deleting any messages",
 						"days_one": "• Deleting messages sent in the last day",
 						"days_other": "• Deleting messages sent in the last `{{count}}` days",
-						"parsed_ids": "• Valid members of this guild: `{{valid}}` of `{{total}}` total parsed ids."
+						"parsed_ids": "• Valid members of this guild: `{{valid}}` of `{{total}}` total parsed ids.",
+						"hide": "• Hidden command execution only generates a preliminary report. Execute publicly to launch a nuke."
 					},
 					"reason": "Anti-Raid-Nuke `({{current}}/{{count}})`",
-					"pending": "Anti-Raid-Nuke is projected to hit `{{count}}` members.\n• Created within `{{creation_range}}`\n• Joined within `{{join_range}}`",
+					"pending_one": "Anti-Raid-Nuke is projected to hit `{{count}}` member.",
+					"pending_other": "Anti-Raid-Nuke is projected to hit `{{count}}` members.\n• Created within `{{creation_range}}`\n• Joined within `{{join_range}}`",
 					"buttons": {
 						"execute": "Launch",
-						"dry_run": "Dry run",
 						"formatted": "Formatted report"
 					},
 					"cancel": "Canceled Anti-Raid-Nuke.",
-					"success_one": "Anti-Raid-Nuke hit `1` member.",
+					"success_one": "Anti-Raid-Nuke hit `{{count}}` member.",
 					"success_other": "Anti-Raid-Nuke hit `{{count}}` members."
 				},
 				"filter": {
@@ -180,18 +183,12 @@
 					}
 				},
 				"file": {
-					"errors": {
-						"no_ids": "This file does not contain any ids."
-					},
 					"parameters": {
 						"file": "• File: {{- file_link}}",
 						"link_label": "<CDN url>"
 					}
 				},
 				"modal": {
-					"errors": {
-						"no_ids": "The content does not contain any ids."
-					},
 					"title": "Anti-Raid-Nuke Entry",
 					"components": {
 						"label": "{{i}}- Enter valid ids",
@@ -462,7 +459,6 @@
 		"anti_raid_nuke": {
 			"pending": "The report for the Anti-Raid-Nuke is being processed...",
 			"title": "Anti-Raid-Nuke launched",
-			"title_dryrun": "Anti-Raid-Nuke dry run",
 			"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
 		}
 	},
@@ -471,7 +467,9 @@
 			"guild_member": "{{- id}}| Joined: {{- join}} | Created: {{- creation}} | {{- tag}}"
 		},
 		"anti_raid_nuke": {
+			"case_placeholder": "Preliminary",
 			"title": "Anti-Raid-Nuke report for {{guild}}",
+			"title_preliminary": "Preliminary Anti-Raid-Nuke report for {{guild}}",
 			"summary": {
 				"title": "**Summary**",
 				"mode": "**Mode:** `{{mode}}`",
@@ -479,17 +477,25 @@
 				"time_taken": "**Time taken:** `{{time_taken}}`",
 				"moderator": "**Moderator:** `{{- moderator}}`",
 				"reason": "**Reason:** `{{- reason}}`",
-				"dry_run": "**Operated in `dry-run` mode**",
-				"blast_mode": "**Operated in `BLAST` mode**"
+				"preliminary": "This is a preliminary report. To launch the nuke, return to Discord.",
+				"preliminary_hidden": "You can only view a preliminary report when executing the command in hidden mode."
 			},
 			"results": {
 				"title": "**Results**",
 				"total": "**Total:** `{{count}}`",
-				"banned": "`{{count}}` members were successfully banned",
-				"banned_zero": "No members were banned",
-				"failed": "`{{count}}` members failed to be banned",
-				"failed_zero": "All members were banned",
-				"ratio": "Ratio: `{{ratio}}`"
+				"preliminary": {
+					"banned_one": "`{{count}}` member can be banned",
+					"banned_other": "`{{count}}` members can be banned",
+					"failed_one": "`{{count}}` member cannot be banned",
+					"failed_other": "`{{count}}` members cannot be banned"
+				},
+				"blast": {
+					"banned_one": "`{{count}}` member was successfully banned",
+					"banned_other": "`{{count}}` members were successfully banned",
+					"failed_one": "`{{count}}` member failed to be banned",
+					"failed_other": "`{{count}}` members failed to be banned"
+				},
+				"ratio": "Success rate: `{{ratio}}`"
 			},
 			"parameters": {
 				"title": "**Parameters**",
@@ -536,19 +542,29 @@
 				"log_message_sub": "Beam me up, Yuu",
 				"log_message_none": "**Case log:** No case log created"
 			},
-			"successes": {
-				"title": "**Successes**",
-				"none": "No successes, something went wrong",
-				"tables": ["Case id", "Member id", "Username"]
+			"preliminary": {
+				"successes": {
+					"title": "**Projected Hits**",
+					"none": "No potential hits"
+				},
+				"fails": {
+					"title": "**Projected Failures**",
+					"none": "No early detectable failures"
+				}
 			},
-			"failures": {
-				"title": "**Failures**",
-				"none": "No failures, everything went fine",
-				"tables": ["Member id", "Username", "Error"]
+			"blast": {
+				"successes": {
+					"title": "**Confirmed hits**",
+					"none": "No confirmed hits, something went wrong"
+				},
+				"fails": {
+					"title": "**Failures**",
+					"none": "No failures, everything went fine"
+				}
 			},
-			"raw_data": {
-				"title": "**Raw data**",
-				"description": "Sorted by join date descending, highlight based on account age and success/failure"
+			"table": {
+				"success_titles": ["Case id", "Member id", "Username"],
+				"fail_titles": ["Member id", "Username", "Error"]
 			}
 		}
 	}
