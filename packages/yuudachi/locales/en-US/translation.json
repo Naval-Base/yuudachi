@@ -533,6 +533,7 @@
 			"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
 		},
 		"report_log": {
+			"title": "Report #{{report_id}}",
 			"reason": "**Reason:**\n{{- reason}}",
 			"target": "**Reported User:** {{- target}}",
 			"message": "**Message:** {{- message_link}} ({{- channel}})",
@@ -542,11 +543,7 @@
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
 			"moderator": "**Moderator:** {{- mod}}",
 			"updated_at": "**Updated at:** {{- updated_at}}",
-			"footer": "Report {{report_id}} | Type $t(log.report_log.report_type.{{type}})",
-			"report_type": {
-				"0": "Message",
-				"1": "User"
-			},
+			"footer": "Hint: You can resolve a report by referencing it in a moderation action, setting it with /reference to an already existing case, or use /reports status to approve or reject it directly.",
 			"report_status": {
 				"0": "Pending",
 				"1": "Approved",

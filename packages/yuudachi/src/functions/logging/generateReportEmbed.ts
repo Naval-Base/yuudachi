@@ -24,11 +24,12 @@ export async function generateReportEmbed(
 	message?: Message | null,
 ): Promise<APIEmbed> {
 	const embed: APIEmbed = {
+		title: i18next.t('log.report_log.title', {
+			report_id: report.reportId,
+			lng: locale,
+		}),
 		author: {
-			name: i18next.t('log.report_log.author', {
-				author: `${user.tag} (${user.id})`,
-				lng: locale,
-			}),
+			name: `${user.tag} (${user.id})`,
 			icon_url: user.avatarURL()!,
 		},
 		color: statusToColor(report.status),
@@ -36,10 +37,9 @@ export async function generateReportEmbed(
 		timestamp: report.createdAt,
 		footer: {
 			text: i18next.t('log.report_log.footer', {
-				report_id: report.reportId,
-				type: report.type,
 				lng: locale,
 			}),
+			icon_url: user.client.user!.displayAvatarURL(),
 		},
 	};
 
