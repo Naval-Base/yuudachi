@@ -377,11 +377,11 @@
 						"timed_out": "The report has timed out, please try again."
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
-					"trust_and_safety_sub": "trust and safety",
+					"trust_and_safety_sub": "Trust & Safety",
 					"buttons": {
 						"execute": "Create Report",
 						"cancel": "Cancel",
-						"trust_and_safety": "Report to Trust and Safety"
+						"discord_report": "Report to Discord"
 					},
 					"modal": {
 						"label": "The reason for the report",
@@ -533,9 +533,8 @@
 			"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
 		},
 		"report_log": {
-			"author": "Reported by {{- author}}",
 			"reason": "**Reason:**\n{{- reason}}",
-			"target": "**Target:** {{- target}}",
+			"target": "**Reported User:** {{- target}}",
 			"message": "**Message:** {{- message_link}} ({{- channel}})",
 			"message_sub": "Beam me up, Yuu",
 			"message_fallback": "`Message deleted`",

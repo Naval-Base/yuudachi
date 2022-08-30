@@ -59,7 +59,7 @@ export async function user(
 		style: ButtonStyle.Secondary,
 	});
 	const trustAndSafetyButton = createButton({
-		label: i18next.t('command.utility.report.commons.buttons.trust_and_safety', { lng: locale }),
+		label: i18next.t('command.utility.report.commons.buttons.discord_report', { lng: locale }),
 		url: localeTrustAndSafety(locale),
 		style: ButtonStyle.Link,
 	});
