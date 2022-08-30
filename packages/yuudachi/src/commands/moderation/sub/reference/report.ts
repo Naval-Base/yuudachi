@@ -38,7 +38,7 @@ export async function reportReference(
 				guildId: interaction.guildId,
 				reportId,
 				refId: originalCase.caseId,
-				status: ReportStatus.Approved,
+				status: originalCase.targetId === referenceReport.authorId ? ReportStatus.Spam : ReportStatus.Approved,
 			},
 			interaction.user,
 		),
