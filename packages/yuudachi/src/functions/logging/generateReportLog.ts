@@ -46,10 +46,10 @@ export async function generateReportLog(report: Report, locale: string, message?
 
 	if (report.refId) {
 		const [reference] = await sql<[{ log_message_id: Snowflake | null }?]>`
-		select log_message_id
-		from cases
-		where guild_id = ${report.guildId}
-			and case_id = ${report.refId}`;
+			select log_message_id
+			from cases
+			where guild_id = ${report.guildId}
+				and case_id = ${report.refId}`;
 
 		const modLogChannelId = await getGuildSetting(report.guildId, SettingsKeys.ModLogChannelId);
 

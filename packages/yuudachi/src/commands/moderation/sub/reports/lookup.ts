@@ -36,21 +36,21 @@ export async function lookup(
 
 	if (!isNaN(parseInt(args.phrase, 10))) {
 		const [report] = await sql<RawReport[]>`
-		select *
-		from reports
-		where guild_id = ${interaction.guildId}
-		and report_id = ${args.phrase}`;
+			select *
+			from reports
+			where guild_id = ${interaction.guildId}
+			and report_id = ${args.phrase}`;
 
 		if (!report) {
 			throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
 		}
 
-		let message: Message | undefined = undefined;
+		let message: Message | null = null;
 
 		try {
 			message = report.message_id
 				? await resolveMessage(interaction.channelId, report.guild_id, report.channel_id, report.message_id, locale)
-				: undefined;
+				: null;
 		} catch {}
 
 		const author = await interaction.client.users.fetch(report.author_id);
@@ -58,7 +58,7 @@ export async function lookup(
 		const embeds = [truncateEmbed(await generateReportEmbed(author, transformReport(report), locale, message))];
 
 		if (message) {
-			embeds.push(truncateEmbed(await formatMessageToEmbed(message as Message<true>, locale)));
+			embeds.push(truncateEmbed(await formatMessageToEmbed(message, locale)));
 		}
 
 		if (report.type === ReportType.User) {

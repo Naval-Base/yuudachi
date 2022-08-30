@@ -95,6 +95,12 @@ export default class extends Command<
 		args: ArgsParam<typeof ReportUserContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
+		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
+		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
+		if (!reportChannel) {
+			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
+		}
+
 		const modalKey = nanoid();
 
 		if (args.user.user.id === interaction.user.id) {
@@ -109,12 +115,6 @@ export default class extends Command<
 
 		if (!args.user.member) {
 			throw new Error(i18next.t('command.common.errors.target_not_found', { lng: locale }));
-		}
-
-		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
-		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
-		if (!reportChannel) {
-			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
 		}
 
 		const modal = createModal({
@@ -182,6 +182,12 @@ export default class extends Command<
 		args: ArgsParam<typeof ReportMessageContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
+		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
+		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
+		if (!reportChannel) {
+			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
+		}
+
 		const modalKey = nanoid();
 
 		if (args.message.author.id === interaction.user.id) {
@@ -192,12 +198,6 @@ export default class extends Command<
 
 		if (await this.redis.exists(key)) {
 			throw new Error(i18next.t('command.utility.report.commons.errors.recently_reported.message', { lng: locale }));
-		}
-
-		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
-		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
-		if (!reportChannel) {
-			throw new Error(i18next.t('common.errors.no_report_channel', { lng: locale }));
 		}
 
 		const modal = createModal({
