@@ -636,15 +636,25 @@
 				"log_message_sub": "Beam me up, Yuu",
 				"log_message_none": "**Case log:** No case log created"
 			},
-			"successes": {
-				"title": "**Successes**",
-				"none": "No successes, something went wrong",
-				"tables": ["Case id", "Member id", "Username"]
+			"preliminary": {
+				"successes": {
+					"title": "**Projected Hits**",
+					"none": "No potential hits"
+				},
+				"fails": {
+					"title": "**Projected Failures**",
+					"none": "No early detectable failures"
+				}
 			},
-			"failures": {
-				"title": "**Failures**",
-				"none": "No failures, everything went fine",
-				"tables": ["Member id", "Username", "Error"]
+			"blast": {
+				"successes": {
+					"title": "**Confirmed hits**",
+					"none": "No confirmed hits, something went wrong"
+				},
+				"fails": {
+					"title": "**Failures**",
+					"none": "No failures, everything went fine"
+				}
 			},
 			"table": {
 				"success_titles": ["Case id", "Member id", "Username"],

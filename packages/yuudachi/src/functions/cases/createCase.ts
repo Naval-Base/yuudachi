@@ -23,28 +23,7 @@ export enum CaseAction {
 	TimeoutEnd,
 }
 
-export type Case = {
-	accountCutoff?: string | null | undefined;
-	action: CaseAction;
-	actionExpiration?: string | null | undefined;
-	actionProcessed: boolean;
-	caseId: number;
-	caseReferenceId?: number | null | undefined;
-	contextMessageId?: Snowflake | null | undefined;
-	createdAt: string;
-	deleteMessageDays?: number | undefined;
-	guildId: Snowflake;
-	joinCutoff?: string | null | undefined;
-	logMessageId?: Snowflake | null | undefined;
-	moderatorId: Snowflake;
-	moderatorTag: string;
-	multi: boolean;
-	reason?: string | null | undefined;
-	reportReferenceId?: number | null | undefined;
-	roleId?: Snowflake | null | undefined;
-	targetId: Snowflake;
-	targetTag: string;
-};
+export type Case = PartialAndUndefinedOnNull<CamelCasedProperties<RawCase>>;
 
 export type CreateCase = Omit<
 	Case,

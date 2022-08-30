@@ -10,6 +10,7 @@ export type Report = PartialAndUndefinedOnNull<CamelCasedProperties<RawReport>> 
 	type: ReportType;
 	status: ReportStatus;
 };
+
 export type CreateReport = Omit<Report, 'status' | 'channelId' | 'reportId' | 'createdAt'> & {
 	reportId?: number | undefined | null;
 	status?: ReportStatus | undefined | null;
