@@ -45,7 +45,7 @@ export async function lookup(
 			throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
 		}
 
-		let message: Message | null = null;
+		let message: Message<true> | null = null;
 
 		try {
 			message = report.message_id

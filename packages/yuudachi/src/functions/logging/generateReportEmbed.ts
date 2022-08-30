@@ -21,7 +21,7 @@ export async function generateReportEmbed(
 	user: User,
 	report: Report,
 	locale: string,
-	message?: Message,
+	message?: Message | null,
 ): Promise<APIEmbed> {
 	const embed: APIEmbed = {
 		author: {
