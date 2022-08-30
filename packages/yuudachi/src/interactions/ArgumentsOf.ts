@@ -1,14 +1,6 @@
 /* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions, APIAttachment } from 'discord-api-types/v10'; */
-import type {
-	ApplicationCommandOptionType,
-	ApplicationCommandType,
-	Attachment,
-	GuildChannel,
-	GuildMember,
-	Message,
-	Role,
-	User,
-} from 'discord.js';
+import type { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
+import type { Attachment, GuildChannel, GuildMember, Message, Role, User } from 'discord.js';
 
 export type CommandPayload = Readonly<{
 	name: string;
@@ -45,7 +37,7 @@ type Option = Readonly<
 	)
 >;
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
+type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
 type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	? ArgumentsOfRaw<O>
