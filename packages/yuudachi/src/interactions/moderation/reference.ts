@@ -2,22 +2,22 @@ import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 export const ReferenceCommand = {
 	name: "reference",
-	description: "Change the reference of an action",
+	description: "Set a reference of a moderation case",
 	options: [
 		{
 			name: "case",
-			description: "Change the reference using a case",
+			description: "Set the case reference to another moderation case",
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: "case",
-					description: "The case to look up",
+					description: "The case to set a reference for",
 					type: ApplicationCommandOptionType.Integer,
 					required: true,
 				},
 				{
-					name: "reference",
-					description: "The reference case",
+					name: "reference_case",
+					description: "The case to refer to",
 					type: ApplicationCommandOptionType.Integer,
 					required: true,
 				},
@@ -25,18 +25,18 @@ export const ReferenceCommand = {
 		},
 		{
 			name: "report",
-			description: "Change the reference using a report",
+			description: "Set the case reference to a report",
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: "case",
-					description: "The case to look up",
+					description: "The case to set a reference for",
 					type: ApplicationCommandOptionType.Integer,
 					required: true,
 				},
 				{
-					name: "reference",
-					description: "The reference report",
+					name: "reference_report",
+					description: "The report to refer to",
 					type: ApplicationCommandOptionType.Integer,
 					required: true,
 				},

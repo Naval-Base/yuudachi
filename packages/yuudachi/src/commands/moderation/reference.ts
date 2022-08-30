@@ -35,10 +35,10 @@ export default class extends Command<typeof ReferenceCommand> {
 
 		switch (Object.keys(args)[0]) {
 			case "case":
-				await caseReference(interaction, modLogChannel.id, originalCase, args.case.reference, locale);
+				await caseReference(interaction, modLogChannel.id, originalCase, args.case.reference_case, locale);
 				break;
 			case "report":
-				await reportReference(interaction, modLogChannel.id, originalCase, args.report.reference, locale);
+				await reportReference(interaction, modLogChannel.id, originalCase, args.report.reference_report, locale);
 				break;
 			default:
 				break;
