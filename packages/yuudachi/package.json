@@ -3,7 +3,7 @@
 	"version": "3.0.0",
 	"description": "",
 	"scripts": {
-		"build:clean": "del dist",
+		"build:clean": "del-cli dist",
 		"build:check": "tsc --noEmit",
 		"build:esm": "swc ./src --out-dir ./dist",
 		"build:copy-locales": "cpy locales/ dist/",
