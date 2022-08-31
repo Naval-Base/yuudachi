@@ -3,9 +3,9 @@ import relativeTime from "dayjs/plugin/relativeTime.js";
 import type { Snowflake } from "discord.js";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
-import type { RawCase } from "./transformCase.js";
 import { SNOWFLAKE_MIN_LENGTH } from "../../Constants.js";
 import { kSQL } from "../../tokens.js";
+import type { RawCase } from "./transformCase.js";
 
 dayjs.extend(relativeTime);
 

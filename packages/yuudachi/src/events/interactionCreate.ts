@@ -116,8 +116,8 @@ export default class implements Event {
 						}
 
 						await interaction.editReply({ content: error.message, components: [] });
-					} catch (err) {
-						const subError = err as Error;
+					} catch (error__) {
+						const subError = error__ as Error;
 						logger.error(subError, subError.message);
 
 						if (interaction.isAutocomplete()) {

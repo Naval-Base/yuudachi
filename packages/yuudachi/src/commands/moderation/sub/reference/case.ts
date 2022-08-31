@@ -1,10 +1,10 @@
-import { hyperlink, messageLink } from 'discord.js';
-import i18next from 'i18next';
-import type { InteractionParam } from '../../../../Command.js';
-import type { Case } from '../../../../functions/cases/createCase.js';
-import { getCase } from '../../../../functions/cases/getCase.js';
-import { updateCase } from '../../../../functions/cases/updateCase.js';
-import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
+import { hyperlink, messageLink } from "discord.js";
+import i18next from "i18next";
+import type { InteractionParam } from "../../../../Command.js";
+import type { Case } from "../../../../functions/cases/createCase.js";
+import { getCase } from "../../../../functions/cases/getCase.js";
+import { updateCase } from "../../../../functions/cases/updateCase.js";
+import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
 
 export async function caseReference(
 	interaction: InteractionParam,
@@ -17,7 +17,7 @@ export async function caseReference(
 
 	if (!referenceCase) {
 		throw new Error(
-			i18next.t('command.mod.common.errors.no_reference_case', {
+			i18next.t("command.mod.common.errors.no_reference_case", {
 				case: caseId,
 				lng: locale,
 			}),
@@ -32,7 +32,7 @@ export async function caseReference(
 	await upsertCaseLog(interaction.guild, interaction.user, case_);
 
 	await interaction.editReply({
-		content: i18next.t('command.mod.reference.case', {
+		content: i18next.t("command.mod.reference.case", {
 			case: hyperlink(
 				`\`#${originalCase.caseId}\``,
 				messageLink(logChannelId, originalCase.logMessageId!, interaction.guildId),

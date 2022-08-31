@@ -1,11 +1,11 @@
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime.js';
-import type { Snowflake } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import type { RawReport } from './transformReport.js';
-import { SNOWFLAKE_MIN_LENGTH } from '../../Constants.js';
-import { kSQL } from '../../tokens.js';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+import type { Snowflake } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { SNOWFLAKE_MIN_LENGTH } from "../../Constants.js";
+import { kSQL } from "../../tokens.js";
+import type { RawReport } from "./transformReport.js";
 
 dayjs.extend(relativeTime);
 
@@ -22,7 +22,7 @@ export async function findReports(phrase: string, guildId: Snowflake) {
 		`;
 	}
 
-	if (!isNaN(parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
+	if (!Number.isNaN(Number.parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
 		return sql<RawReport[]>`
 			select *
 			from reports

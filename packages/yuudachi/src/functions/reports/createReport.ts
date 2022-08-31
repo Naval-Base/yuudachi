@@ -1,22 +1,22 @@
-import type { Message, Snowflake } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import type { CamelCasedProperties } from 'type-fest';
-import { type RawReport, transformReport } from './transformReport.js';
-import { kSQL } from '../../tokens.js';
-import type { PartialAndUndefinedOnNull } from '../../util/types.js';
+import type { Message, Snowflake } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import type { CamelCasedProperties } from "type-fest";
+import { kSQL } from "../../tokens.js";
+import type { PartialAndUndefinedOnNull } from "../../util/types.js";
+import { type RawReport, transformReport } from "./transformReport.js";
 
 export type Report = PartialAndUndefinedOnNull<CamelCasedProperties<RawReport>> & {
-	type: ReportType;
 	status: ReportStatus;
+	type: ReportType;
 };
 
-export type CreateReport = Omit<Report, 'status' | 'channelId' | 'reportId' | 'createdAt'> & {
-	reportId?: number | undefined | null;
-	status?: ReportStatus | undefined | null;
-	message?: Message | undefined | null;
-	channelId?: Snowflake | undefined | null;
-	createdAt?: Date | undefined | null;
+export type CreateReport = Omit<Report, "channelId" | "createdAt" | "reportId" | "status"> & {
+	channelId?: Snowflake | null | undefined;
+	createdAt?: Date | null | undefined;
+	message?: Message | null | undefined;
+	reportId?: number | null | undefined;
+	status?: ReportStatus | null | undefined;
 };
 
 export enum ReportType {

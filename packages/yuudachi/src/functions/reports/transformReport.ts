@@ -1,26 +1,26 @@
-import type { Snowflake } from 'discord.js';
-import type { Report } from './createReport.js';
+import type { Snowflake } from "discord.js";
+import type { Report } from "./createReport.js";
 
-export interface RawReport {
-	guild_id: Snowflake;
-	report_id: number;
-	type: number;
-	status: number;
-	message_id: Snowflake | null;
-	channel_id: Snowflake;
-	target_id: Snowflake;
-	target_tag: string;
+export type RawReport = {
+	attachment_url: string | null;
 	author_id: Snowflake;
 	author_tag: string;
+	channel_id: Snowflake;
+	created_at: string;
+	guild_id: Snowflake;
+	log_message_id: Snowflake | null;
+	message_id: Snowflake | null;
 	mod_id: Snowflake | null;
 	mod_tag: string | null;
 	reason: string;
-	attachment_url: string | null;
-	log_message_id: Snowflake | null;
 	ref_id: number | null;
+	report_id: number;
+	status: number;
+	target_id: Snowflake;
+	target_tag: string;
+	type: number;
 	updated_at: string | null;
-	created_at: string;
-}
+};
 
 export function transformReport(report: RawReport): Report {
 	return {

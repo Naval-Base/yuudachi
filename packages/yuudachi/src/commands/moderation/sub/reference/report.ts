@@ -1,13 +1,13 @@
-import { hyperlink, messageLink } from 'discord.js';
-import i18next from 'i18next';
-import type { InteractionParam } from '../../../../Command.js';
-import type { Case } from '../../../../functions/cases/createCase.js';
-import { updateCase } from '../../../../functions/cases/updateCase.js';
-import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
-import { upsertReportLog } from '../../../../functions/logging/upsertReportLog.js';
-import { ReportStatus } from '../../../../functions/reports/createReport.js';
-import { getReport } from '../../../../functions/reports/getReport.js';
-import { updateReport } from '../../../../functions/reports/updateReport.js';
+import { hyperlink, messageLink } from "discord.js";
+import i18next from "i18next";
+import type { InteractionParam } from "../../../../Command.js";
+import type { Case } from "../../../../functions/cases/createCase.js";
+import { updateCase } from "../../../../functions/cases/updateCase.js";
+import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
+import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
+import { ReportStatus } from "../../../../functions/reports/createReport.js";
+import { getReport } from "../../../../functions/reports/getReport.js";
+import { updateReport } from "../../../../functions/reports/updateReport.js";
 
 export async function reportReference(
 	interaction: InteractionParam,
@@ -20,7 +20,7 @@ export async function reportReference(
 
 	if (!referenceReport) {
 		throw new Error(
-			i18next.t('command.mod.common.errors.no_reference_report', {
+			i18next.t("command.mod.common.errors.no_reference_report", {
 				report: reportId,
 				lng: locale,
 			}),
@@ -50,7 +50,7 @@ export async function reportReference(
 	]);
 
 	await interaction.editReply({
-		content: i18next.t('command.mod.reference.report', {
+		content: i18next.t("command.mod.reference.report", {
 			case: hyperlink(
 				`\`#${originalCase.caseId}\``,
 				messageLink(logChannelId, originalCase.logMessageId!, interaction.guildId),

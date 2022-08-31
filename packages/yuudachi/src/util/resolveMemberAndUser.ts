@@ -1,4 +1,4 @@
-import type { Guild, Snowflake } from 'discord.js';
+import type { Guild, Snowflake } from "discord.js";
 
 export async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
 	try {

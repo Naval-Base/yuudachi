@@ -1,13 +1,13 @@
-import type { User } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import type { CreateReport } from './createReport.js';
-import { type RawReport, transformReport } from './transformReport.js';
-import { kSQL } from '../../tokens.js';
+import type { User } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { kSQL } from "../../tokens.js";
+import type { CreateReport } from "./createReport.js";
+import { type RawReport, transformReport } from "./transformReport.js";
 
 export type PatchReport = Pick<
 	Partial<CreateReport>,
-	'guildId' | 'reportId' | 'reason' | 'message' | 'refId' | 'attachmentUrl' | 'status'
+	"attachmentUrl" | "guildId" | "message" | "reason" | "refId" | "reportId" | "status"
 >;
 
 export async function updateReport(report: PatchReport, moderator?: User) {
@@ -18,7 +18,8 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 			update reports
 			set status = ${report.status}
 			where guild_id = ${report.guildId}
-				and report_id = ${report.reportId!}`;
+				and report_id = ${report.reportId!}
+		`;
 	}
 
 	if (report.attachmentUrl) {
@@ -26,7 +27,8 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 			update reports
 			set attachment_url = ${report.attachmentUrl}
 			where guild_id = ${report.guildId}
-				and report_id = ${report.reportId!}`;
+				and report_id = ${report.reportId!}
+		`;
 	}
 
 	if (report.reason) {
@@ -34,7 +36,8 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 			update reports
 			set reason = ${report.reason}
 			where guild_id = ${report.guildId}
-				and report_id = ${report.reportId!}`;
+				and report_id = ${report.reportId!}
+		`;
 	}
 
 	if (report.message) {
@@ -43,7 +46,8 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 			set message_id = ${report.message.id},
 				channel_id = ${report.message.channel.id}
 			where guild_id = ${report.guildId}
-				and report_id = ${report.reportId!}`;
+				and report_id = ${report.reportId!}
+		`;
 	}
 
 	if (report.refId) {
@@ -51,7 +55,8 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 			update reports
 			set ref_id = ${report.refId}
 			where guild_id = ${report.guildId}
-				and report_id = ${report.reportId!}`;
+				and report_id = ${report.reportId!}
+		`;
 	}
 
 	if (moderator) {
@@ -60,14 +65,16 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 			set mod_id = ${moderator.id},
 				mod_tag = ${moderator.tag}
 			where guild_id = ${report.guildId}
-				and report_id = ${report.reportId!}`;
+				and report_id = ${report.reportId!}
+		`;
 	}
 
 	const [updatedCase] = await sql<[RawReport]>`
 		select *
 		from reports
 		where guild_id = ${report.guildId}
-			and report_id = ${report.reportId!}`;
+			and report_id = ${report.reportId!}
+	`;
 
 	return transformReport(updatedCase);
 }

@@ -1,4 +1,4 @@
-import { Collection, type Guild, type Snowflake } from "discord.js";
+import { Collection, type Snowflake } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
@@ -15,8 +15,7 @@ import { kSQL } from "../../tokens.js";
 import { ACTION_KEYS } from "../../util/actionKeys.js";
 import { ellipsis, truncateEmbed } from "../../util/embed.js";
 import { generateHistory } from "../../util/generateHistory.js";
-
-const OP_DELIMITER = "-" as const;
+import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 
 export default class extends Command<typeof CaseLookupCommand> {
 	public override async autocomplete(

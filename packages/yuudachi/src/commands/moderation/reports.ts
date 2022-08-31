@@ -1,20 +1,20 @@
-import { Collection, type Snowflake } from 'discord.js';
-import i18next from 'i18next';
-import { lookup } from './sub/reports/lookup.js';
-import { status } from './sub/reports/status.js';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
+import { Collection, type Snowflake } from "discord.js";
+import i18next from "i18next";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import {
 	AUTOCOMPLETE_CHOICE_LIMIT,
 	AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
 	OP_DELIMITER,
 	SNOWFLAKE_MIN_LENGTH,
-} from '../../Constants.js';
-import { ReportType } from '../../functions/reports/createReport.js';
-import { findReports } from '../../functions/reports/findReports.js';
-import type { ReportUtilsCommand } from '../../interactions/index.js';
-import { logger } from '../../logger.js';
-import { REPORT_KEYS } from '../../util/actionKeys.js';
-import { ellipsis } from '../../util/embed.js';
+} from "../../Constants.js";
+import { ReportType } from "../../functions/reports/createReport.js";
+import { findReports } from "../../functions/reports/findReports.js";
+import type { ReportUtilsCommand } from "../../interactions/index.js";
+import { logger } from "../../logger.js";
+import { REPORT_KEYS } from "../../util/actionKeys.js";
+import { ellipsis } from "../../util/embed.js";
+import { lookup } from "./sub/reports/lookup.js";
+import { status } from "./sub/reports/status.js";
 
 export default class extends Command<typeof ReportUtilsCommand> {
 	public override async autocomplete(
@@ -25,27 +25,27 @@ export default class extends Command<typeof ReportUtilsCommand> {
 		try {
 			const trimmedPhrase = args.lookup.phrase.trim();
 			const reports = await findReports(trimmedPhrase, interaction.guildId);
-			let choices = reports.map((r) => {
-				const choiceName = `#${r.report_id} ${r.type === ReportType.Message ? '✉️' : '👤'} ${REPORT_KEYS[
-					r.status
-				]!.toUpperCase()} ${r.author_tag} ➜ ${r.target_tag}: ${r.reason}`;
+			let choices = reports.map((report) => {
+				const choiceName = `#${report.report_id} ${report.type === ReportType.Message ? "✉️" : "👤"} ${REPORT_KEYS[
+					report.status
+				]!.toUpperCase()} ${report.author_tag} ➜ ${report.target_tag}: ${report.reason}`;
 
 				return {
 					name: ellipsis(choiceName, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT),
-					value: String(r.report_id),
+					value: String(report.report_id),
 				} as const;
 			});
 
 			const uniqueTargets = new Collection<string, { id: Snowflake; tag: string }>();
 			const uniqueAuthors = new Collection<string, { id: Snowflake; tag: string }>();
 
-			for (const r of reports) {
-				if (!uniqueTargets.has(r.target_id)) {
-					uniqueTargets.set(r.target_id, { id: r.target_id, tag: r.target_tag });
+			for (const report of reports) {
+				if (!uniqueTargets.has(report.target_id)) {
+					uniqueTargets.set(report.target_id, { id: report.target_id, tag: report.target_tag });
 				}
 
-				if (!uniqueAuthors.has(r.author_id)) {
-					uniqueAuthors.set(r.author_id, { id: r.author_id, tag: r.author_tag });
+				if (!uniqueAuthors.has(report.author_id)) {
+					uniqueAuthors.set(report.author_id, { id: report.author_id, tag: report.author_tag });
 				}
 			}
 
@@ -56,7 +56,7 @@ export default class extends Command<typeof ReportUtilsCommand> {
 				choices = [
 					{
 						name: ellipsis(
-							i18next.t('command.mod.reports.autocomplete.show_history_target', {
+							i18next.t("command.mod.reports.autocomplete.show_history_target", {
 								user: target.tag,
 								lng: locale,
 							})!,
@@ -74,7 +74,7 @@ export default class extends Command<typeof ReportUtilsCommand> {
 				choices = [
 					{
 						name: ellipsis(
-							i18next.t('command.mod.reports.autocomplete.show_history_author', {
+							i18next.t("command.mod.reports.autocomplete.show_history_author", {
 								user: author.tag,
 								lng: locale,
 							})!,
@@ -87,14 +87,18 @@ export default class extends Command<typeof ReportUtilsCommand> {
 				historyAdded = true;
 			}
 
-			if (!historyAdded && !isNaN(parseInt(trimmedPhrase, 10)) && trimmedPhrase.length >= SNOWFLAKE_MIN_LENGTH) {
+			if (
+				!historyAdded &&
+				!Number.isNaN(Number.parseInt(trimmedPhrase, 10)) &&
+				trimmedPhrase.length >= SNOWFLAKE_MIN_LENGTH
+			) {
 				const user = interaction.client.users.cache.get(trimmedPhrase);
 
 				if (user) {
 					choices = [
 						{
 							name: ellipsis(
-								i18next.t('command.mod.reports.autocomplete.show_history_target', {
+								i18next.t("command.mod.reports.autocomplete.show_history_target", {
 									user: user.tag,
 									lng: locale,
 								})!,
@@ -108,8 +112,8 @@ export default class extends Command<typeof ReportUtilsCommand> {
 			}
 
 			await interaction.respond(choices.slice(0, AUTOCOMPLETE_CHOICE_LIMIT));
-		} catch (err) {
-			const error = err as Error;
+		} catch (error_) {
+			const error = error_ as Error;
 			logger.error(error, error.message);
 		}
 	}
@@ -123,10 +127,10 @@ export default class extends Command<typeof ReportUtilsCommand> {
 		await interaction.deferReply({ ephemeral: args.lookup?.hide ?? true });
 
 		switch (Object.keys(args)[0]) {
-			case 'lookup':
+			case "lookup":
 				await lookup(interaction, args.lookup, locale);
 				break;
-			case 'status':
+			case "status":
 				await status(interaction, args.status, locale);
 				break;
 			default:

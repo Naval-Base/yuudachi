@@ -1,29 +1,29 @@
-import type { Message } from 'discord.js';
-import i18next from 'i18next';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import type { ArgsParam, InteractionParam, LocaleParam } from '../../../../Command.js';
-import { OP_DELIMITER } from '../../../../Constants.js';
-import { formatMessageToEmbed } from '../../../../functions/logging/formatMessageToEmbed.js';
-import { generateReportEmbed } from '../../../../functions/logging/generateReportEmbed.js';
-import { ReportType } from '../../../../functions/reports/createReport.js';
-import { type RawReport, transformReport } from '../../../../functions/reports/transformReport.js';
-import type { ReportUtilsCommand } from '../../../../interactions/index.js';
-import { kSQL } from '../../../../tokens.js';
-import { truncateEmbed } from '../../../../util/embed.js';
-import { generateHistory, generateUserInfo, HistoryType } from '../../../../util/generateHistory.js';
-import { resolveMemberAndUser } from '../../../../util/resolveMemberAndUser.js';
-import { resolveMessage } from '../../../../util/resolveMessage.js';
+import type { Message } from "discord.js";
+import i18next from "i18next";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import type { ArgsParam, InteractionParam, LocaleParam } from "../../../../Command.js";
+import { OP_DELIMITER } from "../../../../Constants.js";
+import { formatMessageToEmbed } from "../../../../functions/logging/formatMessageToEmbed.js";
+import { generateReportEmbed } from "../../../../functions/logging/generateReportEmbed.js";
+import { ReportType } from "../../../../functions/reports/createReport.js";
+import { type RawReport, transformReport } from "../../../../functions/reports/transformReport.js";
+import type { ReportUtilsCommand } from "../../../../interactions/index.js";
+import { kSQL } from "../../../../tokens.js";
+import { truncateEmbed } from "../../../../util/embed.js";
+import { generateHistory, generateUserInfo, HistoryType } from "../../../../util/generateHistory.js";
+import { resolveMemberAndUser } from "../../../../util/resolveMemberAndUser.js";
+import { resolveMessage } from "../../../../util/resolveMessage.js";
 
 export async function lookup(
 	interaction: InteractionParam,
-	args: ArgsParam<typeof ReportUtilsCommand>['lookup'],
+	args: ArgsParam<typeof ReportUtilsCommand>["lookup"],
 	locale: LocaleParam,
 ): Promise<void> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const [cmd, id] = args.phrase.split(OP_DELIMITER);
 
-	if (cmd === 'history' && id) {
+	if (cmd === "history" && id) {
 		const data = await resolveMemberAndUser(interaction.guild, id);
 
 		const embed = truncateEmbed(await generateHistory(interaction, data, locale, HistoryType.Report));
@@ -34,15 +34,16 @@ export async function lookup(
 		return;
 	}
 
-	if (!isNaN(parseInt(args.phrase, 10))) {
+	if (!Number.isNaN(Number.parseInt(args.phrase, 10))) {
 		const [report] = await sql<RawReport[]>`
 			select *
 			from reports
 			where guild_id = ${interaction.guildId}
-			and report_id = ${args.phrase}`;
+			and report_id = ${args.phrase}
+		`;
 
 		if (!report) {
-			throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
+			throw new Error(i18next.t("command.common.errors.use_autocomplete", { lng: locale }));
 		}
 
 		let message: Message<true> | null = null;
@@ -58,7 +59,7 @@ export async function lookup(
 		const embeds = [truncateEmbed(await generateReportEmbed(author, transformReport(report), locale, message))];
 
 		if (message) {
-			embeds.push(truncateEmbed(await formatMessageToEmbed(message, locale)));
+			embeds.push(truncateEmbed(formatMessageToEmbed(message, locale)));
 		}
 
 		if (report.type === ReportType.User) {
@@ -72,5 +73,5 @@ export async function lookup(
 		return;
 	}
 
-	throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
+	throw new Error(i18next.t("command.common.errors.use_autocomplete", { lng: locale }));
 }

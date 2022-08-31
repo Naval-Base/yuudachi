@@ -12,18 +12,18 @@ import {
 	time,
 	TimestampStyles,
 	messageLink,
-} from 'discord.js';
-import i18next from 'i18next';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { ACTION_KEYS, REPORT_KEYS } from './actionKeys.js';
-import { addFields } from './embed.js';
-import { Color, ThreatLevelColor } from '../Constants.js';
-import type { RawCase } from '../functions/cases/transformCase.js';
-import { ReportStatus, ReportType } from '../functions/reports/createReport.js';
-import type { RawReport } from '../functions/reports/transformReport.js';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
-import { kSQL } from '../tokens.js';
+} from "discord.js";
+import i18next from "i18next";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { Color, ThreatLevelColor } from "../Constants.js";
+import type { RawCase } from "../functions/cases/transformCase.js";
+import { ReportStatus, ReportType } from "../functions/reports/createReport.js";
+import type { RawReport } from "../functions/reports/transformReport.js";
+import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
+import { kSQL } from "../tokens.js";
+import { ACTION_KEYS, REPORT_KEYS } from "./actionKeys.js";
+import { addFields } from "./embed.js";
 
 dayjs.extend(relativeTime);
 
@@ -34,8 +34,7 @@ type CaseFooter = {
 	mute?: number | undefined;
 	restriction?: number | undefined;
 	timeout?: number | undefined;
-	[key: string]: number | undefined;
-}
+};
 
 const colors = [
 	ThreatLevelColor.Level0,
@@ -65,7 +64,7 @@ export async function generateCaseHistory(
 					name: `${target.user.tag} (${target.user.id})`,
 					icon_url: target.user.displayAvatarURL(),
 			  },
-		title: i18next.t('log.history.title', { lng: locale }),
+		title: i18next.t("log.history.title", { lng: locale }),
 	});
 
 	const cases = await sql<[RawCase]>`
@@ -183,7 +182,7 @@ export async function generateReportHistory(
 	`;
 
 	const colorIndex = Math.min(
-		reports.filter((r) => r.status === ReportStatus.Approved || r.status === ReportStatus.Spam).length,
+		reports.filter((report) => report.status === ReportStatus.Approved || report.status === ReportStatus.Spam).length,
 		colors.length - 1,
 	);
 
@@ -198,18 +197,18 @@ export async function generateReportHistory(
 	for (const report of reports) {
 		const dateFormatted = time(dayjs(report.created_at).unix(), TimestampStyles.ShortDate);
 
-		const typeString = report.author_id === target.user.id ? 'author' : 'target';
+		const typeString = report.author_id === target.user.id ? "author" : "target";
 		const reportString = `${dateFormatted} ${inlineCode(REPORT_KEYS[report.status]!.toUpperCase())} ${
 			report.log_message_id
 				? hyperlink(`#${report.report_id}`, messageLink(reportChannelId, report.log_message_id), report.guild_id)
 				: `#${report.report_id}`
 		} ${i18next.t(`log.history.report_details`, {
 			author: typeString,
-			type: report.type === ReportType.Message ? '✉️' : '👤',
+			type: report.type === ReportType.Message ? "✉️" : "👤",
 			lng: locale,
-		})}: ${report.reason.replace(/\*/g, '')}`;
+		})}: ${report.reason.replaceAll("*", "")}`;
 
-		if (summary.join('\n').length + reportString.length + 1 < 4060) {
+		if (summary.join("\n").length + reportString.length + 1 < 4_060) {
 			summary.push(reportString);
 			continue;
 		}
@@ -220,23 +219,24 @@ export async function generateReportHistory(
 
 	if (truncated) {
 		embed = {
-			description: i18next.t('log.history.summary_truncated', { summary: summary.join('\n'), lng: locale }),
+			description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
 			...embed,
 		};
 	} else {
-		embed = { description: summary.join('\n'), ...embed };
+		embed = { description: summary.join("\n"), ...embed };
 	}
 
 	if (!embed.description?.length) {
 		embed = {
-			description: i18next.t('log.history.none', { lng: locale }),
+			description: i18next.t("log.history.none", { lng: locale }),
 			...embed,
 		};
+	}
 
-	return truncateEmbed(embed);
+	return embed;
 }
 
-export function generateUserInfo(target: { user: User; member?: GuildMember | undefined }, locale: string) {
+export function generateUserInfo(target: { member?: GuildMember | undefined; user: User }, locale: string) {
 	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
 	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
 
@@ -277,65 +277,6 @@ export function generateUserInfo(target: { user: User; member?: GuildMember | un
 		});
 	}
 
-	embed = {
-		footer: {
-			text: [
-				i18next.t('log.history.report_footer.target', {
-					lng: locale,
-					count: reports.filter((r) => r.target_id === target.user.id && r.status === ReportStatus.Approved).length,
-				}),
-				i18next.t('log.history.report_footer.spam', {
-					lng: locale,
-					count: reports.filter((r) => r.author_id === target.user.id && r.status === ReportStatus.Spam).length,
-				}),
-			].join(' | '),
-		},
-		...embed,
-	};
-
-	return embed;
-}
-
-export function generateUserInfo(target: { user: User; member?: GuildMember | undefined }, locale: string) {
-	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
-	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
-
-	let embed = addFields(
-		{
-			author: {
-				name: `${target.user.tag} (${target.user.id})`,
-				icon_url: target.user.displayAvatarURL(),
-			},
-		},
-		{
-			name: i18next.t('log.history.user_details', { lng: locale }),
-			value: i18next.t('log.history.user_details_description', {
-				user_mention: target.user.toString(),
-				user_tag: target.user.tag,
-				user_id: target.user.id,
-				created_at: creationFormatted,
-				created_at_since: sinceCreationFormatted,
-				lng: locale,
-			}),
-		},
-	);
-
-	if (target.member?.joinedTimestamp) {
-		const sinceJoinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
-		const joinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
-
-		embed = addFields(embed, {
-			name: i18next.t('log.history.member_details', { lng: locale }),
-			value: i18next.t('log.history.member_details_description', {
-				member_nickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
-				member_roles: target.member.roles.cache.map((role) => role.name).join(', '),
-				joined_at: joinFormatted,
-				joined_at_since: sinceJoinFormatted,
-				lng: locale,
-			}),
-		});
-	}
-
 	return embed;
 }
 
@@ -345,8 +286,8 @@ export enum HistoryType {
 }
 
 export async function generateHistory(
-	interaction: CommandInteraction<"cached"> | ButtonInteraction<"cached"> | SelectMenuInteraction<"cached">,
-	target: { user: User; member?: GuildMember | undefined },
+	interaction: ButtonInteraction<"cached"> | CommandInteraction<"cached"> | SelectMenuInteraction<"cached">,
+	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
 	type = HistoryType.Case,
 ) {

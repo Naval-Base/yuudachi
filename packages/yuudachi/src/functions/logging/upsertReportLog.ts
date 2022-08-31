@@ -1,30 +1,37 @@
-import type { APIEmbed, Embed, Guild, Message } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { formatMessageToEmbed } from './formatMessageToEmbed.js';
-import { generateReportEmbed } from './generateReportEmbed.js';
-import { kSQL } from '../../tokens.js';
-import { resolveMessage } from '../../util/resolveMessage.js';
-import type { Report } from '../reports/createReport.js';
-import { checkLogChannel } from '../settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
+import type { APIEmbed, Embed, Guild, Message } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { kSQL } from "../../tokens.js";
+import { resolveMessage } from "../../util/resolveMessage.js";
+import type { Report } from "../reports/createReport.js";
+import { checkLogChannel } from "../settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
+import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
+import { generateReportEmbed } from "./generateReportEmbed.js";
 
 export async function upsertReportLog(guild: Guild, report: Report, message?: Message) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.resolve<Sql<{}>>(kSQL);
 	const reportLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
+	let localMessage = message;
 
 	try {
-		if (!message && report.messageId) {
-			message = await resolveMessage(reportLogChannel!.id, report.guildId, report.channelId!, report.messageId, locale);
+		if (!localMessage && report.messageId) {
+			localMessage = await resolveMessage(
+				reportLogChannel!.id,
+				report.guildId,
+				report.channelId!,
+				report.messageId,
+				locale,
+			);
 		}
 	} catch {}
 
 	const author = await guild.client.users.fetch(report.authorId);
 
-	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, message)];
-	if (message) {
-		embeds.push(formatMessageToEmbed(message as Message<true>, locale));
+	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, localMessage)];
+	if (localMessage) {
+		embeds.push(formatMessageToEmbed(localMessage as Message<true>, locale));
 	}
 
 	if (report.logMessageId) {
@@ -43,10 +50,12 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 		embeds,
 	});
 
-	await sql`update reports
-			set log_message_id = ${logMessage.id}
-			where guild_id = ${report.guildId}
-				and report_id = ${report.reportId}`;
+	await sql`
+		update reports
+					set log_message_id = ${logMessage.id}
+					where guild_id = ${report.guildId}
+						and report_id = ${report.reportId}
+	`;
 
 	return logMessage;
 }
