@@ -34,6 +34,7 @@ type CaseFooter = {
 	mute?: number | undefined;
 	restriction?: number | undefined;
 	timeout?: number | undefined;
+	warn?: number | undefined;
 };
 
 const colors = [

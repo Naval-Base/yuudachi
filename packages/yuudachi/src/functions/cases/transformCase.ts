@@ -6,7 +6,6 @@ export type RawCase = {
 	action_expiration: string | null;
 	action_processed: boolean;
 	case_id: number;
-	case_ref_id: number | null;
 	context_message_id: Snowflake | null;
 	created_at: string;
 	guild_id: Snowflake;
