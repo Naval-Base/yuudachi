@@ -1,5 +1,5 @@
-import type { PermissionOverwrites, Snowflake } from 'discord.js';
-import type { Lockdown } from './createLockdown.js';
+import type { PermissionOverwrites, Snowflake } from "discord.js";
+import type { Lockdown } from "./createLockdown.js";
 
 export type RawLockdown = {
 	channel_id: Snowflake;

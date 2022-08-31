@@ -1,4 +1,4 @@
-import { type Case, CaseAction } from '../cases/createCase.js';
+import { type Case, CaseAction } from "../cases/createCase.js";
 
 export function generateCaseColor(case_: Case) {
 	switch (case_.action) {

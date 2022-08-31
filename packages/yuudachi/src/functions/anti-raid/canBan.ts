@@ -1,5 +1,5 @@
-import { type GuildMember, PermissionFlagsBits, type Snowflake } from 'discord.js';
-import i18next from 'i18next';
+import { type GuildMember, PermissionFlagsBits, type Snowflake } from "discord.js";
+import i18next from "i18next";
 
 export function canBan(target: GuildMember, executorId: Snowflake, ignoreRoles: string[], locale: string) {
 	if (target.id === executorId) {

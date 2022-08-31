@@ -1,22 +1,22 @@
-import { Collection, type Guild, type Snowflake } from 'discord.js';
-import i18next from 'i18next';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
-import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from '../../Constants.js';
-import { type RawCase, transformCase } from '../../functions/cases/transformCase.js';
-import { generateCaseEmbed } from '../../functions/logging/generateCaseEmbed.js';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { CaseLookupCommand } from '../../interactions/index.js';
-import { logger } from '../../logger.js';
-import { kSQL } from '../../tokens.js';
-import { ACTION_KEYS } from '../../util/actionKeys.js';
-import { ellipsis, truncateEmbed } from '../../util/embed.js';
-import { findCases } from '../../util/findCases.js';
-import { generateHistory } from '../../util/generateHistory.js';
+import { Collection, type Guild, type Snowflake } from "discord.js";
+import i18next from "i18next";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
+import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from "../../Constants.js";
+import { type RawCase, transformCase } from "../../functions/cases/transformCase.js";
+import { generateCaseEmbed } from "../../functions/logging/generateCaseEmbed.js";
+import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import type { CaseLookupCommand } from "../../interactions/index.js";
+import { logger } from "../../logger.js";
+import { kSQL } from "../../tokens.js";
+import { ACTION_KEYS } from "../../util/actionKeys.js";
+import { ellipsis, truncateEmbed } from "../../util/embed.js";
+import { findCases } from "../../util/findCases.js";
+import { generateHistory } from "../../util/generateHistory.js";
 
-const OP_DELIMITER = '-' as const;
+const OP_DELIMITER = "-" as const;
 
 async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
 	try {
@@ -42,7 +42,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 			let choices = cases.map((case_) => {
 				const choiceName = `#${case_.case_id} ${ACTION_KEYS[case_.action]!.toUpperCase()} ${case_.target_tag}: ${
 					case_.reason ??
-					i18next.t('command.mod.case.autocomplete.no_reason', {
+					i18next.t("command.mod.case.autocomplete.no_reason", {
 						lng: locale,
 					})!
 				}`;
@@ -68,7 +68,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 				choices = [
 					{
 						name: ellipsis(
-							i18next.t('command.mod.case.autocomplete.show_history', {
+							i18next.t("command.mod.case.autocomplete.show_history", {
 								user: target.tag,
 								lng: locale,
 							})!,
@@ -101,7 +101,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 
 		const [cmd, id] = args.phrase.split(OP_DELIMITER);
 
-		if (cmd === 'history' && id) {
+		if (cmd === "history" && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
 			await interaction.editReply({
 				embeds: [truncateEmbed(await generateHistory(interaction, data, locale))],
@@ -118,7 +118,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 			`;
 
 			if (!modCase) {
-				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
+				throw new Error(i18next.t("command.common.errors.use_autocomplete", { lng: locale }));
 			}
 
 			const modLogChannel = checkLogChannel(
@@ -137,6 +137,6 @@ export default class extends Command<typeof CaseLookupCommand> {
 			return;
 		}
 
-		throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));
+		throw new Error(i18next.t("command.common.errors.use_autocomplete", { lng: locale }));
 	}
 }

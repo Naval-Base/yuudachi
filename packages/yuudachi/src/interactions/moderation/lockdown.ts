@@ -1,55 +1,55 @@
-import { ApplicationCommandOptionType, ChannelType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType, ChannelType } from "discord-api-types/v10";
 
 export const LockdownCommand = {
-	name: 'lockdown',
-	description: 'Execute or lift a lockdown on a text channel',
+	name: "lockdown",
+	description: "Execute or lift a lockdown on a text channel",
 	options: [
 		{
-			name: 'lock',
-			description: 'Execute a lockdown on a text channel',
+			name: "lock",
+			description: "Execute a lockdown on a text channel",
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
-					name: 'duration',
-					description: 'The duration',
+					name: "duration",
+					description: "The duration",
 					type: ApplicationCommandOptionType.String,
 					choices: [
-						{ name: '1 hour', value: '1h' },
-						{ name: '3 hours', value: '3h' },
-						{ name: '6 hours', value: '6h' },
-						{ name: '12 hours', value: '12h' },
-						{ name: '1 day', value: '1d' },
-						{ name: '2 days', value: '2d' },
-						{ name: '3 days', value: '3d' },
+						{ name: "1 hour", value: "1h" },
+						{ name: "3 hours", value: "3h" },
+						{ name: "6 hours", value: "6h" },
+						{ name: "12 hours", value: "12h" },
+						{ name: "1 day", value: "1d" },
+						{ name: "2 days", value: "2d" },
+						{ name: "3 days", value: "3d" },
 					],
 					required: true,
 				},
 				{
-					name: 'channel',
-					description: 'The channel to lock',
+					name: "channel",
+					description: "The channel to lock",
 					type: ApplicationCommandOptionType.Channel,
 					channel_types: [ChannelType.GuildText],
 				},
 				{
-					name: 'reason',
-					description: 'The reason of this lockdown',
+					name: "reason",
+					description: "The reason of this lockdown",
 					type: ApplicationCommandOptionType.String,
 				},
 			],
 		},
 		{
-			name: 'lift',
-			description: 'Lift a lockdown on a text channel',
+			name: "lift",
+			description: "Lift a lockdown on a text channel",
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
-					name: 'channel',
-					description: 'The channel to lift the lock',
+					name: "channel",
+					description: "The channel to lift the lock",
 					type: ApplicationCommandOptionType.Channel,
 					channel_types: [ChannelType.GuildText],
 				},
 			],
 		},
 	],
-	default_member_permissions: '0',
+	default_member_permissions: "0",
 } as const;

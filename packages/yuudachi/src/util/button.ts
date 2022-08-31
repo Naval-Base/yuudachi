@@ -3,7 +3,7 @@ import {
 	ButtonStyle,
 	ComponentType,
 	type APIButtonComponentBase,
-} from 'discord-api-types/v10';
+} from "discord-api-types/v10";
 
 export function createButton({
 	label,

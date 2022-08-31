@@ -1,13 +1,13 @@
-import { on } from 'node:events';
-import { Client, Events, type Message } from 'discord.js';
-import { injectable } from 'tsyringe';
-import type { Event } from '../../Event.js';
-import { handleAntiSpam } from '../../functions/anti-spam/handler.js';
-import { logger } from '../../logger.js';
+import { on } from "node:events";
+import { Client, Events, type Message } from "discord.js";
+import { injectable } from "tsyringe";
+import type { Event } from "../../Event.js";
+import { handleAntiSpam } from "../../functions/anti-spam/handler.js";
+import { logger } from "../../logger.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Spam check';
+	public name = "Spam check";
 
 	public event = Events.MessageCreate as const;
 

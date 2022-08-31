@@ -1,6 +1,6 @@
-import { oneLine } from 'common-tags';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime.js';
+import { oneLine } from "common-tags";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
 import {
 	type CommandInteraction,
 	type ButtonInteraction,
@@ -12,16 +12,16 @@ import {
 	time,
 	TimestampStyles,
 	messageLink,
-} from 'discord.js';
-import i18next from 'i18next';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { ThreatLevelColor } from '../Constants.js';
-import type { RawCase } from '../functions/cases/transformCase.js';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
-import { kSQL } from '../tokens.js';
-import { ACTION_KEYS } from './actionKeys.js';
-import { addFields, truncateEmbed } from './embed.js';
+} from "discord.js";
+import i18next from "i18next";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { ThreatLevelColor } from "../Constants.js";
+import type { RawCase } from "../functions/cases/transformCase.js";
+import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
+import { kSQL } from "../tokens.js";
+import { ACTION_KEYS } from "./actionKeys.js";
+import { addFields, truncateEmbed } from "./embed.js";
 
 dayjs.extend(relativeTime);
 
@@ -36,7 +36,7 @@ type CaseFooter = {
 };
 
 export async function generateHistory(
-	interaction: ButtonInteraction<'cached'> | CommandInteraction<'cached'> | SelectMenuInteraction<'cached'>,
+	interaction: ButtonInteraction<"cached"> | CommandInteraction<"cached"> | SelectMenuInteraction<"cached">,
 	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
 ) {
@@ -53,11 +53,11 @@ export async function generateHistory(
 				name: `${target.user.tag} (${target.user.id})`,
 				icon_url: target.user.displayAvatarURL(),
 			},
-			title: i18next.t('log.history.title', { lng: locale }),
+			title: i18next.t("log.history.title", { lng: locale }),
 		},
 		{
-			name: i18next.t('log.history.user_details', { lng: locale }),
-			value: i18next.t('log.history.user_details_description', {
+			name: i18next.t("log.history.user_details", { lng: locale }),
+			value: i18next.t("log.history.user_details_description", {
 				user_mention: target.user.toString(),
 				user_tag: target.user.tag,
 				user_id: target.user.id,
@@ -73,10 +73,10 @@ export async function generateHistory(
 		const joinFormatted = time(dayjs(target.member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
 
 		embed = addFields(embed, {
-			name: i18next.t('log.history.member_details', { lng: locale }),
-			value: i18next.t('log.history.member_details_description', {
-				member_nickname: target.member.nickname ?? i18next.t('log.history.member_details_no_nickname', { lng: locale }),
-				member_roles: target.member.roles.cache.map((role) => role.name).join(', '),
+			name: i18next.t("log.history.member_details", { lng: locale }),
+			value: i18next.t("log.history.member_details_description", {
+				member_nickname: target.member.nickname ?? i18next.t("log.history.member_details_no_nickname", { lng: locale }),
+				member_roles: target.member.roles.cache.map((role) => role.name).join(", "),
 				joined_at: joinFormatted,
 				joined_at_since: sinceJoinFormatted,
 				lng: locale,
@@ -127,13 +127,13 @@ export async function generateHistory(
 	embed = {
 		color: colors[colorIndex],
 		footer: {
-			text: oneLine`${warn} warning${warn > 1 || warn === 0 ? 's' : ''},
-					${restriction} restriction${restriction > 1 || restriction === 0 ? 's' : ''},
-					${timeout} timeout${timeout > 1 || timeout === 0 ? 's' : ''},
-					${kick} kick${kick > 1 || kick === 0 ? 's' : ''},
-					${softban} softban${softban > 1 || softban === 0 ? 's' : ''},
-					${ban} ban${ban > 1 || ban === 0 ? 's' : ''},
-					${unban} unban${unban > 1 || unban === 0 ? 's' : ''}`,
+			text: oneLine`${warn} warning${warn > 1 || warn === 0 ? "s" : ""},
+					${restriction} restriction${restriction > 1 || restriction === 0 ? "s" : ""},
+					${timeout} timeout${timeout > 1 || timeout === 0 ? "s" : ""},
+					${kick} kick${kick > 1 || kick === 0 ? "s" : ""},
+					${softban} softban${softban > 1 || softban === 0 ? "s" : ""},
+					${ban} ban${ban > 1 || ban === 0 ? "s" : ""},
+					${unban} unban${unban > 1 || unban === 0 ? "s" : ""}`,
 		},
 		...embed,
 	};
@@ -147,9 +147,9 @@ export async function generateHistory(
 			case_.log_message_id
 				? hyperlink(`#${case_.case_id}`, messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id))
 				: `#${case_.case_id}`
-		} ${case_.reason?.replace(/\*/g, '') ?? ''}`;
+		} ${case_.reason?.replace(/\*/g, "") ?? ""}`;
 
-		if (summary.join('\n').length + caseString.length + 1 < 4_060) {
+		if (summary.join("\n").length + caseString.length + 1 < 4_060) {
 			summary.push(caseString);
 			continue;
 		}
@@ -160,11 +160,11 @@ export async function generateHistory(
 
 	if (truncated) {
 		embed = {
-			description: i18next.t('log.history.summary_truncated', { summary: summary.join('\n'), lng: locale }),
+			description: i18next.t("log.history.summary_truncated", { summary: summary.join("\n"), lng: locale }),
 			...embed,
 		};
 	} else {
-		embed = { description: summary.join('\n'), ...embed };
+		embed = { description: summary.join("\n"), ...embed };
 	}
 
 	return truncateEmbed(embed);

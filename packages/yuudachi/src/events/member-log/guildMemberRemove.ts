@@ -1,15 +1,15 @@
-import { on } from 'node:events';
-import { Client, Events, type GuildMember, type Webhook } from 'discord.js';
-import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kWebhooks } from '../../tokens.js';
-import { generateMemberLog } from '../../util/generateMemberLog.js';
+import { on } from "node:events";
+import { Client, Events, type GuildMember, type Webhook } from "discord.js";
+import { inject, injectable } from "tsyringe";
+import type { Event } from "../../Event.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kWebhooks } from "../../tokens.js";
+import { generateMemberLog } from "../../util/generateMemberLog.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Member log remove';
+	public name = "Member log remove";
 
 	public event = Events.GuildMemberRemove as const;
 

@@ -1,4 +1,4 @@
-import type { Snowflake } from 'discord.js';
+import type { Snowflake } from "discord.js";
 
 // https://github.com/discordjs/discord-api-types/pull/497
 

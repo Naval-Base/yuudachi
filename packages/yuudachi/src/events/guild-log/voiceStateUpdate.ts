@@ -1,17 +1,17 @@
-import { on } from 'node:events';
-import { Client, Events, type VoiceState, type Webhook } from 'discord.js';
-import i18next from 'i18next';
-import { inject, injectable } from 'tsyringe';
-import { Color } from '../../Constants.js';
-import type { Event } from '../../Event.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kWebhooks } from '../../tokens.js';
-import { addFields, truncateEmbed } from '../../util/embed.js';
+import { on } from "node:events";
+import { Client, Events, type VoiceState, type Webhook } from "discord.js";
+import i18next from "i18next";
+import { inject, injectable } from "tsyringe";
+import { Color } from "../../Constants.js";
+import type { Event } from "../../Event.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kWebhooks } from "../../tokens.js";
+import { addFields, truncateEmbed } from "../../util/embed.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Guild log voice state update';
+	public name = "Guild log voice state update";
 
 	public event = Events.VoiceStateUpdate as const;
 
@@ -49,9 +49,9 @@ export default class implements Event {
 
 				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
 
-				let description = '';
+				let description = "";
 
-				if ((!oldState?.channel || ignoreChannels.includes(oldState.channelId ?? '')) && newState.channel) {
+				if ((!oldState?.channel || ignoreChannels.includes(oldState.channelId ?? "")) && newState.channel) {
 					if (ignoreChannels.includes(newState.channelId)) {
 						continue;
 					}
@@ -67,7 +67,7 @@ export default class implements Event {
 						`Member ${newState.member.id} joined a voice channel`,
 					);
 
-					description = i18next.t('log.guild_log.voice_state_update.joined', {
+					description = i18next.t("log.guild_log.voice_state_update.joined", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
@@ -84,13 +84,13 @@ export default class implements Event {
 						`Member ${newState.member.id} left a voice channel`,
 					);
 
-					description = i18next.t('log.guild_log.voice_state_update.left', {
+					description = i18next.t("log.guild_log.voice_state_update.left", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						lng: locale,
 					});
 				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
-					description = i18next.t('log.guild_log.voice_state_update.moved', {
+					description = i18next.t("log.guild_log.voice_state_update.moved", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						from_channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
@@ -107,7 +107,7 @@ export default class implements Event {
 						icon_url: newState.member.user.displayAvatarURL(),
 					},
 					color: Color.DiscordPrimary,
-					title: i18next.t('log.guild_log.voice_state_update.title', { lng: locale }),
+					title: i18next.t("log.guild_log.voice_state_update.title", { lng: locale }),
 					description,
 					timestamp: new Date().toISOString(),
 				});

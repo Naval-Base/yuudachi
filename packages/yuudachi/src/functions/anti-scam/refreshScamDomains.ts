@@ -1,14 +1,14 @@
-import process from 'node:process';
-import type { Redis } from 'ioredis';
-import { container } from 'tsyringe';
-import { request as fetch, type Dispatcher } from 'undici';
-import { logger } from '../../logger.js';
-import { kRedis } from '../../tokens.js';
+import process from "node:process";
+import type { Redis } from "ioredis";
+import { container } from "tsyringe";
+import { request as fetch, type Dispatcher } from "undici";
+import { logger } from "../../logger.js";
+import { kRedis } from "../../tokens.js";
 
-export const scamURLEnvs = ['SCAM_DOMAIN_URL', 'SCAM_DOMAIN_DISCORD_URL'] as const;
+export const scamURLEnvs = ["SCAM_DOMAIN_URL", "SCAM_DOMAIN_DISCORD_URL"] as const;
 export enum ScamRedisKeys {
-	SCAM_DOMAIN_DISCORD_URL = 'scamdomains_discord',
-	SCAM_DOMAIN_URL = 'scamdomains',
+	SCAM_DOMAIN_DISCORD_URL = "scamdomains_discord",
+	SCAM_DOMAIN_URL = "scamdomains",
 }
 
 export type ScamDomainRefreshData = {
@@ -24,14 +24,14 @@ export function checkResponse(response: Dispatcher.ResponseData) {
 		return response;
 	}
 
-	logger.warn({ response }, 'Fetching scam domains returned a non 2xx response code.');
+	logger.warn({ response }, "Fetching scam domains returned a non 2xx response code.");
 
 	return null;
 }
 
 export const scamDomainRequestHeaders = {
 	SCAM_DOMAIN_URL: {
-		'X-Identity': 'Naval-Base/yuudachi',
+		"X-Identity": "Naval-Base/yuudachi",
 	},
 	SCAM_DOMAIN_DISCORD_URL: {},
 } as const;
@@ -64,8 +64,8 @@ export async function refreshScamDomains(redis?: Redis | undefined) {
 		const list = (await checkedResponse.body.json()) as string[];
 
 		switch (urlEnvironment) {
-			case 'SCAM_DOMAIN_DISCORD_URL':
-			case 'SCAM_DOMAIN_URL': {
+			case "SCAM_DOMAIN_DISCORD_URL":
+			case "SCAM_DOMAIN_URL": {
 				const key = ScamRedisKeys[urlEnvironment];
 				// @ts-expect-error: Redis types are awful
 				const [[, lastRefresh], [, before], , , [, after]] = await localRedis
@@ -81,7 +81,7 @@ export async function refreshScamDomains(redis?: Redis | undefined) {
 				const lastRefreshTimestamp = Number.parseInt(lastRefresh, 10);
 
 				logger.info({
-					msg: 'refreshd scam domains',
+					msg: "refreshd scam domains",
 					envVar: urlEnvironment,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,

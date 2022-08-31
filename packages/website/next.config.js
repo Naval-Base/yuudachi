@@ -23,16 +23,16 @@ export default {
 	async rewrites() {
 		return [
 			{
-				source: '/:path*',
+				source: "/:path*",
 				destination: `/:path*`,
 			},
 			{
-				source: '/report',
+				source: "/report",
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				destination: `${REPORT_URL}/report`,
 			},
 			{
-				source: '/report/:path*',
+				source: "/report/:path*",
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				destination: `${REPORT_URL}/report/:path*`,
 			},

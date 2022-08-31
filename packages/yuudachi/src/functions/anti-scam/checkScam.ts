@@ -1,11 +1,11 @@
-import { createHash } from 'node:crypto';
-import { URL } from 'node:url';
-import type { Redis } from 'ioredis';
-import { container } from 'tsyringe';
-import { logger } from '../../logger.js';
-import { kRedis } from '../../tokens.js';
-import { resolveRedirect } from '../../util/resolveRedirect.js';
-import { ScamRedisKeys, scamURLEnvs } from './refreshScamDomains.js';
+import { createHash } from "node:crypto";
+import { URL } from "node:url";
+import type { Redis } from "ioredis";
+import { container } from "tsyringe";
+import { logger } from "../../logger.js";
+import { kRedis } from "../../tokens.js";
+import { resolveRedirect } from "../../util/resolveRedirect.js";
+import { ScamRedisKeys, scamURLEnvs } from "./refreshScamDomains.js";
 
 type ScamDomainHit = {
 	full: string;
@@ -16,7 +16,7 @@ type ScamDomainHit = {
 const scamDomainChecks = {
 	SCAM_DOMAIN_URL: (url: URL, host: string) => `.${url.host}`.endsWith(`.${host}`),
 	SCAM_DOMAIN_DISCORD_URL: (url: URL, hash: string) => {
-		const inHash = createHash('sha256').update(url.host).digest('hex');
+		const inHash = createHash("sha256").update(url.host).digest("hex");
 
 		return hash === inHash;
 	},
@@ -75,7 +75,7 @@ export async function checkScam(content: string) {
 			trippedDomains.push(hit);
 		}
 
-		if (!(await redis.sismember('linkshorteners', url.host))) {
+		if (!(await redis.sismember("linkshorteners", url.host))) {
 			continue;
 		}
 
@@ -102,7 +102,7 @@ export async function checkScam(content: string) {
 
 	if (trippedDomains.length) {
 		logger.info({
-			msg: 'Found scam domains',
+			msg: "Found scam domains",
 			content,
 			trippedDomains,
 		});

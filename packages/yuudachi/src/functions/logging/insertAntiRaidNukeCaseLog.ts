@@ -1,13 +1,13 @@
-import type { Guild, User } from 'discord.js';
-import i18next from 'i18next';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { kSQL } from '../../tokens.js';
-import { addFields } from '../../util/embed.js';
-import type { Case } from '../cases/createCase.js';
-import { checkLogChannel } from '../settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
-import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog.js';
+import type { Guild, User } from "discord.js";
+import i18next from "i18next";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { kSQL } from "../../tokens.js";
+import { addFields } from "../../util/embed.js";
+import type { Case } from "../cases/createCase.js";
+import { checkLogChannel } from "../settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
+import { generateAntiRaidNukeCaseLog } from "./generateAntiRaidNukeCaseLog.js";
 
 export async function insertAntiRaidNukeCaseLog(
 	guild: Guild,
@@ -33,8 +33,8 @@ export async function insertAntiRaidNukeCaseLog(
 		footer: {
 			text:
 				cases.length === 1
-					? i18next.t('log.mod_log.case_log.footer', { case_id: from, lng: locale })
-					: i18next.t('log.mod_log.anti_raid_nuke.footer', { from, to, lng: locale }),
+					? i18next.t("log.mod_log.case_log.footer", { case_id: from, lng: locale })
+					: i18next.t("log.mod_log.anti_raid_nuke.footer", { from, to, lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
 	});

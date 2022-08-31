@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
-import { codeBlock, time, TimestampStyles } from 'discord.js';
-import i18next from 'i18next';
-import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
+import dayjs from "dayjs";
+import { codeBlock, time, TimestampStyles } from "discord.js";
+import i18next from "i18next";
+import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
 import {
 	ageFilter,
 	joinFilter,
@@ -9,14 +9,14 @@ import {
 	confusablesFilter,
 	patternFilter,
 	zalgoFilter,
-} from '../../../../functions/anti-raid/filters.js';
-import { parseAvatar } from '../../../../functions/anti-raid/parseAvatar.js';
-import { resolveDateLocale } from '../../../../functions/anti-raid/resolveDateLocale.js';
-import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
-import { parseRegex } from '../../../../util/parseRegex.js';
-import { resolveTimestamp } from '../../../../util/timestamp.js';
-import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
-import { acquireLockIfPublic } from './utils.js';
+} from "../../../../functions/anti-raid/filters.js";
+import { parseAvatar } from "../../../../functions/anti-raid/parseAvatar.js";
+import { resolveDateLocale } from "../../../../functions/anti-raid/resolveDateLocale.js";
+import type { AntiRaidNukeCommand } from "../../../../interactions/index.js";
+import { parseRegex } from "../../../../util/parseRegex.js";
+import { resolveTimestamp } from "../../../../util/timestamp.js";
+import { AntiRaidNukeMode, handleAntiRaidNuke } from "./coreCommand.js";
+import { acquireLockIfPublic } from "./utils.js";
 
 export enum Confusables {
 	Off,
@@ -44,7 +44,7 @@ function parseDates({ createdAfter, createdBefore, joinAfter, joinBefore }: Pars
 		(joinAfter && !parsedJoinAfter) ||
 		(joinBefore && !parsedJoinBefore)
 	) {
-		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
+		throw new Error(i18next.t("command.common.errors.duration_format", { lng: locale }));
 	}
 
 	return {
@@ -57,7 +57,7 @@ function parseDates({ createdAfter, createdBefore, joinAfter, joinBefore }: Pars
 
 export async function filter(
 	interaction: InteractionParam,
-	args: ArgsParam<typeof AntiRaidNukeCommand>['filter'],
+	args: ArgsParam<typeof AntiRaidNukeCommand>["filter"],
 	locale: LocaleParam,
 ): Promise<void> {
 	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
@@ -77,13 +77,13 @@ export async function filter(
 	const parsedPattern = parseRegex(args.pattern, args.insensitive ?? true, args.full_match ?? false);
 
 	if (args.pattern && !parsedPattern) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.filter.errors.pattern_format', { locale }));
+		throw new Error(i18next.t("command.mod.anti_raid_nuke.filter.errors.pattern_format", { locale }));
 	}
 
 	const parsedAvatar = await parseAvatar(args.avatar);
 
 	if (args.avatar && !parsedAvatar) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.filter.errors.invalid_avatar', { locale }));
+		throw new Error(i18next.t("command.mod.anti_raid_nuke.filter.errors.invalid_avatar", { locale }));
 	}
 
 	const parsedConfusables = {
@@ -103,14 +103,14 @@ export async function filter(
 	);
 
 	if (members.size === fetchedMembers.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_filter', { locale }));
+		throw new Error(i18next.t("command.mod.anti_raid_nuke.common.errors.no_filter", { locale }));
 	}
 
 	const parameterStrings = [];
 
 	if (parsedCreatedAfter || parsedCreatedBefore || parsedJoinAfter || parsedJoinBefore) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.common.parameters.launch_time', {
+			i18next.t("command.mod.anti_raid_nuke.common.parameters.launch_time", {
 				now: time(dayjs().unix(), TimestampStyles.ShortDateTime),
 				lng: locale,
 			}),
@@ -118,7 +118,7 @@ export async function filter(
 
 		if (parsedCreatedAfter) {
 			parameterStrings.push(
-				i18next.t('command.mod.anti_raid_nuke.filter.parameters.created.after', {
+				i18next.t("command.mod.anti_raid_nuke.filter.parameters.created.after", {
 					date: resolveDateLocale(parsedCreatedAfter),
 					lng: locale,
 				}),
@@ -127,7 +127,7 @@ export async function filter(
 
 		if (parsedCreatedBefore) {
 			parameterStrings.push(
-				i18next.t('command.mod.anti_raid_nuke.filter.parameters.created.before', {
+				i18next.t("command.mod.anti_raid_nuke.filter.parameters.created.before", {
 					date: resolveDateLocale(parsedCreatedBefore),
 					lng: locale,
 				}),
@@ -136,7 +136,7 @@ export async function filter(
 
 		if (parsedJoinAfter) {
 			parameterStrings.push(
-				i18next.t('command.mod.anti_raid_nuke.filter.parameters.join.after', {
+				i18next.t("command.mod.anti_raid_nuke.filter.parameters.join.after", {
 					date: resolveDateLocale(parsedJoinAfter),
 					lng: locale,
 				}),
@@ -145,7 +145,7 @@ export async function filter(
 
 		if (parsedJoinBefore) {
 			parameterStrings.push(
-				i18next.t('command.mod.anti_raid_nuke.filter.parameters.join.before', {
+				i18next.t("command.mod.anti_raid_nuke.filter.parameters.join.before", {
 					date: resolveDateLocale(parsedJoinBefore),
 					lng: locale,
 				}),
@@ -155,8 +155,8 @@ export async function filter(
 
 	if (parsedAvatar) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.filter.parameters.avatar', {
-				avatar: parsedAvatar === 'none' ? 'No avatar' : parsedAvatar,
+			i18next.t("command.mod.anti_raid_nuke.filter.parameters.avatar", {
+				avatar: parsedAvatar === "none" ? "No avatar" : parsedAvatar,
 				lng: locale,
 			}),
 		);
@@ -164,7 +164,7 @@ export async function filter(
 
 	if (parsedPattern) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.filter.parameters.pattern', {
+			i18next.t("command.mod.anti_raid_nuke.filter.parameters.pattern", {
 				lng: locale,
 			}),
 			// eslint-disable-next-line @typescript-eslint/no-base-to-string
@@ -174,7 +174,7 @@ export async function filter(
 
 	if (args.zalgo) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.filter.parameters.zalgo', {
+			i18next.t("command.mod.anti_raid_nuke.filter.parameters.zalgo", {
 				lng: locale,
 			}),
 		);
@@ -182,7 +182,7 @@ export async function filter(
 
 	if (parsedConfusables.members) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.filter.parameters.filter_confusables', {
+			i18next.t("command.mod.anti_raid_nuke.filter.parameters.filter_confusables", {
 				lng: locale,
 			}),
 		);
@@ -190,7 +190,7 @@ export async function filter(
 
 	if (parsedConfusables.pattern) {
 		parameterStrings.push(
-			i18next.t('command.mod.anti_raid_nuke.filter.parameters.clean_confusables', {
+			i18next.t("command.mod.anti_raid_nuke.filter.parameters.clean_confusables", {
 				lng: locale,
 			}),
 		);

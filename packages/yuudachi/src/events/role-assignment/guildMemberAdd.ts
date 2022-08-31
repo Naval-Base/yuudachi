@@ -1,17 +1,17 @@
-import { on } from 'node:events';
-import { Client, Events, type GuildMember } from 'discord.js';
+import { on } from "node:events";
+import { Client, Events, type GuildMember } from "discord.js";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { Sql } from 'postgres';
-import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event.js';
-import { CaseAction } from '../../functions/cases/createCase.js';
-import type { RawCase } from '../../functions/cases/transformCase.js';
-import { logger } from '../../logger.js';
-import { kSQL } from '../../tokens.js';
+import type { Sql } from "postgres";
+import { inject, injectable } from "tsyringe";
+import type { Event } from "../../Event.js";
+import { CaseAction } from "../../functions/cases/createCase.js";
+import type { RawCase } from "../../functions/cases/transformCase.js";
+import { logger } from "../../logger.js";
+import { kSQL } from "../../tokens.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Role assignment';
+	public name = "Role assignment";
 
 	public event = Events.GuildMemberAdd as const;
 
@@ -22,7 +22,7 @@ export default class implements Event {
 			try {
 				logger.info(
 					{ event: { name: this.name, event: this.event }, guildId: guildMember.guild.id, memberId: guildMember.id },
-					'Checking for non-processed cases',
+					"Checking for non-processed cases",
 				);
 
 				const cases = await this.sql<RawCase[]>`

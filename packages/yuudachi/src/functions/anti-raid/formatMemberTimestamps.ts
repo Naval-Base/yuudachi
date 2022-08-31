@@ -1,5 +1,5 @@
-import { ms } from '@naval-base/ms';
-import type { Collection, GuildMember } from 'discord.js';
+import { ms } from "@naval-base/ms";
+import type { Collection, GuildMember } from "discord.js";
 
 export function formatMemberTimestamps(members: Collection<string, GuildMember>) {
 	let creationLower = Number.POSITIVE_INFINITY;

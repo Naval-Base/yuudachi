@@ -1,20 +1,20 @@
-import { ButtonStyle, ComponentType, hyperlink, messageLink, type InteractionResponse } from 'discord.js';
-import i18next from 'i18next';
-import { nanoid } from 'nanoid';
-import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
-import { deleteCase } from '../../../../functions/cases/deleteCase.js';
-import { getCase } from '../../../../functions/cases/getCase.js';
-import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
-import { checkLogChannel } from '../../../../functions/settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../../../../functions/settings/getGuildSetting.js';
-import type { RestrictCommand } from '../../../../interactions/index.js';
-import { createButton } from '../../../../util/button.js';
-import { createMessageActionRow } from '../../../../util/messageActionRow.js';
+import { ButtonStyle, ComponentType, hyperlink, messageLink, type InteractionResponse } from "discord.js";
+import i18next from "i18next";
+import { nanoid } from "nanoid";
+import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
+import { deleteCase } from "../../../../functions/cases/deleteCase.js";
+import { getCase } from "../../../../functions/cases/getCase.js";
+import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
+import { checkLogChannel } from "../../../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../../../functions/settings/getGuildSetting.js";
+import type { RestrictCommand } from "../../../../interactions/index.js";
+import { createButton } from "../../../../util/button.js";
+import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
 export async function unrole(
 	interaction: InteractionParam,
 	reply: InteractionResponse<true>,
-	args: ArgsParam<typeof RestrictCommand>['unrole'],
+	args: ArgsParam<typeof RestrictCommand>["unrole"],
 	locale: LocaleParam,
 ): Promise<void> {
 	const modLogChannel = checkLogChannel(
@@ -23,18 +23,18 @@ export async function unrole(
 	);
 
 	if (!modLogChannel) {
-		throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+		throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 	}
 
 	const originalCase = await getCase(interaction.guildId, args.case);
 	if (!originalCase) {
-		throw new Error(i18next.t('command.mod.common.errors.no_case', { case: args.case, lng: locale }));
+		throw new Error(i18next.t("command.mod.common.errors.no_case", { case: args.case, lng: locale }));
 	}
 
 	if (originalCase.actionProcessed) {
 		const user = await interaction.client.users.fetch(originalCase.targetId);
 		throw new Error(
-			i18next.t('command.mod.common.errors.already_processed', {
+			i18next.t("command.mod.common.errors.already_processed", {
 				user: `${user.toString()} - ${user.tag} (${user.id})`,
 				case: hyperlink(
 					`#${originalCase.caseId}`,
@@ -55,20 +55,20 @@ export async function unrole(
 	const cancelKey = nanoid();
 
 	const roleButton = createButton({
-		label: i18next.t('command.mod.restrict.unrole.buttons.execute', { lng: locale }),
+		label: i18next.t("command.mod.restrict.unrole.buttons.execute", { lng: locale }),
 		customId: unroleKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		label: i18next.t("command.common.buttons.cancel", { lng: locale }),
 		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 
 	await interaction.editReply({
-		content: i18next.t('command.mod.restrict.unrole.pending', {
+		content: i18next.t("command.mod.restrict.unrole.pending", {
 			user: `${user.toString()} - ${user.tag} (${user.id})`,
-			role: role ? `${role.toString()} - ${role.name} (${role.id})` : 'Unknown',
+			role: role ? `${role.toString()} - ${role.name} (${role.id})` : "Unknown",
 			case: hyperlink(
 				`#${originalCase.caseId}`,
 				messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),
@@ -87,7 +87,7 @@ export async function unrole(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+					content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 					components: [],
 				});
 			} catch {}
@@ -97,9 +97,9 @@ export async function unrole(
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t('command.mod.restrict.unrole.cancel', {
+			content: i18next.t("command.mod.restrict.unrole.cancel", {
 				user: `${user.toString()} - ${user.tag} (${user.id})`,
-				role: role ? `${role.toString()} - ${role.name} (${role.id})` : 'Unknown',
+				role: role ? `${role.toString()} - ${role.name} (${role.id})` : "Unknown",
 				case: hyperlink(
 					`#${originalCase.caseId}`,
 					messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),
@@ -120,9 +120,9 @@ export async function unrole(
 		await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
-			content: i18next.t('command.mod.restrict.unrole.success', {
+			content: i18next.t("command.mod.restrict.unrole.success", {
 				user: `${user.toString()} - ${user.tag} (${user.id})`,
-				role: role ? `${role.toString()} - ${role.name} (${role.id})` : 'Unknown',
+				role: role ? `${role.toString()} - ${role.name} (${role.id})` : "Unknown",
 				case: hyperlink(
 					`#${originalCase.caseId}`,
 					messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),

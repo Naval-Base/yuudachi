@@ -1,10 +1,10 @@
-import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink } from 'discord.js';
-import i18next from 'i18next';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { logger } from '../../logger.js';
-import { kSQL } from '../../tokens.js';
-import { type Case, CaseAction } from '../cases/createCase.js';
+import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink } from "discord.js";
+import i18next from "i18next";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { logger } from "../../logger.js";
+import { kSQL } from "../../tokens.js";
+import { type Case, CaseAction } from "../cases/createCase.js";
 
 export async function generateCaseLog(case_: Case, logChannelId: Snowflake, locale: string) {
 	const client = container.resolve<Client<true>>(Client);
@@ -28,7 +28,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 		}
 	}
 
-	let msg = i18next.t('log.mod_log.case_log.description', {
+	let msg = i18next.t("log.mod_log.case_log.description", {
 		target_tag: case_.targetTag,
 		target_id: case_.targetId,
 		action,
@@ -36,7 +36,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	});
 
 	if (case_.actionExpiration) {
-		msg += i18next.t('log.mod_log.case_log.expiration', {
+		msg += i18next.t("log.mod_log.case_log.expiration", {
 			time: time(new Date(case_.actionExpiration), TimestampStyles.RelativeTime),
 			lng: locale,
 		});
@@ -49,10 +49,10 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 			where id = ${case_.contextMessageId}
 		`;
 
-		if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
-			msg += i18next.t('log.mod_log.case_log.context', {
+		if (Reflect.has(contextMessage ?? {}, "channel_id")) {
+			msg += i18next.t("log.mod_log.case_log.context", {
 				link: hyperlink(
-					i18next.t('log.mod_log.case_log.context_sub', { lng: locale }),
+					i18next.t("log.mod_log.case_log.context_sub", { lng: locale }),
 					messageLink(contextMessage!.channel_id!, case_.contextMessageId, case_.guildId),
 				),
 				lng: locale,
@@ -61,9 +61,9 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	}
 
 	if (case_.reason) {
-		msg += i18next.t('log.mod_log.case_log.reason', { reason: case_.reason, lng: locale });
+		msg += i18next.t("log.mod_log.case_log.reason", { reason: case_.reason, lng: locale });
 	} else {
-		msg += i18next.t('log.mod_log.case_log.reason_fallback', { case_id: case_.caseId, lng: locale });
+		msg += i18next.t("log.mod_log.case_log.reason_fallback", { case_id: case_.caseId, lng: locale });
 	}
 
 	if (case_.refId) {
@@ -74,8 +74,8 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 				and case_id = ${case_.refId}
 		`;
 
-		if (Reflect.has(reference ?? {}, 'log_message_id')) {
-			msg += i18next.t('log.mod_log.case_log.reference', {
+		if (Reflect.has(reference ?? {}, "log_message_id")) {
+			msg += i18next.t("log.mod_log.case_log.reference", {
 				ref: hyperlink(`#${case_.refId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
 				lng: locale,
 			});

@@ -1,7 +1,7 @@
-import { type Snowflake, Client } from 'discord.js';
-import i18next from 'i18next';
-import { container } from 'tsyringe';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
+import { type Snowflake, Client } from "discord.js";
+import i18next from "i18next";
+import { container } from "tsyringe";
+import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 
 export function parseMessageLink(link: string) {
 	const linkRegex =
@@ -33,7 +33,7 @@ export async function resolveMessage(
 
 	if (!guild) {
 		throw new Error(
-			i18next.t('command.common.errors.no_guild', {
+			i18next.t("command.common.errors.no_guild", {
 				guild_id: guildId,
 				lng: locale,
 			}),
@@ -44,7 +44,7 @@ export async function resolveMessage(
 
 	if (!channel?.isTextBased()) {
 		throw new Error(
-			i18next.t('command.common.errors.no_channel', {
+			i18next.t("command.common.errors.no_channel", {
 				channel_id: channelId,
 				guild: guild.name,
 				lng: locale,
@@ -61,7 +61,7 @@ export async function resolveMessage(
 			(channel.parent?.parentId && ignoreChannels.includes(channel.parent.parentId)))
 	) {
 		throw new Error(
-			i18next.t('command.common.errors.ignored_channel', {
+			i18next.t("command.common.errors.ignored_channel", {
 				lng: locale,
 			}),
 		);
@@ -71,7 +71,7 @@ export async function resolveMessage(
 		return await channel.messages.fetch(messageId);
 	} catch {
 		throw new Error(
-			i18next.t('command.common.errors.no_message', {
+			i18next.t("command.common.errors.no_message", {
 				message_id: messageId,
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: channel.toString(),

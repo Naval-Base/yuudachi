@@ -1,9 +1,9 @@
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime.js';
-import { time, TimestampStyles, type GuildMember } from 'discord.js';
-import i18next from 'i18next';
-import { MAX_TRUST_ACCOUNT_AGE } from '../Constants.js';
-import { addFields, truncateEmbed } from './embed.js';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+import { time, TimestampStyles, type GuildMember } from "discord.js";
+import i18next from "i18next";
+import { MAX_TRUST_ACCOUNT_AGE } from "../Constants.js";
+import { addFields, truncateEmbed } from "./embed.js";
 
 dayjs.extend(relativeTime);
 
@@ -34,7 +34,7 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 	const sinceCreationFormatted = time(dayjs(member.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
 	const creationFormatted = time(dayjs(member.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
 
-	let description = i18next.t('log.member_log.description', {
+	let description = i18next.t("log.member_log.description", {
 		user_mention: member.user.toString(),
 		user_tag: member.user.tag,
 		user_id: member.user.id,
@@ -47,7 +47,7 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 		const sinceJoinFormatted = time(dayjs(member.joinedTimestamp).unix(), TimestampStyles.RelativeTime);
 		const joinFormatted = time(dayjs(member.joinedTimestamp).unix(), TimestampStyles.ShortDateTime);
 
-		description += i18next.t('log.member_log.joined_at', {
+		description += i18next.t("log.member_log.joined_at", {
 			joined_at: joinFormatted,
 			joined_at_since: sinceJoinFormatted,
 			lng: locale,
@@ -58,7 +58,7 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 		const sinceleaveFormatted = time(dayjs().unix(), TimestampStyles.RelativeTime);
 		const leaveFormatted = time(dayjs().unix(), TimestampStyles.ShortDateTime);
 
-		description += i18next.t('log.member_log.left_at', {
+		description += i18next.t("log.member_log.left_at", {
 			left_at: leaveFormatted,
 			left_at_since: sinceleaveFormatted,
 			lng: locale,
@@ -73,7 +73,7 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 		color: join ? colorFromDuration(Date.now() - member.user.createdTimestamp) : 3_092_790,
 		description,
 		footer: {
-			text: i18next.t(join ? 'log.member_log.footer.joined' : 'log.member_log.footer.left', { lng: locale }),
+			text: i18next.t(join ? "log.member_log.footer.joined" : "log.member_log.footer.left", { lng: locale }),
 		},
 		timestamp: new Date().toISOString(),
 	});

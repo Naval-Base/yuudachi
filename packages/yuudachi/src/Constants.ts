@@ -33,8 +33,8 @@ export const ANTI_RAID_NUKE_AVATAR_BITS = 16;
 export const ANTI_RAID_NUKE_AVATAR_THRESHOLD = 5;
 export const ANTI_RAID_NUKE_PROGRESS_SPLIT = 50;
 
-export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD_HH-mm-ss';
-export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
+export const DATE_FORMAT_LOGFILE = "YYYY-MM-DD_HH-mm-ss";
+export const DATE_FORMAT_WITH_SECONDS = "YYYY/MM/DD HH:mm:ss";
 
 export const EMBED_TITLE_LIMIT = 256;
 export const EMBED_DESCRIPTION_LIMIT = 4_096;
@@ -44,6 +44,6 @@ export const EMBED_FIELD_LIMIT = 25;
 export const EMBED_FIELD_NAME_LIMIT = 256;
 export const EMBED_FIELD_VALUE_LIMIT = 1_024;
 export const SNOWFLAKE_MIN_LENGTH = 17;
-export const AUTOMOD_FLAG_INDICATOR_FIELD_NAME = 'flagged_message_id';
+export const AUTOMOD_FLAG_INDICATOR_FIELD_NAME = "flagged_message_id";
 export const AUTOCOMPLETE_CHOICE_LIMIT = 25;
 export const AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT = 100;

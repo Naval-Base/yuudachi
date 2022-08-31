@@ -1,17 +1,17 @@
-import { on } from 'node:events';
-import { ChannelType, Client, Events, messageLink, MessageType, type Message, type Webhook } from 'discord.js';
-import i18next from 'i18next';
-import { inject, injectable } from 'tsyringe';
-import { Color } from '../../Constants.js';
-import type { Event } from '../../Event.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kWebhooks } from '../../tokens.js';
-import { addFields, truncateEmbed } from '../../util/embed.js';
+import { on } from "node:events";
+import { ChannelType, Client, Events, messageLink, MessageType, type Message, type Webhook } from "discord.js";
+import i18next from "i18next";
+import { inject, injectable } from "tsyringe";
+import { Color } from "../../Constants.js";
+import type { Event } from "../../Event.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kWebhooks } from "../../tokens.js";
+import { addFields, truncateEmbed } from "../../util/embed.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Guild log message delete';
+	public name = "Guild log message delete";
 
 	public event = Events.MessageDelete as const;
 
@@ -71,7 +71,7 @@ export default class implements Event {
 				);
 
 				const infoParts = [
-					i18next.t('log.guild_log.message_deleted.channel', {
+					i18next.t("log.guild_log.message_deleted.channel", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${message.channel.toString()} - ${message.channel.name} (${message.channel.id})`,
 						lng: locale,
@@ -84,9 +84,9 @@ export default class implements Event {
 						icon_url: message.author.displayAvatarURL(),
 					},
 					color: Color.LogsMessageDelete,
-					title: i18next.t('log.guild_log.message_deleted.title'),
+					title: i18next.t("log.guild_log.message_deleted.title"),
 					description: `${
-						message.content.length ? message.content : i18next.t('common.errors.no_content', { lng: locale })
+						message.content.length ? message.content : i18next.t("common.errors.no_content", { lng: locale })
 					}`,
 					footer: { text: message.id },
 					timestamp: new Date().toISOString(),
@@ -94,7 +94,7 @@ export default class implements Event {
 
 				if (!message.content && message.embeds.length) {
 					infoParts.push(
-						i18next.t('log.guild_log.message_deleted.embeds', {
+						i18next.t("log.guild_log.message_deleted.embeds", {
 							embeds: message.embeds.length,
 							lng: locale,
 						}),
@@ -110,8 +110,8 @@ export default class implements Event {
 					}
 
 					infoParts.push(
-						i18next.t('log.guild_log.message_deleted.attachments', {
-							attachments: attachmentParts.join(' '),
+						i18next.t("log.guild_log.message_deleted.attachments", {
+							attachments: attachmentParts.join(" "),
 							lng: locale,
 						}),
 					);
@@ -119,14 +119,14 @@ export default class implements Event {
 
 				if (message.stickers.size) {
 					infoParts.push(
-						i18next.t('log.guild_log.message_deleted.stickers', {
-							stickers: message.stickers.map((sticker) => `\`${sticker.name}\``).join(', '),
+						i18next.t("log.guild_log.message_deleted.stickers", {
+							stickers: message.stickers.map((sticker) => `\`${sticker.name}\``).join(", "),
 							lng: locale,
 						}),
 					);
 				}
 
-				infoParts.push(i18next.t('log.guild_log.message_deleted.jump_to', { link: message.url, lng: locale }));
+				infoParts.push(i18next.t("log.guild_log.message_deleted.jump_to", { link: message.url, lng: locale }));
 
 				if (message.type === MessageType.Reply && message.reference && message.mentions.repliedUser) {
 					const { channelId, messageId, guildId } = message.reference;
@@ -134,14 +134,14 @@ export default class implements Event {
 
 					infoParts.push(
 						message.mentions.users.has(message.mentions.repliedUser.id)
-							? i18next.t('log.guild_log.message_deleted.reply_to_mentions', {
+							? i18next.t("log.guild_log.message_deleted.reply_to_mentions", {
 									message_id: messageId,
 									message_url: replyURL,
 									user_tag: message.mentions.repliedUser.tag,
 									user_id: message.mentions.repliedUser.id,
 									lng: locale,
 							  })
-							: i18next.t('log.guild_log.message_deleted.reply_to', {
+							: i18next.t("log.guild_log.message_deleted.reply_to", {
 									message_id: messageId,
 									message_url: replyURL,
 									user_tag: message.mentions.repliedUser.tag,
@@ -152,8 +152,8 @@ export default class implements Event {
 				}
 
 				embed = addFields(embed, {
-					name: '\u200B',
-					value: infoParts.join('\n'),
+					name: "\u200B",
+					value: infoParts.join("\n"),
 				});
 
 				await webhook.send({

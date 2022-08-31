@@ -1,4 +1,4 @@
-import type { Merge } from 'type-fest';
+import type { Merge } from "type-fest";
 
 export type PartialAndUndefinedOnNull<T> = T extends Record<any, any>
 	? {

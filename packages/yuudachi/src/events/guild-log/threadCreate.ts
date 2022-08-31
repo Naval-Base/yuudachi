@@ -1,17 +1,17 @@
-import { on } from 'node:events';
-import { Client, Events, type ThreadChannel, type Webhook } from 'discord.js';
-import i18next from 'i18next';
-import { inject, injectable } from 'tsyringe';
-import { Color } from '../../Constants.js';
-import type { Event } from '../../Event.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kWebhooks } from '../../tokens.js';
-import { addFields, truncateEmbed } from '../../util/embed.js';
+import { on } from "node:events";
+import { Client, Events, type ThreadChannel, type Webhook } from "discord.js";
+import i18next from "i18next";
+import { inject, injectable } from "tsyringe";
+import { Color } from "../../Constants.js";
+import type { Event } from "../../Event.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kWebhooks } from "../../tokens.js";
+import { addFields, truncateEmbed } from "../../util/embed.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Guild log thread create';
+	public name = "Guild log thread create";
 
 	public event = Events.ThreadCreate as const;
 
@@ -65,7 +65,7 @@ export default class implements Event {
 				);
 
 				const descriptionParts = [
-					i18next.t('log.guild_log.thread_created.channel', {
+					i18next.t("log.guild_log.thread_created.channel", {
 						channel: thread.toString(),
 						name: `\`${thread.name}\``,
 						channel_id: thread.id,
@@ -77,11 +77,11 @@ export default class implements Event {
 
 				if (starterMessage) {
 					descriptionParts.push(
-						i18next.t('log.guild_log.thread_created.starter', {
+						i18next.t("log.guild_log.thread_created.starter", {
 							message_id: starterMessage.id,
 							lng: locale,
 						}),
-						i18next.t('log.guild_log.thread_created.jump_to', {
+						i18next.t("log.guild_log.thread_created.jump_to", {
 							link: starterMessage.url,
 							lng: locale,
 						}),
@@ -96,8 +96,8 @@ export default class implements Event {
 								icon_url: owner.displayAvatarURL(),
 						  }
 						: undefined,
-					description: descriptionParts.join('\n'),
-					title: i18next.t('log.guild_log.thread_created.title'),
+					description: descriptionParts.join("\n"),
+					title: i18next.t("log.guild_log.thread_created.title"),
 					timestamp: (thread.createdAt ?? new Date()).toISOString(),
 					color: Color.DiscordGem,
 				});

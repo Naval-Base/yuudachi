@@ -1,10 +1,10 @@
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
-import type { HistoryCommand, HistoryUserContextCommand } from '../../interactions/index.js';
-import { generateHistory } from '../../util/generateHistory.js';
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
+import type { HistoryCommand, HistoryUserContextCommand } from "../../interactions/index.js";
+import { generateHistory } from "../../util/generateHistory.js";
 
 export default class extends Command<typeof HistoryCommand | typeof HistoryUserContextCommand> {
 	public constructor() {
-		super(['history', 'History']);
+		super(["history", "History"]);
 	}
 
 	private async handle(

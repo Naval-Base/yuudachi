@@ -1,5 +1,5 @@
-import type { Snowflake } from 'discord.js';
-import type { Case } from './createCase.js';
+import type { Snowflake } from "discord.js";
+import type { Case } from "./createCase.js";
 
 export type RawCase = {
 	action: number;

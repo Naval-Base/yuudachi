@@ -1,22 +1,22 @@
-import { on } from 'node:events';
-import { Client, Events, type Message } from 'discord.js';
-import i18next from 'i18next';
+import { on } from "node:events";
+import { Client, Events, type Message } from "discord.js";
+import i18next from "i18next";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { Redis } from 'ioredis';
-import { inject, injectable } from 'tsyringe';
-import { SCAM_THRESHOLD } from '../../Constants.js';
-import type { Event } from '../../Event.js';
-import { totalScams } from '../../functions/anti-scam/totalScams.js';
-import { type Case, CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kRedis } from '../../tokens.js';
+import type { Redis } from "ioredis";
+import { inject, injectable } from "tsyringe";
+import { SCAM_THRESHOLD } from "../../Constants.js";
+import type { Event } from "../../Event.js";
+import { totalScams } from "../../functions/anti-scam/totalScams.js";
+import { type Case, CaseAction, createCase } from "../../functions/cases/createCase.js";
+import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
+import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kRedis } from "../../tokens.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Spam check';
+	public name = "Spam check";
 
 	public event = Events.MessageCreate as const;
 
@@ -60,7 +60,7 @@ export default class implements Event {
 
 					const locale = await getGuildSetting(message.guildId, SettingsKeys.Locale);
 
-					await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:ban`, 15, '');
+					await this.redis.setex(`guild:${message.guildId}:user:${message.author.id}:ban`, 15, "");
 					let case_: Case | null = null;
 
 					logger.info(
@@ -79,7 +79,7 @@ export default class implements Event {
 						guildId: message.guildId,
 						action: CaseAction.Ban,
 						targetTag: message.author.tag,
-						reason: i18next.t('log.mod_log.scam.reason', {
+						reason: i18next.t("log.mod_log.scam.reason", {
 							lng: locale,
 						}),
 						deleteMessageDays: 1,

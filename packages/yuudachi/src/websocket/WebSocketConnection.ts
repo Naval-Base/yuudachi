@@ -1,12 +1,12 @@
-import type { Buffer } from 'node:buffer';
-import { setTimeout } from 'node:timers';
-import type { Redis } from 'ioredis';
-import WebSocket from 'ws';
-import { logger } from '../logger.js';
+import type { Buffer } from "node:buffer";
+import { setTimeout } from "node:timers";
+import type { Redis } from "ioredis";
+import WebSocket from "ws";
+import { logger } from "../logger.js";
 
 type ScamAPIData = {
 	domains: string[];
-	type: 'add' | 'delete';
+	type: "add" | "delete";
 };
 
 export class WebSocketConnection {
@@ -31,10 +31,10 @@ export class WebSocketConnection {
 	}
 
 	public connect() {
-		this.connection.on('open', this.onOpen.bind(this));
-		this.connection.on('message', this.onMessage.bind(this));
-		this.connection.on('close', this.onClose.bind(this));
-		this.connection.on('error', this.onError.bind(this));
+		this.connection.on("open", this.onOpen.bind(this));
+		this.connection.on("message", this.onMessage.bind(this));
+		this.connection.on("close", this.onClose.bind(this));
+		this.connection.on("error", this.onError.bind(this));
 	}
 
 	private onOpen() {
@@ -46,7 +46,7 @@ export class WebSocketConnection {
 	}
 
 	private onError(error: Error) {
-		logger.warn(error, 'WS error received');
+		logger.warn(error, "WS error received");
 	}
 
 	private onMessage(data: Buffer) {
@@ -56,26 +56,26 @@ export class WebSocketConnection {
 			url: this.url,
 		});
 
-		if (objData.type === 'add') {
+		if (objData.type === "add") {
 			void this.redis
 				.multi()
-				.sadd('scamdomains', ...objData.domains)
-				.set('scamdomains:refresh', Date.now())
+				.sadd("scamdomains", ...objData.domains)
+				.set("scamdomains:refresh", Date.now())
 				.exec();
 			logger.info({
-				msg: `WebSocket based update of domains (add): ${objData.domains.join(', ')}`,
+				msg: `WebSocket based update of domains (add): ${objData.domains.join(", ")}`,
 				url: this.url,
 			});
 		}
 
-		if (objData.type === 'delete') {
+		if (objData.type === "delete") {
 			void this.redis
 				.multi()
-				.srem('scamdomains', ...objData.domains)
-				.set('scamdomains:refresh', Date.now())
+				.srem("scamdomains", ...objData.domains)
+				.set("scamdomains:refresh", Date.now())
 				.exec();
 			logger.info({
-				msg: `WebSocket based update of domains (remove): ${objData.domains.join(', ')}`,
+				msg: `WebSocket based update of domains (remove): ${objData.domains.join(", ")}`,
 				url: this.url,
 			});
 		}

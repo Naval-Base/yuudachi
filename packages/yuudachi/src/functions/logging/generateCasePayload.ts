@@ -1,5 +1,5 @@
-import type { GuildMember, Snowflake, User } from 'discord.js';
-import type { CaseAction } from '../cases/createCase.js';
+import type { GuildMember, Snowflake, User } from "discord.js";
+import type { CaseAction } from "../cases/createCase.js";
 
 type CasePayloadArgs = {
 	days?: number | undefined;

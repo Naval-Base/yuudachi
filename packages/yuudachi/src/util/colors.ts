@@ -1,4 +1,4 @@
-import kleur from 'kleur';
+import kleur from "kleur";
 
 type IPredicate<T> = (...args: T[]) => boolean;
 

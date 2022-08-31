@@ -1,4 +1,4 @@
-import { Collection, type GuildTextBasedChannel, type Message, type Snowflake, SnowflakeUtil } from 'discord.js';
+import { Collection, type GuildTextBasedChannel, type Message, type Snowflake, SnowflakeUtil } from "discord.js";
 
 type MessageOrder = {
 	newest?: Message | null | undefined;

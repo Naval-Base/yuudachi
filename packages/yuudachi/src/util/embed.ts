@@ -1,4 +1,4 @@
-import type { APIEmbed, APIEmbedField } from 'discord-api-types/v10';
+import type { APIEmbed, APIEmbedField } from "discord-api-types/v10";
 import {
 	EMBED_AUTHOR_NAME_LIMIT,
 	EMBED_DESCRIPTION_LIMIT,
@@ -7,7 +7,7 @@ import {
 	EMBED_FIELD_VALUE_LIMIT,
 	EMBED_FOOTER_TEXT_LIMIT,
 	EMBED_TITLE_LIMIT,
-} from '../Constants.js';
+} from "../Constants.js";
 
 export function addFields(embed: APIEmbed, ...data: APIEmbedField[]): APIEmbed {
 	return {
@@ -58,7 +58,7 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 	} as const;
 }
 
-export function truncate(text: string, length: number, splitChar = ' ') {
+export function truncate(text: string, length: number, splitChar = " ") {
 	if (text.length <= length) {
 		return text;
 	}

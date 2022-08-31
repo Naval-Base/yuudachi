@@ -1,4 +1,4 @@
-import Image from 'next/future/image';
+import Image from "next/future/image";
 
 export default function IndexRoute() {
 	return (
@@ -8,7 +8,7 @@ export default function IndexRoute() {
 			alt="Yuudachi"
 			width={250}
 			height={250}
-			style={{ height: '100%', width: '100%' }}
+			style={{ height: "100%", width: "100%" }}
 		/>
 	);
 }

@@ -1,12 +1,12 @@
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { kSQL } from '../../tokens.js';
-import type { CreateCase } from './createCase.js';
-import { type RawCase, transformCase } from './transformCase.js';
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { kSQL } from "../../tokens.js";
+import type { CreateCase } from "./createCase.js";
+import { type RawCase, transformCase } from "./transformCase.js";
 
 export type PatchCase = Pick<
 	CreateCase,
-	'actionExpiration' | 'caseId' | 'contextMessageId' | 'guildId' | 'reason' | 'refId'
+	"actionExpiration" | "caseId" | "contextMessageId" | "guildId" | "reason" | "refId"
 >;
 
 export async function updateCase(case_: PatchCase) {

@@ -1,11 +1,11 @@
-import type { Guild, GuildMember, Snowflake } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import type { CamelCasedProperties } from 'type-fest';
-import { logger } from '../../logger.js';
-import { kSQL } from '../../tokens.js';
-import type { PartialAndUndefinedOnNull } from '../../util/types.js';
-import { type RawCase, transformCase } from './transformCase.js';
+import type { Guild, GuildMember, Snowflake } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import type { CamelCasedProperties } from "type-fest";
+import { logger } from "../../logger.js";
+import { kSQL } from "../../tokens.js";
+import type { PartialAndUndefinedOnNull } from "../../util/types.js";
+import { type RawCase, transformCase } from "./transformCase.js";
 
 export enum CaseAction {
 	Role,
@@ -23,7 +23,7 @@ export type Case = PartialAndUndefinedOnNull<CamelCasedProperties<RawCase>>;
 
 export type CreateCase = Omit<
 	Case,
-	'actionExpiration' | 'actionProcessed' | 'caseId' | 'createdAt' | 'logMessageId' | 'modId' | 'modTag' | 'multi'
+	"actionExpiration" | "actionProcessed" | "caseId" | "createdAt" | "logMessageId" | "modId" | "modTag" | "multi"
 > & {
 	actionExpiration?: Date | null | undefined;
 	caseId?: number | null | undefined;
@@ -43,7 +43,7 @@ export async function createCase(
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const reason = case_.modTag
-		? `Mod: ${case_.modTag}${case_.reason ? ` | ${case_.reason.replaceAll('`', '')}` : ''}`
+		? `Mod: ${case_.modTag}${case_.reason ? ` | ${case_.reason.replaceAll("`", "")}` : ""}`
 		: case_.reason ?? undefined;
 
 	try {

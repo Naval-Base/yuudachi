@@ -2,7 +2,7 @@ import type {
 	APIModalInteractionResponseCallbackData,
 	APIActionRowComponent,
 	APIModalActionRowComponent,
-} from 'discord-api-types/v10';
+} from "discord-api-types/v10";
 
 export function createModal({
 	customId,

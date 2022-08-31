@@ -1,8 +1,8 @@
-import type { Snowflake } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { kSQL } from '../../tokens.js';
-import { type RawCase, transformCase } from './transformCase.js';
+import type { Snowflake } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { kSQL } from "../../tokens.js";
+import { type RawCase, transformCase } from "./transformCase.js";
 
 export async function getCase(guildId: Snowflake, caseId: number) {
 	const sql = container.resolve<Sql<any>>(kSQL);

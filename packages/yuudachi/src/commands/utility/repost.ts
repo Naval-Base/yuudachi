@@ -1,9 +1,9 @@
-import type { Message } from 'discord.js';
-import i18next from 'i18next';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
-import { formatMessageToEmbed } from '../../functions/logging/formatMessageToEmbed.js';
-import type { RepostCommand, RepostMessageContextCommand } from '../../interactions/index.js';
-import { parseMessageLink, resolveMessage } from '../../util/resolveMessage.js';
+import type { Message } from "discord.js";
+import i18next from "i18next";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
+import { formatMessageToEmbed } from "../../functions/logging/formatMessageToEmbed.js";
+import type { RepostCommand, RepostMessageContextCommand } from "../../interactions/index.js";
+import { parseMessageLink, resolveMessage } from "../../util/resolveMessage.js";
 
 export default class extends Command<typeof RepostCommand | typeof RepostMessageContextCommand> {
 	private async handle(
@@ -24,9 +24,9 @@ export default class extends Command<typeof RepostCommand | typeof RepostMessage
 
 		if (!parsedLink) {
 			throw new Error(
-				i18next.t('command.common.errors.not_message_link', {
+				i18next.t("command.common.errors.not_message_link", {
 					val: args.message_link,
-					arg: 'message_link',
+					arg: "message_link",
 					lng: locale,
 				}),
 			);

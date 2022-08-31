@@ -1,10 +1,10 @@
-import type { Guild, Snowflake, User } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { kSQL } from '../../tokens.js';
-import { generateCasePayload } from '../logging/generateCasePayload.js';
-import { CaseAction, createCase } from './createCase.js';
-import type { RawCase } from './transformCase.js';
+import type { Guild, Snowflake, User } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { kSQL } from "../../tokens.js";
+import { generateCasePayload } from "../logging/generateCasePayload.js";
+import { CaseAction, createCase } from "./createCase.js";
+import type { RawCase } from "./transformCase.js";
 
 type DeleteCaseOptions = {
 	action?: CaseAction | undefined;
@@ -63,9 +63,9 @@ export async function deleteCase({
 		`;
 
 		if (manual) {
-			localReason = 'Manual unrole';
+			localReason = "Manual unrole";
 		} else {
-			localReason = 'Automatic unrole based on duration';
+			localReason = "Automatic unrole based on duration";
 		}
 	}
 
@@ -78,9 +78,9 @@ export async function deleteCase({
 		`;
 
 		if (manual) {
-			localReason = 'Manually ended timeout';
+			localReason = "Manually ended timeout";
 		} else {
-			localReason = 'Timeout expired based on duration';
+			localReason = "Timeout expired based on duration";
 		}
 	}
 

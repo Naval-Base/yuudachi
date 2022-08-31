@@ -1,18 +1,18 @@
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import {
 	type Snowflake,
 	type ChatInputCommandInteraction,
 	type ModalSubmitInteraction,
 	Collection,
 	type GuildMember,
-} from 'discord.js';
-import i18next from 'i18next';
-import type { Redis } from 'ioredis';
-import { container } from 'tsyringe';
-import { ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS, DATE_FORMAT_WITH_SECONDS } from '../../../../Constants.js';
-import { canBan } from '../../../../functions/anti-raid/canBan.js';
-import { kRedis } from '../../../../tokens.js';
-import { resolveTimestamp } from '../../../../util/timestamp.js';
+} from "discord.js";
+import i18next from "i18next";
+import type { Redis } from "ioredis";
+import { container } from "tsyringe";
+import { ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS, DATE_FORMAT_WITH_SECONDS } from "../../../../Constants.js";
+import { canBan } from "../../../../functions/anti-raid/canBan.js";
+import { kRedis } from "../../../../tokens.js";
+import { resolveTimestamp } from "../../../../util/timestamp.js";
 
 /**
  * Acquire an anti-raid-nuke lock for a guild
@@ -27,7 +27,7 @@ export async function acquireNukeLock(guildId: Snowflake) {
 		return false;
 	}
 
-	await redis.set(key, Date.now(), 'EX', ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS);
+	await redis.set(key, Date.now(), "EX", ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS);
 	return true;
 }
 
@@ -53,7 +53,7 @@ export async function acquireLockIfPublic(guildId: Snowflake, locale: string, hi
 		const acquiredLock = await acquireNukeLock(guildId);
 		if (!acquiredLock) {
 			throw new Error(
-				i18next.t('command.mod.anti_raid_nuke.common.errors.no_concurrent_use', {
+				i18next.t("command.mod.anti_raid_nuke.common.errors.no_concurrent_use", {
 					lng: locale,
 				}),
 			);
@@ -95,7 +95,7 @@ export type IdValidationResult = {
 };
 
 export async function validateMemberIds(
-	interaction: ChatInputCommandInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<"cached"> | ModalSubmitInteraction<"cached">,
 	ids: Set<Snowflake>,
 	locale: string,
 ): Promise<IdValidationResult> {
@@ -111,11 +111,11 @@ export async function validateMemberIds(
 	}
 
 	if (!result.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_ids', { lng: locale }));
+		throw new Error(i18next.t("command.mod.anti_raid_nuke.common.errors.no_ids", { lng: locale }));
 	}
 
 	if (result.size === fetchedMembers.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_filter', { lng: locale }));
+		throw new Error(i18next.t("command.mod.anti_raid_nuke.common.errors.no_filter", { lng: locale }));
 	}
 
 	return {

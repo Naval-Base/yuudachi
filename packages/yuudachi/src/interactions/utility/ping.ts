@@ -1,23 +1,23 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 export const PingCommand = {
-	name: 'ping',
-	description: 'Health check',
+	name: "ping",
+	description: "Health check",
 	description_localizations: {
-		de: 'Gesundheitscheck',
+		de: "Gesundheitscheck",
 	},
 	options: [
 		{
-			name: 'hide',
+			name: "hide",
 			name_localizations: {
-				de: 'ausblenden',
+				de: "ausblenden",
 			},
-			description: 'Hides the output',
+			description: "Hides the output",
 			description_localizations: {
-				de: 'Blendet die Ausgabe aus',
+				de: "Blendet die Ausgabe aus",
 			},
 			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
-	default_member_permissions: '0',
+	default_member_permissions: "0",
 } as const;

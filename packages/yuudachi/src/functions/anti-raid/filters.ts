@@ -1,6 +1,6 @@
-import clean from '@aero/sanitizer';
-import type { GuildMember } from 'discord.js';
-import type RE2 from 're2';
+import clean from "@aero/sanitizer";
+import type { GuildMember } from "discord.js";
+import type RE2 from "re2";
 
 /**
  * Check if a member should be kept in the set, based on its join timestamp
@@ -78,7 +78,7 @@ export function avatarFilter(member: GuildMember, avatar?: string | null | undef
 		return true;
 	}
 
-	if (avatar.toLowerCase() === 'none') {
+	if (avatar.toLowerCase() === "none") {
 		return !member.avatar && !member.user.avatar;
 	}
 

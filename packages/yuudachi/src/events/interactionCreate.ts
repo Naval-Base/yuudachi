@@ -1,16 +1,16 @@
-import { ApplicationCommandType, Client, Events } from 'discord.js';
-import { inject, injectable } from 'tsyringe';
-import type { Command } from '../Command.js';
-import type { Event } from '../Event.js';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
-import type { CommandPayload } from '../interactions/ArgumentsOf.js';
-import { transformInteraction } from '../interactions/InteractionOptions.js';
-import { logger } from '../logger.js';
-import { kCommands } from '../tokens.js';
+import { ApplicationCommandType, Client, Events } from "discord.js";
+import { inject, injectable } from "tsyringe";
+import type { Command } from "../Command.js";
+import type { Event } from "../Event.js";
+import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
+import type { CommandPayload } from "../interactions/ArgumentsOf.js";
+import { transformInteraction } from "../interactions/InteractionOptions.js";
+import { logger } from "../logger.js";
+import { kCommands } from "../tokens.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Interaction handling';
+	public name = "Interaction handling";
 
 	public event = Events.InteractionCreate as const;
 
@@ -47,7 +47,7 @@ export default class implements Event {
 
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-								`Executing ${isAutocomplete ? 'autocomplete' : 'chatInput command'} ${interaction.commandName}`,
+								`Executing ${isAutocomplete ? "autocomplete" : "chatInput command"} ${interaction.commandName}`,
 							);
 
 							if (isAutocomplete) {
@@ -110,7 +110,7 @@ export default class implements Event {
 						if (!interaction.deferred && !interaction.replied) {
 							logger.warn(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-								'Command interaction has not been deferred before throwing',
+								"Command interaction has not been deferred before throwing",
 							);
 							await interaction.deferReply();
 						}

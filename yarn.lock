@@ -4507,9 +4507,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-neon@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "eslint-config-neon@npm:0.1.6"
+"eslint-config-neon@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "eslint-config-neon@npm:0.1.7"
   dependencies:
     "@next/eslint-plugin-next": ^12.2.5
     "@rushstack/eslint-patch": ^1.1.4
@@ -4529,7 +4529,7 @@ __metadata:
     eslint-plugin-tsdoc: ^0.2.16
     eslint-plugin-typescript-sort-keys: ^2.1.0
     eslint-plugin-unicorn: ^43.0.2
-  checksum: 6cf82a212b307784a52add7f4f423621f6908184c0b0615f2171768a66168755b6aaa4953529e82f79010dcc373711d040debe4c1cced8e754836bce93fd5478
+  checksum: 2dba75ebfb50d22970b71f7c79a8b156b4cc1c7cb6d4a87740ed5f0732b5343e1bf2841026ccedf6ddd2c8d1173d7e477702b84593bd3d098c9314765a11d591
   languageName: node
   linkType: hard
 
@@ -11692,7 +11692,7 @@ __metadata:
     discord.js: ^14.3.0
     env-cmd: ^10.1.0
     eslint: ^8.23.0
-    eslint-config-neon: ^0.1.6
+    eslint-config-neon: ^0.1.7
     i18next: ^21.9.1
     ioredis: ^5.2.3
     kleur: ^4.1.5

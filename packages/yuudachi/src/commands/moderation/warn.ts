@@ -1,17 +1,17 @@
-import { ButtonStyle, ComponentType } from 'discord.js';
-import i18next from 'i18next';
-import { nanoid } from 'nanoid';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
-import { CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { WarnCommand } from '../../interactions/index.js';
-import { logger } from '../../logger.js';
-import { createButton } from '../../util/button.js';
-import { generateHistory } from '../../util/generateHistory.js';
-import { createMessageActionRow } from '../../util/messageActionRow.js';
+import { ButtonStyle, ComponentType } from "discord.js";
+import i18next from "i18next";
+import { nanoid } from "nanoid";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import { CaseAction, createCase } from "../../functions/cases/createCase.js";
+import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
+import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
+import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import type { WarnCommand } from "../../interactions/index.js";
+import { logger } from "../../logger.js";
+import { createButton } from "../../util/button.js";
+import { generateHistory } from "../../util/generateHistory.js";
+import { createMessageActionRow } from "../../util/messageActionRow.js";
 
 export default class extends Command<typeof WarnCommand> {
 	public override async chatInput(
@@ -27,19 +27,19 @@ export default class extends Command<typeof WarnCommand> {
 		);
 
 		if (!modLogChannel) {
-			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+			throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 		}
 
 		if (!args.user.member) {
 			throw new Error(
-				i18next.t('command.common.errors.target_not_found', {
+				i18next.t("command.common.errors.target_not_found", {
 					lng: locale,
 				}),
 			);
 		}
 
 		if (args.reason && args.reason.length >= 500) {
-			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
+			throw new Error(i18next.t("command.mod.common.errors.max_length_reason", { lng: locale }));
 		}
 
 		const warnKey = nanoid();
@@ -48,18 +48,18 @@ export default class extends Command<typeof WarnCommand> {
 		const embed = await generateHistory(interaction, args.user, locale);
 
 		const warnButton = createButton({
-			label: i18next.t('command.mod.warn.buttons.execute', { lng: locale }),
+			label: i18next.t("command.mod.warn.buttons.execute", { lng: locale }),
 			customId: warnKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			label: i18next.t("command.common.buttons.cancel", { lng: locale }),
 			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 
 		await interaction.editReply({
-			content: i18next.t('command.mod.warn.pending', {
+			content: i18next.t("command.mod.warn.pending", {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
@@ -76,7 +76,7 @@ export default class extends Command<typeof WarnCommand> {
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+						content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 						components: [],
 					});
 				} catch (error_) {
@@ -89,7 +89,7 @@ export default class extends Command<typeof WarnCommand> {
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
-				content: i18next.t('command.mod.warn.cancel', {
+				content: i18next.t("command.mod.warn.cancel", {
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 					lng: locale,
 				}),
@@ -110,7 +110,7 @@ export default class extends Command<typeof WarnCommand> {
 			await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 			await collectedInteraction.editReply({
-				content: i18next.t('command.mod.warn.success', {
+				content: i18next.t("command.mod.warn.success", {
 					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 					lng: locale,
 				}),

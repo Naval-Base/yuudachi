@@ -1,12 +1,12 @@
-import i18next from 'i18next';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { RestrictCommand } from '../../interactions/index.js';
-import { embed } from './sub/restrict/embed.js';
-import { emoji } from './sub/restrict/emoji.js';
-import { react } from './sub/restrict/react.js';
-import { unrole } from './sub/restrict/unrole.js';
+import i18next from "i18next";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import type { RestrictCommand } from "../../interactions/index.js";
+import { embed } from "./sub/restrict/embed.js";
+import { emoji } from "./sub/restrict/emoji.js";
+import { react } from "./sub/restrict/react.js";
+import { unrole } from "./sub/restrict/unrole.js";
 
 export default class extends Command<typeof RestrictCommand> {
 	public override async chatInput(
@@ -22,26 +22,26 @@ export default class extends Command<typeof RestrictCommand> {
 		);
 
 		if (!modLogChannel) {
-			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+			throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 		}
 
 		switch (Object.keys(args)[0]) {
-			case 'embed': {
+			case "embed": {
 				await embed(interaction, reply, args.embed, locale);
 				break;
 			}
 
-			case 'react': {
+			case "react": {
 				await react(interaction, reply, args.react, locale);
 				break;
 			}
 
-			case 'emoji': {
+			case "emoji": {
 				await emoji(interaction, reply, args.emoji, locale);
 				break;
 			}
 
-			case 'unrole': {
+			case "unrole": {
 				await unrole(interaction, reply, args.unrole, locale);
 				break;
 			}

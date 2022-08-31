@@ -1,14 +1,14 @@
-import { type Job, Queue, QueueScheduler, Worker } from 'bullmq';
-import { Client, type Snowflake } from 'discord.js';
-import type { Redis } from 'ioredis';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { refreshScamDomains } from './functions/anti-scam/refreshScamDomains.js';
-import { deleteCase } from './functions/cases/deleteCase.js';
-import { deleteLockdown } from './functions/lockdowns/deleteLockdown.js';
-import { upsertCaseLog } from './functions/logging/upsertCaseLog.js';
-import { logger } from './logger.js';
-import { kRedis, kSQL } from './tokens.js';
+import { type Job, Queue, QueueScheduler, Worker } from "bullmq";
+import { Client, type Snowflake } from "discord.js";
+import type { Redis } from "ioredis";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { refreshScamDomains } from "./functions/anti-scam/refreshScamDomains.js";
+import { deleteCase } from "./functions/cases/deleteCase.js";
+import { deleteLockdown } from "./functions/lockdowns/deleteLockdown.js";
+import { upsertCaseLog } from "./functions/logging/upsertCaseLog.js";
+import { logger } from "./logger.js";
+import { kRedis, kSQL } from "./tokens.js";
 
 export async function registerJobs() {
 	const client = container.resolve<Client<true>>(Client);
@@ -16,28 +16,28 @@ export async function registerJobs() {
 	const redis = container.resolve<Redis>(kRedis);
 
 	// @ts-expect-error: This works
-	new QueueScheduler('jobs', { connection: redis });
+	new QueueScheduler("jobs", { connection: redis });
 	// @ts-expect-error: This works
-	const queue = new Queue('jobs', { connection: redis });
+	const queue = new Queue("jobs", { connection: redis });
 
 	try {
-		logger.info({ job: { name: 'modActionTimers' } }, 'Registering job: modActionTimers');
-		await queue.add('modActionTimers', {}, { repeat: { cron: '* * * * *' } });
-		logger.info({ job: { name: 'modActionTimers' } }, 'Registered job: modActionTimers');
+		logger.info({ job: { name: "modActionTimers" } }, "Registering job: modActionTimers");
+		await queue.add("modActionTimers", {}, { repeat: { cron: "* * * * *" } });
+		logger.info({ job: { name: "modActionTimers" } }, "Registered job: modActionTimers");
 
-		logger.info({ job: { name: 'modLockdownTimers' } }, 'Registering job: modLockdownTimers');
-		await queue.add('modLockdownTimers', {}, { repeat: { cron: '* * * * *' } });
-		logger.info({ job: { name: 'modLockdownTimers' } }, 'Registered job: modLockdownTimers');
+		logger.info({ job: { name: "modLockdownTimers" } }, "Registering job: modLockdownTimers");
+		await queue.add("modLockdownTimers", {}, { repeat: { cron: "* * * * *" } });
+		logger.info({ job: { name: "modLockdownTimers" } }, "Registered job: modLockdownTimers");
 
-		logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registering job: scamDomainUpdateTimers');
-		await queue.add('scamDomainUpdateTimers', {}, { repeat: { cron: '*/5 * * * *' } });
-		logger.info({ job: { name: 'scamDomainUpdateTimers' } }, 'Registered job: scamDomainUpdateTimers');
+		logger.info({ job: { name: "scamDomainUpdateTimers" } }, "Registering job: scamDomainUpdateTimers");
+		await queue.add("scamDomainUpdateTimers", {}, { repeat: { cron: "*/5 * * * *" } });
+		logger.info({ job: { name: "scamDomainUpdateTimers" } }, "Registered job: scamDomainUpdateTimers");
 
 		new Worker(
-			'jobs',
+			"jobs",
 			async (job: Job) => {
 				switch (job.name) {
-					case 'modActionTimers': {
+					case "modActionTimers": {
 						const currentCases = await sql<[{ action_expiration: string; case_id: number; guild_id: Snowflake }]>`
 							select guild_id, case_id, action_expiration
 							from cases
@@ -69,7 +69,7 @@ export async function registerJobs() {
 						break;
 					}
 
-					case 'modLockdownTimers': {
+					case "modLockdownTimers": {
 						const currentLockdowns = await sql<[{ channel_id: Snowflake; expiration: string }]>`
 							select channel_id, expiration
 							from lockdowns
@@ -93,7 +93,7 @@ export async function registerJobs() {
 						break;
 					}
 
-					case 'scamDomainUpdateTimers': {
+					case "scamDomainUpdateTimers": {
 						try {
 							await refreshScamDomains();
 						} catch (error_) {

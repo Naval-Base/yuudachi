@@ -1,17 +1,17 @@
-import { on } from 'node:events';
-import { Client, Events } from 'discord.js';
-import { injectable } from 'tsyringe';
-import type { Event } from '../../Event.js';
-import { handleAntiSpam } from '../../functions/anti-spam/handler.js';
-import { logger } from '../../logger.js';
+import { on } from "node:events";
+import { Client, Events } from "discord.js";
+import { injectable } from "tsyringe";
+import type { Event } from "../../Event.js";
+import { handleAntiSpam } from "../../functions/anti-spam/handler.js";
+import { logger } from "../../logger.js";
 import {
 	APIAutoModerationRuleActionType,
 	type GatewayAutoModerationActionExecution,
-} from '../../util/tempAutomodTypes.js';
+} from "../../util/tempAutomodTypes.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'AutoMod spam handler';
+	public name = "AutoMod spam handler";
 
 	public event = Events.Raw as const;
 
@@ -28,7 +28,7 @@ export default class implements Event {
 			]
 		>) {
 			try {
-				if (rawData.t !== 'AUTO_MODERATION_ACTION_EXECUTION') {
+				if (rawData.t !== "AUTO_MODERATION_ACTION_EXECUTION") {
 					continue;
 				}
 

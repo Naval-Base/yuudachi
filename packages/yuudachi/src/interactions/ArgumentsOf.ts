@@ -1,6 +1,6 @@
 /* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions, APIAttachment } from 'discord-api-types/v10'; */
-import type { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
-import type { Attachment, GuildChannel, GuildMember, Message, Role, User } from 'discord.js';
+import type { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
+import type { Attachment, GuildChannel, GuildMember, Message, Role, User } from "discord.js";
 
 export type CommandPayload = Readonly<{
 	name: string;
@@ -45,11 +45,11 @@ type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	? ArgumentsOfRaw<O>
 	: T extends ApplicationCommandOptionType.String
 	? C extends readonly { value: string }[]
-		? C[number]['value']
+		? C[number]["value"]
 		: string
 	: T extends ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number
 	? C extends readonly { value: number }[]
-		? C[number]['value']
+		? C[number]["value"]
 		: number
 	: T extends ApplicationCommandOptionType.Boolean
 	? boolean
@@ -87,7 +87,7 @@ type OptionToObject<O> = O extends {
 type ArgumentsOfRaw<O> = O extends readonly any[] ? UnionToIntersection<OptionToObject<O[number]>> : never;
 
 export type ArgumentsOf<C extends CommandPayload> = C extends { options: readonly Option[] }
-	? UnionToIntersection<OptionToObject<C['options'][number]>>
+	? UnionToIntersection<OptionToObject<C["options"][number]>>
 	: C extends { type: ApplicationCommandType.Message }
 	? { message: Message<true> }
 	: C extends { type: ApplicationCommandType.User }
