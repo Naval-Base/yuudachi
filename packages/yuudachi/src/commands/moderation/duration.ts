@@ -49,7 +49,7 @@ export default class extends Command<typeof DurationCommand> {
 
 		const parsedDuration = ms(args.duration);
 
-		if (parsedDuration < 300000 || parsedDuration > 2419200000 || isNaN(parsedDuration)) {
+		if (parsedDuration < 300_000 || parsedDuration > 2_419_200_000 || Number.isNaN(parsedDuration)) {
 			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 		}
 

@@ -46,12 +46,12 @@ const client = createClient({
 createCommands();
 createWebhooks();
 
-const commandFiles = readdirp(fileURLToPath(new URL('./commands', import.meta.url)), {
+const commandFiles = readdirp(fileURLToPath(new URL('commands', import.meta.url)), {
 	fileFilter: '*.js',
 	directoryFilter: '!sub',
 });
 
-const eventFiles = readdirp(fileURLToPath(new URL('./events', import.meta.url)), {
+const eventFiles = readdirp(fileURLToPath(new URL('events', import.meta.url)), {
 	fileFilter: '*.js',
 });
 
@@ -66,7 +66,7 @@ try {
 
 	await i18next.use(Backend).init({
 		backend: {
-			paths: [new URL('./locales/{{lng}}/{{ns}}.json', import.meta.url)],
+			paths: [new URL('locales/{{lng}}/{{ns}}.json', import.meta.url)],
 		},
 		cleanCode: true,
 		preload: ['en-US', 'en-GB', 'de', 'es-ES', 'ja', 'ko', 'pl', 'zh-CH', 'zh-TW'],
@@ -83,8 +83,8 @@ try {
 			continue;
 		}
 
-		const dynamic = await dynamicImport<new () => Command<CommandPayload>>(
-			() => import(pathToFileURL(dir.fullPath).href),
+		const dynamic = dynamicImport<new () => Command<CommandPayload>>(
+			async () => import(pathToFileURL(dir.fullPath).href),
 		);
 		const command = container.resolve<Command<CommandPayload>>((await dynamic()).default);
 		logger.info(
@@ -92,18 +92,24 @@ try {
 			`Registering command: ${command.name?.join(', ') ?? cmdInfo.name}`,
 		);
 
-		command.name?.forEach((name) => commands.set(name.toLowerCase(), command)) ??
+		if (command.name) {
+			for (const name of command.name) {
+				commands.set(name.toLowerCase(), command);
+			}
+		} else {
 			commands.set(cmdInfo.name.toLowerCase(), command);
+		}
 	}
 
 	for await (const dir of eventFiles) {
-		const dynamic = await dynamicImport<new () => Event>(() => import(pathToFileURL(dir.fullPath).href));
+		const dynamic = dynamicImport<new () => Event>(async () => import(pathToFileURL(dir.fullPath).href));
 		const event_ = container.resolve<Event>((await dynamic()).default);
 		logger.info({ event: { name: event_.name, event: event_.event } }, `Registering event: ${event_.name}`);
 
 		if (event_.disabled) {
 			continue;
 		}
+
 		void event_.execute();
 	}
 
@@ -112,11 +118,11 @@ try {
 	const wsURL = process.env.SCAM_DOMAIN_WS;
 
 	if (wsURL) {
-		new WebSocketConnection(process.env.SCAM_DOMAIN_WS!, scamDomainRequestHeaders['SCAM_DOMAIN_URL'], redis);
+		new WebSocketConnection(process.env.SCAM_DOMAIN_WS!, scamDomainRequestHeaders.SCAM_DOMAIN_URL, redis);
 	} else {
 		logger.info(`Missing env var 'SCAM_DOMAIN_WS`);
 	}
-} catch (e) {
-	const error = e as Error;
+} catch (error_) {
+	const error = error_ as Error;
 	logger.error(error, error.message);
 }

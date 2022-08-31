@@ -1,6 +1,7 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
 import { Client, Events, type GuildMember, AuditLogEvent } from 'discord.js';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -34,7 +35,7 @@ export default class implements Event {
 				if (
 					!modLogChannel ||
 					oldMember.communicationDisabledUntilTimestamp === newMember.communicationDisabledUntilTimestamp ||
-					(newMember.communicationDisabledUntilTimestamp ?? Infinity) < Date.now()
+					(newMember.communicationDisabledUntilTimestamp ?? Number.POSITIVE_INFINITY) < Date.now()
 				) {
 					continue;
 				}
@@ -55,7 +56,7 @@ export default class implements Event {
 					continue;
 				}
 
-				await pSetTimeout(5000);
+				await pSetTimeout(5_000);
 
 				const autoMod = await this.redis.del(`guild:${oldMember.guild.id}:user:${oldMember.id}:auto_mod_timeout`);
 
@@ -66,14 +67,15 @@ export default class implements Event {
 				const auditLogs = await oldMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberUpdate });
 				const logs = auditLogs.entries.find(
 					(log) =>
-						log.target!.id === oldMember.user.id && log.changes.some((c) => c.key === 'communication_disabled_until'),
+						log.target!.id === oldMember.user.id &&
+						log.changes.some((change) => change.key === 'communication_disabled_until'),
 				);
 
 				if (!logs?.changes) {
 					continue;
 				}
 
-				const timeoutChange = logs.changes.find((c) => c.key === 'communication_disabled_until');
+				const timeoutChange = logs.changes.find((change) => change.key === 'communication_disabled_until');
 
 				if (!timeoutChange) {
 					continue;
@@ -115,8 +117,8 @@ export default class implements Event {
 					  ));
 
 				await upsertCaseLog(oldMember.guild, logs.executor, case_);
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

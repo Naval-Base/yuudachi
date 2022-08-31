@@ -1,26 +1,26 @@
 import type { GuildMember, Snowflake, User } from 'discord.js';
 import type { CaseAction } from '../cases/createCase.js';
 
-interface CasePayloadArgs {
-	reason?: string | undefined | null;
-	user: {
-		user: User;
-		member?: GuildMember | undefined | null;
-	};
+type CasePayloadArgs = {
 	days?: number | undefined;
-	reference?: number | undefined | null;
-}
+	reason?: string | null | undefined;
+	reference?: number | null | undefined;
+	user: {
+		member?: GuildMember | null | undefined;
+		user: User;
+	};
+};
 
-interface GenerateCasePayloadOptions {
-	guildId: Snowflake;
-	user?: User | undefined | null;
-	roleId?: Snowflake | undefined | null;
-	args: CasePayloadArgs;
+type GenerateCasePayloadOptions = {
 	action: CaseAction;
-	messageId?: Snowflake | undefined | null;
-	duration?: number | undefined | null;
-	multi?: boolean | undefined | null;
-}
+	args: CasePayloadArgs;
+	duration?: number | null | undefined;
+	guildId: Snowflake;
+	messageId?: Snowflake | null | undefined;
+	multi?: boolean | null | undefined;
+	roleId?: Snowflake | null | undefined;
+	user?: User | null | undefined;
+};
 
 export function generateCasePayload({
 	guildId,

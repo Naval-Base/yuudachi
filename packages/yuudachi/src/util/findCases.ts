@@ -10,7 +10,7 @@ import { kSQL } from '../tokens.js';
 dayjs.extend(relativeTime);
 
 export async function findCases(phrase: string, guildId: Snowflake) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.resolve<Sql<{}>>(kSQL);
 
 	if (!phrase.length) {
 		return sql<RawCase[]>`
@@ -22,7 +22,7 @@ export async function findCases(phrase: string, guildId: Snowflake) {
 		`;
 	}
 
-	if (!isNaN(parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
+	if (!Number.isNaN(Number.parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
 		return sql<RawCase[]>`
 			select *
 			from cases

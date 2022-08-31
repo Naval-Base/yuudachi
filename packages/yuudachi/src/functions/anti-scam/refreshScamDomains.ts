@@ -7,17 +7,17 @@ import { kRedis } from '../../tokens.js';
 
 export const scamURLEnvs = ['SCAM_DOMAIN_URL', 'SCAM_DOMAIN_DISCORD_URL'] as const;
 export enum ScamRedisKeys {
-	SCAM_DOMAIN_URL = 'scamdomains',
 	SCAM_DOMAIN_DISCORD_URL = 'scamdomains_discord',
+	SCAM_DOMAIN_URL = 'scamdomains',
 }
 
-export interface ScamDomainRefreshData {
-	envVar: string;
-	redisKey: string;
-	lastRefresh: number;
-	before: number;
+export type ScamDomainRefreshData = {
 	after: number;
-}
+	before: number;
+	envVar: string;
+	lastRefresh: number;
+	redisKey: string;
+};
 
 export function checkResponse(response: Dispatcher.ResponseData) {
 	if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -37,21 +37,23 @@ export const scamDomainRequestHeaders = {
 } as const;
 
 export async function refreshScamDomains(redis?: Redis | undefined) {
+	let localRedis = redis;
 	if (!redis) {
-		redis = container.resolve<Redis>(kRedis);
+		localRedis = container.resolve<Redis>(kRedis);
 	}
+
 	const res: ScamDomainRefreshData[] = [];
 
-	for (const urlEnv of scamURLEnvs) {
-		const url = process.env[urlEnv];
+	for (const urlEnvironment of scamURLEnvs) {
+		const url = process.env[urlEnvironment];
 
 		if (!url) {
-			logger.warn(`Missing env var: ${urlEnv}`);
+			logger.warn(`Missing env var: ${urlEnvironment}`);
 			continue;
 		}
 
-		const response = await fetch(process.env[urlEnv]!, {
-			headers: scamDomainRequestHeaders[urlEnv],
+		const response = await fetch(process.env[urlEnvironment]!, {
+			headers: scamDomainRequestHeaders[urlEnvironment],
 		});
 		const checkedResponse = checkResponse(response);
 
@@ -61,12 +63,12 @@ export async function refreshScamDomains(redis?: Redis | undefined) {
 
 		const list = (await checkedResponse.body.json()) as string[];
 
-		switch (urlEnv) {
+		switch (urlEnvironment) {
 			case 'SCAM_DOMAIN_DISCORD_URL':
 			case 'SCAM_DOMAIN_URL': {
-				const key = ScamRedisKeys[urlEnv];
-				// @ts-expect-error
-				const [[, lastRefresh], [, before], , , [, after]] = await redis
+				const key = ScamRedisKeys[urlEnvironment];
+				// @ts-expect-error: Redis types are awful
+				const [[, lastRefresh], [, before], , , [, after]] = await localRedis
 					.multi()
 					.get(`${key}:refresh`)
 					.scard(key)
@@ -76,31 +78,29 @@ export async function refreshScamDomains(redis?: Redis | undefined) {
 					.set(`${key}:refresh`, Date.now())
 					.exec();
 
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-				const lastRefreshTimestamp = parseInt(lastRefresh, 10);
+				const lastRefreshTimestamp = Number.parseInt(lastRefresh, 10);
 
 				logger.info({
 					msg: 'refreshd scam domains',
-					envVar: urlEnv,
+					envVar: urlEnvironment,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					before,
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					after,
 				});
 
 				res.push({
-					envVar: urlEnv,
+					envVar: urlEnvironment,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					before,
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					after,
 				});
 				break;
 			}
+
+			default:
+				break;
 		}
 	}
 

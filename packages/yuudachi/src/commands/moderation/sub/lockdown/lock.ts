@@ -16,11 +16,11 @@ import { getLockdown } from '../../../../functions/lockdowns/getLockdown.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
-interface LockdownLockArgs {
+type LockdownLockArgs = {
 	channel: TextChannel;
 	duration: string;
 	reason?: string | undefined;
-}
+};
 
 export async function lock(
 	interaction: InteractionParam,
@@ -42,7 +42,7 @@ export async function lock(
 
 	const parsedDuration = ms(args.duration);
 
-	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
+	if (parsedDuration < 300_000 || Number.isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
@@ -73,7 +73,7 @@ export async function lock(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 15000,
+			time: 15_000,
 		})
 		.catch(async () => {
 			try {
@@ -82,6 +82,7 @@ export async function lock(
 					components: [],
 				});
 			} catch {}
+
 			return undefined;
 		});
 

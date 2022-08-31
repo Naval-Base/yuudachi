@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 import { codeBlock, time, TimestampStyles } from 'discord.js';
 import i18next from 'i18next';
-import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
-import { acquireLockIfPublic } from './utils.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import {
 	ageFilter,
@@ -17,6 +15,8 @@ import { resolveDateLocale } from '../../../../functions/anti-raid/resolveDateLo
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
 import { resolveTimestamp } from '../../../../util/timestamp.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
+import { acquireLockIfPublic } from './utils.js';
 
 export enum Confusables {
 	Off,
@@ -25,12 +25,12 @@ export enum Confusables {
 	PatternAndMembers,
 }
 
-interface ParseDateParams {
+type ParseDateParams = {
 	createdAfter?: string | undefined;
 	createdBefore?: string | undefined;
 	joinAfter?: string | undefined;
 	joinBefore?: string | undefined;
-}
+};
 
 function parseDates({ createdAfter, createdBefore, joinAfter, joinBefore }: ParseDateParams, locale: string) {
 	const parsedCreatedAfter = resolveTimestamp(createdAfter);

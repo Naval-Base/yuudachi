@@ -26,7 +26,8 @@ export default class extends Command<typeof SponsorCommand | typeof SponsorUserC
 		const [roles] = await sql<[{ sponsor_role_id: Snowflake | null }?]>`
 			select sponsor_role_id
 			from guild_settings
-			where guild_id = ${interaction.guildId}`;
+			where guild_id = ${interaction.guildId}
+		`;
 
 		if (!roles?.sponsor_role_id) {
 			throw new Error(i18next.t('command.utility.sponsor.errors.no_role', { lng: locale }));
@@ -67,7 +68,7 @@ export default class extends Command<typeof SponsorCommand | typeof SponsorUserC
 			.awaitMessageComponent({
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: ComponentType.Button,
-				time: 15000,
+				time: 15_000,
 			})
 			.catch(async () => {
 				try {
@@ -76,6 +77,7 @@ export default class extends Command<typeof SponsorCommand | typeof SponsorUserC
 						components: [],
 					});
 				} catch {}
+
 				return undefined;
 			});
 

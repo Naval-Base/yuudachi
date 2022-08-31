@@ -1,22 +1,22 @@
 import type { Guild, Snowflake, User } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { CaseAction, createCase } from './createCase.js';
-import type { RawCase } from './transformCase.js';
 import { kSQL } from '../../tokens.js';
 import { generateCasePayload } from '../logging/generateCasePayload.js';
+import { CaseAction, createCase } from './createCase.js';
+import type { RawCase } from './transformCase.js';
 
-interface DeleteCaseOptions {
-	guild: Guild;
-	user?: User | undefined | null;
-	messageId?: Snowflake | undefined;
-	target?: User | undefined;
-	caseId?: number | undefined;
-	reason?: string | undefined | null;
-	manual?: boolean | undefined;
-	skipAction?: boolean | undefined;
+type DeleteCaseOptions = {
 	action?: CaseAction | undefined;
-}
+	caseId?: number | undefined;
+	guild: Guild;
+	manual?: boolean | undefined;
+	messageId?: Snowflake | undefined;
+	reason?: string | null | undefined;
+	skipAction?: boolean | undefined;
+	target?: User | undefined;
+	user?: User | null | undefined;
+};
 
 export async function deleteCase({
 	guild,
@@ -31,6 +31,7 @@ export async function deleteCase({
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	let case_: RawCase | undefined;
+	let localReason = reason;
 
 	if (target) {
 		[case_] = await sql<[RawCase]>`
@@ -40,7 +41,8 @@ export async function deleteCase({
 				and target_id = ${target.id}
 				and action = ${action ?? CaseAction.Ban}
 			order by created_at desc
-			limit 1`;
+			limit 1
+		`;
 	}
 
 	if (!target) {
@@ -48,7 +50,8 @@ export async function deleteCase({
 			select *
 			from cases
 			where guild_id = ${guild.id}
-				and case_id = ${caseId!}`;
+				and case_id = ${caseId!}
+		`;
 	}
 
 	if (case_?.action === CaseAction.Role) {
@@ -56,12 +59,13 @@ export async function deleteCase({
 			update cases
 			set action_processed = true
 			where guild_id = ${guild.id}
-				and case_id = ${case_.case_id}`;
+				and case_id = ${case_.case_id}
+		`;
 
 		if (manual) {
-			reason = 'Manual unrole';
+			localReason = 'Manual unrole';
 		} else {
-			reason = 'Automatic unrole based on duration';
+			localReason = 'Automatic unrole based on duration';
 		}
 	}
 
@@ -70,12 +74,13 @@ export async function deleteCase({
 			update cases
 			set action_processed = true
 			where guild_id = ${guild.id}
-				and case_id = ${case_.case_id}`;
+				and case_id = ${case_.case_id}
+		`;
 
 		if (manual) {
-			reason = 'Manually ended timeout';
+			localReason = 'Manually ended timeout';
 		} else {
-			reason = 'Timeout expired based on duration';
+			localReason = 'Timeout expired based on duration';
 		}
 	}
 
@@ -88,7 +93,7 @@ export async function deleteCase({
 			user,
 			roleId: case_?.role_id,
 			args: {
-				reason,
+				reason: localReason,
 				user: {
 					user: await guild.client.users.fetch(case_?.target_id ?? target!.id),
 					member: await guild.members.fetch(case_?.target_id ?? target!.id).catch(() => null),

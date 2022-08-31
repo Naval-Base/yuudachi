@@ -1,15 +1,15 @@
 import type { Snowflake, User } from 'discord.js';
 import i18next from 'i18next';
-import { generateCaseColor } from './generateCaseColor.js';
-import { generateCaseLog } from './generateCaseLog.js';
 import { addFields } from '../../util/embed.js';
 import type { Case } from '../cases/createCase.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
+import { generateCaseColor } from './generateCaseColor.js';
+import { generateCaseLog } from './generateCaseLog.js';
 
 export async function generateCaseEmbed(
 	guildId: Snowflake,
 	logChannelId: Snowflake,
-	user: User | undefined | null,
+	user: User | null | undefined,
 	case_: Case,
 ) {
 	const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
@@ -32,5 +32,6 @@ export async function generateCaseEmbed(
 			},
 		};
 	}
+
 	return embed;
 }

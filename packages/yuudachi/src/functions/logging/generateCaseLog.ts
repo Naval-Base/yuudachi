@@ -22,8 +22,8 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 			} else {
 				action += ` \`Unknown\` (${case_.roleId})`;
 			}
-		} catch (e) {
-			const error = e as Error;
+		} catch (error_) {
+			const error = error_ as Error;
 			logger.error(error, error.message);
 		}
 	}
@@ -46,7 +46,8 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 		const [contextMessage] = await sql<[{ channel_id: Snowflake | null }?]>`
 			select channel_id
 			from messages
-			where id = ${case_.contextMessageId}`;
+			where id = ${case_.contextMessageId}
+		`;
 
 		if (Reflect.has(contextMessage ?? {}, 'channel_id')) {
 			msg += i18next.t('log.mod_log.case_log.context', {
@@ -70,7 +71,8 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 			select log_message_id
 			from cases
 			where guild_id = ${case_.guildId}
-				and case_id = ${case_.refId}`;
+				and case_id = ${case_.refId}
+		`;
 
 		if (Reflect.has(reference ?? {}, 'log_message_id')) {
 			msg += i18next.t('log.mod_log.case_log.reference', {

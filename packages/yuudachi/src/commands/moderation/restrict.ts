@@ -1,12 +1,12 @@
 import i18next from 'i18next';
-import { embed } from './sub/restrict/embed.js';
-import { emoji } from './sub/restrict/emoji.js';
-import { react } from './sub/restrict/react.js';
-import { unrole } from './sub/restrict/unrole.js';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { RestrictCommand } from '../../interactions/index.js';
+import { embed } from './sub/restrict/embed.js';
+import { emoji } from './sub/restrict/emoji.js';
+import { react } from './sub/restrict/react.js';
+import { unrole } from './sub/restrict/unrole.js';
 
 export default class extends Command<typeof RestrictCommand> {
 	public override async chatInput(
@@ -27,19 +27,23 @@ export default class extends Command<typeof RestrictCommand> {
 
 		switch (Object.keys(args)[0]) {
 			case 'embed': {
-				return embed(interaction, reply, args.embed, locale);
+				await embed(interaction, reply, args.embed, locale);
+				break;
 			}
 
 			case 'react': {
-				return react(interaction, reply, args.react, locale);
+				await react(interaction, reply, args.react, locale);
+				break;
 			}
 
 			case 'emoji': {
-				return emoji(interaction, reply, args.emoji, locale);
+				await emoji(interaction, reply, args.emoji, locale);
+				break;
 			}
 
 			case 'unrole': {
-				return unrole(interaction, reply, args.unrole, locale);
+				await unrole(interaction, reply, args.unrole, locale);
+				break;
 			}
 
 			default:

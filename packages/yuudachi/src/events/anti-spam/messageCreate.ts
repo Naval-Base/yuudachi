@@ -4,6 +4,7 @@ import { injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
 import { handleAntiSpam } from '../../functions/anti-spam/handler.js';
 import { logger } from '../../logger.js';
+
 @injectable()
 export default class implements Event {
 	public name = 'Spam check';
@@ -27,8 +28,8 @@ export default class implements Event {
 					name: this.name,
 					event: this.event,
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

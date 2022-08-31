@@ -74,12 +74,14 @@ export default class implements Event {
 				let description = '';
 
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
+					// eslint-disable-next-line unicorn/no-unsafe-regex
 					const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
 
 					if (!strippedOldMessage?.[2]) {
 						continue;
 					}
 
+					// eslint-disable-next-line unicorn/no-unsafe-regex
 					const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
 
 					if (!strippedNewMessage?.[2]) {
@@ -96,13 +98,14 @@ export default class implements Event {
 						if (part.value === '\n') {
 							continue;
 						}
-						const d = part.added ? '+ ' : part.removed ? '- ' : '';
-						description += `${d}${part.value.replace(/\n/g, '')}\n`;
+
+						const deleted = part.added ? '+ ' : part.removed ? '- ' : '';
+						description += `${deleted}${part.value.replace(/\n/g, '')}\n`;
 					}
 
 					const prepend = '```diff\n';
 					const append = '\n```';
-					description = `${prepend}${description.substring(0, 3900)}${append}`;
+					description = `${prepend}${description.slice(0, 3_900)}${append}`;
 				} else {
 					const diffMessage = diffWords(escapeMarkdown(oldMessage.content), escapeMarkdown(newMessage.content));
 
@@ -111,7 +114,7 @@ export default class implements Event {
 						description += `${markdown}${part.value}${markdown}`;
 					}
 
-					description = `${description.substring(0, 3900)}` || '\u200b';
+					description = `${description.slice(0, 3_900)}` || '\u200B';
 				}
 
 				const info = `${i18next.t('log.guild_log.message_updated.channel', {
@@ -134,7 +137,7 @@ export default class implements Event {
 						timestamp: new Date().toISOString(),
 					},
 					{
-						name: '\u200b',
+						name: '\u200B',
 						value: info,
 					},
 				);
@@ -144,8 +147,8 @@ export default class implements Event {
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

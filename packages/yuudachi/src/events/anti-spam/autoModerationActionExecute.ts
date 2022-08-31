@@ -1,4 +1,4 @@
-import { on } from 'events';
+import { on } from 'node:events';
 import { Client, Events } from 'discord.js';
 import { injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -21,9 +21,9 @@ export default class implements Event {
 		for await (const [rawData] of on(this.client, this.event) as AsyncIterableIterator<
 			[
 				{
+					d: GatewayAutoModerationActionExecution;
 					op: number;
 					t: string;
-					d: GatewayAutoModerationActionExecution;
 				},
 			]
 		>) {
@@ -46,8 +46,8 @@ export default class implements Event {
 					name: this.name,
 					event: this.event,
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

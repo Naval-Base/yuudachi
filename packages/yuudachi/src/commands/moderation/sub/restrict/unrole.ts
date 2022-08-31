@@ -82,7 +82,7 @@ export async function unrole(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 15000,
+			time: 15_000,
 		})
 		.catch(async () => {
 			try {
@@ -91,6 +91,7 @@ export async function unrole(
 					components: [],
 				});
 			} catch {}
+
 			return undefined;
 		});
 

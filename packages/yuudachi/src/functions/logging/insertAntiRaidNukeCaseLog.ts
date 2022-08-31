@@ -2,12 +2,12 @@ import type { Guild, User } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog.js';
 import { kSQL } from '../../tokens.js';
 import { addFields } from '../../util/embed.js';
 import type { Case } from '../cases/createCase.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
+import { generateAntiRaidNukeCaseLog } from './generateAntiRaidNukeCaseLog.js';
 
 export async function insertAntiRaidNukeCaseLog(
 	guild: Guild,
@@ -43,10 +43,12 @@ export async function insertAntiRaidNukeCaseLog(
 		embeds: [embed],
 	});
 
-	await sql`update cases
-		set log_message_id = ${logMessage.id}
-		where guild_id = ${guild.id}
-			and case_id in ${sql(cases.map((case_) => case_.caseId))}`;
+	await sql`
+		update cases
+			set log_message_id = ${logMessage.id}
+			where guild_id = ${guild.id}
+				and case_id in ${sql(cases.map((case_) => case_.caseId))}
+	`;
 
 	return logMessage;
 }

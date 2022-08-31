@@ -108,6 +108,7 @@ export default class implements Event {
 						attachmentParts.push(`[${counter}](${attachment.proxyURL})`);
 						counter++;
 					}
+
 					infoParts.push(
 						i18next.t('log.guild_log.message_deleted.attachments', {
 							attachments: attachmentParts.join(' '),
@@ -119,7 +120,7 @@ export default class implements Event {
 				if (message.stickers.size) {
 					infoParts.push(
 						i18next.t('log.guild_log.message_deleted.stickers', {
-							stickers: message.stickers.map((s) => `\`${s.name}\``).join(', '),
+							stickers: message.stickers.map((sticker) => `\`${sticker.name}\``).join(', '),
 							lng: locale,
 						}),
 					);
@@ -151,7 +152,7 @@ export default class implements Event {
 				}
 
 				embed = addFields(embed, {
-					name: '\u200b',
+					name: '\u200B',
 					value: infoParts.join('\n'),
 				});
 
@@ -160,8 +161,8 @@ export default class implements Event {
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

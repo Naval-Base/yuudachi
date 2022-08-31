@@ -1,24 +1,24 @@
 import type { Snowflake } from 'discord.js';
 import type { Case } from './createCase.js';
 
-export interface RawCase {
-	case_id: number;
-	guild_id: Snowflake;
+export type RawCase = {
 	action: number;
-	role_id: Snowflake | null;
 	action_expiration: string | null;
-	reason: string | null;
+	action_processed: boolean;
+	case_id: number;
+	context_message_id: Snowflake | null;
+	created_at: string;
+	guild_id: Snowflake;
+	log_message_id: Snowflake | null;
 	mod_id: Snowflake;
 	mod_tag: string;
+	multi: boolean;
+	reason: string | null;
+	ref_id: number | null;
+	role_id: Snowflake | null;
 	target_id: Snowflake;
 	target_tag: string;
-	context_message_id: Snowflake | null;
-	ref_id: number | null;
-	log_message_id: Snowflake | null;
-	action_processed: boolean;
-	multi: boolean;
-	created_at: string;
-}
+};
 
 export function transformCase(case_: RawCase): Case {
 	return {

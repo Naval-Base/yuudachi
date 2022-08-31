@@ -39,9 +39,9 @@ export default class extends Command<typeof CaseLookupCommand> {
 		try {
 			const trimmedPhrase = args.phrase.trim();
 			const cases = await findCases(trimmedPhrase, interaction.guildId);
-			let choices = cases.map((c) => {
-				const choiceName = `#${c.case_id} ${ACTION_KEYS[c.action]!.toUpperCase()} ${c.target_tag}: ${
-					c.reason ??
+			let choices = cases.map((case_) => {
+				const choiceName = `#${case_.case_id} ${ACTION_KEYS[case_.action]!.toUpperCase()} ${case_.target_tag}: ${
+					case_.reason ??
 					i18next.t('command.mod.case.autocomplete.no_reason', {
 						lng: locale,
 					})!
@@ -49,17 +49,18 @@ export default class extends Command<typeof CaseLookupCommand> {
 
 				return {
 					name: ellipsis(choiceName, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT),
-					value: String(c.case_id),
+					value: String(case_.case_id),
 				} as const;
 			});
 
 			const uniqueTargets = new Collection<string, { id: Snowflake; tag: string }>();
 
-			for (const c of cases) {
-				if (uniqueTargets.has(c.target_id)) {
+			for (const case_ of cases) {
+				if (uniqueTargets.has(case_.target_id)) {
 					continue;
 				}
-				uniqueTargets.set(c.target_id, { id: c.target_id, tag: c.target_tag });
+
+				uniqueTargets.set(case_.target_id, { id: case_.target_id, tag: case_.target_tag });
 			}
 
 			if (uniqueTargets.size === 1) {
@@ -84,8 +85,8 @@ export default class extends Command<typeof CaseLookupCommand> {
 			}
 
 			await interaction.respond(choices.slice(0, 25));
-		} catch (err) {
-			const error = err as Error;
+		} catch (error_) {
+			const error = error_ as Error;
 			logger.error(error, error.message);
 		}
 	}
@@ -108,12 +109,13 @@ export default class extends Command<typeof CaseLookupCommand> {
 			return;
 		}
 
-		if (!isNaN(parseInt(args.phrase, 10))) {
+		if (!Number.isNaN(Number.parseInt(args.phrase, 10))) {
 			const [modCase] = await sql<RawCase[]>`
-			select *
-			from cases
-			where guild_id = ${interaction.guildId}
-			and case_id = ${args.phrase}`;
+				select *
+				from cases
+				where guild_id = ${interaction.guildId}
+				and case_id = ${args.phrase}
+			`;
 
 			if (!modCase) {
 				throw new Error(i18next.t('command.common.errors.use_autocomplete', { lng: locale }));

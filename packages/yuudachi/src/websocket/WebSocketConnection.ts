@@ -4,17 +4,22 @@ import type { Redis } from 'ioredis';
 import WebSocket from 'ws';
 import { logger } from '../logger.js';
 
-interface ScamAPIData {
-	type: 'add' | 'delete';
+type ScamAPIData = {
 	domains: string[];
-}
+	type: 'add' | 'delete';
+};
 
 export class WebSocketConnection {
 	private connection: WebSocket;
+
 	private readonly url: string;
+
 	private readonly redis: Redis;
+
 	private readonly headers: { [key: string]: string } | undefined;
+
 	private tries = 0;
+
 	public constructor(url: string, headers: { [key: string]: string } | undefined, redis: Redis) {
 		this.url = url;
 		this.redis = redis;
@@ -40,8 +45,8 @@ export class WebSocketConnection {
 		this.tries = 0;
 	}
 
-	private onError(err: Error) {
-		logger.warn(err, 'WS error received');
+	private onError(error: Error) {
+		logger.warn(error, 'WS error received');
 	}
 
 	private onMessage(data: Buffer) {
@@ -99,6 +104,6 @@ export class WebSocketConnection {
 	}
 
 	private backOff() {
-		return Math.min(Math.floor(Math.exp(this.tries)), 10 * 60) * 1000;
+		return Math.min(Math.floor(Math.exp(this.tries)), 10 * 60) * 1_000;
 	}
 }

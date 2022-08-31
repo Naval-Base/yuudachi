@@ -23,9 +23,9 @@ export function table(headers: string[], rows: string[][], alignment = TableAlig
 		headerRow,
 		`|${headers
 			.map(
-				(s) =>
+				(str) =>
 					`${alignment === TableAlignment.Left || alignment === TableAlignment.Center ? ':' : ''}${'-'.repeat(
-						s.length,
+						str.length,
 					)}${alignment === TableAlignment.Center || alignment === TableAlignment.Right ? ':' : ''}`,
 			)
 			.join('|')}|`,

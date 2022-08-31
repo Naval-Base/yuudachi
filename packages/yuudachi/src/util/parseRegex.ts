@@ -1,16 +1,16 @@
 import RE2 from 're2';
 
 /**
- * @param input `/(hype)\s+(events?|messages?|apply|team|system)/i`
+ * @param input - `/(hype)\s+(events?|messages?|apply|team|system)/i`
  * @returns `(hype)\s+(events?|messages?|apply|team|system)`
  */
-export function parseRegex(input?: string | undefined | null, insensitive = true, fullMatch = false) {
+export function parseRegex(input?: string | null | undefined, insensitive = true, fullMatch = false) {
 	if (!input) {
 		return null;
 	}
 
 	try {
-		const regex = /^\/(.+)\/(?:g|m|i|s|u|y)?$/;
+		const regex = /^\/(.+)\/[gimsuy]?$/;
 		const options = insensitive ? 'i' : '';
 
 		if (regex.test(input)) {

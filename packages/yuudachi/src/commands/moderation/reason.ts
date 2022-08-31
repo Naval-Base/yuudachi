@@ -100,7 +100,7 @@ export default class extends Command<typeof ReasonCommand> {
 				.awaitMessageComponent({
 					filter: (collected) => collected.user.id === interaction.user.id,
 					componentType: ComponentType.Button,
-					time: 15000,
+					time: 15_000,
 				})
 				.catch(async () => {
 					try {
@@ -108,10 +108,11 @@ export default class extends Command<typeof ReasonCommand> {
 							content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 							components: [],
 						});
-					} catch (e) {
-						const error = e as Error;
+					} catch (error_) {
+						const error = error_ as Error;
 						logger.error(error, error.message);
 					}
+
 					return undefined;
 				});
 
@@ -186,7 +187,7 @@ export default class extends Command<typeof ReasonCommand> {
 			  });
 
 		await interaction.editReply({
-			content: truncate(message, 1000, ''),
+			content: truncate(message, 1_000, ''),
 			components: [],
 		});
 	}

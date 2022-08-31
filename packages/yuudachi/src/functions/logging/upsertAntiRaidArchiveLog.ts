@@ -1,7 +1,8 @@
+import { Buffer } from 'node:buffer';
 import dayjs from 'dayjs';
-import { ButtonStyle, type Message, type Guild, type User, GuildMember } from 'discord.js';
+import { ButtonStyle, type Message, type Guild, type User } from 'discord.js';
+import type { GuildMember } from 'discord.js';
 import i18next from 'i18next';
-import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
 import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
 import type { TargetRejection } from '../../commands/moderation/sub/anti-raid-nuke/utils.js';
 import { createButton } from '../../util/button.js';
@@ -11,6 +12,7 @@ import { type FormatterArgs, generateAntiRaidNukeReport } from '../formatters/ge
 import { generateFormatterUrl } from '../formatters/generateFormatterUrl.js';
 import { checkLogChannel } from '../settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
+import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
 
 export async function upsertAntiRaidArchivePendingLog(guild: Guild) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);

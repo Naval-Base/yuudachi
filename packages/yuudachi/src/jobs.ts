@@ -12,7 +12,7 @@ import { kRedis, kSQL } from './tokens.js';
 
 export async function registerJobs() {
 	const client = container.resolve<Client<true>>(Client);
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.resolve<Sql<{}>>(kSQL);
 	const redis = container.resolve<Redis>(kRedis);
 
 	// @ts-expect-error: This works
@@ -38,10 +38,11 @@ export async function registerJobs() {
 			async (job: Job) => {
 				switch (job.name) {
 					case 'modActionTimers': {
-						const currentCases = await sql<[{ guild_id: Snowflake; case_id: number; action_expiration: string }]>`
+						const currentCases = await sql<[{ action_expiration: string; case_id: number; guild_id: Snowflake }]>`
 							select guild_id, case_id, action_expiration
 							from cases
-							where action_processed = false`;
+							where action_processed = false
+						`;
 
 						for (const case_ of currentCases) {
 							if (Date.parse(case_.action_expiration) <= Date.now()) {
@@ -54,8 +55,8 @@ export async function registerJobs() {
 								try {
 									const newCase = await deleteCase({ guild, user: client.user, caseId: case_.case_id });
 									await upsertCaseLog(guild, client.user, newCase);
-								} catch (e) {
-									const error = e as Error;
+								} catch (error_) {
+									const error = error_ as Error;
 									logger.error(error, error.message);
 								}
 
@@ -67,17 +68,19 @@ export async function registerJobs() {
 
 						break;
 					}
+
 					case 'modLockdownTimers': {
 						const currentLockdowns = await sql<[{ channel_id: Snowflake; expiration: string }]>`
 							select channel_id, expiration
-							from lockdowns`;
+							from lockdowns
+						`;
 
 						for (const lockdown of currentLockdowns) {
 							if (Date.parse(lockdown.expiration) <= Date.now()) {
 								try {
 									await deleteLockdown(lockdown.channel_id);
-								} catch (e) {
-									const error = e as Error;
+								} catch (error_) {
+									const error = error_ as Error;
 									logger.error(error, error.message);
 								}
 
@@ -89,16 +92,18 @@ export async function registerJobs() {
 
 						break;
 					}
+
 					case 'scamDomainUpdateTimers': {
 						try {
 							await refreshScamDomains();
-						} catch (e) {
-							const error = e as Error;
+						} catch (error_) {
+							const error = error_ as Error;
 							logger.error(error, error.message);
 						}
 
 						break;
 					}
+
 					default:
 						break;
 				}
@@ -106,8 +111,8 @@ export async function registerJobs() {
 			// @ts-expect-error: This works
 			{ connection: redis },
 		);
-	} catch (e) {
-		const error = e as Error;
+	} catch (error_) {
+		const error = error_ as Error;
 		logger.error(error, error.message);
 	}
 }

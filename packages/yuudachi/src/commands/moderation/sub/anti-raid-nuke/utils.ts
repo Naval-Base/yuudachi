@@ -16,7 +16,8 @@ import { resolveTimestamp } from '../../../../util/timestamp.js';
 
 /**
  * Acquire an anti-raid-nuke lock for a guild
- * @param guildId Id representing the guild the lock is for
+ *
+ * @param guildId - Id representing the guild the lock is for
  * @returns True, if the lock was acquired, false if already locked
  */
 export async function acquireNukeLock(guildId: Snowflake) {
@@ -25,13 +26,15 @@ export async function acquireNukeLock(guildId: Snowflake) {
 	if (await redis.exists(key)) {
 		return false;
 	}
+
 	await redis.set(key, Date.now(), 'EX', ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS);
 	return true;
 }
 
 /**
  * Release an anti-raid-nuke lock for a guild
- * @param guildId Id representing the guild the lock is for
+ *
+ * @param guildId - Id representing the guild the lock is for
  * @returns True, if the lock was released, false if there was no lock
  */
 export async function releaseNukeLock(guildId: Snowflake) {
@@ -41,6 +44,7 @@ export async function releaseNukeLock(guildId: Snowflake) {
 		await redis.del(key);
 		return true;
 	}
+
 	return false;
 }
 
@@ -57,10 +61,10 @@ export async function acquireLockIfPublic(guildId: Snowflake, locale: string, hi
 	}
 }
 
-export interface TargetRejection {
+export type TargetRejection = {
 	member: GuildMember;
 	reason: string;
-}
+};
 
 export function partitionNukeTargets(
 	members: Collection<string, GuildMember>,
@@ -83,12 +87,12 @@ export function partitionNukeTargets(
 	return [confirmations, rejections];
 }
 
-export interface IdValidationResult {
-	validMembers: Collection<string, GuildMember>;
-	validIdCount: number;
+export type IdValidationResult = {
 	invalidIdCount: number;
 	totalIdCount: number;
-}
+	validIdCount: number;
+	validMembers: Collection<string, GuildMember>;
+};
 
 export async function validateMemberIds(
 	interaction: ChatInputCommandInteraction<'cached'> | ModalSubmitInteraction<'cached'>,

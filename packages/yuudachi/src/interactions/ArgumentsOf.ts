@@ -14,25 +14,25 @@ type Option = Readonly<
 		required?: boolean | undefined;
 	} & (
 		| {
-				type: ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup;
-				options?: readonly Option[] | undefined;
-		  }
-		| {
-				type: ApplicationCommandOptionType.String;
-				choices?: readonly Readonly<{ name: string; value: string }>[] | undefined;
-		  }
-		| {
-				type: ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number;
 				choices?: readonly Readonly<{ name: string; value: number }>[] | undefined;
+				type: ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number;
+		  }
+		| {
+				choices?: readonly Readonly<{ name: string; value: string }>[] | undefined;
+				type: ApplicationCommandOptionType.String;
+		  }
+		| {
+				options?: readonly Option[] | undefined;
+				type: ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup;
 		  }
 		| {
 				type:
+					| ApplicationCommandOptionType.Attachment
 					| ApplicationCommandOptionType.Boolean
-					| ApplicationCommandOptionType.User
 					| ApplicationCommandOptionType.Channel
-					| ApplicationCommandOptionType.Role
 					| ApplicationCommandOptionType.Mentionable
-					| ApplicationCommandOptionType.Attachment;
+					| ApplicationCommandOptionType.Role
+					| ApplicationCommandOptionType.User;
 		  }
 	)
 >;
@@ -54,26 +54,26 @@ type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	: T extends ApplicationCommandOptionType.Boolean
 	? boolean
 	: T extends ApplicationCommandOptionType.User
-	? { user: User; member?: GuildMember | undefined /* | (APIGuildMember & { permissions: Permissions }) */ }
+	? { member?: GuildMember | undefined; user: User /* | (APIGuildMember & { permissions: Permissions }) */ }
 	: T extends ApplicationCommandOptionType.Channel
 	? GuildChannel /* | (APIPartialChannel & { permissions: Permissions }) */
 	: T extends ApplicationCommandOptionType.Role
 	? Role /* | APIRole */
 	: T extends ApplicationCommandOptionType.Mentionable
 	?
-			| { user: User; member?: GuildMember /* | (APIGuildMember & { permissions: Permissions }) */ }
 			| Role
+			| { member?: GuildMember; user: User /* | (APIGuildMember & { permissions: Permissions }) */ }
 			| undefined /* | APIRole */
 	: T extends ApplicationCommandOptionType.Attachment
 	? Attachment /* | APIAttachment */
 	: never;
 
 type OptionToObject<O> = O extends {
-	name: infer K;
-	type: infer T;
-	required?: infer R | undefined;
-	options?: infer O | undefined;
 	choices?: infer C | undefined;
+	name: infer K;
+	options?: infer O | undefined;
+	required?: infer R | undefined;
+	type: infer T;
 }
 	? K extends string
 		? R extends true
@@ -91,5 +91,5 @@ export type ArgumentsOf<C extends CommandPayload> = C extends { options: readonl
 	: C extends { type: ApplicationCommandType.Message }
 	? { message: Message<true> }
 	: C extends { type: ApplicationCommandType.User }
-	? { user: { user: User; member?: GuildMember | undefined } }
+	? { user: { member?: GuildMember | undefined; user: User } }
 	: never;

@@ -16,14 +16,14 @@ export function transformInteraction<T extends CommandPayload = CommandPayload>(
 	const opts: Record<
 		string,
 		| ArgumentsOf<T>
-		| { user?: User | undefined; member?: GuildMember | undefined }
-		| GuildBasedChannel
-		| Role
-		| string
-		| number
-		| boolean
 		| Attachment
+		| GuildBasedChannel
 		| Message<true>
+		| Role
+		| boolean
+		| number
+		| string
+		| { member?: GuildMember | undefined; user?: User | undefined }
 		| undefined
 	> = {};
 
@@ -57,6 +57,7 @@ export function transformInteraction<T extends CommandPayload = CommandPayload>(
 			// @ts-expect-error: This is actually a string
 			case '_MESSAGE':
 				opts[top.name] = top.message;
+				break;
 			default:
 				break;
 		}

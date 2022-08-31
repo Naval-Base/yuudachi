@@ -5,16 +5,50 @@ import type { Snowflake } from 'discord.js';
 /**
  * https://discord.com/developers/docs/topics/gateway#auto-moderation-action-execution-auto-moderation-action-execution-event-fields
  */
-export interface GatewayAutoModerationActionExecution {
+export type GatewayAutoModerationActionExecution = {
+	/**
+	 * The action which was executed
+	 */
+	action: APIAutoModerationRuleAction;
+
+	/**
+	 * The id of any system auto moderation messages posted as a result of this action
+	 *
+	 * Will not exist if this event does not correspond to an action with type `SendAlertMessage`
+	 */
+	alert_system_message_id?: Snowflake;
+
+	/**
+	 * The id of the channel in which user content was posted
+	 */
+	channel_id?: Snowflake;
+
+	/**
+	 * The user generated text content
+	 */
+	content: string;
+
 	/**
 	 * The id of the guild in which action was executed
 	 */
 	guild_id: Snowflake;
 
 	/**
-	 * The action which was executed
+	 * The substring in content that triggered the rule
 	 */
-	action: APIAutoModerationRuleAction;
+	matched_content: string;
+
+	/**
+	 * The word or phrase configured in the rule that triggered the rule
+	 */
+	matched_keyword: string;
+
+	/**
+	 * The id of any user message which content belongs to
+	 *
+	 * Will not exist if message was blocked by automod or content was not part of any message
+	 */
+	message_id?: Snowflake;
 
 	/**
 	 * The id of the rule which action belongs to
@@ -30,60 +64,16 @@ export interface GatewayAutoModerationActionExecution {
 	 * The id of the user which generated the content which triggered the rule
 	 */
 	user_id: Snowflake;
-
-	/**
-	 * The id of the channel in which user content was posted
-	 */
-	channel_id?: Snowflake;
-
-	/**
-	 * The id of any user message which content belongs to
-	 *
-	 * Will not exist if message was blocked by automod or content was not part of any message
-	 */
-	message_id?: Snowflake;
-
-	/**
-	 * The id of any system auto moderation messages posted as a result of this action
-	 *
-	 * Will not exist if this event does not correspond to an action with type `SendAlertMessage`
-	 */
-	alert_system_message_id?: Snowflake;
-
-	/**
-	 * The user generated text content
-	 */
-	content: string;
-
-	/**
-	 * The word or phrase configured in the rule that triggered the rule
-	 */
-	matched_keyword: string;
-
-	/**
-	 * The substring in content that triggered the rule
-	 */
-	matched_content: string;
-}
+};
 
 /**
  * https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-auto-moderation-rule-structure
  */
-export interface APIAutoModerationRule {
+export type APIAutoModerationRule = {
 	/**
-	 * The id of this rule
+	 * The actions which will execute when the rule is triggered
 	 */
-	id: Snowflake;
-
-	/**
-	 * The guild which this rule belongs to
-	 */
-	guild_id: Snowflake;
-
-	/**
-	 * The rule name
-	 */
-	name: string;
+	actions: APIAutoModerationRuleAction[];
 
 	/**
 	 * The user which first created this rule
@@ -91,29 +81,21 @@ export interface APIAutoModerationRule {
 	creator_id: Snowflake;
 
 	/**
+	 * Whether the rule is enabled
+	 */
+	enabled: boolean;
+
+	/**
 	 * The rule event type
 	 */
 	event_type: APIAutoModerationRuleEventType;
 
 	/**
-	 * The rule trigger type
+	 * The channel ids that should not be affected by the rule
+	 *
+	 * Maxiumum of `50`
 	 */
-	trigger_type: APIAutoModerationRuleTriggerType;
-
-	/**
-	 * The rule trigger metadata
-	 */
-	trigger_metadata: APIAutoModerationRuleTriggerMetadata;
-
-	/**
-	 * The actions which will execute when the rule is triggered
-	 */
-	actions: APIAutoModerationRuleAction[];
-
-	/**
-	 * Whether the rule is enabled
-	 */
-	enabled: boolean;
+	exempt_channels: Snowflake[];
 
 	/**
 	 * The role ids that should not be affected by the rule
@@ -123,12 +105,30 @@ export interface APIAutoModerationRule {
 	exempt_roles: Snowflake[];
 
 	/**
-	 * The channel ids that should not be affected by the rule
-	 *
-	 * Maxiumum of `50`
+	 * The guild which this rule belongs to
 	 */
-	exempt_channels: Snowflake[];
-}
+	guild_id: Snowflake;
+
+	/**
+	 * The id of this rule
+	 */
+	id: Snowflake;
+
+	/**
+	 * The rule name
+	 */
+	name: string;
+
+	/**
+	 * The rule trigger metadata
+	 */
+	trigger_metadata: APIAutoModerationRuleTriggerMetadata;
+
+	/**
+	 * The rule trigger type
+	 */
+	trigger_type: APIAutoModerationRuleTriggerType;
+};
 
 export enum APIAutoModerationRuleEventType {
 	/**
@@ -137,17 +137,17 @@ export enum APIAutoModerationRuleEventType {
 	MessageSend = 1,
 }
 
-export interface APIAutoModerationRuleAction {
-	/**
-	 * The type of action
-	 */
-	type: APIAutoModerationRuleActionType;
-
+export type APIAutoModerationRuleAction = {
 	/**
 	 * The metadata for the action
 	 */
 	metadata: APIAutoModerationRuleActionMetadata;
-}
+
+	/**
+	 * The type of action
+	 */
+	type: APIAutoModerationRuleActionType;
+};
 /**
  * https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-action-object-action-types
  */
@@ -206,11 +206,11 @@ export enum APIAutoModerationRuleTriggerType {
 /**
  * https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-trigger-metadata
  */
-export interface APIAutoModerationRuleTriggerMetadata {
+export type APIAutoModerationRuleTriggerMetadata = {
 	keyword_filter: string[];
 
 	presets: APIAutoModerationRuleKeywordPresetTypes[];
-}
+};
 
 /**
  * https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-keyword-preset-types
@@ -235,7 +235,7 @@ export enum APIAutoModerationRuleKeywordPresetTypes {
 /**
  * https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-action-object-action-metadata
  */
-export interface APIAutoModerationRuleActionMetadata {
+export type APIAutoModerationRuleActionMetadata = {
 	/**
 	 * Channel to which user content should be logged
 	 */
@@ -247,4 +247,4 @@ export interface APIAutoModerationRuleActionMetadata {
 	 * Maximum of 4 weeks (2419200 seconds)
 	 */
 	duration_seconds: number;
-}
+};

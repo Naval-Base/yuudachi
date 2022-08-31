@@ -1,6 +1,7 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
 import { Client, Events, type GuildBan, AuditLogEvent } from 'discord.js';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -50,7 +51,7 @@ export default class implements Event {
 					continue;
 				}
 
-				await pSetTimeout(5000);
+				await pSetTimeout(5_000);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberBanAdd });
 				const logs = auditLogs.entries.find((log) => log.target!.id === guildBan.user.id);
 
@@ -87,8 +88,8 @@ export default class implements Event {
 					true,
 				);
 				await upsertCaseLog(guildBan.guild, logs?.executor, case_);
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

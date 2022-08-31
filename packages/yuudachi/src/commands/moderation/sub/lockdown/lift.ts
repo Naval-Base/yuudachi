@@ -52,7 +52,7 @@ export async function lift(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 15000,
+			time: 15_000,
 		})
 		.catch(async () => {
 			try {
@@ -61,6 +61,7 @@ export async function lift(
 					components: [],
 				});
 			} catch {}
+
 			return undefined;
 		});
 

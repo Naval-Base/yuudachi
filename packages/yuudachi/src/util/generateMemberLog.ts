@@ -2,32 +2,32 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import { time, TimestampStyles, type GuildMember } from 'discord.js';
 import i18next from 'i18next';
-import { addFields, truncateEmbed } from './embed.js';
 import { MAX_TRUST_ACCOUNT_AGE } from '../Constants.js';
+import { addFields, truncateEmbed } from './embed.js';
 
 dayjs.extend(relativeTime);
 
 function colorFromDuration(duration: number) {
 	const percent = Math.min(duration / (MAX_TRUST_ACCOUNT_AGE / 100), 100);
-	let r;
-	let g;
-	let b = 0;
+	let red;
+	let green;
+	let blue = 0;
 
 	if (percent < 50) {
-		r = 255;
-		g = Math.round(5.1 * percent);
+		red = 255;
+		green = Math.round(5.1 * percent);
 	} else {
-		g = 255;
-		r = Math.round(510 - 5.1 * percent);
+		green = 255;
+		red = Math.round(510 - 5.1 * percent);
 	}
 
 	const tintFactor = 0.3;
 
-	r += (255 - r) * tintFactor;
-	g += (255 - g) * tintFactor;
-	b += (255 - b) * tintFactor;
+	red += (255 - red) * tintFactor;
+	green += (255 - green) * tintFactor;
+	blue += (255 - blue) * tintFactor;
 
-	return (r << 16) + (g << 8) + b;
+	return (red << 16) + (green << 8) + blue;
 }
 
 export function generateMemberLog(member: GuildMember, locale: string, join = true) {
@@ -70,8 +70,8 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 			name: `${member.user.tag} (${member.user.id})`,
 			icon_url: member.user.displayAvatarURL(),
 		},
-		color: join ? colorFromDuration(Date.now() - member.user.createdTimestamp) : 3092790,
-		description: description,
+		color: join ? colorFromDuration(Date.now() - member.user.createdTimestamp) : 3_092_790,
+		description,
 		footer: {
 			text: i18next.t(join ? 'log.member_log.footer.joined' : 'log.member_log.footer.left', { lng: locale }),
 		},

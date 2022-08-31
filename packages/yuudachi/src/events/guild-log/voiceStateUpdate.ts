@@ -117,8 +117,8 @@ export default class implements Event {
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

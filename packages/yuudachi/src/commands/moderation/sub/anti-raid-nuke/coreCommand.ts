@@ -1,10 +1,11 @@
+import { Buffer } from 'node:buffer';
 import { performance } from 'node:perf_hooks';
 import dayjs from 'dayjs';
 import {
 	type ButtonInteraction,
 	ButtonStyle,
 	type ChatInputCommandInteraction,
-	Collection,
+	type Collection,
 	ComponentType,
 	type GuildMember,
 	type ModalSubmitInteraction,
@@ -13,15 +14,12 @@ import {
 } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import { parseDate, partitionNukeTargets, releaseNukeLock, TargetRejection } from './utils.js';
 import type { ArgsParam } from '../../../../Command.js';
 import { ANTI_RAID_NUKE_COLLECTOR_TIMEOUT_SECONDS, DATE_FORMAT_LOGFILE } from '../../../../Constants.js';
 import { blastOff } from '../../../../functions/anti-raid/blastOff.js';
 import { formatMemberTimestamps } from '../../../../functions/anti-raid/formatMemberTimestamps.js';
-import {
-	AntiRaidNukeArgsUnion,
-	generateAntiRaidNukeReport,
-} from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
+import { generateAntiRaidNukeReport } from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
+import type { AntiRaidNukeArgsUnion } from '../../../../functions/formatters/generateAntiRaidNukeReport.js';
 import { generateFormatterUrl } from '../../../../functions/formatters/generateFormatterUrl.js';
 import { insertAntiRaidNukeCaseLog } from '../../../../functions/logging/insertAntiRaidNukeCaseLog.js';
 import {
@@ -33,6 +31,7 @@ import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { createButton } from '../../../../util/button.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 import { parseRegex } from '../../../../util/parseRegex.js';
+import { parseDate, partitionNukeTargets, releaseNukeLock, type TargetRejection } from './utils.js';
 
 export enum AntiRaidNukeMode {
 	File = 'file',
@@ -225,7 +224,7 @@ export async function handleAntiRaidNuke(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: ANTI_RAID_NUKE_COLLECTOR_TIMEOUT_SECONDS * 1000,
+			time: ANTI_RAID_NUKE_COLLECTOR_TIMEOUT_SECONDS * 1_000,
 		})
 		.catch(async () => {
 			await releaseNukeLock(interaction.guildId);
@@ -233,7 +232,7 @@ export async function handleAntiRaidNuke(
 				content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 				components: [createMessageActionRow([formattedReportButton])],
 			});
-		})) as ButtonInteraction<'cached'> | void;
+		})) as ButtonInteraction<'cached'>;
 
 	if (collectedInteraction) {
 		await releaseNukeLock(collectedInteraction.guildId);
@@ -251,7 +250,11 @@ export async function handleAntiRaidNuke(
 
 			case banKey: {
 				await launchNuke(collectedInteraction, targets, rejections, pruneDays, insensitive, mode, args, locale);
+				break;
 			}
+
+			default:
+				break;
 		}
 	}
 }

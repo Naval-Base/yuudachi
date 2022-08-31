@@ -2,7 +2,7 @@ import { URL } from 'node:url';
 import { Client } from 'discord.js';
 import { container } from 'tsyringe';
 
-export async function parseAvatar(input?: string | undefined | null) {
+export async function parseAvatar(input?: string | null | undefined) {
 	if (!input) {
 		return null;
 	}
@@ -11,7 +11,7 @@ export async function parseAvatar(input?: string | undefined | null) {
 		return 'none';
 	}
 
-	if (/^[a-f,0-9]{32}$/.test(input)) {
+	if (/^[\d,a-f]{32}$/.test(input)) {
 		return input;
 	}
 
@@ -30,7 +30,7 @@ export async function parseAvatar(input?: string | undefined | null) {
 
 	try {
 		new URL(input);
-		return input.replace(/https:\/\/cdn.discordapp.com.*\/([a-f,0-9]{32})/, '$1');
+		return input.replace(/https:\/\/cdn.discordapp.com.*\/([\d,a-f]{32})/, '$1');
 	} catch {
 		return null;
 	}

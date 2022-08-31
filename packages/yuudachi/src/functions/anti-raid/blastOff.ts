@@ -35,7 +35,7 @@ export async function blastOff(
 							lng: locale,
 						}),
 						user: {
-							member: member,
+							member,
 							user: member.user,
 						},
 						days,
@@ -44,11 +44,14 @@ export async function blastOff(
 					multi: true,
 				}),
 			)
+				// eslint-disable-next-line promise/prefer-await-to-then
 				.then((case_) => {
 					confirmedHits.push(member);
 					return case_;
 				})
+				// eslint-disable-next-line promise/prefer-await-to-then
 				.catch((error: Error) => void rejections.push({ member, reason: error.message }))
+				// eslint-disable-next-line promise/prefer-await-to-then
 				.finally(() => void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15)),
 		);
 	}

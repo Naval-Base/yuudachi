@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
 import { type APIEmbed, ButtonStyle, ComponentType, type Webhook, type Message } from 'discord.js';
@@ -76,7 +77,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 			);
 		}
 
-		const uniqueAuthors = new Set(messages.map((m) => m.author.id));
+		const uniqueAuthors = new Set(messages.map((message) => message.author.id));
 		const latest = messages.first()!;
 		const earliest = messages.last()!;
 		const delta = latest.createdTimestamp - earliest.createdTimestamp;
@@ -127,7 +128,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 			.awaitMessageComponent({
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: ComponentType.Button,
-				time: 15000,
+				time: 15_000,
 			})
 			.catch(async () => {
 				try {
@@ -136,10 +137,11 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 						components: [],
 						embeds: [],
 					});
-				} catch (e) {
-					const error = e as Error;
+				} catch (error_) {
+					const error = error_ as Error;
 					logger.error(error, error.message);
 				}
+
 				return undefined;
 			});
 
@@ -161,7 +163,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 			await collectedInteraction.deferUpdate();
 			const prunedMessages = await pruneMessages(messages);
 
-			const prunedUniqueAuthors = new Set(messages.map((m) => m.author.id));
+			const prunedUniqueAuthors = new Set(messages.map((message) => message.author.id));
 			const prunedLatest = messages.first()!;
 			const prunedEarliest = messages.last()!;
 			const prunedDelta = prunedLatest.createdTimestamp - prunedEarliest.createdTimestamp;
@@ -235,14 +237,14 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 					files: [
 						{
 							name: `${logDate}-clear-logs.txt`,
-							attachment: Buffer.from(formatMessagesToAttachment(prunedMessages, locale), 'utf-8'),
+							attachment: Buffer.from(formatMessagesToAttachment(prunedMessages, locale), 'utf8'),
 						},
 					],
 					username: interaction.client.user!.username,
 					avatarURL: interaction.client.user!.displayAvatarURL(),
 				});
-			} catch (err) {
-				const error = err as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error.message, error);
 			}
 		}

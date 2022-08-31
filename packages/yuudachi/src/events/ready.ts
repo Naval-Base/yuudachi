@@ -41,6 +41,7 @@ export default class implements Event {
 					if (!webhook) {
 						continue;
 					}
+
 					this.webhooks.set(webhook.id, webhook);
 				}
 
@@ -50,6 +51,7 @@ export default class implements Event {
 					if (!webhook) {
 						continue;
 					}
+
 					this.webhooks.set(webhook.id, webhook);
 				}
 			}

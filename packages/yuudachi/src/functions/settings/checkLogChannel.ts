@@ -5,7 +5,7 @@ export function checkLogChannel(guild: Guild, logChannelId: Snowflake) {
 		const logChannel = guild.client.channels.resolve(logChannelId) as TextChannel;
 
 		return logChannel;
-	} catch (error) {
+	} catch {
 		return null;
 	}
 }

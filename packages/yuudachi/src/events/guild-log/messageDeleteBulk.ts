@@ -30,7 +30,7 @@ export default class implements Event {
 
 	public async execute(): Promise<void> {
 		for await (const [messages] of on(this.client, this.event)) {
-			const userMessages = messages.filter((msg) => !msg.author?.bot);
+			const userMessages = messages.filter((message) => !message.author?.bot);
 			const firstMessage = userMessages.first();
 
 			if (!firstMessage?.inGuild()) {
@@ -93,13 +93,13 @@ export default class implements Event {
 				await webhook.send({
 					embeds: [truncateEmbed(embed)],
 					files: [
-						{ name: 'logs.txt', attachment: Buffer.from(formatMessagesToAttachment(userMessages, locale), 'utf-8') },
+						{ name: 'logs.txt', attachment: Buffer.from(formatMessagesToAttachment(userMessages, locale), 'utf8') },
 					],
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

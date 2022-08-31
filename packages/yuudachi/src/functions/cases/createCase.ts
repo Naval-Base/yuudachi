@@ -2,10 +2,10 @@ import type { Guild, GuildMember, Snowflake } from 'discord.js';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
 import type { CamelCasedProperties } from 'type-fest';
-import { type RawCase, transformCase } from './transformCase.js';
 import { logger } from '../../logger.js';
 import { kSQL } from '../../tokens.js';
 import type { PartialAndUndefinedOnNull } from '../../util/types.js';
+import { type RawCase, transformCase } from './transformCase.js';
 
 export enum CaseAction {
 	Role,
@@ -23,63 +23,74 @@ export type Case = PartialAndUndefinedOnNull<CamelCasedProperties<RawCase>>;
 
 export type CreateCase = Omit<
 	Case,
-	'caseId' | 'actionExpiration' | 'modId' | 'modTag' | 'logMessageId' | 'actionProcessed' | 'multi' | 'createdAt'
+	'actionExpiration' | 'actionProcessed' | 'caseId' | 'createdAt' | 'logMessageId' | 'modId' | 'modTag' | 'multi'
 > & {
-	caseId?: number | undefined | null;
-	actionExpiration?: Date | undefined | null;
-	modId?: Snowflake | undefined | null;
-	modTag?: string | undefined | null;
-	multi?: boolean | undefined | null;
+	actionExpiration?: Date | null | undefined;
+	caseId?: number | null | undefined;
+	deleteMessageDays?: number | null | undefined;
+	modId?: Snowflake | null | undefined;
+	modTag?: string | null | undefined;
 
-	target?: GuildMember | undefined | null;
-	deleteMessageDays?: number | undefined | null;
+	multi?: boolean | null | undefined;
+	target?: GuildMember | null | undefined;
 };
 
 export async function createCase(
 	guild: Guild,
-	case_: CreateCase & { target?: GuildMember | undefined | null },
+	case_: CreateCase & { target?: GuildMember | null | undefined },
 	skipAction = false,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const reason = case_.modTag
-		? `Mod: ${case_.modTag}${case_.reason ? ` | ${case_.reason.replace(/`/g, '')}` : ''}`
+		? `Mod: ${case_.modTag}${case_.reason ? ` | ${case_.reason.replaceAll('`', '')}` : ''}`
 		: case_.reason ?? undefined;
 
 	try {
 		if (!skipAction) {
 			switch (case_.action) {
-				case CaseAction.Role:
+				case CaseAction.Role: {
 					await case_.target!.roles.add(case_.roleId!, reason);
 					break;
-				case CaseAction.Unrole:
+				}
+
+				case CaseAction.Unrole: {
 					await case_.target!.roles.remove(case_.roleId!, reason);
 					break;
+				}
+
 				case CaseAction.TimeoutEnd:
 				case CaseAction.Warn:
 					break;
-				case CaseAction.Kick:
+				case CaseAction.Kick: {
 					await case_.target!.kick(reason);
 					break;
+				}
+
 				case CaseAction.Softban: {
 					await guild.bans.create(case_.targetId, { deleteMessageDays: case_.deleteMessageDays ?? 1, reason });
 					await guild.bans.remove(case_.targetId, reason);
 					break;
 				}
+
 				case CaseAction.Ban: {
 					await guild.bans.create(case_.targetId, { deleteMessageDays: case_.deleteMessageDays ?? 0, reason });
 					break;
 				}
+
 				case CaseAction.Unban:
 					await guild.bans.remove(case_.targetId, reason);
 					break;
 				case CaseAction.Timeout:
 					await case_.target!.disableCommunicationUntil(case_.actionExpiration ?? null, reason);
 					break;
+
+				default:
+					break;
 			}
 		}
-	} catch (e) {
-		const error = e as Error;
+	} catch (error_) {
+		const error = error_ as Error;
 		logger.error(error, error.message);
 	}
 
@@ -109,13 +120,14 @@ export async function createCase(
 			${case_.action},
 			${case_.roleId ?? null},
 			${case_.actionExpiration ?? null},
-			${case_.actionExpiration ? false : true},
+			${!case_.actionExpiration},
 			${case_.reason ?? null},
 			${case_.contextMessageId ?? null},
 			${case_.refId ?? null},
 			${case_.multi ?? false}
 		)
-		returning *`;
+		returning *
+	`;
 
 	return transformCase(newCase);
 }

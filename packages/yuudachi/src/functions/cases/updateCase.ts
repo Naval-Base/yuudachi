@@ -1,12 +1,12 @@
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import { kSQL } from '../../tokens.js';
 import type { CreateCase } from './createCase.js';
 import { type RawCase, transformCase } from './transformCase.js';
-import { kSQL } from '../../tokens.js';
 
 export type PatchCase = Pick<
 	CreateCase,
-	'guildId' | 'caseId' | 'actionExpiration' | 'reason' | 'contextMessageId' | 'refId'
+	'actionExpiration' | 'caseId' | 'contextMessageId' | 'guildId' | 'reason' | 'refId'
 >;
 
 export async function updateCase(case_: PatchCase) {
@@ -17,7 +17,8 @@ export async function updateCase(case_: PatchCase) {
 			update cases
 			set action_expiration = ${case_.actionExpiration}
 			where guild_id = ${case_.guildId}
-				and case_id = ${case_.caseId!}`;
+				and case_id = ${case_.caseId!}
+		`;
 	}
 
 	if (case_.reason) {
@@ -25,7 +26,8 @@ export async function updateCase(case_: PatchCase) {
 			update cases
 			set reason = ${case_.reason}
 			where guild_id = ${case_.guildId}
-				and case_id = ${case_.caseId!}`;
+				and case_id = ${case_.caseId!}
+		`;
 	}
 
 	if (case_.contextMessageId) {
@@ -33,7 +35,8 @@ export async function updateCase(case_: PatchCase) {
 			update cases
 			set context_message_id = ${case_.contextMessageId}
 			where guild_id = ${case_.guildId}
-				and case_id = ${case_.caseId!}`;
+				and case_id = ${case_.caseId!}
+		`;
 	}
 
 	if (case_.refId) {
@@ -41,14 +44,16 @@ export async function updateCase(case_: PatchCase) {
 			update cases
 			set ref_id = ${case_.refId}
 			where guild_id = ${case_.guildId}
-				and case_id = ${case_.caseId!}`;
+				and case_id = ${case_.caseId!}
+		`;
 	}
 
 	const [updatedCase] = await sql<[RawCase]>`
 		select *
 		from cases
 		where guild_id = ${case_.guildId}
-			and case_id = ${case_.caseId!}`;
+			and case_id = ${case_.caseId!}
+	`;
 
 	return transformCase(updatedCase);
 }

@@ -1,5 +1,6 @@
 import { on } from 'node:events';
 import { Client, Events, type GuildMember } from 'discord.js';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Sql } from 'postgres';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -48,8 +49,8 @@ export default class implements Event {
 					);
 					await guildMember.roles.add(case_.role_id!, case_.reason!);
 				}
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

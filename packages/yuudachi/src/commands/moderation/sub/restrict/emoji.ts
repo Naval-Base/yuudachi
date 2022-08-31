@@ -37,7 +37,8 @@ export async function emoji(
 	const [roles] = await sql<[{ emoji_role_id: Snowflake | null }?]>`
 		select emoji_role_id
 		from guild_settings
-		where guild_id = ${interaction.guildId}`;
+		where guild_id = ${interaction.guildId}
+	`;
 
 	if (!roles?.emoji_role_id) {
 		throw new Error(i18next.t('command.mod.restrict.emoji.errors.no_role', { lng: locale }));
@@ -50,7 +51,8 @@ export async function emoji(
 			and target_id = ${args.user.user.id}
 			and role_id = ${roles.emoji_role_id}
 		order by created_at desc
-		limit 1`;
+		limit 1
+	`;
 
 	if (action && !action.action_processed) {
 		throw new Error(
@@ -63,7 +65,7 @@ export async function emoji(
 
 	const parsedDuration = ms(args.duration);
 
-	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
+	if (parsedDuration < 300_000 || Number.isNaN(parsedDuration)) {
 		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
 	}
 
@@ -96,7 +98,7 @@ export async function emoji(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 15000,
+			time: 15_000,
 		})
 		.catch(async () => {
 			try {
@@ -105,6 +107,7 @@ export async function emoji(
 					components: [],
 				});
 			} catch {}
+
 			return undefined;
 		});
 

@@ -1,6 +1,6 @@
-export interface Event {
-	name: string;
-	event: string;
+export type Event = {
 	disabled?: boolean | undefined;
-	execute: (...args: any) => void | Promise<void>;
-}
+	event: string;
+	execute(...args: any): Promise<void> | void;
+	name: string;
+};

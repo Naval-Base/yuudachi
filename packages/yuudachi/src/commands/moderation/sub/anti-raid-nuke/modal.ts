@@ -1,14 +1,14 @@
 import { ComponentType } from 'discord.js';
 import i18next from 'i18next';
 import { nanoid } from 'nanoid';
-import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
-import { acquireLockIfPublic, validateMemberIds } from './utils.js';
 import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
 import type { AntiRaidNukeCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { createModal } from '../../../../util/modal.js';
 import { createModalActionRow } from '../../../../util/modalActionRow.js';
 import { createTextComponent } from '../../../../util/textComponent.js';
+import { AntiRaidNukeMode, handleAntiRaidNuke } from './coreCommand.js';
+import { acquireLockIfPublic, validateMemberIds } from './utils.js';
 
 export async function modal(
 	interaction: InteractionParam,
@@ -18,15 +18,17 @@ export async function modal(
 	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
 	const modalKey = nanoid();
 
-	const textComponents = new Array(5).fill(0).map((_, i) =>
-		createTextComponent({
-			customId: `${modalKey}-${i}`,
-			label: i18next.t('command.mod.anti_raid_nuke.modal.components.label', { i: i + 1, lng: locale }),
-			minLength: 17,
-			placeholder: i18next.t('command.mod.anti_raid_nuke.modal.components.placeholder', { lng: locale }),
-			required: i === 0,
-		}),
-	);
+	const textComponents = Array.from({ length: 5 })
+		.fill(0)
+		.map((_, index) =>
+			createTextComponent({
+				customId: `${modalKey}-${index}`,
+				label: i18next.t('command.mod.anti_raid_nuke.modal.components.label', { idx: index + 1, lng: locale }),
+				minLength: 17,
+				placeholder: i18next.t('command.mod.anti_raid_nuke.modal.components.placeholder', { lng: locale }),
+				required: index === 0,
+			}),
+		);
 
 	await interaction.showModal(
 		createModal({
@@ -38,7 +40,7 @@ export async function modal(
 
 	const modalInteraction = await interaction
 		.awaitModalSubmit({
-			time: 120000,
+			time: 120_000,
 			filter: (component) => component.customId === modalKey,
 		})
 		.catch(async () => {
@@ -48,10 +50,11 @@ export async function modal(
 					ephemeral: true,
 					components: [],
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
+
 			return undefined;
 		});
 
@@ -61,8 +64,7 @@ export async function modal(
 
 	await modalInteraction.deferReply({ ephemeral: args.hide ?? false });
 	const fullContent = modalInteraction.components
-		.map((row) => row.components)
-		.flat()
+		.flatMap((row) => row.components)
 		.map((component) => (component.type === ComponentType.TextInput ? component.value || '' : ''));
 
 	const ids = new Set(fullContent.join(' ').match(/\d{17,20}/g) ?? []);

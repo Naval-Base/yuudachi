@@ -58,8 +58,8 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 	} as const;
 }
 
-export function truncate(text: string, len: number, splitChar = ' ') {
-	if (text.length <= len) {
+export function truncate(text: string, length: number, splitChar = ' ') {
+	if (text.length <= length) {
 		return text;
 	}
 
@@ -68,7 +68,7 @@ export function truncate(text: string, len: number, splitChar = ' ') {
 	for (const word of words) {
 		const full = res.join(splitChar);
 
-		if (full.length + word.length + 1 <= len - 3) {
+		if (full.length + word.length + 1 <= length - 3) {
 			res.push(word);
 		}
 	}

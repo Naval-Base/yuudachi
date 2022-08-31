@@ -9,9 +9,9 @@ export function createModal({
 	title,
 	components,
 }: {
+	components: APIActionRowComponent<APIModalActionRowComponent>[];
 	customId: string;
 	title: string;
-	components: APIActionRowComponent<APIModalActionRowComponent>[];
 }): APIModalInteractionResponseCallbackData {
 	return {
 		custom_id: customId,

@@ -98,8 +98,8 @@ export default class implements Event {
 						default:
 							break;
 					}
-				} catch (e) {
-					const error = e as Error;
+				} catch (error_) {
+					const error = error_ as Error;
 					logger.error(error, error.message);
 
 					try {
@@ -116,9 +116,9 @@ export default class implements Event {
 						}
 
 						await interaction.editReply({ content: error.message, components: [] });
-					} catch (err) {
-						const error = err as Error;
-						logger.error(error, error.message);
+					} catch (error__) {
+						const err = error__ as Error;
+						logger.error(err, error.message);
 					}
 				}
 			}

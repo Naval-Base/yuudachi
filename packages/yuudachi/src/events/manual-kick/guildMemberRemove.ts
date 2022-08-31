@@ -1,6 +1,7 @@
 import { on } from 'node:events';
 import { setTimeout as pSetTimeout } from 'node:timers/promises';
 import { Client, Events, type GuildMember, AuditLogEvent } from 'discord.js';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import type { Event } from '../../Event.js';
@@ -44,7 +45,8 @@ export default class implements Event {
 				if (deleted) {
 					continue;
 				}
-				await pSetTimeout(1500);
+
+				await pSetTimeout(1_500);
 				const auditLogs = await guildMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberKick });
 				const logs = auditLogs.entries.find((log) => log.target!.id === guildMember.user.id);
 
@@ -61,8 +63,8 @@ export default class implements Event {
 					);
 					await upsertCaseLog(guildMember.guild, logs.executor, case_);
 				}
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

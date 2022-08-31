@@ -1,6 +1,7 @@
 import { on } from 'node:events';
 import { Client, Events, type Message } from 'discord.js';
 import i18next from 'i18next';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from 'ioredis';
 import { inject, injectable } from 'tsyringe';
 import { SCAM_THRESHOLD } from '../../Constants.js';
@@ -88,8 +89,8 @@ export default class implements Event {
 					await this.redis.del(scamKey);
 					await upsertCaseLog(message.guild, this.client.user, case_);
 				}
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

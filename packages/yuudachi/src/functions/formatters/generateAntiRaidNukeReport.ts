@@ -1,10 +1,10 @@
 import { ms } from '@naval-base/ms';
 import dayjs from 'dayjs';
-import { type Guild, hyperlink, type User, type Snowflake, type Attachment, GuildMember } from 'discord.js';
+import { type Guild, hyperlink, type User, type Snowflake, type Attachment } from 'discord.js';
+import type { GuildMember } from 'discord.js';
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { blockquote, checkbox, emptyLine, heading, horizontalRule, list, table } from './markdownUtils.js';
 import type { ArgsParam } from '../../Command.js';
 import { DATE_FORMAT_WITH_SECONDS } from '../../Constants.js';
 import type { AntiRaidNukeMode } from '../../commands/moderation/sub/anti-raid-nuke/coreCommand.js';
@@ -14,6 +14,7 @@ import type { AntiRaidNukeCommand } from '../../interactions/index.js';
 import { kSQL } from '../../tokens.js';
 import type { Case } from '../cases/createCase.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
+import { blockquote, checkbox, emptyLine, heading, horizontalRule, list, table } from './markdownUtils.js';
 
 export type AntiRaidNukeArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'] &
 	ArgsParam<typeof AntiRaidNukeCommand>['filter'] &
@@ -21,10 +22,10 @@ export type AntiRaidNukeArgsUnion = ArgsParam<typeof AntiRaidNukeCommand>['file'
 
 export type FormatterArgs = Omit<AntiRaidNukeArgsUnion, 'file'> & {
 	file?: Attachment | undefined;
-	mode: AntiRaidNukeMode;
-	timeTaken: number;
-	preliminary: boolean;
 	logMessageUrl?: string;
+	mode: AntiRaidNukeMode;
+	preliminary: boolean;
+	timeTaken: number;
 };
 
 function findCase(userId: Snowflake, cases: Case[]) {
@@ -45,8 +46,8 @@ function failTableRows(rejections: TargetRejection[]) {
 	return rejections.map((rejection) => [rejection.member.id, rejection.member.user.tag, rejection.reason]);
 }
 
-function paramOrNone(param: string | undefined, locale: string): string {
-	return param ?? i18next.t('formatters.anti_raid_nuke.parameters.none', { lng: locale });
+function parameterOrNone(parameter: string | undefined, locale: string): string {
+	return parameter ?? i18next.t('formatters.anti_raid_nuke.parameters.none', { lng: locale });
 }
 
 export async function generateAntiRaidNukeReport(
@@ -108,7 +109,7 @@ export async function generateAntiRaidNukeReport(
 					lng: locale,
 				}),
 				i18next.t('formatters.anti_raid_nuke.summary.reason', {
-					reason: paramOrNone(args.reason, locale),
+					reason: parameterOrNone(args.reason, locale),
 					lng: locale,
 				}),
 			]),
@@ -211,11 +212,11 @@ export async function generateAntiRaidNukeReport(
 			heading(i18next.t('formatters.anti_raid_nuke.parameters.joined.title', { lng: locale }), 4),
 			list([
 				i18next.t('formatters.anti_raid_nuke.parameters.joined.after', {
-					after: paramOrNone(args.join_after, locale),
+					after: parameterOrNone(args.join_after, locale),
 					lng: locale,
 				}),
 				i18next.t('formatters.anti_raid_nuke.parameters.joined.before', {
-					before: paramOrNone(args.join_before, locale),
+					before: parameterOrNone(args.join_before, locale),
 					lng: locale,
 				}),
 			]),
@@ -227,11 +228,11 @@ export async function generateAntiRaidNukeReport(
 			heading(i18next.t('formatters.anti_raid_nuke.parameters.created.title', { lng: locale }), 4),
 			list([
 				i18next.t('formatters.anti_raid_nuke.parameters.created.after', {
-					after: paramOrNone(args.created_after, locale),
+					after: parameterOrNone(args.created_after, locale),
 					lng: locale,
 				}),
 				i18next.t('formatters.anti_raid_nuke.parameters.created.before', {
-					before: paramOrNone(args.created_before, locale),
+					before: parameterOrNone(args.created_before, locale),
 					lng: locale,
 				}),
 			]),

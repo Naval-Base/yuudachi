@@ -16,33 +16,33 @@ import {
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
-import { ACTION_KEYS } from './actionKeys.js';
-import { addFields, truncateEmbed } from './embed.js';
 import { ThreatLevelColor } from '../Constants.js';
 import type { RawCase } from '../functions/cases/transformCase.js';
 import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
 import { kSQL } from '../tokens.js';
+import { ACTION_KEYS } from './actionKeys.js';
+import { addFields, truncateEmbed } from './embed.js';
 
 dayjs.extend(relativeTime);
 
-interface CaseFooter {
-	warn?: number | undefined;
-	restriction?: number | undefined;
-	mute?: number | undefined;
-	kick?: number | undefined;
-	ban?: number | undefined;
-	timeout?: number | undefined;
+type CaseFooter = {
 	[key: string]: number | undefined;
-}
+	ban?: number | undefined;
+	kick?: number | undefined;
+	mute?: number | undefined;
+	restriction?: number | undefined;
+	timeout?: number | undefined;
+	warn?: number | undefined;
+};
 
 export async function generateHistory(
-	interaction: CommandInteraction<'cached'> | ButtonInteraction<'cached'> | SelectMenuInteraction<'cached'>,
-	target: { user: User; member?: GuildMember | undefined },
+	interaction: ButtonInteraction<'cached'> | CommandInteraction<'cached'> | SelectMenuInteraction<'cached'>,
+	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const modLogChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
+	const moduleLogChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
 
 	const sinceCreationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.RelativeTime);
 	const creationFormatted = time(dayjs(target.user.createdTimestamp).unix(), TimestampStyles.ShortDateTime);
@@ -85,15 +85,17 @@ export async function generateHistory(
 	}
 
 	const cases = await sql<[RawCase]>`
-			select *
-			from cases
-			where guild_id = ${interaction.guildId}
-				and target_id = ${target.user.id}
-				and action not in (1, 8)
-			order by created_at desc`;
+		select *
+		from cases
+		where guild_id = ${interaction.guildId}
+			and target_id = ${target.user.id}
+			and action not in (1, 8)
+		order by created_at desc
+	`;
 
-	const footer = cases.reduce((count: CaseFooter, c) => {
-		const action = ACTION_KEYS[c.action]!;
+	// eslint-disable-next-line unicorn/no-array-reduce
+	const footer = cases.reduce((count: CaseFooter, case_) => {
+		const action = ACTION_KEYS[case_.action]!;
 		count[action] = (count[action] ?? 0) + 1;
 		return count;
 	}, {});
@@ -139,15 +141,15 @@ export async function generateHistory(
 	const summary: string[] = [];
 	let truncated = false;
 
-	for (const c of cases) {
-		const dateFormatted = time(dayjs(c.created_at).unix(), TimestampStyles.ShortDate);
-		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[c.action]!.toUpperCase()}`)} ${
-			c.log_message_id
-				? hyperlink(`#${c.case_id}`, messageLink(modLogChannelId, c.log_message_id, c.guild_id))
-				: `#${c.case_id}`
-		} ${c.reason?.replace(/\*/g, '') ?? ''}`;
+	for (const case_ of cases) {
+		const dateFormatted = time(dayjs(case_.created_at).unix(), TimestampStyles.ShortDate);
+		const caseString = `${dateFormatted} ${inlineCode(`${ACTION_KEYS[case_.action]!.toUpperCase()}`)} ${
+			case_.log_message_id
+				? hyperlink(`#${case_.case_id}`, messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id))
+				: `#${case_.case_id}`
+		} ${case_.reason?.replace(/\*/g, '') ?? ''}`;
 
-		if (summary.join('\n').length + caseString.length + 1 < 4060) {
+		if (summary.join('\n').length + caseString.length + 1 < 4_060) {
 			summary.push(caseString);
 			continue;
 		}

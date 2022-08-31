@@ -1,5 +1,6 @@
 import { ButtonStyle, ComponentType } from 'discord.js';
 import i18next from 'i18next';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { inject, injectable } from 'tsyringe';
@@ -82,7 +83,7 @@ export default class extends Command<typeof SoftbanCommand> {
 			.awaitMessageComponent({
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: ComponentType.Button,
-				time: 15000,
+				time: 15_000,
 			})
 			.catch(async () => {
 				try {
@@ -90,10 +91,11 @@ export default class extends Command<typeof SoftbanCommand> {
 						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
 						components: [],
 					});
-				} catch (e) {
-					const error = e as Error;
+				} catch (error_) {
+					const error = error_ as Error;
 					logger.error(error, error.message);
 				}
+
 				return undefined;
 			});
 
