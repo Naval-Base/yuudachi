@@ -4,7 +4,7 @@ import type { Redis } from 'ioredis';
 import { nanoid } from 'nanoid';
 import { container } from 'tsyringe';
 import type { ArgsParam, InteractionParam } from '../../../../Command.js';
-import { REPORT_MESSAGE_EXPIRE_SECONDS } from '../../../../Constants.js';
+import { REPORT_MESSAGE_EXPIRE_SECONDS, REPORT_REASON_MAX_LENGTH } from '../../../../Constants.js';
 import { formatMessageToEmbed } from '../../../../functions/logging/formatMessageToEmbed.js';
 import { upsertReportLog } from '../../../../functions/logging/upsertReportLog.js';
 import { createReport, ReportType } from '../../../../functions/reports/createReport.js';
@@ -12,6 +12,7 @@ import type { ReportCommand } from '../../../../interactions/index.js';
 import { logger } from '../../../../logger.js';
 import { kRedis } from '../../../../tokens.js';
 import { createButton } from '../../../../util/button.js';
+import { ellipsis } from '../../../../util/embed.js';
 import { localeTrustAndSafety } from '../../../../util/localizeTrustAndSafety.js';
 import { createMessageActionRow } from '../../../../util/messageActionRow.js';
 
@@ -52,7 +53,7 @@ export async function message(
 				i18next.t('command.utility.report.message.pending_sub', { lng: locale }),
 				args.message.url,
 			),
-			reason: args.reason,
+			reason: ellipsis(args.reason, REPORT_REASON_MAX_LENGTH),
 			lng: locale,
 		}),
 		'',

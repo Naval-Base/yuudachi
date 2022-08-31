@@ -6,6 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import { message } from './sub/report/message.js';
 import { user } from './sub/report/user.js';
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from '../../Command.js';
+import { REPORT_REASON_MAX_LENGTH } from '../../Constants.js';
 import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
 import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
 import type { ReportCommand, ReportMessageContextCommand, ReportUserContextCommand } from '../../interactions/index.js';
@@ -126,7 +127,7 @@ export default class extends Command<
 						customId: 'reason',
 						label: i18next.t('command.utility.report.commons.modal.label', { lng: locale }),
 						minLength: 10,
-						maxLength: 1900,
+						maxLength: REPORT_REASON_MAX_LENGTH,
 						placeholder: i18next.t('command.utility.report.commons.modal.placeholder', { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
@@ -209,7 +210,7 @@ export default class extends Command<
 						customId: 'reason',
 						label: i18next.t('command.utility.report.commons.modal.label', { lng: locale }),
 						minLength: 10,
-						maxLength: 1900,
+						maxLength: REPORT_REASON_MAX_LENGTH,
 						placeholder: i18next.t('command.utility.report.commons.modal.placeholder', { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
