@@ -2070,7 +2070,7 @@ __metadata:
     c8: ^7.12.0
     concurrently: ^7.3.0
     eslint: ^8.23.0
-    eslint-config-neon: ^0.1.9
+    eslint-config-neon: ^0.1.11
     happy-dom: ^6.0.4
     hast-util-has-property: ^2.0.0
     hast-util-is-element: ^2.1.2
@@ -2114,7 +2114,7 @@ __metadata:
     c8: ^7.12.0
     concurrently: ^7.3.0
     eslint: ^8.23.0
-    eslint-config-neon: ^0.1.9
+    eslint-config-neon: ^0.1.11
     happy-dom: ^6.0.4
     next: ^12.2.5
     prettier: ^2.7.1
@@ -4321,9 +4321,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-neon@npm:^0.1.9":
-  version: 0.1.9
-  resolution: "eslint-config-neon@npm:0.1.9"
+"eslint-config-neon@npm:^0.1.11":
+  version: 0.1.11
+  resolution: "eslint-config-neon@npm:0.1.11"
   dependencies:
     "@next/eslint-plugin-next": ^12.2.5
     "@rushstack/eslint-patch": ^1.1.4
@@ -4343,7 +4343,7 @@ __metadata:
     eslint-plugin-tsdoc: ^0.2.16
     eslint-plugin-typescript-sort-keys: ^2.1.0
     eslint-plugin-unicorn: ^43.0.2
-  checksum: 6a789e7b94e7bfa6be933574aac582d96ce899faa26533f39dbd1eef555868d1775a7baf07996f413ee9ba98fcb443720886159b5787d2a34b07a26fcda6bc8b
+  checksum: 655d700df3754597f9abe4e0a613b3ae1953e5cc617e44fc0f499743b06d4132ab77980ddbeb9e70a565d01bc190b90a1ed32522a59df6a641fe7d30f3f9b245
   languageName: node
   linkType: hard
 
@@ -11365,7 +11365,7 @@ __metadata:
     discord.js: ^14.3.0
     env-cmd: ^10.1.0
     eslint: ^8.23.0
-    eslint-config-neon: ^0.1.9
+    eslint-config-neon: ^0.1.11
     i18next: ^21.9.1
     ioredis: ^5.2.3
     kleur: ^4.1.5

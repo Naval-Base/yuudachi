@@ -93,7 +93,6 @@ export async function generateHistory(
 		order by created_at desc
 	`;
 
-	// eslint-disable-next-line unicorn/no-array-reduce
 	const footer = cases.reduce((count: CaseFooter, case_) => {
 		const action = ACTION_KEYS[case_.action]!;
 		count[action] = (count[action] ?? 0) + 1;
