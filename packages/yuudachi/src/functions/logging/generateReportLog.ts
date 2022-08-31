@@ -12,7 +12,9 @@ import {
 import i18next from 'i18next';
 import type { Sql } from 'postgres';
 import { container } from 'tsyringe';
+import { REPORT_REASON_MAX_LENGTH } from '../../Constants.js';
 import { kSQL } from '../../tokens.js';
+import { ellipsis } from '../../util/embed.js';
 import type { Report } from '../reports/createReport.js';
 import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
 
@@ -25,7 +27,7 @@ export async function generateReportLog(report: Report, locale: string, message?
 			lng: locale,
 		}),
 		i18next.t('log.report_log.reason', {
-			reason: codeBlock(report.reason),
+			reason: codeBlock(ellipsis(report.reason, REPORT_REASON_MAX_LENGTH * 2)),
 			lng: locale,
 		}),
 	];
