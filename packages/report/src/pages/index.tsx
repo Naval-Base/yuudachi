@@ -1,6 +1,6 @@
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next/types";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next/types";
 import rehypeHighlight from "rehype-highlight";
 import rehypeIgnore from "rehype-ignore";
 import rehypeRaw from "rehype-raw";

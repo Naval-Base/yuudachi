@@ -1,12 +1,16 @@
 {
-	"extends": ["marine/prettier/react", "../../.eslintrc.json"],
-	"settings": {
-		"react": {
-			"version": "detect"
-		}
-	},
+	"extends": [
+		"neon/common",
+		"neon/browser",
+		"neon/node",
+		"neon/typescript",
+		"neon/react",
+		"neon/jsx-a11y",
+		"neon/next",
+		"neon/prettier",
+		"../../.eslintrc.json"
+	],
 	"rules": {
-		"react/react-in-jsx-scope": 0,
-		"react/jsx-filename-extension": [1, { "extensions": [".tsx"] }]
+		"import/extensions": 0
 	}
 }

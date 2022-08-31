@@ -42,6 +42,7 @@ export default function Document() {
 			</Head>
 			<body>
 				<script
+					// eslint-disable-next-line react/no-danger
 					dangerouslySetInnerHTML={{
 						__html: `(() => {
 							const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;

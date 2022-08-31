@@ -10,6 +10,7 @@ import rehypeParse from "rehype-parse";
 import { unified } from "unified";
 import { CONTINUE, SKIP, visit } from "unist-util-visit";
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const { parse } = unified().use(rehypeParse, { fragment: true });
 const convert = new Convert();
 // const { flagToScope, highlight } = await createStarryNight(common);
@@ -34,7 +35,7 @@ export default function rehypeHighlightANSI() {
 				return SKIP;
 			}
 
-			const language = classes.find((d) => typeof d === "string" && d.startsWith(prefix));
+			const language = classes.find((class_) => typeof class_ === "string" && class_.startsWith(prefix));
 			if (typeof language !== "string") {
 				return SKIP;
 			}
