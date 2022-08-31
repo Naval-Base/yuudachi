@@ -1,3 +1,5 @@
+import process from "node:process";
+
 const { REPORT_URL } = process.env;
 
 /**
@@ -19,7 +21,6 @@ export default {
 		dangerouslyAllowSVG: true,
 		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 	},
-	// eslint-disable-next-line @typescript-eslint/require-await
 	async rewrites() {
 		return [
 			{
@@ -28,12 +29,10 @@ export default {
 			},
 			{
 				source: "/report",
-				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				destination: `${REPORT_URL}/report`,
 			},
 			{
 				source: "/report/:path*",
-				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				destination: `${REPORT_URL}/report/:path*`,
 			},
 		];

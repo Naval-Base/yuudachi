@@ -62,7 +62,6 @@ export async function checkScam(content: string) {
 	const trippedDomains: ScamDomainHit[] = [];
 
 	while ((matches = linkRegex.exec(content)) !== null) {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const url = urlOption(matches[0]);
 
 		if (!url) {
