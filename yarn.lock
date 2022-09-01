@@ -890,6 +890,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/colors@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "@radix-ui/colors@npm:0.1.8"
+  checksum: 35fb8e48b1333e0a800ee55ce554d29016c10d2cb23aa161c6476c32b8231ec78f0ae57535ad482aa35adf0b64c957d92da88ef7f3a3f4a2f8c06870208c7ed1
+  languageName: node
+  linkType: hard
+
 "@redis/bloom@npm:1.0.2":
   version: 1.0.2
   resolution: "@redis/bloom@npm:1.0.2"
@@ -1000,6 +1007,15 @@ __metadata:
   dependencies:
     tslib: ^2.4.0
   checksum: 2f94a15203c4b1815a085daaee30ec06b6326648766dfded1164e257969ea269be466f0ad2cd578f2f7c7a7c613a74d35bd60d406c47f50aa23f82f9e079dee4
+  languageName: node
+  linkType: hard
+
+"@stitches/react@npm:^1.2.8":
+  version: 1.2.8
+  resolution: "@stitches/react@npm:1.2.8"
+  peerDependencies:
+    react: ">= 16.3.0"
+  checksum: 029795323cdedb5599ec0636526fc233b2cf41fa9c1f4a704b1f7f457c6170053384a7430afed45e25f73e348d7c391cf1379bc079943cd9cad44302234a5244
   languageName: node
   linkType: hard
 
@@ -2103,16 +2119,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@yuudachi/website@workspace:packages/website"
   dependencies:
+    "@radix-ui/colors": ^0.1.8
+    "@stitches/react": ^1.2.8
     "@testing-library/react": ^13.3.0
     "@types/node": ^18.7.14
     "@types/react-dom": ^18.0.6
-    "@unocss/cli": ^0.45.13
-    "@unocss/preset-web-fonts": ^0.45.13
     "@unocss/reset": ^0.45.13
     "@vercel/node": ^2.5.11
     "@vitejs/plugin-react": ^2.0.1
     c8: ^7.12.0
-    concurrently: ^7.3.0
     eslint: ^8.23.0
     eslint-config-neon: ^0.1.13
     happy-dom: ^6.0.4
@@ -2122,7 +2137,6 @@ __metadata:
     react-dom: ^18.2.0
     sharp: ^0.30.7
     typescript: ^4.8.2
-    unocss: ^0.45.13
     vitest: ^0.22.1
   languageName: unknown
   linkType: soft
