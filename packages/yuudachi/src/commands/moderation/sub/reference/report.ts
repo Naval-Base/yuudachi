@@ -8,6 +8,8 @@ import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.j
 import { ReportStatus } from "../../../../functions/reports/createReport.js";
 import { getReport } from "../../../../functions/reports/getReport.js";
 import { updateReport } from "../../../../functions/reports/updateReport.js";
+import { checkLogChannel } from "../../../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../../../functions/settings/getGuildSetting.js";
 
 export async function reportReference(
 	interaction: InteractionParam,
@@ -16,6 +18,15 @@ export async function reportReference(
 	reportId: number,
 	locale: string,
 ) {
+	const reportChannelId = checkLogChannel(
+		interaction.guild,
+		await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId),
+	);
+
+	if (!reportChannelId) {
+		throw new Error(i18next.t("common.errors.no_report_channel", { lng: locale }));
+	}
+
 	const referenceReport = await getReport(interaction.guildId, reportId);
 
 	if (!referenceReport) {
@@ -57,7 +68,7 @@ export async function reportReference(
 			),
 			ref: hyperlink(
 				`\`#${referenceReport.reportId}\``,
-				messageLink(logChannelId, referenceReport.logMessageId!, interaction.guildId),
+				messageLink(reportChannelId.id, referenceReport.logMessageId!, interaction.guildId),
 			),
 			lng: locale,
 		}),
