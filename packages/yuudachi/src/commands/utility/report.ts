@@ -81,7 +81,7 @@ export default class extends Command<
 			const key = `guild:${interaction.guildId}:report:user:${args.user.user.user.id}`;
 
 			if (await this.redis.exists(key)) {
-				throw new Error(i18next.t("command.utility.report.commons.errors.recently_reported.message", { lng: locale }));
+				throw new Error(i18next.t("command.utility.report.commons.errors.recently_reported.user", { lng: locale }));
 			}
 
 			if (!args.user.user.member) {
