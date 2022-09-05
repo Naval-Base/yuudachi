@@ -3,15 +3,15 @@
 		"errors": {
 			"no_mod_log_channel": "Kanał dla logów nie został jeszcze zainicjowany.",
 			"no_anti_raid_archive_channel": "",
-			"no_content": ""
+			"no_content": "<Brak zawartość wiadomości>"
 		},
-		"moderator": ""
+		"moderator": "Moderator"
 	},
 	"command": {
 		"common": {
 			"errors": {
 				"generic": "Coś poszło nie tak.",
-				"no_enabled_module": "",
+				"no_enabled_module": "Modół `{{module}}` nie jest włączony na tym serwerze.",
 				"duration_format": "Nieprawidłowy format czasu trwania.",
 				"use_autocomplete": "Nie udało się przetworzyć podanej opcji. Upewnij się, że wybierasz opcję z uzupełnianiem.",
 				"target_not_found": "Podany użytkownik nie znajduje się na tym serwerze.",
@@ -448,131 +448,123 @@
 				"jump_to": "• [Skocz do wiadomości wątku]({{- link}})"
 			},
 			"messages_cleared": {
-				"title": "",
-				"messages_one": "",
-				"messages_other": "",
-				"authors_one": "",
-				"authors_other": "",
-				"time": ""
+				"title": "Wiadomości usunięte",
+				"messages_one": "• Wiadomość: {{count}}",
+				"messages_other": "• Wiadomości: {{count}}",
+				"authors_one": "• Autor: {{count}}",
+				"authors_other": "• Autorzy: {{count}}",
+				"time": "• Okres czasu: {{time}}"
 			}
 		},
 		"anti_raid_nuke": {
-			"pending": "",
-			"title": "",
-			"description": ""
+			"pending": "Zgłoszenie do Anty Rajdu jest przetwarzane...",
+			"title": "Anti Rajd uruchoniony",
+			"description": "• Moderator: {{- moderator}}\n• Wykryte konta: {{count}}"
 		}
 	},
 	"formatters": {
 		"formatting": {
-			"guild_member": ""
+			"guild_member": "{{- id}}| Dołączył: {{- join}} | Stworzony: {{- creation}} | {{- tag}}"
 		},
 		"anti_raid_nuke": {
-			"case_placeholder": "",
-			"title": "",
-			"title_preliminary": "",
+			"case_placeholder": "Wstępny",
+			"title": "Zgłoszenie Anty Rajdu dla {{guild}}",
+			"title_preliminary": "Wstępne zgłoszenie Anty Rajdu dla {{guild}}",
 			"summary": {
-				"title": "",
-				"mode": "",
-				"launch_time": "",
-				"time_taken": "",
-				"moderator": "",
-				"reason": "",
-				"preliminary": "",
-				"preliminary_hidden": ""
+				"title": "**Streszczenie**",
+				"mode": "**Tryb:** `{{mode}}`",
+				"launch_time": "**Czas uruchomienia:** `{{- launch_time}}`",
+				"time_taken": "**Poświęcony czas:** `{{time_taken}}`",
+				"moderator": "**Moderator:** `{{- moderator}}`",
+				"reason": "**Powód:** `{{- reason}}`",
+				"preliminary": "To jest wstępne zgłoszenie, aby je uruchomić powróć do discorda.",
+				"preliminary_hidden": "Możesz zobaczyć wstępne zgłoszenie, tylko podczas ukrytego włączenia komendy."
 			},
 			"results": {
-				"title": "",
-				"total": "",
+				"title": "**Wyniki**",
+				"total": "**Ogólnie:** `{{count}}`",
 				"preliminary": {
-					"banned_one": "",
-					"banned_other": "",
-					"failed_one": "",
-					"failed_other": ""
+					"banned_one": "`{{count}}` członek może być zbanowany",
+					"banned_other": "`{{count}}` członkowie mogą być zbanowani",
+					"failed_one": "`{{count}}` członek może być zbanowany",
+					"failed_other": "`{{count}}` członkowie nie mogą być zbanowani"
 				},
 				"blast": {
-					"banned_one": "",
-					"banned_other": "",
-					"failed_one": "",
-					"failed_other": ""
+					"banned_one": "`{{count}}` członek jest pomyślnie zbanowany",
+					"banned_other": "`{{count}}` członkowie są pomyślnie zbanowani",
+					"failed_one": "`{{count}}` członek nie został pomyślnie zbanowany",
+					"failed_other": "`{{count}}` członkowie nie zostali pomyślnie zbanowani"
 				},
-				"ratio": ""
+				"ratio": "Wskaźnik powodzenia: `{{ratio}}`"
 			},
 			"parameters": {
-				"title": "",
-				"avatar": "",
+				"title": "**Parametry**",
+				"avatar": "**Dopasowany awatar:** `{{avatar}}`",
 				"pattern": {
-					"title": "",
-					"confusables": "",
-					"insensitive": "",
-					"full_match": ""
+					"title": "**Wzór:** `{{- pattern}}`",
+					"confusables": "Tryb dezorientacji wzorca: `$t(formatters.anti_raid_nuke.parameters.confusables.{{mode}})`",
+					"insensitive": "Wzór jest czuły na wielkośc liter",
+					"full_match": "Wzór jest ograniczony do pełnych dopasowań"
 				},
 				"confusables": {
-					"title": "",
-					"0": "",
-					"1": "",
-					"2": "",
-					"3": ""
+					"title": "Tryb dezorientacji: `$t(formatters.anti_raid_nuke.parameters.confusables.{{mode}})`",
+					"0": "Wyłączony",
+					"1": "Odporność wzoru",
+					"2": "Filtrowanie członków",
+					"3": "Filtrowanie członków and pattern resistance"
 				},
 				"created": {
-					"title": "",
-					"after": "",
-					"before": ""
+					"title": "**Przedział stworzenia:**",
+					"after": "Stworzony przed: `{{- after}}`",
+					"before": "Stworzony po: `{{- before}}`"
 				},
 				"joined": {
-					"title": "",
-					"after": "",
-					"before": ""
+					"title": "**Przediał dołączenia:**",
+					"after": "Dołączył przed: `{{- after}}`",
+					"before": "Dołączył po: `{{- before}}`"
 				},
 				"file": {
-					"title": "",
-					"placeholder": ""
+					"title": "**Plik:** `{{- file}}`",
+					"placeholder": "<CDN link>"
 				},
-				"days_zero": "",
-				"days_one": "",
-				"days_other": "",
+				"days_zero": "• Nie usuwam żadnych wiadomości",
+				"days_one": "• Usuwanie wiadomosći usuniętych wczoraj",
+				"days_other": "• Usuwanie wiadmości z ostatnich `{{count}}` dni",
 				"zalgo": "",
-				"none": ""
+				"none": "Nie podany"
 			},
 			"cases": {
-				"title": "",
-				"single": "",
-				"range": "",
-				"none": "",
-				"log_message": "",
+				"title": "**Sprawy**",
+				"single": "Sprawa `#{{case_id}}`",
+				"range": "Od sprawy `#{{from}}` do sprawy `#{{to}}`",
+				"none": "Nie utworzono sprawy",
+				"log_message": "**Dziennik spraw:** {{- link}}",
 				"log_message_sub": "",
-				"log_message_none": ""
+				"log_message_none": "**Dziennik Spraw:** Braw spraw stworzonych"
 			},
 			"preliminary": {
 				"successes": {
-					"title": "",
-					"none": ""
+					"title": "**Przewidywane cele**",
+					"none": "Brak potencjalnych celów"
 				},
 				"fails": {
-					"title": "",
-					"none": ""
+					"title": "**Przewidywane Porażki**",
+					"none": "Brak wcześnie wykrytych porażek"
 				}
 			},
 			"blast": {
 				"successes": {
-					"title": "",
-					"none": ""
+					"title": "**Potwierdzone cele**",
+					"none": "Brak potwierdzonych celów, coś poszło nie tak"
 				},
 				"fails": {
-					"title": "",
-					"none": ""
+					"title": "**Porażki**",
+					"none": "Brak porażek, wszystko poszło w porzątku"
 				}
 			},
 			"table": {
-				"success_titles": [
-					"",
-					"",
-					""
-				],
-				"fail_titles": [
-					"",
-					"",
-					""
-				]
+				"success_titles": ["ID sprawy", "ID członka", "Nazwa użytkownika"],
+				"fail_titles": ["ID członka", "Nazwa użytkownika", "Błąd"]
 			}
 		}
 	}
