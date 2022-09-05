@@ -40,9 +40,9 @@
 					"max_length_reason": "Maksymalna długość powodu to `1900`",
 					"not_a_text_channel": "{{- channel}} nie jest kanałem tekstowym.",
 					"no_case": "Nie można znaleść numeru sprawy `#{{case}}",
-					"no_case_range": "Niepoprawny przedział namerów spraw `#{{lower_case}}` do `#{{upper_case}}`",
+					"no_case_range": "Niepoprawny przedział numerów spraw `#{{lower_case}}` do `#{{upper_case}}`",
 					"case_lower_one": "Numer sprawy",
-					"no_reference_case": "Nie można znaleść sprawy z number `#{{case}}`",
+					"no_reference_case": "Nie można znaleść sprawy z numberem `#{{case}}`",
 					"already_processed": "{{- user}} ze sprawą {{- case}} nie ma ograniczeń."
 				}
 			},
