@@ -129,7 +129,7 @@
 				"common": {
 					"errors": {
 						"result": {
-							"reject_perms": "Ten użytkownik ma wysokie permisje!",
+							"reject_perms": "Ten użytkownik ma za wysokie permisje!",
 							"reject_unbanable": "Nie mogę zbanować tego użytkownika.",
 							"reject_bot": "Ten użytkownik jest botem.",
 							"reject_self": "Ten użytkownik to ty.",
