@@ -11,7 +11,7 @@
 		"common": {
 			"errors": {
 				"generic": "Coś poszło nie tak.",
-				"no_enabled_module": "Modół `{{module}}` nie jest włączony na tym serwerze.",
+				"no_enabled_module": "Moduł `{{module}}` nie jest włączony na tym serwerze.",
 				"duration_format": "Nieprawidłowy format czasu trwania.",
 				"use_autocomplete": "Nie udało się przetworzyć podanej opcji. Upewnij się, że wybierasz opcję z uzupełnianiem.",
 				"target_not_found": "Podany użytkownik nie znajduje się na tym serwerze.",
