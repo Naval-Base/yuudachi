@@ -279,16 +279,16 @@
 				}
 			},
 			"reason": {
-				"success": "Pomyślnie ustawiono powód dla incydentu {{- case}}",
-				"success_multiple": "Pomyślnie ustawiono powód dla spraw {{- lower_case}} do {{- upper_case}} (`{{current}}/{{count}}` spraw)",
-				"pending_multiple": "Czy chesz zmienić powód dla spraw {{- lower_case}} do {{- upper_case}} (`{{count}}` spraw)?",
+				"success": "Pomyślnie ustawiono powód dla sprawy {{- case}}",
+				"success_multiple": "Pomyślnie ustawiono powód dla spraw {{- lower_case}} na {{- upper_case}} (`{{current}}/{{count}}` spraw)",
+				"pending_multiple": "Czy chesz zmienić powód dla spraw {{- lower_case}} na {{- upper_case}} (`{{count}}` spraw)?",
 				"buttons": {
 					"execute": "Ustaw"
 				},
 				"cancel": "Anuluj"
 			},
 			"reference": {
-				"success": "Pomyślnie ustawiono odniesienie dla incydentu {{- case}} na {{- ref}}"
+				"success": "Pomyślnie ustawiono odniesienie dla sprawy {{- case}} na {{- ref}}"
 			},
 			"duration": {
 				"errors": {
@@ -298,21 +298,21 @@
 			},
 			"clear": {
 				"errors": {
-					"no_results": "",
-					"other_channel": ""
+					"no_results": "Nie możńa znaleść wiadomości w podanym przedziale które są młodsze niż 12 godzin.",
+					"other_channel": "Podane wiadomości muszą być z tego samego kanału."
 				},
-				"pending_one": "",
-				"pending_other": "",
-				"message_too_old": "",
-				"success_one": "",
-				"success_other": "",
-				"authors_one": "",
-				"authors_other": "",
+				"pending_one": "Chesz usunąć `{{count}}` wiadomość od $t(command.mod.clear.authors, {\"count\": {{author_count}}}) wysłanych w `{{time}}`. Jesteś pewien?",
+				"pending_other": "Chesz usunąć {{count}}` wiadomości od $t(command.mod.clear.authors, {\"count\": {{author_count}}}) wysłanych w `{{time}}`. Jesteś pewien?",
+				"message_too_old": "Wiadomośc: Możesz usunąć wiadomości które nie są starsze niż 12 godzin. Najstarsza wiadomości którą mogę usunąć jest poniżej.",
+				"success_one": "Pomyślnie usunięto `{{count}}` wiadomość od $t(command.mod.clear.authors, {\"count\": {{author_count}}}) wysłanych w `{{time}}`",
+				"success_other": "Pomyślnie usunięto `{{count}}` wiadomości poprzez $t(command.mod.clear.authors, {\"count\": {{author_count}}}) wysłanych w `{{time}}`",
+				"authors_one": "`{{count}}` autorów",
+				"authors_other": "`{{count}}` autorów",
 				"buttons": {
-					"execute_one": "",
-					"execute_other": ""
+					"execute_one": "Clear {{count}} message",
+					"execute_other": "Usunięto {{count}} wiadmości"
 				},
-				"cancel": ""
+				"cancel": "Anulowano usuwanie wiadomości."
 			}
 		},
 		"utility": {
@@ -326,17 +326,17 @@
 			"refresh_scamlist": {
 				"missing_env": "Brakuje zmiennych środowiskowych {{missing, list}} z listami domen ze scamem do sprawdzenia.",
 				"refresh_never": "`never`",
-				"amount": "",
-				"before": "",
-				"after": "",
+				"amount": "• Ilość: `{{count}}`",
+				"before": "• Przed: `{{count}}`",
+				"after": "• Po: `{{count}}`",
 				"last_change": "• Ostatnia zmiana: {{- timestamp}}",
 				"buttons": {
 					"execute": "Odśwież"
 				},
-				"cancel": "",
-				"success": "",
-				"pending": "",
-				"error": ""
+				"cancel": "Anulowano dodania domeny do listy scamów.",
+				"success": "Pomyślnie dodano domenę do listy scamów.",
+				"pending": "Obecna lista scamów:",
+				"error": "Coś poszło nie tak..."
 			},
 			"sponsor": {
 				"errors": {
@@ -347,7 +347,7 @@
 				"buttons": {
 					"execute": "Zastosuj"
 				},
-				"reason": "",
+				"reason": "Rola sponsora",
 				"cancel": "Anulowano przyznawanie roli sponsora dla {{- user}}",
 				"success": "Pomyślnie przyznano rolę sponsora dla {{- user}}"
 			}
@@ -355,97 +355,97 @@
 	},
 	"log": {
 		"history": {
-			"title": "Case History",
+			"title": "Histora spraw",
 			"user_details": "User details",
-			"user_details_description": "",
-			"member_details": "Member details",
-			"member_details_description": "",
-			"member_details_no_nickname": "No nickname",
-			"summary_truncated": "{{- summary}}\nand more..."
+			"user_details_description": "• Nazwa: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Stworzono: {{- created_at}} ({{- created_at_since}})",
+			"member_details": "Detale członka",
+			"member_details_description": "• Nick: {{- member_nickname}}\n• Role: {{- member_roles}}\n• Dołączono: {{- joined_at}} ({{- joined_at_since}})",
+			"member_details_no_nickname": "Brak nicku",
+			"summary_truncated": "{{- summary}}\ni więcej..."
 		},
 		"mod_log": {
 			"case_log": {
-				"description": "",
-				"expiration": "\n**Expiration**: {{- time}}",
-				"context": "**Context:** {{- link}}",
+				"description": "**Członek**: `{{- target_tag}}` ({{target_id}})\n**Akcja**: {{- action}}",
+				"expiration": "\n**Wygaśnięcie**: {{- time}}",
+				"context": "**Kontekst:** {{- link}}",
 				"context_sub": "Beam me up, Yuu",
-				"reason": "\n**Reason:** {{- reason}}",
-				"reason_fallback": "",
-				"reference": "\n**Reference:** {{- ref}}",
-				"footer": ""
+				"reason": "\n**Powód:** {{- reason}}",
+				"reason_fallback": "\n**Powód:** Użyj `/reason {{case_id}} <...reason>` aby ustawić powód w sprawie",
+				"reference": "\n**Odniesienie:** {{- ref}}",
+				"footer": "Sprawa {{case_id}}"
 			},
 			"anti_raid_nuke": {
-				"description": "",
-				"report": "",
+				"description": "**Akcja**: Anti Rajd\n**Powód:** {{- reason}}\n**Ilość wykrytych kont:** {{count}}",
+				"report": "**Report:** {{- link}}",
 				"report_sub": "",
-				"footer": "Cases {{from}}-{{to}}"
+				"footer": "Sprawy {{from}}-{{to}}"
 			},
 			"scam": {
-				"reason": "Scam detection"
+				"reason": "Wykrycie scamu"
 			},
 			"spam": {
-				"reason": "Spam detection",
-				"reason_mentions": "Mention spam detection"
+				"reason": "Wykrycie spamu",
+				"reason_mentions": "Wzmianka o wykrywaniu spamu"
 			},
 			"auto_mod": {
-				"keyword": "",
-				"keyword_preset": "",
-				"harmful_link": "",
-				"spam": "",
-				"default": ""
+				"keyword": "Wiadomośc zawiera klucz podany w zasadach Auto Moderacji",
+				"keyword_preset": "Wiadomość wykryta przez Auto Mododerację",
+				"harmful_link": "Wiadomość zawiera niebiezpieczny link",
+				"spam": "Wiadomość wykryta jako spam",
+				"default": "Wiadomość wykryta przez Auto Mododerację"
 			}
 		},
 		"member_log": {
-			"description": "",
-			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
-			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
+			"description": "• Nazwa: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Stworzono: {{- created_at}} ({{- created_at_since}})",
+			"joined_at": "\n• Dołączył: {{- joined_at}} ({{- joined_at_since}})",
+			"left_at": "\n• Wyszedł: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
-				"joined": "User joined",
-				"left": "User left"
+				"joined": "Użytkownik dołączył",
+				"left": "Użytkownik wyszedł"
 			}
 		},
 		"guild_log": {
 			"message_updated": {
-				"title": "Message updated",
-				"channel": "• Channel: {{- channel}}",
-				"jump_to": "• [Jump to]({{- link}})"
+				"title": "Wiadomośc zaktualizowana",
+				"channel": "• Kanał: {{- channel}}",
+				"jump_to": "• [Skocz do]({{- link}})"
 			},
 			"message_deleted": {
-				"title": "Message deleted",
-				"channel": "• Channel: {{- channel}}",
-				"embeds": "• Embeds: {{- embeds}}",
-				"attachments": "• Attachments: {{- attachments}}",
-				"stickers": "• Stickers: {{- stickers}}",
-				"jump_to": "• [Jump to]({{- link}})",
-				"reply_to": "",
-				"reply_to_mentions": ""
+				"title": "Wiadomość usunięta",
+				"channel": "• Kanał: {{- channel}}",
+				"embeds": "• Embedy: {{- embeds}}",
+				"attachments": "• Załączniki: {{- attachments}}",
+				"stickers": "• Naklejki: {{- stickers}}",
+				"jump_to": "• [Skocz do]({{- link}})",
+				"reply_to": "• Odpowiadanie na [{{message_id}}]({{- message_url}}) przez `{{- user_tag}}` ({{user_id}})",
+				"reply_to_mentions": "• @Odpowiadanie na [{{message_id}}]({{- message_url}}) przez `{{- user_tag}}` ({{user_id}})"
 			},
 			"message_bulk_deleted": {
-				"title": "Message deleted bulk",
-				"multiple_authors": "",
-				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
-				"attachment": "↳ Attachment: {{- url}}",
-				"sticker": "↳ Sticker: {{- name}}",
-				"reply_to": "",
-				"reply_to_mentions": ""
+				"title": "Masowe usuwanie wiadomości",
+				"multiple_authors": "Kilku autorów",
+				"description": "• Kanał: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
+				"attachment": "↳ Załączniki: {{- url}}",
+				"sticker": "↳ Nakleki: {{- name}}",
+				"reply_to": "• Odpowiadanie na [{{message_id}}]({{- message_url}}) przez `{{- user_tag}}` ({{user_id}})",
+				"reply_to_mentions": "• @Odpowiadanie na [{{message_id}}]({{- message_url}}) przez `{{- user_tag}}` ({{user_id}})"
 			},
 			"voice_state_update": {
 				"title": "Voice state update",
-				"joined": "Joined {{- channel}}",
-				"moved": "",
-				"left": "Left {{- channel}}"
+				"joined": "Dołączył na {{- channel}}",
+				"moved": "Przeniósł się z {{- from_channel}} do {{- to_channel}}",
+				"left": "Opuścił {{- channel}}"
 			},
 			"thread_created": {
-				"title": "Thread created",
-				"channel": "",
-				"starter": "",
-				"jump_to": "• [Jump to starter message]({{- link}})"
+				"title": "Wątek stworzony",
+				"channel": "• Wątek: {{- channel}} {{- name}} {{channel_id}}",
+				"starter": "• Wiadomość startowa: {{message_id}}",
+				"jump_to": "• [Skocz do wiadomości wątku]({{- link}})"
 			},
 			"thread_deleted": {
-				"title": "Thread deleted",
-				"channel": "",
-				"starter": "",
-				"jump_to": "• [Jump to starter message]({{- link}})"
+				"title": "Wątek usunięty",
+				"channel": "• Wątek: {{- name}} {{channel_id}}",
+				"starter": "• Wiadomość startowa: {{message_id}}",
+				"jump_to": "• [Skocz do wiadomości wątku]({{- link}})"
 			},
 			"messages_cleared": {
 				"title": "",
