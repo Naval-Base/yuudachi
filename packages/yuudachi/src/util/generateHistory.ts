@@ -18,7 +18,7 @@ import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import { Color, ThreatLevelColor } from "../Constants.js";
 import type { RawCase } from "../functions/cases/transformCase.js";
-import { ReportStatus, ReportType } from "../functions/reports/createReport.js";
+import { ReportStatus } from "../functions/reports/createReport.js";
 import type { RawReport } from "../functions/reports/transformReport.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 import { kSQL } from "../tokens.js";
@@ -198,16 +198,19 @@ export async function generateReportHistory(
 	for (const report of reports) {
 		const dateFormatted = time(dayjs(report.created_at).unix(), TimestampStyles.ShortDate);
 
-		const typeString = report.author_id === target.user.id ? "author" : "target";
+		const userRoleString =
+			report.author_id === target.user.id
+				? i18next.t("log.history.user_role.author", { lng: locale })
+				: i18next.t("log.history.user_role.target", { lng: locale });
 		const reportString = `${dateFormatted} ${inlineCode(REPORT_KEYS[report.status]!.toUpperCase())} ${
 			report.log_message_id
-				? hyperlink(`#${report.report_id}`, messageLink(reportChannelId, report.log_message_id), report.guild_id)
+				? hyperlink(
+						`#${report.report_id} (${userRoleString})`,
+						messageLink(reportChannelId, report.log_message_id),
+						report.guild_id,
+				  )
 				: `#${report.report_id}`
-		} ${i18next.t(`log.history.report_details`, {
-			author: typeString,
-			type: report.type === ReportType.Message ? "✉️" : "👤",
-			lng: locale,
-		})}: ${report.reason.replaceAll("*", "")}`;
+		} ${report.reason.replaceAll("*", "")}`;
 
 		if (summary.join("\n").length + reportString.length + 1 < 4_060) {
 			summary.push(reportString);
@@ -269,7 +272,9 @@ export function generateUserInfo(target: { member?: GuildMember | undefined; use
 		embed = addFields(embed, {
 			name: i18next.t("log.history.member_details", { lng: locale }),
 			value: i18next.t("log.history.member_details_description", {
-				member_nickname: target.member.nickname ?? i18next.t("log.history.member_details_no_nickname", { lng: locale }),
+				member_nickname: target.member.nickname
+					? inlineCode(target.member.nickname)
+					: i18next.t("log.history.member_details_no_nickname", { lng: locale }),
 				member_roles: target.member.roles.cache.map((role) => role.name).join(", "),
 				joined_at: joinFormatted,
 				joined_at_since: sinceJoinFormatted,

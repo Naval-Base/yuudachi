@@ -427,8 +427,7 @@
 				"spam_one": "Spam reported once",
 				"spam_other": "Spam reported {{count}} times"
 			},
-			"report_details": "$t(log.history.report.{{author}}) | {{type}}",
-			"report": {
+			"user_role": {
 				"author": "Author",
 				"target": "Target"
 			}
