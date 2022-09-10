@@ -33,16 +33,16 @@ export async function message(
 
 	const reportButton = createButton({
 		customId: reportKey,
-		label: i18next.t("command.utility.report.commons.buttons.execute", { lng: locale }),
+		label: i18next.t("command.utility.report.common.buttons.execute", { lng: locale }),
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t("command.utility.report.commons.buttons.cancel", { lng: locale }),
+		label: i18next.t("command.utility.report.common.buttons.cancel", { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 	const trustAndSafetyButton = createButton({
-		label: i18next.t("command.utility.report.commons.buttons.discord_report", { lng: locale }),
+		label: i18next.t("command.utility.report.common.buttons.discord_report", { lng: locale }),
 		url: localeTrustAndSafety(locale),
 		style: ButtonStyle.Link,
 	});
@@ -57,9 +57,9 @@ export async function message(
 			lng: locale,
 		}),
 		"",
-		i18next.t("command.utility.report.commons.warnings", {
+		i18next.t("command.utility.report.common.warnings", {
 			trust_and_safety: hyperlink(
-				i18next.t("command.utility.report.commons.trust_and_safety_sub", { lng: locale }),
+				i18next.t("command.utility.report.common.trust_and_safety_sub", { lng: locale }),
 				localeTrustAndSafety(locale),
 			),
 			lng: locale,
@@ -81,7 +81,7 @@ export async function message(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t("command.utility.report.commons.errors.timed_out", { lng: locale }),
+					content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
 					components: [],
 				});
 			} catch (error_) {

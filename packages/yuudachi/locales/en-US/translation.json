@@ -366,7 +366,7 @@
 				"success": "Successfully applied sponsor role to {{- user}}"
 			},
 			"report": {
-				"commons": {
+				"common": {
 					"errors": {
 						"recently_reported": {
 							"message": "This message has already been recently reported, thanks for making our community a better place!",

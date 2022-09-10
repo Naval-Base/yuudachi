@@ -56,13 +56,13 @@ export default class extends Command<
 			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
 			if (messageArg.author.id === interaction.user.id) {
-				throw new Error(i18next.t("command.utility.report.commons.errors.no_self", { lng: locale }));
+				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 			}
 
 			const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId}:message:${messageArg.id}`;
 
 			if (await this.redis.exists(key)) {
-				throw new Error(i18next.t("command.utility.report.commons.errors.recently_reported.message", { lng: locale }));
+				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
 			}
 
 			await message(
@@ -75,13 +75,13 @@ export default class extends Command<
 			);
 		} else {
 			if (args.user.user.user.id === interaction.user.id) {
-				throw new Error(i18next.t("command.utility.report.commons.errors.no_self", { lng: locale }));
+				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 			}
 
 			const key = `guild:${interaction.guildId}:report:user:${args.user.user.user.id}`;
 
 			if (await this.redis.exists(key)) {
-				throw new Error(i18next.t("command.utility.report.commons.errors.recently_reported.user", { lng: locale }));
+				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
 			}
 
 			if (!args.user.user.member) {
@@ -106,13 +106,13 @@ export default class extends Command<
 		const modalKey = nanoid();
 
 		if (args.user.user.id === interaction.user.id) {
-			throw new Error(i18next.t("command.utility.report.commons.errors.no_self", { lng: locale }));
+			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 		}
 
 		const key = `guild:${interaction.guildId}:report:user:${args.user.user.id}`;
 
 		if (await this.redis.exists(key)) {
-			throw new Error(i18next.t("command.utility.report.commons.errors.recently_reported.user", { lng: locale }));
+			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
 		}
 
 		if (!args.user.member) {
@@ -126,10 +126,10 @@ export default class extends Command<
 				createModalActionRow([
 					createTextComponent({
 						customId: "reason",
-						label: i18next.t("command.utility.report.commons.modal.label", { lng: locale }),
+						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
 						minLength: 10,
 						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.utility.report.commons.modal.placeholder", { lng: locale }),
+						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
 					}),
@@ -147,7 +147,7 @@ export default class extends Command<
 			.catch(async () => {
 				try {
 					await interaction.followUp({
-						content: i18next.t("command.utility.report.commons.errors.timed_out", { lng: locale }),
+						content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
 						ephemeral: true,
 						components: [],
 					});
@@ -193,13 +193,13 @@ export default class extends Command<
 		const modalKey = nanoid();
 
 		if (args.message.author.id === interaction.user.id) {
-			throw new Error(i18next.t("command.utility.report.commons.errors.no_self", { lng: locale }));
+			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 		}
 
 		const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId}:message:${args.message.id}`;
 
 		if (await this.redis.exists(key)) {
-			throw new Error(i18next.t("command.utility.report.commons.errors.recently_reported.message", { lng: locale }));
+			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
 		}
 
 		const modal = createModal({
@@ -209,10 +209,10 @@ export default class extends Command<
 				createModalActionRow([
 					createTextComponent({
 						customId: "reason",
-						label: i18next.t("command.utility.report.commons.modal.label", { lng: locale }),
+						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
 						minLength: 10,
 						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.utility.report.commons.modal.placeholder", { lng: locale }),
+						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
 					}),
@@ -230,7 +230,7 @@ export default class extends Command<
 			.catch(async () => {
 				try {
 					await interaction.followUp({
-						content: i18next.t("command.utility.report.commons.errors.timed_out", { lng: locale }),
+						content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
 						ephemeral: true,
 						components: [],
 					});
