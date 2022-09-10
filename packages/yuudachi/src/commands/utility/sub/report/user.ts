@@ -67,7 +67,7 @@ export async function user(
 
 	const contentParts = [
 		i18next.t("command.utility.report.user.pending", {
-			user: `${member.user.toString()} - ${member.user.tag} (${member.user.id})`,
+			user: `${member.user.toString()} - \`${member.user.tag}\` (${member.user.id})`,
 			reason: ellipsis(args.reason, REPORT_REASON_MAX_LENGTH),
 			lng: locale,
 		}),
