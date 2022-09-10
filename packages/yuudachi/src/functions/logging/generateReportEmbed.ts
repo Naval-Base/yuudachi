@@ -37,12 +37,15 @@ export async function generateReportEmbed(
 		color: statusToColor(report.status),
 		description: await generateReportLog(report, locale, message),
 		timestamp: report.createdAt,
-		footer: {
-			text: i18next.t("log.report_log.footer", {
-				lng: locale,
-			}),
-			icon_url: user.client.user!.displayAvatarURL(),
-		},
+		footer:
+			report.status === ReportStatus.Pending
+				? {
+						text: i18next.t("log.report_log.footer", {
+							lng: locale,
+						}),
+						icon_url: user.client.user!.displayAvatarURL(),
+				  }
+				: undefined,
 	};
 
 	if (report.attachmentUrl) {
