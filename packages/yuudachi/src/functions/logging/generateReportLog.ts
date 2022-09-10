@@ -38,8 +38,6 @@ export async function generateReportLog(report: Report, locale: string, message?
 				message_link: message
 					? hyperlink(i18next.t("log.report_log.message_sub", { lng: locale }), message.url)
 					: i18next.t("log.report_log.message_fallback", { lng: locale }),
-				// TextChannels have an custom `.toString()` method that returns the channel's mention.
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: channelMention(report.channelId!),
 				lng: locale,
 			}),
