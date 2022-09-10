@@ -6,7 +6,8 @@
 			"no_report_channel": "No report channel has been initialized yet.",
 			"no_content": "<No message content>"
 		},
-		"moderator": "Moderator"
+		"moderator": "Moderator",
+		"and_more": "and more..."
 	},
 	"command": {
 		"common": {
@@ -410,26 +411,73 @@
 	},
 	"log": {
 		"history": {
-			"title": "Case History",
-			"report_title": "Report History",
-			"none": "`No history found`",
-			"user_details": "User details",
-			"user_details_description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})",
-			"member_details": "Member details",
-			"member_details_description": "• Nickname: {{- member_nickname}}\n• Roles: {{- member_roles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
-			"member_details_no_nickname": "No nickname",
-			"summary_truncated": "{{- summary}}\nand more...",
-			"report_footer": {
-				"target_zero": "Never reported",
-				"target_one": "Target of {{count}} report",
-				"target_other": "Target of {{count}} reports",
-				"spam_zero": "Never spam reported",
-				"spam_one": "Spam reported once",
-				"spam_other": "Spam reported {{count}} times"
+			"common": {
+				"errors": {
+					"no_history": "`No history found`"
+				},
+				"user_details": {
+					"title": "User details",
+					"description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})"
+				},
+				"member_details": {
+					"title": "Member details",
+					"description": {
+						"nickname": "• Nickname: `{{- nickname}}`",
+						"roles_one": "• Role ({{count}}): {{- roles}}",
+						"roles_other": "• Roles ({{count}}): {{- roles}}",
+						"joined": "• Joined: {{- joined_at}} ({{- joined_at_since}})"
+					}
+				}
 			},
-			"user_role": {
-				"author": "Author",
-				"target": "Target"
+			"cases": {
+				"title": "Case History",
+				"summary": {
+					"warning_one": "{{count}} warning",
+					"warning_other": "{{count}} warnings",
+					"restriction_one": "{{count}} restriction",
+					"restriction_other": "{{count}} restrictions",
+					"timeout_one": "{{count}} timeout",
+					"timeout_other": "{{count}} timeouts",
+					"kick_one": "{{count}} kick",
+					"kick_other": "{{count}} kicks",
+					"softban_one": "{{count}} softban",
+					"softban_other": "{{count}} softbans",
+					"ban_one": "{{count}} ban",
+					"ban_other": "{{count}} bans",
+					"unban_one": "{{count}} unbans",
+					"unban_other": "{{count}} unbans"
+				},
+				"action_label": {
+					"restriction": "RESTRICT",
+					"warn": "WARN",
+					"kick": "KICK",
+					"softban": "SOFTBAN",
+					"ban": "BAN",
+					"unban": "UNBAN",
+					"timeout": "TIMEOUT",
+					"unknown": "UNKNOWN"
+				}
+			},
+			"reports": {
+				"title": "Report History",
+				"user_role": {
+					"author": "Author",
+					"target": "Target"
+				},
+				"summary": {
+					"target": "{{count}}x reported",
+					"author_one": "{{count}} report authored",
+					"author_other": "{{count}} reports authored",
+					"spam_one": "{{count}} spam report",
+					"spam_other": "{{count}} spam reports"
+				},
+				"status_label": {
+					"pending": "PENDING",
+					"approved": "APPROVED",
+					"rejected": "REJECTED",
+					"spam": "SPAM",
+					"unknown": "UNKNOWN"
+				}
 			}
 		},
 		"mod_log": {
