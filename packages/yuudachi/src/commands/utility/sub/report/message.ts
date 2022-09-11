@@ -4,7 +4,7 @@ import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { container } from "tsyringe";
 import type { ArgsParam, InteractionParam } from "../../../../Command.js";
-import { REPORT_MESSAGE_EXPIRE_SECONDS, REPORT_REASON_MAX_LENGTH } from "../../../../Constants.js";
+import { REPORT_DUPLICATE_EXPIRE_SECONDS, REPORT_REASON_MAX_LENGTH } from "../../../../Constants.js";
 import { formatMessageToEmbed } from "../../../../functions/logging/formatMessageToEmbed.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
 import { createReport, ReportType } from "../../../../functions/reports/createReport.js";
@@ -115,7 +115,7 @@ export async function message(
 		});
 
 		await upsertReportLog(interaction.guild, report, args.message);
-		await redis.setex(key, REPORT_MESSAGE_EXPIRE_SECONDS, "");
+		await redis.setex(key, REPORT_DUPLICATE_EXPIRE_SECONDS, "");
 
 		await collectedInteraction.editReply({
 			content: i18next.t("command.utility.report.message.success", { lng: locale }),
