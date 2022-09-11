@@ -2,8 +2,10 @@ import type { APIEmbed, Embed, Guild, Message } from "discord.js";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import { kSQL } from "../../tokens.js";
+import { generateUserInfo } from "../../util/generateHistory.js";
+import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../util/resolveMessage.js";
-import type { Report } from "../reports/createReport.js";
+import { type Report, ReportType } from "../reports/createReport.js";
 import { checkLogChannel } from "../settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
@@ -32,6 +34,12 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, localMessage)];
 	if (localMessage) {
 		embeds.push(formatMessageToEmbed(localMessage as Message<true>, locale));
+	}
+
+	if (report.type === ReportType.User) {
+		const target = await resolveMemberAndUser(guild, report.targetId);
+
+		embeds.push(generateUserInfo(target, locale));
 	}
 
 	if (report.logMessageId) {
