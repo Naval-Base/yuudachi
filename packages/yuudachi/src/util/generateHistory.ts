@@ -410,16 +410,16 @@ export async function generateHistory(
 	switch (type) {
 		case HistoryType.Case: {
 			embed = {
-				...(await generateCaseHistory(interaction, target, locale)),
 				...embed,
+				...(await generateCaseHistory(interaction, target, locale)),
 			};
 			break;
 		}
 
 		case HistoryType.Report: {
 			embed = {
-				...(await generateReportHistory(interaction, target, locale)),
 				...embed,
+				...(await generateReportHistory(interaction, target, locale)),
 			};
 			break;
 		}
