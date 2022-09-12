@@ -4,8 +4,13 @@
 	"description": "",
 	"scripts": {
 		"test": "vitest run",
-		"build": "next build",
-		"dev": "next dev",
+		"build": "yarn build:css && yarn build:next",
+		"build:next": "next build",
+		"build:css": "yarn generate:css",
+		"dev": "concurrently 'yarn dev:css' 'yarn dev:next'",
+		"dev:next": "next dev",
+		"dev:css": "yarn generate:css --watch",
+		"generate:css": "unocss 'src/**/*.tsx' --out-file ./src/styles/unocss.css",
 		"lint": "prettier --check . && eslint src --ext mjs,js,ts,tsx",
 		"format": "prettier --write . && eslint src --ext mjs,js,ts,tsx --fix",
 		"fmt": "yarn format"
@@ -16,27 +21,34 @@
 	"license": "AGPL-3.0",
 	"private": true,
 	"dependencies": {
-		"@radix-ui/colors": "^0.1.8",
-		"@stitches/react": "^1.2.8",
-		"next": "^12.2.5",
+		"ariakit": "^2.0.0-next.41",
+		"cmdk": "^0.1.20",
+		"next": "^12.3.0",
+		"next-progress": "^2.2.0",
+		"next-themes": "^0.2.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sharp": "^0.30.7"
+		"react-use": "^17.4.0",
+		"sharp": "^0.31.0"
 	},
 	"devDependencies": {
-		"@testing-library/react": "^13.3.0",
-		"@types/node": "^18.7.14",
+		"@testing-library/react": "^13.4.0",
+		"@types/node": "^18.7.16",
 		"@types/react-dom": "^18.0.6",
-		"@unocss/reset": "^0.45.13",
-		"@vercel/node": "^2.5.11",
-		"@vitejs/plugin-react": "^2.0.1",
+		"@unocss/cli": "^0.45.21",
+		"@unocss/reset": "^0.45.21",
+		"@vercel/node": "^2.5.14",
+		"@vitejs/plugin-react": "^2.1.0",
 		"c8": "^7.12.0",
-		"eslint": "^8.23.0",
-		"eslint-config-neon": "^0.1.13",
+		"concurrently": "^7.4.0",
+		"eslint": "^8.23.1",
+		"eslint-config-neon": "^0.1.33",
 		"happy-dom": "^6.0.4",
 		"prettier": "^2.7.1",
-		"typescript": "^4.8.2",
-		"vitest": "^0.22.1"
+		"prettier-plugin-tailwindcss": "^0.1.13",
+		"typescript": "^4.8.3",
+		"unocss": "^0.45.21",
+		"vitest": "^0.23.2"
 	},
 	"engines": {
 		"node": ">=16.0.0"

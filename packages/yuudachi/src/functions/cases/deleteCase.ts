@@ -13,6 +13,7 @@ type DeleteCaseOptions = {
 	manual?: boolean | undefined;
 	messageId?: Snowflake | undefined;
 	reason?: string | null | undefined;
+	reportReference?: number | undefined;
 	skipAction?: boolean | undefined;
 	target?: User | undefined;
 	user?: User | null | undefined;
@@ -27,6 +28,7 @@ export async function deleteCase({
 	manual = false,
 	skipAction = false,
 	action = undefined,
+	reportReference = undefined,
 }: DeleteCaseOptions) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
@@ -98,7 +100,8 @@ export async function deleteCase({
 					user: await guild.client.users.fetch(case_?.target_id ?? target!.id),
 					member: await guild.members.fetch(case_?.target_id ?? target!.id).catch(() => null),
 				},
-				reference: case_?.case_id,
+				case_reference: case_?.case_id,
+				report_reference: reportReference,
 			},
 			action:
 				case_action === CaseAction.Ban

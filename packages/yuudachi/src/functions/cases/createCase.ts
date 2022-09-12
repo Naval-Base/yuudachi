@@ -5,6 +5,10 @@ import type { CamelCasedProperties } from "type-fest";
 import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
 import type { PartialAndUndefinedOnNull } from "../../util/types.js";
+import { upsertReportLog } from "../logging/upsertReportLog.js";
+import { ReportStatus } from "../reports/createReport.js";
+import { getReport } from "../reports/getReport.js";
+import { updateReport } from "../reports/updateReport.js";
 import { type RawCase, transformCase } from "./transformCase.js";
 
 export enum CaseAction {
@@ -27,10 +31,10 @@ export type CreateCase = Omit<
 > & {
 	actionExpiration?: Date | null | undefined;
 	caseId?: number | null | undefined;
+	contextMessageId?: Snowflake | null | undefined;
 	deleteMessageDays?: number | null | undefined;
 	modId?: Snowflake | null | undefined;
 	modTag?: string | null | undefined;
-
 	multi?: boolean | null | undefined;
 	target?: GuildMember | null | undefined;
 };
@@ -109,6 +113,7 @@ export async function createCase(
 			reason,
 			context_message_id,
 			ref_id,
+			report_ref_id,
 			multi
 		) values (
 			next_case(${case_.guildId}),
@@ -124,10 +129,32 @@ export async function createCase(
 			${case_.reason ?? null},
 			${case_.contextMessageId ?? null},
 			${case_.refId ?? null},
+			${case_.reportRefId ?? null},
 			${case_.multi ?? false}
 		)
 		returning *
 	`;
+
+	try {
+		if (case_.reportRefId) {
+			const preReport = await getReport(case_.guildId, case_.reportRefId);
+
+			const report = await updateReport(
+				{
+					guildId: case_.guildId,
+					reportId: case_.reportRefId,
+					refId: newCase.case_id,
+					status: preReport!.authorId === case_.targetId ? ReportStatus.Spam : ReportStatus.Approved,
+				},
+				guild.client.users.cache.get(case_.modId!),
+			);
+
+			await upsertReportLog(guild, report);
+		}
+	} catch (error_) {
+		const error = error_ as Error;
+		logger.error(error, error.message);
+	}
 
 	return transformCase(newCase);
 }

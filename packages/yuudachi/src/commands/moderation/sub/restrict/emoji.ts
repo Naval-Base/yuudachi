@@ -11,6 +11,7 @@ import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
 import type { RestrictCommand } from "../../../../interactions/index.js";
 import { kSQL } from "../../../../tokens.js";
 import { createButton } from "../../../../util/button.js";
+import { truncateEmbed } from "../../../../util/embed.js";
 import { generateHistory } from "../../../../util/generateHistory.js";
 import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
@@ -72,8 +73,6 @@ export async function emoji(
 	const roleKey = nanoid();
 	const cancelKey = nanoid();
 
-	const embed = await generateHistory(interaction, args.user, locale);
-
 	const roleButton = createButton({
 		label: i18next.t("command.mod.restrict.emoji.buttons.execute", { lng: locale }),
 		customId: roleKey,
@@ -84,6 +83,8 @@ export async function emoji(
 		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
+
+	const embed = truncateEmbed(await generateHistory(interaction, args.user, locale));
 
 	await interaction.editReply({
 		content: i18next.t("command.mod.restrict.emoji.pending", {

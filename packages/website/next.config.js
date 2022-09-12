@@ -1,4 +1,6 @@
+/* eslint-disable tsdoc/syntax */
 import process from "node:process";
+import { URL, fileURLToPath } from "node:url";
 
 const { REPORT_URL } = process.env;
 
@@ -13,9 +15,8 @@ export default {
 	},
 	cleanDistDir: true,
 	experimental: {
-		images: {
-			allowFutureImage: true,
-		},
+		outputFileTracingRoot: fileURLToPath(new URL("../../", import.meta.url)),
+		fallbackNodePolyfills: true,
 	},
 	images: {
 		dangerouslyAllowSVG: true,

@@ -17,8 +17,8 @@ export const UnbanCommand = {
 			autocomplete: true,
 		},
 		{
-			name: "reference",
-			description: "The reference case",
+			name: "report_reference",
+			description: "The reference report",
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],

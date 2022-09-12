@@ -14,6 +14,7 @@ import type { BanCommand } from "../../interactions/index.js";
 import { logger } from "../../logger.js";
 import { kRedis } from "../../tokens.js";
 import { createButton } from "../../util/button.js";
+import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory } from "../../util/generateHistory.js";
 import { createMessageActionRow } from "../../util/messageActionRow.js";
 
@@ -70,8 +71,6 @@ export default class extends Command<typeof BanCommand> {
 		const banKey = nanoid();
 		const cancelKey = nanoid();
 
-		const embed = await generateHistory(interaction, args.user, locale);
-
 		const banButton = createButton({
 			label: i18next.t("command.mod.ban.buttons.execute", { lng: locale }),
 			customId: banKey,
@@ -82,6 +81,8 @@ export default class extends Command<typeof BanCommand> {
 			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
+
+		const embed = truncateEmbed(await generateHistory(interaction, args.user, locale));
 
 		await interaction.editReply({
 			content: i18next.t("command.mod.ban.pending", {
