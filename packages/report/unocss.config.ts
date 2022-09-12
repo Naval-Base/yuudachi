@@ -1,5 +1,4 @@
-import presetWebFonts from "@unocss/preset-web-fonts";
-import { defineConfig, presetUno } from "unocss";
+import { defineConfig, presetUno, presetWebFonts } from "unocss";
 
 export default defineConfig({
 	presets: [
@@ -7,8 +6,7 @@ export default defineConfig({
 		presetWebFonts({
 			provider: "bunny",
 			fonts: {
-				sans: ["Inter"],
-				mono: ["JetBrains Mono"],
+				mono: ["JetBrains Mono", "JetBrains Mono:400,600,700"],
 			},
 		}),
 	],
