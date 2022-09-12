@@ -69,6 +69,7 @@ export const AntiRaidNukeCommand = {
 					name: 'reason',
 					description: 'The reason to ban the members',
 					type: ApplicationCommandOptionType.String,
+					autocomplete: true,
 				},
 				{
 					name: 'days',
@@ -107,6 +108,7 @@ export const AntiRaidNukeCommand = {
 					name: 'reason',
 					description: 'The reason to ban the members',
 					type: ApplicationCommandOptionType.String,
+					autocomplete: true,
 				},
 				{
 					name: 'days',
@@ -139,6 +141,7 @@ export const AntiRaidNukeCommand = {
 					name: 'reason',
 					description: 'The reason to ban the members',
 					type: ApplicationCommandOptionType.String,
+					autocomplete: true,
 				},
 				{
 					name: 'days',

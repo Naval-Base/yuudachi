@@ -14,6 +14,7 @@ export const BanCommand = {
 			name: 'reason',
 			description: 'The reason of this action',
 			type: ApplicationCommandOptionType.String,
+			autocomplete: true,
 		},
 		{
 			name: 'days',
