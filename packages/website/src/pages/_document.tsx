@@ -1,9 +1,17 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+/* eslint-disable react/no-danger */
+import { Html, Head, Main, NextScript } from "next/document";
+import { globalCss, getCssText } from "../../stitches.config";
+
+const globalStyles = globalCss({ html: { backgroundColor: "$gray1" } });
 
 export default function Document() {
+	globalStyles();
+
 	return (
 		<Html lang="en">
-			<Head />
+			<Head>
+				<style id="stitches" dangerouslySetInnerHTML={{ __html: getCssText() }} />
+			</Head>
 			<body>
 				<script
 					dangerouslySetInnerHTML={{

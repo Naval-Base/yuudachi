@@ -1,17 +1,17 @@
-import { on } from 'events';
-import { Client, Events } from 'discord.js';
-import { injectable } from 'tsyringe';
-import type { Event } from '../../Event.js';
-import { handleAntiSpam } from '../../functions/anti-spam/handler.js';
-import { logger } from '../../logger.js';
+import { on } from "node:events";
+import { Client, Events } from "discord.js";
+import { injectable } from "tsyringe";
+import type { Event } from "../../Event.js";
+import { handleAntiSpam } from "../../functions/anti-spam/handler.js";
+import { logger } from "../../logger.js";
 import {
 	APIAutoModerationRuleActionType,
 	type GatewayAutoModerationActionExecution,
-} from '../../util/tempAutomodTypes.js';
+} from "../../util/tempAutomodTypes.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'AutoMod spam handler';
+	public name = "AutoMod spam handler";
 
 	public event = Events.Raw as const;
 
@@ -21,14 +21,14 @@ export default class implements Event {
 		for await (const [rawData] of on(this.client, this.event) as AsyncIterableIterator<
 			[
 				{
+					d: GatewayAutoModerationActionExecution;
 					op: number;
 					t: string;
-					d: GatewayAutoModerationActionExecution;
 				},
 			]
 		>) {
 			try {
-				if (rawData.t !== 'AUTO_MODERATION_ACTION_EXECUTION') {
+				if (rawData.t !== "AUTO_MODERATION_ACTION_EXECUTION") {
 					continue;
 				}
 
@@ -46,8 +46,8 @@ export default class implements Event {
 					name: this.name,
 					event: this.event,
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

@@ -1,17 +1,17 @@
-import { ApplicationCommandType, Client, Events } from 'discord.js';
-import { inject, injectable } from 'tsyringe';
-import type { Command } from '../Command.js';
-import type { Event } from '../Event.js';
-import { checkReasonAutocomplete, handleAutocompleteReasons } from '../functions/autocomplete/reasons.js';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
-import type { CommandPayload } from '../interactions/ArgumentsOf.js';
-import { transformInteraction } from '../interactions/InteractionOptions.js';
-import { logger } from '../logger.js';
-import { kCommands } from '../tokens.js';
+import { ApplicationCommandType, Client, Events } from "discord.js";
+import { inject, injectable } from "tsyringe";
+import type { Command } from "../Command.js";
+import type { Event } from "../Event.js";
+import { checkReasonAutocomplete, handleAutocompleteReasons } from "../functions/autocomplete/reasons.js";
+import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
+import type { CommandPayload } from "../interactions/ArgumentsOf.js";
+import { transformInteraction } from "../interactions/InteractionOptions.js";
+import { logger } from "../logger.js";
+import { kCommands } from "../tokens.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Interaction handling';
+	public name = "Interaction handling";
 
 	public event = Events.InteractionCreate as const;
 
@@ -50,7 +50,7 @@ export default class implements Event {
 
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-								`Executing ${isAutocomplete ? 'autocomplete' : 'chatInput command'} ${interaction.commandName}`,
+								`Executing ${isAutocomplete ? "autocomplete" : "chatInput command"} ${interaction.commandName}`,
 							);
 
 							if (isAutocomplete) {
@@ -102,8 +102,8 @@ export default class implements Event {
 						default:
 							break;
 					}
-				} catch (e) {
-					const error = e as Error;
+				} catch (error_) {
+					const error = error_ as Error;
 					logger.error(error, error.message);
 
 					try {
@@ -114,21 +114,15 @@ export default class implements Event {
 						if (!interaction.deferred && !interaction.replied) {
 							logger.warn(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-								'Command interaction has not been deferred before throwing',
+								"Command interaction has not been deferred before throwing",
 							);
 							await interaction.deferReply();
 						}
 
 						await interaction.editReply({ content: error.message, components: [] });
-					} catch (err) {
-						const error = err as Error;
-						logger.error(error, error.message);
-
-						if (interaction.isAutocomplete()) {
-							return;
-						}
-
-						await interaction.editReply({ content: error.message, components: [] });
+					} catch (error__) {
+						const err = error__ as Error;
+						logger.error(err, error.message);
 					}
 				}
 			}

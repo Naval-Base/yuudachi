@@ -1,17 +1,17 @@
-import { on } from 'node:events';
-import { Client, Events, type Webhook } from 'discord.js';
-import i18next from 'i18next';
-import { inject, injectable } from 'tsyringe';
-import { Color } from '../../Constants.js';
-import type { Event } from '../../Event.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kWebhooks } from '../../tokens.js';
-import { addFields, truncateEmbed } from '../../util/embed.js';
+import { on } from "node:events";
+import { Client, Events, type Webhook } from "discord.js";
+import i18next from "i18next";
+import { inject, injectable } from "tsyringe";
+import { Color } from "../../Constants.js";
+import type { Event } from "../../Event.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kWebhooks } from "../../tokens.js";
+import { addFields, truncateEmbed } from "../../util/embed.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Guild log thread create';
+	public name = "Guild log thread create";
 
 	public event = Events.ThreadDelete as const;
 
@@ -58,7 +58,7 @@ export default class implements Event {
 				);
 
 				const descriptionParts = [
-					i18next.t('log.guild_log.thread_deleted.channel', {
+					i18next.t("log.guild_log.thread_deleted.channel", {
 						name: `\`${thread.name}\``,
 						channel_id: thread.id,
 						lng: locale,
@@ -69,11 +69,11 @@ export default class implements Event {
 
 				if (starterMessage) {
 					descriptionParts.push(
-						i18next.t('log.guild_log.thread_deleted.starter', {
+						i18next.t("log.guild_log.thread_deleted.starter", {
 							message_id: starterMessage.id,
 							lng: locale,
 						}),
-						i18next.t('log.guild_log.thread_deleted.jump_to', {
+						i18next.t("log.guild_log.thread_deleted.jump_to", {
 							link: starterMessage.url,
 							lng: locale,
 						}),
@@ -88,8 +88,8 @@ export default class implements Event {
 								icon_url: owner.displayAvatarURL(),
 						  }
 						: undefined,
-					description: descriptionParts.join('\n'),
-					title: i18next.t('log.guild_log.thread_deleted.title'),
+					description: descriptionParts.join("\n"),
+					title: i18next.t("log.guild_log.thread_deleted.title"),
 					timestamp: (thread.createdAt ?? new Date()).toISOString(),
 					color: Color.DiscordGem,
 				});
@@ -99,8 +99,8 @@ export default class implements Event {
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

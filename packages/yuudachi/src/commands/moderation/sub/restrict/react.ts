@@ -1,35 +1,35 @@
-import { ms } from '@naval-base/ms';
-import { type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
-import i18next from 'i18next';
-import { nanoid } from 'nanoid';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import type { InteractionParam, ArgsParam, LocaleParam } from '../../../../Command.js';
-import { CaseAction, createCase } from '../../../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../../../functions/logging/upsertCaseLog.js';
-import type { RestrictCommand } from '../../../../interactions/index.js';
-import { kSQL } from '../../../../tokens.js';
-import { createButton } from '../../../../util/button.js';
-import { generateHistory } from '../../../../util/generateHistory.js';
-import { createMessageActionRow } from '../../../../util/messageActionRow.js';
+import { ms } from "@naval-base/ms";
+import { type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from "discord.js";
+import i18next from "i18next";
+import { nanoid } from "nanoid";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
+import { CaseAction, createCase } from "../../../../functions/cases/createCase.js";
+import { generateCasePayload } from "../../../../functions/logging/generateCasePayload.js";
+import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
+import type { RestrictCommand } from "../../../../interactions/index.js";
+import { kSQL } from "../../../../tokens.js";
+import { createButton } from "../../../../util/button.js";
+import { generateHistory } from "../../../../util/generateHistory.js";
+import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
 export async function react(
 	interaction: InteractionParam,
 	reply: InteractionResponse<true>,
-	args: ArgsParam<typeof RestrictCommand>['react'],
+	args: ArgsParam<typeof RestrictCommand>["react"],
 	locale: LocaleParam,
 ): Promise<void> {
 	if (!args.user.member) {
 		throw new Error(
-			i18next.t('command.common.errors.target_not_found', {
+			i18next.t("command.common.errors.target_not_found", {
 				lng: locale,
 			}),
 		);
 	}
 
 	if (args.reason && args.reason.length >= 500) {
-		throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
+		throw new Error(i18next.t("command.mod.common.errors.max_length_reason", { lng: locale }));
 	}
 
 	const sql = container.resolve<Sql<any>>(kSQL);
@@ -37,10 +37,11 @@ export async function react(
 	const [roles] = await sql<[{ reaction_role_id: Snowflake | null }?]>`
 		select reaction_role_id
 		from guild_settings
-		where guild_id = ${interaction.guildId}`;
+		where guild_id = ${interaction.guildId}
+	`;
 
 	if (!roles?.reaction_role_id) {
-		throw new Error(i18next.t('command.mod.restrict.react.errors.no_role', { lng: locale }));
+		throw new Error(i18next.t("command.mod.restrict.react.errors.no_role", { lng: locale }));
 	}
 
 	const [action] = await sql<[{ action_processed: boolean }?]>`
@@ -50,11 +51,12 @@ export async function react(
 			and target_id = ${args.user.user.id}
 			and role_id = ${roles.reaction_role_id}
 		order by created_at desc
-		limit 1`;
+		limit 1
+	`;
 
 	if (action && !action.action_processed) {
 		throw new Error(
-			i18next.t('command.mod.restrict.react.errors.already_restricted', {
+			i18next.t("command.mod.restrict.react.errors.already_restricted", {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
@@ -63,8 +65,8 @@ export async function react(
 
 	const parsedDuration = ms(args.duration);
 
-	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
-		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
+	if (parsedDuration < 300_000 || Number.isNaN(parsedDuration)) {
+		throw new Error(i18next.t("command.common.errors.duration_format", { lng: locale }));
 	}
 
 	const roleKey = nanoid();
@@ -73,18 +75,18 @@ export async function react(
 	const embed = await generateHistory(interaction, args.user, locale);
 
 	const roleButton = createButton({
-		label: i18next.t('command.mod.restrict.react.buttons.execute', { lng: locale }),
+		label: i18next.t("command.mod.restrict.react.buttons.execute", { lng: locale }),
 		customId: roleKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		label: i18next.t("command.common.buttons.cancel", { lng: locale }),
 		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 
 	await interaction.editReply({
-		content: i18next.t('command.mod.restrict.react.pending', {
+		content: i18next.t("command.mod.restrict.react.pending", {
 			user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 			lng: locale,
 		}),
@@ -96,21 +98,22 @@ export async function react(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 15000,
+			time: 15_000,
 		})
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+					content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 					components: [],
 				});
 			} catch {}
+
 			return undefined;
 		});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t('command.mod.restrict.react.cancel', {
+			content: i18next.t("command.mod.restrict.react.cancel", {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
@@ -133,7 +136,7 @@ export async function react(
 		await upsertCaseLog(collectedInteraction.guild, collectedInteraction.user, case_);
 
 		await collectedInteraction.editReply({
-			content: i18next.t('command.mod.restrict.react.success', {
+			content: i18next.t("command.mod.restrict.react.success", {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),

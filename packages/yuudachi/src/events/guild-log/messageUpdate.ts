@@ -1,18 +1,18 @@
-import { on } from 'node:events';
-import { diffLines, diffWords } from 'diff';
-import { Client, Events, type Message, escapeMarkdown, type Webhook } from 'discord.js';
-import i18next from 'i18next';
-import { inject, injectable } from 'tsyringe';
-import { Color } from '../../Constants.js';
-import type { Event } from '../../Event.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kWebhooks } from '../../tokens.js';
-import { addFields, truncateEmbed } from '../../util/embed.js';
+import { on } from "node:events";
+import { diffLines, diffWords } from "diff";
+import { Client, Events, type Message, escapeMarkdown, type Webhook } from "discord.js";
+import i18next from "i18next";
+import { inject, injectable } from "tsyringe";
+import { Color } from "../../Constants.js";
+import type { Event } from "../../Event.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kWebhooks } from "../../tokens.js";
+import { addFields, truncateEmbed } from "../../util/embed.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Guild log message update';
+	public name = "Guild log message update";
 
 	public event = Events.MessageUpdate as const;
 
@@ -71,15 +71,17 @@ export default class implements Event {
 					`Member ${newMessage.author.id} updated a message`,
 				);
 
-				let description = '';
+				let description = "";
 
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
+					// eslint-disable-next-line unicorn/no-unsafe-regex
 					const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
 
 					if (!strippedOldMessage?.[2]) {
 						continue;
 					}
 
+					// eslint-disable-next-line unicorn/no-unsafe-regex
 					const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
 
 					if (!strippedNewMessage?.[2]) {
@@ -93,34 +95,35 @@ export default class implements Event {
 					const diffMessage = diffLines(strippedOldMessage[2], strippedNewMessage[2], { newlineIsToken: true });
 
 					for (const part of diffMessage) {
-						if (part.value === '\n') {
+						if (part.value === "\n") {
 							continue;
 						}
-						const d = part.added ? '+ ' : part.removed ? '- ' : '';
-						description += `${d}${part.value.replace(/\n/g, '')}\n`;
+
+						const deleted = part.added ? "+ " : part.removed ? "- " : "";
+						description += `${deleted}${part.value.replace(/\n/g, "")}\n`;
 					}
 
-					const prepend = '```diff\n';
-					const append = '\n```';
-					description = `${prepend}${description.substring(0, 3900)}${append}`;
+					const prepend = "```diff\n";
+					const append = "\n```";
+					description = `${prepend}${description.slice(0, 3_900)}${append}`;
 				} else {
 					const diffMessage = diffWords(escapeMarkdown(oldMessage.content), escapeMarkdown(newMessage.content));
 
 					for (const part of diffMessage) {
-						const markdown = part.added ? '**' : part.removed ? '~~' : '';
+						const markdown = part.added ? "**" : part.removed ? "~~" : "";
 						description += `${markdown}${part.value}${markdown}`;
 					}
 
-					description = `${description.substring(0, 3900)}` || '\u200b';
+					description = `${description.slice(0, 3_900)}` || "\u200B";
 				}
 
-				const info = `${i18next.t('log.guild_log.message_updated.channel', {
+				const info = `${i18next.t("log.guild_log.message_updated.channel", {
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					channel: `${newMessage.channel.toString()} - ${newMessage.inGuild() ? newMessage.channel.name : ''}(${
+					channel: `${newMessage.channel.toString()} - ${newMessage.inGuild() ? newMessage.channel.name : ""}(${
 						newMessage.channel.id
 					})`,
 					lng: locale,
-				})}\n${i18next.t('log.guild_log.message_updated.jump_to', { link: newMessage.url, lng: locale })}`;
+				})}\n${i18next.t("log.guild_log.message_updated.jump_to", { link: newMessage.url, lng: locale })}`;
 				const embed = addFields(
 					{
 						author: {
@@ -128,13 +131,13 @@ export default class implements Event {
 							icon_url: newMessage.author.displayAvatarURL(),
 						},
 						color: Color.LogsMessaegUpdate,
-						title: i18next.t('log.guild_log.message_updated.title', { lng: locale }),
+						title: i18next.t("log.guild_log.message_updated.title", { lng: locale }),
 						description,
 						footer: { text: newMessage.id },
 						timestamp: new Date().toISOString(),
 					},
 					{
-						name: '\u200b',
+						name: "\u200B",
 						value: info,
 					},
 				);
@@ -144,8 +147,8 @@ export default class implements Event {
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

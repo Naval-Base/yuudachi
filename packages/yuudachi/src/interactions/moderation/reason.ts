@@ -1,27 +1,27 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 export const ReasonCommand = {
-	name: 'reason',
-	description: 'Change the reason of actions',
+	name: "reason",
+	description: "Change the reason of actions",
 	options: [
 		{
-			name: 'case',
-			description: 'The first case to change',
+			name: "case",
+			description: "The first case to change",
 			type: ApplicationCommandOptionType.Integer,
 			required: true,
 		},
 		{
-			name: 'reason',
-			description: 'The reason',
+			name: "reason",
+			description: "The reason",
 			type: ApplicationCommandOptionType.String,
 			required: true,
 			autocomplete: true,
 		},
 		{
-			name: 'last_case',
-			description: 'The last case to change',
+			name: "last_case",
+			description: "The last case to change",
 			type: ApplicationCommandOptionType.Integer,
 		},
 	],
-	default_member_permissions: '0',
+	default_member_permissions: "0",
 } as const;

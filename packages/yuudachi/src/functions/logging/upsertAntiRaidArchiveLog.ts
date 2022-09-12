@@ -1,16 +1,18 @@
-import dayjs from 'dayjs';
-import { ButtonStyle, type Message, type Guild, type User, GuildMember } from 'discord.js';
-import i18next from 'i18next';
-import { generateAntiRaidNukeEmbed } from './generateAntiRaidNukeEmbed.js';
-import { DATE_FORMAT_LOGFILE } from '../../Constants.js';
-import type { TargetRejection } from '../../commands/moderation/sub/anti-raid-nuke/utils.js';
-import { createButton } from '../../util/button.js';
-import { createMessageActionRow } from '../../util/messageActionRow.js';
-import type { Case } from '../cases/createCase.js';
-import { type FormatterArgs, generateAntiRaidNukeReport } from '../formatters/generateAntiRaidNukeReport.js';
-import { generateFormatterUrl } from '../formatters/generateFormatterUrl.js';
-import { checkLogChannel } from '../settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
+import { Buffer } from "node:buffer";
+import dayjs from "dayjs";
+import { ButtonStyle, type Message, type Guild, type User } from "discord.js";
+import type { GuildMember } from "discord.js";
+import i18next from "i18next";
+import { DATE_FORMAT_LOGFILE } from "../../Constants.js";
+import type { TargetRejection } from "../../commands/moderation/sub/anti-raid-nuke/utils.js";
+import { createButton } from "../../util/button.js";
+import { createMessageActionRow } from "../../util/messageActionRow.js";
+import type { Case } from "../cases/createCase.js";
+import { type FormatterArgs, generateAntiRaidNukeReport } from "../formatters/generateAntiRaidNukeReport.js";
+import { generateFormatterUrl } from "../formatters/generateFormatterUrl.js";
+import { checkLogChannel } from "../settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
+import { generateAntiRaidNukeEmbed } from "./generateAntiRaidNukeEmbed.js";
 
 export async function upsertAntiRaidArchivePendingLog(guild: Guild) {
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
@@ -19,7 +21,7 @@ export async function upsertAntiRaidArchivePendingLog(guild: Guild) {
 		await getGuildSetting(guild.id, SettingsKeys.AntiRaidNukeArchiveChannelId),
 	);
 
-	return archiveChannel!.send(i18next.t('log.anti_raid_nuke.pending', { lng: locale }));
+	return archiveChannel!.send(i18next.t("log.anti_raid_nuke.pending", { lng: locale }));
 }
 
 export async function upsertAntiRaidArchiveLog(
@@ -41,7 +43,7 @@ export async function upsertAntiRaidArchiveLog(
 		files: [
 			{
 				name: `${dayjs().format(DATE_FORMAT_LOGFILE)}-anti-raid-nuke-report.md`,
-				attachment: Buffer.from(report, 'utf8'),
+				attachment: Buffer.from(report, "utf8"),
 			},
 		],
 	});
@@ -56,7 +58,7 @@ export async function upsertAntiRaidArchiveLog(
 		components: [
 			createMessageActionRow([
 				createButton({
-					label: i18next.t('command.mod.anti_raid_nuke.common.buttons.formatted', { lng: locale }),
+					label: i18next.t("command.mod.anti_raid_nuke.common.buttons.formatted", { lng: locale }),
 					style: ButtonStyle.Link,
 					url: generateFormatterUrl(attachment.url),
 				}),

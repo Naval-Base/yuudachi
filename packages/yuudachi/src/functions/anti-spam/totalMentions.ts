@@ -1,8 +1,8 @@
-import type { Snowflake } from 'discord.js';
-import type { Redis } from 'ioredis';
-import { container } from 'tsyringe';
-import { MENTION_EXPIRE_SECONDS } from '../../Constants.js';
-import { kRedis } from '../../tokens.js';
+import type { Snowflake } from "discord.js";
+import type { Redis } from "ioredis";
+import { container } from "tsyringe";
+import { MENTION_EXPIRE_SECONDS } from "../../Constants.js";
+import { kRedis } from "../../tokens.js";
 
 export async function totalMentions(guildId: Snowflake, userId: Snowflake, content: string) {
 	const redis = container.resolve<Redis>(kRedis);
@@ -16,7 +16,7 @@ export async function totalMentions(guildId: Snowflake, userId: Snowflake, conte
 		}
 	}
 
-	const attemptAtEveryoneOrHere = ['@everyone', '@here'].some((pattern) => content.includes(pattern));
+	const attemptAtEveryoneOrHere = ["@everyone", "@here"].some((pattern) => content.includes(pattern));
 	const mentionCountKey = `guild:${guildId}:user:${userId}:mentions`;
 	const increment = parsed.size + (attemptAtEveryoneOrHere ? 1 : 0);
 

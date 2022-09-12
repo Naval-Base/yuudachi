@@ -1,15 +1,15 @@
-import { on } from 'node:events';
-import { Client, Events, type Webhook, PermissionFlagsBits } from 'discord.js';
-import { inject, injectable } from 'tsyringe';
-import type { Event } from '../Event.js';
-import { getGuildSetting, SettingsKeys } from '../functions/settings/getGuildSetting.js';
-import { registerJobs } from '../jobs.js';
-import { logger } from '../logger.js';
-import { kWebhooks } from '../tokens.js';
+import { on } from "node:events";
+import { Client, Events, type Webhook, PermissionFlagsBits } from "discord.js";
+import { inject, injectable } from "tsyringe";
+import type { Event } from "../Event.js";
+import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
+import { registerJobs } from "../jobs.js";
+import { logger } from "../logger.js";
+import { kWebhooks } from "../tokens.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'Client ready handling';
+	public name = "Client ready handling";
 
 	public event = Events.ClientReady as const;
 
@@ -20,12 +20,12 @@ export default class implements Event {
 
 	public async execute(): Promise<void> {
 		for await (const _ of on(this.client, this.event)) {
-			logger.info({ event: { name: this.name, event: this.event } }, 'Caching webhooks');
+			logger.info({ event: { name: this.name, event: this.event } }, "Caching webhooks");
 			for (const guild of this.client.guilds.cache.values()) {
 				if (!guild.members.me?.permissions.has(PermissionFlagsBits.ManageWebhooks, true)) {
 					logger.info(
 						{ event: { name: this.name, event: this.event }, guildId: guild.id },
-						'No permission to fetch webhooks',
+						"No permission to fetch webhooks",
 					);
 					continue;
 				}
@@ -41,6 +41,7 @@ export default class implements Event {
 					if (!webhook) {
 						continue;
 					}
+
 					this.webhooks.set(webhook.id, webhook);
 				}
 
@@ -50,11 +51,12 @@ export default class implements Event {
 					if (!webhook) {
 						continue;
 					}
+
 					this.webhooks.set(webhook.id, webhook);
 				}
 			}
 
-			logger.info({ event: { name: this.name, event: this.event } }, 'Registering jobs');
+			logger.info({ event: { name: this.name, event: this.event } }, "Registering jobs");
 			await registerJobs();
 
 			continue;

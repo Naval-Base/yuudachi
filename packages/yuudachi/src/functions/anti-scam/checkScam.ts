@@ -1,22 +1,22 @@
-import { createHash } from 'node:crypto';
-import { URL } from 'node:url';
-import type { Redis } from 'ioredis';
-import { container } from 'tsyringe';
-import { ScamRedisKeys, scamURLEnvs } from './refreshScamDomains.js';
-import { logger } from '../../logger.js';
-import { kRedis } from '../../tokens.js';
-import { resolveRedirect } from '../../util/resolveRedirect.js';
+import { createHash } from "node:crypto";
+import { URL } from "node:url";
+import type { Redis } from "ioredis";
+import { container } from "tsyringe";
+import { logger } from "../../logger.js";
+import { kRedis } from "../../tokens.js";
+import { resolveRedirect } from "../../util/resolveRedirect.js";
+import { ScamRedisKeys, scamURLEnvs } from "./refreshScamDomains.js";
 
-interface ScamDomainHit {
-	lists: string[];
-	host: string;
+type ScamDomainHit = {
 	full: string;
-}
+	host: string;
+	lists: string[];
+};
 
 const scamDomainChecks = {
 	SCAM_DOMAIN_URL: (url: URL, host: string) => `.${url.host}`.endsWith(`.${host}`),
 	SCAM_DOMAIN_DISCORD_URL: (url: URL, hash: string) => {
-		const inHash = createHash('sha256').update(url.host).digest('hex');
+		const inHash = createHash("sha256").update(url.host).digest("hex");
 
 		return hash === inHash;
 	},
@@ -35,7 +35,7 @@ async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null
 
 	for (const urlEnv of scamURLEnvs) {
 		const list = await redis.smembers(ScamRedisKeys[urlEnv]);
-		const hit = list.find((d) => scamDomainChecks[urlEnv](url, d));
+		const hit = list.find((entry) => scamDomainChecks[urlEnv](url, entry));
 
 		if (hit) {
 			listHits.push(urlEnv);
@@ -56,13 +56,12 @@ export async function checkScam(content: string) {
 	const redis = container.resolve<Redis>(kRedis);
 
 	const linkRegex =
-		/(?:https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,})/gi;
+		/https?:\/\/(?:www\.|(?!www))[\da-z][\da-z-]+[\da-z]\.\S{2,}|https?:\/\/(?:www\.|(?!www))[\da-z]+\.\S{2,}/gi;
 
 	let matches: any[] | null = [];
 	const trippedDomains: ScamDomainHit[] = [];
 
 	while ((matches = linkRegex.exec(content)) !== null) {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const url = urlOption(matches[0]);
 
 		if (!url) {
@@ -75,34 +74,34 @@ export async function checkScam(content: string) {
 			trippedDomains.push(hit);
 		}
 
-		if (!(await redis.sismember('linkshorteners', url.host))) {
+		if (!(await redis.sismember("linkshorteners", url.host))) {
 			continue;
 		}
 
 		try {
-			const r = await resolveRedirect(url.href);
-			const resolved = urlOption(r);
+			const resolvedRedirect = await resolveRedirect(url.href);
+			const resolved = urlOption(resolvedRedirect);
 
 			if (!resolved) {
 				continue;
 			}
 
-			const hit = await checkDomain(redis, resolved);
+			const isHit = await checkDomain(redis, resolved);
 
-			if (!hit) {
+			if (!isHit) {
 				continue;
 			}
 
-			trippedDomains.push(hit);
-		} catch (e) {
-			const error = e as Error;
+			trippedDomains.push(isHit);
+		} catch (error_) {
+			const error = error_ as Error;
 			logger.error(error, error.message);
 		}
 	}
 
 	if (trippedDomains.length) {
 		logger.info({
-			msg: 'Found scam domains',
+			msg: "Found scam domains",
 			content,
 			trippedDomains,
 		});

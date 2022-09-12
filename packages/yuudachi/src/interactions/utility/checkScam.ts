@@ -1,35 +1,35 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 export const CheckScamCommand = {
-	name: 'checkscam',
-	description: 'Check provided content for scam domains',
+	name: "checkscam",
+	description: "Check provided content for scam domains",
 	description_localizations: {
-		de: 'Überprüfen Sie die bereitgestellten Inhalte auf betrügerische Domains',
+		de: "Überprüfen Sie die bereitgestellten Inhalte auf betrügerische Domains",
 	},
 	options: [
 		{
-			name: 'content',
+			name: "content",
 			name_localizations: {
-				de: 'inhalt',
+				de: "inhalt",
 			},
-			description: 'String to check',
+			description: "String to check",
 			description_localizations: {
-				de: 'Zu prüfende Zeichenfolge',
+				de: "Zu prüfende Zeichenfolge",
 			},
 			type: ApplicationCommandOptionType.String,
 			required: true,
 		},
 		{
-			name: 'hide',
+			name: "hide",
 			name_localizations: {
-				de: 'ausblenden',
+				de: "ausblenden",
 			},
-			description: 'Hides the output',
+			description: "Hides the output",
 			description_localizations: {
-				de: 'Blendet die Ausgabe aus',
+				de: "Blendet die Ausgabe aus",
 			},
 			type: ApplicationCommandOptionType.Boolean,
 		},
 	],
-	default_member_permissions: '0',
+	default_member_permissions: "0",
 } as const;

@@ -1,15 +1,15 @@
-import type { PermissionOverwrites, Snowflake } from 'discord.js';
-import type { Lockdown } from './createLockdown.js';
+import type { PermissionOverwrites, Snowflake } from "discord.js";
+import type { Lockdown } from "./createLockdown.js";
 
-export interface RawLockdown {
-	guild_id: Snowflake;
+export type RawLockdown = {
 	channel_id: Snowflake;
 	expiration: string;
+	guild_id: Snowflake;
 	mod_id: Snowflake;
 	mod_tag: string;
-	reason?: string | undefined | null;
 	overwrites: PermissionOverwrites[];
-}
+	reason?: string | null | undefined;
+};
 
 export function transformLockdown(case_: RawLockdown): Lockdown {
 	return {

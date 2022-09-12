@@ -1,11 +1,11 @@
-import { Collection, type GuildTextBasedChannel, type Message, type Snowflake, SnowflakeUtil } from 'discord.js';
+import { Collection, type GuildTextBasedChannel, type Message, type Snowflake, SnowflakeUtil } from "discord.js";
 
-interface MessageOrder {
-	newest?: Message | undefined | null;
+type MessageOrder = {
+	newest?: Message | null | undefined;
 	oldest: Message;
-}
+};
 
-export function orderMessages(first: Message, second?: Message | undefined | null): MessageOrder {
+export function orderMessages(first: Message, second?: Message | null | undefined): MessageOrder {
 	if (first.id === second?.id || !second) {
 		return {
 			newest: undefined,
@@ -22,7 +22,7 @@ export function orderMessages(first: Message, second?: Message | undefined | nul
 	};
 }
 
-export async function fetchMessages(from: Message, to?: Message | undefined | null) {
+export async function fetchMessages(from: Message, to?: Message | null | undefined) {
 	const { newest, oldest } = orderMessages(from, to);
 	const res = new Collection<Snowflake, Message>();
 
@@ -32,7 +32,7 @@ export async function fetchMessages(from: Message, to?: Message | undefined | nu
 
 	let pivot = newest;
 
-	const earliestPossiblePrune = Date.now() - 12 * 60 * 60 * 1000;
+	const earliestPossiblePrune = Date.now() - 12 * 60 * 60 * 1_000;
 	while (
 		pivot ? oldest.createdTimestamp < pivot.createdTimestamp && pivot.createdTimestamp > earliestPossiblePrune : true
 	) {
@@ -48,6 +48,7 @@ export async function fetchMessages(from: Message, to?: Message | undefined | nu
 				break;
 			}
 		}
+
 		pivot = messages.last();
 	}
 
@@ -55,22 +56,23 @@ export async function fetchMessages(from: Message, to?: Message | undefined | nu
 }
 
 export function chunkMessages(messages: Collection<Snowflake, Message>) {
-	const res = [];
+	const result = [];
 	const chunk = [];
 
 	for (const message of messages.values()) {
 		if (chunk.length === 100) {
-			res.push([...chunk]);
+			result.push([...chunk]);
 			chunk.length = 0;
 		}
+
 		chunk.push(message);
 	}
 
 	if (chunk.length) {
-		res.push([...chunk]);
+		result.push([...chunk]);
 	}
 
-	return res;
+	return result;
 }
 
 export async function pruneMessages(messages: Collection<Snowflake, Message>) {
@@ -79,7 +81,9 @@ export async function pruneMessages(messages: Collection<Snowflake, Message>) {
 
 	for (const chunk of chunkMessages(messages)) {
 		const deleted = await channel.bulkDelete(chunk, true);
-		deleted.forEach((_, id) => deletedMessages.add(id));
+		for (const [id] of deleted.entries()) {
+			deletedMessages.add(id);
+		}
 	}
 
 	return messages.filter((message) => deletedMessages.has(message.id));

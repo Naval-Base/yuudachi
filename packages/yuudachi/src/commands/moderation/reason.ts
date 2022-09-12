@@ -1,18 +1,18 @@
-import { ComponentType, ButtonStyle, hyperlink, messageLink } from 'discord.js';
-import i18next from 'i18next';
-import { nanoid } from 'nanoid';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
-import type { Case } from '../../functions/cases/createCase.js';
-import { getCase } from '../../functions/cases/getCase.js';
-import { updateCase } from '../../functions/cases/updateCase.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { ReasonCommand } from '../../interactions/index.js';
-import { logger } from '../../logger.js';
-import { createButton } from '../../util/button.js';
-import { truncate } from '../../util/embed.js';
-import { createMessageActionRow } from '../../util/messageActionRow.js';
+import { ComponentType, ButtonStyle, hyperlink, messageLink } from "discord.js";
+import i18next from "i18next";
+import { nanoid } from "nanoid";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import type { Case } from "../../functions/cases/createCase.js";
+import { getCase } from "../../functions/cases/getCase.js";
+import { updateCase } from "../../functions/cases/updateCase.js";
+import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
+import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import type { ReasonCommand } from "../../interactions/index.js";
+import { logger } from "../../logger.js";
+import { createButton } from "../../util/button.js";
+import { truncate } from "../../util/embed.js";
+import { createMessageActionRow } from "../../util/messageActionRow.js";
 
 export default class extends Command<typeof ReasonCommand> {
 	public override async chatInput(
@@ -28,11 +28,11 @@ export default class extends Command<typeof ReasonCommand> {
 		);
 
 		if (!modLogChannel) {
-			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+			throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 		}
 
 		if (args.reason.length >= 500) {
-			throw new Error(i18next.t('command.mod.common.errors.max_length_reason', { lng: locale }));
+			throw new Error(i18next.t("command.mod.common.errors.max_length_reason", { lng: locale }));
 		}
 
 		const lower = Math.min(args.case, args.last_case ?? args.case);
@@ -40,7 +40,7 @@ export default class extends Command<typeof ReasonCommand> {
 
 		if (lower < 1 || upper < 1) {
 			await interaction.editReply({
-				content: i18next.t('command.mod.common.errors.case_lower_one', {
+				content: i18next.t("command.mod.common.errors.case_lower_one", {
 					lng: locale,
 				}),
 			});
@@ -55,12 +55,12 @@ export default class extends Command<typeof ReasonCommand> {
 			const cancelKey = nanoid();
 
 			const changeButton = createButton({
-				label: i18next.t('command.mod.reason.buttons.execute', { lng: locale }),
+				label: i18next.t("command.mod.reason.buttons.execute", { lng: locale }),
 				customId: changeKey,
 				style: ButtonStyle.Danger,
 			});
 			const cancelButton = createButton({
-				label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+				label: i18next.t("command.common.buttons.cancel", { lng: locale }),
 				customId: cancelKey,
 				style: ButtonStyle.Secondary,
 			});
@@ -70,7 +70,7 @@ export default class extends Command<typeof ReasonCommand> {
 
 			if (!originalCaseLower || !originalCaseUpper) {
 				await interaction.editReply({
-					content: i18next.t('command.mod.common.errors.no_case_range', {
+					content: i18next.t("command.mod.common.errors.no_case_range", {
 						lower_case: lower,
 						upper_case: upper,
 						lng: locale,
@@ -81,7 +81,7 @@ export default class extends Command<typeof ReasonCommand> {
 			}
 
 			await interaction.editReply({
-				content: i18next.t('command.mod.reason.pending_multiple', {
+				content: i18next.t("command.mod.reason.pending_multiple", {
 					lower_case: hyperlink(
 						`#${lower}`,
 						messageLink(modLogChannel.id, originalCaseLower.logMessageId!, interaction.guildId),
@@ -100,18 +100,19 @@ export default class extends Command<typeof ReasonCommand> {
 				.awaitMessageComponent({
 					filter: (collected) => collected.user.id === interaction.user.id,
 					componentType: ComponentType.Button,
-					time: 15000,
+					time: 15_000,
 				})
 				.catch(async () => {
 					try {
 						await interaction.editReply({
-							content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+							content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 							components: [],
 						});
-					} catch (e) {
-						const error = e as Error;
+					} catch (error_) {
+						const error = error_ as Error;
 						logger.error(error, error.message);
 					}
+
 					return undefined;
 				});
 
@@ -120,7 +121,7 @@ export default class extends Command<typeof ReasonCommand> {
 				(collectedInteraction.customId === cancelKey || collectedInteraction.customId !== changeKey)
 			) {
 				await collectedInteraction.update({
-					content: i18next.t('command.mod.reason.cancel', {
+					content: i18next.t("command.mod.reason.cancel", {
 						lng: locale,
 					}),
 					components: [],
@@ -134,7 +135,7 @@ export default class extends Command<typeof ReasonCommand> {
 
 			if (!originalCaseLower) {
 				await interaction.editReply({
-					content: i18next.t('command.mod.common.errors.no_case', {
+					content: i18next.t("command.mod.common.errors.no_case", {
 						case: lower,
 						lng: locale,
 					}),
@@ -164,7 +165,7 @@ export default class extends Command<typeof ReasonCommand> {
 		}
 
 		const message = args.last_case
-			? i18next.t('command.mod.reason.success_multiple', {
+			? i18next.t("command.mod.reason.success_multiple", {
 					lower_case: hyperlink(
 						`#${lower}`,
 						messageLink(modLogChannel.id, originalCaseLower.logMessageId!, interaction.guildId),
@@ -177,7 +178,7 @@ export default class extends Command<typeof ReasonCommand> {
 					count: upper - lower + 1,
 					lng: locale,
 			  })
-			: i18next.t('command.mod.reason.success', {
+			: i18next.t("command.mod.reason.success", {
 					case: hyperlink(
 						`#${lower}`,
 						messageLink(modLogChannel.id, originalCaseLower.logMessageId!, interaction.guildId),
@@ -186,7 +187,7 @@ export default class extends Command<typeof ReasonCommand> {
 			  });
 
 		await interaction.editReply({
-			content: truncate(message, 1000, ''),
+			content: truncate(message, 1_000, ""),
 			components: [],
 		});
 	}

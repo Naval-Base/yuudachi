@@ -1,11 +1,11 @@
-import { type TextChannel, ButtonStyle, ComponentType, type InteractionResponse } from 'discord.js';
-import i18next from 'i18next';
-import { nanoid } from 'nanoid';
-import type { InteractionParam, LocaleParam } from '../../../../Command.js';
-import { deleteLockdown } from '../../../../functions/lockdowns/deleteLockdown.js';
-import { getLockdown } from '../../../../functions/lockdowns/getLockdown.js';
-import { createButton } from '../../../../util/button.js';
-import { createMessageActionRow } from '../../../../util/messageActionRow.js';
+import { type TextChannel, ButtonStyle, ComponentType, type InteractionResponse } from "discord.js";
+import i18next from "i18next";
+import { nanoid } from "nanoid";
+import type { InteractionParam, LocaleParam } from "../../../../Command.js";
+import { deleteLockdown } from "../../../../functions/lockdowns/deleteLockdown.js";
+import { getLockdown } from "../../../../functions/lockdowns/getLockdown.js";
+import { createButton } from "../../../../util/button.js";
+import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
 export async function lift(
 	interaction: InteractionParam,
@@ -17,7 +17,7 @@ export async function lift(
 
 	if (!lockdown) {
 		throw new Error(
-			i18next.t('command.mod.lockdown.lift.errors.not_locked', {
+			i18next.t("command.mod.lockdown.lift.errors.not_locked", {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 				lng: locale,
@@ -29,18 +29,18 @@ export async function lift(
 	const cancelKey = nanoid();
 
 	const unlockButton = createButton({
-		label: i18next.t('command.mod.lockdown.lift.buttons.execute', { lng: locale }),
+		label: i18next.t("command.mod.lockdown.lift.buttons.execute", { lng: locale }),
 		customId: unlockKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		label: i18next.t("command.common.buttons.cancel", { lng: locale }),
 		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 
 	await interaction.editReply({
-		content: i18next.t('command.mod.lockdown.lift.pending', {
+		content: i18next.t("command.mod.lockdown.lift.pending", {
 			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 			lng: locale,
@@ -52,21 +52,22 @@ export async function lift(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 15000,
+			time: 15_000,
 		})
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+					content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 					components: [],
 				});
 			} catch {}
+
 			return undefined;
 		});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t('command.mod.lockdown.lift.cancel', {
+			content: i18next.t("command.mod.lockdown.lift.cancel", {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 				lng: locale,
@@ -80,7 +81,7 @@ export async function lift(
 
 		if (!lockdown) {
 			throw new Error(
-				i18next.t('command.mod.lockdown.lift.errors.failure', {
+				i18next.t("command.mod.lockdown.lift.errors.failure", {
 					// eslint-disable-next-line @typescript-eslint/no-base-to-string
 					channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 					lng: locale,
@@ -89,7 +90,7 @@ export async function lift(
 		}
 
 		await collectedInteraction.editReply({
-			content: i18next.t('command.mod.lockdown.lift.success', {
+			content: i18next.t("command.mod.lockdown.lift.success", {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 				lng: locale,

@@ -1,16 +1,16 @@
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime.js';
-import type { Snowflake } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { SNOWFLAKE_MIN_LENGTH } from '../Constants.js';
-import type { RawCase } from '../functions/cases/transformCase.js';
-import { kSQL } from '../tokens.js';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+import type { Snowflake } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import { SNOWFLAKE_MIN_LENGTH } from "../Constants.js";
+import type { RawCase } from "../functions/cases/transformCase.js";
+import { kSQL } from "../tokens.js";
 
 dayjs.extend(relativeTime);
 
 export async function findCases(phrase: string, guildId: Snowflake) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.resolve<Sql<{}>>(kSQL);
 
 	if (!phrase.length) {
 		return sql<RawCase[]>`
@@ -22,7 +22,7 @@ export async function findCases(phrase: string, guildId: Snowflake) {
 		`;
 	}
 
-	if (!isNaN(parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
+	if (!Number.isNaN(Number.parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
 		return sql<RawCase[]>`
 			select *
 			from cases

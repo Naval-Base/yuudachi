@@ -1,14 +1,14 @@
-import { ms } from '@naval-base/ms';
-import { hyperlink, messageLink } from 'discord.js';
-import i18next from 'i18next';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
-import { CaseAction } from '../../functions/cases/createCase.js';
-import { getCase } from '../../functions/cases/getCase.js';
-import { updateCase } from '../../functions/cases/updateCase.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
-import { checkLogChannel } from '../../functions/settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import type { DurationCommand } from '../../interactions/index.js';
+import { ms } from "@naval-base/ms";
+import { hyperlink, messageLink } from "discord.js";
+import i18next from "i18next";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import { CaseAction } from "../../functions/cases/createCase.js";
+import { getCase } from "../../functions/cases/getCase.js";
+import { updateCase } from "../../functions/cases/updateCase.js";
+import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
+import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import type { DurationCommand } from "../../interactions/index.js";
 
 export default class extends Command<typeof DurationCommand> {
 	public override async chatInput(
@@ -24,19 +24,19 @@ export default class extends Command<typeof DurationCommand> {
 		);
 
 		if (!modLogChannel) {
-			throw new Error(i18next.t('common.errors.no_mod_log_channel', { lng: locale }));
+			throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 		}
 
 		const originalCase = await getCase(interaction.guildId, args.case);
 
 		if (!originalCase) {
-			throw new Error(i18next.t('command.mod.common.errors.no_case', { case: args.case, lng: locale }));
+			throw new Error(i18next.t("command.mod.common.errors.no_case", { case: args.case, lng: locale }));
 		}
 
 		if (originalCase.actionProcessed) {
 			const user = await interaction.client.users.fetch(originalCase.targetId);
 			throw new Error(
-				i18next.t('command.mod.common.errors.already_processed', {
+				i18next.t("command.mod.common.errors.already_processed", {
 					user: `${user.toString()} - ${user.tag} (${user.id})`,
 					case: hyperlink(
 						`#${originalCase.caseId}`,
@@ -49,8 +49,8 @@ export default class extends Command<typeof DurationCommand> {
 
 		const parsedDuration = ms(args.duration);
 
-		if (parsedDuration < 300000 || parsedDuration > 2419200000 || isNaN(parsedDuration)) {
-			throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
+		if (parsedDuration < 300_000 || parsedDuration > 2_419_200_000 || Number.isNaN(parsedDuration)) {
+			throw new Error(i18next.t("command.common.errors.duration_format", { lng: locale }));
 		}
 
 		const actionExpiration = Date.now() + parsedDuration;
@@ -61,7 +61,7 @@ export default class extends Command<typeof DurationCommand> {
 				await member.disableCommunicationUntil(actionExpiration);
 			} catch {
 				throw new Error(
-					i18next.t('command.mod.duration.errors.timeout', {
+					i18next.t("command.mod.duration.errors.timeout", {
 						case: hyperlink(
 							`#${originalCase.caseId}`,
 							messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),
@@ -80,7 +80,7 @@ export default class extends Command<typeof DurationCommand> {
 		await upsertCaseLog(interaction.guild, interaction.user, case_);
 
 		await interaction.editReply({
-			content: i18next.t('command.mod.duration.success', {
+			content: i18next.t("command.mod.duration.success", {
 				case: hyperlink(
 					`#${originalCase.caseId}`,
 					messageLink(modLogChannel.id, originalCase.logMessageId!, interaction.guildId),

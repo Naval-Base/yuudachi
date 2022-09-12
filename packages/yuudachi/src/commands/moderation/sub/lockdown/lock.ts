@@ -1,5 +1,5 @@
-import { ms } from '@naval-base/ms';
-import dayjs from 'dayjs';
+import { ms } from "@naval-base/ms";
+import dayjs from "dayjs";
 import {
 	type TextChannel,
 	ButtonStyle,
@@ -7,20 +7,20 @@ import {
 	type InteractionResponse,
 	time,
 	TimestampStyles,
-} from 'discord.js';
-import i18next from 'i18next';
-import { nanoid } from 'nanoid';
-import type { InteractionParam, LocaleParam } from '../../../../Command.js';
-import { createLockdown } from '../../../../functions/lockdowns/createLockdown.js';
-import { getLockdown } from '../../../../functions/lockdowns/getLockdown.js';
-import { createButton } from '../../../../util/button.js';
-import { createMessageActionRow } from '../../../../util/messageActionRow.js';
+} from "discord.js";
+import i18next from "i18next";
+import { nanoid } from "nanoid";
+import type { InteractionParam, LocaleParam } from "../../../../Command.js";
+import { createLockdown } from "../../../../functions/lockdowns/createLockdown.js";
+import { getLockdown } from "../../../../functions/lockdowns/getLockdown.js";
+import { createButton } from "../../../../util/button.js";
+import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
-interface LockdownLockArgs {
+type LockdownLockArgs = {
 	channel: TextChannel;
 	duration: string;
 	reason?: string | undefined;
-}
+};
 
 export async function lock(
 	interaction: InteractionParam,
@@ -32,7 +32,7 @@ export async function lock(
 
 	if (lockdown) {
 		throw new Error(
-			i18next.t('command.mod.lockdown.lock.errors.already_locked', {
+			i18next.t("command.mod.lockdown.lock.errors.already_locked", {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 				lng: locale,
@@ -42,26 +42,26 @@ export async function lock(
 
 	const parsedDuration = ms(args.duration);
 
-	if (parsedDuration < 300000 || isNaN(parsedDuration)) {
-		throw new Error(i18next.t('command.common.errors.duration_format', { lng: locale }));
+	if (parsedDuration < 300_000 || Number.isNaN(parsedDuration)) {
+		throw new Error(i18next.t("command.common.errors.duration_format", { lng: locale }));
 	}
 
 	const lockKey = nanoid();
 	const cancelKey = nanoid();
 
 	const lockButton = createButton({
-		label: i18next.t('command.mod.lockdown.lock.buttons.execute', { lng: locale }),
+		label: i18next.t("command.mod.lockdown.lock.buttons.execute", { lng: locale }),
 		customId: lockKey,
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
-		label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+		label: i18next.t("command.common.buttons.cancel", { lng: locale }),
 		customId: cancelKey,
 		style: ButtonStyle.Secondary,
 	});
 
 	await interaction.editReply({
-		content: i18next.t('command.mod.lockdown.lock.pending', {
+		content: i18next.t("command.mod.lockdown.lock.pending", {
 			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 			lng: locale,
@@ -73,21 +73,22 @@ export async function lock(
 		.awaitMessageComponent({
 			filter: (collected) => collected.user.id === interaction.user.id,
 			componentType: ComponentType.Button,
-			time: 15000,
+			time: 15_000,
 		})
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+					content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 					components: [],
 				});
 			} catch {}
+
 			return undefined;
 		});
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t('command.mod.lockdown.lock.cancel', {
+			content: i18next.t("command.mod.lockdown.lock.cancel", {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 				lng: locale,
@@ -110,19 +111,19 @@ export async function lock(
 
 		await args.channel.send({
 			content: args.reason
-				? i18next.t('command.mod.lockdown.lock.message_reason', {
+				? i18next.t("command.mod.lockdown.lock.message_reason", {
 						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
 						reason: args.reason,
 						lng: locale,
 				  })
-				: i18next.t('command.mod.lockdown.lock.message', {
+				: i18next.t("command.mod.lockdown.lock.message", {
 						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
 						lng: locale,
 				  }),
 		});
 
 		await collectedInteraction.editReply({
-			content: i18next.t('command.mod.lockdown.lock.success', {
+			content: i18next.t("command.mod.lockdown.lock.success", {
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 				lng: locale,

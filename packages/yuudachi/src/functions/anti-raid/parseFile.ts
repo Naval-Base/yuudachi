@@ -1,5 +1,5 @@
-import type { Attachment } from 'discord.js';
-import { request as fetch } from 'undici';
+import type { Attachment } from "discord.js";
+import { request as fetch } from "undici";
 
 export async function parseFile(file: Attachment) {
 	const content = await (await fetch(file.url)).body.text();

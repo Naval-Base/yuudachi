@@ -1,30 +1,31 @@
 // import { createStarryNight, common } from '@wooorm/starry-night';
-import Convert from 'ansi-to-html';
-import type { Root } from 'hast';
-import { hasProperty } from 'hast-util-has-property';
-import { isElement } from 'hast-util-is-element';
-import { select } from 'hast-util-select';
-import { toString } from 'hast-util-to-string';
-import { h } from 'hastscript';
-import rehypeParse from 'rehype-parse';
-import { unified } from 'unified';
-import { CONTINUE, SKIP, visit } from 'unist-util-visit';
+import Convert from "ansi-to-html";
+import type { Root } from "hast";
+import { hasProperty } from "hast-util-has-property";
+import { isElement } from "hast-util-is-element";
+import { select } from "hast-util-select";
+import { toString } from "hast-util-to-string";
+import { h } from "hastscript";
+import rehypeParse from "rehype-parse";
+import { unified } from "unified";
+import { CONTINUE, SKIP, visit } from "unist-util-visit";
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const { parse } = unified().use(rehypeParse, { fragment: true });
 const convert = new Convert();
 // const { flagToScope, highlight } = await createStarryNight(common);
 
 export default function rehypeHighlightANSI() {
-	const prefix = 'language-';
+	const prefix = "language-";
 
 	return (tree: Root) => {
-		visit(tree, 'element', (node, index, parent) => {
-			if (!parent || index === null || !isElement(node, 'pre')) {
+		visit(tree, "element", (node, index, parent) => {
+			if (!parent || index === null || !isElement(node, "pre")) {
 				return CONTINUE;
 			}
 
-			const code = select('code', node);
-			if (!isElement(code, 'code') || !hasProperty(code, 'className')) {
+			const code = select("code", node);
+			if (!isElement(code, "code") || !hasProperty(code, "className")) {
 				return SKIP;
 			}
 
@@ -34,13 +35,13 @@ export default function rehypeHighlightANSI() {
 				return SKIP;
 			}
 
-			const language = classes.find((d) => typeof d === 'string' && d.startsWith(prefix));
-			if (typeof language !== 'string') {
+			const language = classes.find((class_) => typeof class_ === "string" && class_.startsWith(prefix));
+			if (typeof language !== "string") {
 				return SKIP;
 			}
 
 			const languageWithoutPrefix = language.slice(prefix.length);
-			if (languageWithoutPrefix !== 'ansi') {
+			if (languageWithoutPrefix !== "ansi") {
 				return SKIP;
 			}
 
@@ -69,14 +70,14 @@ export default function rehypeHighlightANSI() {
 				index,
 				1,
 				h(
-					'div',
+					"div",
 					{
 						className: [
-							'no-highlight',
+							"no-highlight",
 							// `${scope ? `highlight-${scope.replace(/^source\./, '').replace(/\./g, '-')}` : ''}`,
 						],
 					},
-					[h('pre', children)],
+					[h("pre", children)],
 				),
 			);
 			return SKIP;

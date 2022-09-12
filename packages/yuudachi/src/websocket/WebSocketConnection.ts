@@ -1,20 +1,25 @@
-import type { Buffer } from 'node:buffer';
-import { setTimeout } from 'node:timers';
-import type { Redis } from 'ioredis';
-import WebSocket from 'ws';
-import { logger } from '../logger.js';
+import type { Buffer } from "node:buffer";
+import { setTimeout } from "node:timers";
+import type { Redis } from "ioredis";
+import WebSocket from "ws";
+import { logger } from "../logger.js";
 
-interface ScamAPIData {
-	type: 'add' | 'delete';
+type ScamAPIData = {
 	domains: string[];
-}
+	type: "add" | "delete";
+};
 
 export class WebSocketConnection {
 	private connection: WebSocket;
+
 	private readonly url: string;
+
 	private readonly redis: Redis;
+
 	private readonly headers: { [key: string]: string } | undefined;
+
 	private tries = 0;
+
 	public constructor(url: string, headers: { [key: string]: string } | undefined, redis: Redis) {
 		this.url = url;
 		this.redis = redis;
@@ -26,10 +31,10 @@ export class WebSocketConnection {
 	}
 
 	public connect() {
-		this.connection.on('open', this.onOpen.bind(this));
-		this.connection.on('message', this.onMessage.bind(this));
-		this.connection.on('close', this.onClose.bind(this));
-		this.connection.on('error', this.onError.bind(this));
+		this.connection.on("open", this.onOpen.bind(this));
+		this.connection.on("message", this.onMessage.bind(this));
+		this.connection.on("close", this.onClose.bind(this));
+		this.connection.on("error", this.onError.bind(this));
 	}
 
 	private onOpen() {
@@ -40,8 +45,8 @@ export class WebSocketConnection {
 		this.tries = 0;
 	}
 
-	private onError(err: Error) {
-		logger.warn(err, 'WS error received');
+	private onError(error: Error) {
+		logger.warn(error, "WS error received");
 	}
 
 	private onMessage(data: Buffer) {
@@ -51,26 +56,26 @@ export class WebSocketConnection {
 			url: this.url,
 		});
 
-		if (objData.type === 'add') {
+		if (objData.type === "add") {
 			void this.redis
 				.multi()
-				.sadd('scamdomains', ...objData.domains)
-				.set('scamdomains:refresh', Date.now())
+				.sadd("scamdomains", ...objData.domains)
+				.set("scamdomains:refresh", Date.now())
 				.exec();
 			logger.info({
-				msg: `WebSocket based update of domains (add): ${objData.domains.join(', ')}`,
+				msg: `WebSocket based update of domains (add): ${objData.domains.join(", ")}`,
 				url: this.url,
 			});
 		}
 
-		if (objData.type === 'delete') {
+		if (objData.type === "delete") {
 			void this.redis
 				.multi()
-				.srem('scamdomains', ...objData.domains)
-				.set('scamdomains:refresh', Date.now())
+				.srem("scamdomains", ...objData.domains)
+				.set("scamdomains:refresh", Date.now())
 				.exec();
 			logger.info({
-				msg: `WebSocket based update of domains (remove): ${objData.domains.join(', ')}`,
+				msg: `WebSocket based update of domains (remove): ${objData.domains.join(", ")}`,
 				url: this.url,
 			});
 		}
@@ -99,6 +104,6 @@ export class WebSocketConnection {
 	}
 
 	private backOff() {
-		return Math.min(Math.floor(Math.exp(this.tries)), 10 * 60) * 1000;
+		return Math.min(Math.floor(Math.exp(this.tries)), 10 * 60) * 1_000;
 	}
 }

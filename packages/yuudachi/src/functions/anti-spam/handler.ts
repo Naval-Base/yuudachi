@@ -1,22 +1,22 @@
-import { Client, type Snowflake } from 'discord.js';
-import i18next from 'i18next';
-import type { Redis } from 'ioredis';
-import { container } from 'tsyringe';
-import { createContentHash, totalContents } from './totalContents.js';
-import { totalMentions } from './totalMentions.js';
-import { MENTION_THRESHOLD, SPAM_THRESHOLD } from '../../Constants.js';
-import { logger } from '../../logger.js';
-import { kRedis } from '../../tokens.js';
-import { type Case, CaseAction, createCase } from '../cases/createCase.js';
-import { upsertCaseLog } from '../logging/upsertCaseLog.js';
-import { checkLogChannel } from '../settings/checkLogChannel.js';
-import { getGuildSetting, SettingsKeys } from '../settings/getGuildSetting.js';
+import { Client, type Snowflake } from "discord.js";
+import i18next from "i18next";
+import type { Redis } from "ioredis";
+import { container } from "tsyringe";
+import { MENTION_THRESHOLD, SPAM_THRESHOLD } from "../../Constants.js";
+import { logger } from "../../logger.js";
+import { kRedis } from "../../tokens.js";
+import { type Case, CaseAction, createCase } from "../cases/createCase.js";
+import { upsertCaseLog } from "../logging/upsertCaseLog.js";
+import { checkLogChannel } from "../settings/checkLogChannel.js";
+import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
+import { createContentHash, totalContents } from "./totalContents.js";
+import { totalMentions } from "./totalMentions.js";
 
 export async function handleAntiSpam(
 	guildId: Snowflake,
 	userId: Snowflake,
 	content: string,
-	event: { name: string; event: string },
+	event: { event: string; name: string },
 ): Promise<void> {
 	const client = container.resolve<Client<true>>(Client);
 	const redis = container.resolve<Redis>(kRedis);
@@ -54,14 +54,14 @@ export async function handleAntiSpam(
 	if (mentionExceeded || contentExceeded) {
 		const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
 
-		await redis.setex(`guild:${guildId}:user:${userId}:ban`, 15, '');
+		await redis.setex(`guild:${guildId}:user:${userId}:ban`, 15, "");
 
 		let case_: Case | null = null;
 		if (mentionExceeded) {
 			logger.info(
 				{
 					event,
-					guildId: guildId,
+					guildId,
 					userId: client.user.id,
 					memberId: userId,
 					mentionExceeded,
@@ -71,10 +71,10 @@ export async function handleAntiSpam(
 
 			case_ = await createCase(guild, {
 				targetId: userId,
-				guildId: guildId,
+				guildId,
 				action: CaseAction.Ban,
 				targetTag: member.user.tag,
-				reason: i18next.t('log.mod_log.spam.reason_mentions', {
+				reason: i18next.t("log.mod_log.spam.reason_mentions", {
 					lng: locale,
 				}),
 				deleteMessageDays: 1,
@@ -85,21 +85,21 @@ export async function handleAntiSpam(
 			logger.info(
 				{
 					event,
-					guildId: guildId,
+					guildId,
 					userId: client.user.id,
 					memberId: userId,
 				},
 				`Member ${userId} softbanned (spam)`,
 			);
 
-			await redis.setex(`guild:${guildId}:user:${userId}:unban`, 15, '');
+			await redis.setex(`guild:${guildId}:user:${userId}:unban`, 15, "");
 
 			case_ = await createCase(guild, {
 				targetId: userId,
-				guildId: guildId,
+				guildId,
 				action: CaseAction.Softban,
 				targetTag: member.user.tag,
-				reason: i18next.t('log.mod_log.spam.reason', { lng: locale }),
+				reason: i18next.t("log.mod_log.spam.reason", { lng: locale }),
 				deleteMessageDays: 1,
 			});
 

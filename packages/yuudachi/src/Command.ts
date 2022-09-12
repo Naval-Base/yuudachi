@@ -1,58 +1,57 @@
-import { basename, extname } from 'node:path';
+import { basename, extname } from "node:path";
 import type {
 	AutocompleteInteraction,
 	ChatInputCommandInteraction,
 	MessageContextMenuCommandInteraction,
 	UserContextMenuCommandInteraction,
-} from 'discord.js';
-import type { ArgumentsOf, CommandPayload } from './interactions/ArgumentsOf.js';
-import { logger } from './logger.js';
+} from "discord.js";
+import type { ArgumentsOf, CommandPayload } from "./interactions/ArgumentsOf.js";
+import { logger } from "./logger.js";
 
-export interface ChatInput<T extends CommandPayload> {
-	chatInput: (
-		interaction: ChatInputCommandInteraction<'cached'>,
+export type ChatInput<T extends CommandPayload> = {
+	chatInput(
+		interaction: ChatInputCommandInteraction<"cached">,
 		args: ArgumentsOf<T>,
 		locale: string,
-	) => void | Promise<void>;
-}
+	): Promise<void> | void;
+};
 
-export interface Autocomplete<T extends CommandPayload> {
-	autocomplete: (
-		interaction: AutocompleteInteraction<'cached'>,
+export type Autocomplete<T extends CommandPayload> = {
+	autocomplete(
+		interaction: AutocompleteInteraction<"cached">,
 		args_: ArgumentsOf<T>,
 		locale: string,
-	) => void | Promise<void>;
-}
+	): Promise<void> | void;
+};
 
-export interface MessageContext<T extends CommandPayload> {
-	messageContext: (
-		interaction: MessageContextMenuCommandInteraction<'cached'>,
+export type MessageContext<T extends CommandPayload> = {
+	messageContext(
+		interaction: MessageContextMenuCommandInteraction<"cached">,
 		args: ArgumentsOf<T>,
 		locale: string,
-	) => void | Promise<void>;
-}
+	): Promise<void> | void;
+};
 
-export interface UserContext<T extends CommandPayload> {
-	userContext: (
-		interaction: UserContextMenuCommandInteraction<'cached'>,
+export type UserContext<T extends CommandPayload> = {
+	userContext(
+		interaction: UserContextMenuCommandInteraction<"cached">,
 		args: ArgumentsOf<T>,
 		locale: string,
-	) => void | Promise<void>;
-}
+	): Promise<void> | void;
+};
 
-export interface Commands<T extends CommandPayload>
-	extends ChatInput<T>,
-		Autocomplete<T>,
-		MessageContext<T>,
-		UserContext<T> {
-	[key: string]: any;
-}
+export type Commands<T extends CommandPayload> = Autocomplete<T> &
+	ChatInput<T> &
+	MessageContext<T> &
+	UserContext<T> & {
+		[key: string]: any;
+	};
 
 export const enum CommandMethod {
-	ChatInput = 'chatInput',
-	Autocomplete = 'autocomplete',
-	MessageContext = 'messageContext',
-	UserContext = 'userContext',
+	Autocomplete = "autocomplete",
+	ChatInput = "chatInput",
+	MessageContext = "messageContext",
+	UserContext = "userContext",
 }
 
 type CommandMethodParameters<
@@ -74,9 +73,9 @@ export type LocaleParam<T extends CommandMethod = CommandMethod.ChatInput> = Com
 >[2];
 
 export abstract class Command<T extends CommandPayload> implements Commands<T> {
-	public constructor(public readonly name?: T['name'][]) {}
+	public constructor(public readonly name?: T["name"][]) {}
 
-	public chatInput(interaction: InteractionParam, _: ArgsParam<T>, __: LocaleParam): void | Promise<void> {
+	public chatInput(interaction: InteractionParam, _: ArgsParam<T>, __: LocaleParam): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 			`Received chat input for ${interaction.commandName}, but the command does not handle chat input`,
@@ -87,7 +86,7 @@ export abstract class Command<T extends CommandPayload> implements Commands<T> {
 		interaction: InteractionParam<CommandMethod.Autocomplete>,
 		_args: ArgsParam<T>,
 		_locale: LocaleParam,
-	): void | Promise<void> {
+	): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 			`Received autocomplete for ${interaction.commandName}, but the command does not handle autocomplete`,
@@ -98,7 +97,7 @@ export abstract class Command<T extends CommandPayload> implements Commands<T> {
 		interaction: InteractionParam<CommandMethod.MessageContext>,
 		_args: ArgsParam<T>,
 		_locale: LocaleParam,
-	): void | Promise<void> {
+	): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 			`Received message context for ${interaction.commandName}, but the command does not handle message context`,
@@ -109,7 +108,7 @@ export abstract class Command<T extends CommandPayload> implements Commands<T> {
 		interaction: InteractionParam<CommandMethod.UserContext>,
 		_args: ArgsParam<T>,
 		_locale: LocaleParam,
-	): void | Promise<void> {
+	): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 			`Received user context for ${interaction.commandName}, but the command does not handle user context`,
@@ -117,14 +116,14 @@ export abstract class Command<T extends CommandPayload> implements Commands<T> {
 	}
 }
 
-export interface CommandInfo {
+export type CommandInfo = {
 	name: string;
-}
+};
 
 export function commandInfo(path: string): CommandInfo | null {
-	if (extname(path) !== '.js') {
+	if (extname(path) !== ".js") {
 		return null;
 	}
 
-	return { name: basename(path, '.js') } as const;
+	return { name: basename(path, ".js") } as const;
 }

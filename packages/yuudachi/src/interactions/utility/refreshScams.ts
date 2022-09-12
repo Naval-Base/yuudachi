@@ -1,9 +1,9 @@
 export const RefreshScamlistCommand = {
-	name: 'refreshscams',
-	description: 'Refresh scamlists',
+	name: "refreshscams",
+	description: "Refresh scamlists",
 	description_localizations: {
-		de: 'Betrugslisten aktualisieren',
+		de: "Betrugslisten aktualisieren",
 	},
 	options: [],
-	default_member_permissions: '0',
+	default_member_permissions: "0",
 } as const;

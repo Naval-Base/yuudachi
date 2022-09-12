@@ -1,14 +1,14 @@
-import { type GuildChannel, OverwriteType, PermissionFlagsBits } from 'discord.js';
-import type { Sql } from 'postgres';
-import { container } from 'tsyringe';
-import type { CamelCasedProperties } from 'type-fest';
-import { type RawLockdown, transformLockdown } from './transformLockdown.js';
-import { kSQL } from '../../tokens.js';
-import type { PartialAndUndefinedOnNull } from '../../util/types.js';
+import { type GuildChannel, OverwriteType, PermissionFlagsBits } from "discord.js";
+import type { Sql } from "postgres";
+import { container } from "tsyringe";
+import type { CamelCasedProperties } from "type-fest";
+import { kSQL } from "../../tokens.js";
+import type { PartialAndUndefinedOnNull } from "../../util/types.js";
+import { type RawLockdown, transformLockdown } from "./transformLockdown.js";
 
 export type Lockdown = PartialAndUndefinedOnNull<CamelCasedProperties<RawLockdown>>;
 
-export type CreateLockdown = Omit<Lockdown, 'expiration' | 'overwrites'> & {
+export type CreateLockdown = Omit<Lockdown, "expiration" | "overwrites"> & {
 	expiration: Date;
 };
 
@@ -54,7 +54,8 @@ export async function createLockdown(lockdown: CreateLockdown & { channel: Guild
 			${lockdown.reason ?? null},
 			${sql.json(overwrites)}
 		)
-		returning *`;
+		returning *
+	`;
 
 	return transformLockdown(newLockdown);
 }

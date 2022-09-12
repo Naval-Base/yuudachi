@@ -20,7 +20,7 @@ export const enum ThreatLevelColor {
 	Level7 = 0xfb3244,
 }
 
-export const MAX_TRUST_ACCOUNT_AGE = 1000 * 60 * 60 * 24 * 7 * 4;
+export const MAX_TRUST_ACCOUNT_AGE = 1_000 * 60 * 60 * 24 * 7 * 4;
 export const SPAM_THRESHOLD = 4;
 export const SPAM_EXPIRE_SECONDS = 30;
 export const MENTION_THRESHOLD = 10;
@@ -33,20 +33,20 @@ export const ANTI_RAID_NUKE_AVATAR_BITS = 16;
 export const ANTI_RAID_NUKE_AVATAR_THRESHOLD = 5;
 export const ANTI_RAID_NUKE_PROGRESS_SPLIT = 50;
 
-export const DATE_FORMAT_LOGFILE = 'YYYY-MM-DD_HH-mm-ss';
-export const DATE_FORMAT_WITH_SECONDS = 'YYYY/MM/DD HH:mm:ss';
+export const DATE_FORMAT_LOGFILE = "YYYY-MM-DD_HH-mm-ss";
+export const DATE_FORMAT_WITH_SECONDS = "YYYY/MM/DD HH:mm:ss";
 
 export const EMBED_TITLE_LIMIT = 256;
-export const EMBED_DESCRIPTION_LIMIT = 4096;
-export const EMBED_FOOTER_TEXT_LIMIT = 2048;
+export const EMBED_DESCRIPTION_LIMIT = 4_096;
+export const EMBED_FOOTER_TEXT_LIMIT = 2_048;
 export const EMBED_AUTHOR_NAME_LIMIT = 256;
 export const EMBED_FIELD_LIMIT = 25;
 export const EMBED_FIELD_NAME_LIMIT = 256;
-export const EMBED_FIELD_VALUE_LIMIT = 1024;
+export const EMBED_FIELD_VALUE_LIMIT = 1_024;
 export const SNOWFLAKE_MIN_LENGTH = 17;
-export const AUTOMOD_FLAG_INDICATOR_FIELD_NAME = 'flagged_message_id';
+export const AUTOMOD_FLAG_INDICATOR_FIELD_NAME = "flagged_message_id";
 
 export const AUTOCOMPLETE_CHOICE_LIMIT = 25;
 export const AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT = 100;
 
-export const AUTOCOMPLETE_REASON_FOCUSED_FIELD_NAME = 'reason';
+export const AUTOCOMPLETE_REASON_FOCUSED_FIELD_NAME = "reason";

@@ -1,22 +1,23 @@
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import {
 	type Snowflake,
 	type ChatInputCommandInteraction,
 	type ModalSubmitInteraction,
 	Collection,
 	type GuildMember,
-} from 'discord.js';
-import i18next from 'i18next';
-import type { Redis } from 'ioredis';
-import { container } from 'tsyringe';
-import { ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS, DATE_FORMAT_WITH_SECONDS } from '../../../../Constants.js';
-import { canBan } from '../../../../functions/anti-raid/canBan.js';
-import { kRedis } from '../../../../tokens.js';
-import { resolveTimestamp } from '../../../../util/timestamp.js';
+} from "discord.js";
+import i18next from "i18next";
+import type { Redis } from "ioredis";
+import { container } from "tsyringe";
+import { ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS, DATE_FORMAT_WITH_SECONDS } from "../../../../Constants.js";
+import { canBan } from "../../../../functions/anti-raid/canBan.js";
+import { kRedis } from "../../../../tokens.js";
+import { resolveTimestamp } from "../../../../util/timestamp.js";
 
 /**
  * Acquire an anti-raid-nuke lock for a guild
- * @param guildId Id representing the guild the lock is for
+ *
+ * @param guildId - Id representing the guild the lock is for
  * @returns True, if the lock was acquired, false if already locked
  */
 export async function acquireNukeLock(guildId: Snowflake) {
@@ -25,13 +26,15 @@ export async function acquireNukeLock(guildId: Snowflake) {
 	if (await redis.exists(key)) {
 		return false;
 	}
-	await redis.set(key, Date.now(), 'EX', ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS);
+
+	await redis.set(key, Date.now(), "EX", ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS);
 	return true;
 }
 
 /**
  * Release an anti-raid-nuke lock for a guild
- * @param guildId Id representing the guild the lock is for
+ *
+ * @param guildId - Id representing the guild the lock is for
  * @returns True, if the lock was released, false if there was no lock
  */
 export async function releaseNukeLock(guildId: Snowflake) {
@@ -41,6 +44,7 @@ export async function releaseNukeLock(guildId: Snowflake) {
 		await redis.del(key);
 		return true;
 	}
+
 	return false;
 }
 
@@ -49,7 +53,7 @@ export async function acquireLockIfPublic(guildId: Snowflake, locale: string, hi
 		const acquiredLock = await acquireNukeLock(guildId);
 		if (!acquiredLock) {
 			throw new Error(
-				i18next.t('command.mod.anti_raid_nuke.common.errors.no_concurrent_use', {
+				i18next.t("command.mod.anti_raid_nuke.common.errors.no_concurrent_use", {
 					lng: locale,
 				}),
 			);
@@ -57,10 +61,10 @@ export async function acquireLockIfPublic(guildId: Snowflake, locale: string, hi
 	}
 }
 
-export interface TargetRejection {
+export type TargetRejection = {
 	member: GuildMember;
 	reason: string;
-}
+};
 
 export function partitionNukeTargets(
 	members: Collection<string, GuildMember>,
@@ -83,15 +87,15 @@ export function partitionNukeTargets(
 	return [confirmations, rejections];
 }
 
-export interface IdValidationResult {
-	validMembers: Collection<string, GuildMember>;
-	validIdCount: number;
+export type IdValidationResult = {
 	invalidIdCount: number;
 	totalIdCount: number;
-}
+	validIdCount: number;
+	validMembers: Collection<string, GuildMember>;
+};
 
 export async function validateMemberIds(
-	interaction: ChatInputCommandInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
+	interaction: ChatInputCommandInteraction<"cached"> | ModalSubmitInteraction<"cached">,
 	ids: Set<Snowflake>,
 	locale: string,
 ): Promise<IdValidationResult> {
@@ -107,11 +111,11 @@ export async function validateMemberIds(
 	}
 
 	if (!result.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_ids', { lng: locale }));
+		throw new Error(i18next.t("command.mod.anti_raid_nuke.common.errors.no_ids", { lng: locale }));
 	}
 
 	if (result.size === fetchedMembers.size) {
-		throw new Error(i18next.t('command.mod.anti_raid_nuke.common.errors.no_filter', { lng: locale }));
+		throw new Error(i18next.t("command.mod.anti_raid_nuke.common.errors.no_filter", { lng: locale }));
 	}
 
 	return {

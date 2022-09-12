@@ -7,23 +7,23 @@ import {
 	type GuildMember,
 	type Attachment,
 	type Message,
-} from 'discord.js';
-import type { ArgumentsOf, CommandPayload } from './ArgumentsOf.js';
+} from "discord.js";
+import type { ArgumentsOf, CommandPayload } from "./ArgumentsOf.js";
 
 export function transformInteraction<T extends CommandPayload = CommandPayload>(
-	options: readonly CommandInteractionOption<'cached'>[],
+	options: readonly CommandInteractionOption<"cached">[],
 ): ArgumentsOf<T> {
 	const opts: Record<
 		string,
 		| ArgumentsOf<T>
-		| { user?: User | undefined; member?: GuildMember | undefined }
-		| GuildBasedChannel
-		| Role
-		| string
-		| number
-		| boolean
 		| Attachment
+		| GuildBasedChannel
 		| Message<true>
+		| Role
+		| boolean
+		| number
+		| string
+		| { member?: GuildMember | undefined; user?: User | undefined }
 		| undefined
 	> = {};
 
@@ -55,8 +55,9 @@ export function transformInteraction<T extends CommandPayload = CommandPayload>(
 				opts[top.name] = top.attachment;
 				break;
 			// @ts-expect-error: This is actually a string
-			case '_MESSAGE':
+			case "_MESSAGE":
 				opts[top.name] = top.message;
+				break;
 			default:
 				break;
 		}

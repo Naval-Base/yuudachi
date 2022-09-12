@@ -1,18 +1,18 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 export const SponsorCommand = {
-	name: 'sponsor',
-	description: 'Add sponsor role to a member of this guild',
+	name: "sponsor",
+	description: "Add sponsor role to a member of this guild",
 	description_localizations: {
-		de: 'Sponsorrolle für ein Mitglied dieser Gilde hinzufügen',
+		de: "Sponsorrolle für ein Mitglied dieser Gilde hinzufügen",
 	},
 	options: [
 		{
-			name: 'user',
-			description: 'The user to action',
+			name: "user",
+			description: "The user to action",
 			type: ApplicationCommandOptionType.User,
 			required: true,
 		},
 	],
-	default_member_permissions: '0',
+	default_member_permissions: "0",
 } as const;

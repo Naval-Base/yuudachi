@@ -1,4 +1,4 @@
-import { request as fetch } from 'undici';
+import { request as fetch } from "undici";
 
 export async function resolveRedirect(initial: string) {
 	const res = await fetch(initial);

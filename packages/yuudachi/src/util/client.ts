@@ -1,5 +1,5 @@
-import { Client, type ClientOptions } from 'discord.js';
-import { container } from 'tsyringe';
+import { Client, type ClientOptions } from "discord.js";
+import { container } from "tsyringe";
 
 export function createClient(options: ClientOptions) {
 	const client = new Client(options);

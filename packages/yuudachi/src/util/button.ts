@@ -3,7 +3,7 @@ import {
 	ButtonStyle,
 	ComponentType,
 	type APIButtonComponentBase,
-} from 'discord-api-types/v10';
+} from "discord-api-types/v10";
 
 export function createButton({
 	label,
@@ -12,11 +12,11 @@ export function createButton({
 	url,
 	disabled,
 }: {
-	label: string;
 	customId?: string | undefined;
+	disabled?: boolean | undefined;
+	label: string;
 	style?: ButtonStyle | undefined;
 	url?: string | undefined;
-	disabled?: boolean | undefined;
 }): APIButtonComponent {
 	const button: APIButtonComponentBase<any> = {
 		type: ComponentType.Button,

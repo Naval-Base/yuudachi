@@ -1,13 +1,13 @@
-import postgres, { type Sql } from 'postgres';
-import { container } from 'tsyringe';
-import { kSQL } from '../tokens.js';
+import postgres, { type Sql } from "postgres";
+import { container } from "tsyringe";
+import { kSQL } from "../tokens.js";
 
-export function createPostgres(): Sql<any> {
+export function createPostgres(): Sql<{}> {
 	const sql = postgres({
 		types: {
 			date: {
-				to: 1184,
-				from: [1082, 1083, 1114, 1184],
+				to: 1_184,
+				from: [1_082, 1_083, 1_114, 1_184],
 				serialize: (date: Date) => date.toISOString(),
 				parse: (isoString: string) => isoString,
 			},

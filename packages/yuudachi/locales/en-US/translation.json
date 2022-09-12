@@ -207,7 +207,7 @@
 				"modal": {
 					"title": "Anti-Raid-Nuke Entry",
 					"components": {
-						"label": "{{i}}- Enter valid ids",
+						"label": "{{idx}}- Enter valid ids",
 						"placeholder": "Members will be parsed by id from the provided content."
 					}
 				}

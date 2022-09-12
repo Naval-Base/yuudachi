@@ -1,7 +1,7 @@
-import type { Message } from 'discord.js';
-import i18next from 'i18next';
-import { Color } from '../../Constants.js';
-import { truncateEmbed } from '../../util/embed.js';
+import type { Message } from "discord.js";
+import i18next from "i18next";
+import { Color } from "../../Constants.js";
+import { truncateEmbed } from "../../util/embed.js";
 
 export function formatMessageToEmbed(message: Message<true>, locale: string) {
 	let embed = truncateEmbed({
@@ -12,7 +12,7 @@ export function formatMessageToEmbed(message: Message<true>, locale: string) {
 		},
 		description: message.content.length
 			? message.content
-			: i18next.t('common.errors.no_content', {
+			: i18next.t("common.errors.no_content", {
 					lng: locale,
 			  }),
 		timestamp: message.createdAt.toISOString(),
@@ -23,7 +23,7 @@ export function formatMessageToEmbed(message: Message<true>, locale: string) {
 	});
 
 	const attachment = message.attachments.first();
-	const attachmentIsImage = attachment?.contentType === 'image/jpeg' || attachment?.contentType === 'image/png';
+	const attachmentIsImage = attachment?.contentType === "image/jpeg" || attachment?.contentType === "image/png";
 
 	if (attachmentIsImage) {
 		embed = {

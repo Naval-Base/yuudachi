@@ -1,24 +1,25 @@
-import { on } from 'events';
-import { Client, Events } from 'discord.js';
-import i18next from 'i18next';
-import type { Redis } from 'ioredis';
-import { inject, injectable } from 'tsyringe';
-import type { Event } from '../../Event.js';
-import { CaseAction, createCase } from '../../functions/cases/createCase.js';
-import { generateCasePayload } from '../../functions/logging/generateCasePayload.js';
-import { upsertCaseLog } from '../../functions/logging/upsertCaseLog.js';
-import { getGuildSetting, SettingsKeys } from '../../functions/settings/getGuildSetting.js';
-import { logger } from '../../logger.js';
-import { kRedis } from '../../tokens.js';
+import { on } from "node:events";
+import { Client, Events } from "discord.js";
+import i18next from "i18next";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import type { Redis } from "ioredis";
+import { inject, injectable } from "tsyringe";
+import type { Event } from "../../Event.js";
+import { CaseAction, createCase } from "../../functions/cases/createCase.js";
+import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
+import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
+import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import { logger } from "../../logger.js";
+import { kRedis } from "../../tokens.js";
 import {
 	APIAutoModerationRuleActionType,
 	APIAutoModerationRuleTriggerType,
 	type GatewayAutoModerationActionExecution,
-} from '../../util/tempAutomodTypes.js';
+} from "../../util/tempAutomodTypes.js";
 
 @injectable()
 export default class implements Event {
-	public name = 'AutoMod timeout handler';
+	public name = "AutoMod timeout handler";
 
 	public event = Events.Raw as const;
 
@@ -28,14 +29,14 @@ export default class implements Event {
 		for await (const [rawData] of on(this.client, this.event) as AsyncIterableIterator<
 			[
 				{
+					d: GatewayAutoModerationActionExecution;
 					op: number;
 					t: string;
-					d: GatewayAutoModerationActionExecution;
 				},
 			]
 		>) {
 			try {
-				if (rawData.t !== 'AUTO_MODERATION_ACTION_EXECUTION') {
+				if (rawData.t !== "AUTO_MODERATION_ACTION_EXECUTION") {
 					continue;
 				}
 
@@ -56,7 +57,7 @@ export default class implements Event {
 				await this.redis.setex(
 					`guild:${autoModAction.guild_id}:user:${autoModAction.user_id}:auto_mod_timeout`,
 					15,
-					'',
+					"",
 				);
 
 				const locale = await getGuildSetting(autoModAction.guild_id, SettingsKeys.Locale);
@@ -71,19 +72,19 @@ export default class implements Event {
 					`Member ${autoModAction.user_id} timed out (AutoMod)`,
 				);
 
-				let reasonType = 'default';
+				let reasonType = "default";
 				switch (autoModAction.rule_trigger_type) {
 					case APIAutoModerationRuleTriggerType.HarmfulLink:
-						reasonType = 'harmful_link';
+						reasonType = "harmful_link";
 						break;
 					case APIAutoModerationRuleTriggerType.Keyword:
-						reasonType = 'keyword';
+						reasonType = "keyword";
 						break;
 					case APIAutoModerationRuleTriggerType.KeywordPreset:
-						reasonType = 'keyword_preset';
+						reasonType = "keyword_preset";
 						break;
 					case APIAutoModerationRuleTriggerType.Spam:
-						reasonType = 'spam';
+						reasonType = "spam";
 						break;
 					default:
 						break;
@@ -98,14 +99,14 @@ export default class implements Event {
 						user: this.client.user,
 						args: { user: { user: member.user }, reason },
 						action: CaseAction.Timeout,
-						duration: autoModAction.action.metadata.duration_seconds * 1000,
+						duration: autoModAction.action.metadata.duration_seconds * 1_000,
 					}),
 					true,
 				);
 
 				await upsertCaseLog(guild, this.client.user, case_);
-			} catch (e) {
-				const error = e as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
 

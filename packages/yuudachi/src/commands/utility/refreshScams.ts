@@ -1,18 +1,18 @@
-import process from 'node:process';
-import { ButtonStyle, ComponentType } from 'discord.js';
-import i18next from 'i18next';
-import type { Redis } from 'ioredis';
-import { nanoid } from 'nanoid';
-import { container } from 'tsyringe';
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from '../../Command.js';
-import { Color } from '../../Constants.js';
-import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from '../../functions/anti-scam/refreshScamDomains.js';
-import type { RefreshScamlistCommand } from '../../interactions/index.js';
-import { logger } from '../../logger.js';
-import { kRedis } from '../../tokens.js';
-import { createButton } from '../../util/button.js';
-import { addFields } from '../../util/embed.js';
-import { createMessageActionRow } from '../../util/messageActionRow.js';
+import process from "node:process";
+import { ButtonStyle, ComponentType } from "discord.js";
+import i18next from "i18next";
+import type { Redis } from "ioredis";
+import { nanoid } from "nanoid";
+import { container } from "tsyringe";
+import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import { Color } from "../../Constants.js";
+import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from "../../functions/anti-scam/refreshScamDomains.js";
+import type { RefreshScamlistCommand } from "../../interactions/index.js";
+import { logger } from "../../logger.js";
+import { kRedis } from "../../tokens.js";
+import { createButton } from "../../util/button.js";
+import { addFields } from "../../util/embed.js";
+import { createMessageActionRow } from "../../util/messageActionRow.js";
 
 export default class extends Command<typeof RefreshScamlistCommand> {
 	public override async chatInput(
@@ -24,14 +24,14 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 
 		const reply = await interaction.deferReply({ ephemeral: true });
 
-		const missing = scamURLEnvs.filter((u) => !process.env[u]);
+		const missing = scamURLEnvs.filter((url) => !process.env[url]);
 
 		if (missing.length) {
-			logger.warn(`Missing environment variables: ${missing.join(', ')}.`);
+			logger.warn(`Missing environment variables: ${missing.join(", ")}.`);
 		}
 
 		if (missing.length === 2) {
-			await interaction.editReply(i18next.t('command.utility.refresh_scamlist.missing_env', { missing, lng: locale }));
+			await interaction.editReply(i18next.t("command.utility.refresh_scamlist.missing_env", { missing, lng: locale }));
 			return;
 		}
 
@@ -39,19 +39,19 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 		const cancelKey = nanoid();
 
 		const refreshButton = createButton({
-			label: i18next.t('command.utility.refresh_scamlist.buttons.execute', { lng: locale }),
+			label: i18next.t("command.utility.refresh_scamlist.buttons.execute", { lng: locale }),
 			customId: refreshKey,
 			style: ButtonStyle.Danger,
 		});
 		const cancelButton = createButton({
-			label: i18next.t('command.common.buttons.cancel', { lng: locale }),
+			label: i18next.t("command.common.buttons.cancel", { lng: locale }),
 			customId: cancelKey,
 			style: ButtonStyle.Secondary,
 		});
 
 		let embed = addFields({
 			color: Color.DiscordEmbedBackground,
-			title: i18next.t('command.utility.refresh_scamlist.pending', {
+			title: i18next.t("command.utility.refresh_scamlist.pending", {
 				lng: locale,
 			}),
 		});
@@ -62,24 +62,24 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 			const lastRefresh = await redis.get(`${key}:refresh`);
 
 			const parts = [
-				i18next.t('command.utility.refresh_scamlist.amount', {
+				i18next.t("command.utility.refresh_scamlist.amount", {
 					count: num,
 					lng: locale,
 				}),
 
-				i18next.t('command.utility.refresh_scamlist.last_change', {
+				i18next.t("command.utility.refresh_scamlist.last_change", {
 					timestamp: lastRefresh
-						? `<t:${Math.floor(parseInt(lastRefresh, 10) / 1000)}:f> (<t:${Math.floor(
-								parseInt(lastRefresh, 10) / 1000,
+						? `<t:${Math.floor(Number.parseInt(lastRefresh, 10) / 1_000)}:f> (<t:${Math.floor(
+								Number.parseInt(lastRefresh, 10) / 1_000,
 						  )}:R>)`
-						: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale }),
+						: i18next.t("command.utility.refresh_scamlist.refresh_never", { lng: locale }),
 					lng: locale,
 				}),
 			];
 
 			embed = addFields(embed, {
 				name: urlEnv,
-				value: parts.join('\n'),
+				value: parts.join("\n"),
 				inline: true,
 			});
 		}
@@ -93,24 +93,25 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 			.awaitMessageComponent({
 				filter: (collected) => collected.user.id === interaction.user.id,
 				componentType: ComponentType.Button,
-				time: 15000,
+				time: 15_000,
 			})
 			.catch(async () => {
 				try {
 					await interaction.editReply({
-						content: i18next.t('command.common.errors.timed_out', { lng: locale }),
+						content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 						components: [],
 					});
-				} catch (e) {
-					const error = e as Error;
+				} catch (error_) {
+					const error = error_ as Error;
 					logger.error(error, error.message);
 				}
+
 				return undefined;
 			});
 
 		if (collectedInteraction?.customId === cancelKey) {
 			await collectedInteraction.update({
-				content: i18next.t('command.utility.refresh_scamlist.cancel', {
+				content: i18next.t("command.utility.refresh_scamlist.cancel", {
 					lng: locale,
 				}),
 				components: [],
@@ -120,7 +121,7 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 		if (collectedInteraction?.customId === refreshKey) {
 			let embed = addFields({
 				color: Color.DiscordSuccess,
-				title: i18next.t('command.utility.refresh_scamlist.success', {
+				title: i18next.t("command.utility.refresh_scamlist.success", {
 					lng: locale,
 				}),
 			});
@@ -129,34 +130,34 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 				const res = await refreshScamDomains();
 				for (const result of res) {
 					const parts = [
-						i18next.t('command.utility.refresh_scamlist.before', {
+						i18next.t("command.utility.refresh_scamlist.before", {
 							count: result.before,
 							lng: locale,
 						}),
-						i18next.t('command.utility.refresh_scamlist.after', {
+						i18next.t("command.utility.refresh_scamlist.after", {
 							count: result.after,
 							lng: locale,
 						}),
-						i18next.t('command.utility.refresh_scamlist.last_change', {
+						i18next.t("command.utility.refresh_scamlist.last_change", {
 							timestamp: result.lastRefresh
-								? `<t:${Math.floor(result.lastRefresh / 1000)}:f> (<t:${Math.floor(result.lastRefresh / 1000)}:R>)`
-								: i18next.t('command.utility.refresh_scamlist.refresh_never', { lng: locale }),
+								? `<t:${Math.floor(result.lastRefresh / 1_000)}:f> (<t:${Math.floor(result.lastRefresh / 1_000)}:R>)`
+								: i18next.t("command.utility.refresh_scamlist.refresh_never", { lng: locale }),
 							lng: locale,
 						}),
 					];
 
 					embed = addFields(embed, {
 						name: result.envVar,
-						value: parts.join('\n'),
+						value: parts.join("\n"),
 						inline: true,
 					});
 				}
-			} catch (err) {
-				const error = err as Error;
+			} catch (error_) {
+				const error = error_ as Error;
 				logger.error(error, error.message);
 				embed = addFields({
 					color: Color.DiscordDanger,
-					title: i18next.t('command.utility.refresh_scamlist.error', {
+					title: i18next.t("command.utility.refresh_scamlist.error", {
 						lng: locale,
 					}),
 				});

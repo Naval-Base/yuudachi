@@ -5,42 +5,42 @@ export enum TableAlignment {
 }
 
 export function heading(text: string, level: number) {
-	return `${'#'.repeat(level)} ${text}`;
+	return `${"#".repeat(level)} ${text}`;
 }
 
 export function checkbox(text: string, checked = false) {
-	return `- [${checked ? 'x' : ' '}] ${text}`;
+	return `- [${checked ? "x" : " "}] ${text}`;
 }
 
 export function list(items: string[], ordered = false) {
-	return items.map((text) => `${ordered ? '1.' : '-'} ${text}`).join('\n');
+	return items.map((text) => `${ordered ? "1." : "-"} ${text}`).join("\n");
 }
 
 export function table(headers: string[], rows: string[][], alignment = TableAlignment.Left) {
-	const headerRow = `| ${headers.join(' | ')} |`;
-	const bodyRows = rows.map((row) => `| ${row.join(' | ')} |`).join('\n');
+	const headerRow = `| ${headers.join(" | ")} |`;
+	const bodyRows = rows.map((row) => `| ${row.join(" | ")} |`).join("\n");
 	return [
 		headerRow,
 		`|${headers
 			.map(
-				(s) =>
-					`${alignment === TableAlignment.Left || alignment === TableAlignment.Center ? ':' : ''}${'-'.repeat(
-						s.length,
-					)}${alignment === TableAlignment.Center || alignment === TableAlignment.Right ? ':' : ''}`,
+				(str) =>
+					`${alignment === TableAlignment.Left || alignment === TableAlignment.Center ? ":" : ""}${"-".repeat(
+						str.length,
+					)}${alignment === TableAlignment.Center || alignment === TableAlignment.Right ? ":" : ""}`,
 			)
-			.join('|')}|`,
+			.join("|")}|`,
 		bodyRows,
-	].join('\n');
+	].join("\n");
 }
 
 export function blockquote(text: string, nested = false) {
-	return `${nested ? '>' : ''}> ${text}`;
+	return `${nested ? ">" : ""}> ${text}`;
 }
 
 export function horizontalRule() {
-	return '---';
+	return "---";
 }
 
 export function emptyLine(jump = false) {
-	return jump ? '\n' : '';
+	return jump ? "\n" : "";
 }
