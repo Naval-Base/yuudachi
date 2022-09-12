@@ -3,6 +3,10 @@ import type { HistoryCommand, HistoryUserContextCommand } from "../../interactio
 import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory, HistoryType } from "../../util/generateHistory.js";
 
+type HistoryCommandArgs =
+	| ArgsParam<typeof HistoryCommand>["cases"]
+	| ArgsParam<typeof HistoryCommand>["reports"]
+	| ArgsParam<typeof HistoryUserContextCommand>;
 export default class extends Command<typeof HistoryCommand | typeof HistoryUserContextCommand> {
 	public constructor() {
 		super(["history", "History"]);
@@ -10,7 +14,7 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 
 	private async handle(
 		interaction: InteractionParam | InteractionParam<CommandMethod.UserContext>,
-		args: ArgsParam<typeof HistoryCommand | typeof HistoryUserContextCommand>,
+		args: HistoryCommandArgs,
 		type: HistoryType,
 		locale: LocaleParam,
 	): Promise<void> {
@@ -26,8 +30,23 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		args: ArgsParam<typeof HistoryCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: args.hide ?? true });
-		await this.handle(interaction, args, args.type ?? HistoryType.Case, locale);
+		await interaction.deferReply({ ephemeral: args.cases?.hide ?? args.reports?.hide ?? true });
+
+		switch (Object.keys(args)[0]) {
+			case "cases": {
+				await this.handle(interaction, args.cases, HistoryType.Case, locale);
+				break;
+			}
+
+			case "reports": {
+				await this.handle(interaction, args.reports, HistoryType.Report, locale);
+				break;
+			}
+
+			default: {
+				break;
+			}
+		}
 	}
 
 	public override async userContext(
