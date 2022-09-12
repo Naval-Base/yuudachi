@@ -269,7 +269,7 @@ export async function generateReportHistory(
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
 
-	const reports = await sql<[RawReport]>`
+	const rawReports = await sql<[RawReport]>`
 		select *
 		from reports
 		where guild_id = ${interaction.guildId}
@@ -280,6 +280,10 @@ export async function generateReportHistory(
 				and status != ${ReportStatus.Rejected}
 		order by created_at desc
 	`;
+
+	const reports = rawReports.filter(
+		(report) => !(report.status === ReportStatus.Spam && report.target_id === target.user.id),
+	);
 
 	const colorIndex = Math.min(
 		reports.filter((report) => report.status === ReportStatus.Approved || report.status === ReportStatus.Spam).length,
