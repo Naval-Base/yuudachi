@@ -102,8 +102,6 @@ export default class implements Event {
 				const error = error_ as Error;
 				logger.error(error, error.message);
 			}
-
-			continue;
 		}
 	}
 }

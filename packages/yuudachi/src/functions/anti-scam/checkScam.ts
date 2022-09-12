@@ -39,7 +39,6 @@ async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null
 
 		if (hit) {
 			listHits.push(urlEnv);
-			continue;
 		}
 	}
 
