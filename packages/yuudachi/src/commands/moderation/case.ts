@@ -1,9 +1,10 @@
-import { Collection, type Guild, type Snowflake } from "discord.js";
+import { Collection, type Snowflake } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
-import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT } from "../../Constants.js";
+import { AUTOCOMPLETE_CHOICE_LIMIT, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT, OP_DELIMITER } from "../../Constants.js";
+import { findCases } from "../../functions/cases/findCases.js";
 import { type RawCase, transformCase } from "../../functions/cases/transformCase.js";
 import { generateCaseEmbed } from "../../functions/logging/generateCaseEmbed.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -13,22 +14,8 @@ import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
 import { ACTION_KEYS } from "../../util/actionKeys.js";
 import { ellipsis, truncateEmbed } from "../../util/embed.js";
-import { findCases } from "../../util/findCases.js";
 import { generateHistory } from "../../util/generateHistory.js";
-
-const OP_DELIMITER = "-" as const;
-
-async function resolveMemberAndUser(guild: Guild, id: Snowflake) {
-	try {
-		const member = await guild.members.fetch(id);
-
-		return { member, user: member.user } as const;
-	} catch {
-		const user = await guild.client.users.fetch(id);
-
-		return { user } as const;
-	}
-}
+import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 
 export default class extends Command<typeof CaseLookupCommand> {
 	public override async autocomplete(
@@ -103,8 +90,10 @@ export default class extends Command<typeof CaseLookupCommand> {
 
 		if (cmd === "history" && id) {
 			const data = await resolveMemberAndUser(interaction.guild, id);
+			const embed = truncateEmbed(await generateHistory(interaction, data, locale));
+
 			await interaction.editReply({
-				embeds: [truncateEmbed(await generateHistory(interaction, data, locale))],
+				embeds: [embed],
 			});
 			return;
 		}

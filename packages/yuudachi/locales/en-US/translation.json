@@ -3,9 +3,11 @@
 		"errors": {
 			"no_mod_log_channel": "No mod log channel has been initialized yet.",
 			"no_anti_raid_archive_channel": "No Anti-Raid-Nuke archive channel has been initialized yet.",
+			"no_report_channel": "No report channel has been initialized yet.",
 			"no_content": "<No message content>"
 		},
-		"moderator": "Moderator"
+		"moderator": "Moderator",
+		"and_more": "and more..."
 	},
 	"command": {
 		"common": {
@@ -40,16 +42,25 @@
 					"max_length_reason": "Maximum length of `1900` for reason exceeded.",
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
 					"no_case": "Cannot find case `#{{case}}`",
+					"no_report": "Cannot find report `#{{report}}`",
 					"no_case_range": "Invalid case range `#{{lower_case}}` to `#{{upper_case}}`",
 					"case_lower_one": "Case ids have to be above `0`",
 					"no_reference_case": "Cannot find reference case `#{{case}}`",
-					"already_processed": "{{- user}} with case {{- case}} has no running restrictions."
+					"already_processed": "{{- user}} with case {{- case}} has no running restrictions.",
+					"no_reference_report": "Cannot find reference report `#{{report}}`"
 				}
 			},
 			"case": {
 				"autocomplete": {
 					"no_reason": "No reason",
 					"show_history": "Show history for user {{- user}}"
+				}
+			},
+			"reports": {
+				"autocomplete": {
+					"no_reason": "No reason",
+					"show_history_target": "Show history for target {{- user}}",
+					"show_history_author": "Show history for author {{- user}}"
 				}
 			},
 			"warn": {
@@ -288,7 +299,8 @@
 				"cancel": "Canceled setting reason."
 			},
 			"reference": {
-				"success": "Successfully set reference for case {{- case}} to {{- ref}}"
+				"case": "Successfully set the **case reference** for case {{- case}} to {{- ref}}",
+				"report": "Successfully set the **report reference** for case {{- case}} to {{- ref}}"
 			},
 			"duration": {
 				"errors": {
@@ -313,6 +325,9 @@
 					"execute_other": "Clear {{count}} messages"
 				},
 				"cancel": "Cancelled clearing messages."
+			},
+			"status": {
+				"success": "Successfully set status of report {{- report}} to `$t(log.report_log.report_status.{{status}})`"
 			}
 		},
 		"utility": {
@@ -350,18 +365,120 @@
 				"reason": "Sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
+			},
+			"report": {
+				"common": {
+					"errors": {
+						"recently_reported": {
+							"message": "This message has already been recently reported, thanks for making our community a better place!",
+							"user": "This user has already been recently reported, thanks for making our community a better place!"
+						},
+						"no_self": "You cannot report yourself.",
+						"invalid_attachment": "Invalid attachment, only images are allowed.",
+						"timed_out": "The report has timed out, please try again."
+					},
+					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
+					"trust_and_safety_sub": "Trust & Safety",
+					"buttons": {
+						"execute": "Create Report",
+						"cancel": "Cancel",
+						"discord_report": "Report to Discord"
+					},
+					"modal": {
+						"label": "The reason for the report",
+						"placeholder": "Please enter a detailed reason for the report"
+					}
+				},
+				"message": {
+					"modal": {
+						"title": "Message report"
+					},
+					"pending": "Are you sure you want to report {{- message_link}} to the server moderators?\n**Reason:** {{- reason}}",
+					"pending_sub": "this message",
+					"cancel": "Message report canceled.",
+					"success": "Successfully reported message, thanks for making our community a better place!"
+				},
+				"user": {
+					"modal": {
+						"title": "User report"
+					},
+					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
+					"cancel": "User report canceled.",
+					"success": "Successfully reported user, thanks for making our community a better place!"
+				}
 			}
 		}
 	},
 	"log": {
 		"history": {
-			"title": "Case History",
-			"user_details": "User details",
-			"user_details_description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})",
-			"member_details": "Member details",
-			"member_details_description": "• Nickname: {{- member_nickname}}\n• Roles: {{- member_roles}}\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
-			"member_details_no_nickname": "No nickname",
-			"summary_truncated": "{{- summary}}\nand more..."
+			"common": {
+				"errors": {
+					"no_history": "`No history found`"
+				},
+				"user_details": {
+					"title": "User details",
+					"description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})"
+				},
+				"member_details": {
+					"title": "Member details",
+					"description": {
+						"nickname": "• Nickname: `{{- nickname}}`",
+						"roles_one": "• Role ({{count}}): {{- roles}}",
+						"roles_other": "• Roles ({{count}}): {{- roles}}",
+						"joined": "• Joined: {{- joined_at}} ({{- joined_at_since}})"
+					}
+				}
+			},
+			"cases": {
+				"title": "Case History",
+				"summary": {
+					"warning_one": "{{count}} warning",
+					"warning_other": "{{count}} warnings",
+					"restriction_one": "{{count}} restriction",
+					"restriction_other": "{{count}} restrictions",
+					"timeout_one": "{{count}} timeout",
+					"timeout_other": "{{count}} timeouts",
+					"kick_one": "{{count}} kick",
+					"kick_other": "{{count}} kicks",
+					"softban_one": "{{count}} softban",
+					"softban_other": "{{count}} softbans",
+					"ban_one": "{{count}} ban",
+					"ban_other": "{{count}} bans",
+					"unban_one": "{{count}} unbans",
+					"unban_other": "{{count}} unbans"
+				},
+				"action_label": {
+					"restriction": "RESTRICT",
+					"warn": "WARN",
+					"kick": "KICK",
+					"softban": "SOFTBAN",
+					"ban": "BAN",
+					"unban": "UNBAN",
+					"timeout": "TIMEOUT",
+					"unknown": "UNKNOWN"
+				}
+			},
+			"reports": {
+				"title": "Report History",
+				"user_role": {
+					"author": "Author",
+					"target": "Target"
+				},
+				"summary": {
+					"target": "{{count}}x reported",
+					"author_one": "{{count}} report authored",
+					"author_other": "{{count}} reports authored",
+					"spam_one": "{{count}} spam report",
+					"spam_other": "{{count}} spam reports"
+				},
+				"status_label": {
+					"pending": "PENDING",
+					"approved": "APPROVED",
+					"rejected": "REJECTED",
+					"spam": "SPAM",
+					"unknown": "UNKNOWN"
+				}
+			}
 		},
 		"mod_log": {
 			"case_log": {
@@ -371,7 +488,8 @@
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
 				"reason_fallback": "\n**Reason:** Use `/reason {{case_id}} <...reason>` to set a reason for this case",
-				"reference": "\n**Reference:** {{- ref}}",
+				"case_reference": "\n**Case Reference:** {{- ref}}",
+				"report_reference": "\n**Report Reference:** {{- report_ref}}",
 				"footer": "Case {{case_id}}"
 			},
 			"anti_raid_nuke": {
@@ -460,6 +578,25 @@
 			"pending": "The report for the Anti-Raid-Nuke is being processed...",
 			"title": "Anti-Raid-Nuke launched",
 			"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
+		},
+		"report_log": {
+			"title": "Report #{{report_id}}",
+			"reason": "**Reason:**\n{{- reason}}",
+			"target": "**Reported User:** {{- target}}",
+			"message": "**Message:** {{- message_link}} ({{- channel}})",
+			"message_sub": "Beam me up, Yuu",
+			"message_fallback": "`Message deleted`",
+			"case_reference": "**Case Reference:** {{- ref}}",
+			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
+			"moderator": "**Moderator:** {{- mod}}",
+			"updated_at": "**Updated at:** {{- updated_at}}",
+			"footer": "Hint: You can resolve a report by referencing it in a moderation action, setting it with /reference to an already existing case, or use /reports status to approve or reject it directly.",
+			"report_status": {
+				"0": "Pending",
+				"1": "Approved",
+				"2": "Rejected",
+				"3": "Spam"
+			}
 		}
 	},
 	"formatters": {
@@ -565,6 +702,26 @@
 			"table": {
 				"success_titles": ["Case id", "Member id", "Username"],
 				"fail_titles": ["Member id", "Username", "Error"]
+			}
+		},
+		"report_log": {
+			"author": "Reported by {{- author}}",
+			"reason": "**Reason:**\n{{- reason}}",
+			"target": "**Target:** {{- target}}",
+			"message": "**Message:** {{- message_link}} ({{- channel}})",
+			"message_sub": "Beam me up, Yuu",
+			"case_reference": "**Case Reference:** {{- ref}}",
+			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
+			"footer": "Report {{report_id}} | $t(log.report_log.report_type.{{type}})",
+			"report_type": {
+				"0": "Message",
+				"1": "User"
+			},
+			"report_status": {
+				"0": "Pending",
+				"1": "Approved",
+				"2": "Rejected",
+				"3": "False"
 			}
 		}
 	}

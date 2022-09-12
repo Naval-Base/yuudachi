@@ -18,6 +18,7 @@ import {
 	WarnCommand,
 	TimeoutCommand,
 	ClearCommand,
+	ReportUtilsCommand,
 
 	// Utility
 	PingCommand,
@@ -25,12 +26,15 @@ import {
 	RefreshScamlistCommand,
 	SponsorCommand,
 	RepostCommand,
+	ReportCommand,
 
 	// Context Menu
 	HistoryUserContextCommand,
 	SponsorUserContextCommand,
 	RepostMessageContextCommand,
 	ClearContextCommand,
+	ReportMessageContextCommand,
+	ReportUserContextCommand,
 } from "./interactions/index.js";
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
@@ -56,6 +60,7 @@ try {
 			LockdownCommand,
 			TimeoutCommand,
 			ClearCommand,
+			ReportUtilsCommand,
 
 			// Utility
 			PingCommand,
@@ -63,12 +68,15 @@ try {
 			RefreshScamlistCommand,
 			SponsorCommand,
 			RepostCommand,
+			ReportCommand,
 
 			// Context Menu
 			HistoryUserContextCommand,
 			SponsorUserContextCommand,
 			RepostMessageContextCommand,
 			ClearContextCommand,
+			ReportMessageContextCommand,
+			ReportUserContextCommand,
 		],
 	});
 	console.log("Successfully reloaded interaction (/) commands.");

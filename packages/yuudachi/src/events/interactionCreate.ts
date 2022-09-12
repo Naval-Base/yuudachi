@@ -112,13 +112,19 @@ export default class implements Event {
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 								"Command interaction has not been deferred before throwing",
 							);
-							await interaction.deferReply();
+							await interaction.deferReply({ ephemeral: true });
 						}
 
 						await interaction.editReply({ content: error.message, components: [] });
 					} catch (error__) {
-						const err = error__ as Error;
-						logger.error(err, error.message);
+						const subError = error__ as Error;
+						logger.error(subError, subError.message);
+
+						if (interaction.isAutocomplete()) {
+							return;
+						}
+
+						await interaction.followUp({ content: error.message, components: [], ephemeral: true });
 					}
 				}
 			}

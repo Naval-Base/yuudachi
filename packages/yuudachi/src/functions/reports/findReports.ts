@@ -3,19 +3,19 @@ import relativeTime from "dayjs/plugin/relativeTime.js";
 import type { Snowflake } from "discord.js";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
-import { SNOWFLAKE_MIN_LENGTH } from "../Constants.js";
-import type { RawCase } from "../functions/cases/transformCase.js";
-import { kSQL } from "../tokens.js";
+import { SNOWFLAKE_MIN_LENGTH } from "../../Constants.js";
+import { kSQL } from "../../tokens.js";
+import type { RawReport } from "./transformReport.js";
 
 dayjs.extend(relativeTime);
 
-export async function findCases(phrase: string, guildId: Snowflake) {
-	const sql = container.resolve<Sql<{}>>(kSQL);
+export async function findReports(phrase: string, guildId: Snowflake) {
+	const sql = container.resolve<Sql<any>>(kSQL);
 
 	if (!phrase.length) {
-		return sql<RawCase[]>`
+		return sql<RawReport[]>`
 			select *
-			from cases
+			from reports
 			where guild_id = ${guildId}
 			order by created_at desc
 			limit 25
@@ -23,20 +23,22 @@ export async function findCases(phrase: string, guildId: Snowflake) {
 	}
 
 	if (!Number.isNaN(Number.parseInt(phrase, 10)) && phrase.length < SNOWFLAKE_MIN_LENGTH) {
-		return sql<RawCase[]>`
+		return sql<RawReport[]>`
 			select *
-			from cases
+			from reports
 			where guild_id = ${guildId}
-			and case_id = ${phrase}
+			and report_id = ${phrase}
 		`;
 	}
 
-	return sql<RawCase[]>`
+	return sql<RawReport[]>`
 		select *
-		from cases
+		from reports
 		where guild_id = ${guildId}
 			and (
-				target_id = ${phrase}
+				author_id = ${phrase}
+				or author_tag ilike ${`%${phrase}%`}
+				or target_id = ${phrase}
 				or target_tag ilike ${`%${phrase}%`}
 				or reason ilike ${`%${phrase}%`}
 			)
