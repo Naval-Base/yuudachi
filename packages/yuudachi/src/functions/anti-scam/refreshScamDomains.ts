@@ -31,7 +31,7 @@ export function checkResponse(response: Dispatcher.ResponseData) {
 
 export const scamDomainRequestHeaders = {
 	SCAM_DOMAIN_URL: {
-		"X-Identity": "Naval-Base/yuudachi",
+		"X-Identity": process.env.SCAM_DOMAIN_IDENTITY!,
 	},
 	SCAM_DOMAIN_DISCORD_URL: {},
 } as const;
@@ -49,6 +49,11 @@ export async function refreshScamDomains(redis?: Redis | undefined) {
 
 		if (!url) {
 			logger.warn(`Missing env var: ${urlEnvironment}`);
+			continue;
+		}
+
+		if (urlEnvironment === "SCAM_DOMAIN_DISCORD_URL" && !process.env.SCAM_DOMAIN_IDENTITY) {
+			logger.warn(`Missing env var 'SCAM_DOMAIN_IDENTITY' to fetch ${urlEnvironment}`);
 			continue;
 		}
 
@@ -81,7 +86,7 @@ export async function refreshScamDomains(redis?: Redis | undefined) {
 				const lastRefreshTimestamp = Number.parseInt(lastRefresh, 10);
 
 				logger.info({
-					msg: "refreshd scam domains",
+					msg: "refreshed scam domains",
 					envVar: urlEnvironment,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,
