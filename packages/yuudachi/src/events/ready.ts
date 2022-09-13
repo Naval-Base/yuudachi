@@ -58,6 +58,8 @@ export default class implements Event {
 
 			logger.info({ event: { name: this.name, event: this.event } }, "Registering jobs");
 			await registerJobs();
+
+			continue;
 		}
 	}
 }
