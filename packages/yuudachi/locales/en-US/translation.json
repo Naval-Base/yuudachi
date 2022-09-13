@@ -50,7 +50,7 @@
 					"no_reference_report": "Cannot find reference report `#{{report}}`"
 				},
 				"reasons": [
-					"Coppa",
+					"COPPA",
 					"DM harassment",
 					"Insults",
 					"NSFW",
