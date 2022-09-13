@@ -42,7 +42,7 @@ export class WebSocketConnection {
 
 	private onOpen() {
 		logger.info({
-			msg: `Websoket connected to ${this.url} as ${this.identity}`,
+			msg: `Websocket connected to ${this.url} as ${this.identity}`,
 			url: this.url,
 			identity: this.identity,
 		});
