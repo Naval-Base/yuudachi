@@ -51,6 +51,8 @@ export const SNOWFLAKE_MIN_LENGTH = 17;
 export const AUTOCOMPLETE_CHOICE_LIMIT = 25;
 export const AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT = 100;
 
+export const AUTOCOMPLETE_REASON_FOCUSED_FIELD_NAME = "reason";
+
 export const TRUST_AND_SAFETY_URL_BASE = "https://support.discord.com/hc/en-us/requests/new";
 
 export const DiscordLocales: { [key: string]: string } = {

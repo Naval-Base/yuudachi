@@ -15,6 +15,7 @@ export const ReasonCommand = {
 			description: "The reason",
 			type: ApplicationCommandOptionType.String,
 			required: true,
+			autocomplete: true,
 		},
 		{
 			name: "last_case",

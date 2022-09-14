@@ -48,7 +48,23 @@
 					"no_reference_case": "Cannot find reference case `#{{case}}`",
 					"already_processed": "{{- user}} with case {{- case}} has no running restrictions.",
 					"no_reference_report": "Cannot find reference report `#{{report}}`"
-				}
+				},
+				"reasons": [
+					"COPPA",
+					"DM harassment",
+					"Insults",
+					"NSFW",
+					"Off-topic in support",
+					"Possible scam",
+					"Rude on support",
+					"Selfbot",
+					"Shitpost",
+					"Slurs",
+					"Spam",
+					"Suspicious or spam account",
+					"TOS violation",
+					"Troll"
+				]
 			},
 			"case": {
 				"autocomplete": {
@@ -700,8 +716,16 @@
 				}
 			},
 			"table": {
-				"success_titles": ["Case id", "Member id", "Username"],
-				"fail_titles": ["Member id", "Username", "Error"]
+				"success_titles": [
+					"Case id",
+					"Member id",
+					"Username"
+				],
+				"fail_titles": [
+					"Member id",
+					"Username",
+					"Error"
+				]
 			}
 		},
 		"report_log": {

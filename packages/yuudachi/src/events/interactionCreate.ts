@@ -2,6 +2,7 @@ import { ApplicationCommandType, Client, Events } from "discord.js";
 import { inject, injectable } from "tsyringe";
 import type { Command } from "../Command.js";
 import type { Event } from "../Event.js";
+import { checkReasonAutocomplete, handleAutocompleteReasons } from "../functions/autocomplete/reasons.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 import type { CommandPayload } from "../interactions/ArgumentsOf.js";
 import { transformInteraction } from "../interactions/InteractionOptions.js";
@@ -41,6 +42,8 @@ export default class implements Event {
 					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
 					const forceLocale = await getGuildSetting<boolean>(interaction.guildId, SettingsKeys.ForceLocale);
 
+					const effectiveLocale = forceLocale ? locale : interaction.locale;
+
 					switch (interaction.commandType) {
 						case ApplicationCommandType.ChatInput: {
 							const isAutocomplete = interaction.isAutocomplete();
@@ -51,18 +54,23 @@ export default class implements Event {
 							);
 
 							if (isAutocomplete) {
+								if (checkReasonAutocomplete(interaction)) {
+									logger.info(
+										{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+										`Executing reason autocomplete for command ${interaction.commandName}`,
+									);
+									await handleAutocompleteReasons(interaction, effectiveLocale);
+									break;
+								}
+
 								await command.autocomplete(
 									interaction,
 									transformInteraction(interaction.options.data),
-									forceLocale ? locale : interaction.locale,
+									effectiveLocale,
 								);
 								break;
 							} else {
-								await command.chatInput(
-									interaction,
-									transformInteraction(interaction.options.data),
-									forceLocale ? locale : interaction.locale,
-								);
+								await command.chatInput(interaction, transformInteraction(interaction.options.data), effectiveLocale);
 								break;
 							}
 						}
@@ -76,7 +84,7 @@ export default class implements Event {
 							await command.messageContext(
 								interaction,
 								transformInteraction(interaction.options.data),
-								forceLocale ? locale : interaction.locale,
+								effectiveLocale,
 							);
 							break;
 						}
@@ -87,11 +95,7 @@ export default class implements Event {
 								`Executing user context command ${interaction.commandName}`,
 							);
 
-							await command.userContext(
-								interaction,
-								transformInteraction(interaction.options.data),
-								forceLocale ? locale : interaction.locale,
-							);
+							await command.userContext(interaction, transformInteraction(interaction.options.data), effectiveLocale);
 							break;
 						}
 
