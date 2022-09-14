@@ -48,7 +48,21 @@
 					"no_reference_case": "",
 					"already_processed": "",
 					"no_reference_report": ""
-				}
+				},
+				"reasons": [
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					""
+				]
 			},
 			"case": {
 				"autocomplete": {
@@ -515,7 +529,7 @@
 		},
 		"member_log": {
 			"description": "",
-			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"joined_at": "",
 			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
 				"joined": "User joined",
