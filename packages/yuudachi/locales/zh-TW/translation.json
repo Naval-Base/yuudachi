@@ -48,7 +48,21 @@
 					"no_reference_case": "",
 					"already_processed": "",
 					"no_reference_report": ""
-				}
+				},
+				"reasons": [
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					""
+				]
 			},
 			"case": {
 				"autocomplete": {
