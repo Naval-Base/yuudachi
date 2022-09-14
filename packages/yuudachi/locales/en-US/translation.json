@@ -433,7 +433,7 @@
 				},
 				"user_details": {
 					"title": "User details",
-					"description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})"
+					"description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}}) `{{created_at_timestamp}}`"
 				},
 				"member_details": {
 					"title": "Member details",
@@ -441,7 +441,7 @@
 						"nickname": "• Nickname: `{{- nickname}}`",
 						"roles_one": "• Role ({{count}}): {{- roles}}",
 						"roles_other": "• Roles ({{count}}): {{- roles}}",
-						"joined": "• Joined: {{- joined_at}} ({{- joined_at_since}})"
+						"joined": "• Joined: {{- joined_at}} ({{- joined_at_since}}) `{{joined_at_timestamp}}`"
 					}
 				}
 			},
@@ -530,8 +530,8 @@
 			}
 		},
 		"member_log": {
-			"description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}})",
-			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"description": "• Username: {{- user_mention}} - `{{- user_tag}}` ({{user_id}})\n• Created: {{- created_at}} ({{- created_at_since}}) `{{created_at_timestamp}}`",
+			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}}) `{{joined_at_timestamp}}`",
 			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
 				"joined": "User joined",

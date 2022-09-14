@@ -40,6 +40,7 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 		user_id: member.user.id,
 		created_at: creationFormatted,
 		created_at_since: sinceCreationFormatted,
+		created_at_timestamp: member.user.createdTimestamp,
 		lng: locale,
 	});
 
@@ -50,6 +51,7 @@ export function generateMemberLog(member: GuildMember, locale: string, join = tr
 		description += i18next.t("log.member_log.joined_at", {
 			joined_at: joinFormatted,
 			joined_at_since: sinceJoinFormatted,
+			joined_at_timestamp: member.joinedTimestamp,
 			lng: locale,
 		});
 	}
