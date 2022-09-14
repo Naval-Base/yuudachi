@@ -14,7 +14,7 @@ export type PatchReport = Pick<
 export async function updateReport(report: PatchReport, moderator?: User) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const queries: Partial<Record<keyof RawReport, unknown>> = {
+	const updates: Partial<Record<keyof RawReport, unknown>> = {
 		status: report.status,
 		attachment_url: report.attachmentUrl,
 		reason: report.reason,
@@ -25,10 +25,10 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 		mod_tag: moderator?.tag,
 	};
 
-	const updates = removeUndefinedKeys(queries);
+	const queries = removeUndefinedKeys(updates);
 
 	const [updatedCase] = await sql<[RawReport]>`
-		update reports set ${sql(updates as Record<string, unknown>, ...Object.keys(updates))}
+		update reports set ${sql(queries as Record<string, unknown>, ...Object.keys(queries))}
 		where guild_id = ${report.guildId}
 			and report_id = ${report.reportId!}
 		returning *

@@ -13,7 +13,7 @@ export type PatchCase = Pick<
 export async function updateCase(case_: PatchCase) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	const queries: Partial<Record<keyof RawCase, unknown>> = {
+	const updates: Partial<Record<keyof RawCase, unknown>> = {
 		action_expiration: case_.actionExpiration,
 		reason: case_.reason,
 		context_message_id: case_.contextMessageId,
@@ -21,10 +21,10 @@ export async function updateCase(case_: PatchCase) {
 		report_ref_id: case_.reportRefId,
 	};
 
-	const updates = removeUndefinedKeys(queries);
+	const queries = removeUndefinedKeys(updates);
 
 	const [updatedCase] = await sql<[RawCase]>`
-		update cases set ${sql(updates as Record<string, unknown>, ...Object.keys(updates))}
+		update cases set ${sql(queries as Record<string, unknown>, ...Object.keys(queries))}
 		where guild_id = ${case_.guildId}
 			and case_id = ${case_.caseId!}
 		returning *
