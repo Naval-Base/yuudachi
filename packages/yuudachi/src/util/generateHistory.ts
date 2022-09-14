@@ -350,6 +350,7 @@ export function generateUserInfo(target: { member?: GuildMember | undefined; use
 				user_id: target.user.id,
 				created_at: creationFormatted,
 				created_at_since: sinceCreationFormatted,
+				created_at_timestamp: target.user.createdTimestamp,
 				lng: locale,
 			}),
 		},
@@ -385,6 +386,7 @@ export function generateUserInfo(target: { member?: GuildMember | undefined; use
 			i18next.t("log.history.common.member_details.description.joined", {
 				joined_at: joinFormatted,
 				joined_at_since: sinceJoinFormatted,
+				joined_at_timestamp: target.member.joinedTimestamp,
 				lng: locale,
 			}),
 		);
