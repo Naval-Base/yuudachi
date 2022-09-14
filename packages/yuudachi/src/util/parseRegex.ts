@@ -10,6 +10,7 @@ export function parseRegex(input?: string | null | undefined, insensitive = true
 	}
 
 	try {
+		// eslint-disable-next-line prefer-named-capture-group
 		const regex = /^\/(.+)\/[gimsuy]?$/;
 		const options = insensitive ? "i" : "";
 

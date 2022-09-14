@@ -59,11 +59,7 @@ export async function registerJobs() {
 									const error = error_ as Error;
 									logger.error(error, error.message);
 								}
-
-								continue;
 							}
-
-							continue;
 						}
 
 						break;
@@ -83,11 +79,7 @@ export async function registerJobs() {
 									const error = error_ as Error;
 									logger.error(error, error.message);
 								}
-
-								continue;
 							}
-
-							continue;
 						}
 
 						break;

@@ -1775,10 +1775,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.7.16":
-  version: 18.7.16
-  resolution: "@types/node@npm:18.7.16"
-  checksum: 01a3d35c764a3f0e7370b56e1ad4203731131883c65784e020009014171b3f53c4649cde6c7aa4f1026b907ee87ef6ae6ece2bc518151dc7b81100fe8b1db3ad
+"@types/node@npm:^18.7.18":
+  version: 18.7.18
+  resolution: "@types/node@npm:18.7.18"
+  checksum: 8aec61f0f96e2a69ce51f1f40f949ca578bbb4fe05d7c0b8ce3aeeb848e90f755837f17f6ac132ca404d974fe9b2974150ad3b4984fc9dc7c3ceddb10bae0167
   languageName: node
   linkType: hard
 
@@ -2454,6 +2454,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vitest/coverage-c8@npm:^0.23.2":
+  version: 0.23.2
+  resolution: "@vitest/coverage-c8@npm:0.23.2"
+  dependencies:
+    c8: ^7.12.0
+    vitest: 0.23.2
+  checksum: e02defdabec610402eefa280de447f411e688d467b2bc5748e3a80153ec23f19749069fc2f338e8341841004c101e0c488f577bf710b60811aec62fd72a35e9a
+  languageName: node
+  linkType: hard
+
 "@xobotyi/scrollbar-width@npm:^1.9.5":
   version: 1.9.5
   resolution: "@xobotyi/scrollbar-width@npm:1.9.5"
@@ -2466,12 +2476,13 @@ __metadata:
   resolution: "@yuudachi/report@workspace:packages/report"
   dependencies:
     "@testing-library/react": ^13.4.0
-    "@types/node": ^18.7.16
+    "@types/node": ^18.7.18
     "@types/react-dom": ^18.0.6
     "@unocss/cli": ^0.45.21
     "@unocss/reset": ^0.45.21
     "@vercel/node": ^2.5.14
     "@vitejs/plugin-react": ^2.1.0
+    "@vitest/coverage-c8": ^0.23.2
     ansi-to-html: ^0.7.2
     c8: ^7.12.0
     concurrently: ^7.4.0
@@ -2510,12 +2521,13 @@ __metadata:
   resolution: "@yuudachi/website@workspace:packages/website"
   dependencies:
     "@testing-library/react": ^13.4.0
-    "@types/node": ^18.7.16
+    "@types/node": ^18.7.18
     "@types/react-dom": ^18.0.6
     "@unocss/cli": ^0.45.21
     "@unocss/reset": ^0.45.21
     "@vercel/node": ^2.5.14
     "@vitejs/plugin-react": ^2.1.0
+    "@vitest/coverage-c8": ^0.23.2
     ariakit: ^2.0.0-next.41
     c8: ^7.12.0
     cmdk: ^0.1.20
@@ -2546,7 +2558,7 @@ __metadata:
     is-ci: ^3.0.1
     lint-staged: ^13.0.3
     typescript: ^4.8.3
-    vercel: ^28.2.4
+    vercel: ^28.2.5
   languageName: unknown
   linkType: soft
 
@@ -3159,9 +3171,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^1.90.1":
-  version: 1.90.1
-  resolution: "bullmq@npm:1.90.1"
+"bullmq@npm:^1.90.2":
+  version: 1.90.2
+  resolution: "bullmq@npm:1.90.2"
   dependencies:
     cron-parser: ^4.6.0
     get-port: 6.1.2
@@ -3171,8 +3183,8 @@ __metadata:
     msgpackr: ^1.6.2
     semver: ^7.3.7
     tslib: ^2.0.0
-    uuid: ^8.3.2
-  checksum: 14e249db622bf50d918661e87bb5e6e4133becabaa3097e350b6cb5abebe81155613c43b60246036d12c020e9b7857a0c5724d64732631908c18a65d68cbd3b6
+    uuid: ^9.0.0
+  checksum: 959d6e7a7555948a3f4528df0595bdb04d7af0311e29cec558e42650ce696c3a57eb6e02a14f608c27e330c4ab03d470305f0764e02ac61a1a3167a34997553a
   languageName: node
   linkType: hard
 
@@ -12039,12 +12051,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^8.3.2":
-  version: 8.3.2
-  resolution: "uuid@npm:8.3.2"
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
   bin:
     uuid: dist/bin/uuid
-  checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 
@@ -12083,9 +12095,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vercel@npm:^28.2.4":
-  version: 28.2.4
-  resolution: "vercel@npm:28.2.4"
+"vercel@npm:^28.2.5":
+  version: 28.2.5
+  resolution: "vercel@npm:28.2.5"
   dependencies:
     "@vercel/build-utils": 5.4.2
     "@vercel/go": 2.2.5
@@ -12101,7 +12113,7 @@ __metadata:
   bin:
     vc: dist/index.js
     vercel: dist/index.js
-  checksum: fd0c5e90a0ba6c65c42d5b68225e8b84796754dca2caef80e62f6f674ae75382e5995639045b240a2ccce8f7a285485466b1315086904d086730de41a238ec21
+  checksum: 51daef57efac6c358d1378c535a40d77e310f152d519199c92c9f165512b8ba351fce908637c38a44a332e4432c77e6714364cbe04881866e2b29929e5d25f56
   languageName: node
   linkType: hard
 
@@ -12180,7 +12192,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^0.23.2":
+"vitest@npm:0.23.2, vitest@npm:^0.23.2":
   version: 0.23.2
   resolution: "vitest@npm:0.23.2"
   dependencies:
@@ -12494,10 +12506,10 @@ __metadata:
     "@types/aero__sanitizer": ^1.2.0
     "@types/common-tags": ^1.8.1
     "@types/diff": ^5.0.2
-    "@types/node": ^18.7.16
+    "@types/node": ^18.7.18
     "@types/ws": ^8.5.3
     bufferutil: ^4.0.6
-    bullmq: ^1.90.1
+    bullmq: ^1.90.2
     common-tags: ^1.8.2
     cpy-cli: ^4.2.0
     dayjs: ^1.11.5

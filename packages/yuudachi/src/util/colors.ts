@@ -34,10 +34,10 @@ export function colorBasedOnDeterminant<T>(
 
 /**
  * Color a string based on timestamp difference.
- * red: <2 weeks
- * yellow: <4 weeks
- * cyan: <1 months
- * green >1 year
+ * red: \<2 weeks
+ * yellow: \<4 weeks
+ * cyan: \<1 months
+ * green \>1 year
  *
  * @param diff - The  difference to determine color by
  * @param colorString - The string to color

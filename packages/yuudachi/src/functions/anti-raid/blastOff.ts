@@ -49,7 +49,7 @@ export async function blastOff(
 					confirmedHits.push(member);
 					return case_;
 				})
-				// eslint-disable-next-line promise/prefer-await-to-then
+				// eslint-disable-next-line promise/prefer-await-to-then, promise/prefer-await-to-callbacks
 				.catch((error: Error) => void rejections.push({ member, reason: error.message }))
 				// eslint-disable-next-line promise/prefer-await-to-then
 				.finally(() => void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15)),

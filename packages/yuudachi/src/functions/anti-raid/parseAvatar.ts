@@ -30,6 +30,7 @@ export async function parseAvatar(input?: string | null | undefined) {
 
 	try {
 		new URL(input);
+		// eslint-disable-next-line prefer-named-capture-group
 		return input.replace(/https:\/\/cdn.discordapp.com.*\/([\d,a-f]{32})/, "$1");
 	} catch {
 		return null;
