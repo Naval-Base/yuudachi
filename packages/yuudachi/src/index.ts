@@ -116,11 +116,15 @@ try {
 	await client.login();
 
 	const wsURL = process.env.SCAM_DOMAIN_WS;
+	const identity = process.env.SCAM_DOMAIN_IDENTITY;
 
-	if (wsURL) {
+	if (wsURL && identity) {
 		new WebSocketConnection(process.env.SCAM_DOMAIN_WS!, scamDomainRequestHeaders.SCAM_DOMAIN_URL, redis);
 	} else {
-		logger.info(`Missing env var 'SCAM_DOMAIN_WS`);
+		logger.warn(`Missing env var 'SCAM_DOMAIN_WS or 'SCAM_DOMAIN_IDENTITY' to instantiate a WebSocketConnection`, {
+			wsURL,
+			identity,
+		});
 	}
 } catch (error_) {
 	const error = error_ as Error;

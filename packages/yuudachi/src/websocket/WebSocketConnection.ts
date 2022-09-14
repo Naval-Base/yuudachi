@@ -14,6 +14,8 @@ export class WebSocketConnection {
 
 	private readonly url: string;
 
+	private readonly identity: string;
+
 	private readonly redis: Redis;
 
 	private readonly headers: { [key: string]: string } | undefined;
@@ -22,6 +24,7 @@ export class WebSocketConnection {
 
 	public constructor(url: string, headers: { [key: string]: string } | undefined, redis: Redis) {
 		this.url = url;
+		this.identity = process.env.SCAM_DOMAIN_IDENTITY!;
 		this.redis = redis;
 		this.headers = headers;
 		this.connection = new WebSocket(url, {
@@ -39,8 +42,9 @@ export class WebSocketConnection {
 
 	private onOpen() {
 		logger.info({
-			msg: `Websoket connected to ${this.url}`,
+			msg: `WebSocket connected to ${this.url} as ${this.identity}`,
 			url: this.url,
+			identity: this.identity,
 		});
 		this.tries = 0;
 	}
