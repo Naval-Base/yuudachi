@@ -3,9 +3,11 @@
 		"errors": {
 			"no_mod_log_channel": "Es wurde noch kein Mod-Log-Kanal initialisiert.",
 			"no_anti_raid_archive_channel": "",
+			"no_report_channel": "",
 			"no_content": ""
 		},
-		"moderator": "Moderator"
+		"moderator": "Moderator",
+		"and_more": ""
 	},
 	"command": {
 		"common": {
@@ -40,16 +42,25 @@
 					"max_length_reason": "Maximale Länge von `1900` für Grund überschritten.",
 					"not_a_text_channel": "{{- channel}} ist kein Textkanal.",
 					"no_case": "Kann den Fall `#{{case}}` nicht finden",
+					"no_report": "",
 					"no_case_range": "",
 					"case_lower_one": "Case ids müssen über `0` liegen",
 					"no_reference_case": "Kann den Referenzfall `#{{case}}` nicht finden",
-					"already_processed": ""
+					"already_processed": "",
+					"no_reference_report": ""
 				}
 			},
 			"case": {
 				"autocomplete": {
 					"no_reason": "Kein Grund",
 					"show_history": "Historie für Benutzer {{- user}} anzeigen"
+				}
+			},
+			"reports": {
+				"autocomplete": {
+					"no_reason": "",
+					"show_history_target": "",
+					"show_history_author": ""
 				}
 			},
 			"warn": {
@@ -288,7 +299,8 @@
 				"cancel": ""
 			},
 			"reference": {
-				"success": "Erfolgreich Referenz für Fall {{- case}} auf {{- ref}} gesetzt"
+				"case": "",
+				"report": ""
 			},
 			"duration": {
 				"errors": {
@@ -313,6 +325,9 @@
 					"execute_other": ""
 				},
 				"cancel": ""
+			},
+			"status": {
+				"success": ""
 			}
 		},
 		"utility": {
@@ -350,18 +365,120 @@
 				"reason": "",
 				"cancel": "Anwendung der Sponsorrolle auf {{- user}} abgebrochen",
 				"success": "Sponsorrolle erfolgreich auf {{- user}} angewendet"
+			},
+			"report": {
+				"common": {
+					"errors": {
+						"recently_reported": {
+							"message": "",
+							"user": ""
+						},
+						"no_self": "",
+						"invalid_attachment": "",
+						"timed_out": ""
+					},
+					"warnings": "",
+					"trust_and_safety_sub": "",
+					"buttons": {
+						"execute": "",
+						"cancel": "",
+						"discord_report": ""
+					},
+					"modal": {
+						"label": "",
+						"placeholder": ""
+					}
+				},
+				"message": {
+					"modal": {
+						"title": ""
+					},
+					"pending": "",
+					"pending_sub": "",
+					"cancel": "",
+					"success": ""
+				},
+				"user": {
+					"modal": {
+						"title": ""
+					},
+					"pending": "",
+					"cancel": "",
+					"success": ""
+				}
 			}
 		}
 	},
 	"log": {
 		"history": {
-			"title": "Case History",
-			"user_details": "User details",
-			"user_details_description": "",
-			"member_details": "Member details",
-			"member_details_description": "",
-			"member_details_no_nickname": "No nickname",
-			"summary_truncated": "{{- summary}}\nand more..."
+			"common": {
+				"errors": {
+					"no_history": ""
+				},
+				"user_details": {
+					"title": "",
+					"description": ""
+				},
+				"member_details": {
+					"title": "",
+					"description": {
+						"nickname": "",
+						"roles_one": "",
+						"roles_other": "",
+						"joined": ""
+					}
+				}
+			},
+			"cases": {
+				"title": "",
+				"summary": {
+					"warning_one": "",
+					"warning_other": "",
+					"restriction_one": "",
+					"restriction_other": "",
+					"timeout_one": "",
+					"timeout_other": "",
+					"kick_one": "",
+					"kick_other": "",
+					"softban_one": "",
+					"softban_other": "",
+					"ban_one": "",
+					"ban_other": "",
+					"unban_one": "",
+					"unban_other": ""
+				},
+				"action_label": {
+					"restriction": "",
+					"warn": "",
+					"kick": "",
+					"softban": "",
+					"ban": "",
+					"unban": "",
+					"timeout": "",
+					"unknown": ""
+				}
+			},
+			"reports": {
+				"title": "",
+				"user_role": {
+					"author": "",
+					"target": ""
+				},
+				"summary": {
+					"target": "",
+					"author_one": "",
+					"author_other": "",
+					"spam_one": "",
+					"spam_other": ""
+				},
+				"status_label": {
+					"pending": "",
+					"approved": "",
+					"rejected": "",
+					"spam": "",
+					"unknown": ""
+				}
+			}
 		},
 		"mod_log": {
 			"case_log": {
@@ -371,7 +488,8 @@
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
 				"reason_fallback": "",
-				"reference": "\n**Reference:** {{- ref}}",
+				"case_reference": "",
+				"report_reference": "",
 				"footer": ""
 			},
 			"anti_raid_nuke": {
@@ -460,6 +578,25 @@
 			"pending": "",
 			"title": "",
 			"description": ""
+		},
+		"report_log": {
+			"title": "",
+			"reason": "",
+			"target": "",
+			"message": "",
+			"message_sub": "",
+			"message_fallback": "",
+			"case_reference": "",
+			"status": "",
+			"moderator": "",
+			"updated_at": "",
+			"footer": "",
+			"report_status": {
+				"0": "",
+				"1": "",
+				"2": "",
+				"3": ""
+			}
 		}
 	},
 	"formatters": {
@@ -573,6 +710,26 @@
 					"",
 					""
 				]
+			}
+		},
+		"report_log": {
+			"author": "",
+			"reason": "",
+			"target": "",
+			"message": "",
+			"message_sub": "",
+			"case_reference": "",
+			"status": "",
+			"footer": "",
+			"report_type": {
+				"0": "",
+				"1": ""
+			},
+			"report_status": {
+				"0": "",
+				"1": "",
+				"2": "",
+				"3": ""
 			}
 		}
 	}
