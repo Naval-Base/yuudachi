@@ -30,6 +30,9 @@ export type ReportLabels = {
 	user_report: string;
 };
 
+export const REPORT_TYPE_KEYS = ["user_report", "message_report"];
+export const REPORT_STATUS_KEYS = ["approved", "pending", "rejected", "spam"];
+
 export async function getGuildSetting<T = string>(guildId: Snowflake, prop: SettingsKeys, table = "guild_settings") {
 	const sql = container.resolve<Sql<{}>>(kSQL);
 

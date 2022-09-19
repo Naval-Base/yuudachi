@@ -13,7 +13,7 @@ import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
 import { generateReportEmbed } from "./generateReportEmbed.js";
 
-function resolveStatusLabel(labels: ReportLabels, report: Report) {
+export function resolveStatusLabel(labels: ReportLabels, report: Report) {
 	switch (report.status) {
 		case ReportStatus.Approved:
 			return labels.approved;
@@ -23,6 +23,21 @@ function resolveStatusLabel(labels: ReportLabels, report: Report) {
 			return labels.rejected;
 		case ReportStatus.Spam:
 			return labels.spam;
+	}
+}
+
+export function resolveLabelToStatus(labels: ReportLabels, label: string) {
+	switch (label) {
+		case labels.pending:
+			return ReportStatus.Pending;
+		case labels.approved:
+			return ReportStatus.Approved;
+		case labels.rejected:
+			return ReportStatus.Rejected;
+		case labels.spam:
+			return ReportStatus.Spam;
+		default:
+			return ReportStatus.Pending;
 	}
 }
 
