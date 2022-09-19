@@ -98,7 +98,7 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 
 	if ([statusLabel, typeLabel].some((required) => !reportPost.appliedTags.includes(required))) {
 		// @ts-expect-error upstream does not allow ids, but sends them as if they were ids
-		await reportPost.setAppliedTags([statusLabel, typeLabel]);
+		await reportPost.setAppliedTags([typeLabel, statusLabel]);
 	}
 
 	return reportPost;
