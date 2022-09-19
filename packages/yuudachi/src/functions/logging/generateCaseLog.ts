@@ -1,4 +1,4 @@
-import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink } from "discord.js";
+import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink, channelLink } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
@@ -95,10 +95,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 
 		if (reportsChannelId && Reflect.has(reference ?? {}, "log_message_id")) {
 			msg += i18next.t("log.mod_log.case_log.report_reference", {
-				report_ref: hyperlink(
-					`#${case_.reportRefId}`,
-					messageLink(reportsChannelId, reference!.log_message_id!, case_.guildId),
-				),
+				report_ref: hyperlink(`#${case_.reportRefId}`, channelLink(reference!.log_message_id!, case_.guildId)),
 				lng: locale,
 			});
 		}

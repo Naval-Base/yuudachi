@@ -401,6 +401,10 @@
 					"modal": {
 						"label": "The reason for the report",
 						"placeholder": "Please enter a detailed reason for the report"
+					},
+					"post": {
+						"name": "Report #{{report_id}} {{- user}}",
+						"reason": "reported by {{- user}}"
 					}
 				},
 				"message": {
