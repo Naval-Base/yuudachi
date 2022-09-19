@@ -36,7 +36,6 @@ export async function generateReportEmbed(
 		},
 		color: statusToColor(report.status),
 		description: await generateReportLog(report, locale, message),
-		timestamp: report.createdAt,
 		footer:
 			report.status === ReportStatus.Pending
 				? {
