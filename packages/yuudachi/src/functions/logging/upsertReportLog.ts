@@ -6,54 +6,19 @@ import { kSQL } from "../../tokens.js";
 import { generateUserInfo } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../util/resolveMessage.js";
-import { type Report, ReportType, ReportStatus } from "../reports/createReport.js";
+import { type Report, ReportType } from "../reports/createReport.js";
 import { checkReportForum } from "../settings/checkLogChannel.js";
-import type { ReportLabels } from "../settings/getGuildSetting.js";
+import type { ReportStatusLabelTuple, ReportTypeLabelTuple } from "../settings/getGuildSetting.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
 import { generateReportEmbed } from "./generateReportEmbed.js";
 
-export function resolveStatusLabel(labels: ReportLabels, report: Report) {
-	switch (report.status) {
-		case ReportStatus.Approved:
-			return labels.approved;
-		case ReportStatus.Pending:
-			return labels.pending;
-		case ReportStatus.Rejected:
-			return labels.rejected;
-		case ReportStatus.Spam:
-			return labels.spam;
-	}
-}
-
-export function resolveLabelToStatus(labels: ReportLabels, label: string) {
-	switch (label) {
-		case labels.pending:
-			return ReportStatus.Pending;
-		case labels.approved:
-			return ReportStatus.Approved;
-		case labels.rejected:
-			return ReportStatus.Rejected;
-		case labels.spam:
-			return ReportStatus.Spam;
-		default:
-			return ReportStatus.Pending;
-	}
-}
-
-function resolveTypeLabel(labels: ReportLabels, report: Report) {
-	switch (report.type) {
-		case ReportType.User:
-			return labels.user_report;
-		case ReportType.Message:
-			return labels.message_report;
-	}
-}
-
 export async function upsertReportLog(guild: Guild, report: Report, message?: Message) {
 	const sql = container.resolve<Sql<{}>>(kSQL);
 	const reportForum = checkReportForum(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
-	const reportLabels = await getGuildSetting<ReportLabels>(guild.id, SettingsKeys.ReportLabels);
+	const reportStatusLabels = await getGuildSetting<ReportStatusLabelTuple>(guild.id, SettingsKeys.ReportStatusLabels);
+	const reportTypeLabels = await getGuildSetting<ReportTypeLabelTuple>(guild.id, SettingsKeys.ReportTypeLabels);
+
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	let localMessage = message;
 
@@ -76,8 +41,8 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 		embeds.push(generateUserInfo(target, locale));
 	}
 
-	const statusLabel = resolveStatusLabel(reportLabels, report);
-	const typeLabel = resolveTypeLabel(reportLabels, report);
+	const statusLabel = reportStatusLabels[report.status];
+	const typeLabel = reportTypeLabels[report.type];
 
 	const reportPost = await reportForum!.threads.fetch(report.logMessageId ?? "1").catch(() => null);
 

@@ -5,12 +5,14 @@ import { Client, Events } from "discord.js";
 import type { Sql } from "postgres";
 import { inject, injectable } from "tsyringe";
 import type { Event } from "../../Event.js";
-import { resolveLabelToStatus, resolveStatusLabel, upsertReportLog } from "../../functions/logging/upsertReportLog.js";
-import type { RawReport } from "../../functions/reports/transformReport.js";
-import { transformReport } from "../../functions/reports/transformReport.js";
+import { upsertReportLog } from "../../functions/logging/upsertReportLog.js";
+import { type RawReport, transformReport } from "../../functions/reports/transformReport.js";
 import { updateReport } from "../../functions/reports/updateReport.js";
-import type { ReportLabels } from "../../functions/settings/getGuildSetting.js";
-import { REPORT_STATUS_KEYS, getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
+import {
+	type ReportStatusLabelTuple,
+	getGuildSetting,
+	SettingsKeys,
+} from "../../functions/settings/getGuildSetting.js";
 import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
 
@@ -27,17 +29,13 @@ export default class implements Event {
 			[ThreadChannel, ThreadChannel]
 		>) {
 			try {
-				const reportLabels = await getGuildSetting<ReportLabels>(oldPost.guildId, SettingsKeys.ReportLabels);
-				const reportLabelIds = Object.entries(reportLabels).reduce<string[]>((acc, [key, val]) => {
-					if (REPORT_STATUS_KEYS.includes(key)) {
-						acc.push(val);
-					}
+				const reportStatusLabels = await getGuildSetting<ReportStatusLabelTuple>(
+					oldPost.guildId,
+					SettingsKeys.ReportStatusLabels,
+				);
 
-					return acc;
-				}, []);
-
-				const oldStatusTags = oldPost.appliedTags.filter((tag) => reportLabelIds.includes(tag));
-				const newStatusTags = newPost.appliedTags.filter((tag) => reportLabelIds.includes(tag));
+				const oldStatusTags = oldPost.appliedTags.filter((tag) => reportStatusLabels.includes(tag));
+				const newStatusTags = newPost.appliedTags.filter((tag) => reportStatusLabels.includes(tag));
 
 				if (oldStatusTags.length !== 1 && newStatusTags.length === 1) {
 					const [rawReport] = await this.sql<[RawReport]>`
@@ -50,12 +48,12 @@ export default class implements Event {
 					if (rawReport) {
 						const [statusTag] = newStatusTags;
 						const oldReport = transformReport(rawReport);
-						const reportStatusLabel = resolveStatusLabel(reportLabels, oldReport);
+						const reportStatusLabel = reportStatusLabels[oldReport.status];
 
 						if (statusTag && statusTag !== reportStatusLabel) {
 							const report = await updateReport({
 								...oldReport,
-								status: resolveLabelToStatus(reportLabels, statusTag),
+								status: reportStatusLabels.indexOf(statusTag),
 							});
 							await upsertReportLog(oldPost.guild, report);
 						}

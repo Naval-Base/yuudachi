@@ -17,26 +17,20 @@ export enum SettingsKeys {
 	ModRoleId = "mod_role_id",
 	ReactionRoleId = "reaction_role_id",
 	ReportChannelId = "report_channel_id",
-	ReportLabels = "report_labels",
+	ReportStatusLabels = "report_status_labels",
+	ReportTypeLabels = "report_type_labels",
 	SponsorRoleId = "sponsor_role_id",
 }
 
-export type ReportLabels = {
-	approved: string;
-	message_report: string;
-	pending: string;
-	rejected: string;
-	spam: string;
-	user_report: string;
-};
-
-export const REPORT_TYPE_KEYS = ["user_report", "message_report"];
-export const REPORT_STATUS_KEYS = ["approved", "pending", "rejected", "spam"];
+export type ReportStatusLabelTuple = [string, string, string, string, string, string];
+export type ReportTypeLabelTuple = [string, string];
 
 export async function getGuildSetting<T = string>(guildId: Snowflake, prop: SettingsKeys, table = "guild_settings") {
 	const sql = container.resolve<Sql<{}>>(kSQL);
 
-	const [data] = await sql.unsafe<[{ value: ReportLabels | boolean | string | null }?]>(
+	const [data] = await sql.unsafe<
+		[{ value: ReportStatusLabelTuple | ReportTypeLabelTuple | boolean | string | null }?]
+	>(
 		`select ${prop} as value
 		from ${table}
 		where guild_id = $1`,
