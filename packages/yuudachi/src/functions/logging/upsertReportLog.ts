@@ -99,17 +99,17 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 		return reportPost;
 	}
 
-	if (reportPost.archived) {
-		await reportPost.setArchived(false);
+	const shouldUpdateTags = [statusTag, typeTag].some((required) => !reportPost.appliedTags.includes(required));
+
+	if (reportPost.archived || shouldUpdateTags) {
+		await reportPost.edit({
+			archived: false,
+			appliedTags: [typeTag, statusTag],
+		});
 	}
 
 	const starter = await reportPost.messages.fetch(reportPost.id);
 	await starter?.edit({ embeds });
-
-	if ([statusTag, typeTag].some((required) => !reportPost.appliedTags.includes(required))) {
-		// @ts-expect-error upstream does not allow ids, but sends them as if they were ids
-		await reportPost.setAppliedTags([typeTag, statusTag]);
-	}
 
 	return reportPost;
 }
