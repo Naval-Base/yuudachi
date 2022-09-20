@@ -34,7 +34,7 @@
 		"dayjs": "^1.11.5",
 		"diff": "^5.1.0",
 		"discord-api-types": "^0.37.9",
-		"discord.js": "dev",
+		"discord.js": "14.4.0-dev.1663675488-5048a3d.0",
 		"env-cmd": "^10.1.0",
 		"i18next": "^21.9.1",
 		"ioredis": "^5.2.3",

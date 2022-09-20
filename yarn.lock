@@ -4194,7 +4194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:dev":
+"discord.js@npm:14.4.0-dev.1663675488-5048a3d.0":
   version: 14.4.0-dev.1663675488-5048a3d.0
   resolution: "discord.js@npm:14.4.0-dev.1663675488-5048a3d.0"
   dependencies:
@@ -12523,7 +12523,7 @@ __metadata:
     del-cli: ^5.0.0
     diff: ^5.1.0
     discord-api-types: ^0.37.9
-    discord.js: dev
+    discord.js: 14.4.0-dev.1663675488-5048a3d.0
     env-cmd: ^10.1.0
     eslint: ^8.23.1
     eslint-config-neon: ^0.1.33
