@@ -5,6 +5,7 @@ import { AuditLogEvent, Client, Events } from "discord.js";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Sql } from "postgres";
 import { inject, injectable } from "tsyringe";
+import { AUDIT_LOG_WAIT_SECONDS } from "../../Constants.js";
 import type { Event } from "../../Event.js";
 import { upsertReportLog } from "../../functions/logging/upsertReportLog.js";
 import { type RawReport, transformReport } from "../../functions/reports/transformReport.js";
@@ -44,7 +45,7 @@ export default class implements Event {
 					`;
 
 					if (rawReport) {
-						await pSetTimeout(1_500);
+						await pSetTimeout(AUDIT_LOG_WAIT_SECONDS * 1_000);
 						const auditLogs = await oldPost.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.ThreadUpdate });
 						const auditLog = auditLogs.entries.find(
 							(entry) =>
