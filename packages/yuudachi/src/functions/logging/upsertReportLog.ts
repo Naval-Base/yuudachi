@@ -1,7 +1,9 @@
+import { Buffer } from "node:buffer";
 import type { APIEmbed, Embed, Guild, Message } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
+import { REPORT_MESSAGE_CONTEXT_LIMIT } from "../../Constants.js";
 import { kSQL } from "../../tokens.js";
 import { generateUserInfo } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
@@ -11,6 +13,7 @@ import { checkReportForum } from "../settings/checkLogChannel.js";
 import type { ReportStatusTagTuple, ReportTypeTagTuple } from "../settings/getGuildSetting.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
+import { formatMessagesToAttachment } from "./formatMessagesToAttachment.js";
 import { generateReportEmbed } from "./generateReportEmbed.js";
 
 export async function upsertReportLog(guild: Guild, report: Report, message?: Message) {
@@ -31,8 +34,8 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 	const author = await guild.client.users.fetch(report.authorId);
 
 	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, localMessage)];
-	if (localMessage) {
-		embeds.push(formatMessageToEmbed(localMessage as Message<true>, locale));
+	if (localMessage?.inGuild()) {
+		embeds.push(formatMessageToEmbed(localMessage, locale));
 	}
 
 	if (report.type === ReportType.User) {
@@ -45,6 +48,11 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 	const typeTag = reportTypeTags[report.type];
 
 	const reportPost = await reportForum!.threads.fetch(report.logPostId ?? "1").catch(() => null);
+	const messageContext = localMessage?.inGuild()
+		? await localMessage.channel.messages
+				.fetch({ around: localMessage.id, limit: REPORT_MESSAGE_CONTEXT_LIMIT })
+				.catch(() => null)
+		: null;
 
 	if (!reportPost) {
 		const reportPost = await reportForum!.threads.create({
@@ -55,6 +63,24 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 			}),
 			message: {
 				embeds,
+				files:
+					messageContext && localMessage
+						? [
+								{
+									name: "messagecontext.ansi",
+									attachment: Buffer.from(
+										formatMessagesToAttachment(
+											messageContext,
+											locale,
+											[localMessage.id],
+											messageContext
+												.filter((message: Message) => message.author.id === report.targetId)
+												.map((message) => message.id),
+										),
+									),
+								},
+						  ]
+						: undefined,
 			},
 			reason: i18next.t("command.utility.report.common.post.reason", {
 				user: `${report.authorTag} (${report.authorId})`,

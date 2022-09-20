@@ -1,5 +1,7 @@
 import kleur from "kleur";
 
+kleur.enabled = true;
+
 type IPredicate<T> = (...args: T[]) => boolean;
 
 type PredicateEntry<T> = {
@@ -20,8 +22,6 @@ export function colorBasedOnDeterminant<T>(
 	stringExtractor: (a0: T) => string,
 	predicates: PredicateEntry<T>[],
 ): string {
-	kleur.enabled = true;
-
 	const res = stringExtractor(determinant);
 	for (const { color, predicate } of predicates) {
 		if (predicate(determinant)) {

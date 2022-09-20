@@ -8,11 +8,21 @@ import {
 	type Snowflake,
 } from "discord.js";
 import i18next from "i18next";
+import kleur from "kleur";
 import { DATE_FORMAT_WITH_SECONDS } from "../../Constants.js";
 
-export function formatMessagesToAttachment(messages: Collection<Snowflake, Message | PartialMessage>, locale: string) {
+kleur.enabled = true;
+
+export function formatMessagesToAttachment(
+	messages: Collection<Snowflake, Message | PartialMessage>,
+	locale: string,
+	primaryHighlightMessageIds: Snowflake[] = [],
+	secondaryHighlighMessageIds: Snowflake[] = [],
+) {
 	return messages
 		.map((message) => {
+			const isPrimaryHighlight = primaryHighlightMessageIds.includes(message.id);
+			const isSecondaryHighlight = secondaryHighlighMessageIds.includes(message.id);
 			const outParts = [
 				`[${dayjs(message.createdTimestamp).utc().format(DATE_FORMAT_WITH_SECONDS)} (UTC)] ${
 					message.author?.tag ?? "Unknown author"
@@ -70,7 +80,12 @@ export function formatMessagesToAttachment(messages: Collection<Snowflake, Messa
 				);
 			}
 
-			return outParts.join("\n");
+			const outSection = outParts.join("\n");
+			return isPrimaryHighlight
+				? kleur.yellow(outSection)
+				: isSecondaryHighlight
+				? kleur.white(outSection)
+				: outSection;
 		})
 		.join("\n");
 }
