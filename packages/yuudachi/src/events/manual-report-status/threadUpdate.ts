@@ -1,6 +1,7 @@
 import { on } from "node:events";
+import { setTimeout as pSetTimeout } from "node:timers/promises";
 import type { ThreadChannel } from "discord.js";
-import { Client, Events } from "discord.js";
+import { AuditLogEvent, Client, Events } from "discord.js";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Sql } from "postgres";
 import { inject, injectable } from "tsyringe";
@@ -11,6 +12,7 @@ import { updateReport } from "../../functions/reports/updateReport.js";
 import { type ReportStatusTagTuple, getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
+import { arrayEquals } from "../../util/arrays.js";
 
 @injectable()
 export default class implements Event {
@@ -42,16 +44,28 @@ export default class implements Event {
 					`;
 
 					if (rawReport) {
+						await pSetTimeout(1_500);
+						const auditLogs = await oldPost.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.ThreadUpdate });
+						const auditLog = auditLogs.entries.find(
+							(entry) =>
+								entry.target.id === oldPost.id &&
+								arrayEquals(entry.changes[0]?.new as string[] | undefined, newPost.appliedTags) &&
+								arrayEquals(entry.changes[0]?.old as string[] | undefined, oldPost.appliedTags),
+						);
+
 						const [statusTag] = newStatusTags;
 						const oldReport = transformReport(rawReport);
 						const reportStatusTag = reportStatusTags[oldReport.status];
 
 						if (statusTag && statusTag !== reportStatusTag) {
-							const report = await updateReport({
-								...oldReport,
-								status: reportStatusTags.indexOf(statusTag),
-							});
-							await upsertReportLog(oldPost.guild, report);
+							const report = await updateReport(
+								{
+									...oldReport,
+									status: reportStatusTags.indexOf(statusTag),
+								},
+								auditLog?.executor ?? undefined,
+							);
+							await upsertReportLog(oldPost.guild, report, undefined);
 						}
 					}
 				}
