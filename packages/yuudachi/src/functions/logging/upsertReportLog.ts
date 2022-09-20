@@ -99,6 +99,10 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 		return reportPost;
 	}
 
+	if (reportPost.archived) {
+		await reportPost.setArchived(false);
+	}
+
 	const starter = await reportPost.messages.fetch(reportPost.id);
 	await starter?.edit({ embeds });
 
