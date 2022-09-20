@@ -1,4 +1,4 @@
-import { hyperlink, messageLink } from "discord.js";
+import { channelLink, hyperlink } from "discord.js";
 import i18next from "i18next";
 import type { ArgsParam, InteractionParam, LocaleParam } from "../../../../Command.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
@@ -41,10 +41,7 @@ export async function status(
 
 	await interaction.editReply({
 		content: i18next.t("command.mod.status.success", {
-			report: hyperlink(
-				`#${originalReport.reportId}`,
-				messageLink(reportLogChannel.id, originalReport.logMessageId!, interaction.guildId),
-			),
+			report: hyperlink(`#${originalReport.reportId}`, channelLink(originalReport.logPostId!, interaction.guildId)),
 			status: args.status,
 			lng: locale,
 		}),

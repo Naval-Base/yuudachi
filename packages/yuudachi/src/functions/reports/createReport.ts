@@ -48,7 +48,7 @@ export async function createReport(report: CreateReport): Promise<Report> {
 			author_tag,
 			reason,
 			attachment_url,
-			log_message_id,
+			log_post_id,
 			ref_id
 		) values (
 			next_report(${report.guildId}),
@@ -63,7 +63,7 @@ export async function createReport(report: CreateReport): Promise<Report> {
 			${report.authorTag},
 			${report.reason},
 			${report.attachmentUrl ?? null},
-			${report.logMessageId ?? null},
+			${report.logPostId ?? null},
 			${report.refId ?? null}
 		) returning *;
 	`;

@@ -1,4 +1,4 @@
-import { hyperlink, messageLink } from "discord.js";
+import { channelLink, hyperlink, messageLink } from "discord.js";
 import i18next from "i18next";
 import type { InteractionParam } from "../../../../Command.js";
 import type { Case } from "../../../../functions/cases/createCase.js";
@@ -66,10 +66,7 @@ export async function reportReference(
 				`\`#${originalCase.caseId}\``,
 				messageLink(logChannelId, originalCase.logMessageId!, interaction.guildId),
 			),
-			ref: hyperlink(
-				`\`#${referenceReport.reportId}\``,
-				messageLink(reportChannelId.id, referenceReport.logMessageId!, interaction.guildId),
-			),
+			ref: hyperlink(`\`#${referenceReport.reportId}\``, channelLink(referenceReport.logPostId!, interaction.guildId)),
 			lng: locale,
 		}),
 	});

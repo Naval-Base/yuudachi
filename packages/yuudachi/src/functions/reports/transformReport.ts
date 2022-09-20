@@ -8,7 +8,7 @@ export type RawReport = {
 	channel_id: Snowflake;
 	created_at: string;
 	guild_id: Snowflake;
-	log_message_id: Snowflake | null;
+	log_post_id: Snowflake | null;
 	message_id: Snowflake | null;
 	mod_id: Snowflake | null;
 	mod_tag: string | null;
@@ -38,7 +38,7 @@ export function transformReport(report: RawReport): Report {
 		modTag: report.mod_tag,
 		reason: report.reason,
 		attachmentUrl: report.attachment_url,
-		logMessageId: report.log_message_id,
+		logPostId: report.log_post_id,
 		refId: report.ref_id,
 		updatedAt: report.updated_at,
 		createdAt: report.created_at,

@@ -8,11 +8,7 @@ import type { Event } from "../../Event.js";
 import { upsertReportLog } from "../../functions/logging/upsertReportLog.js";
 import { type RawReport, transformReport } from "../../functions/reports/transformReport.js";
 import { updateReport } from "../../functions/reports/updateReport.js";
-import {
-	type ReportStatusLabelTuple,
-	getGuildSetting,
-	SettingsKeys,
-} from "../../functions/settings/getGuildSetting.js";
+import { type ReportStatusTagTuple, getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import { logger } from "../../logger.js";
 import { kSQL } from "../../tokens.js";
 
@@ -29,31 +25,31 @@ export default class implements Event {
 			[ThreadChannel, ThreadChannel]
 		>) {
 			try {
-				const reportStatusLabels = await getGuildSetting<ReportStatusLabelTuple>(
+				const reportStatusTags = await getGuildSetting<ReportStatusTagTuple>(
 					oldPost.guildId,
-					SettingsKeys.ReportStatusLabels,
+					SettingsKeys.ReportStatusTags,
 				);
 
-				const oldStatusTags = oldPost.appliedTags.filter((tag) => reportStatusLabels.includes(tag));
-				const newStatusTags = newPost.appliedTags.filter((tag) => reportStatusLabels.includes(tag));
+				const oldStatusTags = oldPost.appliedTags.filter((tag) => reportStatusTags.includes(tag));
+				const newStatusTags = newPost.appliedTags.filter((tag) => reportStatusTags.includes(tag));
 
 				if (oldStatusTags.length !== 1 && newStatusTags.length === 1) {
 					const [rawReport] = await this.sql<[RawReport]>`
 						select *
 						from reports
 						where guild_id = ${oldPost.guildId}
-							and log_message_id = ${oldPost.id}
+							and log_post_id = ${oldPost.id}
 					`;
 
 					if (rawReport) {
 						const [statusTag] = newStatusTags;
 						const oldReport = transformReport(rawReport);
-						const reportStatusLabel = reportStatusLabels[oldReport.status];
+						const reportStatusTag = reportStatusTags[oldReport.status];
 
-						if (statusTag && statusTag !== reportStatusLabel) {
+						if (statusTag && statusTag !== reportStatusTag) {
 							const report = await updateReport({
 								...oldReport,
-								status: reportStatusLabels.indexOf(statusTag),
+								status: reportStatusTags.indexOf(statusTag),
 							});
 							await upsertReportLog(oldPost.guild, report);
 						}

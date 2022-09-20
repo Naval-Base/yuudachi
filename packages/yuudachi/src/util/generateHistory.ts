@@ -13,6 +13,7 @@ import {
 	time,
 	TimestampStyles,
 	messageLink,
+	channelLink,
 } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
@@ -267,7 +268,6 @@ export async function generateReportHistory(
 	locale: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
-	const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
 
 	const rawReports = await sql<[RawReport]>`
 		select *
@@ -312,9 +312,7 @@ export async function generateReportHistory(
 		return {
 			created: report.created_at,
 			identifierLabel: `#${report.report_id} (${userRoleString})`,
-			identifierURL: report.log_message_id
-				? messageLink(reportChannelId, report.log_message_id, report.guild_id)
-				: undefined,
+			identifierURL: report.log_post_id ? channelLink(report.log_post_id, report.guild_id) : undefined,
 			label: reportKeyLabel(REPORT_KEYS[report.status]!, locale),
 			description: report.reason ?? undefined,
 		};
