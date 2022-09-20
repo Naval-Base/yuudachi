@@ -27,7 +27,7 @@ export async function generateReportLog(report: Report, locale: string, message?
 			lng: locale,
 		}),
 		i18next.t("log.report_log.reason", {
-			reason: codeBlock(ellipsis(report.reason, REPORT_REASON_MAX_LENGTH * 2)),
+			reason: codeBlock(ellipsis(report.reason.trim(), REPORT_REASON_MAX_LENGTH * 2)),
 			lng: locale,
 		}),
 	];
