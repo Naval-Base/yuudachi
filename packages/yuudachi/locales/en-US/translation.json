@@ -608,7 +608,7 @@
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
 			"moderator": "**Moderator:** {{- mod}}",
 			"updated_at": "**Updated at:** {{- updated_at}}",
-			"footer": "Hint: You can resolve a report by referencing it in a moderation action, setting it with /reference to an already existing case, or use /reports status to approve or reject it directly.",
+			"footer": "Hint: To resolve a report: Change the status forum label, reference it in a case, set the reference for an existing case with /reference, set the status via /reports status",
 			"report_status": {
 				"0": "Pending",
 				"1": "Approved",
