@@ -26,10 +26,6 @@ export async function generateReportEmbed(
 	message?: Message | null,
 ): Promise<APIEmbed> {
 	const embed: APIEmbed = {
-		title: i18next.t("log.report_log.title", {
-			report_id: report.reportId,
-			lng: locale,
-		}),
 		author: {
 			name: `${user.tag} (${user.id})`,
 			icon_url: user.avatarURL()!,

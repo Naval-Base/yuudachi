@@ -598,7 +598,6 @@
 			"description": "• Moderator: {{- moderator}}\n• Hit count: {{count}}"
 		},
 		"report_log": {
-			"title": "Report #{{report_id}}",
 			"reason": "**Reason:**\n{{- reason}}",
 			"target": "**Reported User:** {{- target}}",
 			"message": "**Message:** {{- message_link}} ({{- channel}})",
