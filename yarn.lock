@@ -4194,9 +4194,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:14.4.0-dev.1663675488-5048a3d.0":
-  version: 14.4.0-dev.1663675488-5048a3d.0
-  resolution: "discord.js@npm:14.4.0-dev.1663675488-5048a3d.0"
+"discord.js@npm:^14.4.0":
+  version: 14.4.0
+  resolution: "discord.js@npm:14.4.0"
   dependencies:
     "@discordjs/builders": ^1.2.0
     "@discordjs/collection": ^1.1.0
@@ -4209,7 +4209,7 @@ __metadata:
     tslib: ^2.4.0
     undici: ^5.10.0
     ws: ^8.8.1
-  checksum: 2348a86e76638f78029f37b99b3635444b006a6b0c8d5b2192a24467bb31dbc9c83fc7c17eb85d17f177507d0bf9278b789e7104d70ccdfe63438ef8b9c81a24
+  checksum: 0005332da88c130fb5fb144817cfb10323b0c57d0c7c20ec456a4b217b7127844dcd71107c58ef10d83f46af7edb2ba41610c107736a1a08cffc9683d548764b
   languageName: node
   linkType: hard
 
@@ -12523,7 +12523,7 @@ __metadata:
     del-cli: ^5.0.0
     diff: ^5.1.0
     discord-api-types: ^0.37.9
-    discord.js: 14.4.0-dev.1663675488-5048a3d.0
+    discord.js: ^14.4.0
     env-cmd: ^10.1.0
     eslint: ^8.23.1
     eslint-config-neon: ^0.1.33
