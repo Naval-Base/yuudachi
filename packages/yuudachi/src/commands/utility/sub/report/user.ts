@@ -37,6 +37,7 @@ export async function user(
 		reason,
 		attachment,
 	} = args as MemberAssuredReportArgs;
+	const trimmedReason = reason.trim();
 
 	if (attachment) {
 		const attachmentIsImage = attachment.contentType === "image/jpeg" || attachment.contentType === "image/png";
@@ -68,7 +69,7 @@ export async function user(
 	const contentParts = [
 		i18next.t("command.utility.report.user.pending", {
 			user: `${member.user.toString()} - \`${member.user.tag}\` (${member.user.id})`,
-			reason: ellipsis(args.reason, REPORT_REASON_MAX_LENGTH),
+			reason: ellipsis(trimmedReason, REPORT_REASON_MAX_LENGTH),
 			lng: locale,
 		}),
 		"",
@@ -135,7 +136,7 @@ export async function user(
 			guildId: interaction.guildId,
 			authorId: interaction.user.id,
 			authorTag: interaction.user.tag,
-			reason,
+			reason: trimmedReason,
 			targetId: member.id,
 			targetTag: member.user.tag,
 			attachmentUrl: attachment?.proxyURL,

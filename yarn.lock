@@ -4173,6 +4173,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"discord-api-types@npm:^0.37.10":
+  version: 0.37.10
+  resolution: "discord-api-types@npm:0.37.10"
+  checksum: a09460953a02adf3c40a486e3946c6ca0dd6c76d279444a4595abecfe8b5b88ad49d48b5eeb85e2cb95256a0824ee075cb7550d371c13e64e37ec703206c092b
+  languageName: node
+  linkType: hard
+
 "discord-api-types@npm:^0.37.3":
   version: 0.37.4
   resolution: "discord-api-types@npm:0.37.4"
@@ -4187,22 +4194,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:^14.3.0":
-  version: 14.3.0
-  resolution: "discord.js@npm:14.3.0"
+"discord.js@npm:14.4.0-dev.1663675488-5048a3d.0":
+  version: 14.4.0-dev.1663675488-5048a3d.0
+  resolution: "discord.js@npm:14.4.0-dev.1663675488-5048a3d.0"
   dependencies:
     "@discordjs/builders": ^1.2.0
     "@discordjs/collection": ^1.1.0
     "@discordjs/rest": ^1.1.0
     "@sapphire/snowflake": ^3.2.2
     "@types/ws": ^8.5.3
-    discord-api-types: ^0.37.3
+    discord-api-types: ^0.37.10
     fast-deep-equal: ^3.1.3
     lodash.snakecase: ^4.1.1
     tslib: ^2.4.0
-    undici: ^5.9.1
+    undici: ^5.10.0
     ws: ^8.8.1
-  checksum: e45117549d8d504eae958cb104a42dd3903f67ae0c3062fdc60c748a2a21da14a32ec3c9643edcebe568d82602f0b2efc3b9af59d1482ac1304ce4aaeda944a2
+  checksum: 2348a86e76638f78029f37b99b3635444b006a6b0c8d5b2192a24467bb31dbc9c83fc7c17eb85d17f177507d0bf9278b789e7104d70ccdfe63438ef8b9c81a24
   languageName: node
   linkType: hard
 
@@ -12516,7 +12523,7 @@ __metadata:
     del-cli: ^5.0.0
     diff: ^5.1.0
     discord-api-types: ^0.37.9
-    discord.js: ^14.3.0
+    discord.js: 14.4.0-dev.1663675488-5048a3d.0
     env-cmd: ^10.1.0
     eslint: ^8.23.1
     eslint-config-neon: ^0.1.33

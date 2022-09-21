@@ -1,39 +1,41 @@
+import { Buffer } from "node:buffer";
 import type { APIEmbed, Embed, Guild, Message } from "discord.js";
+import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
+import { REPORT_MESSAGE_CONTEXT_LIMIT } from "../../Constants.js";
 import { kSQL } from "../../tokens.js";
 import { generateUserInfo } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../util/resolveMessage.js";
 import { type Report, ReportType } from "../reports/createReport.js";
-import { checkLogChannel } from "../settings/checkLogChannel.js";
+import { checkReportForum } from "../settings/checkLogChannel.js";
+import type { ReportStatusTagTuple, ReportTypeTagTuple } from "../settings/getGuildSetting.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
+import { formatMessagesToAttachment } from "./formatMessagesToAttachment.js";
 import { generateReportEmbed } from "./generateReportEmbed.js";
 
 export async function upsertReportLog(guild: Guild, report: Report, message?: Message) {
 	const sql = container.resolve<Sql<{}>>(kSQL);
-	const reportLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
+	const reportForum = checkReportForum(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
+	const reportStatusTags = await getGuildSetting<ReportStatusTagTuple>(guild.id, SettingsKeys.ReportStatusTags);
+	const reportTypeTags = await getGuildSetting<ReportTypeTagTuple>(guild.id, SettingsKeys.ReportTypeTags);
+
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	let localMessage = message;
 
 	try {
 		if (!localMessage && report.messageId) {
-			localMessage = await resolveMessage(
-				reportLogChannel!.id,
-				report.guildId,
-				report.channelId!,
-				report.messageId,
-				locale,
-			);
+			localMessage = await resolveMessage(reportForum!.id, report.guildId, report.channelId!, report.messageId, locale);
 		}
 	} catch {}
 
 	const author = await guild.client.users.fetch(report.authorId);
 
 	const embeds: (APIEmbed | Embed)[] = [await generateReportEmbed(author, report, locale, localMessage)];
-	if (localMessage) {
-		embeds.push(formatMessageToEmbed(localMessage as Message<true>, locale));
+	if (localMessage?.inGuild()) {
+		embeds.push(formatMessageToEmbed(localMessage, locale));
 	}
 
 	if (report.type === ReportType.User) {
@@ -42,28 +44,72 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 		embeds.push(generateUserInfo(target, locale));
 	}
 
-	if (report.logMessageId) {
-		const logMessage = await reportLogChannel!.messages.fetch(report.logMessageId);
+	const statusTag = reportStatusTags[report.status];
+	const typeTag = reportTypeTags[report.type];
 
-		if (logMessage.embeds.length > 1 && embeds.length < 2) {
-			embeds.push(logMessage.embeds[1]!);
-		}
+	const reportPost = await reportForum!.threads.fetch(report.logPostId ?? "1").catch(() => null);
+	const messageContext = localMessage?.inGuild()
+		? await localMessage.channel.messages
+				.fetch({ around: localMessage.id, limit: REPORT_MESSAGE_CONTEXT_LIMIT })
+				.catch(() => null)
+		: null;
 
-		return logMessage.edit({
-			embeds,
+	if (!reportPost) {
+		const reportPost = await reportForum!.threads.create({
+			name: i18next.t("command.utility.report.common.post.name", {
+				report_id: report.reportId,
+				user: `${report.targetTag} (${report.targetId})`,
+				lng: locale,
+			}),
+			message: {
+				embeds,
+				files:
+					messageContext && localMessage
+						? [
+								{
+									name: "messagecontext.ansi",
+									attachment: Buffer.from(
+										formatMessagesToAttachment(
+											messageContext,
+											locale,
+											[localMessage.id],
+											messageContext
+												.filter((message: Message) => message.author.id === report.targetId)
+												.map((message) => message.id),
+										),
+									),
+								},
+						  ]
+						: undefined,
+			},
+			reason: i18next.t("command.utility.report.common.post.reason", {
+				user: `${report.authorTag} (${report.authorId})`,
+				lng: locale,
+			}),
+			appliedTags: [typeTag, statusTag],
+		});
+
+		await sql`
+			update reports
+				set log_post_id = ${reportPost.id}
+				where guild_id = ${report.guildId}
+					and report_id = ${report.reportId}
+		`;
+
+		return reportPost;
+	}
+
+	const shouldUpdateTags = [statusTag, typeTag].some((required) => !reportPost.appliedTags.includes(required));
+
+	if (reportPost.archived || shouldUpdateTags) {
+		await reportPost.edit({
+			archived: false,
+			appliedTags: [typeTag, statusTag],
 		});
 	}
 
-	const logMessage = await reportLogChannel!.send({
-		embeds,
-	});
+	const starter = await reportPost.messages.fetch(reportPost.id);
+	await starter?.edit({ embeds });
 
-	await sql`
-		update reports
-					set log_message_id = ${logMessage.id}
-					where guild_id = ${report.guildId}
-						and report_id = ${report.reportId}
-	`;
-
-	return logMessage;
+	return reportPost;
 }

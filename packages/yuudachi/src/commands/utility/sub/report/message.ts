@@ -27,6 +27,7 @@ export async function message(
 ) {
 	const redis = container.resolve<Redis>(kRedis);
 	const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId!}:message:${args.message.id}`;
+	const trimmedReason = args.reason.trim();
 
 	const reportKey = nanoid();
 	const cancelKey = nanoid();
@@ -53,7 +54,7 @@ export async function message(
 				i18next.t("command.utility.report.message.pending_sub", { lng: locale }),
 				args.message.url,
 			),
-			reason: ellipsis(args.reason, REPORT_REASON_MAX_LENGTH),
+			reason: ellipsis(trimmedReason, REPORT_REASON_MAX_LENGTH),
 			lng: locale,
 		}),
 		"",
@@ -107,7 +108,7 @@ export async function message(
 			guildId: interaction.guildId,
 			authorId: interaction.user.id,
 			authorTag: interaction.user.tag,
-			reason: args.reason,
+			reason: trimmedReason,
 			targetId: args.message.author.id,
 			targetTag: args.message.author.tag,
 			message: args.message,

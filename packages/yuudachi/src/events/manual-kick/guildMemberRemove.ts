@@ -4,6 +4,7 @@ import { Client, Events, type GuildMember, AuditLogEvent } from "discord.js";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { inject, injectable } from "tsyringe";
+import { AUDIT_LOG_WAIT_SECONDS } from "../../Constants.js";
 import type { Event } from "../../Event.js";
 import { createCase, CaseAction } from "../../functions/cases/createCase.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
@@ -46,7 +47,7 @@ export default class implements Event {
 					continue;
 				}
 
-				await pSetTimeout(1_500);
+				await pSetTimeout(AUDIT_LOG_WAIT_SECONDS * 1_000);
 				const auditLogs = await guildMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberKick });
 				const logs = auditLogs.entries.find((log) => log.target!.id === guildMember.user.id);
 

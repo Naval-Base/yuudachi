@@ -4,6 +4,7 @@ import { Client, Events, type GuildBan, AuditLogEvent } from "discord.js";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { inject, injectable } from "tsyringe";
+import { AUDIT_LOG_WAIT_SECONDS } from "../../Constants.js";
 import type { Event } from "../../Event.js";
 import { deleteCase } from "../../functions/cases/deleteCase.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
@@ -57,7 +58,7 @@ export default class implements Event {
 					`Member ${guildBan.user.id} unbanned`,
 				);
 
-				await pSetTimeout(5_000);
+				await pSetTimeout(AUDIT_LOG_WAIT_SECONDS * 1_000);
 				const auditLogs = await guildBan.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberBanRemove });
 				const logs = auditLogs.entries.find((log) => log.target!.id === guildBan.user.id);
 				logger.info(
