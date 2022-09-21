@@ -11,7 +11,12 @@ import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { container } from "tsyringe";
 import type { ArgsParam, InteractionParam } from "../../../../Command.js";
-import { Color, REPORT_REASON_MAX_LENGTH, REPORT_DUPLICATE_EXPIRE_SECONDS } from "../../../../Constants.js";
+import {
+	Color,
+	REPORT_REASON_MAX_LENGTH,
+	REPORT_DUPLICATE_EXPIRE_SECONDS,
+	REPORT_DUPLICATE_PRE_EXPIRE_SECONDS,
+} from "../../../../Constants.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
 import { createReport, ReportType } from "../../../../functions/reports/createReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
@@ -131,6 +136,18 @@ export async function user(
 		});
 	} else if (collectedInteraction?.customId === reportKey) {
 		await collectedInteraction.deferUpdate();
+
+		if (await redis.exists(key)) {
+			await collectedInteraction.editReply({
+				content: i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }),
+				embeds: [],
+				components: [],
+			});
+
+			return;
+		}
+
+		await redis.setex(key, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
 
 		const report = await createReport({
 			guildId: interaction.guildId,
