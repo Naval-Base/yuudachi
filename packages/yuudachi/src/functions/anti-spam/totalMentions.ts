@@ -4,13 +4,13 @@ import type { Redis } from "ioredis";
 import { container } from "tsyringe";
 import { MENTION_EXPIRE_SECONDS } from "../../Constants.js";
 import { kRedis } from "../../tokens.js";
-import { removeCodeBlock } from "../../util/codeBlock.js";
+import { removeCodeBlocks } from "../../util/codeBlock.js";
 
 export async function totalMentions(guildId: Snowflake, userId: Snowflake, content: string) {
 	const redis = container.resolve<Redis>(kRedis);
 	const parsed = new Set<Snowflake>();
 
-	const filtered = removeCodeBlock(content);
+	const filtered = removeCodeBlocks(content);
 
 	for (const mention of filtered.matchAll(new RegExp(FormattingPatterns.User, "g"))) {
 		const id = mention.groups?.id;
