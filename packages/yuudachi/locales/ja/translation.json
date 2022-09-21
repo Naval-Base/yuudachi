@@ -401,6 +401,10 @@
 					"modal": {
 						"label": "",
 						"placeholder": ""
+					},
+					"post": {
+						"name": "",
+						"reason": ""
 					}
 				},
 				"message": {
@@ -594,7 +598,6 @@
 			"description": ""
 		},
 		"report_log": {
-			"title": "",
 			"reason": "",
 			"target": "",
 			"message": "",
