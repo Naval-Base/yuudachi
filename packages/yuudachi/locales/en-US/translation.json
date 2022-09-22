@@ -421,6 +421,11 @@
 					"modal": {
 						"title": "User report"
 					},
+					"attachment_upsell": {
+						"base": "ℹ️ ***Tip:** If it helps to provide context, you can attach an image to this report using the {{- report_command}}!*",
+						"mention": "{{- report_command}} command",
+						"option": "attachment option"
+					},
 					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
 					"cancel": "User report canceled.",
 					"success": "Successfully reported user, thanks for making our community a better place!"

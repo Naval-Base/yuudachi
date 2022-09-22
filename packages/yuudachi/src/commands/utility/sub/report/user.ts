@@ -23,6 +23,7 @@ import type { ReportCommand } from "../../../../interactions/index.js";
 import { logger } from "../../../../logger.js";
 import { kRedis } from "../../../../tokens.js";
 import { createButton } from "../../../../util/button.js";
+import { resolveGuildCommand, chatInputApplicationCommandMention } from "../../../../util/commandUtils.js";
 import { ellipsis } from "../../../../util/embed.js";
 import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
 import { createMessageActionRow } from "../../../../util/messageActionRow.js";
@@ -78,6 +79,26 @@ export async function user(
 			lng: locale,
 		}),
 		"",
+	];
+
+	if (!attachment) {
+		const reportCommand = !interaction.isChatInputCommand() && (await resolveGuildCommand(interaction.guild, "report"));
+
+		contentParts.push(
+			i18next.t("command.utility.report.user.attachment_upsell.base", {
+				report_command: reportCommand
+					? i18next.t("command.utility.report.user.attachment_upsell.mention", {
+							report_command: chatInputApplicationCommandMention("report user", reportCommand.id),
+							lng: locale,
+					  })
+					: i18next.t("command.utility.report.user.attachment_upsell.option", { lng: locale }),
+				lng: locale,
+			}),
+			"",
+		);
+	}
+
+	contentParts.push(
 		i18next.t("command.utility.report.common.warnings", {
 			trust_and_safety: hyperlink(
 				i18next.t("command.utility.report.common.trust_and_safety_sub", { lng: locale }),
@@ -85,7 +106,7 @@ export async function user(
 			),
 			lng: locale,
 		}),
-	];
+	);
 
 	const embed: APIEmbed = {
 		author: {
