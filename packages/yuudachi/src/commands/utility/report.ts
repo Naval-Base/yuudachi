@@ -55,6 +55,10 @@ export default class extends Command<
 			const { guildId, channelId, messageId } = parsedLink;
 			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
+			if (messageArg.author.bot) {
+				throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
+			}
+
 			if (messageArg.author.id === interaction.user.id) {
 				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 			}
@@ -74,6 +78,10 @@ export default class extends Command<
 				locale,
 			);
 		} else {
+			if (args.user.user.user.bot) {
+				throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
+			}
+
 			if (args.user.user.user.id === interaction.user.id) {
 				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 			}
@@ -104,6 +112,10 @@ export default class extends Command<
 		}
 
 		const modalKey = nanoid();
+
+		if (args.user.user.bot) {
+			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
+		}
 
 		if (args.user.user.id === interaction.user.id) {
 			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
@@ -191,6 +203,10 @@ export default class extends Command<
 		}
 
 		const modalKey = nanoid();
+
+		if (args.message.author.bot) {
+			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
+		}
 
 		if (args.message.author.id === interaction.user.id) {
 			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
