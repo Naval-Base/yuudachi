@@ -15,6 +15,8 @@ export const KickCommand = {
 			description: "The reason of this action",
 			type: ApplicationCommandOptionType.String,
 			autocomplete: true,
+			min_length: 3,
+			max_length: 500,
 		},
 		{
 			name: "case_reference",

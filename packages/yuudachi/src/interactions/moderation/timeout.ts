@@ -34,6 +34,8 @@ export const TimeoutCommand = {
 			description: "The reason of this timeout",
 			type: ApplicationCommandOptionType.String,
 			autocomplete: true,
+			min_length: 3,
+			max_length: 500,
 		},
 		{
 			name: "case_reference",

@@ -14,6 +14,8 @@ export const UnbanCommand = {
 			name: "reason",
 			description: "The reason of this action",
 			type: ApplicationCommandOptionType.String,
+			min_length: 3,
+			max_length: 500,
 		},
 		{
 			name: "report_reference",

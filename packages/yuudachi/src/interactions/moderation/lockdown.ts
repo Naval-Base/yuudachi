@@ -34,6 +34,8 @@ export const LockdownCommand = {
 					name: "reason",
 					description: "The reason of this lockdown",
 					type: ApplicationCommandOptionType.String,
+					min_length: 3,
+					max_length: 500,
 				},
 			],
 		},

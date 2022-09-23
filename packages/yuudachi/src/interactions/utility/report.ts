@@ -20,6 +20,8 @@ export const ReportCommand = {
 					description: "Reason for the report",
 					type: ApplicationCommandOptionType.String,
 					required: true,
+					min_length: 10,
+					max_length: 1_500,
 				},
 			],
 		},
@@ -39,6 +41,8 @@ export const ReportCommand = {
 					description: "Reason for the report",
 					type: ApplicationCommandOptionType.String,
 					required: true,
+					min_length: 10,
+					max_length: 1_500,
 				},
 				{
 					name: "attachment",

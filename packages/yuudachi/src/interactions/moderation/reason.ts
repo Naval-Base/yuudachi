@@ -16,6 +16,8 @@ export const ReasonCommand = {
 			type: ApplicationCommandOptionType.String,
 			required: true,
 			autocomplete: true,
+			min_length: 3,
+			max_length: 500,
 		},
 		{
 			name: "last_case",
