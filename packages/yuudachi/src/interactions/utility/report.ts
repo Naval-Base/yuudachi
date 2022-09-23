@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
 
 export const ReportCommand = {
 	name: "report",
@@ -20,8 +21,8 @@ export const ReportCommand = {
 					description: "Reason for the report",
 					type: ApplicationCommandOptionType.String,
 					required: true,
-					min_length: 10,
-					max_length: 1_500,
+					min_length: REPORT_REASON_MIN_LENGTH,
+					max_length: REPORT_REASON_MAX_LENGTH,
 				},
 			],
 		},
@@ -41,8 +42,8 @@ export const ReportCommand = {
 					description: "Reason for the report",
 					type: ApplicationCommandOptionType.String,
 					required: true,
-					min_length: 10,
-					max_length: 1_500,
+					min_length: REPORT_REASON_MIN_LENGTH,
+					max_length: REPORT_REASON_MAX_LENGTH,
 				},
 				{
 					name: "attachment",

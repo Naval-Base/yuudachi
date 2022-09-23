@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { CASE_REASON_MAX_LENGTH, CASE_REASON_MIN_LENGTH } from "../../Constants.js";
 
 export const ReasonCommand = {
 	name: "reason",
@@ -16,8 +17,8 @@ export const ReasonCommand = {
 			type: ApplicationCommandOptionType.String,
 			required: true,
 			autocomplete: true,
-			min_length: 3,
-			max_length: 500,
+			min_length: CASE_REASON_MIN_LENGTH,
+			max_length: CASE_REASON_MAX_LENGTH,
 		},
 		{
 			name: "last_case",

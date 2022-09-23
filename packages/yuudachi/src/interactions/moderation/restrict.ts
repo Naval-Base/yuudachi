@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { CASE_REASON_MAX_LENGTH, CASE_REASON_MIN_LENGTH } from "../../Constants.js";
 
 export const RestrictCommand = {
 	name: "restrict",
@@ -35,8 +36,8 @@ export const RestrictCommand = {
 					description: "The reason of this action",
 					type: ApplicationCommandOptionType.String,
 					autocomplete: true,
-					min_length: 3,
-					max_length: 500,
+					min_length: CASE_REASON_MIN_LENGTH,
+					max_length: CASE_REASON_MAX_LENGTH,
 				},
 				{
 					name: "case_reference",
@@ -81,8 +82,8 @@ export const RestrictCommand = {
 					description: "The reason of this action",
 					type: ApplicationCommandOptionType.String,
 					autocomplete: true,
-					min_length: 3,
-					max_length: 500,
+					min_length: CASE_REASON_MIN_LENGTH,
+					max_length: CASE_REASON_MAX_LENGTH,
 				},
 				{
 					name: "case_reference",
@@ -127,8 +128,8 @@ export const RestrictCommand = {
 					description: "The reason of this action",
 					type: ApplicationCommandOptionType.String,
 					autocomplete: true,
-					min_length: 3,
-					max_length: 500,
+					min_length: CASE_REASON_MIN_LENGTH,
+					max_length: CASE_REASON_MAX_LENGTH,
 				},
 				{
 					name: "case_reference",
