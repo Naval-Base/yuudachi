@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType, ChannelType } from "discord-api-types/v10";
+import { CASE_REASON_MAX_LENGTH, CASE_REASON_MIN_LENGTH } from "../../Constants.js";
 
 export const LockdownCommand = {
 	name: "lockdown",
@@ -34,8 +35,8 @@ export const LockdownCommand = {
 					name: "reason",
 					description: "The reason of this lockdown",
 					type: ApplicationCommandOptionType.String,
-					min_length: 3,
-					max_length: 500,
+					min_length: CASE_REASON_MIN_LENGTH,
+					max_length: CASE_REASON_MAX_LENGTH,
 				},
 			],
 		},
