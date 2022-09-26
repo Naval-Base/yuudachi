@@ -1,6 +1,7 @@
 import { type TextChannel, ChannelType, PermissionFlagsBits } from "discord.js";
 import i18next from "i18next";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import type { LockdownCommand } from "../../interactions/index.js";
 import { lift } from "./sub/lockdown/lift.js";
 import { lock } from "./sub/lockdown/lock.js";
@@ -34,8 +35,13 @@ export default class extends Command<typeof LockdownCommand> {
 
 				const reason = args.lock.reason;
 
-				if (reason && reason.length >= 1_900) {
-					throw new Error(i18next.t("command.mod.common.errors.max_length_reason", { lng: locale }));
+				if (args.lock.reason && args.lock.reason.length >= CASE_REASON_MAX_LENGTH) {
+					throw new Error(
+						i18next.t("command.mod.common.errors.max_length_reason", {
+							reason_max_length: CASE_REASON_MAX_LENGTH,
+							lng: locale,
+						}),
+					);
 				}
 
 				const targetChannel = (args.lock.channel ?? interaction.channel) as TextChannel;

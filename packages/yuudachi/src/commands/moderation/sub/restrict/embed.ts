@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
+import { CASE_REASON_MAX_LENGTH } from "../../../../Constants.js";
 import { CaseAction, createCase } from "../../../../functions/cases/createCase.js";
 import { generateCasePayload } from "../../../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
@@ -29,8 +30,13 @@ export async function embed(
 		);
 	}
 
-	if (args.reason && args.reason.length >= 500) {
-		throw new Error(i18next.t("command.mod.common.errors.max_length_reason", { lng: locale }));
+	if (args.reason && args.reason.length >= CASE_REASON_MAX_LENGTH) {
+		throw new Error(
+			i18next.t("command.mod.common.errors.max_length_reason", {
+				reason_max_length: CASE_REASON_MAX_LENGTH,
+				lng: locale,
+			}),
+		);
 	}
 
 	const sql = container.resolve<Sql<any>>(kSQL);

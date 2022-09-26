@@ -5,6 +5,7 @@ import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
@@ -49,11 +50,16 @@ export default class extends Command<typeof SoftbanCommand> {
 			);
 		}
 
-		const isStillMember = interaction.guild.members.resolve(args.user.user.id);
-
-		if (args.reason && args.reason.length >= 500) {
-			throw new Error(i18next.t("command.mod.common.errors.max_length_reason", { lng: locale }));
+		if (args.reason && args.reason.length >= CASE_REASON_MAX_LENGTH) {
+			throw new Error(
+				i18next.t("command.mod.common.errors.max_length_reason", {
+					reason_max_length: CASE_REASON_MAX_LENGTH,
+					lng: locale,
+				}),
+			);
 		}
+
+		const isStillMember = interaction.guild.members.resolve(args.user.user.id);
 
 		const softbanKey = nanoid();
 		const cancelKey = nanoid();

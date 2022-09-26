@@ -2,6 +2,7 @@ import { ComponentType, ButtonStyle, hyperlink, messageLink } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
+import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import type { Case } from "../../functions/cases/createCase.js";
 import { getCase } from "../../functions/cases/getCase.js";
 import { updateCase } from "../../functions/cases/updateCase.js";
@@ -31,8 +32,13 @@ export default class extends Command<typeof ReasonCommand> {
 			throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 		}
 
-		if (args.reason.length >= 500) {
-			throw new Error(i18next.t("command.mod.common.errors.max_length_reason", { lng: locale }));
+		if (args.reason && args.reason.length >= CASE_REASON_MAX_LENGTH) {
+			throw new Error(
+				i18next.t("command.mod.common.errors.max_length_reason", {
+					reason_max_length: CASE_REASON_MAX_LENGTH,
+					lng: locale,
+				}),
+			);
 		}
 
 		const lower = Math.min(args.case, args.last_case ?? args.case);
