@@ -723,16 +723,8 @@
 				}
 			},
 			"table": {
-				"success_titles": [
-					"Case id",
-					"Member id",
-					"Username"
-				],
-				"fail_titles": [
-					"Member id",
-					"Username",
-					"Error"
-				]
+				"success_titles": ["Case id", "Member id", "Username"],
+				"fail_titles": ["Member id", "Username", "Error"]
 			}
 		},
 		"report_log": {
