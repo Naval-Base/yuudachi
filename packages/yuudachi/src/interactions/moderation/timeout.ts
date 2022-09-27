@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { CASE_REASON_MAX_LENGTH, CASE_REASON_MIN_LENGTH } from "../../Constants.js";
 
 export const TimeoutCommand = {
 	name: "timeout",
@@ -34,6 +35,8 @@ export const TimeoutCommand = {
 			description: "The reason of this timeout",
 			type: ApplicationCommandOptionType.String,
 			autocomplete: true,
+			min_length: CASE_REASON_MIN_LENGTH,
+			max_length: CASE_REASON_MAX_LENGTH,
 		},
 		{
 			name: "case_reference",

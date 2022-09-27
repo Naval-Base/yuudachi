@@ -5,7 +5,7 @@ import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
-import { REPORT_REASON_MAX_LENGTH } from "../../Constants.js";
+import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReportCommand, ReportMessageContextCommand, ReportUserContextCommand } from "../../interactions/index.js";
@@ -127,7 +127,7 @@ export default class extends Command<
 					createTextComponent({
 						customId: "reason",
 						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
-						minLength: 10,
+						minLength: REPORT_REASON_MIN_LENGTH,
 						maxLength: REPORT_REASON_MAX_LENGTH,
 						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
 						required: true,
@@ -210,7 +210,7 @@ export default class extends Command<
 					createTextComponent({
 						customId: "reason",
 						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
-						minLength: 10,
+						minLength: REPORT_REASON_MIN_LENGTH,
 						maxLength: REPORT_REASON_MAX_LENGTH,
 						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
 						required: true,

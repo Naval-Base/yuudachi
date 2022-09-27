@@ -39,7 +39,7 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Maximum length of `1900` for reason exceeded.",
+					"max_length_reason": "Maximum length of `{{reason_max_length}}` for reason exceeded.",
 					"not_a_text_channel": "{{- channel}} is not a text channel.",
 					"no_case": "Cannot find case `#{{case}}`",
 					"no_report": "Cannot find report `#{{report}}`",

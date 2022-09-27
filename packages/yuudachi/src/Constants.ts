@@ -22,6 +22,9 @@ export const enum ThreatLevelColor {
 
 export const OP_DELIMITER = "-";
 
+export const CASE_REASON_MAX_LENGTH = 500;
+export const CASE_REASON_MIN_LENGTH = 3;
+
 export const MAX_TRUST_ACCOUNT_AGE = 1_000 * 60 * 60 * 24 * 7 * 4;
 export const SPAM_THRESHOLD = 4;
 export const SPAM_EXPIRE_SECONDS = 30;
@@ -36,6 +39,7 @@ export const AUDIT_LOG_WAIT_SECONDS = 2.5;
 
 export const HISTORY_DESCRIPTION_MAX_LENGTH = 80;
 export const REPORT_REASON_MAX_LENGTH = 1_500;
+export const REPORT_REASON_MIN_LENGTH = 1_500;
 
 export const REPORT_DUPLICATE_EXPIRE_SECONDS = 15 * 60;
 export const REPORT_MESSAGE_CONTEXT_LIMIT = 20;
