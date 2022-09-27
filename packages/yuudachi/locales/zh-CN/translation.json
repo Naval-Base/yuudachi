@@ -389,7 +389,8 @@
 						},
 						"no_self": "",
 						"invalid_attachment": "",
-						"timed_out": ""
+						"timed_out": "",
+						"bot": ""
 					},
 					"warnings": "",
 					"trust_and_safety_sub": "",
@@ -419,6 +420,11 @@
 				"user": {
 					"modal": {
 						"title": ""
+					},
+					"attachment_upsell": {
+						"base": "",
+						"mention": "",
+						"option": ""
 					},
 					"pending": "",
 					"cancel": "",
