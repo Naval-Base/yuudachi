@@ -39,7 +39,7 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Maximale Länge von `1900` für Grund überschritten.",
+					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} ist kein Textkanal.",
 					"no_case": "Kann den Fall `#{{case}}` nicht finden",
 					"no_report": "",
