@@ -8,7 +8,7 @@ import { kSQL } from "../../tokens.js";
 import { generateUserInfo } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../util/resolveMessage.js";
-import { type Report, ReportType } from "../reports/createReport.js";
+import { type Report, ReportType, ReportStatus } from "../reports/createReport.js";
 import { checkReportForum } from "../settings/checkLogChannel.js";
 import type { ReportStatusTagTuple, ReportTypeTagTuple } from "../settings/getGuildSetting.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
@@ -110,6 +110,10 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 
 	const starter = await reportPost.messages.fetch(reportPost.id);
 	await starter?.edit({ embeds });
+
+	if (report.status !== ReportStatus.Pending) {
+		await reportPost.edit({ archived: true });
+	}
 
 	return reportPost;
 }

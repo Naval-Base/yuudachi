@@ -389,7 +389,8 @@
 						},
 						"no_self": "You cannot report yourself.",
 						"invalid_attachment": "Invalid attachment, only images are allowed.",
-						"timed_out": "The report has timed out, please try again."
+						"timed_out": "The report has timed out, please try again.",
+						"bot": "You cannot report bots."
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "Trust & Safety",
@@ -419,6 +420,11 @@
 				"user": {
 					"modal": {
 						"title": "User report"
+					},
+					"attachment_upsell": {
+						"base": "ℹ️ ***Tip:** If it helps to provide context, you can attach an image to this report using the {{- report_command}}!*",
+						"mention": "{{- report_command}} command",
+						"option": "attachment option"
 					},
 					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
 					"cancel": "User report canceled.",

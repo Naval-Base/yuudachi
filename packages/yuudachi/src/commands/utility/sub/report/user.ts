@@ -11,13 +11,19 @@ import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { container } from "tsyringe";
 import type { ArgsParam, InteractionParam } from "../../../../Command.js";
-import { Color, REPORT_REASON_MAX_LENGTH, REPORT_DUPLICATE_EXPIRE_SECONDS } from "../../../../Constants.js";
+import {
+	Color,
+	REPORT_REASON_MAX_LENGTH,
+	REPORT_DUPLICATE_EXPIRE_SECONDS,
+	REPORT_DUPLICATE_PRE_EXPIRE_SECONDS,
+} from "../../../../Constants.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
 import { createReport, ReportType } from "../../../../functions/reports/createReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
 import { logger } from "../../../../logger.js";
 import { kRedis } from "../../../../tokens.js";
 import { createButton } from "../../../../util/button.js";
+import { resolveGuildCommand, chatInputApplicationCommandMention } from "../../../../util/commandUtils.js";
 import { ellipsis } from "../../../../util/embed.js";
 import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
 import { createMessageActionRow } from "../../../../util/messageActionRow.js";
@@ -73,6 +79,26 @@ export async function user(
 			lng: locale,
 		}),
 		"",
+	];
+
+	if (!attachment) {
+		const reportCommand = !interaction.isChatInputCommand() && (await resolveGuildCommand(interaction.guild, "report"));
+
+		contentParts.push(
+			i18next.t("command.utility.report.user.attachment_upsell.base", {
+				report_command: reportCommand
+					? i18next.t("command.utility.report.user.attachment_upsell.mention", {
+							report_command: chatInputApplicationCommandMention("report user", reportCommand.id),
+							lng: locale,
+					  })
+					: i18next.t("command.utility.report.user.attachment_upsell.option", { lng: locale }),
+				lng: locale,
+			}),
+			"",
+		);
+	}
+
+	contentParts.push(
 		i18next.t("command.utility.report.common.warnings", {
 			trust_and_safety: hyperlink(
 				i18next.t("command.utility.report.common.trust_and_safety_sub", { lng: locale }),
@@ -80,7 +106,7 @@ export async function user(
 			),
 			lng: locale,
 		}),
-	];
+	);
 
 	const embed: APIEmbed = {
 		author: {
@@ -131,6 +157,18 @@ export async function user(
 		});
 	} else if (collectedInteraction?.customId === reportKey) {
 		await collectedInteraction.deferUpdate();
+
+		if (await redis.exists(key)) {
+			await collectedInteraction.editReply({
+				content: i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }),
+				embeds: [],
+				components: [],
+			});
+
+			return;
+		}
+
+		await redis.setex(key, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
 
 		const report = await createReport({
 			guildId: interaction.guildId,
