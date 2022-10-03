@@ -1,4 +1,4 @@
-import { type Job, Queue, QueueScheduler, Worker } from "bullmq";
+import { type Job, Queue, Worker } from "bullmq";
 import { Client, type Snowflake } from "discord.js";
 import type { Redis } from "ioredis";
 import type { Sql } from "postgres";
@@ -15,8 +15,6 @@ export async function registerJobs() {
 	const sql = container.resolve<Sql<{}>>(kSQL);
 	const redis = container.resolve<Redis>(kRedis);
 
-	// @ts-expect-error: This works
-	new QueueScheduler("jobs", { connection: redis });
 	// @ts-expect-error: This works
 	const queue = new Queue("jobs", { connection: redis });
 
