@@ -1662,13 +1662,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fast-levenshtein@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "@types/fast-levenshtein@npm:0.0.2"
-  checksum: fb886b85c3a314948a86ad164b91217454993c88f658a529013cd0084e24996cd58637baf66e818ac6e78819e831e06a8d38d6f5f81ab36d1d4cf4c3da3c5e5b
-  languageName: node
-  linkType: hard
-
 "@types/form-data@npm:0.0.33":
   version: 0.0.33
   resolution: "@types/form-data@npm:0.0.33"
@@ -5623,15 +5616,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-levenshtein@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "fast-levenshtein@npm:3.0.0"
-  dependencies:
-    fastest-levenshtein: ^1.0.7
-  checksum: 02732ba6c656797ca7e987c25f3e53718c8fcc39a4bfab46def78eef7a8729eb629632d4a7eca4c27a33e10deabffa9984839557e18a96e91ecf7ccaeedb9890
-  languageName: node
-  linkType: hard
-
 "fast-redact@npm:^3.1.1":
   version: 3.1.1
   resolution: "fast-redact@npm:3.1.1"
@@ -5646,7 +5630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastest-levenshtein@npm:^1.0.7":
+"fastest-levenshtein@npm:^1.0.16":
   version: 1.0.16
   resolution: "fastest-levenshtein@npm:1.0.16"
   checksum: a78d44285c9e2ae2c25f3ef0f8a73f332c1247b7ea7fb4a191e6bb51aa6ee1ef0dfb3ed113616dcdc7023e18e35a8db41f61c8d88988e877cf510df8edafbc71
@@ -12530,7 +12514,6 @@ __metadata:
     "@types/aero__sanitizer": ^1.2.0
     "@types/common-tags": ^1.8.1
     "@types/diff": ^5.0.2
-    "@types/fast-levenshtein": ^0.0.2
     "@types/node": ^18.8.0
     "@types/ws": ^8.5.3
     bufferutil: ^4.0.6
@@ -12545,7 +12528,7 @@ __metadata:
     env-cmd: ^10.1.0
     eslint: ^8.24.0
     eslint-config-neon: ^0.1.33
-    fast-levenshtein: ^3.0.0
+    fastest-levenshtein: ^1.0.16
     i18next: ^21.9.2
     ioredis: ^5.2.3
     kleur: ^4.1.5

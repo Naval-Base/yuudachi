@@ -1,4 +1,4 @@
-import Leven from "fast-levenshtein";
+import { distance } from "fastest-levenshtein";
 
 function calcDistance(a: string, b: string) {
 	const [lowerA, lowerB] = [a.toLowerCase(), b.toLowerCase()];
@@ -11,7 +11,7 @@ function calcDistance(a: string, b: string) {
 		return 1;
 	}
 
-	return Leven.get(lowerA, lowerB);
+	return distance(lowerA, lowerB);
 }
 
 export function findBestMatch(input: string, options: string[]) {
