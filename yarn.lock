@@ -2447,10 +2447,11 @@ __metadata:
     del-cli: ^5.0.0
     discord-api-types: ^0.37.12
     discord.js: ^14.5.0
-    eslint: ^8.24.0
+    eslint: ^8.25.0
     eslint-config-neon: ^0.1.35
     ioredis: ^5.2.3
     pino: ^8.6.1
+    pinst: ^3.0.0
     postgres: ^3.3.1
     prettier: ^2.7.1
     readdirp: ^3.6.0
@@ -2476,7 +2477,7 @@ __metadata:
     ansi-to-html: ^0.7.2
     c8: ^7.12.0
     concurrently: ^7.4.0
-    eslint: ^8.24.0
+    eslint: ^8.25.0
     eslint-config-neon: ^0.1.35
     happy-dom: ^7.4.0
     hast-util-has-property: ^2.0.0
@@ -2522,7 +2523,7 @@ __metadata:
     c8: ^7.12.0
     cmdk: ^0.1.20
     concurrently: ^7.4.0
-    eslint: ^8.24.0
+    eslint: ^8.25.0
     eslint-config-neon: ^0.1.35
     happy-dom: ^7.4.0
     next: ^12.3.1
@@ -5409,7 +5410,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.24.0":
+"eslint@npm:^8.25.0":
   version: 8.25.0
   resolution: "eslint@npm:8.25.0"
   dependencies:
@@ -9588,6 +9589,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pinst@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "pinst@npm:3.0.0"
+  bin:
+    pinst: bin.js
+  checksum: 4ae48a6a60f79c37071233af51b4d91bfc85cfa3c12b66ccda60cdb642b4d14a4ab0cb3587afc55b1f6192cea1772a5e4822026a0d0d3528296edef00cc2d61f
+  languageName: node
+  linkType: hard
+
 "pluralize@npm:^8.0.0":
   version: 8.0.0
   resolution: "pluralize@npm:8.0.0"
@@ -12555,7 +12565,7 @@ __metadata:
     discord-api-types: ^0.37.12
     discord.js: ^14.5.0
     env-cmd: ^10.1.0
-    eslint: ^8.24.0
+    eslint: ^8.25.0
     eslint-config-neon: ^0.1.35
     i18next: ^21.10.0
     ioredis: ^5.2.3
