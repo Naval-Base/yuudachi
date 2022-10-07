@@ -13,7 +13,6 @@ export async function registerJobs() {
 	const sql = container.resolve<Sql<{}>>(kSQL);
 	const redis = container.resolve<Redis>(kRedis);
 
-	// @ts-expect-error: This works
 	const queue = new Queue("jobs", { connection: redis });
 
 	try {
@@ -96,7 +95,6 @@ export async function registerJobs() {
 						break;
 				}
 			},
-			// @ts-expect-error: This works
 			{ connection: redis },
 		);
 	} catch (error_) {
