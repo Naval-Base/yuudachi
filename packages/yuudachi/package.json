@@ -18,6 +18,9 @@
 		"migrate": "env-cmd ley"
 	},
 	"type": "module",
+	"directories": {
+		"lib": "src"
+	},
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "AGPL-3.0",
