@@ -8,19 +8,17 @@ import "../styles/main.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<>
-			<ThemeProvider
-				attribute="class"
-				defaultTheme="system"
-				value={{
-					light: "light",
-					dark: "dark",
-				}}
-				disableTransitionOnChange
-			>
-				<NextProgress color="#5865f2" options={{ showSpinner: false }} />
-				<Component {...pageProps} />
-			</ThemeProvider>
-		</>
+		<ThemeProvider
+			attribute="class"
+			defaultTheme="system"
+			disableTransitionOnChange
+			value={{
+				light: "light",
+				dark: "dark",
+			}}
+		>
+			<NextProgress color="#5865f2" options={{ showSpinner: false }} />
+			<Component {...pageProps} />
+		</ThemeProvider>
 	);
 }

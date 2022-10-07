@@ -7,27 +7,14 @@ import {
 	EMBED_FIELD_VALUE_LIMIT,
 	EMBED_FOOTER_TEXT_LIMIT,
 	EMBED_TITLE_LIMIT,
-} from "../Constants.js";
+} from "../constants.js";
+import { ellipsis } from "./ellipsis.js";
 
 export function addFields(embed: APIEmbed, ...data: APIEmbedField[]): APIEmbed {
 	return {
 		...embed,
 		fields: [...(embed.fields ?? []), ...data],
 	};
-}
-
-export function ellipsis(text: string, total: number) {
-	if (text.length <= total) {
-		return text;
-	}
-
-	const keep = total - 3;
-
-	if (keep < 1) {
-		return text.slice(0, total);
-	}
-
-	return `${text.slice(0, keep)}...`;
 }
 
 export function truncateEmbed(embed: APIEmbed): APIEmbed {
@@ -56,24 +43,4 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 					.slice(0, EMBED_FIELD_LIMIT)
 			: [],
 	} as const;
-}
-
-export function truncate(text: string, length: number, splitChar = " ") {
-	if (text.length <= length) {
-		return text;
-	}
-
-	const words = text.split(splitChar);
-	const res: string[] = [];
-	for (const word of words) {
-		const full = res.join(splitChar);
-
-		if (full.length + word.length + 1 <= length - 3) {
-			res.push(word);
-		}
-	}
-
-	const resText = res.join(splitChar);
-
-	return resText.length === text.length ? resText : `${resText.trim()}...`;
 }

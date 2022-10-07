@@ -1,4 +1,6 @@
 import { ms } from "@naval-base/ms";
+import { createButton, createMessageActionRow } from "@yuudachi/framework";
+import type { InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import dayjs from "dayjs";
 import {
 	type TextChannel,
@@ -10,11 +12,8 @@ import {
 } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
-import type { InteractionParam, LocaleParam } from "../../../../Command.js";
 import { createLockdown } from "../../../../functions/lockdowns/createLockdown.js";
 import { getLockdown } from "../../../../functions/lockdowns/getLockdown.js";
-import { createButton } from "../../../../util/button.js";
-import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
 type LockdownLockArgs = {
 	channel: TextChannel;

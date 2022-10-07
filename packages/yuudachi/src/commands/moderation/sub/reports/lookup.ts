@@ -1,16 +1,14 @@
+import { kSQL, truncateEmbed, container } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import type { Message } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import type { ArgsParam, InteractionParam, LocaleParam } from "../../../../Command.js";
 import { OP_DELIMITER } from "../../../../Constants.js";
 import { formatMessageToEmbed } from "../../../../functions/logging/formatMessageToEmbed.js";
 import { generateReportEmbed } from "../../../../functions/logging/generateReportEmbed.js";
 import { ReportType } from "../../../../functions/reports/createReport.js";
 import { type RawReport, transformReport } from "../../../../functions/reports/transformReport.js";
 import type { ReportUtilsCommand } from "../../../../interactions/index.js";
-import { kSQL } from "../../../../tokens.js";
-import { truncateEmbed } from "../../../../util/embed.js";
 import { generateHistory, generateUserInfo, HistoryType } from "../../../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../../../util/resolveMessage.js";

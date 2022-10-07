@@ -1,5 +1,7 @@
 import { Buffer } from "node:buffer";
 import { on } from "node:events";
+import { logger, kWebhooks, addFields, truncateEmbed } from "@yuudachi/framework";
+import type { Event } from "@yuudachi/framework/types";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime.js";
 import utc from "dayjs/plugin/utc.js";
@@ -7,12 +9,8 @@ import { Client, Events, type Snowflake, type Webhook } from "discord.js";
 import i18next from "i18next";
 import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
-import type { Event } from "../../Event.js";
 import { formatMessagesToAttachment } from "../../functions/logging/formatMessagesToAttachment.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
-import { logger } from "../../logger.js";
-import { kWebhooks } from "../../tokens.js";
-import { addFields, truncateEmbed } from "../../util/embed.js";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);

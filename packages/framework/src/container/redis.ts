@@ -1,7 +1,7 @@
 import process from "node:process";
 import Redis from "ioredis";
 import { container } from "tsyringe";
-import { kRedis } from "../tokens.js";
+import { kRedis } from "./tokens.js";
 
 export function createRedis() {
 	// @ts-expect-error: This is callable

@@ -1,6 +1,6 @@
 import postgres, { type Sql } from "postgres";
 import { container } from "tsyringe";
-import { kSQL } from "../tokens.js";
+import { kSQL } from "./tokens.js";
 
 export function createPostgres(): Sql<{}> {
 	const sql = postgres({

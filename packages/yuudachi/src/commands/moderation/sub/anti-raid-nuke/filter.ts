@@ -1,7 +1,7 @@
+import type { InteractionParam, ArgsParam, LocaleParam } from "@yuudachi/framework/types";
 import dayjs from "dayjs";
 import { codeBlock, time, TimestampStyles } from "discord.js";
 import i18next from "i18next";
-import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
 import {
 	ageFilter,
 	joinFilter,

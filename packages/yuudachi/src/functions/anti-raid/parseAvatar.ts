@@ -1,6 +1,6 @@
 import { URL } from "node:url";
+import { container } from "@yuudachi/framework";
 import { Client } from "discord.js";
-import { container } from "tsyringe";
 
 export async function parseAvatar(input?: string | null | undefined) {
 	if (!input) {

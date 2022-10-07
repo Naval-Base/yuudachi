@@ -1,18 +1,19 @@
-import { Collection, type Snowflake } from "discord.js";
-import i18next from "i18next";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import {
+	Command,
+	logger,
+	ellipsis,
 	AUTOCOMPLETE_CHOICE_LIMIT,
 	AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
-	OP_DELIMITER,
 	SNOWFLAKE_MIN_LENGTH,
-} from "../../Constants.js";
+} from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
+import { Collection, type Snowflake } from "discord.js";
+import i18next from "i18next";
+import { OP_DELIMITER } from "../../Constants.js";
 import { ReportType } from "../../functions/reports/createReport.js";
 import { findReports } from "../../functions/reports/findReports.js";
 import type { ReportUtilsCommand } from "../../interactions/index.js";
-import { logger } from "../../logger.js";
 import { REPORT_KEYS } from "../../util/actionKeys.js";
-import { ellipsis } from "../../util/embed.js";
 import { lookup } from "./sub/reports/lookup.js";
 import { status } from "./sub/reports/status.js";
 

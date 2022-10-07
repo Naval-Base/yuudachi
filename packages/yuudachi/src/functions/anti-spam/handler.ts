@@ -1,10 +1,8 @@
+import { logger, kRedis, container } from "@yuudachi/framework";
 import { Client, type Snowflake } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import { container } from "tsyringe";
 import { MENTION_THRESHOLD, SPAM_THRESHOLD } from "../../Constants.js";
-import { logger } from "../../logger.js";
-import { kRedis } from "../../tokens.js";
 import { type Case, CaseAction, createCase } from "../cases/createCase.js";
 import { upsertCaseLog } from "../logging/upsertCaseLog.js";
 import { checkLogChannel } from "../settings/checkLogChannel.js";

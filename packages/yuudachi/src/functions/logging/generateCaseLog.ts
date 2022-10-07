@@ -1,9 +1,7 @@
+import { logger, kSQL, container } from "@yuudachi/framework";
 import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink, channelLink } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import { logger } from "../../logger.js";
-import { kSQL } from "../../tokens.js";
 import { type Case, CaseAction } from "../cases/createCase.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 

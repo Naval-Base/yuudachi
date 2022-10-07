@@ -1,9 +1,7 @@
 import process from "node:process";
+import { logger, kRedis, container } from "@yuudachi/framework";
 import type { Redis } from "ioredis";
-import { container } from "tsyringe";
 import { request as fetch, type Dispatcher } from "undici";
-import { logger } from "../../logger.js";
-import { kRedis } from "../../tokens.js";
 
 export const scamURLEnvs = ["SCAM_DOMAIN_URL", "SCAM_DOMAIN_DISCORD_URL"] as const;
 export enum ScamRedisKeys {

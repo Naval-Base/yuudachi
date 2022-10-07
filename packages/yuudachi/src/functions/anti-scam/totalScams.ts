@@ -1,8 +1,7 @@
+import { kRedis, container } from "@yuudachi/framework";
 import type { Snowflake } from "discord.js";
 import type { Redis } from "ioredis";
-import { container } from "tsyringe";
 import { SCAM_EXPIRE_SECONDS } from "../../Constants.js";
-import { kRedis } from "../../tokens.js";
 import { checkScam } from "./checkScam.js";
 
 export async function totalScams(content: string, guildId: Snowflake, userId: Snowflake) {

@@ -1,14 +1,12 @@
+import { logger, kRedis, kSQL, container } from "@yuudachi/framework";
 import { type Job, Queue, Worker } from "bullmq";
 import { Client, type Snowflake } from "discord.js";
 import type { Redis } from "ioredis";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
 import { refreshScamDomains } from "./functions/anti-scam/refreshScamDomains.js";
 import { deleteCase } from "./functions/cases/deleteCase.js";
 import { deleteLockdown } from "./functions/lockdowns/deleteLockdown.js";
 import { upsertCaseLog } from "./functions/logging/upsertCaseLog.js";
-import { logger } from "./logger.js";
-import { kRedis, kSQL } from "./tokens.js";
 
 export async function registerJobs() {
 	const client = container.resolve<Client<true>>(Client);

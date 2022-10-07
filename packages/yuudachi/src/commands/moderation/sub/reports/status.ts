@@ -1,6 +1,6 @@
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { channelLink, hyperlink } from "discord.js";
 import i18next from "i18next";
-import type { ArgsParam, InteractionParam, LocaleParam } from "../../../../Command.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
 import type { ReportStatus } from "../../../../functions/reports/createReport.js";
 import { getReport } from "../../../../functions/reports/getReport.js";

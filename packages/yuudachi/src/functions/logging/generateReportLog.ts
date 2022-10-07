@@ -1,3 +1,4 @@
+import { kSQL, ellipsis, container } from "@yuudachi/framework";
 import {
 	type Message,
 	type Snowflake,
@@ -11,10 +12,7 @@ import {
 } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
 import { REPORT_REASON_MAX_LENGTH } from "../../Constants.js";
-import { kSQL } from "../../tokens.js";
-import { ellipsis } from "../../util/embed.js";
 import type { Report } from "../reports/createReport.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 

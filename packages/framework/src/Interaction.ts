@@ -8,7 +8,7 @@ import {
 	type Attachment,
 	type Message,
 } from "discord.js";
-import type { ArgumentsOf, CommandPayload } from "./ArgumentsOf.js";
+import type { ArgumentsOf, CommandPayload } from "./types/ArgumentsOf.js";
 
 export function transformInteraction<T extends CommandPayload = CommandPayload>(
 	options: readonly CommandInteractionOption<"cached">[],
