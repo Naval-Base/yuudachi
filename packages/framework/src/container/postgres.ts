@@ -1,9 +1,10 @@
-import postgres from "postgres";
 import { container } from "tsyringe";
 import { kSQL } from "./tokens.js";
 
-export function createPostgres() {
-	const sql = postgres({
+export async function createPostgres() {
+	const postgres = await import("postgres");
+
+	const sql = postgres.default({
 		types: {
 			date: {
 				to: 1_184,
