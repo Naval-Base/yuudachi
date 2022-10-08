@@ -1,6 +1,6 @@
+import { addFields } from "@yuudachi/framework";
 import type { Snowflake, User } from "discord.js";
 import i18next from "i18next";
-import { addFields } from "../../util/embed.js";
 import type { Case } from "../cases/createCase.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { generateCaseColor } from "./generateCaseColor.js";

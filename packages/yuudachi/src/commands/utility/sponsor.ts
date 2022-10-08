@@ -1,13 +1,10 @@
+import { kSQL, Command, createButton, createMessageActionRow, container } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import { type Snowflake, ButtonStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import type { SponsorCommand, SponsorUserContextCommand } from "../../interactions/index.js";
-import { kSQL } from "../../tokens.js";
-import { createButton } from "../../util/button.js";
-import { createMessageActionRow } from "../../util/messageActionRow.js";
 
 export default class extends Command<typeof SponsorCommand | typeof SponsorUserContextCommand> {
 	public constructor() {

@@ -3,22 +3,25 @@ import { readFile } from "node:fs/promises";
 import process from "node:process";
 import { URL, fileURLToPath, pathToFileURL } from "node:url";
 import { Backend } from "@skyra/i18next-backend";
+import {
+	type Command,
+	logger,
+	kCommands,
+	kRedis,
+	createClient,
+	commandInfo,
+	createCommands,
+	dynamicImport,
+	createPostgres,
+	createRedis,
+	container,
+} from "@yuudachi/framework";
+import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { GatewayIntentBits, Options, Partials } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import readdirp from "readdirp";
-import { container } from "tsyringe";
-import { type Command, commandInfo } from "./Command.js";
-import type { Event } from "./Event.js";
 import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomains.js";
-import type { CommandPayload } from "./interactions/ArgumentsOf.js";
-import { logger } from "./logger.js";
-import { kCommands, kRedis } from "./tokens.js";
-import { createClient } from "./util/client.js";
-import { createCommands } from "./util/commands.js";
-import { dynamicImport } from "./util/dynamicImport.js";
-import { createPostgres } from "./util/postgres.js";
-import { createRedis } from "./util/redis.js";
 import { createWebhooks } from "./util/webhooks.js";
 import { WebSocketConnection } from "./websocket/WebSocketConnection.js";
 

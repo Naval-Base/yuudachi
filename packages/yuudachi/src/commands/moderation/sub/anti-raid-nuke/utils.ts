@@ -1,3 +1,4 @@
+import { container, kRedis } from "@yuudachi/framework";
 import dayjs from "dayjs";
 import {
 	type Snowflake,
@@ -8,10 +9,8 @@ import {
 } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import { container } from "tsyringe";
 import { ANTI_RAID_NUKE_SAFETY_LOCK_RELEASE_SECONDS, DATE_FORMAT_WITH_SECONDS } from "../../../../Constants.js";
 import { canBan } from "../../../../functions/anti-raid/canBan.js";
-import { kRedis } from "../../../../tokens.js";
 import { resolveTimestamp } from "../../../../util/timestamp.js";
 
 /**

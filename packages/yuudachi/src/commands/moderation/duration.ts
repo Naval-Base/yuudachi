@@ -1,10 +1,11 @@
 import { ms } from "@naval-base/ms";
+import { Command, kRedis } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { hyperlink, messageLink } from "discord.js";
 import i18next from "i18next";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { inject, injectable } from "tsyringe";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
 import { CaseAction } from "../../functions/cases/createCase.js";
 import { getCase } from "../../functions/cases/getCase.js";
 import { updateCase } from "../../functions/cases/updateCase.js";
@@ -12,7 +13,6 @@ import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { DurationCommand } from "../../interactions/index.js";
-import { kRedis } from "../../tokens.js";
 
 @injectable()
 export default class extends Command<typeof DurationCommand> {

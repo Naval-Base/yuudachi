@@ -1,6 +1,6 @@
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { hyperlink } from "discord.js";
 import i18next from "i18next";
-import type { ArgsParam, InteractionParam, LocaleParam } from "../../../../Command.js";
 import { parseFile } from "../../../../functions/anti-raid/parseFile.js";
 import type { AntiRaidNukeCommand } from "../../../../interactions/index.js";
 import { AntiRaidNukeMode, handleAntiRaidNuke } from "./coreCommand.js";

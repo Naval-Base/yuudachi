@@ -1,6 +1,6 @@
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
+import { Command, truncateEmbed } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import type { HistoryCommand, HistoryUserContextCommand } from "../../interactions/index.js";
-import { truncateEmbed } from "../../util/embed.js";
 import { generateHistory, HistoryType } from "../../util/generateHistory.js";
 
 type HistoryCommandArgs =

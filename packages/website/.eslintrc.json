@@ -1,5 +1,6 @@
 {
 	"extends": [
+		"../../.eslintrc.json",
 		"neon/common",
 		"neon/browser",
 		"neon/node",
@@ -7,7 +8,6 @@
 		"neon/react",
 		"neon/jsx-a11y",
 		"neon/next",
-		"neon/prettier",
-		"../../.eslintrc.json"
+		"neon/prettier"
 	]
 }

@@ -1,5 +1,6 @@
+import { Command } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
 import type { PingCommand } from "../../interactions/index.js";
 
 export default class extends Command<typeof PingCommand> {

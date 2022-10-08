@@ -1,20 +1,16 @@
 import { ms } from "@naval-base/ms";
+import { container, kSQL, createButton, truncateEmbed, createMessageActionRow } from "@yuudachi/framework";
+import type { InteractionParam, ArgsParam, LocaleParam } from "@yuudachi/framework/types";
 import { type Snowflake, ButtonStyle, ComponentType, type InteractionResponse } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
 import { CASE_REASON_MAX_LENGTH } from "../../../../Constants.js";
 import { CaseAction, createCase } from "../../../../functions/cases/createCase.js";
 import { generateCasePayload } from "../../../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
 import type { RestrictCommand } from "../../../../interactions/index.js";
-import { kSQL } from "../../../../tokens.js";
-import { createButton } from "../../../../util/button.js";
-import { truncateEmbed } from "../../../../util/embed.js";
 import { generateHistory } from "../../../../util/generateHistory.js";
-import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
 export async function embed(
 	interaction: InteractionParam,

@@ -1,7 +1,7 @@
+import { truncateEmbed } from "@yuudachi/framework";
 import type { Message } from "discord.js";
 import i18next from "i18next";
 import { Color } from "../../Constants.js";
-import { truncateEmbed } from "../../util/embed.js";
 
 export function formatMessageToEmbed(message: Message<true>, locale: string) {
 	let embed = truncateEmbed({

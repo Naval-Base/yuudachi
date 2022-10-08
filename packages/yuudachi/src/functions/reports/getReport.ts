@@ -1,6 +1,5 @@
+import { kSQL, container } from "@yuudachi/framework";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import { kSQL } from "../../tokens.js";
 import { type RawReport, transformReport } from "./transformReport.js";
 
 export async function getReport(guildId: string, reportId: number) {
