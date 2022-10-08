@@ -26,8 +26,6 @@ export function findBestMatch(input: string, options: string[]) {
 		}))
 		.filter((match) => match.dist < 3);
 
-	console.log(matches);
-
 	if (matches.length === 0) {
 		return [];
 	}
