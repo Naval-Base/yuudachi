@@ -1,8 +1,8 @@
-import postgres, { type Sql } from "postgres";
+import postgres from "postgres";
 import { container } from "tsyringe";
 import { kSQL } from "./tokens.js";
 
-export function createPostgres(): Sql<{}> {
+export function createPostgres() {
 	const sql = postgres({
 		types: {
 			date: {
@@ -14,6 +14,4 @@ export function createPostgres(): Sql<{}> {
 		},
 	});
 	container.register(kSQL, { useValue: sql });
-
-	return sql;
 }

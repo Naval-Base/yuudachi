@@ -7,6 +7,4 @@ export function createRedis() {
 	// @ts-expect-error: This is callable
 	const redis = new Redis(process.env.REDISHOST!, { maxRetriesPerRequest: null });
 	container.register(kRedis, { useValue: redis });
-
-	return redis;
 }
