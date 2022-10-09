@@ -5693,6 +5693,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastest-levenshtein@npm:^1.0.16":
+  version: 1.0.16
+  resolution: "fastest-levenshtein@npm:1.0.16"
+  checksum: a78d44285c9e2ae2c25f3ef0f8a73f332c1247b7ea7fb4a191e6bb51aa6ee1ef0dfb3ed113616dcdc7023e18e35a8db41f61c8d88988e877cf510df8edafbc71
+  languageName: node
+  linkType: hard
+
 "fastest-stable-stringify@npm:^2.0.2":
   version: 2.0.2
   resolution: "fastest-stable-stringify@npm:2.0.2"
@@ -12557,6 +12564,7 @@ __metadata:
     env-cmd: ^10.1.0
     eslint: ^8.25.0
     eslint-config-neon: ^0.1.35
+    fastest-levenshtein: ^1.0.16
     i18next: ^21.10.0
     ioredis: ^5.2.3
     kleur: ^4.1.5

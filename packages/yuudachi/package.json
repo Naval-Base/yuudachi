@@ -40,6 +40,7 @@
 		"discord-api-types": "^0.37.12",
 		"discord.js": "^14.5.0",
 		"env-cmd": "^10.1.0",
+		"fastest-levenshtein": "^1.0.16",
 		"i18next": "^21.10.0",
 		"ioredis": "^5.2.3",
 		"kleur": "^4.1.5",
