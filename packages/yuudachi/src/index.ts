@@ -25,8 +25,8 @@ import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomai
 import { createWebhooks } from "./util/webhooks.js";
 import { WebSocketConnection } from "./websocket/WebSocketConnection.js";
 
-createPostgres();
-createRedis();
+await createPostgres();
+await createRedis();
 
 const client = createClient({
 	intents: [
