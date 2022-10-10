@@ -1,10 +1,9 @@
 import { Buffer } from "node:buffer";
+import { kSQL, container } from "@yuudachi/framework";
 import type { APIEmbed, Embed, Guild, Message } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
 import { REPORT_MESSAGE_CONTEXT_LIMIT } from "../../Constants.js";
-import { kSQL } from "../../tokens.js";
 import { generateUserInfo } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../util/resolveMessage.js";

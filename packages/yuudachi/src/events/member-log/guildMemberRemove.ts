@@ -1,10 +1,9 @@
 import { on } from "node:events";
+import { logger, kWebhooks } from "@yuudachi/framework";
+import type { Event } from "@yuudachi/framework/types";
 import { Client, Events, type GuildMember, type Webhook } from "discord.js";
 import { inject, injectable } from "tsyringe";
-import type { Event } from "../../Event.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
-import { logger } from "../../logger.js";
-import { kWebhooks } from "../../tokens.js";
 import { generateMemberLog } from "../../util/generateMemberLog.js";
 
 @injectable()

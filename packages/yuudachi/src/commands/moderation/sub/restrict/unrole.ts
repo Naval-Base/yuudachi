@@ -1,15 +1,14 @@
+import { createButton, createMessageActionRow } from "@yuudachi/framework";
+import type { InteractionParam, ArgsParam, LocaleParam } from "@yuudachi/framework/types";
 import { ButtonStyle, ComponentType, hyperlink, messageLink, type InteractionResponse } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
-import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
 import { deleteCase } from "../../../../functions/cases/deleteCase.js";
 import { getCase } from "../../../../functions/cases/getCase.js";
 import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../../../functions/settings/getGuildSetting.js";
 import type { RestrictCommand } from "../../../../interactions/index.js";
-import { createButton } from "../../../../util/button.js";
-import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
 export async function unrole(
 	interaction: InteractionParam,

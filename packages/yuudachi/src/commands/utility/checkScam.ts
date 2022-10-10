@@ -1,9 +1,9 @@
+import { Command, addFields, truncateEmbed } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
 import { Color } from "../../Constants.js";
 import { checkScam } from "../../functions/anti-scam/checkScam.js";
 import type { CheckScamCommand } from "../../interactions/index.js";
-import { addFields, truncateEmbed } from "../../util/embed.js";
 
 export default class extends Command<typeof CheckScamCommand> {
 	public override async chatInput(

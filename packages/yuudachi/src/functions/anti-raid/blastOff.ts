@@ -1,9 +1,8 @@
+import { kRedis, container } from "@yuudachi/framework";
 import type { ButtonInteraction, GuildMember } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import { container } from "tsyringe";
 import type { TargetRejection } from "../../commands/moderation/sub/anti-raid-nuke/utils.js";
-import { kRedis } from "../../tokens.js";
 import { type Case, CaseAction, createCase } from "../cases/createCase.js";
 import { generateCasePayload } from "../logging/generateCasePayload.js";
 

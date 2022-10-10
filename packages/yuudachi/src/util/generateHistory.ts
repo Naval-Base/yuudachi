@@ -1,3 +1,4 @@
+import { logger, kSQL, addFields, truncate, EMBED_DESCRIPTION_LIMIT, container } from "@yuudachi/framework";
 import { oneLine } from "common-tags";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime.js";
@@ -17,16 +18,12 @@ import {
 } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import { Color, EMBED_DESCRIPTION_LIMIT, HISTORY_DESCRIPTION_MAX_LENGTH, ThreatLevelColor } from "../Constants.js";
+import { Color, HISTORY_DESCRIPTION_MAX_LENGTH, ThreatLevelColor } from "../Constants.js";
 import type { RawCase } from "../functions/cases/transformCase.js";
 import { ReportStatus } from "../functions/reports/createReport.js";
 import type { RawReport } from "../functions/reports/transformReport.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
-import { logger } from "../logger.js";
-import { kSQL } from "../tokens.js";
 import { ACTION_KEYS, REPORT_KEYS } from "./actionKeys.js";
-import { addFields, truncate } from "./embed.js";
 
 dayjs.extend(relativeTime);
 

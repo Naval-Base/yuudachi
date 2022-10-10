@@ -1,18 +1,17 @@
 import { on } from "node:events";
+import { logger, kRedis } from "@yuudachi/framework";
+import type { Event } from "@yuudachi/framework/types";
 import { Client, Events, type Message } from "discord.js";
 import i18next from "i18next";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { inject, injectable } from "tsyringe";
 import { SCAM_THRESHOLD } from "../../Constants.js";
-import type { Event } from "../../Event.js";
 import { totalScams } from "../../functions/anti-scam/totalScams.js";
 import { type Case, CaseAction, createCase } from "../../functions/cases/createCase.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
-import { logger } from "../../logger.js";
-import { kRedis } from "../../tokens.js";
 
 @injectable()
 export default class implements Event {

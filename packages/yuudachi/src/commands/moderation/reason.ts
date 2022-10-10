@@ -1,7 +1,8 @@
+import { Command, logger, createButton, truncate, createMessageActionRow } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { ComponentType, ButtonStyle, hyperlink, messageLink } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import type { Case } from "../../functions/cases/createCase.js";
 import { getCase } from "../../functions/cases/getCase.js";
@@ -10,10 +11,6 @@ import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReasonCommand } from "../../interactions/index.js";
-import { logger } from "../../logger.js";
-import { createButton } from "../../util/button.js";
-import { truncate } from "../../util/embed.js";
-import { createMessageActionRow } from "../../util/messageActionRow.js";
 
 export default class extends Command<typeof ReasonCommand> {
 	public override async chatInput(

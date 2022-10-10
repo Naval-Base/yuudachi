@@ -1,21 +1,17 @@
+import { Command, logger, kRedis, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import { TextInputStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
 import { reportRedisMessageKey, reportRedisUserKey } from "../../functions/reports/utils.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReportCommand, ReportMessageContextCommand, ReportUserContextCommand } from "../../interactions/index.js";
-import { logger } from "../../logger.js";
-import { kRedis } from "../../tokens.js";
-import { createModal } from "../../util/modal.js";
-import { createModalActionRow } from "../../util/modalActionRow.js";
 import { parseMessageLink, resolveMessage } from "../../util/resolveMessage.js";
-import { createTextComponent } from "../../util/textComponent.js";
 import { message } from "./sub/report/message.js";
 import { user } from "./sub/report/user.js";
 

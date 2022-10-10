@@ -1,9 +1,7 @@
 import { createHash } from "node:crypto";
 import { URL } from "node:url";
+import { logger, kRedis, container } from "@yuudachi/framework";
 import type { Redis } from "ioredis";
-import { container } from "tsyringe";
-import { logger } from "../../logger.js";
-import { kRedis } from "../../tokens.js";
 import { resolveRedirect } from "../../util/resolveRedirect.js";
 import { ScamRedisKeys, scamURLEnvs } from "./refreshScamDomains.js";
 

@@ -6,7 +6,7 @@ export default defineConfig({
 		presetWebFonts({
 			provider: "bunny",
 			fonts: {
-				mono: ["JetBrains Mono", "JetBrains Mono:400,600,700"],
+				mono: ["JetBrains Mono:400,600,700"],
 			},
 		}),
 	],

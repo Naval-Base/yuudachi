@@ -1,18 +1,21 @@
 import process from "node:process";
+import {
+	Command,
+	logger,
+	kRedis,
+	createButton,
+	addFields,
+	createMessageActionRow,
+	container,
+} from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { ButtonStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
-import { container } from "tsyringe";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
 import { Color } from "../../Constants.js";
 import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from "../../functions/anti-scam/refreshScamDomains.js";
 import type { RefreshScamlistCommand } from "../../interactions/index.js";
-import { logger } from "../../logger.js";
-import { kRedis } from "../../tokens.js";
-import { createButton } from "../../util/button.js";
-import { addFields } from "../../util/embed.js";
-import { createMessageActionRow } from "../../util/messageActionRow.js";
 
 export default class extends Command<typeof RefreshScamlistCommand> {
 	public override async chatInput(

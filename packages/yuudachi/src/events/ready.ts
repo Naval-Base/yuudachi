@@ -1,11 +1,10 @@
 import { on } from "node:events";
+import { logger, kWebhooks } from "@yuudachi/framework";
+import type { Event } from "@yuudachi/framework/types";
 import { Client, Events, type Webhook, PermissionFlagsBits } from "discord.js";
 import { inject, injectable } from "tsyringe";
-import type { Event } from "../Event.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 import { registerJobs } from "../jobs.js";
-import { logger } from "../logger.js";
-import { kWebhooks } from "../tokens.js";
 
 @injectable()
 export default class implements Event {

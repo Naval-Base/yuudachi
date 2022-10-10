@@ -48,17 +48,6 @@ export const REPORT_MESSAGE_CONTEXT_LIMIT = 20;
 export const DATE_FORMAT_LOGFILE = "YYYY-MM-DD_HH-mm-ss";
 export const DATE_FORMAT_WITH_SECONDS = "YYYY/MM/DD HH:mm:ss";
 
-export const EMBED_TITLE_LIMIT = 256;
-export const EMBED_DESCRIPTION_LIMIT = 4_096;
-export const EMBED_FOOTER_TEXT_LIMIT = 2_048;
-export const EMBED_AUTHOR_NAME_LIMIT = 256;
-export const EMBED_FIELD_LIMIT = 25;
-export const EMBED_FIELD_NAME_LIMIT = 256;
-export const EMBED_FIELD_VALUE_LIMIT = 1_024;
-export const SNOWFLAKE_MIN_LENGTH = 17;
-export const AUTOCOMPLETE_CHOICE_LIMIT = 25;
-export const AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT = 100;
-
 export const AUTOCOMPLETE_REASON_FOCUSED_FIELD_NAME = "reason";
 
 export const TRUST_AND_SAFETY_URL_BASE = "https://support.discord.com/hc/en-us/requests/new";

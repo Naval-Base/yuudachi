@@ -1,7 +1,6 @@
+import { kSQL, container } from "@yuudachi/framework";
 import type { Snowflake } from "discord.js";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
-import { kSQL } from "../../tokens.js";
 
 export enum SettingsKeys {
 	AntiRaidNukeArchiveChannelId = "anti_raid_nuke_archive_channel_id",

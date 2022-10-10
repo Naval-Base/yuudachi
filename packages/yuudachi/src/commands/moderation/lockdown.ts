@@ -1,6 +1,7 @@
+import { Command } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { type TextChannel, ChannelType, PermissionFlagsBits } from "discord.js";
 import i18next from "i18next";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import type { LockdownCommand } from "../../interactions/index.js";
 import { lift } from "./sub/lockdown/lift.js";

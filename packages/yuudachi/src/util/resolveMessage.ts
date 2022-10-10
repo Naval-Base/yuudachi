@@ -1,6 +1,6 @@
+import { container } from "@yuudachi/framework";
 import { type Snowflake, Client } from "discord.js";
 import i18next from "i18next";
-import { container } from "tsyringe";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 
 export function parseMessageLink(link: string) {
@@ -14,10 +14,6 @@ export function parseMessageLink(link: string) {
 
 	const { guildId, channelId, messageId } = groups;
 	return { guildId, channelId, messageId };
-}
-
-export function validateSnowflake(id: Snowflake) {
-	return /^\d{17,20}$/.test(id);
 }
 
 export async function resolveMessage(

@@ -1,9 +1,9 @@
+import { container, createButton, ellipsis, createMessageActionRow, kRedis, logger } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam } from "@yuudachi/framework/types";
 import { ButtonStyle, ComponentType, hyperlink, type Message, type ModalSubmitInteraction } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
-import { container } from "tsyringe";
-import type { ArgsParam, InteractionParam } from "../../../../Command.js";
 import {
 	REPORT_DUPLICATE_EXPIRE_SECONDS,
 	REPORT_DUPLICATE_PRE_EXPIRE_SECONDS,
@@ -15,12 +15,7 @@ import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.j
 import { createReport, ReportType } from "../../../../functions/reports/createReport.js";
 import { reportRedisMessageKey, reportRedisUserKey } from "../../../../functions/reports/utils.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
-import { logger } from "../../../../logger.js";
-import { kRedis } from "../../../../tokens.js";
-import { createButton } from "../../../../util/button.js";
-import { ellipsis } from "../../../../util/embed.js";
 import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
-import { createMessageActionRow } from "../../../../util/messageActionRow.js";
 
 type MessageReportArgs = Omit<ArgsParam<typeof ReportCommand>["message"], "message_link"> & {
 	message: Message;

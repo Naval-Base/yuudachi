@@ -1,5 +1,6 @@
+import { Command } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam } from "../../Command.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { RestrictCommand } from "../../interactions/index.js";

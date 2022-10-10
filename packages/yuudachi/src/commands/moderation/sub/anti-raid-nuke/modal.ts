@@ -1,12 +1,9 @@
+import { logger, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
+import type { InteractionParam, ArgsParam, LocaleParam } from "@yuudachi/framework/types";
 import { ComponentType } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
-import type { InteractionParam, ArgsParam, LocaleParam } from "../../../../Command.js";
 import type { AntiRaidNukeCommand } from "../../../../interactions/index.js";
-import { logger } from "../../../../logger.js";
-import { createModal } from "../../../../util/modal.js";
-import { createModalActionRow } from "../../../../util/modalActionRow.js";
-import { createTextComponent } from "../../../../util/textComponent.js";
 import { AntiRaidNukeMode, handleAntiRaidNuke } from "./coreCommand.js";
 import { acquireLockIfPublic, validateMemberIds } from "./utils.js";
 

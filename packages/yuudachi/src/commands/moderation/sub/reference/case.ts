@@ -1,6 +1,6 @@
+import type { InteractionParam } from "@yuudachi/framework/types";
 import { hyperlink, messageLink } from "discord.js";
 import i18next from "i18next";
-import type { InteractionParam } from "../../../../Command.js";
 import type { Case } from "../../../../functions/cases/createCase.js";
 import { getCase } from "../../../../functions/cases/getCase.js";
 import { updateCase } from "../../../../functions/cases/updateCase.js";

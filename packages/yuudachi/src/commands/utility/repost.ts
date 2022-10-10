@@ -1,6 +1,7 @@
+import { Command } from "@yuudachi/framework";
+import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import type { Message } from "discord.js";
 import i18next from "i18next";
-import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import { formatMessageToEmbed } from "../../functions/logging/formatMessageToEmbed.js";
 import type { RepostCommand, RepostMessageContextCommand } from "../../interactions/index.js";
 import { parseMessageLink, resolveMessage } from "../../util/resolveMessage.js";
