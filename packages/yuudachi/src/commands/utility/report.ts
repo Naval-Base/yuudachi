@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { type ArgsParam, Command, type InteractionParam, type LocaleParam, type CommandMethod } from "../../Command.js";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
+import { reportRedisMessageKey, reportRedisUserKey } from "../../functions/reports/utils.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReportCommand, ReportMessageContextCommand, ReportUserContextCommand } from "../../interactions/index.js";
@@ -63,9 +64,9 @@ export default class extends Command<
 				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 			}
 
-			const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId}:message:${messageArg.id}`;
+			const key = reportRedisMessageKey(interaction.guildId!, messageArg.author.id);
 
-			if (await this.redis.exists(key)) {
+			if ((await this.redis.smembers(key)).includes(messageId!)) {
 				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
 			}
 
@@ -86,7 +87,7 @@ export default class extends Command<
 				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 			}
 
-			const key = `guild:${interaction.guildId}:report:user:${args.user.user.user.id}`;
+			const key = reportRedisUserKey(interaction.guildId, args.user.user.user.id);
 
 			if (await this.redis.exists(key)) {
 				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
@@ -121,7 +122,7 @@ export default class extends Command<
 			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 		}
 
-		const key = `guild:${interaction.guildId}:report:user:${args.user.user.id}`;
+		const key = reportRedisUserKey(interaction.guildId, args.user.user.id);
 
 		if (await this.redis.exists(key)) {
 			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
@@ -212,9 +213,9 @@ export default class extends Command<
 			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 		}
 
-		const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId}:message:${args.message.id}`;
+		const key = reportRedisMessageKey(interaction.guildId, args.message.author.id);
 
-		if (await this.redis.exists(key)) {
+		if ((await this.redis.smembers(key)).includes(args.message.id)) {
 			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
 		}
 
