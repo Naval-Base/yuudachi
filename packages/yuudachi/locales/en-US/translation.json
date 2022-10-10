@@ -395,6 +395,7 @@
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "Trust & Safety",
 					"buttons": {
+						"forward": "Forward",
 						"execute": "Create Report",
 						"cancel": "Cancel",
 						"discord_report": "Report to Discord"
@@ -414,8 +415,10 @@
 					},
 					"pending": "Are you sure you want to report {{- message_link}} to the server moderators?\n**Reason:** {{- reason}}",
 					"pending_sub": "this message",
+					"pending_forward": "This user has already been reported recently, do you want to forward {{- message_link}} to that report?",
 					"cancel": "Message report canceled.",
-					"success": "Successfully reported message, thanks for making our community a better place!"
+					"success": "Successfully reported message, thanks for making our community a better place!",
+					"success_forward": "Successfully forwarded message to existing report, thanks for making our community a better place!"
 				},
 				"user": {
 					"modal": {
@@ -614,6 +617,13 @@
 			"moderator": "**Moderator:** {{- mod}}",
 			"updated_at": "**Updated at:** {{- updated_at}}",
 			"footer": "Hint: To resolve a report: Change the status forum label, reference it in a case, set the reference for an existing case with /reference, or set the status via /reports status",
+			"forward": {
+				"content": "**Message report forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
+				"errors": {
+					"generic": "There was an error forwarding the report.",
+					"already_resolved": "The report has already been resolved."
+				}
+			},
 			"report_status": {
 				"0": "Pending",
 				"1": "Approved",
