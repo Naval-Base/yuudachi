@@ -1,9 +1,9 @@
+import { kSQL } from "@yuudachi/framework";
 import type { Message, User } from "discord.js";
 import { inlineCode, userMention } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { container } from "tsyringe";
-import { kSQL } from "../../tokens.js";
 import { ReportStatus } from "../reports/createReport.js";
 import type { RawReport } from "../reports/transformReport.js";
 import { checkLogChannel } from "../settings/checkLogChannel.js";
