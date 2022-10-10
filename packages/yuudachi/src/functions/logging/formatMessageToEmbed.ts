@@ -23,9 +23,10 @@ export function formatMessageToEmbed(message: Message<true>, locale: string) {
 	});
 
 	const attachment = message.attachments.first();
-	const attachmentIsImage = attachment?.contentType === "image/jpeg" || attachment?.contentType === "image/png";
+	const attachmentIsImage = ["image/jpeg", "image/png", "image/gif"].includes(attachment?.contentType ?? "");
+	const attachmentIsImageNaive = [".jpg", ".png", ".gif"].some((ext) => attachment?.name?.endsWith(ext));
 
-	if (attachmentIsImage) {
+	if (attachment && (attachmentIsImage || attachmentIsImageNaive)) {
 		embed = {
 			...embed,
 			image: {
