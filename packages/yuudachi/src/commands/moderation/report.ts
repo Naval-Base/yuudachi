@@ -1,12 +1,14 @@
 import { Command, logger, kRedis, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import { TextInputStyle, ComponentType } from "discord.js";
+import { type GuildMember, type User, type Message, TextInputStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
+import { ReportStatus } from "../../functions/reports/createReport.js";
+import { getReportByTarget } from "../../functions/reports/getReport.js";
 import { reportRedisMessageKey, reportRedisUserKey } from "../../functions/reports/utils.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
@@ -52,19 +54,7 @@ export default class extends Command<
 			const { guildId, channelId, messageId } = parsedLink;
 			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
-			if (messageArg.author.bot) {
-				throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-			}
-
-			if (messageArg.author.id === interaction.user.id) {
-				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-			}
-
-			const key = reportRedisMessageKey(interaction.guildId!, messageArg.author.id);
-
-			if ((await this.redis.smembers(key)).includes(messageId!)) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
-			}
+			await this.validateReport(interaction.member, messageArg.author, locale, messageArg);
 
 			await message(
 				interaction,
@@ -75,23 +65,11 @@ export default class extends Command<
 				locale,
 			);
 		} else {
-			if (args.user.user.user.bot) {
-				throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-			}
-
-			if (args.user.user.user.id === interaction.user.id) {
-				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-			}
-
-			const key = reportRedisUserKey(interaction.guildId, args.user.user.user.id);
-
-			if (await this.redis.exists(key)) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
-			}
-
 			if (!args.user.user.member) {
 				throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
 			}
+
+			await this.validateReport(interaction.member, args.user.user.user, locale);
 
 			await user(interaction, args.user, locale);
 		}
@@ -110,23 +88,11 @@ export default class extends Command<
 
 		const modalKey = nanoid();
 
-		if (args.user.user.bot) {
-			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-		}
-
-		if (args.user.user.id === interaction.user.id) {
-			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-		}
-
-		const key = reportRedisUserKey(interaction.guildId, args.user.user.id);
-
-		if (await this.redis.exists(key)) {
-			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
-		}
-
 		if (!args.user.member) {
 			throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
 		}
+
+		await this.validateReport(interaction.member, args.user.user, locale);
 
 		const modal = createModal({
 			customId: modalKey,
@@ -201,19 +167,7 @@ export default class extends Command<
 
 		const modalKey = nanoid();
 
-		if (args.message.author.bot) {
-			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-		}
-
-		if (args.message.author.id === interaction.user.id) {
-			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-		}
-
-		const key = reportRedisMessageKey(interaction.guildId, args.message.author.id);
-
-		if ((await this.redis.smembers(key)).includes(args.message.id)) {
-			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
-		}
+		await this.validateReport(interaction.member, args.message.author, locale, args.message);
 
 		const modal = createModal({
 			customId: modalKey,
@@ -273,5 +227,40 @@ export default class extends Command<
 			},
 			locale,
 		);
+	}
+
+	private async validateReport(
+		author: GuildMember,
+		target: User,
+		locale: string,
+		message?: Message<boolean>,
+	): Promise<void> {
+		if (target.bot) {
+			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
+		}
+
+		if (target.id === author.id) {
+			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
+		}
+
+		if (message) {
+			const key = reportRedisMessageKey(author.guild.id, target.id);
+			if ((await this.redis.smembers(key)).includes(message.id)) {
+				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
+			}
+		}
+
+		const userKey = reportRedisUserKey(author.guild.id, target.id);
+		if (await this.redis.exists(userKey)) {
+			if (!message) {
+				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
+			}
+
+			const [latestReport] = await getReportByTarget(author.guild.id, target.id);
+
+			if (latestReport?.status !== ReportStatus.Pending) {
+				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
+			}
+		}
 	}
 }
