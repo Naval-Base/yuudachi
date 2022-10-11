@@ -6,7 +6,7 @@ import type { Sql } from "postgres";
 import { container } from "tsyringe";
 import { ReportStatus } from "../reports/createReport.js";
 import type { RawReport } from "../reports/transformReport.js";
-import { checkLogChannel } from "../settings/checkLogChannel.js";
+import { checkReportForum } from "../settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
 
@@ -39,7 +39,10 @@ export async function forwardReport(
 		throw new Error(i18next.t("log.report_log.forward.errors.already_resolved", { lng: locale }));
 	}
 
-	const channel = checkLogChannel(message.guild, await getGuildSetting(message.guild.id, SettingsKeys.ReportChannelId));
+	const channel = checkReportForum(
+		message.guild,
+		await getGuildSetting(message.guild.id, SettingsKeys.ReportChannelId),
+	);
 	if (!channel) {
 		throw new Error(i18next.t("common.errors.no_report_channel", { lng: locale }));
 	}
