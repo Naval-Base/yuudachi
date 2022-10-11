@@ -1,11 +1,8 @@
-import { kSQL } from "@yuudachi/framework";
 import type { Message, User } from "discord.js";
 import { inlineCode, userMention } from "discord.js";
 import i18next from "i18next";
-import type { Sql } from "postgres";
-import { container } from "tsyringe";
 import { ReportStatus } from "../reports/createReport.js";
-import type { RawReport } from "../reports/transformReport.js";
+import { getReportByTarget } from "../reports/getReport.js";
 import { checkReportForum } from "../settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
@@ -20,18 +17,9 @@ export async function forwardReport(
 	message: Message<true>,
 	locale: string,
 ): Promise<void> {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const [report] = await getReportByTarget(message.guild!.id, message.author.id);
 
-	const [report] = await sql<[RawReport]>`
-		select * 
-		from reports
-		where guild_id = ${message.guild.id}
-			and target_id = ${message.author.id}
-		order by created_at desc
-		limit 1
-	`;
-
-	if (!report || !report.log_post_id) {
+	if (!report || !report.logPostId) {
 		throw new Error(i18next.t("log.report_log.forward.errors.generic", { lng: locale }));
 	}
 
@@ -47,7 +35,7 @@ export async function forwardReport(
 		throw new Error(i18next.t("common.errors.no_report_channel", { lng: locale }));
 	}
 
-	const thread = await channel.threads.fetch(report.log_post_id);
+	const thread = await channel.threads.fetch(report.logPostId);
 	if (!thread) {
 		throw new Error(i18next.t("log.report_log.forward.errors.generic", { lng: locale }));
 	}
