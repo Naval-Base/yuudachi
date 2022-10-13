@@ -512,7 +512,7 @@
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
 				"reason_fallback": "\n**Reason:** Use `/reason {{case_id}} <...reason>` to set a reason for this case",
-				"case_reference": "\n**Case Reference:** {{- ref}}",
+				"case_reference": "\n**Case Reference:** {{- ref}} ({{action}})",
 				"report_reference": "\n**Report Reference:** {{- report_ref}}",
 				"footer": "Case {{case_id}}"
 			},
