@@ -77,7 +77,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 		if (Reflect.has(reference ?? {}, "log_message_id") && Reflect.has(reference ?? {}, "action")) {
 			msg += i18next.t("log.mod_log.case_log.case_reference", {
 				ref: hyperlink(`#${case_.refId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
-				action: actionKeyLabel(ACTION_KEYS[reference!.action], locale),
+				action: actionKeyLabel(ACTION_KEYS[reference!.action]!, locale),
 				lng: locale,
 			});
 		}
