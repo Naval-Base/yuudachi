@@ -23,7 +23,7 @@ import type { RawCase } from "../functions/cases/transformCase.js";
 import { ReportStatus } from "../functions/reports/createReport.js";
 import type { RawReport } from "../functions/reports/transformReport.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
-import { ACTION_KEYS, REPORT_KEYS } from "./actionKeys.js";
+import { actionKeyLabel, ACTION_KEYS, reportKeyLabel, REPORT_KEYS } from "./actionKeys.js";
 
 dayjs.extend(relativeTime);
 
@@ -103,27 +103,6 @@ function generateHistoryEmbed(
 			text: footerText,
 		},
 	};
-}
-
-function actionKeyLabel(key: typeof ACTION_KEYS[number], locale: string) {
-	switch (key) {
-		case "restriction":
-			return i18next.t("log.history.cases.action_label.restriction", { lng: locale });
-		case "warn":
-			return i18next.t("log.history.cases.action_label.warn", { lng: locale });
-		case "kick":
-			return i18next.t("log.history.cases.action_label.kick", { lng: locale });
-		case "softban":
-			return i18next.t("log.history.cases.action_label.softban", { lng: locale });
-		case "ban":
-			return i18next.t("log.history.cases.action_label.ban", { lng: locale });
-		case "unban":
-			return i18next.t("log.history.cases.action_label.unban", { lng: locale });
-		case "timeout":
-			return i18next.t("log.history.cases.action_label.timeout", { lng: locale });
-		default:
-			return i18next.t("log.history.cases.action_label.unknown", { lng: locale });
-	}
 }
 
 function actionSummary(
@@ -225,21 +204,6 @@ export async function generateCaseHistory(
 		actionSummary(...values, locale),
 		locale,
 	);
-}
-
-function reportKeyLabel(key: typeof REPORT_KEYS[number], locale: string) {
-	switch (key) {
-		case "pending":
-			return i18next.t("log.history.reports.status_label.pending", { lng: locale });
-		case "approved":
-			return i18next.t("log.history.reports.status_label.approved", { lng: locale });
-		case "rejected":
-			return i18next.t("log.history.reports.status_label.rejected", { lng: locale });
-		case "spam":
-			return i18next.t("log.history.reports.status_label.spam", { lng: locale });
-		default:
-			return i18next.t("log.history.reports.status_label.unknown", { lng: locale });
-	}
 }
 
 function reportSummary(reported: number, authored: number, spam: number, locale: string) {
