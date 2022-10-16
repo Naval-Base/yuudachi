@@ -68,6 +68,9 @@
 				"autocomplete": {
 					"no_reason": "No reason",
 					"show_history": "Show history for user {{- user}}"
+				},
+				"buttons": {
+					"goto": "Go to case {{- case}}"
 				}
 			},
 			"reports": {
