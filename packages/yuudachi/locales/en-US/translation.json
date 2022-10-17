@@ -468,18 +468,18 @@
 					"softban_other": "{{count}} softbans",
 					"ban_one": "{{count}} ban",
 					"ban_other": "{{count}} bans",
-					"unban_one": "{{count}} unbans",
+					"unban_one": "{{count}} unban",
 					"unban_other": "{{count}} unbans"
 				},
 				"action_label": {
-					"restriction": "RESTRICT",
-					"warn": "WARN",
-					"kick": "KICK",
-					"softban": "SOFTBAN",
-					"ban": "BAN",
-					"unban": "UNBAN",
-					"timeout": "TIMEOUT",
-					"unknown": "UNKNOWN"
+					"restriction": "Restrict",
+					"warn": "Warn",
+					"kick": "Kick",
+					"softban": "Softban",
+					"ban": "Ban",
+					"unban": "Unban",
+					"timeout": "Timeout",
+					"unknown": "Unknown"
 				}
 			},
 			"reports": {
@@ -496,11 +496,11 @@
 					"spam_other": "{{count}} spam reports"
 				},
 				"status_label": {
-					"pending": "PENDING",
-					"approved": "APPROVED",
-					"rejected": "REJECTED",
-					"spam": "SPAM",
-					"unknown": "UNKNOWN"
+					"pending": "Pending",
+					"approved": "Approved",
+					"rejected": "Rejected",
+					"spam": "Spam",
+					"unknown": "Unknown"
 				}
 			}
 		},
