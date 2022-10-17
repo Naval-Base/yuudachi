@@ -13,7 +13,7 @@ import {
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { REPORT_REASON_MAX_LENGTH } from "../../Constants.js";
-import { actionKeyLabel, ACTION_KEYS } from "../../util/actionKeys.js";
+import { caseActionLabel } from "../../util/actionKeys.js";
 import type { CaseAction } from "../cases/createCase.js";
 import type { Report } from "../reports/createReport.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
@@ -58,7 +58,7 @@ export async function generateReportLog(report: Report, locale: string, message?
 			parts.push(
 				i18next.t("log.report_log.case_reference", {
 					ref: hyperlink(`#${report.refId}`, messageLink(modLogChannelId, reference!.log_message_id!, report.guildId)),
-					action: actionKeyLabel(ACTION_KEYS[reference!.action]!, locale),
+					action: caseActionLabel(reference!.action, locale),
 					lng: locale,
 				}),
 			);

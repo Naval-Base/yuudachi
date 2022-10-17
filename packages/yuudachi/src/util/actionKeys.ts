@@ -1,38 +1,37 @@
 import i18next from "i18next";
+import { CaseAction } from "../functions/cases/createCase.js";
+import { ReportStatus } from "../functions/reports/createReport.js";
 
-export const ACTION_KEYS = ["restriction", "", "warn", "kick", "softban", "ban", "unban", "timeout", ""] as const;
-export const REPORT_KEYS = ["pending", "approved", "rejected", "spam"] as const;
-
-export function actionKeyLabel(key: typeof ACTION_KEYS[number], locale: string) {
+export function caseActionLabel(key: CaseAction, locale: string) {
 	switch (key) {
-		case "restriction":
+		case CaseAction.Role:
 			return i18next.t("log.history.cases.action_label.restriction", { lng: locale });
-		case "warn":
+		case CaseAction.Warn:
 			return i18next.t("log.history.cases.action_label.warn", { lng: locale });
-		case "kick":
+		case CaseAction.Kick:
 			return i18next.t("log.history.cases.action_label.kick", { lng: locale });
-		case "softban":
+		case CaseAction.Softban:
 			return i18next.t("log.history.cases.action_label.softban", { lng: locale });
-		case "ban":
+		case CaseAction.Ban:
 			return i18next.t("log.history.cases.action_label.ban", { lng: locale });
-		case "unban":
+		case CaseAction.Unban:
 			return i18next.t("log.history.cases.action_label.unban", { lng: locale });
-		case "timeout":
+		case CaseAction.Timeout:
 			return i18next.t("log.history.cases.action_label.timeout", { lng: locale });
 		default:
 			return i18next.t("log.history.cases.action_label.unknown", { lng: locale });
 	}
 }
 
-export function reportKeyLabel(key: typeof REPORT_KEYS[number], locale: string) {
+export function reportStatusLabel(key: ReportStatus, locale: string) {
 	switch (key) {
-		case "pending":
+		case ReportStatus.Pending:
 			return i18next.t("log.history.reports.status_label.pending", { lng: locale });
-		case "approved":
+		case ReportStatus.Approved:
 			return i18next.t("log.history.reports.status_label.approved", { lng: locale });
-		case "rejected":
+		case ReportStatus.Rejected:
 			return i18next.t("log.history.reports.status_label.rejected", { lng: locale });
-		case "spam":
+		case ReportStatus.Spam:
 			return i18next.t("log.history.reports.status_label.spam", { lng: locale });
 		default:
 			return i18next.t("log.history.reports.status_label.unknown", { lng: locale });

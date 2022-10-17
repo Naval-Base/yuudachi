@@ -2,7 +2,7 @@ import { logger, kSQL, container } from "@yuudachi/framework";
 import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink, channelLink } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
-import { actionKeyLabel, ACTION_KEYS } from "../../util/actionKeys.js";
+import { caseActionLabel } from "../../util/actionKeys.js";
 import { type Case, CaseAction } from "../cases/createCase.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 
@@ -10,7 +10,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	const client = container.resolve<Client<true>>(Client);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	let action = CaseAction[case_.action];
+	let action = caseActionLabel(case_.action, locale);
 
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
 		try {
@@ -77,7 +77,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 		if (Reflect.has(reference ?? {}, "log_message_id") && Reflect.has(reference ?? {}, "action")) {
 			msg += i18next.t("log.mod_log.case_log.case_reference", {
 				ref: hyperlink(`#${case_.refId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
-				action: actionKeyLabel(ACTION_KEYS[reference!.action]!, locale),
+				action: caseActionLabel(reference!.action, locale),
 				lng: locale,
 			});
 		}

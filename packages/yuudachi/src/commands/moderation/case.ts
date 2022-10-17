@@ -13,13 +13,14 @@ import { Collection, type Snowflake } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { OP_DELIMITER } from "../../Constants.js";
+import type { CaseAction } from "../../functions/cases/createCase.js";
 import { findCases } from "../../functions/cases/findCases.js";
 import { type RawCase, transformCase } from "../../functions/cases/transformCase.js";
 import { generateCaseEmbed } from "../../functions/logging/generateCaseEmbed.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { CaseLookupCommand } from "../../interactions/index.js";
-import { ACTION_KEYS } from "../../util/actionKeys.js";
+import { caseActionLabel } from "../../util/actionKeys.js";
 import { generateHistory } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 
@@ -33,7 +34,9 @@ export default class extends Command<typeof CaseLookupCommand> {
 			const trimmedPhrase = args.phrase.trim();
 			const cases = await findCases(trimmedPhrase, interaction.guildId);
 			let choices = cases.map((case_) => {
-				const choiceName = `#${case_.case_id} ${ACTION_KEYS[case_.action]!.toUpperCase()} ${case_.target_tag}: ${
+				const choiceName = `#${case_.case_id} ${caseActionLabel(case_.action as CaseAction, locale).toUpperCase()} ${
+					case_.target_tag
+				}: ${
 					case_.reason ??
 					i18next.t("command.mod.case.autocomplete.no_reason", {
 						lng: locale,
