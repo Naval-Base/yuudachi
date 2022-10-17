@@ -22,6 +22,7 @@ export async function resolveMessage(
 	channelId: Snowflake,
 	messageId: Snowflake,
 	locale: string,
+	unsafe = false,
 ) {
 	const client = container.resolve<Client<true>>(Client);
 
@@ -51,6 +52,7 @@ export async function resolveMessage(
 	const ignoreChannels = await getGuildSetting(guild.id, SettingsKeys.LogIgnoreChannels);
 
 	if (
+		!unsafe &&
 		originChannelId !== channel.id &&
 		(ignoreChannels.includes(channel.id) ||
 			(channel.parentId && ignoreChannels.includes(channel.parentId)) ||
