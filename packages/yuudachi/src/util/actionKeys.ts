@@ -2,10 +2,16 @@ import i18next from "i18next";
 import { CaseAction } from "../functions/cases/createCase.js";
 import { ReportStatus } from "../functions/reports/createReport.js";
 
-export function caseActionLabel(key: CaseAction, locale: string) {
+export function caseActionLabel(key: CaseAction, locale: string, isCase = false): string {
 	switch (key) {
 		case CaseAction.Role:
-			return i18next.t("log.history.cases.action_label.restriction", { lng: locale });
+			return isCase
+				? i18next.t(`log.history.cases.action_label.restriction_case`, { lng: locale })
+				: i18next.t(`log.history.cases.action_label.restriction`, { lng: locale });
+		case CaseAction.Unrole:
+			return isCase
+				? i18next.t(`log.history.cases.action_label.unrestriction_case`, { lng: locale })
+				: i18next.t(`log.history.cases.action_label.unrestriction`, { lng: locale });
 		case CaseAction.Warn:
 			return i18next.t("log.history.cases.action_label.warn", { lng: locale });
 		case CaseAction.Kick:
@@ -18,6 +24,8 @@ export function caseActionLabel(key: CaseAction, locale: string) {
 			return i18next.t("log.history.cases.action_label.unban", { lng: locale });
 		case CaseAction.Timeout:
 			return i18next.t("log.history.cases.action_label.timeout", { lng: locale });
+		case CaseAction.TimeoutEnd:
+			return i18next.t("log.history.cases.action_label.timeout_end", { lng: locale });
 		default:
 			return i18next.t("log.history.cases.action_label.unknown", { lng: locale });
 	}

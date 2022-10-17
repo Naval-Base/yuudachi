@@ -473,12 +473,16 @@
 				},
 				"action_label": {
 					"restriction": "Restrict",
+					"restriction_case": "Role",
+					"unrestriction": "Unrestrict",
+					"unrestriction_case": "Unrole",
 					"warn": "Warn",
 					"kick": "Kick",
 					"softban": "Softban",
 					"ban": "Ban",
 					"unban": "Unban",
 					"timeout": "Timeout",
+					"timeout_end": "Timeout End",
 					"unknown": "Unknown"
 				}
 			},

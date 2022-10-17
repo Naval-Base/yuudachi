@@ -10,7 +10,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	const client = container.resolve<Client<true>>(Client);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	let action = caseActionLabel(case_.action, locale);
+	let action = caseActionLabel(case_.action, locale, true);
 
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
 		try {
