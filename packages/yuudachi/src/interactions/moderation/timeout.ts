@@ -46,7 +46,7 @@ export const TimeoutCommand = {
 		},
 		{
 			name: "report_reference",
-			description: "The reference report",
+			description: "The reference report, this will resolve all pending reports by this target",
 			type: ApplicationCommandOptionType.Integer,
 			autocomplete: true,
 		},
