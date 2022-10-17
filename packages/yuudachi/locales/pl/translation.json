@@ -68,6 +68,9 @@
 				"autocomplete": {
 					"no_reason": "",
 					"show_history": "Pokaż historię dla użytkownika {{- user}}"
+				},
+				"buttons": {
+					"goto": ""
 				}
 			},
 			"reports": {
