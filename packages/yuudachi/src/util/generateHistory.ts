@@ -19,11 +19,12 @@ import {
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { Color, HISTORY_DESCRIPTION_MAX_LENGTH, ThreatLevelColor } from "../Constants.js";
+import { CaseAction } from "../functions/cases/createCase.js";
 import type { RawCase } from "../functions/cases/transformCase.js";
 import { ReportStatus } from "../functions/reports/createReport.js";
 import type { RawReport } from "../functions/reports/transformReport.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
-import { actionKeyLabel, ACTION_KEYS, reportKeyLabel, REPORT_KEYS } from "./actionKeys.js";
+import { caseActionLabel, reportStatusLabel } from "./actionKeys.js";
 
 dayjs.extend(relativeTime);
 
@@ -165,19 +166,19 @@ export async function generateCaseHistory(
 	`;
 
 	const caseCounter = cases.reduce((count: CaseFooter, case_) => {
-		const action = ACTION_KEYS[case_.action]!;
+		const action = case_.action!;
 		count[action] = (count[action] ?? 0) + 1;
 		return count;
 	}, {});
 
 	const values: [number, number, number, number, number, number, number] = [
-		caseCounter.unban ?? 0,
-		caseCounter.warn ?? 0,
-		caseCounter.restriction ?? 0,
-		caseCounter.kick ?? 0,
-		caseCounter.softban ?? 0,
-		caseCounter.ban ?? 0,
-		caseCounter.timeout ?? 0,
+		caseCounter[CaseAction.Role] ?? 0,
+		caseCounter[CaseAction.Warn] ?? 0,
+		caseCounter[CaseAction.Kick] ?? 0,
+		caseCounter[CaseAction.Softban] ?? 0,
+		caseCounter[CaseAction.Ban] ?? 0,
+		caseCounter[CaseAction.Unban] ?? 0,
+		caseCounter[CaseAction.Timeout] ?? 0,
 	];
 	const colorIndex = Math.min(
 		values.reduce((a, b) => a + b),
@@ -191,7 +192,7 @@ export async function generateCaseHistory(
 			identifierURL: case_.log_message_id
 				? messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id)
 				: undefined,
-			label: actionKeyLabel(ACTION_KEYS[case_.action]!, locale),
+			label: caseActionLabel(case_.action, locale).toUpperCase(),
 			description: case_.reason ?? undefined,
 		};
 	});
@@ -274,7 +275,7 @@ export async function generateReportHistory(
 			created: report.created_at,
 			identifierLabel: `#${report.report_id} (${userRoleString})`,
 			identifierURL: report.log_post_id ? channelLink(report.log_post_id, report.guild_id) : undefined,
-			label: reportKeyLabel(REPORT_KEYS[report.status]!, locale),
+			label: reportStatusLabel(report.status, locale).toUpperCase(),
 			description: report.reason ?? undefined,
 		};
 	});
