@@ -7,9 +7,11 @@ import {
 	truncateEmbed,
 	AUTOCOMPLETE_CHOICE_LIMIT,
 	AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT,
+	createButton,
+	createMessageActionRow,
 } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import { Collection, type Snowflake } from "discord.js";
+import { ButtonStyle, Collection, messageLink, type Snowflake } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { OP_DELIMITER } from "../../Constants.js";
@@ -122,12 +124,23 @@ export default class extends Command<typeof CaseLookupCommand> {
 			);
 			const moderator = await interaction.client.users.fetch(modCase.mod_id);
 
+			const gotoButton = createButton({
+				label: i18next.t("command.mod.case.buttons.goto", {
+					case: modCase.case_id,
+					lng: locale,
+				}),
+				style: ButtonStyle.Link,
+				disabled: !modLogChannel?.id || !modCase.log_message_id,
+				url: messageLink(modLogChannel!.id, modCase.log_message_id!, interaction.guildId),
+			});
+
 			await interaction.editReply({
 				embeds: [
 					truncateEmbed(
 						await generateCaseEmbed(interaction.guildId, modLogChannel!.id, moderator, transformCase(modCase)),
 					),
 				],
+				components: [createMessageActionRow([gotoButton])],
 			});
 			return;
 		}
