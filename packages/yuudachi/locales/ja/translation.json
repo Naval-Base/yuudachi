@@ -68,6 +68,9 @@
 				"autocomplete": {
 					"no_reason": "",
 					"show_history": "{{- user}}の歴史を見る"
+				},
+				"buttons": {
+					"goto": ""
 				}
 			},
 			"reports": {
