@@ -20,7 +20,7 @@ export async function generateCaseEmbed(
 		footer: {
 			text: i18next.t("log.mod_log.case_log.footer", { case_id: case_.caseId, lng: locale }),
 		},
-		timestamp: new Date().toISOString(),
+		timestamp: new Date(case_.createdAt).toISOString(),
 	});
 
 	if (user) {
