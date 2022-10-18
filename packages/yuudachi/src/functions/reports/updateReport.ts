@@ -6,7 +6,7 @@ import { type RawReport, transformReport } from "./transformReport.js";
 
 export type PatchReport = Pick<
 	Partial<CreateReport>,
-	"attachmentUrl" | "guildId" | "message" | "reason" | "refId" | "reportId" | "status"
+	"attachmentUrl" | "contextMessagesIds" | "guildId" | "message" | "reason" | "refId" | "reportId" | "status"
 >;
 
 export async function updateReport(report: PatchReport, moderator?: User) {
@@ -21,6 +21,7 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 		ref_id: report.refId,
 		mod_id: moderator?.id,
 		mod_tag: moderator?.tag,
+		context_messages_ids: report.contextMessagesIds,
 	};
 
 	const queries = removeUndefinedKeys(updates);

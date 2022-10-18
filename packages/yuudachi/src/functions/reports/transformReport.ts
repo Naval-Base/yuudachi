@@ -6,6 +6,7 @@ export type RawReport = {
 	author_id: Snowflake;
 	author_tag: string;
 	channel_id: Snowflake;
+	context_messages_ids: Snowflake[];
 	created_at: string;
 	guild_id: Snowflake;
 	log_post_id: Snowflake | null;
@@ -30,6 +31,7 @@ export function transformReport(report: RawReport): Report {
 		status: report.status,
 		messageId: report.message_id,
 		channelId: report.channel_id,
+		contextMessagesIds: report.context_messages_ids,
 		targetId: report.target_id,
 		targetTag: report.target_tag,
 		authorId: report.author_id,
