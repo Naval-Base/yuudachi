@@ -7,9 +7,8 @@ import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
-import { ReportStatus } from "../../functions/reports/createReport.js";
-import { getReportByTarget } from "../../functions/reports/getReport.js";
-import { reportRedisMessageKey, reportRedisUserKey } from "../../functions/reports/utils.js";
+import type { Report } from "../../functions/reports/createReport.js";
+import { getPendingReportsByTarget } from "../../functions/reports/getReport.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReportCommand, ReportMessageContextCommand, ReportUserContextCommand } from "../../interactions/index.js";
@@ -54,7 +53,7 @@ export default class extends Command<
 			const { guildId, channelId, messageId } = parsedLink;
 			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
-			await this.validateReport(interaction.member, messageArg.author, locale, messageArg);
+			const pendingReport = await this.validateReport(interaction.member, messageArg.author, locale, messageArg);
 
 			await message(
 				interaction,
@@ -63,6 +62,7 @@ export default class extends Command<
 					message: messageArg,
 				},
 				locale,
+				pendingReport,
 			);
 		} else {
 			if (!args.user.user.member) {
@@ -167,7 +167,7 @@ export default class extends Command<
 
 		const modalKey = nanoid();
 
-		await this.validateReport(interaction.member, args.message.author, locale, args.message);
+		const pendingReport = await this.validateReport(interaction.member, args.message.author, locale, args.message);
 
 		const modal = createModal({
 			customId: modalKey,
@@ -226,6 +226,7 @@ export default class extends Command<
 				reason: reason.join(" "),
 			},
 			locale,
+			pendingReport,
 		);
 	}
 
@@ -234,7 +235,7 @@ export default class extends Command<
 		target: User,
 		locale: string,
 		message?: Message<boolean>,
-	): Promise<void> {
+	): Promise<Report | undefined> {
 		if (target.bot) {
 			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
 		}
@@ -243,24 +244,18 @@ export default class extends Command<
 			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
 		}
 
-		if (message) {
-			const key = reportRedisMessageKey(author.guild.id, target.id);
-			if ((await this.redis.smembers(key)).includes(message.id)) {
+		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
+		const [latestReport] = await getPendingReportsByTarget(author.guild.id, target.id);
+		if ((await this.redis.exists(userKey)) || latestReport) {
+			if (!message || !latestReport) {
+				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
+			}
+
+			if (latestReport?.contextMessagesIds.includes(message.id)) {
 				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
 			}
 		}
 
-		const userKey = reportRedisUserKey(author.guild.id, target.id);
-		if (await this.redis.exists(userKey)) {
-			if (!message) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
-			}
-
-			const [latestReport] = await getReportByTarget(author.guild.id, target.id);
-
-			if (latestReport?.status !== ReportStatus.Pending) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
-			}
-		}
+		return latestReport;
 	}
 }

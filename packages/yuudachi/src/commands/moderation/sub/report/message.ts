@@ -7,13 +7,14 @@ import { nanoid } from "nanoid";
 import {
 	REPORT_DUPLICATE_EXPIRE_SECONDS,
 	REPORT_DUPLICATE_PRE_EXPIRE_SECONDS,
+	REPORT_MESSAGE_CONTEXT_LIMIT,
 	REPORT_REASON_MAX_LENGTH,
 } from "../../../../Constants.js";
 import { formatMessageToEmbed } from "../../../../functions/logging/formatMessageToEmbed.js";
 import { forwardReport } from "../../../../functions/logging/forwardReport.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
-import { createReport, ReportType } from "../../../../functions/reports/createReport.js";
-import { reportRedisMessageKey, reportRedisUserKey } from "../../../../functions/reports/utils.js";
+import { type Report, createReport, ReportType } from "../../../../functions/reports/createReport.js";
+import { getPendingReportsByTarget } from "../../../../functions/reports/getReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
 import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
 
@@ -25,23 +26,21 @@ export async function message(
 	interaction: InteractionParam | ModalSubmitInteraction<"cached">,
 	args: MessageReportArgs,
 	locale: string,
+	pendingReport?: Report,
 ) {
 	const redis = container.resolve<Redis>(kRedis);
-	const messageKey = reportRedisMessageKey(interaction.guildId!, args.message.author.id);
-	const userKey = reportRedisUserKey(interaction.guildId!, args.message.author.id);
+	const userKey = `guild:${interaction.guildId}:report:user:${args.message.author.id}`;
 	const trimmedReason = args.reason.trim();
-
-	const userRecentlyReported = await redis.exists(userKey);
 
 	const reportKey = nanoid();
 	const cancelKey = nanoid();
 
 	const reportButton = createButton({
 		customId: reportKey,
-		label: i18next.t(`command.utility.report.common.buttons.${userRecentlyReported ? "forward" : "execute"}`, {
+		label: i18next.t(`command.utility.report.common.buttons.${pendingReport ? "forward" : "execute"}`, {
 			lng: locale,
 		}),
-		style: userRecentlyReported ? ButtonStyle.Primary : ButtonStyle.Danger,
+		style: pendingReport ? ButtonStyle.Primary : ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
@@ -55,7 +54,7 @@ export async function message(
 	});
 
 	const contentParts = [
-		i18next.t(`command.utility.report.message.pending${userRecentlyReported ? "_forward" : ""}`, {
+		i18next.t(`command.utility.report.message.pending${pendingReport ? "_forward" : ""}`, {
 			message_link: hyperlink(
 				i18next.t("command.utility.report.message.pending_sub", { lng: locale }),
 				args.message.url,
@@ -109,68 +108,72 @@ export async function message(
 		});
 	} else if (collectedInteraction?.customId === reportKey) {
 		await collectedInteraction.deferUpdate();
-		try {
-			if ((await redis.smembers(messageKey)).includes(args.message.id)) {
-				await collectedInteraction.editReply({
-					content: i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }),
-					embeds: [],
-					components: [],
-				});
 
+		const [lastReport] = await getPendingReportsByTarget(interaction.guildId!, args.message.author.id);
+
+		if (lastReport?.contextMessagesIds.includes(args.message.id)) {
+			await collectedInteraction.editReply({
+				content: i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }),
+				embeds: [],
+				components: [],
+			});
+
+			return;
+		}
+
+		if (pendingReport) {
+			try {
+				await forwardReport(
+					{
+						author: collectedInteraction.user,
+						reason: trimmedReason,
+					},
+					args.message as Message<true>,
+					pendingReport,
+					locale,
+				);
+			} catch (error) {
+				await collectedInteraction.editReply({
+					content: (error as Error).message,
+					components: [],
+					embeds: [],
+				});
 				return;
 			}
+		} else {
+			await redis.setex(userKey, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
 
-			await redis.sadd(messageKey, args.message.id);
-			if (userRecentlyReported) {
-				try {
-					await forwardReport(
-						{
-							author: collectedInteraction.user,
-							reason: trimmedReason,
-						},
-						args.message as Message<true>,
-						locale,
-					);
-				} catch (error) {
-					await collectedInteraction.editReply({
-						content: (error as Error).message,
-						components: [],
-						embeds: [],
-					});
-					return;
-				}
-			} else {
-				await redis.setex(userKey, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
+			const messageContext = args.message?.inGuild()
+				? await args.message.channel.messages
+						.fetch({ around: args.message.id, limit: REPORT_MESSAGE_CONTEXT_LIMIT })
+						.catch(() => null)
+				: null;
 
-				const report = await createReport({
-					guildId: interaction.guildId,
-					authorId: interaction.user.id,
-					authorTag: interaction.user.tag,
-					reason: trimmedReason,
-					targetId: args.message.author.id,
-					targetTag: args.message.author.tag,
-					message: args.message,
-					type: ReportType.Message,
-				});
+			const targetContextMessagesIds =
+				messageContext?.filter((msg) => msg.author.id === args.message.author.id).map((msg) => msg.id) ?? [];
 
-				await upsertReportLog(interaction.guild, report, args.message);
-			}
-
-			await redis
-				.multi()
-				.sadd(messageKey, args.message.id)
-				.expire(messageKey, REPORT_DUPLICATE_EXPIRE_SECONDS)
-				.setex(userKey, REPORT_DUPLICATE_EXPIRE_SECONDS, "")
-				.exec();
-
-			await collectedInteraction.editReply({
-				content: i18next.t(`command.utility.report.message.success${userRecentlyReported ? "_forward" : ""}`, {
-					lng: locale,
-				}),
-				components: [createMessageActionRow([trustAndSafetyButton])],
+			const report = await createReport({
+				guildId: interaction.guildId,
+				authorId: interaction.user.id,
+				authorTag: interaction.user.tag,
+				reason: trimmedReason,
+				targetId: args.message.author.id,
+				targetTag: args.message.author.tag,
+				message: args.message,
+				contextMessagesIds: targetContextMessagesIds,
+				type: ReportType.Message,
 			});
-		} catch {
-			void redis.srem(messageKey, args.message.id);
+
+			await upsertReportLog(interaction.guild, report, args.message, messageContext!);
 		}
+
+		await redis.setex(userKey, REPORT_DUPLICATE_EXPIRE_SECONDS, "");
+
+		await collectedInteraction.editReply({
+			content: i18next.t(`command.utility.report.message.success${pendingReport ? "_forward" : ""}`, {
+				lng: locale,
+			}),
+			components: [createMessageActionRow([trustAndSafetyButton])],
+		});
 	}
 }
