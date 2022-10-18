@@ -1,6 +1,7 @@
 import { kSQL, container } from "@yuudachi/framework";
 import type { Sql } from "postgres";
 import type { Report } from "./createReport.js";
+import { ReportStatus } from "./createReport.js";
 import { type RawReport, transformReport } from "./transformReport.js";
 
 export async function getReport(guildId: string, reportId: number) {
@@ -20,7 +21,7 @@ export async function getReport(guildId: string, reportId: number) {
 	return transformReport(rawReport);
 }
 
-export async function getReportByTarget(guildId: string, targetId: string, limit = 1): Promise<Report[]> {
+export async function getPendingReportsByTarget(guildId: string, targetId: string, limit = 1): Promise<Report[]> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const rawReports = await sql<[RawReport]>`
@@ -28,6 +29,7 @@ export async function getReportByTarget(guildId: string, targetId: string, limit
 		from reports
 		where guild_id = ${guildId}
 			and target_id = ${targetId}
+			and status = ${ReportStatus.Pending}
 		order by created_at desc
 		limit ${limit}
 	`;

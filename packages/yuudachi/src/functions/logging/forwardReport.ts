@@ -1,8 +1,9 @@
 import type { Message, User } from "discord.js";
 import { inlineCode, userMention } from "discord.js";
 import i18next from "i18next";
+import type { Report } from "../reports/createReport.js";
 import { ReportStatus } from "../reports/createReport.js";
-import { getReportByTarget } from "../reports/getReport.js";
+import { updateReport } from "../reports/updateReport.js";
 import { checkReportForum } from "../settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
@@ -15,10 +16,9 @@ type ForwardReportData = {
 export async function forwardReport(
 	{ author, reason }: ForwardReportData,
 	message: Message<true>,
+	report: Report,
 	locale: string,
 ): Promise<void> {
-	const [report] = await getReportByTarget(message.guild!.id, message.author.id);
-
 	if (!report || !report.logPostId) {
 		throw new Error(i18next.t("log.report_log.forward.errors.generic", { lng: locale }));
 	}
@@ -39,6 +39,12 @@ export async function forwardReport(
 	if (!thread) {
 		throw new Error(i18next.t("log.report_log.forward.errors.generic", { lng: locale }));
 	}
+
+	await updateReport({
+		reportId: report.reportId,
+		guildId: report.guildId,
+		contextMessagesIds: [...report.contextMessagesIds, message.id],
+	});
 
 	await thread.send({
 		content: i18next.t("log.report_log.forward.content", {
