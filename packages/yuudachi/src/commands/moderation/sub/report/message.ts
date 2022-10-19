@@ -118,28 +118,19 @@ export async function message(
 			return;
 		}
 
-		if (pendingReport) {
-			try {
-				await forwardReport(
-					{
-						author: collectedInteraction.user,
-						reason: trimmedReason,
-					},
-					args.message as Message<true>,
-					pendingReport,
-					locale,
-				);
-			} catch (error) {
-				await collectedInteraction.editReply({
-					content: (error as Error).message,
-					components: [],
-					embeds: [],
-				});
-				return;
-			}
-		} else {
-			await redis.setex(userKey, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
+		await redis.setex(userKey, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
 
+		if (pendingReport) {
+			await forwardReport(
+				{
+					author: collectedInteraction.user,
+					reason: trimmedReason,
+				},
+				args.message as Message<true>,
+				pendingReport,
+				locale,
+			);
+		} else {
 			const messageContext = args.message?.inGuild()
 				? await args.message.channel.messages
 						.fetch({ around: args.message.id, limit: REPORT_MESSAGE_CONTEXT_LIMIT })
