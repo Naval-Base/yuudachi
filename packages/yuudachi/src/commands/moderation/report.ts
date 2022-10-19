@@ -246,7 +246,7 @@ export default class extends Command<
 
 		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
 		const [latestReport] = await getPendingReportsByTarget(author.guild.id, target.id);
-		if ((await this.redis.exists(userKey)) || latestReport) {
+		if (latestReport || (await this.redis.exists(userKey))) {
 			if (!message || !latestReport) {
 				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }));
 			}
