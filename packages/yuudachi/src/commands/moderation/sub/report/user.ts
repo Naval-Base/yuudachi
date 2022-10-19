@@ -44,7 +44,7 @@ export async function user(
 		const attachmentIsImage = attachment.contentType === "image/jpeg" || attachment.contentType === "image/png";
 
 		if (!attachmentIsImage) {
-			throw new Error(i18next.t("command.utility.report.common.errors.invalid_attachment", { lng: locale }));
+			throw new Error(i18next.t("command.mod.report.common.errors.invalid_attachment", { lng: locale }));
 		}
 	}
 
@@ -53,22 +53,22 @@ export async function user(
 
 	const reportButton = createButton({
 		customId: reportKey,
-		label: i18next.t("command.utility.report.common.buttons.execute", { lng: locale }),
+		label: i18next.t("command.mod.report.common.buttons.execute", { lng: locale }),
 		style: ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t("command.utility.report.common.buttons.cancel", { lng: locale }),
+		label: i18next.t("command.mod.report.common.buttons.cancel", { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 	const trustAndSafetyButton = createButton({
-		label: i18next.t("command.utility.report.common.buttons.discord_report", { lng: locale }),
+		label: i18next.t("command.mod.report.common.buttons.discord_report", { lng: locale }),
 		url: localeTrustAndSafety(locale),
 		style: ButtonStyle.Link,
 	});
 
 	const contentParts = [
-		i18next.t("command.utility.report.user.pending", {
+		i18next.t("command.mod.report.user.pending", {
 			user: `${member.user.toString()} - \`${member.user.tag}\` (${member.user.id})`,
 			reason: ellipsis(trimmedReason, REPORT_REASON_MAX_LENGTH),
 			lng: locale,
@@ -80,13 +80,13 @@ export async function user(
 		const reportCommand = !interaction.isChatInputCommand() && (await resolveGuildCommand(interaction.guild, "report"));
 
 		contentParts.push(
-			i18next.t("command.utility.report.user.attachment_upsell.base", {
+			i18next.t("command.mod.report.user.attachment_upsell.base", {
 				report_command: reportCommand
-					? i18next.t("command.utility.report.user.attachment_upsell.mention", {
+					? i18next.t("command.mod.report.user.attachment_upsell.mention", {
 							report_command: chatInputApplicationCommandMention("report user", reportCommand.id),
 							lng: locale,
 					  })
-					: i18next.t("command.utility.report.user.attachment_upsell.option", { lng: locale }),
+					: i18next.t("command.mod.report.user.attachment_upsell.option", { lng: locale }),
 				lng: locale,
 			}),
 			"",
@@ -94,9 +94,9 @@ export async function user(
 	}
 
 	contentParts.push(
-		i18next.t("command.utility.report.common.warnings", {
+		i18next.t("command.mod.report.common.warnings", {
 			trust_and_safety: hyperlink(
-				i18next.t("command.utility.report.common.trust_and_safety_sub", { lng: locale }),
+				i18next.t("command.mod.report.common.trust_and_safety_sub", { lng: locale }),
 				localeTrustAndSafety(locale),
 			),
 			lng: locale,
@@ -131,7 +131,7 @@ export async function user(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
+					content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
 					components: [],
 				});
 			} catch (error_) {
@@ -144,7 +144,7 @@ export async function user(
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t("command.utility.report.user.cancel", {
+			content: i18next.t("command.mod.report.user.cancel", {
 				lng: locale,
 			}),
 			embeds: [],
@@ -155,7 +155,7 @@ export async function user(
 
 		if (await redis.exists(key)) {
 			await collectedInteraction.editReply({
-				content: i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }),
+				content: i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }),
 				embeds: [],
 				components: [],
 			});
@@ -180,7 +180,7 @@ export async function user(
 		await redis.setex(key, REPORT_DUPLICATE_EXPIRE_SECONDS, "");
 
 		await collectedInteraction.editReply({
-			content: i18next.t("command.utility.report.user.success", { lng: locale }),
+			content: i18next.t("command.mod.report.user.success", { lng: locale }),
 			embeds: [embed],
 			components: [createMessageActionRow([trustAndSafetyButton])],
 		});

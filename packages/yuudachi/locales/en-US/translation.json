@@ -345,43 +345,6 @@
 			},
 			"status": {
 				"success": "Successfully set status of report {{- report}} to `$t(log.report_log.report_status.{{status}})`"
-			}
-		},
-		"utility": {
-			"ping": {
-				"success": "ok"
-			},
-			"check_scam": {
-				"found_one": "Detected scam domain ({{count}})",
-				"found_other": "Detected scam domains ({{count}})"
-			},
-			"refresh_scamlist": {
-				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
-				"refresh_never": "`never`",
-				"amount": "• Amount: `{{count}}`",
-				"before": "• Before: `{{count}}`",
-				"after": "• After: `{{count}}`",
-				"last_change": "• Last change: {{- timestamp}}",
-				"buttons": {
-					"execute": "Refresh"
-				},
-				"cancel": "Canceled scam domain list refreshing.",
-				"success": "Successfully refreshed scam domain lists.",
-				"pending": "Current scam domain lists:",
-				"error": "Something went wrong when refreshing scam domains."
-			},
-			"sponsor": {
-				"errors": {
-					"no_role": "No role for sponsors has been configured.",
-					"already_sponsor": "{{- user}} is already a sponsor."
-				},
-				"pending": "Do you really want to apply the sponsor role to {{- user}}?",
-				"buttons": {
-					"execute": "Apply"
-				},
-				"reason": "Sponsor role",
-				"cancel": "Canceled applying sponsor role to {{- user}}",
-				"success": "Successfully applied sponsor role to {{- user}}"
 			},
 			"report": {
 				"common": {
@@ -436,6 +399,43 @@
 					"cancel": "User report canceled.",
 					"success": "Successfully reported user, thanks for making our community a better place!"
 				}
+			}
+		},
+		"utility": {
+			"ping": {
+				"success": "ok"
+			},
+			"check_scam": {
+				"found_one": "Detected scam domain ({{count}})",
+				"found_other": "Detected scam domains ({{count}})"
+			},
+			"refresh_scamlist": {
+				"missing_env": "Missing environment variables {{missing, list}} to fetch scam domains from.",
+				"refresh_never": "`never`",
+				"amount": "• Amount: `{{count}}`",
+				"before": "• Before: `{{count}}`",
+				"after": "• After: `{{count}}`",
+				"last_change": "• Last change: {{- timestamp}}",
+				"buttons": {
+					"execute": "Refresh"
+				},
+				"cancel": "Canceled scam domain list refreshing.",
+				"success": "Successfully refreshed scam domain lists.",
+				"pending": "Current scam domain lists:",
+				"error": "Something went wrong when refreshing scam domains."
+			},
+			"sponsor": {
+				"errors": {
+					"no_role": "No role for sponsors has been configured.",
+					"already_sponsor": "{{- user}} is already a sponsor."
+				},
+				"pending": "Do you really want to apply the sponsor role to {{- user}}?",
+				"buttons": {
+					"execute": "Apply"
+				},
+				"reason": "Sponsor role",
+				"cancel": "Canceled applying sponsor role to {{- user}}",
+				"success": "Successfully applied sponsor role to {{- user}}"
 			}
 		}
 	},
@@ -623,8 +623,7 @@
 			"forward": {
 				"content": "**Message report forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
 				"errors": {
-					"generic": "There was an error forwarding the report.",
-					"already_resolved": "The report has already been resolved."
+					"generic": "There was an error forwarding the report."
 				}
 			},
 			"report_status": {

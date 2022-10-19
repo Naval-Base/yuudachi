@@ -37,35 +37,32 @@ export async function message(
 
 	const reportButton = createButton({
 		customId: reportKey,
-		label: i18next.t(`command.utility.report.common.buttons.${pendingReport ? "forward" : "execute"}`, {
+		label: i18next.t(`command.mod.report.common.buttons.${pendingReport ? "forward" : "execute"}`, {
 			lng: locale,
 		}),
 		style: pendingReport ? ButtonStyle.Primary : ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
-		label: i18next.t("command.utility.report.common.buttons.cancel", { lng: locale }),
+		label: i18next.t("command.mod.report.common.buttons.cancel", { lng: locale }),
 		style: ButtonStyle.Secondary,
 	});
 	const trustAndSafetyButton = createButton({
-		label: i18next.t("command.utility.report.common.buttons.discord_report", { lng: locale }),
+		label: i18next.t("command.mod.report.common.buttons.discord_report", { lng: locale }),
 		url: localeTrustAndSafety(locale),
 		style: ButtonStyle.Link,
 	});
 
 	const contentParts = [
-		i18next.t(`command.utility.report.message.pending${pendingReport ? "_forward" : ""}`, {
-			message_link: hyperlink(
-				i18next.t("command.utility.report.message.pending_sub", { lng: locale }),
-				args.message.url,
-			),
+		i18next.t(`command.mod.report.message.pending${pendingReport ? "_forward" : ""}`, {
+			message_link: hyperlink(i18next.t("command.mod.report.message.pending_sub", { lng: locale }), args.message.url),
 			reason: ellipsis(trimmedReason, REPORT_REASON_MAX_LENGTH),
 			lng: locale,
 		}),
 		"",
-		i18next.t("command.utility.report.common.warnings", {
+		i18next.t("command.mod.report.common.warnings", {
 			trust_and_safety: hyperlink(
-				i18next.t("command.utility.report.common.trust_and_safety_sub", { lng: locale }),
+				i18next.t("command.mod.report.common.trust_and_safety_sub", { lng: locale }),
 				localeTrustAndSafety(locale),
 			),
 			lng: locale,
@@ -87,7 +84,7 @@ export async function message(
 		.catch(async () => {
 			try {
 				await interaction.editReply({
-					content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
+					content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
 					components: [],
 				});
 			} catch (error_) {
@@ -100,7 +97,7 @@ export async function message(
 
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
-			content: i18next.t("command.utility.report.message.cancel", {
+			content: i18next.t("command.mod.report.message.cancel", {
 				lng: locale,
 			}),
 			embeds: [],
@@ -113,7 +110,7 @@ export async function message(
 
 		if (lastReport?.contextMessagesIds.includes(args.message.id)) {
 			await collectedInteraction.editReply({
-				content: i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }),
+				content: i18next.t("command.mod.report.common.errors.recently_reported.message", { lng: locale }),
 				embeds: [],
 				components: [],
 			});
@@ -170,7 +167,7 @@ export async function message(
 		await redis.setex(userKey, REPORT_DUPLICATE_EXPIRE_SECONDS, "");
 
 		await collectedInteraction.editReply({
-			content: i18next.t(`command.utility.report.message.success${pendingReport ? "_forward" : ""}`, {
+			content: i18next.t(`command.mod.report.message.success${pendingReport ? "_forward" : ""}`, {
 				lng: locale,
 			}),
 			components: [createMessageActionRow([trustAndSafetyButton])],

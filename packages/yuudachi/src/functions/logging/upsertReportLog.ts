@@ -54,7 +54,7 @@ export async function upsertReportLog(
 
 	if (!reportPost) {
 		const reportPost = await reportForum!.threads.create({
-			name: i18next.t("command.utility.report.common.post.name", {
+			name: i18next.t("command.mod.report.common.post.name", {
 				report_id: report.reportId,
 				user: `${report.targetTag} (${report.targetId})`,
 				lng: locale,
@@ -80,7 +80,7 @@ export async function upsertReportLog(
 						  ]
 						: undefined,
 			},
-			reason: i18next.t("command.utility.report.common.post.reason", {
+			reason: i18next.t("command.mod.report.common.post.reason", {
 				user: `${report.authorTag} (${report.authorId})`,
 				lng: locale,
 			}),

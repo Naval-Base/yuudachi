@@ -96,15 +96,15 @@ export default class extends Command<
 
 		const modal = createModal({
 			customId: modalKey,
-			title: i18next.t("command.utility.report.user.modal.title", { lng: locale }),
+			title: i18next.t("command.mod.report.user.modal.title", { lng: locale }),
 			components: [
 				createModalActionRow([
 					createTextComponent({
 						customId: "reason",
-						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
+						label: i18next.t("command.mod.report.common.modal.label", { lng: locale }),
 						minLength: REPORT_REASON_MIN_LENGTH,
 						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
+						placeholder: i18next.t("command.mod.report.common.modal.placeholder", { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
 					}),
@@ -122,7 +122,7 @@ export default class extends Command<
 			.catch(async () => {
 				try {
 					await interaction.followUp({
-						content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
+						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
 						ephemeral: true,
 						components: [],
 					});
@@ -171,15 +171,15 @@ export default class extends Command<
 
 		const modal = createModal({
 			customId: modalKey,
-			title: i18next.t("command.utility.report.message.modal.title", { lng: locale }),
+			title: i18next.t("command.mod.report.message.modal.title", { lng: locale }),
 			components: [
 				createModalActionRow([
 					createTextComponent({
 						customId: "reason",
-						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
+						label: i18next.t("command.mod.report.common.modal.label", { lng: locale }),
 						minLength: REPORT_REASON_MIN_LENGTH,
 						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
+						placeholder: i18next.t("command.mod.report.common.modal.placeholder", { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
 					}),
@@ -197,7 +197,7 @@ export default class extends Command<
 			.catch(async () => {
 				try {
 					await interaction.followUp({
-						content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
+						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
 						ephemeral: true,
 						components: [],
 					});
@@ -237,22 +237,22 @@ export default class extends Command<
 		message?: Message<boolean>,
 	): Promise<Report | undefined> {
 		if (target.bot) {
-			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
+			throw new Error(i18next.t("command.mod.report.common.errors.bot", { lng: locale }));
 		}
 
 		if (target.id === author.id) {
-			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
+			throw new Error(i18next.t("command.mod.report.common.errors.no_self", { lng: locale }));
 		}
 
 		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
 		const [latestReport] = await getPendingReportsByTarget(author.guild.id, target.id);
 		if ((await this.redis.exists(userKey)) || latestReport) {
 			if (!message || !latestReport) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
+				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }));
 			}
 
 			if (latestReport?.contextMessagesIds.includes(message.id)) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
+				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.message", { lng: locale }));
 			}
 		}
 
