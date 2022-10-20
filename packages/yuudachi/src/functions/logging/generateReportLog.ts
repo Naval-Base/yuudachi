@@ -46,7 +46,7 @@ export async function generateReportLog(report: Report, locale: string, message?
 
 	if (report.refId) {
 		const [reference] = await sql<[{ action: CaseAction; log_message_id: Snowflake | null }?]>`
-			select log_message_id, action
+			select action, log_message_id
 			from cases
 			where guild_id = ${report.guildId}
 				and case_id = ${report.refId}
@@ -54,7 +54,7 @@ export async function generateReportLog(report: Report, locale: string, message?
 
 		const modLogChannelId = await getGuildSetting(report.guildId, SettingsKeys.ModLogChannelId);
 
-		if (modLogChannelId && Reflect.has(reference ?? {}, "log_message_id") && Reflect.has(reference ?? {}, "action")) {
+		if (modLogChannelId && Reflect.has(reference ?? {}, "action") && Reflect.has(reference ?? {}, "log_message_id")) {
 			parts.push(
 				i18next.t("log.report_log.case_reference", {
 					ref: hyperlink(`#${report.refId}`, messageLink(modLogChannelId, reference!.log_message_id!, report.guildId)),

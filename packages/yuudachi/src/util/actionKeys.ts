@@ -6,12 +6,12 @@ export function caseActionLabel(key: CaseAction, locale: string, isCase = false)
 	switch (key) {
 		case CaseAction.Role:
 			return isCase
-				? i18next.t(`log.history.cases.action_label.restriction_case`, { lng: locale })
-				: i18next.t(`log.history.cases.action_label.restriction`, { lng: locale });
+				? i18next.t("log.history.cases.action_label.restriction_case", { lng: locale })
+				: i18next.t("log.history.cases.action_label.restriction", { lng: locale });
 		case CaseAction.Unrole:
 			return isCase
-				? i18next.t(`log.history.cases.action_label.unrestriction_case`, { lng: locale })
-				: i18next.t(`log.history.cases.action_label.unrestriction`, { lng: locale });
+				? i18next.t("log.history.cases.action_label.unrestriction_case", { lng: locale })
+				: i18next.t("log.history.cases.action_label.unrestriction", { lng: locale });
 		case CaseAction.Warn:
 			return i18next.t("log.history.cases.action_label.warn", { lng: locale });
 		case CaseAction.Kick:

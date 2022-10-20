@@ -68,13 +68,13 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 
 	if (case_.refId) {
 		const [reference] = await sql<[{ action: CaseAction; log_message_id: Snowflake | null }?]>`
-			select log_message_id, action
+			select action, log_message_id
 			from cases
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.refId}
 		`;
 
-		if (Reflect.has(reference ?? {}, "log_message_id") && Reflect.has(reference ?? {}, "action")) {
+		if (Reflect.has(reference ?? {}, "action") && Reflect.has(reference ?? {}, "log_message_id")) {
 			msg += i18next.t("log.mod_log.case_log.case_reference", {
 				ref: hyperlink(`#${case_.refId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
 				action: caseActionLabel(reference!.action, locale),
