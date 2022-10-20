@@ -34,7 +34,7 @@ export async function forwardReport(
 	await thread!.send({
 		content: i18next.t("log.report_log.forward.content", {
 			author: `${userMention(author.id)} - \`${author.tag}\` (${author.id})`,
-			reason: inlineCode(reason || i18next.t("log.common.", { lng: locale })),
+			reason: inlineCode(reason),
 			lng: locale,
 		}),
 		embeds: [formatMessageToEmbed(message, locale)],
