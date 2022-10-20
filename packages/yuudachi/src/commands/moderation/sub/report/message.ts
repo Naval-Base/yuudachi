@@ -106,7 +106,7 @@ export async function message(
 	} else if (collectedInteraction?.customId === reportKey) {
 		await collectedInteraction.deferUpdate();
 
-		const [lastReport] = await getPendingReportsByTarget(interaction.guildId!, args.message.author.id);
+		const lastReport = await getPendingReportsByTarget(interaction.guildId!, args.message.author.id);
 
 		if (lastReport?.contextMessagesIds.includes(args.message.id)) {
 			await collectedInteraction.editReply({
