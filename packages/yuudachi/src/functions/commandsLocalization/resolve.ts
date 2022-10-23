@@ -1,6 +1,7 @@
 import { removeUndefinedKeys } from "@yuudachi/framework";
 import type { RESTPostAPIApplicationCommand } from "@yuudachi/framework/types";
 import { ApplicationCommandType } from "discord.js";
+import i18next from "i18next";
 import { formatCommandOptionsToLocalizations } from "./formatters.js";
 import type { FetchCommandLocalesOptions, LocaleObject } from "./types.js";
 import { resolveLocalizations } from "./utils.js";
