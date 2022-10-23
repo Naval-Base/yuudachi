@@ -2,6 +2,7 @@ import "reflect-metadata";
 import process from "node:process";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
+import { formatCommandToLocalizations } from "./functions/commandsLocalization/resolve.js";
 import {
 	// Moderation
 	AntiRaidNukeCommand,
@@ -37,7 +38,6 @@ import {
 	ReportMessageContextCommand,
 	ReportUserContextCommand,
 } from "./interactions/index.js";
-import { formatCommandToLocalizations } from "./interactions/resolveLocales.js";
 import { createI18next } from "./util/i18next.js";
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
