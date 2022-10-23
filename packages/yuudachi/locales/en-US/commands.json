@@ -1,0 +1,487 @@
+{
+	"commons": {
+		"options": {
+			"hide": {
+				"name": "hide",
+				"description": "Hides the output"
+			},
+			"duration": {
+				"name": "duration",
+				"description": "Duration of the effect",
+				"choices": {
+					"60s": "1 minute",
+					"5m": "5 minutes",
+					"10m": "10 minutes",
+					"1h": "1 hour",
+					"3h": "3 hours",
+					"6h": "6 hours",
+					"12h": "12 hours",
+					"1d": "1 day",
+					"2d": "2 days",
+					"3d": "3 days",
+					"7d": "7 days"
+				}
+			},
+			"days": {
+				"name": "days",
+				"description": "The amount of days to delete messages for",
+				"choices": {
+					"0": "0 days",
+					"1": "1 day (default)",
+					"2": "2 days",
+					"3": "3 days",
+					"4": "4 days",
+					"5": "5 days",
+					"6": "6 days",
+					"7": "7 days"
+				}
+			},
+			"user": {
+				"name": "user",
+				"description": "The user to action"
+			},
+			"reason": {
+				"name": "reason",
+				"description": "The reason for the action"
+			},
+			"case_reference": {
+				"name": "case_reference",
+				"description": "The reference case"
+			},
+			"report_reference": {
+				"name": "report_reference",
+				"description": "The reference report"
+			}
+		}
+	},
+	"context-menu": {
+		"report-message": {
+			"name": "Report message"
+		},
+		"report-user": {
+			"name": "Report user"
+		},
+		"clear-messages-to": {
+			"name": "Clear messages to"
+		},
+		"history": {
+			"name": "History"
+		},
+		"repost": {
+			"name": "Repost"
+		},
+		"assign-sponsor": {
+			"name": "Assign sponsor"
+		}
+	},
+	"moderation": {
+		"anti-raid-nuke": {
+			"name": "anti-raid-nuke",
+			"description": "Handle raids and nukes",
+			"sub_command": {
+				"filter": {
+					"name": "filter",
+					"description": "Filter and ban members based on various criterias",
+					"options": {
+						"pattern": {
+							"name": "pattern",
+							"description": "The pattern to match against the username"
+						},
+						"confusables": {
+							"name": "confusables",
+							"description": "Enable confusables (Cleaning the username or filter out members without confusables)",
+							"choices": {
+								"0": "Off",
+								"1": "Only pattern (default) (Pattern will be resistant to confusables and zalgo)",
+								"2": "Only filter members (Filter out members without confusables in their username)",
+								"3": "Pattern & filter members"
+							}
+						},
+						"insensitive": {
+							"name": "insensitive",
+							"description": "The pattern should be case insensitive (default: true)"
+						},
+						"full_match": {
+							"name": "full_match",
+							"description": "The pattern should only match the whole username (default: false)"
+						},
+						"zalgo": {
+							"name": "zalgo",
+							"description": "Filter out members without zalgo in their username"
+						},
+						"join_after": {
+							"name": "join_after",
+							"description": "Minimum join date (Snowflake | Timestamp | Duration | ISO)"
+						},
+						"join_before": {
+							"name": "join_before",
+							"description": "Maximum join date (Snowflake | Timestamp | Duration | ISO)"
+						},
+						"created_after": {
+							"name": "created_after",
+							"description": "Minimum creation date (Snowflake | Timestamp | Duration | ISO)"
+						},
+						"created_before": {
+							"name": "created_before",
+							"description": "Maximum creation date (Snowflake | Timestamp | Duration | ISO)"
+						},
+						"avatar": {
+							"name": "avatar",
+							"description": "The avatar (Raw hash, user id, cdn url, or \"none\" to match no avatar)"
+						},
+						"reason": {
+							"description": "The reason to ban the members"
+						},
+						"hide": {
+							"description": "Hides the output (preliminary report only)"
+						}
+					}
+				},
+				"file": {
+					"name": "file",
+					"description": "Filter and ban members from a file of ids",
+					"options": {
+						"file": {
+							"name": "file",
+							"description": "The file to read from"
+						},
+						"reason": {
+							"description": "The reason to ban the members"
+						},
+						"hide": {
+							"description": "Hides the output (preliminary report only)"
+						}
+					}
+				},
+				"modal": {
+					"name": "modal",
+					"description": "Filter and ban members prompted by a modal",
+					"options": {
+						"reason": {
+							"description": "The reason to ban the members"
+						},
+						"hide": {
+							"description": "Hides the output (preliminary report only)"
+						}
+					}
+				}
+			}
+		},
+		"ban": {
+			"name": "ban",
+			"description": "Ban a member of(f) this guild",
+			"options": {
+				"days": {
+					"choices": {
+						"0": "0 days (default)",
+						"1": "1 day"
+					}
+				}
+			}
+		},
+		"case": {
+			"name": "case",
+			"description": "Look up a moderation case",
+			"options": {
+				"phrase": {
+					"name": "phrase",
+					"description": "Term to find a case by (case id, target id, part of target tag, part of reason)"
+				}
+			}
+		},
+		"clear": {
+			"name": "clear",
+			"description": "Clear messages",
+			"options": {
+				"last_message": {
+					"name": "last_message",
+					"description": "The last message to clear"
+				},
+				"first_message": {
+					"name": "first_message",
+					"description": "The first message to clear"
+				}
+			}
+		},
+		"duration": {
+			"name": "duration",
+			"description": "Change the duration of a timed action",
+			"options": {
+				"case": {
+					"name": "case",
+					"description": "The case to look up"
+				}
+			}
+		},
+		"history": {
+			"name": "history",
+			"description": "Look up a users moderative history",
+			"sub_command": {
+				"cases": {
+					"name": "cases",
+					"description": "Look up a user case history",
+					"options": {
+						"user": {
+							"description": "The user to look up"
+						}
+					}
+				},
+				"reports": {
+					"name": "reports",
+					"description": "Look up a user report history",
+					"options": {
+						"user": {
+							"description": "The user to look up"
+						}
+					}
+				}
+			}
+		},
+		"kick": {
+			"name": "kick",
+			"description": "Kick a member of(f) this guild"
+		},
+		"lockdown": {
+			"name": "lockdown",
+			"description": "Execute or lift a lockdown on a text channel",
+			"sub_command": {
+				"lock": {
+					"name": "lock",
+					"description": "Execute a lockdown on a text channel",
+					"options": {
+						"channel": {
+							"name": "channel",
+							"description": "The channel to lock"
+						},
+						"duration": {
+							"description": "The duration"
+						},
+						"reason": {
+							"description": "The reason of this lockdown"
+						}
+					}
+				},
+				"lift": {
+					"name": "lift",
+					"description": "Lift a lockdown on a text channel",
+					"options": {
+						"channel": {
+							"name": "channel",
+							"description": "The channel to lift the lock"
+						}
+					}
+				}
+			}
+		},
+		"reason": {
+			"name": "reason",
+			"description": "Change the reason of actions",
+			"options": {
+				"case": {
+					"name": "case",
+					"description": "The first case to change"
+				},
+				"reason": {
+					"description": "The reason"
+				},
+				"last_case": {
+					"name": "last_case",
+					"description": "The last case to change"
+				}
+			}
+		},
+		"reference": {
+			"name": "reference",
+			"description": "Set a reference of a moderation case",
+			"sub_command": {
+				"case": {
+					"name": "case",
+					"description": "Set the case reference to another moderation case",
+					"options": {
+						"case": {
+							"name": "case",
+							"description": "The case to set the reference for"
+						},
+						"reference_case": {
+							"name": "reference_case",
+							"description": "The case to refer to"
+						}
+					}
+				},
+				"report": {
+					"name": "report",
+					"description": "Set the case reference to a report",
+					"options": {
+						"case": {
+							"name": "case",
+							"description": "The case to set the reference for"
+						},
+						"reference_report": {
+							"name": "reference_report",
+							"description": "The report to refer to"
+						}
+					}
+				}
+			}
+		},
+		"reports": {
+			"name": "reports",
+			"description": "Mod reports utilities",
+			"sub_command": {
+				"lookup": {
+					"name": "lookup",
+					"description": "Lookup a report",
+					"options": {
+						"phrase": {
+							"name": "phrase",
+							"description": "Term to find a report by (report id, user id, part of user tag, part of reason)"
+						}
+					}
+				},
+				"status": {
+					"name": "status",
+					"description": "Change the status of a report",
+					"options": {
+						"report": {
+							"name": "report",
+							"description": "The report to update"
+						},
+						"status": {
+							"name": "status",
+							"description": "The new status for the report",
+							"choices": {
+								"0": "Pending",
+								"1": "Approved",
+								"2": "Rejected",
+								"3": "Spam"
+							}
+						}
+					}
+				}
+			}
+		},
+		"restrict": {
+			"name": "restrict",
+			"description": "Restrict a members access to embed/react/emoji",
+			"sub_command": {
+				"embed": {
+					"name": "embed",
+					"description": "Embed restrict a member of(f) this guild"
+				},
+				"react": {
+					"name": "react",
+					"description": "Reaction restrict a member of(f) this guild"
+				},
+				"emoji": {
+					"name": "emoji",
+					"description": "Emoji restrict a member of(f) this guild"
+				},
+				"unrole": {
+					"name": "unrole",
+					"description": "Unrole a specific case",
+					"options": {
+						"case": {
+							"name": "case",
+							"description": "The case to unrole"
+						}
+					}
+				}
+			}
+		},
+		"softban": {
+			"name": "softban",
+			"description": "Softban a member of(f) this guild"
+		},
+		"timeout": {
+			"name": "timeout",
+			"description": "Timeout a member",
+			"options": {
+				"user": {
+					"description": "Timeout a member of this guild"
+				}
+			}
+		},
+		"unban": {
+			"name": "unban",
+			"description": "Unban a user"
+		},
+		"warn": {
+			"name": "warn",
+			"description": "Warn a user"
+		}
+	},
+	"utility": {
+		"checkscam": {
+			"name": "checkscam",
+			"description": "Check provided content for scam domains",
+			"options": {
+				"content": {
+					"name": "content",
+					"description": "Content to check for scam domains"
+				}
+			}
+		},
+		"ping": {
+			"name": "ping",
+			"description": "Health check"
+		},
+		"refreshscams": {
+			"name": "refreshscams",
+			"description": "Refresh scamlists"
+		},
+		"report": {
+			"name": "report",
+			"description": "Report a message to the server moderators",
+			"sub_command": {
+				"message": {
+					"name": "message",
+					"description": "Report a message to the server moderators",
+					"options": {
+						"message_link": {
+							"name": "message_link",
+							"description": "Message link to the message"
+						},
+						"reason": {
+							"description": "Reason for the report"
+						}
+					}
+				},
+				"user": {
+					"name": "user",
+					"description": "Report a user to the server moderators",
+					"options": {
+						"user": {
+							"description": "The user to report"
+						},
+						"reason": {
+							"description": "Reason for the report"
+						},
+						"attachment": {
+							"name": "attachment",
+							"description": "Attachment to the report (image only)"
+						}
+					}
+				}
+			}
+		},
+		"repost": {
+			"name": "repost",
+			"description": "Repost a message",
+			"options": {
+				"message_link": {
+					"name": "message_link",
+					"description": "Message link to the message"
+				}
+			}
+		},
+		"sponsor": {
+			"name": "sponsor",
+			"description": "Add sponsor role to a member of this guild",
+			"options": {
+				"user": {
+					"description": "The user to add the sponsor role to"
+				}
+			}
+		}
+	}
+}
