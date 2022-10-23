@@ -1,7 +1,7 @@
 import { removeUndefinedKeys } from "@yuudachi/framework";
 import type { RESTPostAPIApplicationCommand } from "@yuudachi/framework/types";
-import { ApplicationCommandType } from "discord.js";
-import i18next from "i18next";
+import { type LocaleString, ApplicationCommandType } from "discord.js";
+import i18next, { type i18n } from "i18next";
 import { formatCommandOptionsToLocalizations } from "./formatters.js";
 import type { FetchCommandLocalesOptions, LocaleObject } from "./types.js";
 import { resolveLocalizations } from "./utils.js";
@@ -14,8 +14,7 @@ import { resolveLocalizations } from "./utils.js";
  * Commons are grouped under the commons top-level, overrides can be done by using the same key on a command.
  */
 export function fetchCommandLocales(options: FetchCommandLocalesOptions): LocaleObject {
-	// @ts-expect-error: This is callable
-	const locales = i18next.options.preload as LocaleString[];
+	const locales = (i18next as unknown as i18n).options.preload as LocaleString[];
 	const { choice, contextMenu } = options;
 	const onlyName = contextMenu! || typeof choice === "number" || typeof choice === "string";
 
