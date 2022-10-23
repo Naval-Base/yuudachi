@@ -3,7 +3,7 @@ import { CASE_REASON_MAX_LENGTH, CASE_REASON_MIN_LENGTH } from "../../Constants.
 
 export const RestrictCommand = {
 	name: "restrict",
-	description: "Restrict a members access to write/tags/embed/react/emoji",
+	description: "Restrict a members access to embed/react/emoji",
 	options: [
 		{
 			name: "embed",
