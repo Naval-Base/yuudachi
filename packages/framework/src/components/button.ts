@@ -27,7 +27,7 @@ export function createButton({
 		style: style ?? ButtonStyle.Primary,
 		disabled,
 		emoji,
-	};	    
+	};
 
 	if (style === ButtonStyle.Link && url) {
 		return {
