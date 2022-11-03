@@ -12,6 +12,7 @@ export function createButton({
 	style,
 	url,
 	disabled,
+	emoji,
 }: {
 	customId?: string | undefined;
 	disabled?: boolean | undefined;
