@@ -12,7 +12,14 @@ import {
 } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import dayjs from "dayjs";
-import { type APIEmbed, ButtonStyle, ComponentType, type Webhook, type Message } from "discord.js";
+import {
+	type APIEmbed,
+	ButtonStyle,
+	ComponentType,
+	type Webhook,
+	type Message,
+	type APIButtonComponent,
+} from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
@@ -22,6 +29,7 @@ import { formatMessagesToAttachment } from "../../functions/logging/formatMessag
 import { fetchMessages, orderMessages, pruneMessages } from "../../functions/pruning/pruneMessages.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ClearCommand, ClearContextCommand } from "../../interactions/index.js";
+import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
 import { parseMessageLink, resolveMessage } from "../../util/resolveMessage.js";
 
 async function resolveSnowflakeOrLink(
@@ -111,9 +119,11 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 		];
 
 		const embeds: APIEmbed[] = [];
+		const buttons: APIButtonComponent[] = [cancelButton, clearButton];
 
 		if (!messages.has(oldest.id)) {
 			embeds.push(formatMessageToEmbed(earliest as Message<true>, locale));
+			buttons.push(createMessageLinkButton(earliest as Message<true>, locale));
 			confirmParts.push(
 				i18next.t("command.mod.clear.message_too_old", {
 					embeds,
@@ -125,7 +135,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 
 		await interaction.editReply({
 			content: confirmParts.join("\n"),
-			components: [createMessageActionRow([cancelButton, clearButton])],
+			components: [createMessageActionRow(buttons)],
 			embeds,
 		});
 

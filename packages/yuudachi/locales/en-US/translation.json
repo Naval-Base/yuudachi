@@ -26,7 +26,8 @@
 				"ignored_channel": "Resolving a message from an ignored channel is not allowed."
 			},
 			"buttons": {
-				"cancel": "Cancel"
+				"cancel": "Cancel",
+				"message_reference": "Original message"
 			}
 		},
 		"config": {
