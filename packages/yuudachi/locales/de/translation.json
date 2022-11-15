@@ -26,7 +26,8 @@
 				"ignored_channel": ""
 			},
 			"buttons": {
-				"cancel": "Abbrechen"
+				"cancel": "Abbrechen",
+				"message_reference": ""
 			}
 		},
 		"config": {
