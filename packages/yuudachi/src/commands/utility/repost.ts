@@ -1,9 +1,10 @@
-import { Command } from "@yuudachi/framework";
+import { Command, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import type { Message } from "discord.js";
 import i18next from "i18next";
 import { formatMessageToEmbed } from "../../functions/logging/formatMessageToEmbed.js";
 import type { RepostCommand, RepostMessageContextCommand } from "../../interactions/index.js";
+import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
 import { parseMessageLink, resolveMessage } from "../../util/resolveMessage.js";
 
 export default class extends Command<typeof RepostCommand | typeof RepostMessageContextCommand> {
@@ -12,7 +13,10 @@ export default class extends Command<typeof RepostCommand | typeof RepostMessage
 		message: Message<true>,
 		locale: string,
 	) {
-		await interaction.editReply({ embeds: [formatMessageToEmbed(message, locale)] });
+		await interaction.editReply({
+			embeds: [formatMessageToEmbed(message, locale)],
+			components: [createMessageActionRow([createMessageLinkButton(message, locale)])],
+		});
 	}
 
 	public override async chatInput(

@@ -7,7 +7,6 @@ export function formatMessageToEmbed(message: Message<true>, locale: string) {
 	let embed = truncateEmbed({
 		author: {
 			name: `${message.author.tag} (${message.author.id})`,
-			url: message.url,
 			icon_url: message.author.displayAvatarURL(),
 		},
 		description: message.content.length
