@@ -92,12 +92,12 @@ export class WebSocketConnection {
 
 		logger.info({
 			msg: `WebSocket closed with code ${code} and reason ${reason}. Attempting reconnect after ${String(
-				Math.round(backOff / 1_000),
+				backOff,
 			)} seconds`,
 			url: this.url,
 			code,
 			reason,
-			attemptReconnectAfterMilliseconds: backOff,
+			attemptReconnectAfterSeconds: backOff,
 		});
 
 		setTimeout(() => {
