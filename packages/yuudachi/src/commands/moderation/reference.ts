@@ -31,7 +31,7 @@ export default class extends Command<typeof ReferenceCommand> {
 		const originalCase = await getCase(interaction.guildId, caseId);
 
 		if (!originalCase) {
-			throw new Error(i18next.t("command.mod.common.errors.no_case", { case: args.case.case, lng: locale }));
+			throw new Error(i18next.t("command.mod.common.errors.no_case", { case: caseId, lng: locale }));
 		}
 
 		switch (Object.keys(args)[0]) {
