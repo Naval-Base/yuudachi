@@ -477,12 +477,16 @@
 				},
 				"action_label": {
 					"restriction": "",
+					"restriction_case": "",
+					"unrestriction": "",
+					"unrestriction_case": "",
 					"warn": "",
 					"kick": "",
 					"softban": "",
 					"ban": "",
 					"unban": "",
 					"timeout": "",
+					"timeout_end": "",
 					"unknown": ""
 				}
 			},
