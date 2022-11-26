@@ -13,19 +13,20 @@ export async function registerJobs() {
 	const sql = container.resolve<Sql<{}>>(kSQL);
 	const redis = container.resolve<Redis>(kRedis);
 
+	// @ts-expect-error: Works as expected
 	const queue = new Queue("jobs", { connection: redis });
 
 	try {
 		logger.info({ job: { name: "modActionTimers" } }, "Registering job: modActionTimers");
-		await queue.add("modActionTimers", {}, { repeat: { cron: "* * * * *" } });
+		await queue.add("modActionTimers", {}, { repeat: { pattern: "* * * * *" } });
 		logger.info({ job: { name: "modActionTimers" } }, "Registered job: modActionTimers");
 
 		logger.info({ job: { name: "modLockdownTimers" } }, "Registering job: modLockdownTimers");
-		await queue.add("modLockdownTimers", {}, { repeat: { cron: "* * * * *" } });
+		await queue.add("modLockdownTimers", {}, { repeat: { pattern: "* * * * *" } });
 		logger.info({ job: { name: "modLockdownTimers" } }, "Registered job: modLockdownTimers");
 
 		logger.info({ job: { name: "scamDomainUpdateTimers" } }, "Registering job: scamDomainUpdateTimers");
-		await queue.add("scamDomainUpdateTimers", {}, { repeat: { cron: "*/5 * * * *" } });
+		await queue.add("scamDomainUpdateTimers", {}, { repeat: { pattern: "*/5 * * * *" } });
 		logger.info({ job: { name: "scamDomainUpdateTimers" } }, "Registered job: scamDomainUpdateTimers");
 
 		new Worker(
@@ -95,6 +96,7 @@ export async function registerJobs() {
 						break;
 				}
 			},
+			// @ts-expect-error: Works as expected
 			{ connection: redis },
 		);
 	} catch (error_) {
