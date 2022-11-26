@@ -25,13 +25,17 @@ export async function forwardReport(
 
 	const thread = await channel!.threads.fetch(report.logPostId!);
 
+	if (!thread) {
+		throw new Error(i18next.t("log.report_log.forward.errors.no_thread", { lng: locale }));
+	}
+
 	await updateReport({
 		reportId: report.reportId,
 		guildId: report.guildId,
 		contextMessagesIds: [...report.contextMessagesIds, message.id],
 	});
 
-	await thread!.send({
+	await thread.send({
 		content: i18next.t("log.report_log.forward.content", {
 			author: `${userMention(author.id)} - \`${author.tag}\` (${author.id})`,
 			reason: inlineCode(reason),

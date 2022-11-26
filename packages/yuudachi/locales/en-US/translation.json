@@ -623,7 +623,8 @@
 			"forward": {
 				"content": "**Message report forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
 				"errors": {
-					"generic": "There was an error forwarding the report."
+					"generic": "There was an error forwarding the report.",
+					"no_thread": "There was an error forwarding the report the associated thread could not be found."
 				}
 			},
 			"report_status": {
