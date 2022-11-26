@@ -8,7 +8,7 @@ import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
 import type { Report } from "../../functions/reports/createReport.js";
-import { getPendingReportsByTarget } from "../../functions/reports/getReport.js";
+import { getPendingReportByTarget } from "../../functions/reports/getReport.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReportCommand, ReportMessageContextCommand, ReportUserContextCommand } from "../../interactions/index.js";
@@ -245,7 +245,7 @@ export default class extends Command<
 		}
 
 		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
-		const latestReport = await getPendingReportsByTarget(author.guild.id, target.id);
+		const latestReport = await getPendingReportByTarget(author.guild.id, target.id);
 		if (latestReport || (await this.redis.exists(userKey))) {
 			if (!message || !latestReport) {
 				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }));

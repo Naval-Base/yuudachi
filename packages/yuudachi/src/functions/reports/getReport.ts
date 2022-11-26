@@ -21,7 +21,7 @@ export async function getReport(guildId: string, reportId: number) {
 	return transformReport(rawReport);
 }
 
-export async function getPendingReportsByTarget(guildId: string, targetId: string): Promise<Report> {
+export async function getPendingReportByTarget(guildId: string, targetId: string): Promise<Report> {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const [rawReport] = await sql<[RawReport]>`

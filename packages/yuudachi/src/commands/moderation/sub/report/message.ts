@@ -14,7 +14,7 @@ import { formatMessageToEmbed } from "../../../../functions/logging/formatMessag
 import { forwardReport } from "../../../../functions/logging/forwardReport.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
 import { type Report, createReport, ReportType } from "../../../../functions/reports/createReport.js";
-import { getPendingReportsByTarget } from "../../../../functions/reports/getReport.js";
+import { getPendingReportByTarget } from "../../../../functions/reports/getReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
 import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
 
@@ -106,7 +106,7 @@ export async function message(
 	} else if (collectedInteraction?.customId === reportKey) {
 		await collectedInteraction.deferUpdate();
 
-		const lastReport = await getPendingReportsByTarget(interaction.guildId!, args.message.author.id);
+		const lastReport = await getPendingReportByTarget(interaction.guildId!, args.message.author.id);
 
 		if (lastReport?.contextMessagesIds.includes(args.message.id)) {
 			await collectedInteraction.editReply({
