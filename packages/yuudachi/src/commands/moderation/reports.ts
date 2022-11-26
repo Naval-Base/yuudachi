@@ -10,10 +10,11 @@ import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@y
 import { Collection, type Snowflake } from "discord.js";
 import i18next from "i18next";
 import { OP_DELIMITER } from "../../Constants.js";
+import type { ReportStatus } from "../../functions/reports/createReport.js";
 import { ReportType } from "../../functions/reports/createReport.js";
 import { findReports } from "../../functions/reports/findReports.js";
 import type { ReportUtilsCommand } from "../../interactions/index.js";
-import { REPORT_KEYS } from "../../util/actionKeys.js";
+import { reportStatusLabel } from "../../util/actionKeys.js";
 import { lookup } from "./sub/reports/lookup.js";
 import { status } from "./sub/reports/status.js";
 
@@ -27,9 +28,11 @@ export default class extends Command<typeof ReportUtilsCommand> {
 			const trimmedPhrase = args.lookup.phrase.trim();
 			const reports = await findReports(trimmedPhrase, interaction.guildId);
 			let choices = reports.map((report) => {
-				const choiceName = `#${report.report_id} ${report.type === ReportType.Message ? "✉️" : "👤"} ${REPORT_KEYS[
-					report.status
-				]!.toUpperCase()} ${report.author_tag} ➜ ${report.target_tag}: ${report.reason}`;
+				const choiceName = `#${report.report_id} ${
+					report.type === ReportType.Message ? "✉️" : "👤"
+				} ${reportStatusLabel(report.status as ReportStatus, locale).toUpperCase()} ${report.author_tag} ➜ ${
+					report.target_tag
+				}: ${report.reason}`;
 
 				return {
 					name: ellipsis(choiceName, AUTOCOMPLETE_CHOICE_NAME_LENGTH_LIMIT),

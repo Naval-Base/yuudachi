@@ -472,18 +472,22 @@
 					"softban_other": "{{count}} softbans",
 					"ban_one": "{{count}} ban",
 					"ban_other": "{{count}} bans",
-					"unban_one": "{{count}} unbans",
+					"unban_one": "{{count}} unban",
 					"unban_other": "{{count}} unbans"
 				},
 				"action_label": {
-					"restriction": "RESTRICT",
-					"warn": "WARN",
-					"kick": "KICK",
-					"softban": "SOFTBAN",
-					"ban": "BAN",
-					"unban": "UNBAN",
-					"timeout": "TIMEOUT",
-					"unknown": "UNKNOWN"
+					"restriction": "Restrict",
+					"restriction_case": "Role",
+					"unrestriction": "Unrestrict",
+					"unrestriction_case": "Unrole",
+					"warn": "Warn",
+					"kick": "Kick",
+					"softban": "Softban",
+					"ban": "Ban",
+					"unban": "Unban",
+					"timeout": "Timeout",
+					"timeout_end": "Timeout End",
+					"unknown": "Unknown"
 				}
 			},
 			"reports": {
@@ -500,11 +504,11 @@
 					"spam_other": "{{count}} spam reports"
 				},
 				"status_label": {
-					"pending": "PENDING",
-					"approved": "APPROVED",
-					"rejected": "REJECTED",
-					"spam": "SPAM",
-					"unknown": "UNKNOWN"
+					"pending": "Pending",
+					"approved": "Approved",
+					"rejected": "Rejected",
+					"spam": "Spam",
+					"unknown": "Unknown"
 				}
 			}
 		},
@@ -516,7 +520,7 @@
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
 				"reason_fallback": "\n**Reason:** Use `/reason {{case_id}} <...reason>` to set a reason for this case",
-				"case_reference": "\n**Case Reference:** {{- ref}}",
+				"case_reference": "\n**Case Reference:** {{- ref}} ({{action}})",
 				"report_reference": "\n**Report Reference:** {{- report_ref}}",
 				"footer": "Case {{case_id}}"
 			},
@@ -613,7 +617,7 @@
 			"message": "**Message:** {{- message_link}} ({{- channel}})",
 			"message_sub": "Beam me up, Yuu",
 			"message_fallback": "`Message deleted`",
-			"case_reference": "**Case Reference:** {{- ref}}",
+			"case_reference": "**Case Reference:** {{- ref}} ({{action}})",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
 			"moderator": "**Moderator:** {{- mod}}",
 			"updated_at": "**Updated at:** {{- updated_at}}",

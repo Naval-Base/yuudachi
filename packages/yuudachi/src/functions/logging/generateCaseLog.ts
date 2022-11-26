@@ -2,6 +2,7 @@ import { logger, kSQL, container } from "@yuudachi/framework";
 import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink, channelLink } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
+import { caseActionLabel } from "../../util/actionKeys.js";
 import { type Case, CaseAction } from "../cases/createCase.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 
@@ -9,7 +10,7 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	const client = container.resolve<Client<true>>(Client);
 	const sql = container.resolve<Sql<any>>(kSQL);
 
-	let action = CaseAction[case_.action];
+	let action = caseActionLabel(case_.action, locale, true);
 
 	if ((case_.action === CaseAction.Role || case_.action === CaseAction.Unrole) && case_.roleId) {
 		try {
@@ -66,16 +67,17 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	}
 
 	if (case_.refId) {
-		const [reference] = await sql<[{ log_message_id: Snowflake | null }?]>`
-			select log_message_id
+		const [reference] = await sql<[{ action: CaseAction; log_message_id: Snowflake | null }?]>`
+			select action, log_message_id
 			from cases
 			where guild_id = ${case_.guildId}
 				and case_id = ${case_.refId}
 		`;
 
-		if (Reflect.has(reference ?? {}, "log_message_id")) {
+		if (Reflect.has(reference ?? {}, "action") && Reflect.has(reference ?? {}, "log_message_id")) {
 			msg += i18next.t("log.mod_log.case_log.case_reference", {
 				ref: hyperlink(`#${case_.refId}`, messageLink(logChannelId, reference!.log_message_id!, case_.guildId)),
+				action: caseActionLabel(reference!.action, locale),
 				lng: locale,
 			});
 		}
