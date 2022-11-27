@@ -1,8 +1,9 @@
 import { Buffer } from "node:buffer";
-import { kSQL, container } from "@yuudachi/framework";
+import { kSQL, container, createMessageActionRow } from "@yuudachi/framework";
 import type { APIEmbed, Embed, Guild, Message, Collection } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
+import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
 import { generateUserInfo } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../util/resolveMessage.js";
@@ -60,6 +61,9 @@ export async function upsertReportLog(
 				lng: locale,
 			}),
 			message: {
+				components: localMessage?.inGuild
+					? [createMessageActionRow([createMessageLinkButton(localMessage as Message<true>, locale)])]
+					: [],
 				embeds,
 				files:
 					messageContext && localMessage
