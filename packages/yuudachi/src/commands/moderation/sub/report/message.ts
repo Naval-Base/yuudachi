@@ -26,7 +26,7 @@ export async function message(
 	interaction: InteractionParam | ModalSubmitInteraction<"cached">,
 	args: MessageReportArgs,
 	locale: string,
-	pendingReport?: Report,
+	pendingReport?: Report | null,
 ) {
 	const redis = container.resolve<Redis>(kRedis);
 	const userKey = `guild:${interaction.guildId}:report:user:${args.message.author.id}`;
@@ -126,6 +126,7 @@ export async function message(
 					author: collectedInteraction.user,
 					reason: trimmedReason,
 				},
+				interaction.guild,
 				args.message as Message<true>,
 				pendingReport,
 				locale,
