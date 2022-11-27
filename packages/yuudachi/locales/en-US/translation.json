@@ -356,12 +356,14 @@
 						"no_self": "You cannot report yourself.",
 						"invalid_attachment": "Invalid attachment, only images are allowed.",
 						"timed_out": "The report has timed out, please try again.",
-						"bot": "You cannot report bots."
+						"bot": "You cannot report bots.",
+						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report."
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "Trust & Safety",
 					"buttons": {
-						"forward": "Forward",
+						"forward": "Forward Message",
+						"forward_attachment": "Forward Attachment",
 						"execute": "Create Report",
 						"cancel": "Cancel",
 						"discord_report": "Report to Discord"
@@ -396,8 +398,10 @@
 						"option": "attachment option"
 					},
 					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
+					"pending_forward": "This user has already been reported recently, do you want to forward the attachment to that report?",
 					"cancel": "User report canceled.",
-					"success": "Successfully reported user, thanks for making our community a better place!"
+					"success": "Successfully reported user, thanks for making our community a better place!",
+					"success_forward": "Successfully forwarded the attachment to existing report, thanks for making our community a better place!"
 				}
 			}
 		},
@@ -621,7 +625,8 @@
 			"updated_at": "**Updated at:** {{- updated_at}}",
 			"footer": "Hint: To resolve a report: Change the status forum label, reference it in a case, set the reference for an existing case with /reference, or set the status via /reports status",
 			"forward": {
-				"content": "**Message report forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
+				"message": "**Message report forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
+				"user": "**Attachment forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
 				"errors": {
 					"generic": "There was an error forwarding the report.",
 					"no_thread": "There was an error forwarding the report the associated thread could not be found."
