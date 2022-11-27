@@ -1,7 +1,9 @@
+import { createMessageActionRow } from "@yuudachi/framework";
 import type { APIEmbed, Attachment, AttachmentPayload, Guild, User } from "discord.js";
 import { inlineCode, userMention, Message } from "discord.js";
 import i18next from "i18next";
 import { Color } from "../../Constants.js";
+import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
 import type { Report } from "../reports/createReport.js";
 import { updateReport } from "../reports/updateReport.js";
 import { checkReportForum } from "../settings/checkLogChannel.js";
@@ -60,6 +62,7 @@ export async function forwardReport(
 			lng: locale,
 		}),
 		embeds,
+		components: isMessage ? [createMessageActionRow([createMessageLinkButton(payload as Message<true>, locale)])] : [],
 		allowedMentions: {
 			parse: [],
 		},
