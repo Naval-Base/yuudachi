@@ -69,9 +69,13 @@ export default class extends Command<
 				throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
 			}
 
-			await this.validateReport(interaction.member, args.user.user.user, locale);
+			const pendingReport = await this.validateReport(interaction.member, args.user.user.user, locale);
 
-			await user(interaction, args.user, locale);
+			if (pendingReport && !args.user.attachment) {
+				throw new Error(i18next.t("command.mod.report.common.errors.no_attachment_forward", { lng: locale }));
+			}
+
+			await user(interaction, args.user, locale, pendingReport);
 		}
 	}
 
@@ -235,7 +239,7 @@ export default class extends Command<
 		target: User,
 		locale: string,
 		message?: Message<boolean>,
-	): Promise<Report | undefined> {
+	): Promise<Report | null | undefined> {
 		if (target.bot) {
 			throw new Error(i18next.t("command.mod.report.common.errors.bot", { lng: locale }));
 		}
@@ -247,11 +251,11 @@ export default class extends Command<
 		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
 		const latestReport = await getPendingReportByTarget(author.guild.id, target.id);
 		if (latestReport || (await this.redis.exists(userKey))) {
-			if (!message || !latestReport) {
+			if (!latestReport || latestReport.attachmentUrl) {
 				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }));
 			}
 
-			if (latestReport?.contextMessagesIds.includes(message.id)) {
+			if (message && latestReport?.contextMessagesIds.includes(message.id)) {
 				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.message", { lng: locale }));
 			}
 		}

@@ -17,8 +17,10 @@ import {
 	REPORT_DUPLICATE_EXPIRE_SECONDS,
 	REPORT_DUPLICATE_PRE_EXPIRE_SECONDS,
 } from "../../../../Constants.js";
+import { forwardReport } from "../../../../functions/logging/forwardReport.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
-import { createReport, ReportType } from "../../../../functions/reports/createReport.js";
+import { type Report, createReport, ReportType } from "../../../../functions/reports/createReport.js";
+import { updateReport } from "../../../../functions/reports/updateReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
 import { resolveGuildCommand, chatInputApplicationCommandMention } from "../../../../util/commandUtils.js";
 import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
@@ -29,6 +31,7 @@ export async function user(
 	interaction: InteractionParam | ModalSubmitInteraction<"cached">,
 	args: ArgsParam<typeof ReportCommand>["user"],
 	locale: string,
+	pendingReport?: Report | null,
 ) {
 	const redis = container.resolve<Redis>(kRedis);
 	const key = `guild:${interaction.guildId}:report:user:${args.user.user.id}`;
@@ -53,8 +56,10 @@ export async function user(
 
 	const reportButton = createButton({
 		customId: reportKey,
-		label: i18next.t("command.mod.report.common.buttons.execute", { lng: locale }),
-		style: ButtonStyle.Danger,
+		label: i18next.t(`command.mod.report.common.buttons.${pendingReport ? "forward_attachment" : "execute"}`, {
+			lng: locale,
+		}),
+		style: pendingReport ? ButtonStyle.Primary : ButtonStyle.Danger,
 	});
 	const cancelButton = createButton({
 		customId: cancelKey,
@@ -68,7 +73,7 @@ export async function user(
 	});
 
 	const contentParts = [
-		i18next.t("command.mod.report.user.pending", {
+		i18next.t(`command.mod.report.user.pending${pendingReport ? "_forward" : ""}`, {
 			user: `${member.user.toString()} - \`${member.user.tag}\` (${member.user.id})`,
 			reason: ellipsis(trimmedReason, REPORT_REASON_MAX_LENGTH),
 			lng: locale,
@@ -153,34 +158,54 @@ export async function user(
 	} else if (collectedInteraction?.customId === reportKey) {
 		await collectedInteraction.deferUpdate();
 
-		if (await redis.exists(key)) {
-			await collectedInteraction.editReply({
-				content: i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }),
-				embeds: [],
-				components: [],
+		if (pendingReport) {
+			await updateReport({
+				attachmentUrl: attachment?.url,
+				guildId: interaction.guildId,
+				reportId: pendingReport.reportId,
 			});
 
-			return;
+			await forwardReport(
+				{
+					author: interaction.user,
+					reason: trimmedReason,
+				},
+				interaction.guild,
+				attachment!,
+				pendingReport,
+				locale,
+			);
+		} else {
+			if (await redis.exists(key)) {
+				await collectedInteraction.editReply({
+					content: i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }),
+					embeds: [],
+					components: [],
+				});
+
+				return;
+			}
+
+			await redis.setex(key, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
+
+			const report = await createReport({
+				guildId: interaction.guildId,
+				authorId: interaction.user.id,
+				authorTag: interaction.user.tag,
+				reason: trimmedReason,
+				targetId: member.id,
+				targetTag: member.user.tag,
+				attachmentUrl: attachment?.proxyURL,
+				type: ReportType.User,
+			});
+
+			await upsertReportLog(interaction.guild, report);
 		}
 
-		await redis.setex(key, REPORT_DUPLICATE_PRE_EXPIRE_SECONDS, "");
-
-		const report = await createReport({
-			guildId: interaction.guildId,
-			authorId: interaction.user.id,
-			authorTag: interaction.user.tag,
-			reason: trimmedReason,
-			targetId: member.id,
-			targetTag: member.user.tag,
-			attachmentUrl: attachment?.proxyURL,
-			type: ReportType.User,
-		});
-
-		await upsertReportLog(interaction.guild, report);
 		await redis.setex(key, REPORT_DUPLICATE_EXPIRE_SECONDS, "");
 
 		await collectedInteraction.editReply({
-			content: i18next.t("command.mod.report.user.success", { lng: locale }),
+			content: i18next.t(`command.mod.report.user.success${pendingReport ? "_forward" : ""}`, { lng: locale }),
 			embeds: [embed],
 			components: [createMessageActionRow([trustAndSafetyButton])],
 		});
