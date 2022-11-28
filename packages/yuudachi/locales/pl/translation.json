@@ -434,6 +434,23 @@
 					"cancel": "",
 					"success": ""
 				}
+			},
+			"claim_sponsor": {
+				"errors": {
+					"no_role": "",
+					"already_sponsor": "",
+					"no_oc_user": "",
+					"no_oc_sponsor": "",
+					"no_oc_tag": "",
+					"oc_id_mismatch": ""
+				},
+				"pending": "",
+				"buttons": {
+					"execute": ""
+				},
+				"reason": "",
+				"cancel": "",
+				"success": ""
 			}
 		}
 	},
