@@ -13,6 +13,7 @@ import { formatMessageToEmbed } from "../../../../functions/logging/formatMessag
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
 import { createReport, ReportType } from "../../../../functions/reports/createReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
+import { createMessageLinkButton } from "../../../../util/createMessageLinkButton.js";
 import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
 
 type MessageReportArgs = Omit<ArgsParam<typeof ReportCommand>["message"], "message_link"> & {
@@ -69,7 +70,14 @@ export async function message(
 	const reply = await interaction.editReply({
 		content: contentParts.join("\n"),
 		embeds: [formatMessageToEmbed(args.message as Message<true>, locale)],
-		components: [createMessageActionRow([cancelButton, reportButton, trustAndSafetyButton])],
+		components: [
+			createMessageActionRow([
+				cancelButton,
+				reportButton,
+				trustAndSafetyButton,
+				createMessageLinkButton(args.message as Message<true>, locale),
+			]),
+		],
 	});
 
 	const collectedInteraction = await reply

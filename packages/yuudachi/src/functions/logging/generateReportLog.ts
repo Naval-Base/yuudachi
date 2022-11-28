@@ -13,6 +13,8 @@ import {
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { REPORT_REASON_MAX_LENGTH } from "../../Constants.js";
+import { caseActionLabel } from "../../util/actionKeys.js";
+import type { CaseAction } from "../cases/createCase.js";
 import type { Report } from "../reports/createReport.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 
@@ -43,8 +45,8 @@ export async function generateReportLog(report: Report, locale: string, message?
 	}
 
 	if (report.refId) {
-		const [reference] = await sql<[{ log_message_id: Snowflake | null }?]>`
-			select log_message_id
+		const [reference] = await sql<[{ action: CaseAction; log_message_id: Snowflake | null }?]>`
+			select action, log_message_id
 			from cases
 			where guild_id = ${report.guildId}
 				and case_id = ${report.refId}
@@ -52,10 +54,11 @@ export async function generateReportLog(report: Report, locale: string, message?
 
 		const modLogChannelId = await getGuildSetting(report.guildId, SettingsKeys.ModLogChannelId);
 
-		if (modLogChannelId && Reflect.has(reference ?? {}, "log_message_id")) {
+		if (modLogChannelId && Reflect.has(reference ?? {}, "action") && Reflect.has(reference ?? {}, "log_message_id")) {
 			parts.push(
 				i18next.t("log.report_log.case_reference", {
 					ref: hyperlink(`#${report.refId}`, messageLink(modLogChannelId, reference!.log_message_id!, report.guildId)),
+					action: caseActionLabel(reference!.action, locale),
 					lng: locale,
 				}),
 			);

@@ -482,6 +482,16 @@
 					"description": "The user to add the sponsor role to"
 				}
 			}
+		},
+		"claim-sponsor": {
+			"name": "claim-sponsor",
+			"description": "Claim your sponsor role on this guild",
+			"options": {
+				"slug": {
+					"name": "slug",
+					"description": "Your open collective url slug. Found at Settings->Info->URL slug."
+				}
+			}
 		}
 	}
 }

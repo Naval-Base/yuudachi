@@ -25,7 +25,7 @@ export const getServerSideProps = async (context: Parameters<GetServerSideProps>
 				rehypeSlug,
 				rehypeGithubBlockquoteAdmonitions,
 				rehypeHighlightANSI,
-				[rehypeHighlight, { ignoreMissing: true }],
+				[rehypeHighlight, { ignoreMissing: true, detect: true }],
 			],
 			format: "md",
 		},

@@ -1,5 +1,6 @@
 import {
 	type APIButtonComponent,
+	type APIMessageComponentEmoji,
 	ButtonStyle,
 	ComponentType,
 	type APIButtonComponentBase,
@@ -11,9 +12,11 @@ export function createButton({
 	style,
 	url,
 	disabled,
+	emoji,
 }: {
 	customId?: string | undefined;
 	disabled?: boolean | undefined;
+	emoji?: APIMessageComponentEmoji | undefined;
 	label: string;
 	style?: ButtonStyle | undefined;
 	url?: string | undefined;
@@ -23,6 +26,7 @@ export function createButton({
 		label,
 		style: style ?? ButtonStyle.Primary,
 		disabled,
+		emoji,
 	};
 
 	if (style === ButtonStyle.Link && url) {

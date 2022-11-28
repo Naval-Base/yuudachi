@@ -26,7 +26,8 @@
 				"ignored_channel": "Resolving a message from an ignored channel is not allowed."
 			},
 			"buttons": {
-				"cancel": "Cancel"
+				"cancel": "Cancel",
+				"message_reference": "Original message"
 			}
 		},
 		"config": {
@@ -379,7 +380,7 @@
 				"buttons": {
 					"execute": "Apply"
 				},
-				"reason": "Sponsor role",
+				"reason": "Applied sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
 			},
@@ -433,6 +434,23 @@
 					"cancel": "User report canceled.",
 					"success": "Successfully reported user, thanks for making our community a better place!"
 				}
+			},
+			"claim_sponsor": {
+				"errors": {
+					"no_role": "No role for sponsors has been configured.",
+					"already_sponsor": "You are already a sponsor.",
+					"no_oc_user": "No Open Collective user with the slug `{{slug}}` has been found.",
+					"no_oc_sponsor": "No Open Collective contribution associated with the slug `{{slug}}` has been found.",
+					"no_oc_tag": "No Discord id has been found in your Open Collective profile.\nTo add your Discord id as a tag on your Open Collective account open Settings->Info->Tags and fill in your Discord id.",
+					"oc_id_mismatch": "The Discord id stored in your Open Collective profile tags does not match your Discord id."
+				},
+				"pending": "Do you want to claim your sponsor role on {{- guild}}?",
+				"buttons": {
+					"execute": "Claim"
+				},
+				"reason": "Claimed sponsor role",
+				"cancel": "Canceled claiming your sponsor role on {{- guild}}",
+				"success": "Successfully claimed your sponsor role on {{- guild}}"
 			}
 		}
 	},
@@ -471,18 +489,22 @@
 					"softban_other": "{{count}} softbans",
 					"ban_one": "{{count}} ban",
 					"ban_other": "{{count}} bans",
-					"unban_one": "{{count}} unbans",
+					"unban_one": "{{count}} unban",
 					"unban_other": "{{count}} unbans"
 				},
 				"action_label": {
-					"restriction": "RESTRICT",
-					"warn": "WARN",
-					"kick": "KICK",
-					"softban": "SOFTBAN",
-					"ban": "BAN",
-					"unban": "UNBAN",
-					"timeout": "TIMEOUT",
-					"unknown": "UNKNOWN"
+					"restriction": "Restrict",
+					"restriction_case": "Role",
+					"unrestriction": "Unrestrict",
+					"unrestriction_case": "Unrole",
+					"warn": "Warn",
+					"kick": "Kick",
+					"softban": "Softban",
+					"ban": "Ban",
+					"unban": "Unban",
+					"timeout": "Timeout",
+					"timeout_end": "Timeout End",
+					"unknown": "Unknown"
 				}
 			},
 			"reports": {
@@ -499,11 +521,11 @@
 					"spam_other": "{{count}} spam reports"
 				},
 				"status_label": {
-					"pending": "PENDING",
-					"approved": "APPROVED",
-					"rejected": "REJECTED",
-					"spam": "SPAM",
-					"unknown": "UNKNOWN"
+					"pending": "Pending",
+					"approved": "Approved",
+					"rejected": "Rejected",
+					"spam": "Spam",
+					"unknown": "Unknown"
 				}
 			}
 		},
@@ -515,7 +537,7 @@
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
 				"reason_fallback": "\n**Reason:** Use `/reason {{case_id}} <...reason>` to set a reason for this case",
-				"case_reference": "\n**Case Reference:** {{- ref}}",
+				"case_reference": "\n**Case Reference:** {{- ref}} ({{action}})",
 				"report_reference": "\n**Report Reference:** {{- report_ref}}",
 				"footer": "Case {{case_id}}"
 			},
@@ -612,7 +634,7 @@
 			"message": "**Message:** {{- message_link}} ({{- channel}})",
 			"message_sub": "Beam me up, Yuu",
 			"message_fallback": "`Message deleted`",
-			"case_reference": "**Case Reference:** {{- ref}}",
+			"case_reference": "**Case Reference:** {{- ref}} ({{action}})",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
 			"moderator": "**Moderator:** {{- mod}}",
 			"updated_at": "**Updated at:** {{- updated_at}}",
@@ -631,8 +653,8 @@
 		},
 		"anti_raid_nuke": {
 			"case_placeholder": "Preliminary",
-			"title": "Anti-Raid-Nuke report for {{guild}}",
-			"title_preliminary": "Preliminary Anti-Raid-Nuke report for {{guild}}",
+			"title": "Anti-Raid-Nuke report for {{- guild}}",
+			"title_preliminary": "Preliminary Anti-Raid-Nuke report for {{- guild}}",
 			"summary": {
 				"title": "**Summary**",
 				"mode": "**Mode:** `{{mode}}`",

@@ -29,6 +29,7 @@ import {
 	SponsorCommand,
 	RepostCommand,
 	ReportCommand,
+	ClaimSponsorCommand,
 
 	// Context Menu
 	HistoryUserContextCommand,
@@ -73,6 +74,7 @@ try {
 		SponsorCommand,
 		RepostCommand,
 		ReportCommand,
+		ClaimSponsorCommand,
 	].map((command) => formatCommandToLocalizations("utility", command as any));
 
 	const contextMenu = [
