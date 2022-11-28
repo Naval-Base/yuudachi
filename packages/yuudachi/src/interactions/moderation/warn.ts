@@ -23,11 +23,13 @@ export const WarnCommand = {
 			name: "case_reference",
 			description: "The reference case",
 			type: ApplicationCommandOptionType.Integer,
+			autocomplete: true,
 		},
 		{
 			name: "report_reference",
 			description: "The reference report",
 			type: ApplicationCommandOptionType.Integer,
+			autocomplete: true,
 		},
 	],
 	default_member_permissions: "0",

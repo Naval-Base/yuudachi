@@ -10,6 +10,7 @@ export const ReasonCommand = {
 			description: "The first case to change",
 			type: ApplicationCommandOptionType.Integer,
 			required: true,
+			autocomplete: true,
 		},
 		{
 			name: "reason",
@@ -24,6 +25,7 @@ export const ReasonCommand = {
 			name: "last_case",
 			description: "The last case to change",
 			type: ApplicationCommandOptionType.Integer,
+			autocomplete: true,
 		},
 	],
 	default_member_permissions: "0",
