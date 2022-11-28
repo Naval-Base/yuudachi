@@ -439,7 +439,7 @@
 				"errors": {
 					"no_role": "No role for sponsors has been configured.",
 					"already_sponsor": "You are already a sponsor.",
-					"no_oc_user": "No Open Collective user with the slug {{slug}} has been found.",
+					"no_oc_user": "No Open Collective user with the slug `{{slug}}` has been found.",
 					"no_oc_sponsor": "No Open Collective contribution associated with the slug `{{slug}}` has been found.",
 					"no_oc_tag": "No Discord id has been found in your Open Collective profile.\nTo add your Discord id as a tag on your Open Collective account open Settings->Info->Tags and fill in your Discord id.",
 					"oc_id_mismatch": "The Discord id stored in your Open Collective profile tags does not match your Discord id."
