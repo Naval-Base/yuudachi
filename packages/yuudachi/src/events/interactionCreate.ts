@@ -3,7 +3,10 @@ import { transformInteraction, logger, kCommands } from "@yuudachi/framework";
 import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { ApplicationCommandType, Client, Events } from "discord.js";
 import { inject, injectable } from "tsyringe";
-import { checkReasonAutocomplete, handleAutocompleteReasons } from "../functions/autocomplete/reasons.js";
+import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
+import { handleReasonAutoComplete } from "../functions/autocomplete/reasons.js";
+import { handleReportAutocomplete } from "../functions/autocomplete/reports.js";
+import { AutoCompleteType, findAutocompleteType } from "../functions/autocomplete/validade.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 
 @injectable()
@@ -51,13 +54,26 @@ export default class implements Event {
 							);
 
 							if (isAutocomplete) {
-								if (checkReasonAutocomplete(interaction)) {
-									logger.info(
-										{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-										`Executing reason autocomplete for command ${interaction.commandName}`,
-									);
-									await handleAutocompleteReasons(interaction, effectiveLocale);
-									break;
+								const autocompleteType = findAutocompleteType(interaction);
+
+								logger.info(
+									{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+									`Executing autocomplete ${interaction.commandName} with type ${autocompleteType ?? "custom"}`,
+								);
+
+								if (autocompleteType === AutoCompleteType.Reason) {
+									await handleReasonAutoComplete(interaction, effectiveLocale);
+									return;
+								}
+
+								if (autocompleteType === AutoCompleteType.Case) {
+									await handleCaseAutocomplete(interaction, effectiveLocale);
+									return;
+								}
+
+								if (autocompleteType === AutoCompleteType.Report) {
+									await handleReportAutocomplete(interaction, effectiveLocale);
+									return;
 								}
 
 								await command.autocomplete(
