@@ -49,6 +49,8 @@ export const DATE_FORMAT_LOGFILE = "YYYY-MM-DD_HH-mm-ss";
 export const DATE_FORMAT_WITH_SECONDS = "YYYY/MM/DD HH:mm:ss";
 
 export const AUTOCOMPLETE_REASON_FOCUSED_FIELD_NAME = "reason";
+export const AUTOCOMPLETE_CASE_FOCUSED_FIELD_NAMES = ["case_reference", "reference_case", "case", "last_case"];
+export const AUTOCOMPLETE_REPORT_FOCUSED_FIELD_NAMES = ["report_reference", "reference_report", "report"];
 
 export const TRUST_AND_SAFETY_URL_BASE = "https://support.discord.com/hc/en-us/requests/new";
 
