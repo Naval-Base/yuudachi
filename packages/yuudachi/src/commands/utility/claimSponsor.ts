@@ -131,7 +131,7 @@ export default class extends Command<typeof ClaimSponsorCommand> {
 			}
 
 			const transaction = data.data.account.transactions.nodes[0];
-			const discordId = transaction.fromAccount.tags.find((tag: string) => /^\d{17,20}$/.test(tag));
+			const discordId = transaction.fromAccount.tags?.find((tag: string) => /^\d{17,20}$/.test(tag));
 			if (!discordId) {
 				throw new Error(i18next.t("command.utility.claim_sponsor.errors.no_oc_tag", { lng: locale }));
 			}
