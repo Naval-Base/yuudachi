@@ -9,6 +9,10 @@ import { request as fetch } from "undici";
 import type { ClaimSponsorCommand } from "../../interactions/index.js";
 
 export default class extends Command<typeof ClaimSponsorCommand> {
+	public constructor() {
+		super(["claim-sponsor"]);
+	}
+
 	public override async chatInput(
 		interaction: InteractionParam,
 		args: ArgsParam<typeof ClaimSponsorCommand>,

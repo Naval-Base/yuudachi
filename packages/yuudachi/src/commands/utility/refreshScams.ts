@@ -18,6 +18,10 @@ import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from "../../functions/
 import type { RefreshScamlistCommand } from "../../interactions/index.js";
 
 export default class extends Command<typeof RefreshScamlistCommand> {
+	public constructor() {
+		super(["refresh-scamlists"]);
+	}
+
 	public override async chatInput(
 		interaction: InteractionParam,
 		_: ArgsParam<typeof RefreshScamlistCommand>,

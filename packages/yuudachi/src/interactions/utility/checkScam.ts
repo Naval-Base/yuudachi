@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 export const CheckScamCommand = {
-	name: "checkscam",
+	name: "check-scam",
 	description: "Check provided content for scam domains",
 	description_localizations: {
 		de: "Überprüfen Sie die bereitgestellten Inhalte auf betrügerische Domains",
