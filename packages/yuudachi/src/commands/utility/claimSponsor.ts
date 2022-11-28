@@ -95,11 +95,11 @@ export default class extends Command<typeof ClaimSponsorCommand> {
 				},
 				body: JSON.stringify({
 					query: `query {
-						account(slug: ${process.env.OPEN_COLLECTIVE_ORG}) {
+						account(slug: "${process.env.OPEN_COLLECTIVE_ORG}") {
 							id
 							name
 							slug
-								transactions(fromAccount: { slug: ${args.slug} }, kind: CONTRIBUTION, limit: 1) {
+								transactions(fromAccount: { slug: "${args.slug}" }, kind: CONTRIBUTION, limit: 1) {
 									nodes {
 										id
 										kind
