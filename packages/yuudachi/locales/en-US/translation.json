@@ -404,6 +404,23 @@
 					"success": "Successfully reported user, thanks for making our community a better place!",
 					"success_forward": "Successfully forwarded the attachment to existing report, thanks for making our community a better place!"
 				}
+			},
+			"claim_sponsor": {
+				"errors": {
+					"no_role": "No role for sponsors has been configured.",
+					"already_sponsor": "You are already a sponsor.",
+					"no_oc_user": "No Open Collective user with the slug `{{slug}}` has been found.",
+					"no_oc_sponsor": "No Open Collective contribution associated with the slug `{{slug}}` has been found.",
+					"no_oc_tag": "No Discord id has been found in your Open Collective profile.\nTo add your Discord id as a tag on your Open Collective account open Settings->Info->Tags and fill in your Discord id.",
+					"oc_id_mismatch": "The Discord id stored in your Open Collective profile tags does not match your Discord id."
+				},
+				"pending": "Do you want to claim your sponsor role on {{- guild}}?",
+				"buttons": {
+					"execute": "Claim"
+				},
+				"reason": "Claimed sponsor role",
+				"cancel": "Canceled claiming your sponsor role on {{- guild}}",
+				"success": "Successfully claimed your sponsor role on {{- guild}}"
 			}
 		},
 		"utility": {
@@ -651,8 +668,8 @@
 		},
 		"anti_raid_nuke": {
 			"case_placeholder": "Preliminary",
-			"title": "Anti-Raid-Nuke report for {{guild}}",
-			"title_preliminary": "Preliminary Anti-Raid-Nuke report for {{guild}}",
+			"title": "Anti-Raid-Nuke report for {{- guild}}",
+			"title_preliminary": "Preliminary Anti-Raid-Nuke report for {{- guild}}",
 			"summary": {
 				"title": "**Summary**",
 				"mode": "**Mode:** `{{mode}}`",
