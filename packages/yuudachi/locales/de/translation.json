@@ -26,7 +26,8 @@
 				"ignored_channel": ""
 			},
 			"buttons": {
-				"cancel": "Abbrechen"
+				"cancel": "Abbrechen",
+				"message_reference": ""
 			}
 		},
 		"config": {
@@ -39,7 +40,7 @@
 		"mod": {
 			"common": {
 				"errors": {
-					"max_length_reason": "Maximale Länge von `1900` für Grund überschritten.",
+					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} ist kein Textkanal.",
 					"no_case": "Kann den Fall `#{{case}}` nicht finden",
 					"no_report": "",
@@ -48,12 +49,29 @@
 					"no_reference_case": "Kann den Referenzfall `#{{case}}` nicht finden",
 					"already_processed": "",
 					"no_reference_report": ""
-				}
+				},
+				"reasons": [
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					""
+				]
 			},
 			"case": {
 				"autocomplete": {
 					"no_reason": "Kein Grund",
 					"show_history": "Historie für Benutzer {{- user}} anzeigen"
+				},
+				"buttons": {
+					"goto": ""
 				}
 			},
 			"reports": {
@@ -328,6 +346,64 @@
 			},
 			"status": {
 				"success": ""
+			},
+			"report": {
+				"common": {
+					"errors": {
+						"recently_reported": {
+							"message": "",
+							"user": ""
+						},
+						"no_self": "",
+						"invalid_attachment": "",
+						"timed_out": "",
+						"bot": "",
+						"no_attachment_forward": ""
+					},
+					"warnings": "",
+					"trust_and_safety_sub": "",
+					"buttons": {
+						"forward": "",
+						"forward_attachment": "",
+						"execute": "",
+						"cancel": "",
+						"discord_report": ""
+					},
+					"modal": {
+						"label": "",
+						"placeholder": ""
+					},
+					"post": {
+						"name": "",
+						"reason": ""
+					}
+				},
+				"message": {
+					"modal": {
+						"title": ""
+					},
+					"pending": "",
+					"pending_sub": "",
+					"pending_forward": "",
+					"cancel": "",
+					"success": "",
+					"success_forward": ""
+				},
+				"user": {
+					"modal": {
+						"title": ""
+					},
+					"attachment_upsell": {
+						"base": "",
+						"mention": "",
+						"option": ""
+					},
+					"pending": "",
+					"pending_forward": "",
+					"cancel": "",
+					"success": "",
+					"success_forward": ""
+				}
 			}
 		},
 		"utility": {
@@ -366,46 +442,22 @@
 				"cancel": "Anwendung der Sponsorrolle auf {{- user}} abgebrochen",
 				"success": "Sponsorrolle erfolgreich auf {{- user}} angewendet"
 			},
-			"report": {
-				"common": {
-					"errors": {
-						"recently_reported": {
-							"message": "",
-							"user": ""
-						},
-						"no_self": "",
-						"invalid_attachment": "",
-						"timed_out": ""
-					},
-					"warnings": "",
-					"trust_and_safety_sub": "",
-					"buttons": {
-						"execute": "",
-						"cancel": "",
-						"discord_report": ""
-					},
-					"modal": {
-						"label": "",
-						"placeholder": ""
-					}
+			"claim_sponsor": {
+				"errors": {
+					"no_role": "",
+					"already_sponsor": "",
+					"no_oc_user": "",
+					"no_oc_sponsor": "",
+					"no_oc_tag": "",
+					"oc_id_mismatch": ""
 				},
-				"message": {
-					"modal": {
-						"title": ""
-					},
-					"pending": "",
-					"pending_sub": "",
-					"cancel": "",
-					"success": ""
+				"pending": "",
+				"buttons": {
+					"execute": ""
 				},
-				"user": {
-					"modal": {
-						"title": ""
-					},
-					"pending": "",
-					"cancel": "",
-					"success": ""
-				}
+				"reason": "",
+				"cancel": "",
+				"success": ""
 			}
 		}
 	},
@@ -449,12 +501,16 @@
 				},
 				"action_label": {
 					"restriction": "",
+					"restriction_case": "",
+					"unrestriction": "",
+					"unrestriction_case": "",
 					"warn": "",
 					"kick": "",
 					"softban": "",
 					"ban": "",
 					"unban": "",
 					"timeout": "",
+					"timeout_end": "",
 					"unknown": ""
 				}
 			},
@@ -515,7 +571,7 @@
 		},
 		"member_log": {
 			"description": "",
-			"joined_at": "\n• Joined: {{- joined_at}} ({{- joined_at_since}})",
+			"joined_at": "",
 			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
 			"footer": {
 				"joined": "User joined",
@@ -580,7 +636,6 @@
 			"description": ""
 		},
 		"report_log": {
-			"title": "",
 			"reason": "",
 			"target": "",
 			"message": "",
@@ -591,6 +646,14 @@
 			"moderator": "",
 			"updated_at": "",
 			"footer": "",
+			"forward": {
+				"message": "",
+				"user": "",
+				"errors": {
+					"generic": "",
+					"no_thread": ""
+				}
+			},
 			"report_status": {
 				"0": "",
 				"1": "",
