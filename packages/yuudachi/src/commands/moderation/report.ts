@@ -1,12 +1,14 @@
 import { Command, logger, kRedis, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import { TextInputStyle, ComponentType } from "discord.js";
+import { type GuildMember, type User, type Message, TextInputStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
+import type { Report } from "../../functions/reports/createReport.js";
+import { getPendingReportByTarget } from "../../functions/reports/getReport.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReportCommand, ReportMessageContextCommand, ReportUserContextCommand } from "../../interactions/index.js";
@@ -51,19 +53,7 @@ export default class extends Command<
 			const { guildId, channelId, messageId } = parsedLink;
 			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
-			if (messageArg.author.bot) {
-				throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-			}
-
-			if (messageArg.author.id === interaction.user.id) {
-				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-			}
-
-			const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId}:message:${messageArg.id}`;
-
-			if (await this.redis.exists(key)) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
-			}
+			const pendingReport = await this.validateReport(interaction.member, messageArg.author, locale, messageArg);
 
 			await message(
 				interaction,
@@ -72,27 +62,20 @@ export default class extends Command<
 					message: messageArg,
 				},
 				locale,
+				pendingReport,
 			);
 		} else {
-			if (args.user.user.user.bot) {
-				throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-			}
-
-			if (args.user.user.user.id === interaction.user.id) {
-				throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-			}
-
-			const key = `guild:${interaction.guildId}:report:user:${args.user.user.user.id}`;
-
-			if (await this.redis.exists(key)) {
-				throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
-			}
-
 			if (!args.user.user.member) {
 				throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
 			}
 
-			await user(interaction, args.user, locale);
+			const pendingReport = await this.validateReport(interaction.member, args.user.user.user, locale);
+
+			if (pendingReport && !args.user.attachment) {
+				throw new Error(i18next.t("command.mod.report.common.errors.no_attachment_forward", { lng: locale }));
+			}
+
+			await user(interaction, args.user, locale, pendingReport);
 		}
 	}
 
@@ -109,35 +92,23 @@ export default class extends Command<
 
 		const modalKey = nanoid();
 
-		if (args.user.user.bot) {
-			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-		}
-
-		if (args.user.user.id === interaction.user.id) {
-			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-		}
-
-		const key = `guild:${interaction.guildId}:report:user:${args.user.user.id}`;
-
-		if (await this.redis.exists(key)) {
-			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.user", { lng: locale }));
-		}
-
 		if (!args.user.member) {
 			throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
 		}
 
+		await this.validateReport(interaction.member, args.user.user, locale);
+
 		const modal = createModal({
 			customId: modalKey,
-			title: i18next.t("command.utility.report.user.modal.title", { lng: locale }),
+			title: i18next.t("command.mod.report.user.modal.title", { lng: locale }),
 			components: [
 				createModalActionRow([
 					createTextComponent({
 						customId: "reason",
-						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
+						label: i18next.t("command.mod.report.common.modal.label", { lng: locale }),
 						minLength: REPORT_REASON_MIN_LENGTH,
 						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
+						placeholder: i18next.t("command.mod.report.common.modal.placeholder", { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
 					}),
@@ -155,7 +126,7 @@ export default class extends Command<
 			.catch(async () => {
 				try {
 					await interaction.followUp({
-						content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
+						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
 						ephemeral: true,
 						components: [],
 					});
@@ -200,31 +171,19 @@ export default class extends Command<
 
 		const modalKey = nanoid();
 
-		if (args.message.author.bot) {
-			throw new Error(i18next.t("command.utility.report.common.errors.bot", { lng: locale }));
-		}
-
-		if (args.message.author.id === interaction.user.id) {
-			throw new Error(i18next.t("command.utility.report.common.errors.no_self", { lng: locale }));
-		}
-
-		const key = `guild:${interaction.guildId}:report:channel:${interaction.channelId}:message:${args.message.id}`;
-
-		if (await this.redis.exists(key)) {
-			throw new Error(i18next.t("command.utility.report.common.errors.recently_reported.message", { lng: locale }));
-		}
+		const pendingReport = await this.validateReport(interaction.member, args.message.author, locale, args.message);
 
 		const modal = createModal({
 			customId: modalKey,
-			title: i18next.t("command.utility.report.message.modal.title", { lng: locale }),
+			title: i18next.t("command.mod.report.message.modal.title", { lng: locale }),
 			components: [
 				createModalActionRow([
 					createTextComponent({
 						customId: "reason",
-						label: i18next.t("command.utility.report.common.modal.label", { lng: locale }),
+						label: i18next.t("command.mod.report.common.modal.label", { lng: locale }),
 						minLength: REPORT_REASON_MIN_LENGTH,
 						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.utility.report.common.modal.placeholder", { lng: locale }),
+						placeholder: i18next.t("command.mod.report.common.modal.placeholder", { lng: locale }),
 						required: true,
 						style: TextInputStyle.Paragraph,
 					}),
@@ -242,7 +201,7 @@ export default class extends Command<
 			.catch(async () => {
 				try {
 					await interaction.followUp({
-						content: i18next.t("command.utility.report.common.errors.timed_out", { lng: locale }),
+						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
 						ephemeral: true,
 						components: [],
 					});
@@ -271,6 +230,36 @@ export default class extends Command<
 				reason: reason.join(" "),
 			},
 			locale,
+			pendingReport,
 		);
+	}
+
+	private async validateReport(
+		author: GuildMember,
+		target: User,
+		locale: string,
+		message?: Message<boolean>,
+	): Promise<Report | null | undefined> {
+		if (target.bot) {
+			throw new Error(i18next.t("command.mod.report.common.errors.bot", { lng: locale }));
+		}
+
+		if (target.id === author.id) {
+			throw new Error(i18next.t("command.mod.report.common.errors.no_self", { lng: locale }));
+		}
+
+		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
+		const latestReport = await getPendingReportByTarget(author.guild.id, target.id);
+		if (latestReport || (await this.redis.exists(userKey))) {
+			if (!latestReport || (latestReport.attachmentUrl && !message)) {
+				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.user", { lng: locale }));
+			}
+
+			if (message && latestReport?.contextMessagesIds.includes(message.id)) {
+				throw new Error(i18next.t("command.mod.report.common.errors.recently_reported.message", { lng: locale }));
+			}
+		}
+
+		return latestReport;
 	}
 }

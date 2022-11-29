@@ -6,6 +6,10 @@ import { checkScam } from "../../functions/anti-scam/checkScam.js";
 import type { CheckScamCommand } from "../../interactions/index.js";
 
 export default class extends Command<typeof CheckScamCommand> {
+	public constructor() {
+		super(["check-scam"]);
+	}
+
 	public override async chatInput(
 		interaction: InteractionParam,
 		args: ArgsParam<typeof CheckScamCommand>,

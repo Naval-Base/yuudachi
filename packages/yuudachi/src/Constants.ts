@@ -42,13 +42,15 @@ export const REPORT_REASON_MAX_LENGTH = 1_500;
 export const REPORT_REASON_MIN_LENGTH = 10;
 
 export const REPORT_DUPLICATE_PRE_EXPIRE_SECONDS = 3;
-export const REPORT_DUPLICATE_EXPIRE_SECONDS = 15 * 60;
+export const REPORT_DUPLICATE_EXPIRE_SECONDS = 12 * 60 * 60;
 export const REPORT_MESSAGE_CONTEXT_LIMIT = 20;
 
 export const DATE_FORMAT_LOGFILE = "YYYY-MM-DD_HH-mm-ss";
 export const DATE_FORMAT_WITH_SECONDS = "YYYY/MM/DD HH:mm:ss";
 
 export const AUTOCOMPLETE_REASON_FOCUSED_FIELD_NAME = "reason";
+export const AUTOCOMPLETE_CASE_FOCUSED_FIELD_NAMES = ["case_reference", "reference_case", "case", "last_case"];
+export const AUTOCOMPLETE_REPORT_FOCUSED_FIELD_NAMES = ["report_reference", "reference_report", "report"];
 
 export const TRUST_AND_SAFETY_URL_BASE = "https://support.discord.com/hc/en-us/requests/new";
 

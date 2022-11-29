@@ -1,4 +1,4 @@
-import { kSQL, truncateEmbed, container } from "@yuudachi/framework";
+import { kSQL, truncateEmbed, container, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import type { Message } from "discord.js";
 import i18next from "i18next";
@@ -9,6 +9,7 @@ import { generateReportEmbed } from "../../../../functions/logging/generateRepor
 import { ReportType } from "../../../../functions/reports/createReport.js";
 import { type RawReport, transformReport } from "../../../../functions/reports/transformReport.js";
 import type { ReportUtilsCommand } from "../../../../interactions/index.js";
+import { createMessageLinkButton } from "../../../../util/createMessageLinkButton.js";
 import { generateHistory, generateUserInfo, HistoryType } from "../../../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../../../util/resolveMemberAndUser.js";
 import { resolveMessage } from "../../../../util/resolveMessage.js";
@@ -67,6 +68,7 @@ export async function lookup(
 
 		await interaction.editReply({
 			embeds,
+			components: message ? [createMessageActionRow([createMessageLinkButton(message, locale)])] : [],
 		});
 		return;
 	}

@@ -9,6 +9,7 @@ export const DurationCommand = {
 			description: "The case to look up",
 			type: ApplicationCommandOptionType.Integer,
 			required: true,
+			autocomplete: true,
 		},
 		{
 			name: "duration",

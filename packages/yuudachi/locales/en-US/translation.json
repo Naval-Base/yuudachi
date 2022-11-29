@@ -26,7 +26,8 @@
 				"ignored_channel": "Resolving a message from an ignored channel is not allowed."
 			},
 			"buttons": {
-				"cancel": "Cancel"
+				"cancel": "Cancel",
+				"message_reference": "Original message"
 			}
 		},
 		"config": {
@@ -68,6 +69,9 @@
 				"autocomplete": {
 					"no_reason": "No reason",
 					"show_history": "Show history for user {{- user}}"
+				},
+				"buttons": {
+					"goto": "Go to case {{- case}}"
 				}
 			},
 			"reports": {
@@ -342,6 +346,64 @@
 			},
 			"status": {
 				"success": "Successfully set status of report {{- report}} to `$t(log.report_log.report_status.{{status}})`"
+			},
+			"report": {
+				"common": {
+					"errors": {
+						"recently_reported": {
+							"message": "This message has already been recently reported, thanks for making our community a better place!",
+							"user": "This user has already been recently reported, thanks for making our community a better place!"
+						},
+						"no_self": "You cannot report yourself.",
+						"invalid_attachment": "Invalid attachment, only images are allowed.",
+						"timed_out": "The report has timed out, please try again.",
+						"bot": "You cannot report bots.",
+						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report."
+					},
+					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
+					"trust_and_safety_sub": "Trust & Safety",
+					"buttons": {
+						"forward": "Forward Message",
+						"forward_attachment": "Forward Attachment",
+						"execute": "Create Report",
+						"cancel": "Cancel",
+						"discord_report": "Report to Discord"
+					},
+					"modal": {
+						"label": "The reason for the report",
+						"placeholder": "Please enter a detailed reason for the report"
+					},
+					"post": {
+						"name": "Report {{report_id}} - {{- user}}",
+						"reason": "reported by {{- user}}"
+					}
+				},
+				"message": {
+					"modal": {
+						"title": "Message report"
+					},
+					"pending": "Are you sure you want to report {{- message_link}} to the server moderators?\n**Reason:** {{- reason}}",
+					"pending_sub": "this message",
+					"pending_forward": "This user has already been reported recently, do you want to forward {{- message_link}} to that report?",
+					"cancel": "Message report canceled.",
+					"success": "Successfully reported message, thanks for making our community a better place!",
+					"success_forward": "Successfully forwarded message to existing report, thanks for making our community a better place!"
+				},
+				"user": {
+					"modal": {
+						"title": "User report"
+					},
+					"attachment_upsell": {
+						"base": "ℹ️ ***Tip:** If it helps to provide context, you can attach an image to this report using the {{- report_command}}!*",
+						"mention": "{{- report_command}} command",
+						"option": "attachment option"
+					},
+					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
+					"pending_forward": "This user has already been reported recently, do you want to forward the attachment to that report?",
+					"cancel": "User report canceled.",
+					"success": "Successfully reported user, thanks for making our community a better place!",
+					"success_forward": "Successfully forwarded the attachment to existing report, thanks for making our community a better place!"
+				}
 			}
 		},
 		"utility": {
@@ -376,60 +438,26 @@
 				"buttons": {
 					"execute": "Apply"
 				},
-				"reason": "Sponsor role",
+				"reason": "Applied sponsor role",
 				"cancel": "Canceled applying sponsor role to {{- user}}",
 				"success": "Successfully applied sponsor role to {{- user}}"
 			},
-			"report": {
-				"common": {
-					"errors": {
-						"recently_reported": {
-							"message": "This message has already been recently reported, thanks for making our community a better place!",
-							"user": "This user has already been recently reported, thanks for making our community a better place!"
-						},
-						"no_self": "You cannot report yourself.",
-						"invalid_attachment": "Invalid attachment, only images are allowed.",
-						"timed_out": "The report has timed out, please try again.",
-						"bot": "You cannot report bots."
-					},
-					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
-					"trust_and_safety_sub": "Trust & Safety",
-					"buttons": {
-						"execute": "Create Report",
-						"cancel": "Cancel",
-						"discord_report": "Report to Discord"
-					},
-					"modal": {
-						"label": "The reason for the report",
-						"placeholder": "Please enter a detailed reason for the report"
-					},
-					"post": {
-						"name": "Report {{report_id}} - {{- user}}",
-						"reason": "reported by {{- user}}"
-					}
+			"claim_sponsor": {
+				"errors": {
+					"no_role": "No role for sponsors has been configured.",
+					"already_sponsor": "You are already a sponsor.",
+					"no_oc_user": "No Open Collective user with the slug `{{slug}}` has been found.",
+					"no_oc_sponsor": "No Open Collective contribution associated with the slug `{{slug}}` has been found.",
+					"no_oc_tag": "No Discord id has been found in your Open Collective profile.\nTo add your Discord id as a tag on your Open Collective account open Settings->Info->Tags and fill in your Discord id.",
+					"oc_id_mismatch": "The Discord id stored in your Open Collective profile tags does not match your Discord id."
 				},
-				"message": {
-					"modal": {
-						"title": "Message report"
-					},
-					"pending": "Are you sure you want to report {{- message_link}} to the server moderators?\n**Reason:** {{- reason}}",
-					"pending_sub": "this message",
-					"cancel": "Message report canceled.",
-					"success": "Successfully reported message, thanks for making our community a better place!"
+				"pending": "Do you want to claim your sponsor role on {{- guild}}?",
+				"buttons": {
+					"execute": "Claim"
 				},
-				"user": {
-					"modal": {
-						"title": "User report"
-					},
-					"attachment_upsell": {
-						"base": "ℹ️ ***Tip:** If it helps to provide context, you can attach an image to this report using the {{- report_command}}!*",
-						"mention": "{{- report_command}} command",
-						"option": "attachment option"
-					},
-					"pending": "Are you sure you want to report {{- user}} to the server moderators?\n**Reason:** {{- reason}}",
-					"cancel": "User report canceled.",
-					"success": "Successfully reported user, thanks for making our community a better place!"
-				}
+				"reason": "Claimed sponsor role",
+				"cancel": "Canceled claiming your sponsor role on {{- guild}}",
+				"success": "Successfully claimed your sponsor role on {{- guild}}"
 			}
 		}
 	},
@@ -468,18 +496,22 @@
 					"softban_other": "{{count}} softbans",
 					"ban_one": "{{count}} ban",
 					"ban_other": "{{count}} bans",
-					"unban_one": "{{count}} unbans",
+					"unban_one": "{{count}} unban",
 					"unban_other": "{{count}} unbans"
 				},
 				"action_label": {
-					"restriction": "RESTRICT",
-					"warn": "WARN",
-					"kick": "KICK",
-					"softban": "SOFTBAN",
-					"ban": "BAN",
-					"unban": "UNBAN",
-					"timeout": "TIMEOUT",
-					"unknown": "UNKNOWN"
+					"restriction": "Restrict",
+					"restriction_case": "Role",
+					"unrestriction": "Unrestrict",
+					"unrestriction_case": "Unrole",
+					"warn": "Warn",
+					"kick": "Kick",
+					"softban": "Softban",
+					"ban": "Ban",
+					"unban": "Unban",
+					"timeout": "Timeout",
+					"timeout_end": "Timeout End",
+					"unknown": "Unknown"
 				}
 			},
 			"reports": {
@@ -496,11 +528,11 @@
 					"spam_other": "{{count}} spam reports"
 				},
 				"status_label": {
-					"pending": "PENDING",
-					"approved": "APPROVED",
-					"rejected": "REJECTED",
-					"spam": "SPAM",
-					"unknown": "UNKNOWN"
+					"pending": "Pending",
+					"approved": "Approved",
+					"rejected": "Rejected",
+					"spam": "Spam",
+					"unknown": "Unknown"
 				}
 			}
 		},
@@ -512,7 +544,7 @@
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
 				"reason_fallback": "\n**Reason:** Use `/reason {{case_id}} <...reason>` to set a reason for this case",
-				"case_reference": "\n**Case Reference:** {{- ref}}",
+				"case_reference": "\n**Case Reference:** {{- ref}} ({{action}})",
 				"report_reference": "\n**Report Reference:** {{- report_ref}}",
 				"footer": "Case {{case_id}}"
 			},
@@ -609,11 +641,19 @@
 			"message": "**Message:** {{- message_link}} ({{- channel}})",
 			"message_sub": "Beam me up, Yuu",
 			"message_fallback": "`Message deleted`",
-			"case_reference": "**Case Reference:** {{- ref}}",
+			"case_reference": "**Case Reference:** {{- ref}} ({{action}})",
 			"status": "**Status:** $t(log.report_log.report_status.{{status}})",
 			"moderator": "**Moderator:** {{- mod}}",
 			"updated_at": "**Updated at:** {{- updated_at}}",
 			"footer": "Hint: To resolve a report: Change the status forum label, reference it in a case, set the reference for an existing case with /reference, or set the status via /reports status",
+			"forward": {
+				"message": "**Message report forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
+				"user": "**Attachment forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
+				"errors": {
+					"generic": "There was an error forwarding the report.",
+					"no_thread": "There was an error forwarding the report the associated thread could not be found."
+				}
+			},
 			"report_status": {
 				"0": "Pending",
 				"1": "Approved",
@@ -628,8 +668,8 @@
 		},
 		"anti_raid_nuke": {
 			"case_placeholder": "Preliminary",
-			"title": "Anti-Raid-Nuke report for {{guild}}",
-			"title_preliminary": "Preliminary Anti-Raid-Nuke report for {{guild}}",
+			"title": "Anti-Raid-Nuke report for {{- guild}}",
+			"title_preliminary": "Preliminary Anti-Raid-Nuke report for {{- guild}}",
 			"summary": {
 				"title": "**Summary**",
 				"mode": "**Mode:** `{{mode}}`",

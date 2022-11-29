@@ -37,6 +37,7 @@ export function truncateEmbed(embed: APIEmbed): APIEmbed {
 		fields: embed.fields
 			? embed.fields
 					.map((field) => ({
+						...field,
 						name: ellipsis(field.name, EMBED_FIELD_NAME_LIMIT),
 						value: ellipsis(field.value, EMBED_FIELD_VALUE_LIMIT),
 					}))

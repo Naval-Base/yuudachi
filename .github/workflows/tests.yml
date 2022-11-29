@@ -7,19 +7,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install node.js v16
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
-          cache-dependency-path: yarn.lock
 
       - name: Install dependencies
-        run: yarn --immutable
+        uses: ./.github/actions/yarnCache
 
       - name: Build dependencies
         run: yarn build
 
       - name: ESLint
-        run: yarn lint
+        if: ${{ github.event_name != 'push' }}
+        run: yarn lint --format=compact

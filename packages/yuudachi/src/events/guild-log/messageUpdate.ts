@@ -99,7 +99,7 @@ export default class implements Event {
 						}
 
 						const deleted = part.added ? "+ " : part.removed ? "- " : "";
-						description += `${deleted}${part.value.replace(/\n/g, "")}\n`;
+						description += `${deleted}${part.value.replaceAll("\n", "")}\n`;
 					}
 
 					const prepend = "```diff\n";
