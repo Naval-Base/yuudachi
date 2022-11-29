@@ -91,7 +91,7 @@ export async function handleReportAutocomplete(
 			trimmedPhrase.length >= SNOWFLAKE_MIN_LENGTH &&
 			allowHistory
 		) {
-			const user = interaction.client.users.cache.get(trimmedPhrase);
+			const user = await interaction.client.users.fetch(trimmedPhrase);
 
 			if (user) {
 				choices = [

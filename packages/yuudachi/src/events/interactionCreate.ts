@@ -4,9 +4,9 @@ import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { ApplicationCommandType, Client, Events } from "discord.js";
 import { inject, injectable } from "tsyringe";
 import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
-import { handleReasonAutoComplete } from "../functions/autocomplete/reasons.js";
+import { handleReasonAutocomplete } from "../functions/autocomplete/reasons.js";
 import { handleReportAutocomplete } from "../functions/autocomplete/reports.js";
-import { AutoCompleteType, findAutocompleteType } from "../functions/autocomplete/validade.js";
+import { AutocompleteType, findAutocompleteType } from "../functions/autocomplete/validate.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 
 @injectable()
@@ -54,26 +54,26 @@ export default class implements Event {
 							);
 
 							if (isAutocomplete) {
-								const autocompleteType = findAutocompleteType(interaction);
+								const autocompleteType = findAutocompleteType(interaction.options.getFocused(true).name);
 
 								logger.info(
 									{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 									`Executing autocomplete ${interaction.commandName} with type ${autocompleteType ?? "custom"}`,
 								);
 
-								if (autocompleteType === AutoCompleteType.Reason) {
-									await handleReasonAutoComplete(interaction, effectiveLocale);
-									return;
+								if (autocompleteType === AutocompleteType.Reason) {
+									await handleReasonAutocomplete(interaction, effectiveLocale);
+									break;
 								}
 
-								if (autocompleteType === AutoCompleteType.Case) {
+								if (autocompleteType === AutocompleteType.Case) {
 									await handleCaseAutocomplete(interaction, effectiveLocale);
-									return;
+									break;
 								}
 
-								if (autocompleteType === AutoCompleteType.Report) {
+								if (autocompleteType === AutocompleteType.Report) {
 									await handleReportAutocomplete(interaction, effectiveLocale);
-									return;
+									break;
 								}
 
 								await command.autocomplete(
