@@ -1,9 +1,8 @@
 import { Buffer } from "node:buffer";
 import { kSQL, container, createMessageActionRow } from "@yuudachi/framework";
-import type { APIEmbed, Embed, Guild, Message } from "discord.js";
+import type { APIEmbed, Embed, Guild, Message, Collection } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
-import { REPORT_MESSAGE_CONTEXT_LIMIT } from "../../Constants.js";
 import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
 import { generateUserInfo } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
@@ -16,7 +15,12 @@ import { formatMessageToEmbed } from "./formatMessageToEmbed.js";
 import { formatMessagesToAttachment } from "./formatMessagesToAttachment.js";
 import { generateReportEmbed } from "./generateReportEmbed.js";
 
-export async function upsertReportLog(guild: Guild, report: Report, message?: Message) {
+export async function upsertReportLog(
+	guild: Guild,
+	report: Report,
+	message?: Message,
+	messageContext?: Collection<string, Message>,
+) {
 	const sql = container.resolve<Sql<{}>>(kSQL);
 	const reportForum = checkReportForum(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const reportStatusTags = await getGuildSetting<ReportStatusTagTuple>(guild.id, SettingsKeys.ReportStatusTags);
@@ -48,15 +52,10 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 	const typeTag = reportTypeTags[report.type];
 
 	const reportPost = await reportForum!.threads.fetch(report.logPostId ?? "1").catch(() => null);
-	const messageContext = localMessage?.inGuild()
-		? await localMessage.channel.messages
-				.fetch({ around: localMessage.id, limit: REPORT_MESSAGE_CONTEXT_LIMIT })
-				.catch(() => null)
-		: null;
 
 	if (!reportPost) {
 		const reportPost = await reportForum!.threads.create({
-			name: i18next.t("command.utility.report.common.post.name", {
+			name: i18next.t("command.mod.report.common.post.name", {
 				report_id: report.reportId,
 				user: `${report.targetTag} (${report.targetId})`,
 				lng: locale,
@@ -85,7 +84,7 @@ export async function upsertReportLog(guild: Guild, report: Report, message?: Me
 						  ]
 						: undefined,
 			},
-			reason: i18next.t("command.utility.report.common.post.reason", {
+			reason: i18next.t("command.mod.report.common.post.reason", {
 				user: `${report.authorTag} (${report.authorId})`,
 				lng: locale,
 			}),
