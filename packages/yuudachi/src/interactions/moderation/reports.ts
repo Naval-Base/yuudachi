@@ -33,6 +33,7 @@ export const ReportUtilsCommand = {
 					description: "The report to update",
 					type: ApplicationCommandOptionType.Integer,
 					required: true,
+					autocomplete: true,
 				},
 				{
 					name: "status",

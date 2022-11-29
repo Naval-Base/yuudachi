@@ -22,6 +22,7 @@ export const UnbanCommand = {
 			name: "report_reference",
 			description: "The reference report",
 			type: ApplicationCommandOptionType.Integer,
+			autocomplete: true,
 		},
 	],
 	default_member_permissions: "0",

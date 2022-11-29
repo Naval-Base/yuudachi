@@ -3,7 +3,10 @@ import { transformInteraction, logger, kCommands } from "@yuudachi/framework";
 import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { ApplicationCommandType, Client, Events } from "discord.js";
 import { inject, injectable } from "tsyringe";
-import { checkReasonAutocomplete, handleAutocompleteReasons } from "../functions/autocomplete/reasons.js";
+import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
+import { handleReasonAutocomplete } from "../functions/autocomplete/reasons.js";
+import { handleReportAutocomplete } from "../functions/autocomplete/reports.js";
+import { AutocompleteType, findAutocompleteType } from "../functions/autocomplete/validate.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 
 @injectable()
@@ -51,12 +54,25 @@ export default class implements Event {
 							);
 
 							if (isAutocomplete) {
-								if (checkReasonAutocomplete(interaction)) {
-									logger.info(
-										{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-										`Executing reason autocomplete for command ${interaction.commandName}`,
-									);
-									await handleAutocompleteReasons(interaction, effectiveLocale);
+								const autocompleteType = findAutocompleteType(interaction.options.getFocused(true).name);
+
+								logger.info(
+									{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
+									`Executing autocomplete ${interaction.commandName} with type ${autocompleteType ?? "custom"}`,
+								);
+
+								if (autocompleteType === AutocompleteType.Reason) {
+									await handleReasonAutocomplete(interaction, effectiveLocale);
+									break;
+								}
+
+								if (autocompleteType === AutocompleteType.Case) {
+									await handleCaseAutocomplete(interaction, effectiveLocale);
+									break;
+								}
+
+								if (autocompleteType === AutocompleteType.Report) {
+									await handleReportAutocomplete(interaction, effectiveLocale);
 									break;
 								}
 
