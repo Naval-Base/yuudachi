@@ -47,7 +47,7 @@ export const RestrictCommand = {
 				},
 				{
 					name: "report_reference",
-					description: "The reference report, this will resolve all pending reports by this target",
+					description: "The reference report, if not provided, the latest report will be used",
 					type: ApplicationCommandOptionType.Integer,
 					autocomplete: true,
 				},
@@ -95,7 +95,7 @@ export const RestrictCommand = {
 				},
 				{
 					name: "report_reference",
-					description: "The reference report, this will resolve all pending reports by this target",
+					description: "The reference report, if not provided, the latest report will be used",
 					type: ApplicationCommandOptionType.Integer,
 					autocomplete: true,
 				},
@@ -143,7 +143,7 @@ export const RestrictCommand = {
 				},
 				{
 					name: "report_reference",
-					description: "The reference report, this will resolve all pending reports by this target",
+					description: "The reference report, if not provided, the latest report will be used",
 					type: ApplicationCommandOptionType.Integer,
 					autocomplete: true,
 				},
