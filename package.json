@@ -3,10 +3,10 @@
 	"version": "0.0.0",
 	"description": "",
 	"scripts": {
-		"build": "yarn workspaces foreach --parallel --topological run build",
-		"test": "yarn workspaces foreach --parallel --topological run test",
-		"lint": "yarn workspaces foreach --parallel --topological run lint",
-		"format": "yarn workspaces foreach --parallel --topological run format",
+		"build": "yarn workspaces foreach --parallel --topological --since=origin/main run build",
+		"test": "yarn workspaces foreach --parallel --topological --since=origin/main run test",
+		"lint": "yarn workspaces foreach --parallel --topological --since=origin/main run lint",
+		"format": "yarn workspaces foreach --parallel --topological --since=origin/main run format",
 		"fmt": "yarn format",
 		"postinstall": "is-ci || husky install",
 		"update": "yarn upgrade-interactive"
