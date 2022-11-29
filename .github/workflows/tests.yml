@@ -23,4 +23,4 @@ jobs:
 
       - name: ESLint
         if: ${{ github.event_name != 'push' }}
-        run: yarn lint -- --format=compact
+        run: yarn lint --format=compact
