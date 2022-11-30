@@ -132,3 +132,5 @@ dist
 # macOS
 .DS_Store
 .vercel
+
+.vscode/find-unused-exports.json

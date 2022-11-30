@@ -14,10 +14,15 @@
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"incremental": true,
 		"skipLibCheck": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
 		"paths": {
 			"~/*": ["./src/*"]
 		}
 	},
-	"include": ["api/**/*.js", "src/**/*.ts", "src/**/*.tsx", "next-env.d.ts", "types.d.ts"],
+	"include": ["api/**/*.js", "src/**/*.ts", "src/**/*.tsx", "next-env.d.ts", "types.d.ts", ".next/types/**/*.ts"],
 	"exclude": ["node_modules"]
 }

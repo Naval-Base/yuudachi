@@ -1,20 +1,26 @@
 /* eslint-disable tsdoc/syntax */
 import process from "node:process";
 import { URL, fileURLToPath } from "node:url";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
 const { REPORT_URL } = process.env;
+
+const withBundleAnalyzer = bundleAnalyzer({
+	enabled: process.env.ANALYZE === "true",
+});
 
 /**
  * @type {import('next').NextConfig}
  */
-export default {
+export default withBundleAnalyzer({
 	reactStrictMode: true,
-	swcMinify: true,
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
 	cleanDistDir: true,
+	outputFileTracing: true,
 	experimental: {
+		appDir: true,
 		outputFileTracingRoot: fileURLToPath(new URL("../../", import.meta.url)),
 		fallbackNodePolyfills: false,
 	},
@@ -38,4 +44,4 @@ export default {
 			},
 		];
 	},
-};
+});
