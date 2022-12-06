@@ -2,12 +2,11 @@ import { Command } from "@yuudachi/framework";
 import type { ArgsParam, CommandMethod, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
 import type { DeleteMessageContextCommand } from "../../interactions/context-menu/delete.js";
-import type { RepostMessageContextCommand } from "../../interactions/index.js";
 
 export default class extends Command<typeof DeleteMessageContextCommand> {
 	public override async messageContext(
 		interaction: InteractionParam<CommandMethod.MessageContext>,
-		args: ArgsParam<typeof RepostMessageContextCommand>,
+		args: ArgsParam<typeof DeleteMessageContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
 		if (!args.message.deletable) {

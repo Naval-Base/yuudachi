@@ -36,6 +36,7 @@ import {
 	ClearContextCommand,
 	ReportMessageContextCommand,
 	ReportUserContextCommand,
+	DeleteMessageContextCommand,
 } from "./interactions/index.js";
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
@@ -76,6 +77,7 @@ try {
 			HistoryUserContextCommand,
 			SponsorUserContextCommand,
 			RepostMessageContextCommand,
+			DeleteMessageContextCommand,
 			ClearContextCommand,
 			ReportMessageContextCommand,
 			ReportUserContextCommand,
