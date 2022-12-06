@@ -23,7 +23,9 @@
 				"no_message_resolvable": "Provided value `{{-val}}` for argument `{{arg}}` is not a valid message link or id.",
 				"no_guild": "Could not find guild `{{guild_id}}`",
 				"no_channel": "Could not find channel `{{channel_id}}` in guild `{{- guild}}`",
-				"ignored_channel": "Resolving a message from an ignored channel is not allowed."
+				"ignored_channel": "Resolving a message from an ignored channel is not allowed.",
+				"you_cant": "You can't do that.",
+				"i_cant": "I can't do that."
 			},
 			"buttons": {
 				"cancel": "Cancel",
