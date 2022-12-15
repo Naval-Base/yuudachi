@@ -42,7 +42,7 @@ export const BanCommand = {
 		},
 		{
 			name: "report_reference",
-			description: "The reference report",
+			description: "The reference report, if not provided, the latest report will be used",
 			type: ApplicationCommandOptionType.Integer,
 			autocomplete: true,
 		},

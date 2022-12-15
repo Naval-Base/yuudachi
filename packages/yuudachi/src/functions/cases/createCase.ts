@@ -3,11 +3,9 @@ import type { PartialAndUndefinedOnNull } from "@yuudachi/framework/types";
 import type { Guild, GuildMember, Snowflake } from "discord.js";
 import type { Sql } from "postgres";
 import type { CamelCasedProperties } from "type-fest";
-import { upsertReportLog } from "../logging/upsertReportLog.js";
-import { ReportStatus } from "../reports/createReport.js";
-import { getReport } from "../reports/getReport.js";
-import { updateReport } from "../reports/updateReport.js";
+import { resolvePendingReports } from "../reports/resolveReports.js";
 import { type RawCase, transformCase } from "./transformCase.js";
+import { updateCase } from "./updateCase.js";
 
 export enum CaseAction {
 	Role,
@@ -134,20 +132,19 @@ export async function createCase(
 	`;
 
 	try {
-		if (case_.reportRefId) {
-			const preReport = await getReport(case_.guildId, case_.reportRefId);
+		const resolvedReports = await resolvePendingReports(
+			guild,
+			case_.targetId,
+			newCase.case_id,
+			await guild.client.users.fetch(newCase.mod_id),
+		);
 
-			const report = await updateReport(
-				{
-					guildId: case_.guildId,
-					reportId: case_.reportRefId,
-					refId: newCase.case_id,
-					status: preReport!.authorId === case_.targetId ? ReportStatus.Spam : ReportStatus.Approved,
-				},
-				guild.client.users.cache.get(case_.modId!),
-			);
-
-			await upsertReportLog(guild, report);
+		if (resolvedReports.length && !case_.reportRefId) {
+			return await updateCase({
+				caseId: newCase.case_id,
+				guildId: newCase.guild_id,
+				reportRefId: resolvedReports.at(-1)!.report_id,
+			});
 		}
 	} catch (error_) {
 		const error = error_ as Error;
