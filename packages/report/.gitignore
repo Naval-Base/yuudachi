@@ -133,3 +133,5 @@ dist
 .DS_Store
 .vercel
 src/styles/unocss.css
+
+.vscode/
