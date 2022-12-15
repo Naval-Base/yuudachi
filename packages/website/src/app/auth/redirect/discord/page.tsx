@@ -15,7 +15,6 @@ export default function Page({ searchParams }: { searchParams?: { [key: string]:
 	const [auth, setAuth] = useState<RecordAuthResponse<Record> | null>(null);
 
 	const provider = JSON.parse(localStorage.getItem("provider") ?? "");
-	console.log(provider, searchParams);
 
 	if (!provider) {
 		throw new Error("Provider login info missing.");
@@ -43,8 +42,6 @@ export default function Page({ searchParams }: { searchParams?: { [key: string]:
 			} catch (error) {
 				console.error(error);
 			}
-
-			localStorage.removeItem("provider");
 		};
 
 		void fetchData();
