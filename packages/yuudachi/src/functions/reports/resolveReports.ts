@@ -15,20 +15,18 @@ export async function resolvePendingReports(guild: Guild, targetId: string, case
 		from reports
 		where guild_id = ${guild.id}
 			and status = ${ReportStatus.Pending}
-			and (target_id = ${targetId} or author_id = ${targetId})
+			and target_id = ${targetId}
 		order by created_at asc
 	`;
 
 	for (const report of pendingReports) {
 		try {
-			const status = report.target_id === targetId ? ReportStatus.Approved : ReportStatus.Spam;
-
 			const updatedReport = await updateReport(
 				{
 					guildId: guild.id,
 					reportId: report.report_id,
 					refId: caseId,
-					status,
+					status: ReportStatus.Approved,
 				},
 				moderator,
 			);
