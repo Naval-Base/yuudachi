@@ -41,7 +41,7 @@ services:
     network_mode: "host"
 
   grafana:
-    build: ./docker/grafana
+    image: grafana/grafana-oss:9.3.2
     labels:
       com.naval-base.description: "Grafana"
     expose:
