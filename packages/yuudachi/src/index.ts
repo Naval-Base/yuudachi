@@ -1,7 +1,8 @@
 import "reflect-metadata";
 import { readFile } from "node:fs/promises";
+import { createServer } from "node:http";
 import process from "node:process";
-import { URL, fileURLToPath, pathToFileURL } from "node:url";
+import { URL, fileURLToPath, pathToFileURL, parse } from "node:url";
 import { Backend } from "@skyra/i18next-backend";
 import {
 	type Command,
@@ -20,6 +21,7 @@ import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { GatewayIntentBits, Options, Partials } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
+import promClient from "prom-client";
 import readdirp from "readdirp";
 import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomains.js";
 import { createWebhooks } from "./util/webhooks.js";
@@ -48,6 +50,12 @@ const client = createClient({
 
 createCommands();
 createWebhooks();
+
+const register = new promClient.Registry();
+
+register.setDefaultLabels({
+	app: "yuudachi-bot-v3",
+});
 
 const commandFiles = readdirp(fileURLToPath(new URL("commands", import.meta.url)), {
 	fileFilter: "*.js",
@@ -129,6 +137,16 @@ try {
 			identity,
 		});
 	}
+
+	const server = createServer(async (req, res) => {
+		const route = parse(req.url!).pathname;
+
+		if (route === "/metrics") {
+			res.setHeader("content-type", register.contentType);
+			res.end(await register.metrics());
+		}
+	});
+	server.listen(8_787);
 } catch (error_) {
 	const error = error_ as Error;
 	logger.error(error, error.message);

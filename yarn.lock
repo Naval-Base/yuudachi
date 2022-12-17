@@ -3148,6 +3148,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bintrees@npm:1.0.2":
+  version: 1.0.2
+  resolution: "bintrees@npm:1.0.2"
+  checksum: 56a52b7d3634e30002b1eda740d2517a22fa8e9e2eb088e919f37c030a0ed86e364ab59e472fc770fc8751308054bb1c892979d150e11d9e11ac33bcc1b5d16e
+  languageName: node
+  linkType: hard
+
 "bl@npm:^4.0.3":
   version: 4.1.0
   resolution: "bl@npm:4.1.0"
@@ -9796,6 +9803,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prom-client@npm:^14.1.0":
+  version: 14.1.0
+  resolution: "prom-client@npm:14.1.0"
+  dependencies:
+    tdigest: ^0.1.1
+  checksum: 88f8e67020c0af07d09ab8f15caaa2a3d0810b01d903d0977d82947d3b0100a539db77bcccfde0bf2449a85060475f7fb05b64e7c34951c8a54b84240ae7ae81
+  languageName: node
+  linkType: hard
+
 "promise-inflight@npm:^1.0.1":
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
@@ -11370,6 +11386,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tdigest@npm:^0.1.1":
+  version: 0.1.2
+  resolution: "tdigest@npm:0.1.2"
+  dependencies:
+    bintrees: 1.0.2
+  checksum: 44de8246752b6f8c2924685f969fd3d94c36949f22b0907e99bef2b2220726dd8467f4730ea96b06040b9aa2587c0866049640039d1b956952dfa962bc2075a3
+  languageName: node
+  linkType: hard
+
 "test-exclude@npm:^6.0.0":
   version: 6.0.0
   resolution: "test-exclude@npm:6.0.0"
@@ -12633,6 +12658,7 @@ __metadata:
     nanoid: ^4.0.0
     postgres: ^3.3.2
     prettier: ^2.8.1
+    prom-client: ^14.1.0
     re2: ^1.18.0
     readdirp: ^3.6.0
     redis: ^4.5.1
