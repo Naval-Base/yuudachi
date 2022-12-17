@@ -19,40 +19,8 @@ services:
     ports:
       - "127.0.0.1:6379:6379"
 
-  influxdb:
-    environment:
-      INFLUXDB_INIT_HOST: "influxdb"
-      DOCKER_INFLUXDB_INIT_MODE: "setup"
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "admin"
-      DOCKER_INFLUXDB_INIT_ORG: "yuudachi"
-      DOCKER_INFLUXDB_INIT_BUCKET: "yuudachi"
-      DOCKER_INFLUXDB_INIT_RETENTION: "52w"
-      DOCKER_INFLUXDB_INIT_USERNAME: "yuudachi"
-      DOCKER_INFLUXDB_INIT_PASSWORD: "admin"
-    volumes:
-      - influxdb-data:/var/lib/influxdb2:rw
-    ports:
-      - "127.0.0.1:8086:8086"
-
-  telegraf:
-    environment:
-      INFLUXDB_INIT_HOST: "influxdb"
-      INFLUXDB_INIT_ADMIN_TOKEN: "admin"
-      INFLUXDB_INIT_ORG: "yuudachi"
-      INFLUXDB_INIT_BUCKET: "yuudachi"
-
-  grafana:
-    volumes:
-      - grafana-data:/var/lib/grafana:rw
-    ports:
-      - "127.0.0.1:3000:3000"
-
 volumes:
   postgres-data:
     name: "postgres-data"
   redis-data:
     name: "redis-data"
-  influxdb-data:
-    name: "influxdb-data"
-  grafana-data:
-    name: "grafana-data"
