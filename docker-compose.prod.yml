@@ -20,6 +20,7 @@ services:
       - "127.0.0.1:6379:6379"
 
   prometheus:
+    user: ":"
     volumes:
       - ./prometheus-data:/prometheus
     ports:
