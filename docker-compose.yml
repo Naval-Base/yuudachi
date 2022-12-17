@@ -47,3 +47,4 @@ services:
     expose:
       - "3000"
     restart: unless-stopped
+    network_mode: "host"
