@@ -19,8 +19,29 @@ services:
     ports:
       - "127.0.0.1:6379:6379"
 
+  prometheus:
+    volumes:
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+
+  grafana:
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: "yuudachi"
+      GF_SECURITY_ADMIN_USER: "yuudachi"
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_AUTH_ANONYMOUS_ENABLED: false
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3000:3000"
+
 volumes:
   postgres-data:
     name: "postgres-data"
   redis-data:
     name: "redis-data"
+  promeutheus-data:
+    name: "prometheus-data"
+  grafana-data:
+    name: "grafana-data"

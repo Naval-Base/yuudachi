@@ -30,3 +30,19 @@ services:
       test: ["CMD-SHELL", "redis-cli ping"]
       interval: 10s
       timeout: 5s
+
+  prometheus:
+    build: ./docker/prometheus
+    labels:
+      com.naval-base.description: "Prometheus"
+    expose:
+      - "9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:9.3.2
+    labels:
+      com.naval-base.description: "Grafana"
+    expose:
+      - "3000"
+    restart: unless-stopped
