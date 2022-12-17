@@ -13,7 +13,7 @@ import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSet
 const counter = new Counter({
 	name: "yuudachi_bot_v3_gateway_events_interaction_create_total",
 	help: "Total interaction create gateway events",
-	labelNames: ["commandType", "type"],
+	labelNames: ["commandType", "type", "commandName"],
 });
 
 @injectable()
@@ -55,7 +55,11 @@ export default class implements Event {
 						case ApplicationCommandType.ChatInput: {
 							const isAutocomplete = interaction.isAutocomplete();
 
-							counter.inc({ commandType: ApplicationCommandType.ChatInput, type: interaction.type });
+							counter.inc({
+								commandType: ApplicationCommandType.ChatInput,
+								type: interaction.type,
+								commandName: interaction.commandName,
+							});
 
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
@@ -98,7 +102,11 @@ export default class implements Event {
 						}
 
 						case ApplicationCommandType.Message: {
-							counter.inc({ commandType: ApplicationCommandType.Message, type: interaction.type });
+							counter.inc({
+								commandType: ApplicationCommandType.Message,
+								type: interaction.type,
+								commandName: interaction.commandName,
+							});
 
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
@@ -114,7 +122,11 @@ export default class implements Event {
 						}
 
 						case ApplicationCommandType.User: {
-							counter.inc({ commandType: ApplicationCommandType.User, type: interaction.type });
+							counter.inc({
+								commandType: ApplicationCommandType.User,
+								type: interaction.type,
+								commandName: interaction.commandName,
+							});
 
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
