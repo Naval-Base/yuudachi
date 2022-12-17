@@ -12,7 +12,7 @@ import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSet
 
 const counter = new Counter({
 	name: "yuudachi_bot_v3_gateway_events_interaction_create_total",
-	help: "yuudachi_bot_v3_gateway_events_interaction_create_total",
+	help: "Total interaction create gateway events",
 	labelNames: ["commandType", "type"],
 });
 
