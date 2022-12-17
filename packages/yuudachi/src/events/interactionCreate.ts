@@ -2,7 +2,7 @@ import type { Command } from "@yuudachi/framework";
 import { transformInteraction, logger, kCommands } from "@yuudachi/framework";
 import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { ApplicationCommandType, Client, Events } from "discord.js";
-import promClient from "prom-client";
+import { Counter } from "prom-client";
 import { inject, injectable } from "tsyringe";
 import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
 import { handleReasonAutocomplete } from "../functions/autocomplete/reasons.js";
@@ -10,7 +10,7 @@ import { handleReportAutocomplete } from "../functions/autocomplete/reports.js";
 import { AutocompleteType, findAutocompleteType } from "../functions/autocomplete/validate.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 
-const counter = new promClient.Counter({
+const counter = new Counter({
 	name: "yuudachi_bot_v3_gateway_events_interaction_create_total",
 	help: "yuudachi_bot_v3_gateway_events_interaction_create_total",
 	labelNames: ["commandType", "type"],

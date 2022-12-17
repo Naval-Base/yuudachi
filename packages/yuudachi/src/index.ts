@@ -21,7 +21,7 @@ import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { GatewayIntentBits, Options, Partials } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import promClient from "prom-client";
+import { register } from "prom-client";
 import readdirp from "readdirp";
 import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomains.js";
 import { createWebhooks } from "./util/webhooks.js";
@@ -50,8 +50,6 @@ const client = createClient({
 
 createCommands();
 createWebhooks();
-
-const register = new promClient.Registry();
 
 register.setDefaultLabels({
 	app: "yuudachi-bot-v3",
