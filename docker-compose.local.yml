@@ -30,7 +30,7 @@ services:
       DOCKER_INFLUXDB_INIT_USERNAME: "yuudachi"
       DOCKER_INFLUXDB_INIT_PASSWORD: "admin"
     volumes:
-      - influxdb-data:/var/lib/influxdb2
+      - influxdb-data:/var/lib/influxdb2:rw
     ports:
       - "127.0.0.1:8086:8086"
 
@@ -43,7 +43,7 @@ services:
 
   grafana:
     volumes:
-      - grafana-data:/var/lib/grafana
+      - grafana-data:/var/lib/grafana:rw
     ports:
       - "127.0.0.1:3000:3000"
 
