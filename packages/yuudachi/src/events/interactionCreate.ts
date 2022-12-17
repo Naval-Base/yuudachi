@@ -10,9 +10,21 @@ import { handleReportAutocomplete } from "../functions/autocomplete/reports.js";
 import { AutocompleteType, findAutocompleteType } from "../functions/autocomplete/validate.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
 
-const counter = new Counter({
-	name: "yuudachi_bot_v3_gateway_events_interaction_create_total",
-	help: "Total interaction create gateway events",
+const commandCounter = new Counter({
+	name: "yuudachi_bot_v3_gateway_events_interaction_create_command_total",
+	help: "Total interaction create command gateway events",
+	labelNames: ["commandType", "type", "commandName"],
+});
+
+const commandSuccessCounter = new Counter({
+	name: "yuudachi_bot_v3_gateway_events_interaction_create_command_success_total",
+	help: "Total succeeded interaction create command gateway events",
+	labelNames: ["commandType", "type", "commandName"],
+});
+
+const commandFailureCounter = new Counter({
+	name: "yuudachi_bot_v3_gateway_events_interaction_create_command_failure_total",
+	help: "Total failed interaction create command gateway events",
 	labelNames: ["commandType", "type", "commandName"],
 });
 
@@ -45,6 +57,12 @@ export default class implements Event {
 			const command = this.commands.get(interaction.commandName.toLowerCase());
 
 			if (command) {
+				commandCounter.inc({
+					commandType: interaction.commandType,
+					type: interaction.type,
+					commandName: interaction.commandName,
+				});
+
 				try {
 					const locale = await getGuildSetting(interaction.guildId, SettingsKeys.Locale);
 					const forceLocale = await getGuildSetting<boolean>(interaction.guildId, SettingsKeys.ForceLocale);
@@ -54,12 +72,6 @@ export default class implements Event {
 					switch (interaction.commandType) {
 						case ApplicationCommandType.ChatInput: {
 							const isAutocomplete = interaction.isAutocomplete();
-
-							counter.inc({
-								commandType: ApplicationCommandType.ChatInput,
-								type: interaction.type,
-								commandName: interaction.commandName,
-							});
 
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
@@ -102,12 +114,6 @@ export default class implements Event {
 						}
 
 						case ApplicationCommandType.Message: {
-							counter.inc({
-								commandType: ApplicationCommandType.Message,
-								type: interaction.type,
-								commandName: interaction.commandName,
-							});
-
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 								`Executing message context command ${interaction.commandName}`,
@@ -122,12 +128,6 @@ export default class implements Event {
 						}
 
 						case ApplicationCommandType.User: {
-							counter.inc({
-								commandType: ApplicationCommandType.User,
-								type: interaction.type,
-								commandName: interaction.commandName,
-							});
-
 							logger.info(
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 								`Executing user context command ${interaction.commandName}`,
@@ -140,9 +140,21 @@ export default class implements Event {
 						default:
 							break;
 					}
+
+					commandSuccessCounter.inc({
+						commandType: interaction.commandType,
+						type: interaction.type,
+						commandName: interaction.commandName,
+					});
 				} catch (error_) {
 					const error = error_ as Error;
 					logger.error(error, error.message);
+
+					commandFailureCounter.inc({
+						commandType: interaction.commandType,
+						type: interaction.type,
+						commandName: interaction.commandName,
+					});
 
 					try {
 						if (interaction.isAutocomplete()) {
