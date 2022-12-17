@@ -38,7 +38,7 @@ const client = createClient({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildVoiceStates,
 		GatewayIntentBits.MessageContent,
-		1 << 21, // AutoModActionExecution
+		GatewayIntentBits.AutoModerationExecution,
 	],
 	partials: [Partials.GuildMember],
 	makeCache: Options.cacheWithLimits({
