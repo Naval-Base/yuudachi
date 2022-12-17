@@ -35,6 +35,15 @@ services:
     image: influxdb:2.6-alpine
     labels:
       com.naval-base.description: "InfluxDB"
+    environment:
+      INFLUXDB_INIT_HOST: ""
+      DOCKER_INFLUXDB_INIT_MODE: ""
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ""
+      DOCKER_INFLUXDB_INIT_ORG: ""
+      DOCKER_INFLUXDB_INIT_BUCKET: ""
+      DOCKER_INFLUXDB_INIT_RETENTION: ""
+      DOCKER_INFLUXDB_INIT_USERNAME: ""
+      DOCKER_INFLUXDB_INIT_PASSWORD: ""
     expose:
       - "8086"
     restart: unless-stopped
@@ -43,6 +52,11 @@ services:
     build: ./docker/telegraf
     labels:
       com.naval-base.description: "Telegraf"
+    environment:
+      INFLUXDB_INIT_HOST: ""
+      INFLUXDB_INIT_ADMIN_TOKEN: ""
+      INFLUXDB_INIT_ORG: ""
+      INFLUXDB_INIT_BUCKET: ""
     restart: unless-stopped
     depends_on:
       - influxdb
