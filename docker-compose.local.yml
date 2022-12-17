@@ -1,26 +1,57 @@
-version: '3.7'
+version: "3.7"
 
 services:
   postgres:
     environment:
-      POSTGRES_USER: 'yuudachi'
-      POSTGRES_PASSWORD: 'admin'
-      POSTGRES_DB: 'yuudachi'
+      POSTGRES_USER: "yuudachi"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "yuudachi"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - '127.0.0.1:5432:5432'
+      - "127.0.0.1:5432:5432"
 
   redis:
     environment:
-      REDIS_ARGS: '--requirepass admin --save 300 1 --appendonly yes'
+      REDIS_ARGS: "--requirepass admin --save 300 1 --appendonly yes"
     volumes:
       - redis-data:/data
     ports:
-      - '127.0.0.1:6379:6379'
+      - "127.0.0.1:6379:6379"
+
+  influxdb:
+    environment:
+      INFLUXDB_INIT_HOST: "influxdb"
+      INFLUXDB_INIT_ADMIN_TOKEN: "admin"
+      INFLUXDB_INIT_ORG: "yuudachi"
+      INFLUXDB_INIT_BUCKET: "yuudachi"
+      INFLUXDB_INIT_RETENTION: "52w"
+      INFLUXDB_INIT_USERNAME: "yuudachi"
+      INFLUXDB_INIT_PASSWORD: "admin"
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    ports:
+      - "127.0.0.1:8086:8086"
+
+  telegraf:
+    environment:
+      INFLUXDB_INIT_HOST: "influxdb"
+      INFLUXDB_INIT_ADMIN_TOKEN: "admin"
+      INFLUXDB_INIT_ORG: "yuudachi"
+      INFLUXDB_INIT_BUCKET: "yuudachi"
+
+  grafana:
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3000:3000"
 
 volumes:
   postgres-data:
-    name: 'postgres-data'
+    name: "postgres-data"
   redis-data:
-    name: 'redis-data'
+    name: "redis-data"
+  influxdb-data:
+    name: "influxdb-data"
+  grafana-data:
+    name: "grafana-data"
