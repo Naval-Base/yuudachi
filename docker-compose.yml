@@ -35,7 +35,6 @@ services:
     image: influxdb:2.6-alpine
     labels:
       com.naval-base.description: "InfluxDB"
-    entrypoint: ["./docker/influxdb/entrypoint.sh"]
     expose:
       - "8086"
     restart: unless-stopped
