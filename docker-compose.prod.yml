@@ -22,12 +22,12 @@ services:
   influxdb:
     environment:
       INFLUXDB_INIT_HOST: "influxdb"
-      INFLUXDB_INIT_ADMIN_TOKEN: "admin"
-      INFLUXDB_INIT_ORG: "yuudachi"
-      INFLUXDB_INIT_BUCKET: "yuudachi"
-      INFLUXDB_INIT_RETENTION: "52w"
-      INFLUXDB_INIT_USERNAME: "yuudachi"
-      INFLUXDB_INIT_PASSWORD: "admin"
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "admin"
+      DOCKER_INFLUXDB_INIT_ORG: "yuudachi"
+      DOCKER_INFLUXDB_INIT_BUCKET: "yuudachi"
+      DOCKER_INFLUXDB_INIT_RETENTION: "52w"
+      DOCKER_INFLUXDB_INIT_USERNAME: "yuudachi"
+      DOCKER_INFLUXDB_INIT_PASSWORD: "admin"
     volumes:
       - ./influxdb-data:/var/lib/influxdb2
     ports:
