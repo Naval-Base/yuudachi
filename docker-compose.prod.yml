@@ -31,5 +31,6 @@ services:
       GF_SECURITY_ADMIN_USER: "yuudachi"
       GF_SECURITY_ADMIN_PASSWORD: "admin"
       GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_FEATURE_TOGGLES_ENABLE: "publicDashboards"
     volumes:
       - ./grafana-data:/var/lib/grafana
