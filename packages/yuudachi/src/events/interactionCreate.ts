@@ -13,6 +13,7 @@ import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSet
 const counter = new promClient.Counter({
 	name: "yuudachi_bot_v3_gateway_events_interaction_create_total",
 	help: "yuudachi_bot_v3_gateway_events_interaction_create_total",
+	labelNames: ["commandType", "type"],
 });
 
 @injectable()
