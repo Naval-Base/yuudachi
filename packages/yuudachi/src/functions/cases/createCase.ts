@@ -132,13 +132,6 @@ export async function createCase(
 		returning *
 	`;
 
-	try {
-		const resolvedReports = await resolvePendingReports(
-			guild,
-			case_.targetId,
-			newCase.case_id,
-			await guild.client.users.fetch(newCase.mod_id),
-		);
 	if (!REPORT_AUTO_RESOLVE_IGNORE_ACTIONS.includes(case_.action)) {
 		try {
 			const resolvedReports = await resolvePendingReports(
@@ -148,17 +141,6 @@ export async function createCase(
 				await guild.client.users.fetch(newCase.mod_id),
 			);
 
-		if (resolvedReports.length && !case_.reportRefId) {
-			return await updateCase({
-				caseId: newCase.case_id,
-				guildId: newCase.guild_id,
-				reportRefId: resolvedReports.at(-1)!.report_id,
-			});
-		}
-	} catch (error_) {
-		const error = error_ as Error;
-		logger.error(error, error.message);
-	}
 			if (resolvedReports.length && !case_.reportRefId) {
 				return await updateCase({
 					caseId: newCase.case_id,
