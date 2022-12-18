@@ -4,8 +4,10 @@ import { parse } from "node:url";
 import { logger } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import { Client, Events } from "discord.js";
-import { Gauge, register } from "prom-client";
+import { Gauge, collectDefaultMetrics, register } from "prom-client";
 import { container, injectable } from "tsyringe";
+
+collectDefaultMetrics({ register, prefix: "yuudachi_bot_v3_" });
 
 new Gauge({
 	name: "yuudachi_bot_v3_guilds_total",
