@@ -26,7 +26,7 @@ jobs:
         run: yarn lint --format=compact
 
       - name: Docker-Compose Prod
-        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml
+        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
 
       - name: Docker-Compose Local
-        run: docker-compose -f docker-compose.yml -f docker-compose.local.yml
+        run: docker-compose -f docker-compose.yml -f docker-compose.local.yml build
