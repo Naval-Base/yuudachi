@@ -6,7 +6,7 @@ import type { CamelCasedProperties } from "type-fest";
 import { REPORT_AUTO_RESOLVE_IGNORE_ACTIONS } from "../../Constants.js";
 import { resolvePendingReports } from "../reports/resolveReports.js";
 import { type RawCase, transformCase } from "./transformCase.js";
-import { updateCase } from "./updateCase.js";
+import { updateCase, updateCase } from "./updateCase.js";
 
 export enum CaseAction {
 	Role,

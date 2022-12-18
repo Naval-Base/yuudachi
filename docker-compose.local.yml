@@ -1,26 +1,44 @@
-version: '3.7'
+version: "3.7"
 
 services:
   postgres:
     environment:
-      POSTGRES_USER: 'yuudachi'
-      POSTGRES_PASSWORD: 'admin'
-      POSTGRES_DB: 'yuudachi'
+      POSTGRES_USER: "yuudachi"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "yuudachi"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - '127.0.0.1:5432:5432'
+      - "127.0.0.1:5432:5432"
 
   redis:
     environment:
-      REDIS_ARGS: '--requirepass admin --save 300 1 --appendonly yes'
+      REDIS_ARGS: "--requirepass admin --save 300 1 --appendonly yes"
     volumes:
       - redis-data:/data
     ports:
-      - '127.0.0.1:6379:6379'
+      - "127.0.0.1:6379:6379"
+
+  prometheus:
+    volumes:
+      - prometheus-data:/prometheus
+
+  grafana:
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: "yuudachi"
+      GF_SECURITY_ADMIN_USER: "yuudachi"
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_FEATURE_TOGGLES_ENABLE: "publicDashboards"
+    volumes:
+      - grafana-data:/var/lib/grafana
 
 volumes:
   postgres-data:
-    name: 'postgres-data'
+    name: "postgres-data"
   redis-data:
-    name: 'redis-data'
+    name: "redis-data"
+  promeutheus-data:
+    name: "prometheus-data"
+  grafana-data:
+    name: "grafana-data"

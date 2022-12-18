@@ -20,6 +20,7 @@ import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { GatewayIntentBits, Options, Partials } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
+import { register } from "prom-client";
 import readdirp from "readdirp";
 import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomains.js";
 import { createWebhooks } from "./util/webhooks.js";
@@ -36,7 +37,7 @@ const client = createClient({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildVoiceStates,
 		GatewayIntentBits.MessageContent,
-		1 << 21, // AutoModActionExecution
+		GatewayIntentBits.AutoModerationExecution,
 	],
 	partials: [Partials.GuildMember],
 	makeCache: Options.cacheWithLimits({
@@ -48,6 +49,10 @@ const client = createClient({
 
 createCommands();
 createWebhooks();
+
+register.setDefaultLabels({
+	app: "yuudachi-bot-v3",
+});
 
 const commandFiles = readdirp(fileURLToPath(new URL("commands", import.meta.url)), {
 	fileFilter: "*.js",
