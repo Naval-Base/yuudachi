@@ -3,7 +3,6 @@ import type { PartialAndUndefinedOnNull } from "@yuudachi/framework/types";
 import type { Guild, GuildMember, Snowflake } from "discord.js";
 import type { Sql } from "postgres";
 import type { CamelCasedProperties } from "type-fest";
-import { REPORT_AUTO_RESOLVE_IGNORE_ACTIONS } from "../../Constants.js";
 import { resolvePendingReports } from "../reports/resolveReports.js";
 import { type RawCase, transformCase } from "./transformCase.js";
 import { updateCase } from "./updateCase.js";
@@ -35,6 +34,9 @@ export type CreateCase = Omit<
 	multi?: boolean | null | undefined;
 	target?: GuildMember | null | undefined;
 };
+
+// If used in the Constants file, the import loop would raise an error
+const REPORT_AUTO_RESOLVE_IGNORE_ACTIONS = [CaseAction.TimeoutEnd, CaseAction.Unban];
 
 export async function createCase(
 	guild: Guild,
