@@ -1,3 +1,5 @@
+import { CaseAction } from "./functions/cases/createCase.js";
+
 export const enum Color {
 	DiscordEmbedBackground = 0x2f3136,
 	DiscordSuccess = 0x57f287,
@@ -44,6 +46,7 @@ export const REPORT_REASON_MIN_LENGTH = 10;
 export const REPORT_DUPLICATE_PRE_EXPIRE_SECONDS = 3;
 export const REPORT_DUPLICATE_EXPIRE_SECONDS = 12 * 60 * 60;
 export const REPORT_MESSAGE_CONTEXT_LIMIT = 20;
+export const REPORT_AUTO_RESOLVE_IGNORE_ACTIONS = [CaseAction.TimeoutEnd, CaseAction.Unban];
 
 export const DATE_FORMAT_LOGFILE = "YYYY-MM-DD_HH-mm-ss";
 export const DATE_FORMAT_WITH_SECONDS = "YYYY/MM/DD HH:mm:ss";
