@@ -3,6 +3,7 @@ import type { PartialAndUndefinedOnNull } from "@yuudachi/framework/types";
 import type { Guild, GuildMember, Snowflake } from "discord.js";
 import type { Sql } from "postgres";
 import type { CamelCasedProperties } from "type-fest";
+import { REPORT_AUTO_RESOLVE_IGNORE_ACTIONS } from "../../Constants.js";
 import { resolvePendingReports } from "../reports/resolveReports.js";
 import { type RawCase, transformCase } from "./transformCase.js";
 import { updateCase } from "./updateCase.js";
@@ -131,24 +132,26 @@ export async function createCase(
 		returning *
 	`;
 
-	try {
-		const resolvedReports = await resolvePendingReports(
-			guild,
-			case_.targetId,
-			newCase.case_id,
-			await guild.client.users.fetch(newCase.mod_id),
-		);
+	if (!REPORT_AUTO_RESOLVE_IGNORE_ACTIONS.includes(case_.action)) {
+		try {
+			const resolvedReports = await resolvePendingReports(
+				guild,
+				case_.targetId,
+				newCase.case_id,
+				await guild.client.users.fetch(newCase.mod_id),
+			);
 
-		if (resolvedReports.length && !case_.reportRefId) {
-			return await updateCase({
-				caseId: newCase.case_id,
-				guildId: newCase.guild_id,
-				reportRefId: resolvedReports.at(-1)!.report_id,
-			});
+			if (resolvedReports.length && !case_.reportRefId) {
+				return await updateCase({
+					caseId: newCase.case_id,
+					guildId: newCase.guild_id,
+					reportRefId: resolvedReports.at(-1)!.report_id,
+				});
+			}
+		} catch (error_) {
+			const error = error_ as Error;
+			logger.error(error, error.message);
 		}
-	} catch (error_) {
-		const error = error_ as Error;
-		logger.error(error, error.message);
 	}
 
 	return transformCase(newCase);
