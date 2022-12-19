@@ -25,8 +25,7 @@ jobs:
         if: ${{ github.event_name != 'push' }}
         run: yarn lint --format=compact
 
-      - name: Docker-Compose Prod
-        run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
-
-      - name: Docker-Compose Local
-        run: docker-compose -f docker-compose.yml -f docker-compose.local.yml build
+      - name: Docker
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.local.yml build
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
