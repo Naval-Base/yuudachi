@@ -24,3 +24,8 @@ jobs:
       - name: ESLint
         if: ${{ github.event_name != 'push' }}
         run: yarn lint --format=compact
+
+      - name: Docker
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.local.yml build
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml build

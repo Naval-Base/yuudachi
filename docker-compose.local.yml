@@ -38,7 +38,7 @@ volumes:
     name: "postgres-data"
   redis-data:
     name: "redis-data"
-  promeutheus-data:
+  prometheus-data:
     name: "prometheus-data"
   grafana-data:
     name: "grafana-data"
