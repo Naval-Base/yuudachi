@@ -18,12 +18,6 @@ export const UnbanCommand = {
 			min_length: CASE_REASON_MIN_LENGTH,
 			max_length: CASE_REASON_MAX_LENGTH,
 		},
-		{
-			name: "report_reference",
-			description: "The reference report, if not provided, the latest report will be used",
-			type: ApplicationCommandOptionType.Integer,
-			autocomplete: true,
-		},
 	],
 	default_member_permissions: "0",
 } as const;
