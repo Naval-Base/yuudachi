@@ -173,12 +173,6 @@ export default class implements Event {
 					} catch (error__) {
 						const subError = error__ as Error;
 						logger.error(subError, subError.message);
-
-						if (interaction.isAutocomplete()) {
-							return;
-						}
-
-						await interaction.followUp({ content: error.message, components: [], ephemeral: true });
 					}
 				}
 			}
