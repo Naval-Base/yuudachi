@@ -2,7 +2,6 @@ import "reflect-metadata";
 import { readFile } from "node:fs/promises";
 import process from "node:process";
 import { URL, fileURLToPath, pathToFileURL } from "node:url";
-import { Backend } from "@skyra/i18next-backend";
 import {
 	type Command,
 	logger,
@@ -18,11 +17,11 @@ import {
 } from "@yuudachi/framework";
 import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { GatewayIntentBits, Options, Partials } from "discord.js";
-import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { register } from "prom-client";
 import readdirp from "readdirp";
 import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomains.js";
+import { createI18next } from "./util/i18next.js";
 import { createWebhooks } from "./util/webhooks.js";
 import { WebSocketConnection } from "./websocket/WebSocketConnection.js";
 
@@ -72,17 +71,7 @@ try {
 	) as string[];
 	await redis.sadd("linkshorteners", ...shorteners);
 
-	await i18next.use(Backend).init({
-		backend: {
-			paths: [new URL("locales/{{lng}}/{{ns}}.json", import.meta.url)],
-		},
-		cleanCode: true,
-		preload: ["en-US", "en-GB", "de", "es-ES", "ja", "ko", "pl", "zh-CH", "zh-TW"],
-		supportedLngs: ["en-US", "en-GB", "de", "es-ES", "ja", "ko", "pl", "zh-CH", "zh-TW"],
-		fallbackLng: ["en-US"],
-		returnNull: false,
-		returnEmptyString: false,
-	});
+	await createI18next();
 
 	for await (const dir of commandFiles) {
 		const cmdInfo = commandInfo(dir.path);
