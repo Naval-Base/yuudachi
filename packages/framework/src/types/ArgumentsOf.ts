@@ -1,12 +1,36 @@
-/* import type { APIGuildMember, APIPartialChannel, APIRole, Permissions, APIAttachment } from 'discord-api-types/v10'; */
-import type { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
+import type {
+	ApplicationCommandOptionType,
+	ApplicationCommandType,
+	APIGuildMember,
+	APIPartialChannel,
+	APIRole,
+	Permissions,
+	APIAttachment,
+	ComponentType,
+} from "discord-api-types/v10";
 import type { Attachment, GuildChannel, GuildMember, Message, Role, User } from "discord.js";
+
+export type SharedPayload = Readonly<{
+	options?: readonly Option[] | undefined;
+}>;
 
 export type CommandPayload = Readonly<{
 	name: string;
-	options?: readonly Option[] | undefined;
 	type?: ApplicationCommandType | undefined;
-}>;
+}> &
+	SharedPayload;
+
+export type ComponentPayload = Readonly<{
+	componentType: ComponentType;
+	customId: string;
+	value?: string | undefined;
+}> &
+	SharedPayload;
+
+export const enum Runtime {
+	Raw,
+	Discordjs,
+}
 
 type Option = Readonly<
 	{
@@ -39,10 +63,10 @@ type Option = Readonly<
 
 type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
-type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
-	? ArgumentsOfRaw<O>
+type TypeIdToType<T, O, C, P> = T extends ApplicationCommandOptionType.Subcommand
+	? ArgumentsOfRaw<O, P>
 	: T extends ApplicationCommandOptionType.SubcommandGroup
-	? ArgumentsOfRaw<O>
+	? ArgumentsOfRaw<O, P>
 	: T extends ApplicationCommandOptionType.String
 	? C extends readonly { value: string }[]
 		? C[number]["value"]
@@ -54,21 +78,28 @@ type TypeIdToType<T, O, C> = T extends ApplicationCommandOptionType.Subcommand
 	: T extends ApplicationCommandOptionType.Boolean
 	? boolean
 	: T extends ApplicationCommandOptionType.User
-	? { member?: GuildMember | undefined; user: User /* | (APIGuildMember & { permissions: Permissions }) */ }
+	? P extends Runtime.Discordjs
+		? { member?: GuildMember | undefined; user: User }
+		: { user: APIGuildMember & { permissions: Permissions } }
 	: T extends ApplicationCommandOptionType.Channel
-	? GuildChannel /* | (APIPartialChannel & { permissions: Permissions }) */
+	? P extends Runtime.Discordjs
+		? GuildChannel
+		: APIPartialChannel & { permissions: Permissions }
 	: T extends ApplicationCommandOptionType.Role
-	? Role /* | APIRole */
+	? P extends Runtime.Discordjs
+		? Role
+		: APIRole
 	: T extends ApplicationCommandOptionType.Mentionable
-	?
-			| Role
-			| { member?: GuildMember; user: User /* | (APIGuildMember & { permissions: Permissions }) */ }
-			| undefined /* | APIRole */
+	? P extends Runtime.Discordjs
+		? Role | { member?: GuildMember; user: User } | undefined
+		: APIRole | { user: APIGuildMember & { permissions: Permissions } } | undefined
 	: T extends ApplicationCommandOptionType.Attachment
-	? Attachment /* | APIAttachment */
+	? P extends Runtime.Discordjs
+		? Attachment
+		: APIAttachment
 	: never;
 
-type OptionToObject<O> = O extends {
+type OptionToObject<O, P> = O extends {
 	choices?: infer C | undefined;
 	name: infer K;
 	options?: infer O | undefined;
@@ -77,17 +108,19 @@ type OptionToObject<O> = O extends {
 }
 	? K extends string
 		? R extends true
-			? { [k in K]: TypeIdToType<T, O, C> }
+			? { [k in K]: TypeIdToType<T, O, C, P> }
 			: T extends ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup
-			? { [k in K]: TypeIdToType<T, O, C> }
-			: { [k in K]?: TypeIdToType<T, O, C> | undefined }
+			? { [k in K]: TypeIdToType<T, O, C, P> }
+			: { [k in K]?: TypeIdToType<T, O, C, P> | undefined }
 		: never
 	: never;
 
-type ArgumentsOfRaw<O> = O extends readonly any[] ? UnionToIntersection<OptionToObject<O[number]>> : never;
+type ArgumentsOfRaw<O, P> = O extends readonly any[] ? UnionToIntersection<OptionToObject<O[number], P>> : never;
 
-export type ArgumentsOf<C extends CommandPayload> = C extends { options: readonly Option[] }
-	? UnionToIntersection<OptionToObject<C["options"][number]>>
+export type ArgumentsOf<C extends SharedPayload, P extends Runtime = Runtime.Discordjs> = C extends {
+	options: readonly Option[];
+}
+	? UnionToIntersection<OptionToObject<C["options"][number], P>>
 	: C extends { type: ApplicationCommandType.Message }
 	? { message: Message<true> }
 	: C extends { type: ApplicationCommandType.User }

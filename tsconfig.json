@@ -15,7 +15,8 @@
 		"noUncheckedIndexedAccess": true,
 
 		// Emit
-		"declaration": false,
+		"declaration": true,
+		"declarationMap": true,
 		"importHelpers": true,
 		"importsNotUsedAsValues": "error",
 		"inlineSources": true,

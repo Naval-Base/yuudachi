@@ -1,5 +1,5 @@
 import type { Command } from "@yuudachi/framework";
-import { transformInteraction, logger, kCommands } from "@yuudachi/framework";
+import { transformApplicationInteraction, logger, kCommands } from "@yuudachi/framework";
 import type { Event, CommandPayload } from "@yuudachi/framework/types";
 import { ApplicationCommandType, Client, Events } from "discord.js";
 import { Counter } from "prom-client";
@@ -103,12 +103,16 @@ export default class implements Event {
 
 								await command.autocomplete(
 									interaction,
-									transformInteraction(interaction.options.data),
+									transformApplicationInteraction(interaction.options.data),
 									effectiveLocale,
 								);
 								break;
 							} else {
-								await command.chatInput(interaction, transformInteraction(interaction.options.data), effectiveLocale);
+								await command.chatInput(
+									interaction,
+									transformApplicationInteraction(interaction.options.data),
+									effectiveLocale,
+								);
 								break;
 							}
 						}
@@ -121,7 +125,7 @@ export default class implements Event {
 
 							await command.messageContext(
 								interaction,
-								transformInteraction(interaction.options.data),
+								transformApplicationInteraction(interaction.options.data),
 								effectiveLocale,
 							);
 							break;
@@ -133,7 +137,11 @@ export default class implements Event {
 								`Executing user context command ${interaction.commandName}`,
 							);
 
-							await command.userContext(interaction, transformInteraction(interaction.options.data), effectiveLocale);
+							await command.userContext(
+								interaction,
+								transformApplicationInteraction(interaction.options.data),
+								effectiveLocale,
+							);
 							break;
 						}
 

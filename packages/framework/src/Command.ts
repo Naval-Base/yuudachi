@@ -1,13 +1,26 @@
 import { basename, extname } from "node:path";
 import { logger } from "./logger.js";
-import type { CommandPayload } from "./types/ArgumentsOf.js";
+import type { CommandPayload, Runtime } from "./types/ArgumentsOf.js";
 import type { CommandInfo } from "./types/Command.js";
-import type { ArgsParam, CommandMethod, Commands, InteractionParam, LocaleParam } from "./types/Interaction.js";
+import type {
+	ArgsParam,
+	CommandMethod,
+	Commands,
+	InteractionParam,
+	InteractionType,
+	LocaleParam,
+} from "./types/Interaction.js";
 
-export abstract class Command<T extends CommandPayload> implements Commands<T> {
-	public constructor(public readonly name?: T["name"][]) {}
+export abstract class Command<C extends CommandPayload, R extends Runtime = Runtime.Discordjs>
+	implements Commands<C, R>
+{
+	public constructor(public readonly name?: C["name"][]) {}
 
-	public chatInput(interaction: InteractionParam, _: ArgsParam<T>, __: LocaleParam): Promise<void> | void {
+	public chatInput(
+		interaction: InteractionParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
+		_args: ArgsParam<C, CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
+		_locale: LocaleParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
+	): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 			`Received chat input for ${interaction.commandName}, but the command does not handle chat input`,
@@ -15,9 +28,9 @@ export abstract class Command<T extends CommandPayload> implements Commands<T> {
 	}
 
 	public autocomplete(
-		interaction: InteractionParam<CommandMethod.Autocomplete>,
-		_args: ArgsParam<T>,
-		_locale: LocaleParam,
+		interaction: InteractionParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
+		_args: ArgsParam<C, CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
+		_locale: LocaleParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
 	): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
@@ -26,9 +39,9 @@ export abstract class Command<T extends CommandPayload> implements Commands<T> {
 	}
 
 	public messageContext(
-		interaction: InteractionParam<CommandMethod.MessageContext>,
-		_args: ArgsParam<T>,
-		_locale: LocaleParam,
+		interaction: InteractionParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
+		_args: ArgsParam<C, CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
+		_locale: LocaleParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 	): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
@@ -37,9 +50,9 @@ export abstract class Command<T extends CommandPayload> implements Commands<T> {
 	}
 
 	public userContext(
-		interaction: InteractionParam<CommandMethod.UserContext>,
-		_args: ArgsParam<T>,
-		_locale: LocaleParam,
+		interaction: InteractionParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
+		_args: ArgsParam<C, CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
+		_locale: LocaleParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
 	): Promise<void> | void {
 		logger.info(
 			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
