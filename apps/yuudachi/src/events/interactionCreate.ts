@@ -1,6 +1,6 @@
 import type { Command } from "@yuudachi/framework";
 import { transformApplicationInteraction, logger, kCommands } from "@yuudachi/framework";
-import type { Event, CommandPayload } from "@yuudachi/framework/types";
+import type { Event } from "@yuudachi/framework/types";
 import { ApplicationCommandType, Client, Events } from "discord.js";
 import { Counter } from "prom-client";
 import { inject, injectable } from "tsyringe";
@@ -36,7 +36,7 @@ export default class implements Event {
 
 	public constructor(
 		public readonly client: Client<true>,
-		@inject(kCommands) public readonly commands: Map<string, Command<CommandPayload>>,
+		@inject(kCommands) public readonly commands: Map<string, Command>,
 	) {}
 
 	public execute(): void {

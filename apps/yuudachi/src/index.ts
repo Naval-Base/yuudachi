@@ -16,7 +16,7 @@ import {
 	createRedis,
 	container,
 } from "@yuudachi/framework";
-import type { Event, CommandPayload } from "@yuudachi/framework/types";
+import type { Event } from "@yuudachi/framework/types";
 import { GatewayIntentBits, Options, Partials } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
@@ -65,7 +65,7 @@ const eventFiles = readdirp(fileURLToPath(new URL("events", import.meta.url)), {
 
 try {
 	const redis = container.resolve<Redis>(kRedis);
-	const commands = container.resolve<Map<string, Command<CommandPayload>>>(kCommands);
+	const commands = container.resolve<Map<string, Command>>(kCommands);
 
 	const shorteners = JSON.parse(
 		(await readFile(fileURLToPath(new URL("../linkshorteners.json", import.meta.url).href))).toString(),
@@ -91,10 +91,8 @@ try {
 			continue;
 		}
 
-		const dynamic = dynamicImport<new () => Command<CommandPayload>>(
-			async () => import(pathToFileURL(dir.fullPath).href),
-		);
-		const command = container.resolve<Command<CommandPayload>>((await dynamic()).default);
+		const dynamic = dynamicImport<new () => Command>(async () => import(pathToFileURL(dir.fullPath).href));
+		const command = container.resolve<Command>((await dynamic()).default);
 		logger.info(
 			{ command: { name: command.name?.join(", ") ?? cmdInfo.name } },
 			`Registering command: ${command.name?.join(", ") ?? cmdInfo.name}`,

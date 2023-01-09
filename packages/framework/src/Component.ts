@@ -11,7 +11,7 @@ import type {
 	LocaleParam,
 } from "./types/Interaction.js";
 
-export abstract class Component<C extends ComponentPayload, R extends Runtime = Runtime.Discordjs>
+export abstract class Component<C extends ComponentPayload = ComponentPayload, R extends Runtime = Runtime.Discordjs>
 	implements Components<C, R>
 {
 	public constructor(public readonly customId?: C["customId"][]) {}

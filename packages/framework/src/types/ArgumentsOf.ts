@@ -7,6 +7,7 @@ import type {
 	Permissions,
 	APIAttachment,
 	ComponentType,
+	ModalSubmitActionRowComponent,
 } from "discord-api-types/v10";
 import type { Attachment, GuildChannel, GuildMember, Message, Role, User } from "discord.js";
 
@@ -22,8 +23,9 @@ export type CommandPayload = Readonly<{
 
 export type ComponentPayload = Readonly<{
 	componentType: ComponentType;
+	components?: ModalSubmitActionRowComponent[] | undefined;
 	customId: string;
-	value?: string | undefined;
+	values?: string[] | undefined;
 }> &
 	SharedPayload;
 

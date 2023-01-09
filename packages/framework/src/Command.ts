@@ -11,7 +11,7 @@ import type {
 	LocaleParam,
 } from "./types/Interaction.js";
 
-export abstract class Command<C extends CommandPayload, R extends Runtime = Runtime.Discordjs>
+export abstract class Command<C extends CommandPayload = CommandPayload, R extends Runtime = Runtime.Discordjs>
 	implements Commands<C, R>
 {
 	public constructor(public readonly name?: C["name"][]) {}
