@@ -1,7 +1,5 @@
-import { basename, extname } from "node:path";
 import { logger } from "./logger.js";
 import type { ComponentPayload, Runtime } from "./types/ArgumentsOf.js";
-import type { ComponentInfo } from "./types/Component.js";
 import type {
 	ArgsParam,
 	ComponentMethod,
@@ -14,7 +12,7 @@ import type {
 export abstract class Component<C extends ComponentPayload = ComponentPayload, R extends Runtime = Runtime.Discordjs>
 	implements Components<C, R>
 {
-	public constructor(public readonly customId?: C["customId"][]) {}
+	public constructor(public readonly customId: C["customId"]) {}
 
 	public button(
 		interaction: InteractionParam<ComponentMethod.Button, InteractionType.Component, R>,
@@ -48,12 +46,4 @@ export abstract class Component<C extends ComponentPayload = ComponentPayload, R
 			`Received modal submit for ${interaction.customId}, but the component does not handle modal submit`,
 		);
 	}
-}
-
-export function componentInfo(path: string): ComponentInfo | null {
-	if (extname(path) !== ".js") {
-		return null;
-	}
-
-	return { customId: basename(path, ".js") } as const;
 }
