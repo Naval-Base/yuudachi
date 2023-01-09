@@ -1,6 +1,6 @@
 {
 	"name": "@yuudachi/framework",
-	"version": "0.1.4",
+	"version": "0.2.0",
 	"description": "",
 	"scripts": {
 		"build:clean": "del-cli dist",
