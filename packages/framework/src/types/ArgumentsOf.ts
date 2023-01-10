@@ -8,26 +8,23 @@ import type {
 	APIAttachment,
 	ComponentType,
 	ModalSubmitActionRowComponent,
+	Snowflake,
+	APIMessage,
+	APIUser,
 } from "discord-api-types/v10";
-import type { Attachment, GuildChannel, GuildMember, Message, Role, User } from "discord.js";
-
-export type SharedPayload = Readonly<{
-	options?: readonly Option[] | undefined;
-}>;
+import type { Attachment, Channel, Collection, GuildChannel, GuildMember, Message, Role, User } from "discord.js";
 
 export type CommandPayload = Readonly<{
 	name: string;
 	type?: ApplicationCommandType | undefined;
-}> &
-	SharedPayload;
+}>;
 
 export type ComponentPayload = Readonly<{
 	componentType: ComponentType;
 	components?: ModalSubmitActionRowComponent[] | undefined;
 	customId: string;
 	values?: string[] | undefined;
-}> &
-	SharedPayload;
+}>;
 
 export const enum Runtime {
 	Raw,
@@ -82,7 +79,7 @@ type TypeIdToType<T, O, C, P> = T extends ApplicationCommandOptionType.Subcomman
 	: T extends ApplicationCommandOptionType.User
 	? P extends Runtime.Discordjs
 		? { member?: GuildMember | undefined; user: User }
-		: { user: APIGuildMember & { permissions: Permissions } }
+		: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser }
 	: T extends ApplicationCommandOptionType.Channel
 	? P extends Runtime.Discordjs
 		? GuildChannel
@@ -94,7 +91,7 @@ type TypeIdToType<T, O, C, P> = T extends ApplicationCommandOptionType.Subcomman
 	: T extends ApplicationCommandOptionType.Mentionable
 	? P extends Runtime.Discordjs
 		? Role | { member?: GuildMember; user: User } | undefined
-		: APIRole | { user: APIGuildMember & { permissions: Permissions } } | undefined
+		: APIRole | { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser } | undefined
 	: T extends ApplicationCommandOptionType.Attachment
 	? P extends Runtime.Discordjs
 		? Attachment
@@ -119,12 +116,47 @@ type OptionToObject<O, P> = O extends {
 
 type ArgumentsOfRaw<O, P> = O extends readonly any[] ? UnionToIntersection<OptionToObject<O[number], P>> : never;
 
-export type ArgumentsOf<C extends SharedPayload, P extends Runtime = Runtime.Discordjs> = C extends {
+export type ArgumentsOf<
+	C extends CommandPayload | ComponentPayload,
+	P extends Runtime = Runtime.Discordjs,
+> = C extends {
 	options: readonly Option[];
 }
 	? UnionToIntersection<OptionToObject<C["options"][number], P>>
 	: C extends { type: ApplicationCommandType.Message }
-	? { message: Message<true> }
+	? { message: P extends Runtime.Discordjs ? Message<true> : APIMessage }
 	: C extends { type: ApplicationCommandType.User }
-	? { user: { member?: GuildMember | undefined; user: User } }
+	? P extends Runtime.Discordjs
+		? { user: { member?: GuildMember | undefined; user: User } }
+		: { user: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser } }
+	: C extends { componentType: ComponentType.Button }
+	? never
+	: C extends { componentType: ComponentType.ChannelSelect }
+	? P extends Runtime.Discordjs
+		? { channels: Collection<Snowflake, Channel> }
+		: { channels: Map<Snowflake, APIPartialChannel & { permissions: Permissions }> }
+	: C extends { componentType: ComponentType.MentionableSelect }
+	? P extends Runtime.Discordjs
+		? {
+				members: Collection<Snowflake, GuildMember>;
+				roles: Collection<Snowflake, Role>;
+				users: Collection<Snowflake, User>;
+		  }
+		: {
+				members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>;
+				roles: Map<Snowflake, APIRole>;
+				users: Map<Snowflake, APIUser>;
+		  }
+	: C extends { componentType: ComponentType.RoleSelect }
+	? P extends Runtime.Discordjs
+		? { roles: Collection<Snowflake, Role> }
+		: { roles: Map<Snowflake, APIRole> }
+	: C extends { componentType: ComponentType.StringSelect }
+	? { values: string[] }
+	: C extends { componentType: ComponentType.TextInput }
+	? { value: string }
+	: C extends { componentType: ComponentType.UserSelect }
+	? P extends Runtime.Discordjs
+		? { members: Collection<Snowflake, GuildMember>; users: Collection<Snowflake, User> }
+		: { members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>; users: Map<Snowflake, APIUser> }
 	: never;
