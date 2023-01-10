@@ -45,9 +45,9 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 		_args: ArgsParam<C, CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 	): Promise<any> | any {
-		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.name;
+		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
-			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user.id },
+			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user?.id },
 			`Received message context for ${commandName}, but the command does not handle message context`,
 		);
 	}

@@ -14,23 +14,20 @@ import type {
 	APIModalSubmitInteraction,
 	APIGuildMember,
 } from "discord-api-types/v10";
-import { InteractionType, ComponentType } from "discord-api-types/v10";
+import { InteractionType, ComponentType, ApplicationCommandOptionType } from "discord-api-types/v10";
 import type {
 	ButtonInteraction,
 	AnySelectMenuInteraction,
 	ModalSubmitInteraction,
 	Collection,
 	Channel,
-} from "discord.js";
-import {
-	type CommandInteractionOption,
-	ApplicationCommandOptionType,
-	type GuildBasedChannel,
-	type Role,
-	type User,
-	type GuildMember,
-	type Attachment,
-	type Message,
+	CommandInteractionOption,
+	GuildBasedChannel,
+	Role,
+	User,
+	GuildMember,
+	Attachment,
+	Message,
 } from "discord.js";
 import type { ArgumentsOf, CommandPayload, ComponentPayload, Runtime } from "./types/ArgumentsOf.js";
 

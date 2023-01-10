@@ -3,9 +3,11 @@ import type {
 	APIChatInputApplicationCommandInteraction,
 	APIMessageComponentButtonInteraction,
 	APIMessageComponentSelectMenuInteraction,
-	APIMessageInteraction,
 	APIModalSubmitInteraction,
 	APIUserApplicationCommandInteraction,
+	APIMessageApplicationCommandInteraction,
+} from "discord-api-types/v10";
+import type {
 	AnySelectMenuInteraction,
 	AutocompleteInteraction,
 	ButtonInteraction,
@@ -38,7 +40,9 @@ export type Autocomplete<C extends CommandPayload, R extends Runtime = Runtime.D
 
 export type MessageContext<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
 	messageContext(
-		interaction: R extends Runtime.Discordjs ? MessageContextMenuCommandInteraction<"cached"> : APIMessageInteraction,
+		interaction: R extends Runtime.Discordjs
+			? MessageContextMenuCommandInteraction<"cached">
+			: APIMessageApplicationCommandInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
 	): Promise<any> | any;
