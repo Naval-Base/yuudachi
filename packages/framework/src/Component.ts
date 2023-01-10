@@ -18,7 +18,7 @@ export abstract class Component<C extends ComponentPayload = ComponentPayload, R
 		_interaction: InteractionParam<ComponentMethod.Button, InteractionType.Component, R>,
 		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R>,
 		_locale: LocaleParam<ComponentMethod.Button, InteractionType.Component, R>,
-	): Promise<void> | void {
+	) {
 		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
 			{ component: { customId, type: _interaction.type }, userId: _interaction.user?.id },
@@ -30,7 +30,7 @@ export abstract class Component<C extends ComponentPayload = ComponentPayload, R
 		_interaction: InteractionParam<ComponentMethod.SelectMenu, InteractionType.Component, R>,
 		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R>,
 		_locale: LocaleParam<ComponentMethod.SelectMenu, InteractionType.Component, R>,
-	): Promise<void> | void {
+	) {
 		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
 			{ component: { customId, type: _interaction.type }, userId: _interaction.user?.id },
@@ -42,7 +42,7 @@ export abstract class Component<C extends ComponentPayload = ComponentPayload, R
 		_interaction: InteractionParam<ComponentMethod.ModalSubmit, InteractionType.Component, R>,
 		_args: ArgsParam<C, ComponentMethod.ModalSubmit, InteractionType.Component, R>,
 		_locale: LocaleParam<ComponentMethod.ModalSubmit, InteractionType.Component, R>,
-	): Promise<void> | void {
+	) {
 		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
 			{ component: { customId, type: _interaction.type }, userId: _interaction.user?.id },
