@@ -25,7 +25,7 @@ export default async function routes(fastify: FastifyInstance) {
 				return { type: InteractionResponseType.Pong } satisfies APIInteractionResponsePong;
 			}
 
-			return fastify.httpHandlerOptions.interactionsCallback({ interaction: body, api: fastify.discord.api });
+			return fastify.httpHandlerOptions.interactionsCallback({ interaction: body, api: fastify.discord.api, reply });
 		},
 	);
 }
