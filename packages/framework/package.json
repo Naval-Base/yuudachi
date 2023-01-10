@@ -1,6 +1,6 @@
 {
 	"name": "@yuudachi/framework",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"description": "",
 	"scripts": {
 		"build:clean": "del-cli dist",
@@ -37,6 +37,8 @@
 		"@discordjs/core": "^0.3.0",
 		"@discordjs/rest": "^1.5.0",
 		"@swc/helpers": "^0.4.14",
+		"discord-api-types": "^0.37.27",
+		"discord.js": "^14.7.1",
 		"pino": "^8.8.0",
 		"readdirp": "^3.6.0",
 		"reflect-metadata": "^0.1.13",
@@ -49,8 +51,6 @@
 		"@types/node": "^18.11.18",
 		"cross-env": "^7.0.3",
 		"del-cli": "^5.0.0",
-		"discord-api-types": "^0.37.27",
-		"discord.js": "^14.7.1",
 		"eslint": "^8.31.0",
 		"eslint-config-neon": "^0.1.40",
 		"eslint-formatter-pretty": "^4.1.0",
