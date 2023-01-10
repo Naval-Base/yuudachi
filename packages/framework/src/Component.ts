@@ -15,35 +15,38 @@ export abstract class Component<C extends ComponentPayload = ComponentPayload, R
 	public constructor(public readonly customId: C["customId"]) {}
 
 	public button(
-		interaction: InteractionParam<ComponentMethod.Button, InteractionType.Component, R>,
+		_interaction: InteractionParam<ComponentMethod.Button, InteractionType.Component, R>,
 		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R>,
 		_locale: LocaleParam<ComponentMethod.Button, InteractionType.Component, R>,
 	): Promise<void> | void {
+		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
-			{ component: { customId: interaction.customId, type: interaction.type }, userId: interaction.user.id },
-			`Received button input for ${interaction.customId}, but the component does not handle button input`,
+			{ component: { customId, type: _interaction.type }, userId: _interaction.user?.id },
+			`Received button input for ${customId}, but the component does not handle button input`,
 		);
 	}
 
 	public selectMenu(
-		interaction: InteractionParam<ComponentMethod.SelectMenu, InteractionType.Component, R>,
+		_interaction: InteractionParam<ComponentMethod.SelectMenu, InteractionType.Component, R>,
 		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R>,
 		_locale: LocaleParam<ComponentMethod.SelectMenu, InteractionType.Component, R>,
 	): Promise<void> | void {
+		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
-			{ component: { customId: interaction.customId, type: interaction.type }, userId: interaction.user.id },
-			`Received select menu input for ${interaction.customId}, but the component does not handle select menu input`,
+			{ component: { customId, type: _interaction.type }, userId: _interaction.user?.id },
+			`Received select menu input for ${customId}, but the component does not handle select menu input`,
 		);
 	}
 
 	public modalSubmit(
-		interaction: InteractionParam<ComponentMethod.ModalSubmit, InteractionType.Component, R>,
+		_interaction: InteractionParam<ComponentMethod.ModalSubmit, InteractionType.Component, R>,
 		_args: ArgsParam<C, ComponentMethod.ModalSubmit, InteractionType.Component, R>,
 		_locale: LocaleParam<ComponentMethod.ModalSubmit, InteractionType.Component, R>,
 	): Promise<void> | void {
+		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
-			{ component: { customId: interaction.customId, type: interaction.type }, userId: interaction.user.id },
-			`Received modal submit for ${interaction.customId}, but the component does not handle modal submit`,
+			{ component: { customId, type: _interaction.type }, userId: _interaction.user?.id },
+			`Received modal submit for ${customId}, but the component does not handle modal submit`,
 		);
 	}
 }

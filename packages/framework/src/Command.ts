@@ -17,46 +17,50 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 	public constructor(public readonly name?: C["name"][]) {}
 
 	public chatInput(
-		interaction: InteractionParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
 	): Promise<void> | void {
+		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
-			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-			`Received chat input for ${interaction.commandName}, but the command does not handle chat input`,
+			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user?.id },
+			`Received chat input for ${commandName}, but the command does not handle chat input`,
 		);
 	}
 
 	public autocomplete(
-		interaction: InteractionParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
 	): Promise<void> | void {
+		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
-			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-			`Received autocomplete for ${interaction.commandName}, but the command does not handle autocomplete`,
+			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user?.id },
+			`Received autocomplete for ${commandName}, but the command does not handle autocomplete`,
 		);
 	}
 
 	public messageContext(
-		interaction: InteractionParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 	): Promise<void> | void {
+		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.name;
 		logger.info(
-			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-			`Received message context for ${interaction.commandName}, but the command does not handle message context`,
+			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user.id },
+			`Received message context for ${commandName}, but the command does not handle message context`,
 		);
 	}
 
 	public userContext(
-		interaction: InteractionParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
 	): Promise<void> | void {
+		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
-			{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
-			`Received user context for ${interaction.commandName}, but the command does not handle user context`,
+			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user?.id },
+			`Received user context for ${commandName}, but the command does not handle user context`,
 		);
 	}
 }

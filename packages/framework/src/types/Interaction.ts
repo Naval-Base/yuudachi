@@ -1,4 +1,11 @@
 import type {
+	APIApplicationCommandAutocompleteInteraction,
+	APIChatInputApplicationCommandInteraction,
+	APIMessageComponentButtonInteraction,
+	APIMessageComponentSelectMenuInteraction,
+	APIMessageInteraction,
+	APIModalSubmitInteraction,
+	APIUserApplicationCommandInteraction,
 	AnySelectMenuInteraction,
 	AutocompleteInteraction,
 	ButtonInteraction,
@@ -9,53 +16,65 @@ import type {
 } from "discord.js";
 import type { ArgumentsOf, CommandPayload, ComponentPayload, Runtime } from "./ArgumentsOf.js";
 
-export type ChatInput<C extends CommandPayload, R extends Runtime> = {
+export type ChatInput<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
 	chatInput(
-		interaction: ChatInputCommandInteraction<"cached">,
+		interaction: R extends Runtime.Discordjs
+			? ChatInputCommandInteraction<"cached">
+			: APIChatInputApplicationCommandInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
 	): Promise<void> | void;
 };
 
-export type Autocomplete<C extends CommandPayload, R extends Runtime> = {
+export type Autocomplete<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
 	autocomplete(
-		interaction: AutocompleteInteraction<"cached">,
+		interaction: R extends Runtime.Discordjs
+			? AutocompleteInteraction<"cached">
+			: APIApplicationCommandAutocompleteInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
 	): Promise<void> | void;
 };
 
-export type MessageContext<C extends CommandPayload, R extends Runtime> = {
+export type MessageContext<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
 	messageContext(
-		interaction: MessageContextMenuCommandInteraction<"cached">,
+		interaction: R extends Runtime.Discordjs ? MessageContextMenuCommandInteraction<"cached"> : APIMessageInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
 	): Promise<void> | void;
 };
 
-export type UserContext<C extends CommandPayload, R extends Runtime> = {
+export type UserContext<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
 	userContext(
-		interaction: UserContextMenuCommandInteraction<"cached">,
+		interaction: R extends Runtime.Discordjs
+			? UserContextMenuCommandInteraction<"cached">
+			: APIUserApplicationCommandInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
 	): Promise<void> | void;
 };
 
-export type Button<C extends ComponentPayload, R extends Runtime> = {
-	button(interaction: ButtonInteraction<"cached">, args: ArgumentsOf<C, R>, locale: string): Promise<void> | void;
+export type Button<C extends ComponentPayload, R extends Runtime = Runtime.Discordjs> = {
+	button(
+		interaction: R extends Runtime.Discordjs ? ButtonInteraction<"cached"> : APIMessageComponentButtonInteraction,
+		args: ArgumentsOf<C, R>,
+		locale: string,
+	): Promise<void> | void;
 };
 
-export type SelectMenu<C extends ComponentPayload, R extends Runtime> = {
+export type SelectMenu<C extends ComponentPayload, R extends Runtime = Runtime.Discordjs> = {
 	selectMenu(
-		interaction: AnySelectMenuInteraction<"cached">,
+		interaction: R extends Runtime.Discordjs
+			? AnySelectMenuInteraction<"cached">
+			: APIMessageComponentSelectMenuInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
 	): Promise<void> | void;
 };
 
-export type ModalSubmit<C extends ComponentPayload, R extends Runtime> = {
+export type ModalSubmit<C extends ComponentPayload, R extends Runtime = Runtime.Discordjs> = {
 	modalSubmit(
-		interaction: ModalSubmitInteraction<"cached">,
+		interaction: R extends Runtime.Discordjs ? ModalSubmitInteraction<"cached"> : APIModalSubmitInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
 	): Promise<void> | void;
