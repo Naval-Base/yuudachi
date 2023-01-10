@@ -23,7 +23,7 @@ export type ChatInput<C extends CommandPayload, R extends Runtime = Runtime.Disc
 			: APIChatInputApplicationCommandInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
-	): any;
+	): Promise<any> | any;
 };
 
 export type Autocomplete<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
@@ -33,7 +33,7 @@ export type Autocomplete<C extends CommandPayload, R extends Runtime = Runtime.D
 			: APIApplicationCommandAutocompleteInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
-	): any;
+	): Promise<any> | any;
 };
 
 export type MessageContext<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
@@ -41,7 +41,7 @@ export type MessageContext<C extends CommandPayload, R extends Runtime = Runtime
 		interaction: R extends Runtime.Discordjs ? MessageContextMenuCommandInteraction<"cached"> : APIMessageInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
-	): any;
+	): Promise<any> | any;
 };
 
 export type UserContext<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = {
@@ -51,7 +51,7 @@ export type UserContext<C extends CommandPayload, R extends Runtime = Runtime.Di
 			: APIUserApplicationCommandInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
-	): any;
+	): Promise<any> | any;
 };
 
 export type Button<C extends ComponentPayload, R extends Runtime = Runtime.Discordjs> = {
@@ -59,7 +59,7 @@ export type Button<C extends ComponentPayload, R extends Runtime = Runtime.Disco
 		interaction: R extends Runtime.Discordjs ? ButtonInteraction<"cached"> : APIMessageComponentButtonInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
-	): any;
+	): Promise<any> | any;
 };
 
 export type SelectMenu<C extends ComponentPayload, R extends Runtime = Runtime.Discordjs> = {
@@ -69,7 +69,7 @@ export type SelectMenu<C extends ComponentPayload, R extends Runtime = Runtime.D
 			: APIMessageComponentSelectMenuInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
-	): any;
+	): Promise<any> | any;
 };
 
 export type ModalSubmit<C extends ComponentPayload, R extends Runtime = Runtime.Discordjs> = {
@@ -77,7 +77,7 @@ export type ModalSubmit<C extends ComponentPayload, R extends Runtime = Runtime.
 		interaction: R extends Runtime.Discordjs ? ModalSubmitInteraction<"cached"> : APIModalSubmitInteraction,
 		args: ArgumentsOf<C, R>,
 		locale: string,
-	): any;
+	): Promise<any> | any;
 };
 
 export type Commands<C extends CommandPayload, R extends Runtime = Runtime.Discordjs> = Autocomplete<C, R> &

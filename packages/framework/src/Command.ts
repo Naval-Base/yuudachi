@@ -20,7 +20,7 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 		_interaction: InteractionParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
-	) {
+	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
 			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user?.id },
@@ -32,7 +32,7 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 		_interaction: InteractionParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
-	) {
+	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
 			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user?.id },
@@ -44,7 +44,7 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 		_interaction: InteractionParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
-	) {
+	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.name;
 		logger.info(
 			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user.id },
@@ -56,7 +56,7 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 		_interaction: InteractionParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
 		_args: ArgsParam<C, CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
 		_locale: LocaleParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
-	) {
+	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
 			{ command: { name: commandName, type: _interaction.type }, userId: _interaction.user?.id },
