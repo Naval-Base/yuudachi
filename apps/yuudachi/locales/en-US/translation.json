@@ -539,7 +539,7 @@
 		"mod_log": {
 			"case_log": {
 				"description": "**Member**: `{{- target_tag}}` ({{target_id}})\n**Action**: {{- action}}",
-				"expiration": "\n**Expiration**: {{- time}}",
+				"duration": "\n**Duration**: `{{- time}}` {{- timestamp}}",
 				"context": "**Context:** {{- link}}",
 				"context_sub": "Beam me up, Yuu",
 				"reason": "\n**Reason:** {{- reason}}",
