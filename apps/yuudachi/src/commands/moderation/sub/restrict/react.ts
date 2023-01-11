@@ -7,7 +7,7 @@ import { nanoid } from "nanoid";
 import type { Sql } from "postgres";
 import { CASE_REASON_MAX_LENGTH } from "../../../../Constants.js";
 import { CaseAction, createCase } from "../../../../functions/cases/createCase.js";
-import { acquireMemberLock, extendMemberLock, releaseMemberLock } from "../../../../functions/locks/locks.js";
+import { extendMemberLock } from "../../../../functions/locks/locks.js";
 import { generateCasePayload } from "../../../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
 import type { RestrictCommand } from "../../../../interactions/index.js";
@@ -35,8 +35,6 @@ export async function react(
 			}),
 		);
 	}
-
-	await acquireMemberLock(args.user.member, locale);
 
 	const sql = container.resolve<Sql<any>>(kSQL);
 
@@ -150,6 +148,4 @@ export async function react(
 			components: [],
 		});
 	}
-
-	await releaseMemberLock(args.user.member);
 }

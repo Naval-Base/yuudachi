@@ -8,7 +8,7 @@ import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
-import { acquireMemberLock, releaseMemberLock, extendMemberLock } from "../../functions/locks/locks.js";
+import { extendMemberLock } from "../../functions/locks/locks.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -69,10 +69,6 @@ export default class extends Command<typeof BanCommand> {
 					lng: locale,
 				}),
 			);
-		}
-
-		if (args.user.member) {
-			await acquireMemberLock(args.user.member, locale);
 		}
 
 		const banKey = nanoid();
@@ -157,10 +153,6 @@ export default class extends Command<typeof BanCommand> {
 				}),
 				components: [],
 			});
-		}
-
-		if (args.user.member) {
-			await releaseMemberLock(args.user.member);
 		}
 	}
 }
