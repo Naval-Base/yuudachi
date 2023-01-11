@@ -111,7 +111,6 @@ export default class implements Event {
 								break;
 							} else {
 								const args = transformApplicationInteraction(interaction.options.data);
-
 								const member = findMemberInArgs(args);
 
 								if (member) {

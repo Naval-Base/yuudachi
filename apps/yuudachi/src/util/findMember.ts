@@ -4,7 +4,7 @@ type NestedMember = {
 	member?: GuildMember;
 };
 
-export type FindArgsOptions = {
+type FindArgsOptions = {
 	[key: string]:
 		| NestedMember
 		| {
