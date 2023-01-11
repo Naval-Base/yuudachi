@@ -79,6 +79,26 @@
 					"no_reason": "No reason",
 					"show_history_target": "Show history for target {{- user}}",
 					"show_history_author": "Show history for author {{- user}}"
+				},
+				"toggle": {
+					"buttons": {
+						"toggle": {
+							"enable": "Enable reports",
+							"disable": "Disable reports"
+						}
+					},
+					"pending": {
+						"enable": "Do you really want to enable reports guild wide?",
+						"disable": "Do you really want to disable reports guild wide?"
+					},
+					"success": {
+						"enable": "Successfully enabled reports guild wide.",
+						"disable": "Successfully disabled reports guild wide."
+					},
+					"cancel": {
+						"enable": "Canceled enabling reports guild wide.",
+						"disable": "Canceled disabling reports guild wide."
+					}
 				}
 			},
 			"warn": {
