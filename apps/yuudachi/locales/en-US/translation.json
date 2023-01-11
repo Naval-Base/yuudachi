@@ -359,7 +359,8 @@
 						"invalid_attachment": "Invalid attachment, only images are allowed.",
 						"timed_out": "The report has timed out, please try again.",
 						"bot": "You cannot report bots.",
-						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report."
+						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report.",
+						"member_lock_acquired": "This user is already being processed by a moderator."
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "Trust & Safety",
