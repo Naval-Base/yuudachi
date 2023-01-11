@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
+import { acquireMemberLock, extendMemberLock, releaseMemberLock } from "../../functions/locks/locks.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -56,6 +57,10 @@ export default class extends Command<typeof SoftbanCommand> {
 		}
 
 		const isStillMember = interaction.guild.members.resolve(args.user.user.id);
+
+		if (isStillMember) {
+			await acquireMemberLock(args.user.member!, locale);
+		}
 
 		const softbanKey = nanoid();
 		const cancelKey = nanoid();
@@ -112,6 +117,9 @@ export default class extends Command<typeof SoftbanCommand> {
 			});
 		} else if (collectedInteraction?.customId === softbanKey) {
 			await collectedInteraction.deferUpdate();
+			if (isStillMember) {
+				await extendMemberLock(args.user.member!);
+			}
 
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:ban`, 15, "");
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, "");
@@ -153,6 +161,10 @@ export default class extends Command<typeof SoftbanCommand> {
 				),
 				components: [],
 			});
+		}
+
+		if (isStillMember) {
+			await releaseMemberLock(args.user.member!);
 		}
 	}
 }
