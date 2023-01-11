@@ -8,7 +8,7 @@ import { MEMBER_LOCK_EXPIRE_SECONDS } from "../../Constants.js";
 export async function acquireMemberLock(member: GuildMember, locale: LocaleParam): Promise<void> {
 	const redis = container.resolve<Redis>(kRedis);
 
-	const lockKey = `member-lock:${member.guild.id}:${member.id}`;
+	const lockKey = `guild:${member.guild.id}:member-lock:${member.id}`;
 
 	const lock = await redis.set(lockKey, member.user.createdTimestamp, "EX", MEMBER_LOCK_EXPIRE_SECONDS, "NX");
 
@@ -24,7 +24,7 @@ export async function acquireMemberLock(member: GuildMember, locale: LocaleParam
 export async function extendMemberLock(member: GuildMember): Promise<void> {
 	const redis = container.resolve<Redis>(kRedis);
 
-	const lockKey = `member-lock:${member.guild.id}:${member.id}`;
+	const lockKey = `guild:${member.guild.id}:member-lock:${member.id}`;
 
 	await redis.expire(lockKey, MEMBER_LOCK_EXPIRE_SECONDS, "GT");
 }
@@ -32,7 +32,7 @@ export async function extendMemberLock(member: GuildMember): Promise<void> {
 export async function releaseMemberLock(member: GuildMember): Promise<void> {
 	const redis = container.resolve<Redis>(kRedis);
 
-	const lockKey = `member-lock:${member.guild.id}:${member.id}`;
+	const lockKey = `guild:${member.guild.id}:member-lock:${member.id}`;
 
 	await redis.del(lockKey);
 }
