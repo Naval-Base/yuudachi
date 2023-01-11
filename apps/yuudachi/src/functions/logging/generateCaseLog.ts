@@ -3,6 +3,7 @@ import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink, 
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { caseActionLabel } from "../../util/actionKeys.js";
+import { findClosestDuration } from "../../util/findClosestDuration.js";
 import { type Case, CaseAction } from "../cases/createCase.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 
@@ -36,8 +37,11 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	});
 
 	if (case_.actionExpiration) {
-		msg += i18next.t("log.mod_log.case_log.expiration", {
-			time: time(new Date(case_.actionExpiration), TimestampStyles.RelativeTime),
+		const expirationDate = new Date(case_.actionExpiration);
+
+		msg += i18next.t("log.mod_log.case_log.duration", {
+			time: findClosestDuration(expirationDate.getTime() - Date.now()),
+			timestamp: time(expirationDate, TimestampStyles.RelativeTime),
 			lng: locale,
 		});
 	}
