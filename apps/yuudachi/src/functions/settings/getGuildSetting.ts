@@ -7,6 +7,7 @@ export enum SettingsKeys {
 	AutomodIgnoreRoles = "automod_ignore_roles",
 	EmbedRoleId = "embed_role_id",
 	EmojiRoleId = "emoji_role_id",
+	EnableReports = "enable_reports",
 	ForceLocale = "force_locale",
 	GuildLogWebhookId = "guild_log_webhook_id",
 	Locale = "locale",
