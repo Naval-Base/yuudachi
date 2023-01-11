@@ -22,7 +22,7 @@ export const enum ThreatLevelColor {
 
 export const OP_DELIMITER = "-";
 
-export const MEMBER_LOCK_EXPIRE_SECONDS = 60;
+export const MEMBER_LOCK_EXPIRE_SECONDS = 20;
 
 export const CASE_REASON_MAX_LENGTH = 500;
 export const CASE_REASON_MIN_LENGTH = 3;
