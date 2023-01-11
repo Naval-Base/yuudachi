@@ -19,8 +19,8 @@ export function findMemberInArgs(args: FindArgsOptions): GuildMember | null {
 	}
 
 	for (const key of Object.keys(args)) {
-		const member = findMemberInArgs(args[key as keyof typeof args] as FindArgsOptions);
-		if (member) return member;
+		const member = (args[key as keyof typeof args] as FindArgsOptions).user?.member;
+		if (member instanceof GuildMember) return member;
 	}
 
 	return null;
