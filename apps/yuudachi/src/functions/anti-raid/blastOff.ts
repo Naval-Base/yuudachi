@@ -4,7 +4,6 @@ import i18next from "i18next";
 import type { Redis } from "ioredis";
 import type { TargetRejection } from "../../commands/moderation/sub/anti-raid-nuke/utils.js";
 import { type Case, CaseAction, createCase } from "../cases/createCase.js";
-import { acquireMemberLock, releaseMemberLock } from "../locks/locks.js";
 import { generateCasePayload } from "../logging/generateCasePayload.js";
 
 export async function blastOff(
@@ -22,7 +21,6 @@ export async function blastOff(
 
 	const confirmedHits: GuildMember[] = [];
 	for (const member of confirmations) {
-		await acquireMemberLock(member, locale);
 		promises.push(
 			createCase(
 				interaction.guild,
@@ -53,10 +51,7 @@ export async function blastOff(
 				// eslint-disable-next-line promise/prefer-await-to-then, promise/prefer-await-to-callbacks
 				.catch((error: Error) => void rejections.push({ member, reason: error.message }))
 				// eslint-disable-next-line promise/prefer-await-to-then
-				.finally(() => {
-					void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15);
-					void releaseMemberLock(member);
-				}),
+				.finally(() => void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15)),
 		);
 	}
 
