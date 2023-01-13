@@ -1,6 +1,7 @@
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
+import { acquireMemberLock } from "../../functions/locks/locks.js";
 import type { PingCommand } from "../../interactions/index.js";
 
 export default class extends Command<typeof PingCommand> {
@@ -9,6 +10,7 @@ export default class extends Command<typeof PingCommand> {
 		args: ArgsParam<typeof PingCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
+		await acquireMemberLock(interaction.member!, locale);
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 		await interaction.editReply({
