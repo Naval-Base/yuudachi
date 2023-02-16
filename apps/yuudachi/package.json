@@ -52,7 +52,7 @@
 		"redis": "^4.5.1",
 		"reflect-metadata": "^0.1.13",
 		"tsyringe": "^4.7.0",
-		"undici": "^5.14.0",
+		"undici": "^5.19.1",
 		"utf-8-validate": "^6.0.0",
 		"ws": "^8.12.0"
 	},

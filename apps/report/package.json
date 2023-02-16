@@ -41,7 +41,7 @@
 		"rehype-slug": "^5.1.0",
 		"remark-gfm": "^3.0.1",
 		"sharp": "^0.31.3",
-		"undici": "^5.14.0",
+		"undici": "^5.19.1",
 		"unified": "^10.1.2",
 		"unist-util-visit": "^4.1.1"
 	},
