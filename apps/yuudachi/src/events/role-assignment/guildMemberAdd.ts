@@ -14,7 +14,11 @@ export default class implements Event {
 
 	public event = Events.GuildMemberAdd as const;
 
-	public constructor(public readonly client: Client<true>, @inject(kSQL) public readonly sql: Sql<any>) {}
+	public constructor(
+		public readonly client: Client<true>,
+		// @ts-expect-error: Needs tsyringe update
+		@inject(kSQL) public readonly sql: Sql<any>,
+	) {}
 
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {

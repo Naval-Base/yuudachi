@@ -98,7 +98,7 @@ export async function validateMemberIds(
 	ids: Set<Snowflake>,
 	locale: string,
 ): Promise<IdValidationResult> {
-	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
+	const fetchedMembers = await interaction.guild.members.fetch();
 	const result = new Collection<string, GuildMember>();
 
 	for (const id of ids) {

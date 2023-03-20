@@ -91,7 +91,7 @@ export async function filter(
 		pattern: args.confusables === Confusables.OnlyPattern || args.confusables === Confusables.PatternAndMembers,
 	};
 
-	const fetchedMembers = await interaction.guild.members.fetch({ force: true });
+	const fetchedMembers = await interaction.guild.members.fetch();
 	const members = fetchedMembers.filter(
 		(member) =>
 			joinFilter(member, parsedJoinAfter, parsedJoinBefore) &&

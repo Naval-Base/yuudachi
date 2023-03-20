@@ -21,7 +21,11 @@ export default class implements Event {
 
 	public disabled = true;
 
-	public constructor(public readonly client: Client<true>, @inject(kRedis) public readonly redis: Redis) {}
+	public constructor(
+		public readonly client: Client<true>,
+		// @ts-expect-error: Needs tsyringe update
+		@inject(kRedis) public readonly redis: Redis,
+	) {}
 
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {

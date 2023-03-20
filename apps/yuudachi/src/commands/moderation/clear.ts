@@ -59,7 +59,10 @@ async function resolveSnowflakeOrLink(
 
 @injectable()
 export default class extends Command<typeof ClearCommand | typeof ClearContextCommand> {
-	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {
+	public constructor(
+		// @ts-expect-error: Needs tsyringe update
+		@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>,
+	) {
 		super(["clear", "Clear messages to"]);
 	}
 

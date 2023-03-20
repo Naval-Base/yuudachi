@@ -16,7 +16,10 @@ import type { DurationCommand } from "../../interactions/index.js";
 
 @injectable()
 export default class extends Command<typeof DurationCommand> {
-	public constructor(@inject(kRedis) public readonly redis: Redis) {
+	public constructor(
+		// @ts-expect-error: Needs tsyringe update
+		@inject(kRedis) public readonly redis: Redis,
+	) {
 		super();
 	}
 
