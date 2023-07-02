@@ -32,7 +32,7 @@ await createRedis();
 const client = createClient({
 	intents: [
 		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildBans,
+		GatewayIntentBits.GuildModeration,
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildVoiceStates,
