@@ -6,8 +6,8 @@ import {
 	logger,
 } from "@yuudachi/framework";
 import type { LocaleParam } from "@yuudachi/framework/types";
-import type { Snowflake } from "discord.js";
-import { type AutocompleteInteraction, Collection } from "discord.js";
+import { Collection } from "discord.js";
+import type { Snowflake, AutocompleteInteraction } from "discord.js";
 import i18next from "i18next";
 import { OP_DELIMITER } from "../../Constants.js";
 import { reportStatusLabel } from "../../util/actionKeys.js";

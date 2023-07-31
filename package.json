@@ -3,10 +3,10 @@
 	"version": "0.0.0",
 	"description": "",
 	"scripts": {
-		"build": "yarn workspaces foreach --parallel --topological run build",
-		"test": "yarn workspaces foreach --parallel --topological run test",
-		"lint": "yarn workspaces foreach --parallel --topological run lint",
-		"format": "yarn workspaces foreach --parallel --topological run format",
+		"build": "yarn workspaces foreach run build",
+		"test": "yarn workspaces foreach run test",
+		"lint": "yarn workspaces foreach run lint",
+		"format": "yarn workspaces foreach run format",
 		"fmt": "yarn format",
 		"postinstall": "is-ci || husky install",
 		"update": "yarn upgrade-interactive"
@@ -19,9 +19,9 @@
 	"devDependencies": {
 		"husky": "^8.0.3",
 		"is-ci": "^3.0.1",
-		"lint-staged": "^13.2.0",
-		"typescript": "^5.0.2",
-		"vercel": "^28.17.0"
+		"lint-staged": "^13.2.3",
+		"typescript": "^5.1.6",
+		"vercel": "^31.2.0"
 	},
 	"engines": {
 		"node": ">=16.0.0"
@@ -30,5 +30,5 @@
 		"apps/*",
 		"packages/*"
 	],
-	"packageManager": "yarn@3.5.0"
+	"packageManager": "yarn@3.6.1"
 }

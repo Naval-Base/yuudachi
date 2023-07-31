@@ -8,7 +8,7 @@ export function LoginButton({
 	href,
 	provider,
 	children,
-}: PropsWithChildren<{ href?: string | undefined; provider?: AuthProviderInfo | undefined }>) {
+}: PropsWithChildren<{ readonly href?: string | undefined; readonly provider?: AuthProviderInfo | undefined }>) {
 	const [_, setValue] = useLocalStorage<AuthProviderInfo>("provider");
 
 	return (

@@ -16,10 +16,7 @@ import { generateHistory } from "../../util/generateHistory.js";
 
 @injectable()
 export default class extends Command<typeof UnbanCommand> {
-	public constructor(
-		// @ts-expect-error: Needs tsyringe update
-		@inject(kRedis) public readonly redis: Redis,
-	) {
+	public constructor(@inject(kRedis) public readonly redis: Redis) {
 		super();
 	}
 

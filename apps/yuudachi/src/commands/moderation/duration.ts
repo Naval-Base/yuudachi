@@ -16,10 +16,7 @@ import type { DurationCommand } from "../../interactions/index.js";
 
 @injectable()
 export default class extends Command<typeof DurationCommand> {
-	public constructor(
-		// @ts-expect-error: Needs tsyringe update
-		@inject(kRedis) public readonly redis: Redis,
-	) {
+	public constructor(@inject(kRedis) public readonly redis: Redis) {
 		super();
 	}
 
@@ -65,7 +62,7 @@ export default class extends Command<typeof DurationCommand> {
 			throw new Error(i18next.t("command.common.errors.duration_format", { lng: locale }));
 		}
 
-		const actionExpiration = Date.now() + parsedDuration;
+		const actionExpiration = Date.now() + Number(parsedDuration);
 
 		if (originalCase.action === CaseAction.Timeout) {
 			try {

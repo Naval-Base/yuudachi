@@ -34,7 +34,6 @@ export default function rehypeGithubBlockquoteAdmonitions() {
 				return SKIP;
 			}
 
-			// @ts-expect-error: We already check with: hasProperty above
 			const iconClasses = strong.properties.className;
 			if (!Array.isArray(iconClasses)) {
 				return SKIP;

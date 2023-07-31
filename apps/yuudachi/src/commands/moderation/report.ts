@@ -20,10 +20,7 @@ import { user } from "./sub/report/user.js";
 export default class extends Command<
 	typeof ReportCommand | typeof ReportMessageContextCommand | typeof ReportUserContextCommand
 > {
-	public constructor(
-		// @ts-expect-error: Needs tsyringe update
-		@inject(kRedis) public readonly redis: Redis,
-	) {
+	public constructor(@inject(kRedis) public readonly redis: Redis) {
 		super(["report", "Report message", "Report user"]);
 	}
 

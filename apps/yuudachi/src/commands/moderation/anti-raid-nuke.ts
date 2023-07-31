@@ -37,17 +37,17 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 			switch (Object.keys(args)[0]) {
 				case "file": {
 					await file(interaction, args.file, locale);
-					return;
+					break;
 				}
 
 				case "modal": {
 					await modal(interaction, args.modal, locale);
-					return;
+					break;
 				}
 
 				case "filter": {
 					await filter(interaction, args.filter, locale);
-					return;
+					break;
 				}
 
 				default:

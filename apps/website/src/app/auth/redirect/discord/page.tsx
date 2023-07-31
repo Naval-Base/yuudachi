@@ -7,7 +7,11 @@ import type { RecordAuthResponse, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { pocketbase } from "~/util/pocketbase";
 
-export default function Page({ searchParams }: { searchParams?: { [key: string]: string[] | string | undefined } }) {
+export default function Page({
+	searchParams,
+}: {
+	readonly searchParams?: { [key: string]: string[] | string | undefined };
+}) {
 	if (!pocketbase) {
 		redirect("/");
 	}

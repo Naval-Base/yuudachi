@@ -14,7 +14,6 @@ export default class implements Event {
 
 	public constructor(
 		public readonly client: Client<true>,
-		// @ts-expect-error: Needs tsyringe update
 		@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>,
 	) {}
 

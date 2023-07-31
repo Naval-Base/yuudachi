@@ -29,7 +29,6 @@ export default function rehypeHighlightANSI() {
 				return SKIP;
 			}
 
-			// @ts-expect-error: We already check with: hasProperty above
 			const classes = code.properties.className;
 			if (!Array.isArray(classes)) {
 				return SKIP;
@@ -67,7 +66,7 @@ export default function rehypeHighlightANSI() {
 			// }
 
 			parent.children.splice(
-				index,
+				index!,
 				1,
 				h(
 					"div",

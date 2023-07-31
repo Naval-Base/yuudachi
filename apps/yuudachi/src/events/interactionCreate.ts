@@ -36,7 +36,6 @@ export default class implements Event {
 
 	public constructor(
 		public readonly client: Client<true>,
-		// @ts-expect-error: Needs tsyringe update
 		@inject(kCommands) public readonly commands: Map<string, Command>,
 	) {}
 
