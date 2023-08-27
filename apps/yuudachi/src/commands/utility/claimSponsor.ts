@@ -118,7 +118,7 @@ export default class extends Command<typeof ClaimSponsorCommand> {
 						}`,
 				}),
 			});
-			const data = await res.body.json();
+			const data = (await res.body.json()) as any;
 
 			if (!data?.data?.account) {
 				throw new Error(i18next.t("command.utility.claim_sponsor.errors.no_oc_user", { slug: args.slug, lng: locale }));

@@ -1,6 +1,6 @@
 {
 	"name": "@yuudachi/http",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "",
 	"scripts": {
 		"build:clean": "del-cli dist",
@@ -35,29 +35,29 @@
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "AGPL-3.0",
 	"dependencies": {
-		"@discordjs/core": "^0.6.0",
+		"@discordjs/core": "^1.0.1",
 		"@fastify/helmet": "^11.0.0",
 		"@fastify/sensible": "^5.2.0",
 		"@swc/helpers": "^0.5.1",
-		"discord-api-types": "^0.37.54",
+		"discord-api-types": "^0.37.55",
 		"discord-verify": "^1.2.0",
-		"fastify": "^4.21.0"
+		"fastify": "^4.22.0"
 	},
 	"devDependencies": {
 		"@swc/cli": "^0.1.62",
-		"@swc/core": "^1.3.72",
-		"@types/node": "^18.17.1",
+		"@swc/core": "^1.3.80",
+		"@types/node": "^18.17.11",
 		"@yuudachi/framework": "workspace:^",
 		"cross-env": "^7.0.3",
-		"del-cli": "^5.0.0",
+		"del-cli": "^5.0.1",
 		"env-cmd": "^10.1.0",
-		"eslint": "^8.46.0",
-		"eslint-config-neon": "^0.1.47",
+		"eslint": "^8.48.0",
+		"eslint-config-neon": "^0.1.56",
 		"eslint-formatter-pretty": "^5.0.0",
-		"prettier": "^2.8.8",
+		"prettier": "^3.0.2",
 		"reflect-metadata": "^0.1.13",
 		"tsx": "^3.12.7",
-		"typescript": "^5.1.6"
+		"typescript": "^5.2.2"
 	},
 	"engines": {
 		"node": ">=16.0.0"

@@ -19,9 +19,9 @@
 	"devDependencies": {
 		"husky": "^8.0.3",
 		"is-ci": "^3.0.1",
-		"lint-staged": "^13.2.3",
-		"typescript": "^5.1.6",
-		"vercel": "^31.2.0"
+		"lint-staged": "^14.0.1",
+		"typescript": "^5.2.2",
+		"vercel": "^32.1.0"
 	},
 	"engines": {
 		"node": ">=16.0.0"

@@ -3,7 +3,7 @@
 "use client";
 
 import { redirect } from "next/navigation";
-import type { RecordAuthResponse, Record } from "pocketbase";
+import type { RecordAuthResponse, RecordModel } from "pocketbase";
 import { useEffect, useState } from "react";
 import { pocketbase } from "~/util/pocketbase";
 
@@ -16,7 +16,7 @@ export default function Page({
 		redirect("/");
 	}
 
-	const [auth, setAuth] = useState<RecordAuthResponse<Record> | null>(null);
+	const [auth, setAuth] = useState<RecordAuthResponse<RecordModel> | null>(null);
 
 	const provider = JSON.parse(localStorage.getItem("provider") ?? "");
 
