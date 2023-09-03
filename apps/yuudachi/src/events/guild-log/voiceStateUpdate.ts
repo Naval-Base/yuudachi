@@ -22,11 +22,7 @@ export default class implements Event {
 		for await (const [oldState, newState] of on(this.client, this.event) as AsyncIterableIterator<
 			[VoiceState | null, VoiceState]
 		>) {
-			if (!newState.member || !newState.channelId) {
-				continue;
-			}
-
-			if (oldState?.member?.user.bot || newState.member.user.bot) {
+			if (oldState?.member?.user.bot || newState?.member?.user.bot) {
 				continue;
 			}
 
@@ -47,10 +43,17 @@ export default class implements Event {
 
 				const locale = await getGuildSetting(newState.guild.id, SettingsKeys.Locale);
 
-				let description = "";
+				const fromIgnored = oldState?.channelId ? ignoreChannels.includes(oldState.channelId) : false;
+				const toIgnored = newState?.channelId ? ignoreChannels.includes(newState.channelId) : false;
 
-				if ((!oldState?.channel || ignoreChannels.includes(oldState.channelId ?? "")) && newState.channel) {
-					if (ignoreChannels.includes(newState.channelId)) {
+				const embed = addFields({
+					color: Color.DiscordPrimary,
+					title: i18next.t("log.guild_log.voice_state_update.title", { lng: locale }),
+					timestamp: new Date().toISOString(),
+				});
+
+				if ((!oldState?.channel || fromIgnored) && newState.channel) {
+					if (!newState.member || ignoreChannels.includes(newState.channel.id)) {
 						continue;
 					}
 
@@ -65,50 +68,71 @@ export default class implements Event {
 						`Member ${newState.member.id} joined a voice channel`,
 					);
 
-					description = i18next.t("log.guild_log.voice_state_update.joined", {
+					embed.description = i18next.t("log.guild_log.voice_state_update.joined", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
-				} else if (oldState?.channel && (!newState.channel || ignoreChannels.includes(newState.channelId))) {
+					embed.author = {
+						name: `${newState.member.user.tag} (${newState.member.id})`,
+						icon_url: newState.member.user.displayAvatarURL(),
+					};
+				} else if (oldState?.channel && (!newState.channel || toIgnored)) {
+					if (!oldState.member || ignoreChannels.includes(oldState.channel.id)) {
+						continue;
+					}
+
+					logger.info(
+						{
+							event: { name: this.name, event: this.event },
+							guildId: oldState.guild.id,
+							memberId: oldState.member.id,
+							channelId: oldState.channel.id,
+							joined: false,
+						},
+						`Member ${oldState.member.id} left a voice channel`,
+					);
+
+					embed.description = i18next.t("log.guild_log.voice_state_update.left", {
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
+						channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
+						lng: locale,
+					});
+					embed.author = {
+						name: `${oldState.member.user.tag} (${oldState.member.id})`,
+						icon_url: oldState.member.user.displayAvatarURL(),
+					};
+				} else if (oldState?.channel && newState.channel && oldState.channel.id !== newState.channel.id) {
+					if (!newState.member) {
+						return;
+					}
+
 					logger.info(
 						{
 							event: { name: this.name, event: this.event },
 							guildId: newState.guild.id,
 							memberId: newState.member.id,
-							channelId: oldState.channel.id,
-							joined: false,
+							channelIdOld: oldState.channel.id,
+							channelIdNew: newState.channel.id,
+							joined: true,
 						},
 						`Member ${newState.member.id} left a voice channel`,
 					);
 
-					description = i18next.t("log.guild_log.voice_state_update.left", {
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
-						lng: locale,
-					});
-				} else if (oldState?.channel && newState.channel && oldState.channelId !== newState.channelId) {
-					description = i18next.t("log.guild_log.voice_state_update.moved", {
+					embed.description = i18next.t("log.guild_log.voice_state_update.moved", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						from_channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						to_channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
+					embed.author = {
+						name: `${newState.member.user.tag} (${newState.member.id})`,
+						icon_url: newState.member.user.displayAvatarURL(),
+					};
 				} else {
 					continue;
 				}
-
-				const embed = addFields({
-					author: {
-						name: `${newState.member.user.tag} (${newState.member.id})`,
-						icon_url: newState.member.user.displayAvatarURL(),
-					},
-					color: Color.DiscordPrimary,
-					title: i18next.t("log.guild_log.voice_state_update.title", { lng: locale }),
-					description,
-					timestamp: new Date().toISOString(),
-				});
 
 				await webhook.send({
 					embeds: [truncateEmbed(embed)],

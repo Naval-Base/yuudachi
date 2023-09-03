@@ -32,7 +32,7 @@ await createRedis();
 const client = createClient({
 	intents: [
 		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildBans,
+		GatewayIntentBits.GuildModeration,
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildVoiceStates,
@@ -43,7 +43,7 @@ const client = createClient({
 	makeCache: Options.cacheWithLimits({
 		MessageManager: 100,
 		StageInstanceManager: 10,
-		VoiceStateManager: 10,
+		VoiceStateManager: 50,
 	}),
 });
 
