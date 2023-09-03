@@ -22,7 +22,7 @@ export default class implements Event {
 		for await (const [oldState, newState] of on(this.client, this.event) as AsyncIterableIterator<
 			[VoiceState | null, VoiceState]
 		>) {
-			if (oldState?.member?.user.bot || newState?.member?.user.bot) {
+			if (oldState?.member?.user.bot || newState.member?.user.bot) {
 				continue;
 			}
 
@@ -53,7 +53,7 @@ export default class implements Event {
 				});
 
 				if ((!oldState?.channel || fromIgnored) && newState.channel) {
-					if (!newState.member || ignoreChannels.includes(newState.channel.id)) {
+					if (!newState.member || toIgnored) {
 						continue;
 					}
 
@@ -78,7 +78,7 @@ export default class implements Event {
 						icon_url: newState.member.user.displayAvatarURL(),
 					};
 				} else if (oldState?.channel && (!newState.channel || toIgnored)) {
-					if (!oldState.member || ignoreChannels.includes(oldState.channel.id)) {
+					if (!oldState.member || fromIgnored) {
 						continue;
 					}
 
