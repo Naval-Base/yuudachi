@@ -19,7 +19,10 @@ export default class implements Event {
 
 	public event = Events.ThreadUpdate as const;
 
-	public constructor(public readonly client: Client<true>, @inject(kSQL) public readonly sql: Sql<any>) {}
+	public constructor(
+		public readonly client: Client<true>,
+		@inject(kSQL) public readonly sql: Sql<any>,
+	) {}
 
 	public async execute(): Promise<void> {
 		for await (const [oldPost, newPost] of on(this.client, this.event) as AsyncIterableIterator<
