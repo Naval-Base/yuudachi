@@ -49,7 +49,7 @@ export default class implements Event {
 		);
 
 		const server = createServer(async (req, res) => {
-			const route = new URL(req.url!).pathname;
+			const route = new URL(req.url!, "http://noop").pathname;
 
 			if (route === "/metrics") {
 				logger.info({ event: { name: this.name, event: this.event } }, "Scraping /metrics request");
