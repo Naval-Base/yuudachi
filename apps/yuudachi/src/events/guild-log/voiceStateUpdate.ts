@@ -1,5 +1,5 @@
 import { on } from "node:events";
-import { logger, kWebhooks, truncateEmbed } from "@yuudachi/framework";
+import { logger, kWebhooks, truncateEmbed, addFields } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import { Client, Events, type VoiceState, type Webhook, type APIEmbedAuthor } from "discord.js";
 import i18next from "i18next";
@@ -131,16 +131,16 @@ export default class implements Event {
 					continue;
 				}
 
+				const embed = addFields({
+					description,
+					author,
+					color: Color.DiscordPrimary,
+					title: i18next.t("log.guild_log.voice_state_update.title", { lng: locale }),
+					timestamp: new Date().toISOString(),
+				});
+
 				await webhook.send({
-					embeds: [
-						truncateEmbed({
-							description,
-							author,
-							color: Color.DiscordPrimary,
-							title: i18next.t("log.guild_log.voice_state_update.title", { lng: locale }),
-							timestamp: new Date().toISOString(),
-						}),
-					],
+					embeds: [truncateEmbed(embed)],
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
