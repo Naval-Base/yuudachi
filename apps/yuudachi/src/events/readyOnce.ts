@@ -1,6 +1,6 @@
 import { once } from "node:events";
 import { createServer } from "node:http";
-import { parse } from "node:url";
+import { URL } from "node:url";
 import { logger } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import { Client, Events } from "discord.js";
@@ -49,7 +49,7 @@ export default class implements Event {
 		);
 
 		const server = createServer(async (req, res) => {
-			const route = parse(req.url!).pathname;
+			const route = new URL(req.url!).pathname;
 
 			if (route === "/metrics") {
 				logger.info({ event: { name: this.name, event: this.event } }, "Scraping /metrics request");
