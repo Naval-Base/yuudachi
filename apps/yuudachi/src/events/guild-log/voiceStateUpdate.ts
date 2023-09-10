@@ -1,7 +1,7 @@
 import { on } from "node:events";
-import { logger, kWebhooks, addFields, truncateEmbed } from "@yuudachi/framework";
+import { logger, kWebhooks, truncateEmbed } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, Events, type VoiceState, type Webhook } from "discord.js";
+import { Client, Events, type VoiceState, type Webhook, type APIEmbedAuthor } from "discord.js";
 import i18next from "i18next";
 import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
@@ -46,11 +46,8 @@ export default class implements Event {
 				const fromIgnored = oldState?.channelId ? ignoreChannels.includes(oldState.channelId) : false;
 				const toIgnored = newState?.channelId ? ignoreChannels.includes(newState.channelId) : false;
 
-				const embed = addFields({
-					color: Color.DiscordPrimary,
-					title: i18next.t("log.guild_log.voice_state_update.title", { lng: locale }),
-					timestamp: new Date().toISOString(),
-				});
+				let description = "";
+				let author: APIEmbedAuthor;
 
 				if ((!oldState?.channel || fromIgnored) && newState.channel) {
 					if (!newState.member || toIgnored) {
@@ -68,12 +65,12 @@ export default class implements Event {
 						`Member ${newState.member.id} joined a voice channel`,
 					);
 
-					embed.description = i18next.t("log.guild_log.voice_state_update.joined", {
+					description = i18next.t("log.guild_log.voice_state_update.joined", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
-					embed.author = {
+					author = {
 						name: `${newState.member.user.tag} (${newState.member.id})`,
 						icon_url: newState.member.user.displayAvatarURL(),
 					};
@@ -93,12 +90,12 @@ export default class implements Event {
 						`Member ${oldState.member.id} left a voice channel`,
 					);
 
-					embed.description = i18next.t("log.guild_log.voice_state_update.left", {
+					description = i18next.t("log.guild_log.voice_state_update.left", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						lng: locale,
 					});
-					embed.author = {
+					author = {
 						name: `${oldState.member.user.tag} (${oldState.member.id})`,
 						icon_url: oldState.member.user.displayAvatarURL(),
 					};
@@ -119,14 +116,14 @@ export default class implements Event {
 						`Member ${newState.member.id} left a voice channel`,
 					);
 
-					embed.description = i18next.t("log.guild_log.voice_state_update.moved", {
+					description = i18next.t("log.guild_log.voice_state_update.moved", {
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						from_channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						to_channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
-					embed.author = {
+					author = {
 						name: `${newState.member.user.tag} (${newState.member.id})`,
 						icon_url: newState.member.user.displayAvatarURL(),
 					};
@@ -135,7 +132,15 @@ export default class implements Event {
 				}
 
 				await webhook.send({
-					embeds: [truncateEmbed(embed)],
+					embeds: [
+						truncateEmbed({
+							description,
+							author,
+							color: Color.DiscordPrimary,
+							title: i18next.t("log.guild_log.voice_state_update.title", { lng: locale }),
+							timestamp: new Date().toISOString(),
+						}),
+					],
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
