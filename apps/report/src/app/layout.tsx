@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 
-import "@unocss/reset/normalize.css";
 import "~/styles/main.css";
 
 export const metadata: Metadata = {

@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import type { SerializeOptions } from "next-mdx-remote/dist/types";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeHighlight from "rehype-highlight";
@@ -26,6 +27,10 @@ const mdxOptions = {
 } satisfies SerializeOptions;
 
 export default async function Page({ searchParams }: { readonly searchParams: { url: string } }) {
+	if (!searchParams.url) {
+		notFound();
+	}
+
 	const res = await fetch(searchParams.url);
 	const text = await res.text();
 
