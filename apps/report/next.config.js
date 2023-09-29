@@ -12,14 +12,9 @@ const withBundleAnalyzer = bundleAnalyzer({
  */
 export default withBundleAnalyzer({
 	reactStrictMode: true,
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
-	cleanDistDir: true,
 	outputFileTracing: true,
 	experimental: {
 		outputFileTracingRoot: fileURLToPath(new URL("../../", import.meta.url)),
-		fallbackNodePolyfills: false,
 	},
 	images: {
 		dangerouslyAllowSVG: true,

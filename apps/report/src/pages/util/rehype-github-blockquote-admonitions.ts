@@ -13,7 +13,6 @@ export default function rehypeGithubBlockquoteAdmonitions() {
 				return CONTINUE;
 			}
 
-			// @ts-expect-error: We already check with: hasProperty above
 			const classes = node.properties.className;
 			if (!Array.isArray(classes)) {
 				return SKIP;

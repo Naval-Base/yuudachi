@@ -132,5 +132,8 @@ dist
 # macOS
 .DS_Store
 .vercel
-
+docker/postgresql/dump.sql
+grafana-data
+prometheus-data
+redis-data
 .vscode/find-unused-exports.json
