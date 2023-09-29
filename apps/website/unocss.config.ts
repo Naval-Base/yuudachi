@@ -1,4 +1,4 @@
-import { defineConfig, presetTypography, presetUno, presetWebFonts } from "unocss";
+import { defineConfig, presetTypography, presetUno } from "unocss";
 
 export default defineConfig({
 	theme: {
@@ -19,12 +19,6 @@ export default defineConfig({
 	},
 	presets: [
 		presetUno({ dark: "class" }),
-		presetWebFonts({
-			provider: "bunny",
-			fonts: {
-				mono: ["JetBrains Mono:400,600,700"],
-			},
-		}),
 		presetTypography({
 			cssExtend: {
 				pre: {
