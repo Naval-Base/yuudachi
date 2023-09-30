@@ -59,15 +59,19 @@ export default async function Page({ params }: { params: { id: string } }) {
 
 	const { user, cases } = await caseData.json();
 
+	if (!user) {
+		return <div className="mx-auto max-w-5xl gap-2 p-8">No user found.</div>;
+	}
+
 	return (
 		<div className="mx-auto flex max-w-5xl flex-col gap-2 px-4 pb-8 md:flex-row md:gap-8">
-			<div className="from-dark-800 from-82% md:bg-dark-800 sticky top-0 w-full place-self-center bg-gradient-to-b py-8 md:w-auto md:place-self-start">
+			<div className="dark:from-dark-800 from-82% dark:md:bg-dark-800 sticky top-0 w-full place-self-center bg-gradient-to-b from-white py-8 md:w-auto md:place-self-start md:bg-white">
 				<UserDisplay user={user} />
 			</div>
 
 			<div className="flex w-full flex-col gap-4 md:pt-8">
 				{cases.map((case_: any) => (
-					<div key={case_.case_id} className="bg-dark-400 rounded-lg p-4">
+					<div key={case_.case_id} className="bg-light-600 dark:bg-dark-400 rounded-lg p-4">
 						<div>Case: {case_.case_id}</div>
 						<div>Reason: {case_.reason}</div>
 					</div>
