@@ -1,5 +1,6 @@
 import process from "node:process";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { UserDisplay } from "~/components/UserDisplay";
 
 export default async function Page() {
@@ -25,6 +26,11 @@ export default async function Page() {
 			Authorization: `Bearer ${token.value}`,
 		},
 	});
+
+	if (userData.status !== 200) {
+		return redirect("/api/discord/logout");
+	}
+
 	const user = await userData.json();
 
 	return <UserDisplay user={user} />;
