@@ -23,7 +23,7 @@ import type { Redis } from "ioredis";
 import { register } from "prom-client";
 import readdirp from "readdirp";
 import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomains.js";
-// import { api } from "./util/api.js";
+import { api } from "./util/api.js";
 import { createWebhooks } from "./util/webhooks.js";
 import { WebSocketConnection } from "./websocket/WebSocketConnection.js";
 
@@ -121,7 +121,7 @@ try {
 	}
 
 	await client.login();
-	// api.listen({ port: Number(process.env.API_PORT) });
+	api.listen({ port: Number(process.env.API_PORT) });
 
 	const wsURL = process.env.SCAM_DOMAIN_WS;
 	const identity = process.env.SCAM_DOMAIN_IDENTITY;

@@ -13,9 +13,9 @@ export function UserDisplay({
 	const isBannerAnimated = user.banner?.startsWith("a_");
 
 	return (
-		<div className="flex flex-col p-4">
+		<div className="flex w-[340px] max-w-[340px] flex-col">
 			<div className="relative">
-				<div className="h-[120px] max-h-[120px] w-[340px] max-w-[340px]">
+				<div className="h-[120px] max-h-[120px]">
 					{user.banner ? (
 						<picture>
 							<img
