@@ -28,7 +28,7 @@ export function UserDisplay({
 							/>
 						</picture>
 					) : user.banner_color ? (
-						<div className={`bg-[${user.banner_color.toString(16)}] h-full w-full rounded-lg`} />
+						<div className={`bg-[#${user.banner_color.toString(16)}] h-full w-full rounded-lg`} />
 					) : (
 						<div className="flex h-full w-full place-content-center items-center rounded-lg bg-black">
 							<span>Actually poor.</span>
