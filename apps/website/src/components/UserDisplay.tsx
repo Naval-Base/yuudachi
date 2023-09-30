@@ -27,7 +27,7 @@ export function UserDisplay({
 							/>
 						</picture>
 					) : user.accent_color ? (
-						<div className={`bg-[#${user.accent_color.toString(16)}] h-full w-full rounded-lg`} />
+						<div className="h-full w-full rounded-lg" style={{ background: `#${user.accent_color.toString(16)}` }} />
 					) : (
 						<div className="flex h-full w-full place-content-center items-center rounded-lg bg-black">
 							<span>Actually poor.</span>
