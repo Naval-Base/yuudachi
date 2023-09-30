@@ -9,7 +9,7 @@
 		"build:next": "next build",
 		"build:css": "yarn generate:css",
 		"dev": "concurrently 'yarn dev:css' 'yarn dev:next'",
-		"dev:next": "next dev",
+		"dev:next": "next dev -p 8001",
 		"dev:css": "yarn generate:css --watch",
 		"generate:css": "unocss 'src/**/*.tsx' --out-file ./src/styles/unocss.css",
 		"lint": "prettier --check . && cross-env TIMING=1 eslint src --ext mjs,js,ts,tsx --format=pretty",
