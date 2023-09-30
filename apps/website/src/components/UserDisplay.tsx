@@ -1,30 +1,58 @@
 export function UserDisplay({
 	user,
 }: {
-	readonly user: { avatar: string; banner: string; id: string; username: string };
+	readonly user: {
+		accent_color?: number | null;
+		avatar?: string | null;
+		banner?: string | null;
+		banner_color?: number | null;
+		id: string;
+		username: string;
+	};
 }) {
-	const isAvatarAnimated = user.avatar.startsWith("a_");
-	const isBannerAnimated = user.banner.startsWith("a_");
+	const isAvatarAnimated = user.avatar?.startsWith("a_");
+	const isBannerAnimated = user.banner?.startsWith("a_");
 
 	return (
 		<div className="flex w-[340px] flex-col p-5">
 			<div className="relative">
-				<picture>
-					<img
-						alt="Avatar"
-						className="h-full max-h-[120px] w-full max-w-[340px] rounded-lg object-cover"
-						src={`https://cdn.discordapp.com/banners/${user.id}/${user.banner}${
-							isBannerAnimated ? ".gif" : ".png"
-						}?size=480`}
-					/>
-				</picture>
-				<picture>
-					<img
-						alt="Banner"
-						className="border-3 absolute left-[22px] top-[72px] h-[80px] w-[80px] rounded-full"
-						src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}${isAvatarAnimated ? ".gif" : ".png"}`}
-					/>
-				</picture>
+				<div className="h-[120px] max-h-[120px] w-[340px] max-w-[340px]">
+					{user.banner ? (
+						<picture>
+							<img
+								alt="Banner"
+								className="h-full w-full rounded-lg object-cover"
+								src={`https://cdn.discordapp.com/banners/${user.id}/${user.banner}${
+									isBannerAnimated ? ".gif" : ".png"
+								}?size=480`}
+							/>
+						</picture>
+					) : user.banner_color ? (
+						<div className={`bg-[${user.banner_color.toString(16)}] h-full w-full rounded-lg`} />
+					) : (
+						<div className="flex h-full w-full place-content-center items-center rounded-lg bg-black">
+							<span>Actually poor.</span>
+						</div>
+					)}
+				</div>
+
+				{user.avatar ? (
+					<picture>
+						<img
+							alt="Avatar"
+							className="border-3 absolute left-[22px] top-[72px] h-[80px] w-[80px] rounded-full"
+							src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}${isAvatarAnimated ? ".gif" : ".png"}`}
+						/>
+					</picture>
+				) : (
+					<picture>
+						<img
+							alt="Avatar"
+							className="border-3 absolute left-[22px] top-[72px] h-[80px] w-[80px] rounded-full"
+							src={`https://cdn.discordapp.com/embed/avatars/${(BigInt(user.id) >> 22n) % 6n}.png`}
+						/>
+					</picture>
+				)}
 			</div>
 			<div className="flex place-content-end p-2">
 				<span className="">{user.username}</span>
