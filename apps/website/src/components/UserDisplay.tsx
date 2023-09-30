@@ -5,7 +5,6 @@ export function UserDisplay({
 		accent_color?: number | null;
 		avatar?: string | null;
 		banner?: string | null;
-		banner_color?: number | null;
 		id: string;
 		username: string;
 	};
@@ -27,8 +26,8 @@ export function UserDisplay({
 								}?size=480`}
 							/>
 						</picture>
-					) : user.banner_color ? (
-						<div className={`bg-[#${user.banner_color.toString(16)}] h-full w-full rounded-lg`} />
+					) : user.accent_color ? (
+						<div className={`bg-[#${user.accent_color.toString(16)}] h-full w-full rounded-lg`} />
 					) : (
 						<div className="flex h-full w-full place-content-center items-center rounded-lg bg-black">
 							<span>Actually poor.</span>
