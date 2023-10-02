@@ -68,7 +68,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className="dark:bg-dark-800 bg-white">
+			<body className="bg-light-600 dark:bg-dark-600 dark:text-light-600">
 				<Providers>{children}</Providers>
 			</body>
 		</html>

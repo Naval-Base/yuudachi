@@ -6,6 +6,7 @@ import { container, kSQL } from "@yuudachi/framework";
 import { Client } from "discord.js";
 import { fastify } from "fastify";
 import type { Sql } from "postgres";
+import { CaseAction } from "../functions/cases/createCase.js";
 import type { RawCase } from "../functions/cases/transformCase.js";
 
 export const api = fastify({ trustProxy: true })
@@ -22,12 +23,46 @@ export const api = fastify({ trustProxy: true })
 	.register(
 		(app, _, done) => {
 			app.get("/", () => "Welcome to the yuudachi api.");
+
+			app.get("/users/:id", async (request) => {
+				const { id } = request.params as any;
+				const client = container.resolve(Client);
+				const sql = container.resolve<Sql<any>>(kSQL);
+
+				let banned = false;
+
+				try {
+					await client.guilds.cache.get("222078108977594368")!.bans.fetch(id);
+					banned = true;
+				} catch {
+					banned = false;
+				}
+
+				if (banned) {
+					const user = await client.users.fetch(id, { force: true });
+					const [case_] = await sql<[RawCase]>`
+						select *
+						from cases
+						where guild_id = '222078108977594368'
+							and target_id = ${id}
+							and action = ${CaseAction.Ban}
+						order by created_at desc
+						limit 1
+					`;
+					const moderator = await client.users.fetch(case_.mod_id, { force: true });
+
+					return { user, moderator, banned, case: case_ };
+				}
+
+				return { banned };
+			});
+
 			app.get("/cases/:id", async (request) => {
 				const { id } = request.params as any;
 				const client = container.resolve(Client);
 				const sql = container.resolve<Sql<any>>(kSQL);
 
-				const user = await client.users.fetch(id);
+				const user = await client.users.fetch(id, { force: true });
 				const cases = await sql<RawCase[]>`
 					select *
 					from cases
