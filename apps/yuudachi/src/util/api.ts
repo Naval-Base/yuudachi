@@ -57,6 +57,22 @@ export const api = fastify({ trustProxy: true })
 				return { banned };
 			});
 
+			app.get("/cases", async (_) => {
+				const sql = container.resolve<Sql<any>>(kSQL);
+
+				const cases = await sql<RawCase[]>`
+					select target_id, target_tag, count(target_id) case_count
+					from cases
+					where guild_id = '222078108977594368'
+						and action not in (1, 8)
+					group by target_id, target_tag
+					order by max(created_at) desc
+					limit 50
+				`;
+
+				return { cases };
+			});
+
 			app.get("/cases/:id", async (request) => {
 				const { id } = request.params as any;
 				const client = container.resolve(Client);

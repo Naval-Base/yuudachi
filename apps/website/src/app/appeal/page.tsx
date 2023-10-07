@@ -26,7 +26,7 @@ export default async function Page() {
 		headers: {
 			Authorization: `Bearer ${token.value}`,
 		},
-		next: { revalidate: 86_400 },
+		next: { revalidate: 3_600 },
 	});
 
 	if (userData.status !== 200) {
