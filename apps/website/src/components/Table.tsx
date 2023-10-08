@@ -1,30 +1,9 @@
 "use client";
 
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import Link from "next/link";
+import type { ColumnDef } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-const columnHelper = createColumnHelper<any>();
-
-const columns = [
-	columnHelper.accessor("target_id", {
-		header: "Target id",
-		cell: (info) => (
-			<Link href={`/moderation/cases/${info.getValue()}`} className="text-blurple">
-				{info.getValue()}
-			</Link>
-		),
-	}),
-	columnHelper.accessor("target_tag", {
-		header: "Username",
-		cell: (info) => info.getValue(),
-	}),
-	columnHelper.accessor("case_count", {
-		header: "Cases",
-		cell: (info) => info.getValue(),
-	}),
-];
-
-export function CasesTable({ data }: { readonly data: any }) {
+export function Table({ columns, data }: { readonly columns: ColumnDef<any, any>[]; readonly data: any }) {
 	const table = useReactTable({
 		data,
 		columns,

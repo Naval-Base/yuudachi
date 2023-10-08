@@ -5,7 +5,7 @@ import { type RawCase, transformCase } from "./transformCase.js";
 
 export type PatchCase = Pick<
 	CreateCase,
-	"actionExpiration" | "caseId" | "contextMessageId" | "guildId" | "reason" | "refId" | "reportRefId"
+	"actionExpiration" | "appealRefId" | "caseId" | "contextMessageId" | "guildId" | "reason" | "refId" | "reportRefId"
 >;
 
 export async function updateCase(case_: PatchCase) {
@@ -17,6 +17,7 @@ export async function updateCase(case_: PatchCase) {
 		context_message_id: case_.contextMessageId,
 		ref_id: case_.refId,
 		report_ref_id: case_.reportRefId,
+		appeal_ref_id: case_.appealRefId,
 	};
 
 	const queries = removeUndefinedKeys(updates);

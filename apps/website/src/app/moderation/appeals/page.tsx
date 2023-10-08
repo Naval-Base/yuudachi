@@ -2,7 +2,7 @@ import process from "node:process";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Table } from "~/components/Table";
-import { columns } from "~/components/Table/CasesColumns";
+import { columns } from "~/components/Table/AppealsColumns";
 
 export default async function Page() {
 	const cookieStore = cookies();
@@ -39,26 +39,26 @@ export default async function Page() {
 		return <div className="mx-auto max-w-5xl gap-2 p-8">Nah, surely not.</div>;
 	}
 
-	const casesData = await fetch(`https://bot.yuudachi.dev/api/cases`, {
+	const appealsData = await fetch(`https://bot.yuudachi.dev/api/appeals`, {
 		headers: {
 			Authorization: `Bearer ${process.env.JWT_TOKEN}`,
 		},
 	});
 
-	const { cases } = await casesData.json();
+	const { appeals } = await appealsData.json();
 
 	return (
 		<div className="flex flex-col gap-8">
 			<h1 className="mb-4 pt-12 text-center text-4xl font-extrabold leading-none tracking-tight md:mb-8 md:text-5xl">
-				Latest <span className="underline-offset-3 decoration-blurple underline decoration-8">cases</span>
+				Latest <span className="underline-offset-3 decoration-blurple underline decoration-8">appeals</span>
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">
 				<div className="flex w-full flex-col gap-4">
 					<div className="flex flex-col gap-4">
-						{cases.length ? (
-							<Table columns={columns} data={cases} />
+						{appeals.length ? (
+							<Table columns={columns} data={appeals} />
 						) : (
-							<h2 className="pt-4 text-center text-lg font-semibold">No cases</h2>
+							<h2 className="pt-4 text-center text-lg font-semibold">No appeals</h2>
 						)}
 					</div>
 				</div>

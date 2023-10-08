@@ -1,4 +1,6 @@
-/** @param {import('postgres').Sql} sql */
+/**
+ * @param {import('postgres').Sql} sql
+ */
 export async function up(sql) {
 	await sql.unsafe(`
 		create function next_case(text) returns integer

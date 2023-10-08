@@ -7,6 +7,7 @@ import type { RawCase } from "./transformCase.js";
 
 type DeleteCaseOptions = {
 	action?: CaseAction | undefined;
+	appealReference?: number | undefined;
 	caseId?: number | undefined;
 	guild: Guild;
 	manual?: boolean | undefined;
@@ -28,6 +29,7 @@ export async function deleteCase({
 	skipAction = false,
 	action = undefined,
 	reportReference = undefined,
+	appealReference = undefined,
 }: DeleteCaseOptions) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
@@ -101,6 +103,7 @@ export async function deleteCase({
 				},
 				case_reference: case_?.case_id,
 				report_reference: reportReference,
+				appeal_reference: appealReference,
 			},
 			action:
 				case_action === CaseAction.Ban

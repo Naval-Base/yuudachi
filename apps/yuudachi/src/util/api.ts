@@ -2,10 +2,12 @@ import process from "node:process";
 import helmet from "@fastify/helmet";
 import jwt from "@fastify/jwt";
 import sensible from "@fastify/sensible";
-import { container, kSQL } from "@yuudachi/framework";
+import { container, ellipsis, kSQL } from "@yuudachi/framework";
 import { Client } from "discord.js";
 import { fastify } from "fastify";
 import type { Sql } from "postgres";
+import { APPEAL_REASON_MAX_LENGTH } from "../Constants.js";
+import { createAppeal } from "../functions/appeals/createAppeal.js";
 import { CaseAction } from "../functions/cases/createCase.js";
 import type { RawCase } from "../functions/cases/transformCase.js";
 
@@ -61,7 +63,7 @@ export const api = fastify({ trustProxy: true })
 				const sql = container.resolve<Sql<any>>(kSQL);
 
 				const cases = await sql<RawCase[]>`
-					select target_id, target_tag, count(target_id) case_count
+					select target_id, target_tag, count(*) cases_count
 					from cases
 					where guild_id = '222078108977594368'
 						and action not in (1, 8)
@@ -70,7 +72,14 @@ export const api = fastify({ trustProxy: true })
 					limit 50
 				`;
 
-				return { cases };
+				const [{ count }] = await sql<[{ count: number }]>`
+					select count(*)
+					from cases
+					where guild_id = '222078108977594368'
+						and action not in (1, 8)
+				`;
+
+				return { cases, count };
 			});
 
 			app.get("/cases/:id", async (request) => {
@@ -86,10 +95,51 @@ export const api = fastify({ trustProxy: true })
 						and target_id = ${id}
 						and action not in (1, 8)
 					order by created_at desc
+				`;
+
+				const [{ count }] = await sql<[{ count: number }]>`
+					select count(*)
+					from cases
+					where guild_id = '222078108977594368'
+						and target_id = ${id}
+						and action not in (1, 8)
+				`;
+
+				return { user, cases, count };
+			});
+
+			app.get("/appeals", async (_) => {
+				const sql = container.resolve<Sql<any>>(kSQL);
+
+				const appeals = await sql<RawCase[]>`
+					select *, (select count(*) from appeals) as appeals_count
+					from appeals
+					where guild_id = '222078108977594368'
+					order by created_at desc
 					limit 50
 				`;
 
-				return { user, cases };
+				const [{ count }] = await sql<[{ count: number }]>`
+					select count(*)
+					from appeals
+					where guild_id = '222078108977594368'
+				`;
+
+				return { appeals, count };
+			});
+
+			app.post("/appeals", async (request) => {
+				const { guildId, targetId, targetTag, reason } = request.params as any;
+				const trimmedReason = reason.trim();
+
+				const appeal = await createAppeal({
+					guildId,
+					targetId,
+					targetTag,
+					reason: ellipsis(trimmedReason, APPEAL_REASON_MAX_LENGTH),
+				});
+
+				return { appeal };
 			});
 
 			done();

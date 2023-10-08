@@ -113,6 +113,7 @@ export async function createCase(
 			context_message_id,
 			ref_id,
 			report_ref_id,
+			appeal_ref_id,
 			multi
 		) values (
 			next_case(${case_.guildId}),
@@ -129,6 +130,7 @@ export async function createCase(
 			${case_.contextMessageId ?? null},
 			${case_.refId ?? null},
 			${case_.reportRefId ?? null},
+			${case_.appealRefId ?? null},
 			${case_.multi ?? false}
 		)
 		returning *

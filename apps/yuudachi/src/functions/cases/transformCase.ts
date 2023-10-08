@@ -5,6 +5,7 @@ export type RawCase = {
 	action: number;
 	action_expiration: string | null;
 	action_processed: boolean;
+	appeal_ref_id: number | null;
 	case_id: number;
 	context_message_id: Snowflake | null;
 	created_at: string;
@@ -36,6 +37,7 @@ export function transformCase(case_: RawCase): Case {
 		contextMessageId: case_.context_message_id,
 		refId: case_.ref_id,
 		reportRefId: case_.report_ref_id,
+		appealRefId: case_.appeal_ref_id,
 		logMessageId: case_.log_message_id,
 		actionProcessed: case_.action_processed,
 		multi: case_.multi,

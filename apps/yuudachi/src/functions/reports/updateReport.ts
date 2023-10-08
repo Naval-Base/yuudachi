@@ -26,12 +26,12 @@ export async function updateReport(report: PatchReport, moderator?: User) {
 
 	const queries = removeUndefinedKeys(updates);
 
-	const [updatedCase] = await sql<[RawReport]>`
+	const [updatedReport] = await sql<[RawReport]>`
 		update reports set ${sql(queries as Record<string, unknown>, ...Object.keys(queries))}
 		where guild_id = ${report.guildId}
 			and report_id = ${report.reportId!}
 		returning *
 	`;
 
-	return transformReport(updatedCase);
+	return transformReport(updatedReport);
 }
