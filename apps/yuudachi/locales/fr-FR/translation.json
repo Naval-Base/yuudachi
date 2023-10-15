@@ -89,7 +89,7 @@
 			"execute": "Avertir"
 		  },
 		  "cancel": "Avertissement annulé activé {{- user}}",
-		  "success": "Averti avec succès {{- user}}"
+		  "success": "Avertissement fait avec succès {{- user}}"
 		},
 		"timeout": {
 		  "errors": {
@@ -501,12 +501,12 @@
 			"restriction_one": "{{count}} restriction",
 			"restriction_many": "{{count}} restrictions",
 			"restriction_other": "{{count}} restrictions",
-			"timeout_one": "{{count}} temps mort",
-			"timeout_many": "{{count}} délais d'attente",
-			"timeout_other": "{{count}} délais d'attente",
-			"kick_one": "{{count}} coup",
-			"kick_many": "{{count}} coups de pied",
-			"kick_other": "{{count}} coups de pied",
+			"timeout_one": "{{count}} timeout",
+			"timeout_many": "{{count}} timeouts",
+			"timeout_other": "{{count}} timeouts",
+			"kick_one": "{{count}} kick",
+			"kick_many": "{{count}} kicks",
+			"kick_other": "{{count}} kicks",
 			"softban_one": "{{count}} softban",
 			"softban_many": "{{count}} softbans",
 			"softban_other": "{{count}} softbans",
@@ -520,10 +520,10 @@
 		  "action_label": {
 			"restriction": "Limiter",
 			"restriction_case": "Rôle",
-			"unrestriction": "Libérer la restriction",
+			"unrestriction": "Lever la restriction",
 			"unrestriction_case": "Cas de restriction",
-			"warn": "Avertir",
-			"kick": "Coup",
+			"warn": "Avertissement",
+			"kick": "kick",
 			"softban": "softban",
 			"ban": "bannissement",
 			"unban": "débannissement",
