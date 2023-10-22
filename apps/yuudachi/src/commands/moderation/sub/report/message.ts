@@ -5,6 +5,7 @@ import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import {
+	DISCORD_HOWTOREPORT,
 	REPORT_DUPLICATE_EXPIRE_SECONDS,
 	REPORT_DUPLICATE_PRE_EXPIRE_SECONDS,
 	REPORT_MESSAGE_CONTEXT_LIMIT,
@@ -17,7 +18,6 @@ import { type Report, createReport, ReportType } from "../../../../functions/rep
 import { getPendingReportByTarget } from "../../../../functions/reports/getReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
 import { createMessageLinkButton } from "../../../../util/createMessageLinkButton.js";
-import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
 
 type MessageReportArgs = Omit<ArgsParam<typeof ReportCommand>["message"], "message_link"> & {
 	message: Message;
@@ -50,7 +50,7 @@ export async function message(
 	});
 	const trustAndSafetyButton = createButton({
 		label: i18next.t("command.mod.report.common.buttons.discord_report", { lng: locale }),
-		url: localeTrustAndSafety(locale),
+		url: DISCORD_HOWTOREPORT,
 		style: ButtonStyle.Link,
 	});
 
@@ -64,7 +64,7 @@ export async function message(
 		i18next.t("command.mod.report.common.warnings", {
 			trust_and_safety: hyperlink(
 				i18next.t("command.mod.report.common.trust_and_safety_sub", { lng: locale }),
-				localeTrustAndSafety(locale),
+				DISCORD_HOWTOREPORT,
 			),
 			lng: locale,
 		}),
