@@ -56,8 +56,3 @@ export const AUTOCOMPLETE_CASE_FOCUSED_FIELD_NAMES = ["case_reference", "referen
 export const AUTOCOMPLETE_REPORT_FOCUSED_FIELD_NAMES = ["report_reference", "reference_report", "report"];
 
 export const DISCORD_HOWTOREPORT = "https://discord.com/safety/360044103651-reporting-abusive-behavior-to-discord";
-
-export const DiscordLocales: { [key: string]: string } = {
-	"es-ES": "es",
-	"zh-CN": "zh-tw",
-};
