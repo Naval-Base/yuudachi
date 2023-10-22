@@ -16,6 +16,7 @@ import {
 	REPORT_REASON_MAX_LENGTH,
 	REPORT_DUPLICATE_EXPIRE_SECONDS,
 	REPORT_DUPLICATE_PRE_EXPIRE_SECONDS,
+	DISCORD_HOWTOREPORT,
 } from "../../../../Constants.js";
 import { forwardReport } from "../../../../functions/logging/forwardReport.js";
 import { upsertReportLog } from "../../../../functions/logging/upsertReportLog.js";
@@ -23,7 +24,6 @@ import { type Report, createReport, ReportType } from "../../../../functions/rep
 import { updateReport } from "../../../../functions/reports/updateReport.js";
 import type { ReportCommand } from "../../../../interactions/index.js";
 import { resolveGuildCommand, chatInputApplicationCommandMention } from "../../../../util/commandUtils.js";
-import { localeTrustAndSafety } from "../../../../util/localizeTrustAndSafety.js";
 
 type MemberAssuredReportArgs = ArgsParam<typeof ReportCommand>["user"] & { user: { member: GuildMember } };
 
@@ -68,7 +68,7 @@ export async function user(
 	});
 	const trustAndSafetyButton = createButton({
 		label: i18next.t("command.mod.report.common.buttons.discord_report", { lng: locale }),
-		url: localeTrustAndSafety(locale),
+		url: DISCORD_HOWTOREPORT,
 		style: ButtonStyle.Link,
 	});
 
@@ -102,7 +102,7 @@ export async function user(
 		i18next.t("command.mod.report.common.warnings", {
 			trust_and_safety: hyperlink(
 				i18next.t("command.mod.report.common.trust_and_safety_sub", { lng: locale }),
-				localeTrustAndSafety(locale),
+				DISCORD_HOWTOREPORT,
 			),
 			lng: locale,
 		}),
