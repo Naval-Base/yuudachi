@@ -65,38 +65,41 @@ type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) exten
 type TypeIdToType<T, O, C, P> = T extends ApplicationCommandOptionType.Subcommand
 	? ArgumentsOfRaw<O, P>
 	: T extends ApplicationCommandOptionType.SubcommandGroup
-	? ArgumentsOfRaw<O, P>
-	: T extends ApplicationCommandOptionType.String
-	? C extends readonly { value: string }[]
-		? C[number]["value"]
-		: string
-	: T extends ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number
-	? C extends readonly { value: number }[]
-		? C[number]["value"]
-		: number
-	: T extends ApplicationCommandOptionType.Boolean
-	? boolean
-	: T extends ApplicationCommandOptionType.User
-	? P extends Runtime.Discordjs
-		? { member?: GuildMember | undefined; user: User }
-		: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser }
-	: T extends ApplicationCommandOptionType.Channel
-	? P extends Runtime.Discordjs
-		? GuildChannel
-		: APIPartialChannel & { permissions: Permissions }
-	: T extends ApplicationCommandOptionType.Role
-	? P extends Runtime.Discordjs
-		? Role
-		: APIRole
-	: T extends ApplicationCommandOptionType.Mentionable
-	? P extends Runtime.Discordjs
-		? Role | { member?: GuildMember; user: User } | undefined
-		: APIRole | { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser } | undefined
-	: T extends ApplicationCommandOptionType.Attachment
-	? P extends Runtime.Discordjs
-		? Attachment
-		: APIAttachment
-	: never;
+	  ? ArgumentsOfRaw<O, P>
+	  : T extends ApplicationCommandOptionType.String
+	    ? C extends readonly { value: string }[]
+				? C[number]["value"]
+				: string
+	    : T extends ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number
+	      ? C extends readonly { value: number }[]
+					? C[number]["value"]
+					: number
+	      : T extends ApplicationCommandOptionType.Boolean
+	        ? boolean
+	        : T extends ApplicationCommandOptionType.User
+	          ? P extends Runtime.Discordjs
+							? { member?: GuildMember | undefined; user: User }
+							: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser }
+	          : T extends ApplicationCommandOptionType.Channel
+	            ? P extends Runtime.Discordjs
+								? GuildChannel
+								: APIPartialChannel & { permissions: Permissions }
+	            : T extends ApplicationCommandOptionType.Role
+	              ? P extends Runtime.Discordjs
+									? Role
+									: APIRole
+	              : T extends ApplicationCommandOptionType.Mentionable
+	                ? P extends Runtime.Discordjs
+										? Role | { member?: GuildMember; user: User } | undefined
+										:
+												| APIRole
+												| { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser }
+												| undefined
+	                : T extends ApplicationCommandOptionType.Attachment
+	                  ? P extends Runtime.Discordjs
+											? Attachment
+											: APIAttachment
+	                  : never;
 
 type OptionToObject<O, P> = O extends {
 	choices?: infer C | undefined;
@@ -109,8 +112,8 @@ type OptionToObject<O, P> = O extends {
 		? R extends true
 			? { [k in K]: TypeIdToType<T, O, C, P> }
 			: T extends ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup
-			? { [k in K]: TypeIdToType<T, O, C, P> }
-			: { [k in K]?: TypeIdToType<T, O, C, P> | undefined }
+			  ? { [k in K]: TypeIdToType<T, O, C, P> }
+			  : { [k in K]?: TypeIdToType<T, O, C, P> | undefined }
 		: never
 	: never;
 
@@ -124,39 +127,42 @@ export type ArgumentsOf<
 }
 	? UnionToIntersection<OptionToObject<C["options"][number], P>>
 	: C extends { type: ApplicationCommandType.Message }
-	? { message: P extends Runtime.Discordjs ? Message<true> : APIMessage }
-	: C extends { type: ApplicationCommandType.User }
-	? P extends Runtime.Discordjs
-		? { user: { member?: GuildMember | undefined; user: User } }
-		: { user: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser } }
-	: C extends { componentType: ComponentType.Button }
-	? never
-	: C extends { componentType: ComponentType.ChannelSelect }
-	? P extends Runtime.Discordjs
-		? { channels: Collection<Snowflake, Channel> }
-		: { channels: Map<Snowflake, APIPartialChannel & { permissions: Permissions }> }
-	: C extends { componentType: ComponentType.MentionableSelect }
-	? P extends Runtime.Discordjs
-		? {
-				members: Collection<Snowflake, GuildMember>;
-				roles: Collection<Snowflake, Role>;
-				users: Collection<Snowflake, User>;
-		  }
-		: {
-				members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>;
-				roles: Map<Snowflake, APIRole>;
-				users: Map<Snowflake, APIUser>;
-		  }
-	: C extends { componentType: ComponentType.RoleSelect }
-	? P extends Runtime.Discordjs
-		? { roles: Collection<Snowflake, Role> }
-		: { roles: Map<Snowflake, APIRole> }
-	: C extends { componentType: ComponentType.StringSelect }
-	? { values: string[] }
-	: C extends { componentType: ComponentType.TextInput }
-	? { value: string }
-	: C extends { componentType: ComponentType.UserSelect }
-	? P extends Runtime.Discordjs
-		? { members: Collection<Snowflake, GuildMember>; users: Collection<Snowflake, User> }
-		: { members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>; users: Map<Snowflake, APIUser> }
-	: never;
+	  ? { message: P extends Runtime.Discordjs ? Message<true> : APIMessage }
+	  : C extends { type: ApplicationCommandType.User }
+	    ? P extends Runtime.Discordjs
+				? { user: { member?: GuildMember | undefined; user: User } }
+				: { user: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser } }
+	    : C extends { componentType: ComponentType.Button }
+	      ? never
+	      : C extends { componentType: ComponentType.ChannelSelect }
+	        ? P extends Runtime.Discordjs
+						? { channels: Collection<Snowflake, Channel> }
+						: { channels: Map<Snowflake, APIPartialChannel & { permissions: Permissions }> }
+	        : C extends { componentType: ComponentType.MentionableSelect }
+	          ? P extends Runtime.Discordjs
+							? {
+									members: Collection<Snowflake, GuildMember>;
+									roles: Collection<Snowflake, Role>;
+									users: Collection<Snowflake, User>;
+							  }
+							: {
+									members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>;
+									roles: Map<Snowflake, APIRole>;
+									users: Map<Snowflake, APIUser>;
+							  }
+	          : C extends { componentType: ComponentType.RoleSelect }
+	            ? P extends Runtime.Discordjs
+								? { roles: Collection<Snowflake, Role> }
+								: { roles: Map<Snowflake, APIRole> }
+	            : C extends { componentType: ComponentType.StringSelect }
+	              ? { values: string[] }
+	              : C extends { componentType: ComponentType.TextInput }
+	                ? { value: string }
+	                : C extends { componentType: ComponentType.UserSelect }
+	                  ? P extends Runtime.Discordjs
+											? { members: Collection<Snowflake, GuildMember>; users: Collection<Snowflake, User> }
+											: {
+													members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>;
+													users: Map<Snowflake, APIUser>;
+											  }
+	                  : never;

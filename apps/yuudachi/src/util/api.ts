@@ -19,7 +19,7 @@ export const api = fastify({ trustProxy: true })
 		try {
 			await request.jwtVerify();
 		} catch (error) {
-			reply.send(error);
+			void reply.send(error);
 		}
 	})
 	.register(

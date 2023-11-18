@@ -109,8 +109,8 @@ export async function deleteCase({
 				case_action === CaseAction.Ban
 					? CaseAction.Unban
 					: case_action === CaseAction.Role
-					? CaseAction.Unrole
-					: CaseAction.TimeoutEnd,
+					  ? CaseAction.Unrole
+					  : CaseAction.TimeoutEnd,
 		}),
 		skipAction,
 	);

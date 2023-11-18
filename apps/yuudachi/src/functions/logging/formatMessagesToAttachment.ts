@@ -84,8 +84,8 @@ export function formatMessagesToAttachment(
 			return isPrimaryHighlight
 				? kleur.yellow(outSection)
 				: isSecondaryHighlight
-				? kleur.white(outSection)
-				: outSection;
+				  ? kleur.white(outSection)
+				  : outSection;
 		})
 		.join("\n");
 }

@@ -2,8 +2,8 @@
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.fixAll": true,
-		"source.organizeImports": false
+		"source.fixAll": "explicit",
+		"source.organizeImports": "never"
 	},
 	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
 	"unocss.root": "./packages/website",
