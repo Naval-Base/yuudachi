@@ -1,10 +1,9 @@
-import { Command, createMessageActionRow } from "@yuudachi/framework";
+import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import type { Message } from "discord.js";
+import { bold, type Message } from "discord.js";
 import i18next from "i18next";
 import { formatMessageToEmbed } from "../../functions/logging/formatMessageToEmbed.js";
 import type { RepostCommand, RepostMessageContextCommand } from "../../interactions/index.js";
-import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
 import { parseMessageLink, resolveMessage } from "../../util/resolveMessage.js";
 
 export default class extends Command<typeof RepostCommand | typeof RepostMessageContextCommand> {
@@ -14,8 +13,8 @@ export default class extends Command<typeof RepostCommand | typeof RepostMessage
 		locale: string,
 	) {
 		await interaction.editReply({
+			content: bold(i18next.t("command.utility.repost.content", { lng: locale, message_link: message.url })),
 			embeds: [formatMessageToEmbed(message, locale)],
-			components: [createMessageActionRow([createMessageLinkButton(message, locale)])],
 		});
 	}
 
