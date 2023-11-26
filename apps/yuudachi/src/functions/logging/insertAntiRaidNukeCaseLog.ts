@@ -12,7 +12,7 @@ export async function insertAntiRaidNukeCaseLog(
 	user: User,
 	cases: Case[],
 	reason: string,
-	messageUrl: string,
+	messageUrl?: string,
 ) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
@@ -27,7 +27,7 @@ export async function insertAntiRaidNukeCaseLog(
 			name: `${user.tag} (${user.id})`,
 			icon_url: user.displayAvatarURL(),
 		},
-		description: await generateAntiRaidNukeCaseLog(guild.id, cases, reason, messageUrl),
+		description: await generateAntiRaidNukeCaseLog(guild.id, cases, reason),
 		footer: {
 			text:
 				cases.length === 1
@@ -37,7 +37,12 @@ export async function insertAntiRaidNukeCaseLog(
 		timestamp: new Date().toISOString(),
 	});
 
+	const content = messageUrl
+		? i18next.t("log.mod_log.anti_raid_nuke.report", { lng: locale, message_link: messageUrl })
+		: undefined;
+
 	const logMessage = await modLogChannel!.send({
+		content,
 		embeds: [embed],
 	});
 

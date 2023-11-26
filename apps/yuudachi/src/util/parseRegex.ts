@@ -1,3 +1,4 @@
+import { logger } from "@yuudachi/framework";
 import RE2 from "re2";
 
 /**
@@ -19,7 +20,8 @@ export function parseRegex(input?: string | null | undefined, insensitive = true
 		}
 
 		return new RE2(fullMatch ? `^${input}$` : input, options);
-	} catch {
+	} catch (error) {
+		logger.error(error, "Failed to parse regex pattern.");
 		return null;
 	}
 }

@@ -42,24 +42,6 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 		});
 	}
 
-	if (case_.contextMessageId) {
-		const [contextMessage] = await sql<[{ channel_id: Snowflake | null }?]>`
-			select channel_id
-			from messages
-			where id = ${case_.contextMessageId}
-		`;
-
-		if (Reflect.has(contextMessage ?? {}, "channel_id")) {
-			msg += i18next.t("log.mod_log.case_log.context", {
-				link: hyperlink(
-					i18next.t("log.mod_log.case_log.context_sub", { lng: locale }),
-					messageLink(contextMessage!.channel_id!, case_.contextMessageId, case_.guildId),
-				),
-				lng: locale,
-			});
-		}
-	}
-
 	if (case_.reason) {
 		msg += i18next.t("log.mod_log.case_log.reason", { reason: case_.reason, lng: locale });
 	} else {
