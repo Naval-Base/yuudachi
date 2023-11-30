@@ -458,6 +458,9 @@
 				"reason": "",
 				"cancel": "",
 				"success": ""
+			},
+			"repost": {
+				"content": "Wiadomość: {{- message_link}}"
 			}
 		}
 	},
@@ -551,7 +554,6 @@
 			"anti_raid_nuke": {
 				"description": "",
 				"report": "",
-				"report_sub": "",
 				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
@@ -707,11 +709,11 @@
 					"full_match": ""
 				},
 				"confusables": {
-					"title": "",
 					"0": "",
 					"1": "",
 					"2": "",
-					"3": ""
+					"3": "",
+					"title": ""
 				},
 				"created": {
 					"title": "",

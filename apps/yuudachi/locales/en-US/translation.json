@@ -458,6 +458,9 @@
 				"reason": "Claimed sponsor role",
 				"cancel": "Canceled claiming your sponsor role on {{- guild}}",
 				"success": "Successfully claimed your sponsor role on {{- guild}}"
+			},
+			"repost": {
+				"content": "Message: {{- message_link}}"
 			}
 		}
 	},
@@ -550,8 +553,7 @@
 			},
 			"anti_raid_nuke": {
 				"description": "**Action**: Anti-Raid-Nuke\n**Reason:** {{- reason}}\n**Hit count:** {{count}}",
-				"report": "**Report:** {{- link}}",
-				"report_sub": "Beam me up, Yuu",
+				"report": "**Report:** {{- message_link}}",
 				"footer": "Cases {{from}}-{{to}}"
 			},
 			"scam": {
@@ -763,8 +765,16 @@
 				}
 			},
 			"table": {
-				"success_titles": ["Case id", "Member id", "Username"],
-				"fail_titles": ["Member id", "Username", "Error"]
+				"success_titles": [
+					"Case id",
+					"Member id",
+					"Username"
+				],
+				"fail_titles": [
+					"Member id",
+					"Username",
+					"Error"
+				]
 			}
 		},
 		"report_log": {
