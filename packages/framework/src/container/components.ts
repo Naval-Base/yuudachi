@@ -3,9 +3,7 @@ import type { Component } from "../Component.js";
 import type { ComponentPayload } from "../types/ArgumentsOf.js";
 import { kComponents } from "./tokens.js";
 
-export type ComponentMap = Map<string, Component<ComponentPayload>>;
-
-export function createComponents<C = ComponentMap>() {
+export function createComponents<C extends Component = Component<ComponentPayload>>() {
 	const components = new Map<string, C>();
 	container.register(kComponents, { useValue: components });
 }
