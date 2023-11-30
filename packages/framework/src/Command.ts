@@ -1,4 +1,5 @@
 import { basename, extname } from "node:path";
+import type { CacheType } from "discord.js";
 import { logger } from "./logger.js";
 import type { CommandPayload, Runtime } from "./types/ArgumentsOf.js";
 import type { CommandInfo } from "./types/Command.js";
@@ -11,15 +12,18 @@ import type {
 	LocaleParam,
 } from "./types/Interaction.js";
 
-export abstract class Command<C extends CommandPayload = CommandPayload, R extends Runtime = Runtime.Discordjs>
-	implements Commands<C, R>
+export abstract class Command<
+	C extends CommandPayload = CommandPayload,
+	R extends Runtime = Runtime.Discordjs,
+	T extends CacheType = "cached",
+> implements Commands<C, R, T>
 {
 	public constructor(public readonly name?: C["name"][]) {}
 
 	public chatInput(
-		_interaction: InteractionParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
-		_args: ArgsParam<C, CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
-		_locale: LocaleParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R, T>,
+		_args: ArgsParam<C, CommandMethod.ChatInput, InteractionType.ApplicationCommand, R, T>,
+		_locale: LocaleParam<CommandMethod.ChatInput, InteractionType.ApplicationCommand, R, T>,
 	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
@@ -29,9 +33,9 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 	}
 
 	public autocomplete(
-		_interaction: InteractionParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
-		_args: ArgsParam<C, CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
-		_locale: LocaleParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R, T>,
+		_args: ArgsParam<C, CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R, T>,
+		_locale: LocaleParam<CommandMethod.Autocomplete, InteractionType.ApplicationCommand, R, T>,
 	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
@@ -41,9 +45,9 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 	}
 
 	public messageContext(
-		_interaction: InteractionParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
-		_args: ArgsParam<C, CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
-		_locale: LocaleParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R, T>,
+		_args: ArgsParam<C, CommandMethod.MessageContext, InteractionType.ApplicationCommand, R, T>,
+		_locale: LocaleParam<CommandMethod.MessageContext, InteractionType.ApplicationCommand, R, T>,
 	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
@@ -53,9 +57,9 @@ export abstract class Command<C extends CommandPayload = CommandPayload, R exten
 	}
 
 	public userContext(
-		_interaction: InteractionParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
-		_args: ArgsParam<C, CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
-		_locale: LocaleParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R>,
+		_interaction: InteractionParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R, T>,
+		_args: ArgsParam<C, CommandMethod.UserContext, InteractionType.ApplicationCommand, R, T>,
+		_locale: LocaleParam<CommandMethod.UserContext, InteractionType.ApplicationCommand, R, T>,
 	): Promise<any> | any {
 		const commandName = "commandName" in _interaction ? _interaction.commandName : _interaction.data.name;
 		logger.info(
