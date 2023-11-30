@@ -21,7 +21,7 @@
 		"is-ci": "^3.0.1",
 		"lint-staged": "^15.1.0",
 		"typescript": "^5.3.2",
-		"vercel": "^32.5.6"
+		"vercel": "^32.6.0"
 	},
 	"engines": {
 		"node": ">=16.0.0"

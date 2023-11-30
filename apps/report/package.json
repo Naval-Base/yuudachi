@@ -39,14 +39,14 @@
 		"rehype-slug": "^6.0.0",
 		"remark-gfm": "^3.0.1",
 		"sharp": "^0.33.0",
-		"undici": "^5.28.1",
+		"undici": "^5.28.2",
 		"unified": "11.0.3",
 		"unist-util-visit": "^5.0.0"
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^14.0.3",
 		"@testing-library/react": "^14.1.2",
-		"@types/node": "^18.18.14",
+		"@types/node": "^18.19.0",
 		"@types/react-dom": "^18.2.17",
 		"@vercel/node": "^3.0.11",
 		"@vitejs/plugin-react": "^4.2.0",
