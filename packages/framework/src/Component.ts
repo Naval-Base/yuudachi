@@ -1,3 +1,4 @@
+import type { CacheType } from "discord.js";
 import { logger } from "./logger.js";
 import type { ComponentPayload, Runtime } from "./types/ArgumentsOf.js";
 import type {
@@ -9,15 +10,18 @@ import type {
 	LocaleParam,
 } from "./types/Interaction.js";
 
-export abstract class Component<C extends ComponentPayload = ComponentPayload, R extends Runtime = Runtime.Discordjs>
-	implements Components<C, R>
+export abstract class Component<
+	C extends ComponentPayload = ComponentPayload,
+	R extends Runtime = Runtime.Discordjs,
+	T extends CacheType = "cached",
+> implements Components<C, R, T>
 {
 	public constructor(public readonly customId: C["customId"]) {}
 
 	public button(
-		_interaction: InteractionParam<ComponentMethod.Button, InteractionType.Component, R>,
-		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R>,
-		_locale: LocaleParam<ComponentMethod.Button, InteractionType.Component, R>,
+		_interaction: InteractionParam<ComponentMethod.Button, InteractionType.Component, R, T>,
+		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R, T>,
+		_locale: LocaleParam<ComponentMethod.Button, InteractionType.Component, R, T>,
 	): Promise<any> | any {
 		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
@@ -27,9 +31,9 @@ export abstract class Component<C extends ComponentPayload = ComponentPayload, R
 	}
 
 	public selectMenu(
-		_interaction: InteractionParam<ComponentMethod.SelectMenu, InteractionType.Component, R>,
-		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R>,
-		_locale: LocaleParam<ComponentMethod.SelectMenu, InteractionType.Component, R>,
+		_interaction: InteractionParam<ComponentMethod.SelectMenu, InteractionType.Component, R, T>,
+		_args: ArgsParam<C, ComponentMethod.Button, InteractionType.Component, R, T>,
+		_locale: LocaleParam<ComponentMethod.SelectMenu, InteractionType.Component, R, T>,
 	): Promise<any> | any {
 		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
@@ -39,9 +43,9 @@ export abstract class Component<C extends ComponentPayload = ComponentPayload, R
 	}
 
 	public modalSubmit(
-		_interaction: InteractionParam<ComponentMethod.ModalSubmit, InteractionType.Component, R>,
-		_args: ArgsParam<C, ComponentMethod.ModalSubmit, InteractionType.Component, R>,
-		_locale: LocaleParam<ComponentMethod.ModalSubmit, InteractionType.Component, R>,
+		_interaction: InteractionParam<ComponentMethod.ModalSubmit, InteractionType.Component, R, T>,
+		_args: ArgsParam<C, ComponentMethod.ModalSubmit, InteractionType.Component, R, T>,
+		_locale: LocaleParam<ComponentMethod.ModalSubmit, InteractionType.Component, R, T>,
 	): Promise<any> | any {
 		const customId = "customId" in _interaction ? _interaction.customId : _interaction.data.custom_id;
 		logger.info(
