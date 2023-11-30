@@ -25,21 +25,21 @@
 	"license": "AGPL-3.0",
 	"private": true,
 	"dependencies": {
-		"@lukeed/ms": "^2.0.1",
+		"@lukeed/ms": "^2.0.2",
 		"@tanstack/react-table": "^8.10.7",
 		"next": "^14.0.3",
 		"next-themes": "^0.2.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sharp": "^0.32.6"
+		"sharp": "^0.33.0"
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^14.0.3",
 		"@testing-library/react": "^14.1.2",
-		"@types/node": "^18.18.10",
-		"@types/react-dom": "^18.2.15",
-		"@unocss/cli": "^0.57.5",
-		"@unocss/reset": "^0.57.5",
+		"@types/node": "^18.18.14",
+		"@types/react-dom": "^18.2.17",
+		"@unocss/cli": "^0.57.7",
+		"@unocss/reset": "^0.57.7",
 		"@vercel/node": "^3.0.11",
 		"@vitejs/plugin-react": "^4.2.0",
 		"@vitest/coverage-v8": "^0.34.6",
@@ -51,8 +51,8 @@
 		"happy-dom": "^12.10.3",
 		"prettier": "^3.1.0",
 		"prettier-plugin-tailwindcss": "^0.5.7",
-		"typescript": "^5.2.2",
-		"unocss": "^0.57.5",
+		"typescript": "^5.3.2",
+		"unocss": "^0.57.7",
 		"vitest": "^0.34.6"
 	},
 	"engines": {

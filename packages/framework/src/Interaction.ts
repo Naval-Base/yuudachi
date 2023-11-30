@@ -1,18 +1,15 @@
 import type {
-	APIPartialChannel,
-	APIRole,
-	Permissions,
-	APIAttachment,
+	APIRole as APITypesAPIRole,
+	APIAttachment as APITypesAPIAttachment,
 	Snowflake,
-	APIApplicationCommandInteractionDataOption,
-	APIInteractionDataResolved,
-	APIInteractionDataResolvedChannel,
-	APIUser,
-	APIInteractionDataResolvedGuildMember,
-	APIMessageComponentSelectMenuInteraction,
-	APIMessageComponentButtonInteraction,
-	APIModalSubmitInteraction,
-	APIGuildMember,
+	APIInteractionDataResolvedChannel as APITypesAPIInteractionDataResolvedChannel,
+	APIUser as APITypesAPIUser,
+	APIInteractionDataResolvedGuildMember as APITypesAPIInteractionDataResolvedGuildMember,
+	APIMessageComponentSelectMenuInteraction as APITypesAPIMessageComponentSelectMenuInteraction,
+	APIMessageComponentButtonInteraction as APITypesAPIMessageComponentButtonInteraction,
+	APIModalSubmitInteraction as APITypesAPIModalSubmitInteraction,
+	APIApplicationCommandInteractionDataOption as APITypesAPIApplicationCommandInteractionDataOption,
+	APIInteractionDataResolved as APITypesAPIInteractionDataResolved,
 } from "discord-api-types/v10";
 import { InteractionType, ComponentType, ApplicationCommandOptionType } from "discord-api-types/v10";
 import type {
@@ -28,17 +25,25 @@ import type {
 	GuildMember,
 	Attachment,
 	Message,
+	CacheType,
+	CacheTypeReducer,
+	BooleanCache,
+	APIInteractionDataResolvedChannel,
+	APIRole,
+	APIInteractionDataResolvedGuildMember,
+	APIGuildMember,
+	APIChannel,
 } from "discord.js";
 import type { ArgumentsOf, CommandPayload, ComponentPayload, Runtime } from "./types/ArgumentsOf.js";
 
 export type Option = {
-	attachment?: APIAttachment;
-	channel?: APIInteractionDataResolvedChannel;
-	member?: APIInteractionDataResolvedGuildMember;
+	attachment?: APITypesAPIAttachment;
+	channel?: APITypesAPIInteractionDataResolvedChannel;
+	member?: APITypesAPIInteractionDataResolvedGuildMember;
 	name: string;
-	role?: APIRole;
+	role?: APITypesAPIRole;
 	type: number;
-	user?: APIUser;
+	user?: APITypesAPIUser;
 	value?: boolean | number | string;
 };
 
@@ -47,8 +52,8 @@ export type TransformResult = Option & {
 };
 
 export function transformCommandOption(
-	option: APIApplicationCommandInteractionDataOption,
-	resolved: APIInteractionDataResolved,
+	option: APITypesAPIApplicationCommandInteractionDataOption,
+	resolved: APITypesAPIInteractionDataResolved,
 ) {
 	const result: TransformResult = {
 		name: option.name,
@@ -116,24 +121,23 @@ export function transformCommandOption(
 export function transformApplicationInteraction<
 	T extends CommandPayload = CommandPayload,
 	R extends Runtime = Runtime.Discordjs,
->(options: readonly CommandInteractionOption<"cached">[]): ArgumentsOf<T, R> {
+	C extends CacheType = "cached",
+>(options: readonly CommandInteractionOption<C>[]): ArgumentsOf<T, R, C> {
 	const opts: Record<
 		string,
-		| APIAttachment
-		| APIRole
-		| ArgumentsOf<T, R>
+		| ArgumentsOf<T, R, C>
 		| Attachment
-		| GuildBasedChannel
-		| Message<true>
-		| Role
+		| CacheTypeReducer<C, GuildBasedChannel, APIInteractionDataResolvedChannel>
+		| CacheTypeReducer<C, Role, APIRole>
+		| Message<BooleanCache<C>>
 		| boolean
 		| number
 		| string
 		| {
-				member?: GuildMember | (APIGuildMember & { permissions: Permissions }) | undefined;
-				user?: APIUser | User | undefined;
+				member: CacheTypeReducer<C, GuildMember, APIInteractionDataResolvedGuildMember> | undefined;
+				user: User | undefined;
 		  }
-		| (APIPartialChannel & { permissions: Permissions })
+		| null
 		| undefined
 	> = {};
 
@@ -141,7 +145,7 @@ export function transformApplicationInteraction<
 		switch (top.type) {
 			case ApplicationCommandOptionType.Subcommand:
 			case ApplicationCommandOptionType.SubcommandGroup:
-				opts[top.name] = transformApplicationInteraction<T, R>(top.options ? [...top.options] : []);
+				opts[top.name] = transformApplicationInteraction<T, R, C>(top.options ? [...top.options] : []);
 				break;
 			case ApplicationCommandOptionType.User:
 				opts[top.name] = { user: top.user, member: top.member };
@@ -173,7 +177,7 @@ export function transformApplicationInteraction<
 		}
 	}
 
-	return opts as ArgumentsOf<T, R>;
+	return opts as ArgumentsOf<T, R, C>;
 }
 
 export function transformApplicationInteractionRaw<
@@ -182,16 +186,16 @@ export function transformApplicationInteractionRaw<
 >(options: readonly TransformResult[]): ArgumentsOf<T, R> {
 	const opts: Record<
 		string,
-		| APIAttachment
-		| APIInteractionDataResolvedChannel
-		| APIRole
+		| APITypesAPIAttachment
+		| APITypesAPIInteractionDataResolvedChannel
+		| APITypesAPIRole
 		| ArgumentsOf<T, R>
 		| boolean
 		| number
 		| string
 		| {
-				member?: APIInteractionDataResolvedGuildMember | undefined;
-				user?: APIUser | undefined;
+				member?: APITypesAPIInteractionDataResolvedGuildMember | undefined;
+				user?: APITypesAPIUser | undefined;
 		  }
 		| undefined
 	> = {};
@@ -234,24 +238,26 @@ export function transformApplicationInteractionRaw<
 export function transformComponentInteraction<
 	T extends ComponentPayload = ComponentPayload,
 	R extends Runtime = Runtime.Discordjs,
->(
-	interaction: AnySelectMenuInteraction<"cached"> | ButtonInteraction<"cached"> | ModalSubmitInteraction<"cached">,
-): ArgumentsOf<T, R> {
+	C extends CacheType = "cached",
+>(interaction: AnySelectMenuInteraction<C> | ButtonInteraction<C> | ModalSubmitInteraction<C>): ArgumentsOf<T, R, C> {
 	const opts: Record<
 		string,
-		| APIRole[]
-		| ArgumentsOf<T, R>
-		| Collection<Snowflake, Channel>
-		| Collection<Snowflake, Role>
+		| ArgumentsOf<T, R, C>
+		| Collection<Snowflake, CacheTypeReducer<C, Channel, APIChannel, APIChannel | Channel, APIChannel | Channel>>
+		| Collection<Snowflake, CacheTypeReducer<C, Role, APIRole, APIRole | Role, APIRole | Role>>
 		| string[]
 		| string
-		| { members: Collection<Snowflake, GuildMember>; users: Collection<Snowflake, User> }
+		| {
+				members: Collection<
+					Snowflake,
+					CacheTypeReducer<C, GuildMember, APIGuildMember, APIGuildMember | GuildMember, APIGuildMember | GuildMember>
+				>;
+				users: Collection<Snowflake, User>;
+		  }
 		| undefined
 	> = {};
 
-	const messageComponentType = (
-		messageComponentInteraction: AnySelectMenuInteraction<"cached"> | ButtonInteraction<"cached">,
-	) => {
+	const messageComponentType = (messageComponentInteraction: AnySelectMenuInteraction<C> | ButtonInteraction<C>) => {
 		switch (messageComponentInteraction.componentType) {
 			case ComponentType.Button:
 				opts[messageComponentInteraction.customId] = messageComponentInteraction.customId;
@@ -307,7 +313,7 @@ export function transformComponentInteraction<
 			break;
 	}
 
-	return opts as ArgumentsOf<T, R>;
+	return opts as ArgumentsOf<T, R, C>;
 }
 
 export function transformComponentInteractionRaw<
@@ -315,23 +321,25 @@ export function transformComponentInteractionRaw<
 	R extends Runtime = Runtime.Discordjs,
 >(
 	interaction:
-		| APIMessageComponentButtonInteraction
-		| APIMessageComponentSelectMenuInteraction
-		| APIModalSubmitInteraction,
+		| APITypesAPIMessageComponentButtonInteraction
+		| APITypesAPIMessageComponentSelectMenuInteraction
+		| APITypesAPIModalSubmitInteraction,
 ): ArgumentsOf<T, R> {
 	const opts: Record<
 		string,
 		| ArgumentsOf<T, R>
-		| Map<Snowflake, APIInteractionDataResolvedChannel>
-		| Map<Snowflake, APIRole>
+		| Map<Snowflake, APITypesAPIInteractionDataResolvedChannel>
+		| Map<Snowflake, APITypesAPIRole>
 		| string[]
 		| string
-		| { members: Map<Snowflake, APIInteractionDataResolvedGuildMember>; users: Map<Snowflake, APIUser> }
+		| { members: Map<Snowflake, APITypesAPIInteractionDataResolvedGuildMember>; users: Map<Snowflake, APITypesAPIUser> }
 		| undefined
 	> = {};
 
 	const messageComponentType = (
-		messageComponentInteraction: APIMessageComponentButtonInteraction | APIMessageComponentSelectMenuInteraction,
+		messageComponentInteraction:
+			| APITypesAPIMessageComponentButtonInteraction
+			| APITypesAPIMessageComponentSelectMenuInteraction,
 	) => {
 		switch (messageComponentInteraction.data.component_type) {
 			case ComponentType.Button:

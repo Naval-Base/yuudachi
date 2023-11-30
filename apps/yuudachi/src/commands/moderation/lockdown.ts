@@ -28,6 +28,7 @@ export default class extends Command<typeof LockdownCommand> {
 				if (args.lock.channel && args.lock.channel.type === ChannelType.GuildText) {
 					throw new Error(
 						i18next.t("command.mod.common.errors.not_a_text_channel", {
+							// eslint-disable-next-line @typescript-eslint/no-base-to-string
 							channel: `${args.lock.channel.toString()} - ${args.lock.channel.name} (${args.lock.channel.id})`,
 							lng: locale,
 						}),
@@ -73,6 +74,7 @@ export default class extends Command<typeof LockdownCommand> {
 				if (args.lift.channel && args.lift.channel.type !== ChannelType.GuildText) {
 					throw new Error(
 						i18next.t("command.mod.common.errors.not_a_text_channel", {
+							// eslint-disable-next-line @typescript-eslint/no-base-to-string
 							channel: `${args.lift.channel.toString()} - ${args.lift.channel.name} (${args.lift.channel.id})`,
 							lng: locale,
 						}),
