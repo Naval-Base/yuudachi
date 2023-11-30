@@ -5,7 +5,7 @@ import { kCommands } from "./tokens.js";
 
 export type CommandMap = Map<string, Command<CommandPayload>>;
 
-export function createCommands() {
-	const commands = new Map<string, Command<CommandPayload>>();
+export function createCommands<C = CommandMap>() {
+	const commands = new Map<string, C>();
 	container.register(kCommands, { useValue: commands });
 }
