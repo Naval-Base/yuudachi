@@ -36,7 +36,7 @@
 		"@swc/helpers": "^0.5.3",
 		"@yuudachi/framework": "workspace:^",
 		"bufferutil": "^4.0.8",
-		"bullmq": "^3.15.8",
+		"bullmq": "^4.14.4",
 		"common-tags": "^1.8.2",
 		"dayjs": "^1.11.10",
 		"diff": "^5.1.0",

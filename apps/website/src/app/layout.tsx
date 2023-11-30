@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
 
@@ -6,13 +6,16 @@ import "@unocss/reset/tailwind.css";
 import "../styles/unocss.css";
 import "../styles/main.css";
 
+export const viewport: Viewport = {
+	themeColor: [
+		{ media: "(prefers-color-scheme: light)", color: "#ffffff" },
+		{ media: "(prefers-color-scheme: dark)", color: "#181818" },
+	],
+	colorScheme: "light dark",
+};
+
 export const metadata: Metadata = {
 	title: "Yuudachi",
-	viewport: {
-		minimumScale: 1,
-		initialScale: 1,
-		width: "device-width",
-	},
 	icons: {
 		other: [
 			{
@@ -36,12 +39,6 @@ export const metadata: Metadata = {
 	},
 
 	manifest: "/site.webmanifest",
-
-	themeColor: [
-		{ media: "(prefers-color-scheme: light)", color: "#ffffff" },
-		{ media: "(prefers-color-scheme: dark)", color: "#181818" },
-	],
-	colorScheme: "light dark",
 
 	appleWebApp: {
 		title: "Yuudachi",
