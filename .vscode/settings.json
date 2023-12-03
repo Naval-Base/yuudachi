@@ -5,9 +5,16 @@
 		"source.fixAll": "explicit",
 		"source.organizeImports": "never"
 	},
-	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
+	"eslint.workingDirectories": [
+		{
+			"pattern": "./packages/*"
+		},
+		{
+			"pattern": "./apps/*"
+		}
+	],
 	"unocss.root": "./packages/website",
-	"i18n-ally.localesPaths": "./packages/yuudachi/locales",
+	"i18n-ally.localesPaths": "./apps/yuudachi/locales",
 	"i18n-ally.enabledFrameworks": ["i18next"],
 	"i18n-ally.sourceLanguage": "en-US",
 	"i18n-ally.displayLanguage": "en-US",
