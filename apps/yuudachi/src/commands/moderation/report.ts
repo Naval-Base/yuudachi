@@ -248,6 +248,10 @@ export default class extends Command<
 			throw new Error(i18next.t("command.mod.report.common.errors.no_self", { lng: locale }));
 		}
 
+		if (!(await getGuildSetting(author.guild.id, SettingsKeys.EnableReports))) {
+			throw new Error(i18next.t("command.mod.report.common.errors.disabled", { lng: locale }));
+		}
+
 		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
 		const latestReport = await getPendingReportByTarget(author.guild.id, target.id);
 		if (latestReport || (await this.redis.exists(userKey))) {

@@ -49,6 +49,11 @@ export const ReportUtilsCommand = {
 				},
 			],
 		},
+		{
+			name: "toggle",
+			description: "Toggle the reports creation guild wide",
+			type: ApplicationCommandOptionType.Subcommand,
+		},
 	],
 	default_member_permissions: "0",
 } as const;

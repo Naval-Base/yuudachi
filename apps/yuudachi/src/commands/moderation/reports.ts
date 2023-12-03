@@ -4,6 +4,7 @@ import { handleReportAutocomplete } from "../../functions/autocomplete/reports.j
 import type { ReportUtilsCommand } from "../../interactions/index.js";
 import { lookup } from "./sub/reports/lookup.js";
 import { status } from "./sub/reports/status.js";
+import { toggle } from "./sub/reports/toggle.js";
 
 export default class extends Command<typeof ReportUtilsCommand> {
 	public override async autocomplete(
@@ -20,7 +21,7 @@ export default class extends Command<typeof ReportUtilsCommand> {
 		locale: LocaleParam,
 	): Promise<void> {
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		await interaction.deferReply({ ephemeral: args.lookup?.hide ?? true });
+		const reply = await interaction.deferReply({ ephemeral: args.lookup?.hide ?? true });
 
 		switch (Object.keys(args)[0]) {
 			case "lookup":
@@ -28,6 +29,9 @@ export default class extends Command<typeof ReportUtilsCommand> {
 				break;
 			case "status":
 				await status(interaction, args.status, locale);
+				break;
+			case "toggle":
+				await toggle(interaction, reply, locale);
 				break;
 			default:
 		}
