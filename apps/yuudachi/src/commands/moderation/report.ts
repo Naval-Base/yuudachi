@@ -1,12 +1,33 @@
-import { Command, logger, kRedis, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
+import {
+	Command,
+	logger,
+	kRedis,
+	createModal,
+	createModalActionRow,
+	createTextComponent,
+	createButton,
+	createMessageActionRow,
+} from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import { type GuildMember, type User, type Message, TextInputStyle, ComponentType } from "discord.js";
+import {
+	TextInputStyle,
+	ComponentType,
+	ButtonStyle,
+	type MessageContextMenuCommandInteraction,
+	type Guild,
+	type ModalSubmitInteraction,
+	type ChatInputCommandInteraction,
+	type GuildMember,
+	type User,
+	type Message,
+	type UserContextMenuCommandInteraction,
+} from "discord.js";
 import i18next from "i18next";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
-import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
+import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH, ReportsRestrictionLevel } from "../../Constants.js";
 import type { Report } from "../../functions/reports/createReport.js";
 import { getPendingReportByTarget } from "../../functions/reports/getReport.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -31,11 +52,7 @@ export default class extends Command<
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
 
-		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
-		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
-		if (!reportChannel) {
-			throw new Error(i18next.t("common.errors.no_report_channel", { lng: locale }));
-		}
+		await this.validateReportChannel(interaction.guild, locale);
 
 		if (Object.keys(args)[0] === "message") {
 			const parsedLink = parseMessageLink(args.message.message_link);
@@ -53,7 +70,23 @@ export default class extends Command<
 			const { guildId, channelId, messageId } = parsedLink;
 			const messageArg = await resolveMessage(interaction.channelId, guildId!, channelId!, messageId!, locale);
 
-			const pendingReport = await this.validateReport(interaction.member, messageArg.author, locale, messageArg);
+			const { pendingReport, restrictionLevel } = await this.validateReport(
+				interaction.member,
+				messageArg.author,
+				locale,
+				messageArg,
+			);
+
+			const canProceedWithReport = await this.showRestrictedConfirmationIfNecessary(
+				interaction,
+				restrictionLevel,
+				"message",
+				locale,
+			);
+
+			if (!canProceedWithReport) {
+				return;
+			}
 
 			await message(
 				interaction,
@@ -64,19 +97,36 @@ export default class extends Command<
 				locale,
 				pendingReport,
 			);
-		} else {
-			if (!args.user.user.member) {
-				throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
-			}
 
-			const pendingReport = await this.validateReport(interaction.member, args.user.user.user, locale);
-
-			if (pendingReport && !args.user.attachment) {
-				throw new Error(i18next.t("command.mod.report.common.errors.no_attachment_forward", { lng: locale }));
-			}
-
-			await user(interaction, args.user, locale, pendingReport);
+			return;
 		}
+
+		if (!args.user.user.member) {
+			throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
+		}
+
+		const { pendingReport, restrictionLevel } = await this.validateReport(
+			interaction.member,
+			args.user.user.user,
+			locale,
+		);
+
+		if (pendingReport && !args.user.attachment) {
+			throw new Error(i18next.t("command.mod.report.common.errors.no_attachment_forward", { lng: locale }));
+		}
+
+		const canProceedWithReport = await this.showRestrictedConfirmationIfNecessary(
+			interaction,
+			restrictionLevel,
+			"user",
+			locale,
+		);
+
+		if (!canProceedWithReport) {
+			return;
+		}
+
+		await user(interaction, args.user, locale, pendingReport);
 	}
 
 	public override async userContext(
@@ -84,77 +134,34 @@ export default class extends Command<
 		args: ArgsParam<typeof ReportUserContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
-		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
-		if (!reportChannel) {
-			throw new Error(i18next.t("common.errors.no_report_channel", { lng: locale }));
-		}
+		await this.validateReportChannel(interaction.guild, locale);
 
-		const modalKey = nanoid();
+		const { pendingReport, restrictionLevel } = await this.validateReport(interaction.member, args.user.user, locale);
 
 		if (!args.user.member) {
 			throw new Error(i18next.t("command.common.errors.target_not_found", { lng: locale }));
 		}
 
-		await this.validateReport(interaction.member, args.user.user, locale);
+		if (pendingReport) {
+			throw new Error(i18next.t("command.mod.report.common.errors.no_attachment_forward", { lng: locale }));
+		}
 
-		const modal = createModal({
-			customId: modalKey,
-			title: i18next.t("command.mod.report.user.modal.title", { lng: locale }),
-			components: [
-				createModalActionRow([
-					createTextComponent({
-						customId: "reason",
-						label: i18next.t("command.mod.report.common.modal.label", { lng: locale }),
-						minLength: REPORT_REASON_MIN_LENGTH,
-						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.mod.report.common.modal.placeholder", { lng: locale }),
-						required: true,
-						style: TextInputStyle.Paragraph,
-					}),
-				]),
-			],
-		});
+		const handlerResponse = await this.handleContextInteraction(interaction, restrictionLevel, locale);
 
-		await interaction.showModal(modal);
-
-		const modalInteraction = await interaction
-			.awaitModalSubmit({
-				time: 120_000,
-				filter: (component) => component.customId === modalKey,
-			})
-			.catch(async () => {
-				try {
-					await interaction.followUp({
-						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
-						ephemeral: true,
-						components: [],
-					});
-				} catch (error_) {
-					const error = error_ as Error;
-					logger.error(error, error.message);
-				}
-
-				return undefined;
-			});
-
-		if (!modalInteraction) {
+		if (!handlerResponse) {
 			return;
 		}
 
-		await modalInteraction.deferReply({ ephemeral: true });
-
-		const reason = modalInteraction.components
-			.flatMap((row) => row.components)
-			.map((component) => (component.type === ComponentType.TextInput ? component.value || "" : ""));
+		const { modalInteraction, reason } = handlerResponse;
 
 		await user(
 			modalInteraction,
 			{
 				user: args.user,
-				reason: reason.join(" "),
+				reason,
 			},
 			locale,
+			pendingReport,
 		);
 	}
 
@@ -163,46 +170,111 @@ export default class extends Command<
 		args: ArgsParam<typeof ReportMessageContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
-		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
-		if (!reportChannel) {
-			throw new Error(i18next.t("common.errors.no_report_channel", { lng: locale }));
+		await this.validateReportChannel(interaction.guild, locale);
+
+		const { pendingReport, restrictionLevel } = await this.validateReport(
+			interaction.member,
+			args.message.author,
+			locale,
+			args.message,
+		);
+
+		const handlerResponse = await this.handleContextInteraction(interaction, restrictionLevel, locale);
+
+		if (!handlerResponse) {
+			return;
 		}
 
-		const modalKey = nanoid();
+		const { modalInteraction, reason } = handlerResponse;
 
-		const pendingReport = await this.validateReport(interaction.member, args.message.author, locale, args.message);
+		await message(
+			modalInteraction,
+			{
+				message: args.message,
+				reason,
+			},
+			locale,
+			pendingReport,
+		);
+	}
 
-		const modal = createModal({
-			customId: modalKey,
-			title: i18next.t("command.mod.report.message.modal.title", { lng: locale }),
-			components: [
-				createModalActionRow([
-					createTextComponent({
-						customId: "reason",
-						label: i18next.t("command.mod.report.common.modal.label", { lng: locale }),
-						minLength: REPORT_REASON_MIN_LENGTH,
-						maxLength: REPORT_REASON_MAX_LENGTH,
-						placeholder: i18next.t("command.mod.report.common.modal.placeholder", { lng: locale }),
-						required: true,
-						style: TextInputStyle.Paragraph,
-					}),
-				]),
-			],
+	private async handleContextInteraction(
+		interaction: MessageContextMenuCommandInteraction<"cached"> | UserContextMenuCommandInteraction<"cached">,
+		restrictionLevel: ReportsRestrictionLevel,
+		locale: string,
+	): Promise<{
+		modalInteraction: ModalSubmitInteraction<"cached">;
+		reason: string;
+	} | null> {
+		const type = interaction.isMessageContextMenuCommand() ? "message" : "user";
+
+		const modalResponse = await this.promptReasonModal(type, interaction, locale);
+
+		if (!modalResponse) {
+			return null;
+		}
+
+		const { modalInteraction, reason } = modalResponse;
+
+		const canProceedWithReport = await this.showRestrictedConfirmationIfNecessary(
+			modalInteraction,
+			restrictionLevel,
+			type,
+			locale,
+		);
+
+		if (!canProceedWithReport) {
+			return null;
+		}
+
+		return {
+			modalInteraction,
+			reason,
+		};
+	}
+
+	private async showRestrictedConfirmationIfNecessary(
+		interaction: ChatInputCommandInteraction<"cached"> | ModalSubmitInteraction<"cached">,
+		restrictionLevel: ReportsRestrictionLevel,
+		type: "message" | "user",
+		locale: string,
+	): Promise<boolean> {
+		if (restrictionLevel !== ReportsRestrictionLevel.Restricted) {
+			return true;
+		}
+
+		const confirmationKey = nanoid();
+		const cancelKey = nanoid();
+
+		const confirmationButton = createButton({
+			label: i18next.t("command.mod.report.common.buttons.proceed", { lng: locale }),
+			customId: confirmationKey,
+			style: ButtonStyle.Danger,
 		});
 
-		await interaction.showModal(modal);
+		const cancelButton = createButton({
+			label: i18next.t("command.common.buttons.cancel", { lng: locale }),
+			customId: cancelKey,
+			style: ButtonStyle.Secondary,
+		});
 
-		const modalInteraction = await interaction
-			.awaitModalSubmit({
-				time: 120_000,
-				filter: (component) => component.customId === modalKey,
+		const reason = await getGuildSetting<string>(interaction.guildId, SettingsKeys.ReportsRestrictionReason);
+
+		const reply = await interaction.editReply({
+			content: i18next.t("command.mod.report.common.restriction", { lng: locale, reason }),
+			components: [createMessageActionRow([cancelButton, confirmationButton])],
+		});
+
+		const collectedInteraction = await reply
+			.awaitMessageComponent({
+				filter: (collected) => collected.user.id === interaction.user.id,
+				componentType: ComponentType.Button,
+				time: 60_000,
 			})
 			.catch(async () => {
 				try {
-					await interaction.followUp({
-						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
-						ephemeral: true,
+					await interaction.editReply({
+						content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 						components: [],
 					});
 				} catch (error_) {
@@ -213,25 +285,22 @@ export default class extends Command<
 				return undefined;
 			});
 
-		if (!modalInteraction) {
-			return;
+		if (!collectedInteraction) {
+			return false;
 		}
 
-		await modalInteraction.deferReply({ ephemeral: true });
+		if (collectedInteraction?.customId === cancelKey) {
+			await collectedInteraction.update({
+				content: i18next.t(`command.mod.report.${type}.cancel`, { lng: locale }),
+				components: [],
+			});
 
-		const reason = modalInteraction.components
-			.flatMap((row) => row.components)
-			.map((component) => (component.type === ComponentType.TextInput ? component.value || "" : ""));
+			return false;
+		}
 
-		await message(
-			modalInteraction,
-			{
-				message: args.message,
-				reason: reason.join(" "),
-			},
-			locale,
-			pendingReport,
-		);
+		await collectedInteraction?.deferUpdate();
+
+		return true;
 	}
 
 	private async validateReport(
@@ -239,13 +308,26 @@ export default class extends Command<
 		target: User,
 		locale: string,
 		message?: Message<boolean>,
-	): Promise<Report | null | undefined> {
+	): Promise<{
+		pendingReport: Report | null;
+		restrictionLevel: ReportsRestrictionLevel;
+	}> {
 		if (target.bot) {
 			throw new Error(i18next.t("command.mod.report.common.errors.bot", { lng: locale }));
 		}
 
 		if (target.id === author.id) {
 			throw new Error(i18next.t("command.mod.report.common.errors.no_self", { lng: locale }));
+		}
+
+		const restrictionLevel = await getGuildSetting<ReportsRestrictionLevel>(
+			author.guild.id,
+			SettingsKeys.ReportsRestrictionLevel,
+		);
+
+		if (restrictionLevel === ReportsRestrictionLevel.Blocked) {
+			const reason = await getGuildSetting<string>(author.guild.id, SettingsKeys.ReportsRestrictionReason);
+			throw new Error(i18next.t("command.mod.report.common.errors.disabled", { lng: locale, reason }));
 		}
 
 		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;
@@ -260,6 +342,82 @@ export default class extends Command<
 			}
 		}
 
-		return latestReport;
+		return {
+			pendingReport: latestReport,
+			restrictionLevel,
+		};
+	}
+
+	private async validateReportChannel(guild: Guild, locale: string) {
+		const reportChannelId = await getGuildSetting(guild.id, SettingsKeys.ReportChannelId);
+		const reportChannel = checkLogChannel(guild, reportChannelId);
+		if (!reportChannel) {
+			throw new Error(i18next.t("common.errors.no_report_channel", { lng: locale }));
+		}
+	}
+
+	private async promptReasonModal(
+		type: "message" | "user",
+		interaction: MessageContextMenuCommandInteraction<"cached"> | UserContextMenuCommandInteraction<"cached">,
+		locale: string,
+	): Promise<{
+		modalInteraction: ModalSubmitInteraction<"cached">;
+		reason: string;
+	} | null> {
+		const modalKey = nanoid();
+
+		const modal = createModal({
+			customId: modalKey,
+			title: i18next.t(`command.mod.report.${type}.modal.title`, { lng: locale }),
+			components: [
+				createModalActionRow([
+					createTextComponent({
+						customId: "reason",
+						label: i18next.t("command.mod.report.common.modal.label", { lng: locale }),
+						minLength: REPORT_REASON_MIN_LENGTH,
+						maxLength: REPORT_REASON_MAX_LENGTH,
+						placeholder: i18next.t("command.mod.report.common.modal.placeholder", { lng: locale }),
+						required: true,
+						style: TextInputStyle.Paragraph,
+					}),
+				]),
+			],
+		});
+
+		await interaction.showModal(modal);
+
+		const modalInteraction = await interaction
+			.awaitModalSubmit({
+				time: 120_000,
+				filter: (component) => component.customId === modalKey,
+			})
+			.catch(async () => {
+				try {
+					await interaction.followUp({
+						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
+						ephemeral: true,
+						components: [],
+					});
+				} catch (error_) {
+					const error = error_ as Error;
+					logger.error(error, error.message);
+				}
+
+				return undefined;
+			});
+
+		if (!modalInteraction) {
+			return null;
+		}
+
+		await modalInteraction.deferReply({ ephemeral: true });
+
+		return {
+			modalInteraction,
+			reason: modalInteraction.components
+				.flatMap((row) => row.components)
+				.map((component) => (component.type === ComponentType.TextInput ? component.value || "" : ""))
+				.join(" "),
+		};
 	}
 }

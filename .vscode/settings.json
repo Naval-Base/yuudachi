@@ -7,7 +7,7 @@
 	},
 	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
 	"unocss.root": "./packages/website",
-	"i18n-ally.localesPaths": "./packages/yuudachi/locales",
+	"i18n-ally.localesPaths": ["./packages/yuudachi/locales", "apps/yuudachi/locales"],
 	"i18n-ally.enabledFrameworks": ["i18next"],
 	"i18n-ally.sourceLanguage": "en-US",
 	"i18n-ally.displayLanguage": "en-US",

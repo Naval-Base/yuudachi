@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { REPORTS_RESTRICTION_REASON_MAX_LENGTH, REPORTS_RESTRICTION_REASON_MIN_LENGTH } from "../../Constants.js";
 
 export const ReportUtilsCommand = {
 	name: "reports",
@@ -46,6 +47,31 @@ export const ReportUtilsCommand = {
 						{ name: "Spam", value: 3 },
 					],
 					required: true,
+				},
+			],
+		},
+		{
+			name: "update-restriction-level",
+			description: "Update the restriction level all the future reports will have",
+			type: ApplicationCommandOptionType.Subcommand,
+			options: [
+				{
+					name: "level",
+					description: "The new restriction level",
+					type: ApplicationCommandOptionType.String,
+					choices: [
+						{ name: "Enabled", value: "enabled" },
+						{ name: "Restricted (require confirmation)", value: "restricted" },
+						{ name: "Blocked", value: "blocked" },
+					],
+					required: true,
+				},
+				{
+					name: "reason",
+					description: "The reason that will be shown to the user on restricted or blocked report attempts",
+					min_length: REPORTS_RESTRICTION_REASON_MIN_LENGTH,
+					max_length: REPORTS_RESTRICTION_REASON_MAX_LENGTH,
+					type: ApplicationCommandOptionType.String,
 				},
 			],
 		},
