@@ -8,7 +8,9 @@ import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
 import { handleReasonAutocomplete } from "../functions/autocomplete/reasons.js";
 import { handleReportAutocomplete } from "../functions/autocomplete/reports.js";
 import { AutocompleteType, findAutocompleteType } from "../functions/autocomplete/validate.js";
+import { acquireMemberLock, releaseMemberLock } from "../functions/locks/index.js";
 import { getGuildSetting, SettingsKeys } from "../functions/settings/getGuildSetting.js";
+import { findMemberInArgs } from "../util/findMember.js";
 
 const commandCounter = new Counter({
 	name: "yuudachi_bot_v3_gateway_events_interaction_create_command_total",
@@ -108,11 +110,16 @@ export default class implements Event {
 								);
 								break;
 							} else {
-								await command.chatInput(
-									interaction,
-									transformApplicationInteraction(interaction.options.data),
-									effectiveLocale,
-								);
+								const args = transformApplicationInteraction(interaction.options.data);
+								const member = findMemberInArgs(args);
+
+								if (member) {
+									await acquireMemberLock(member, effectiveLocale);
+								}
+
+								await command
+									.chatInput(interaction, args, effectiveLocale)
+									.finally(() => member && void releaseMemberLock(member));
 								break;
 							}
 						}

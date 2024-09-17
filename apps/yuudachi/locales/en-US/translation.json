@@ -23,7 +23,8 @@
 				"no_message_resolvable": "Provided value `{{-val}}` for argument `{{arg}}` is not a valid message link or id.",
 				"no_guild": "Could not find guild `{{guild_id}}`",
 				"no_channel": "Could not find channel `{{channel_id}}` in guild `{{- guild}}`",
-				"ignored_channel": "Resolving a message from an ignored channel is not allowed."
+				"ignored_channel": "Resolving a message from an ignored channel is not allowed.",
+				"member_lock_acquired": "This member is already being processed by another command."
 			},
 			"buttons": {
 				"cancel": "Cancel",
@@ -358,7 +359,8 @@
 						"invalid_attachment": "Invalid attachment, only images are allowed.",
 						"timed_out": "The report has timed out, please try again.",
 						"bot": "You cannot report bots.",
-						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report."
+						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report.",
+						"member_lock_acquired": "This user is already being processed by a moderator."
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "Trust & Safety",

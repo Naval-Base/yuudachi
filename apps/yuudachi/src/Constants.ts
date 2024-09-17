@@ -22,6 +22,10 @@ export const enum ThreatLevelColor {
 
 export const OP_DELIMITER = "-";
 
+export const LOCK_MAP_TOKEN = Symbol("LockMap");
+export const MEMBER_LOCK_INITIAL_EXPIRE_SECONDS = 5;
+export const MEMBER_LOCK_EXPIRE_SECONDS = 20;
+
 export const CASE_REASON_MAX_LENGTH = 500;
 export const CASE_REASON_MIN_LENGTH = 3;
 

@@ -7,6 +7,7 @@ import { nanoid } from "nanoid";
 import type { Sql } from "postgres";
 import { CASE_REASON_MAX_LENGTH } from "../../../../Constants.js";
 import { CaseAction, createCase } from "../../../../functions/cases/createCase.js";
+import { extendMemberLock } from "../../../../functions/locks/index.js";
 import { generateCasePayload } from "../../../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../../../functions/logging/upsertCaseLog.js";
 import type { RestrictCommand } from "../../../../interactions/index.js";
@@ -124,6 +125,7 @@ export async function react(
 		});
 	} else if (collectedInteraction?.customId === roleKey) {
 		await collectedInteraction.deferUpdate();
+		await extendMemberLock(args.user.member);
 
 		const case_ = await createCase(
 			collectedInteraction.guild,

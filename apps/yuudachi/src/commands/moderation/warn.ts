@@ -5,6 +5,7 @@ import i18next from "i18next";
 import { nanoid } from "nanoid";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
+import { extendMemberLock } from "../../functions/locks/index.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -101,6 +102,7 @@ export default class extends Command<typeof WarnCommand> {
 			});
 		} else if (collectedInteraction?.customId === warnKey) {
 			await collectedInteraction.deferUpdate();
+			await extendMemberLock(args.user.member);
 
 			const case_ = await createCase(
 				collectedInteraction.guild,

@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
+import { extendMemberLock } from "../../functions/locks/index.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -125,6 +126,10 @@ export default class extends Command<typeof BanCommand> {
 			});
 		} else if (collectedInteraction?.customId === banKey) {
 			await collectedInteraction.deferUpdate();
+
+			if (args.user.member) {
+				await extendMemberLock(args.user.member);
+			}
 
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:ban`, 15, "");
 			const case_ = await createCase(

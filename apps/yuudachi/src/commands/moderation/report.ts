@@ -7,6 +7,7 @@ import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
+import { checkMemberLock } from "../../functions/locks/index.js";
 import type { Report } from "../../functions/reports/createReport.js";
 import { getPendingReportByTarget } from "../../functions/reports/getReport.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -246,6 +247,10 @@ export default class extends Command<
 
 		if (target.id === author.id) {
 			throw new Error(i18next.t("command.mod.report.common.errors.no_self", { lng: locale }));
+		}
+
+		if (await checkMemberLock(author.guild.id, target.id)) {
+			throw new Error(i18next.t("command.mod.report.common.errors.member_lock_acquired", { lng: locale }));
 		}
 
 		const userKey = `guild:${author.guild.id}:report:user:${target.id}`;

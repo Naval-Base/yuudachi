@@ -26,6 +26,7 @@ import { scamDomainRequestHeaders } from "./functions/anti-scam/refreshScamDomai
 import { api } from "./util/api.js";
 import { createWebhooks } from "./util/webhooks.js";
 import { WebSocketConnection } from "./websocket/WebSocketConnection.js";
+import { createLockMap } from "./functions/locks/index.js";
 
 await createPostgres();
 await createRedis();
@@ -50,6 +51,7 @@ const client = createClient({
 
 createCommands();
 createWebhooks();
+createLockMap();
 
 register.setDefaultLabels({
 	app: "yuudachi-bot-v3",
