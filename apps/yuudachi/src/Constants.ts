@@ -45,6 +45,15 @@ export const REPORT_DUPLICATE_PRE_EXPIRE_SECONDS = 3;
 export const REPORT_DUPLICATE_EXPIRE_SECONDS = 12 * 60 * 60;
 export const REPORT_MESSAGE_CONTEXT_LIMIT = 20;
 
+export enum ReportsRestrictionLevel {
+	Blocked = "blocked",
+	Enabled = "enabled",
+	Restricted = "restricted",
+}
+
+export const REPORTS_RESTRICTION_REASON_MIN_LENGTH = 3;
+export const REPORTS_RESTRICTION_REASON_MAX_LENGTH = 1_000;
+
 export const APPEAL_REASON_MAX_LENGTH = 1_500;
 export const APPEAL_REASON_MIN_LENGTH = 160;
 

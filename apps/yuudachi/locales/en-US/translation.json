@@ -79,6 +79,16 @@
 					"no_reason": "No reason",
 					"show_history_target": "Show history for target {{- user}}",
 					"show_history_author": "Show history for author {{- user}}"
+				},
+				"update_restriction_level": {
+					"errors": {
+						"no_change": "The restriction level has not been changed.",
+						"no_reason": "No reason provided for updating the restriction level. Reason is required when changing to `Restricted` or `Blocked`."
+					},
+					"base": "Successfully changed the report restriction level to `{{- level}}`.",
+					"enabled": "- All the restrictions to create reports have been lifted.",
+					"restricted": "- The creation of reports have been restricted. Members will be required to confirm their report before proceeding.\n\n**Reason:** ```{{- reason}}```",
+					"blocked": "- The creation of reports have been blocked. Members will not be able to create reports.\n\n**Reason:** ```{{- reason}}```"
 				}
 			},
 			"warn": {
@@ -358,14 +368,17 @@
 						"invalid_attachment": "Invalid attachment, only images are allowed.",
 						"timed_out": "The report has timed out, please try again.",
 						"bot": "You cannot report bots.",
-						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report."
+						"no_attachment_forward": "This user has already been recently reported, you must specify an attachment to forward if it helps the context of the report.",
+						"disabled": "The creation of reports has been disabled by the server moderators for the following reason:\n```{{- reason}}```"
 					},
 					"warnings": "**Attention:** We are not Discord and we **cannot** moderate {{- trust_and_safety}} issues.\n**Creating false reports may lead to moderation actions.**",
 					"trust_and_safety_sub": "Trust & Safety",
+					"restriction": "The reports have been restricted by the moderators for the following reason:\n```{{- reason}}```\nIf your report does not fall under this category, please proceed with the report creation.",
 					"buttons": {
 						"forward": "Forward Message",
 						"forward_attachment": "Forward Attachment",
 						"execute": "Create Report",
+						"proceed": "Proceed with Report",
 						"cancel": "Cancel",
 						"discord_report": "Report to Discord"
 					},
@@ -763,8 +776,16 @@
 				}
 			},
 			"table": {
-				"success_titles": ["Case id", "Member id", "Username"],
-				"fail_titles": ["Member id", "Username", "Error"]
+				"success_titles": [
+					"Case id",
+					"Member id",
+					"Username"
+				],
+				"fail_titles": [
+					"Member id",
+					"Username",
+					"Error"
+				]
 			}
 		},
 		"report_log": {

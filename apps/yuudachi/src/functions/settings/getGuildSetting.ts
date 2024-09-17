@@ -18,6 +18,8 @@ export enum SettingsKeys {
 	ReportChannelId = "report_channel_id",
 	ReportStatusTags = "report_status_tags",
 	ReportTypeTags = "report_type_tags",
+	ReportsRestrictionLevel = "reports_restriction_level",
+	ReportsRestrictionReason = "reports_restriction_reason",
 	SponsorRoleId = "sponsor_role_id",
 }
 
