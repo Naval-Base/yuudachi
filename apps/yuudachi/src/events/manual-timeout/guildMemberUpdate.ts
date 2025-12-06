@@ -2,8 +2,7 @@ import { on } from "node:events";
 import { setTimeout as pSetTimeout } from "node:timers/promises";
 import { logger, kRedis } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, Events, type GuildMember, AuditLogEvent } from "discord.js";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { type Client, Events, type GuildMember, AuditLogEvent } from "discord.js";
 import type { Redis } from "ioredis";
 import { inject, injectable } from "tsyringe";
 import { AUDIT_LOG_WAIT_SECONDS } from "../../Constants.js";
@@ -106,7 +105,7 @@ export default class implements Event {
 							skipAction: true,
 							reason: logs.reason,
 							action: CaseAction.Timeout,
-					  })
+						})
 					: createCase(
 							oldMember.guild,
 							generateCasePayload({
@@ -117,7 +116,7 @@ export default class implements Event {
 								duration: (newMember.communicationDisabledUntilTimestamp ?? Date.now()) - Date.now(),
 							}),
 							true,
-					  ));
+						));
 
 				await upsertCaseLog(oldMember.guild, logs.executor, case_);
 			} catch (error_) {

@@ -1,6 +1,4 @@
-/* eslint-disable tsdoc/syntax */
-import process from "node:process";
-import { URL, fileURLToPath } from "node:url";
+import { fileURLToPath } from "node:url";
 import bundleAnalyzer from "@next/bundle-analyzer";
 
 const withBundleAnalyzer = bundleAnalyzer({

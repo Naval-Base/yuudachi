@@ -61,7 +61,7 @@ export async function modal(
 
 	await modalInteraction.deferReply({ ephemeral: args.hide ?? false });
 	const fullContent = modalInteraction.components
-		.flatMap((row) => row.components)
+		.flatMap((row) => (row.type === ComponentType.ActionRow ? row.components : []))
 		.map((component) => (component.type === ComponentType.TextInput ? component.value || "" : ""));
 
 	const ids = new Set(fullContent.join(" ").match(/\d{17,20}/g) ?? []);

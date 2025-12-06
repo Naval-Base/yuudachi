@@ -69,14 +69,14 @@ export function formatMessagesToAttachment(
 								user_tag: message.mentions.repliedUser.tag,
 								user_id: message.mentions.repliedUser.id,
 								lng: locale,
-						  })
+							})
 						: i18next.t("log.guild_log.message_bulk_deleted.reply_to", {
 								message_id: messageId,
 								message_url: replyURL,
 								user_tag: message.mentions.repliedUser.tag,
 								user_id: message.mentions.repliedUser.id,
 								lng: locale,
-						  }),
+							}),
 				);
 			}
 
@@ -84,8 +84,8 @@ export function formatMessagesToAttachment(
 			return isPrimaryHighlight
 				? kleur.yellow(outSection)
 				: isSecondaryHighlight
-				  ? kleur.white(outSection)
-				  : outSection;
+					? kleur.white(outSection)
+					: outSection;
 		})
 		.join("\n");
 }

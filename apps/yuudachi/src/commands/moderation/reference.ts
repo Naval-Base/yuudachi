@@ -16,7 +16,6 @@ export default class extends Command<typeof ReferenceCommand> {
 	): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const caseId = args.case?.case ?? args.report.case;
 
 		const modLogChannel = checkLogChannel(
@@ -34,6 +33,7 @@ export default class extends Command<typeof ReferenceCommand> {
 			throw new Error(i18next.t("command.mod.common.errors.no_case", { case: caseId, lng: locale }));
 		}
 
+		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 		switch (Object.keys(args)[0]) {
 			case "case":
 				await caseReference(interaction, modLogChannel.id, originalCase, args.case.reference_case, locale);

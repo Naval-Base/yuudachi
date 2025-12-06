@@ -1,5 +1,3 @@
-import type { Buffer } from "node:buffer";
-import process from "node:process";
 import { setTimeout } from "node:timers";
 import { logger } from "@yuudachi/framework";
 import type { Redis } from "ioredis";

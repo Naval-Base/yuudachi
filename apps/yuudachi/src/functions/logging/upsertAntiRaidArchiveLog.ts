@@ -1,4 +1,3 @@
-import { Buffer } from "node:buffer";
 import { createButton, createMessageActionRow } from "@yuudachi/framework";
 import dayjs from "dayjs";
 import { ButtonStyle, type Message, type Guild, type GuildMember, type User } from "discord.js";

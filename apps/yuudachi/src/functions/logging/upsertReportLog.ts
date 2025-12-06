@@ -1,4 +1,3 @@
-import { Buffer } from "node:buffer";
 import { kSQL, container, createMessageActionRow } from "@yuudachi/framework";
 import type { APIEmbed, Embed, Guild, Message, Collection } from "discord.js";
 import i18next from "i18next";
@@ -21,6 +20,7 @@ export async function upsertReportLog(
 	message?: Message,
 	messageContext?: Collection<string, Message>,
 ) {
+	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 	const sql = container.resolve<Sql<{}>>(kSQL);
 	const reportForum = checkReportForum(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const reportStatusTags = await getGuildSetting<ReportStatusTagTuple>(guild.id, SettingsKeys.ReportStatusTags);
@@ -81,7 +81,7 @@ export async function upsertReportLog(
 										),
 									),
 								},
-						  ]
+							]
 						: undefined,
 			},
 			reason: i18next.t("command.mod.report.common.post.reason", {

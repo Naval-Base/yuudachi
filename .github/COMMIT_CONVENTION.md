@@ -7,21 +7,21 @@
 Messages must be matched by the following regex:
 
 ```js
-/^(revert: )?(feat|fix|docs|style|refactor|perf|test|workflow|build|ci|chore|types|wip)(\(.+\))?: .{1,72}/;
+/^(revert: )?(feat|fix|docs|style|refactor|perf|test|build|ci|chore|types)(\(.+\))?!?: .{1,72}/;
 ```
 
 #### Examples
 
-Appears under "Features" header, `handler` subheader:
+Appears under "Features" header, `GuildMember` subheader:
 
 ```
-feat(handler): add 'tag' command
+feat(GuildMember): add 'tag' method
 ```
 
-Appears under "Bug Fixes" header, `api` subheader, with a link to issue #28:
+Appears under "Bug Fixes" header, `Guild` subheader, with a link to issue #28:
 
 ```
-fix(api): handle requests correctly
+fix(Guild): handle events correctly
 
 close #28
 ```
@@ -37,7 +37,7 @@ BREAKING CHANGE: The 'bar' option has been removed.
 The following commit and commit `667ecc1` do not appear in the changelog if they are under the same release. If not, the revert commit appears under the "Reverts" header.
 
 ```
-revert: feat(handler): add Y
+revert: feat(Managers): add Managers
 
 This reverts commit 667ecc1654a317a13331b17617d973392f415f02.
 ```
@@ -55,6 +55,7 @@ A commit message consists of a **header**, **body** and **footer**. The header h
 ```
 
 The **header** is mandatory and the **scope** of the header is optional.
+If the commit contains **Breaking Changes**, a `!` can be added before the `:` as an indicator.
 
 ### Revert
 
@@ -68,7 +69,7 @@ Other prefixes are up to your discretion. Suggested prefixes are `docs`, `chore`
 
 ### Scope
 
-The scope could be anything specifying the place of the commit change. For example `GuildMember`, `Guild`, `Message`, `MessageEmbed` etc...
+The scope could be anything specifying the place of the commit change. For example `GuildMember`, `Guild`, `Message`, `TextChannel` etc...
 
 ### Subject
 

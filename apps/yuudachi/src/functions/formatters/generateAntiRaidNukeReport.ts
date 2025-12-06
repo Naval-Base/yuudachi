@@ -127,20 +127,20 @@ export async function generateAntiRaidNukeReport(
 				? i18next.t("formatters.anti_raid_nuke.results.preliminary.banned", {
 						count: successes.length,
 						lng: locale,
-				  })
+					})
 				: i18next.t("formatters.anti_raid_nuke.results.blast.banned", {
 						count: successes.length,
 						lng: locale,
-				  }),
+					}),
 			isPreliminary
 				? i18next.t("formatters.anti_raid_nuke.results.preliminary.failed", {
 						count: failures.length,
 						lng: locale,
-				  })
+					})
 				: i18next.t("formatters.anti_raid_nuke.results.blast.failed", {
 						count: failures.length,
 						lng: locale,
-				  }),
+					}),
 		]),
 		emptyLine(),
 		i18next.t("formatters.anti_raid_nuke.results.ratio", {
@@ -288,10 +288,10 @@ export async function generateAntiRaidNukeReport(
 								args.logMessageUrl,
 							),
 							lng: locale,
-					  })
+						})
 					: i18next.t("formatters.anti_raid_nuke.cases.log_message_none", {
 							lng: locale,
-					  }),
+						}),
 			]),
 		);
 	}
@@ -311,7 +311,7 @@ export async function generateAntiRaidNukeReport(
 	if (successes.length) {
 		parts.push(
 			table(
-				i18next.t("formatters.anti_raid_nuke.table.success_titles", { returnObjects: true, lng: locale }),
+				i18next.t("formatters.anti_raid_nuke.table.success_titles", { returnObjects: true, lng: locale }) as string[],
 				successTableRows(successes, cases, isPreliminary, locale),
 			),
 		);
@@ -341,7 +341,7 @@ export async function generateAntiRaidNukeReport(
 	if (failures.length) {
 		parts.push(
 			table(
-				i18next.t("formatters.anti_raid_nuke.table.fail_titles", { lng: locale, returnObjects: true }),
+				i18next.t("formatters.anti_raid_nuke.table.fail_titles", { lng: locale, returnObjects: true }) as string[],
 				failTableRows(failures),
 			),
 		);

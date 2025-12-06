@@ -1,29 +1,48 @@
 {
+	"$schema": "https://json.schemastore.org/tsconfig.json",
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
+		// Modules
 		"baseUrl": ".",
-		"module": "ESNext",
-		"moduleResolution": "Node",
-		"resolveJsonModule": true,
+
+		// Emit
+		"declaration": false,
+		"declarationMap": false,
 		"noEmit": true,
 		"outDir": "dist",
+
+		// Interop Constraints
+		"esModuleInterop": true,
 		"allowJs": true,
-		"checkJs": true,
-		"isolatedModules": true,
-		"verbatimModuleSyntax": false,
-		"jsx": "preserve",
-		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"incremental": true,
 		"skipLibCheck": true,
+
+		// Language and Environment
+		"jsx": "preserve",
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+
 		"plugins": [
 			{
 				"name": "next"
 			}
 		],
+
 		"paths": {
-			"~/*": ["./src/*"]
+			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/*.js",
+		"src/**/*.jsx",
+		"src/**/*.cjs",
+		"src/**/*.mjs",
+		"next-env.d.ts",
+		".next/types/**/*.ts",
+		"vitest.shims.d.ts",
+		"__tests__/**/*.ts",
+		"__tests__/**/*.tsx"
+	],
 	"exclude": ["node_modules"]
 }

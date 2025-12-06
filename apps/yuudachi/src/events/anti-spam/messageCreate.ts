@@ -1,7 +1,7 @@
 import { on } from "node:events";
 import { logger } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, Events, type Message } from "discord.js";
+import { type Client, Events, type Message } from "discord.js";
 import { injectable } from "tsyringe";
 import { handleAntiSpam } from "../../functions/anti-spam/handler.js";
 

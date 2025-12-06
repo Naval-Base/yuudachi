@@ -34,6 +34,7 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 		}
 
 		try {
+			// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 			switch (Object.keys(args)[0]) {
 				case "file": {
 					await file(interaction, args.file, locale);

@@ -9,8 +9,8 @@ is a great boon to your development process.
 To get ready to work on the codebase, please do the following:
 
 1. Fork & clone the repository, and make sure you're on the **main** branch
-2. Run `yarn --immutable` ([install](https://yarnpkg.com/getting-started/install))
-3. Run `yarn build` to build local packages
+2. Run `pnpm install --frozen-lockfile` ([install](https://pnpm.io/installation))
+3. Run `pnpm run build` to build local packages
 4. Code your heart out!
-5. Run `yarn test` to run ESLint and ensure any changes are valid
+5. Run `pnpm run test` to run ESLint and ensure any changes are valid
 6. [Submit a pull request](https://github.com/Naval-Base/yuudachi/compare) (Make sure you follow the [conventional commit format](https://github.com/Naval-Base/yuudachi/blob/main/.github/COMMIT_CONVENTION.md))

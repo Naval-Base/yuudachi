@@ -1,8 +1,7 @@
 import { on } from "node:events";
 import { logger, kSQL } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, Events, type GuildMember } from "discord.js";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { type Client, Events, type GuildMember } from "discord.js";
 import type { Sql } from "postgres";
 import { inject, injectable } from "tsyringe";
 import { CaseAction } from "../../functions/cases/createCase.js";

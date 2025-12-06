@@ -1,10 +1,9 @@
-import process from "node:process";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { CaseCard } from "~/components/CaseCard";
-import { UserDisplay } from "~/components/UserDisplay";
+import { CaseCard } from "@/components/CaseCard";
+import { UserDisplay } from "@/components/UserDisplay";
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { readonly params: { id: string } }) {
 	const cookieStore = cookies();
 
 	const token = cookieStore.get("discord_token");
@@ -53,11 +52,11 @@ export default async function Page({ params }: { params: { id: string } }) {
 
 	return (
 		<div className="flex flex-col gap-8">
-			<h1 className="mb-4 pt-12 text-center text-4xl font-extrabold leading-none tracking-tight md:mb-8 md:text-5xl">
-				Review <span className="underline-offset-3 decoration-blurple underline decoration-8">cases</span>
+			<h1 className="mb-4 pt-12 text-center text-4xl leading-none font-extrabold tracking-tight md:mb-8 md:text-5xl">
+				Review <span className="decoration-blurple underline decoration-8 underline-offset-3">cases</span>
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">
-				<div className="dark:from-dark-600 from-light-600 sticky top-0 flex w-full flex-col place-content-start gap-4 bg-gradient-to-b from-85% dark:from-85% md:w-auto">
+				<div className="dark:from-dark-600 from-light-600 sticky top-0 flex w-full flex-col place-content-start gap-4 bg-gradient-to-b from-85% md:w-auto dark:from-85%">
 					<UserDisplay className="sticky top-0 py-4" user={user} />
 				</div>
 

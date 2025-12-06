@@ -69,7 +69,6 @@ export async function resolveMessage(
 		throw new Error(
 			i18next.t("command.common.errors.no_message", {
 				message_id: messageId,
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: channel.toString(),
 				lng: locale,
 			}),

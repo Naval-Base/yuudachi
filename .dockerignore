@@ -1,52 +1,66 @@
 # Packages
-node_modules
 **/node_modules
 
-# Build artifacts
-dist
-**/dist
-typings
-**/typings
-tsconfig.tsbuildinfo
-
 # Log files
-logs
-*.log
-npm-debug.log*
+**/logs
+**/*.log
+**/npm-debug.log*
 
 # Runtime data
-pids
-*.pid
-*.seed
+**/pids
+**/*.pid
+**/*.seed
 
-# IDE
-.vscode
+# Env
+**/.env
 
-# Docker (experimental)
-docker
-Dockerfile
-docker-compose.yml
-docker-compose.local.yml
-docker-compose.prod.yml
-docker-compose.config.yml
-docker-compose.config.example.yml
-
-# Tests
-coverage
-jest-setup.ts
-jest.config.js
-
-# Linting
-.eslintignore
-.eslintrc.json
-tsconfig.eslint.json
+# Dist
+**/dist/
+**/dist-docs/
 
 # Miscellaneous
-.tmp
-.github
-.vscode
-.git
-.gitattributes
-.gitignore
-.npmrc
-README.md
+**/.tmp
+**/.vscode
+**/.idea
+**/.DS_Store
+**/.turbo
+**/tsconfig.tsbuildinfo
+**/coverage
+**/__tests__
+**/out
+
+# yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Cache
+**/.prettiercache
+**/.eslintcache
+**/.vercel
+
+# Docker specific
+**/.cliff-jumperrc.json
+**/api-extractor.json
+**/api-extractor-docs.json
+**/.eslintignore
+**/.eslintrc.json
+**/.lintstagedrc.js
+**/.lintstagedrc.cjs
+**/.lintstagedrc.json
+**/.prettierignore
+**/.prettierrc.js
+**/.prettierrc.cjs
+**/.prettierrc.json
+**/cliff.toml
+**/CHANGELOG.md
+**/README.md
+**/LICENSE
+**/tsconfig.eslint.json
+**/tsconfig.docs.json
+**/docs/
+**/vitest.config.ts

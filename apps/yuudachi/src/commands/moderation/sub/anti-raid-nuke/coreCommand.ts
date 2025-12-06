@@ -1,4 +1,3 @@
-import { Buffer } from "node:buffer";
 import { performance } from "node:perf_hooks";
 import { createButton, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam } from "@yuudachi/framework/types";

@@ -17,7 +17,6 @@ export async function lift(
 	if (!lockdown) {
 		throw new Error(
 			i18next.t("command.mod.lockdown.lift.errors.not_locked", {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 				lng: locale,
 			}),
@@ -40,7 +39,6 @@ export async function lift(
 
 	await interaction.editReply({
 		content: i18next.t("command.mod.lockdown.lift.pending", {
-			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 			lng: locale,
 		}),
@@ -67,7 +65,6 @@ export async function lift(
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
 			content: i18next.t("command.mod.lockdown.lift.cancel", {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 				lng: locale,
 			}),
@@ -81,7 +78,6 @@ export async function lift(
 		if (!lockdown) {
 			throw new Error(
 				i18next.t("command.mod.lockdown.lift.errors.failure", {
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string
 					channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 					lng: locale,
 				}),
@@ -90,7 +86,6 @@ export async function lift(
 
 		await collectedInteraction.editReply({
 			content: i18next.t("command.mod.lockdown.lift.success", {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${channel.toString()} - ${channel.name} (${channel.id})`,
 				lng: locale,
 			}),

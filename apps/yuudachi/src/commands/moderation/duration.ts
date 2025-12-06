@@ -3,7 +3,6 @@ import { Command, kRedis } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { hyperlink, messageLink } from "discord.js";
 import i18next from "i18next";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { inject, injectable } from "tsyringe";
 import { CaseAction } from "../../functions/cases/createCase.js";

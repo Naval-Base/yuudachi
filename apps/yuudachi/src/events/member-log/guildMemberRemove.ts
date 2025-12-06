@@ -1,7 +1,7 @@
 import { on } from "node:events";
 import { logger, kWebhooks } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, Events, type GuildMember, type Webhook } from "discord.js";
+import { type Client, Events, type GuildMember, type Webhook } from "discord.js";
 import { inject, injectable } from "tsyringe";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import { generateMemberLog } from "../../util/generateMemberLog.js";

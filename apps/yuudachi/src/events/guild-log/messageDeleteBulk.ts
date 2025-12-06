@@ -1,11 +1,10 @@
-import { Buffer } from "node:buffer";
 import { on } from "node:events";
 import { logger, kWebhooks, addFields, truncateEmbed } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime.js";
 import utc from "dayjs/plugin/utc.js";
-import { Client, Events, type Snowflake, type Webhook } from "discord.js";
+import { type Client, type Collection, Events, type Message, type Snowflake, type Webhook } from "discord.js";
 import i18next from "i18next";
 import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
@@ -27,7 +26,9 @@ export default class implements Event {
 	) {}
 
 	public async execute(): Promise<void> {
-		for await (const [messages] of on(this.client, this.event)) {
+		for await (const [messages] of on(this.client, this.event) as AsyncIterableIterator<
+			[Collection<Snowflake, Message>]
+		>) {
 			const userMessages = messages.filter((message) => !message.author?.bot);
 			const firstMessage = userMessages.first();
 
@@ -79,7 +80,6 @@ export default class implements Event {
 					color: Color.LogsMessageDelete,
 					title: i18next.t("log.guild_log.message_bulk_deleted.title", { lng: locale }),
 					description: i18next.t("log.guild_log.message_bulk_deleted.description", {
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${firstMessage.channel.toString()} - ${
 							firstMessage.inGuild() ? firstMessage.channel.name : ""
 						} (${firstMessage.channel.id})`,

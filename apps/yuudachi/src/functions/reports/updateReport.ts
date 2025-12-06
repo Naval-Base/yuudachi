@@ -1,5 +1,5 @@
 import { kSQL, removeUndefinedKeys, container } from "@yuudachi/framework";
-import type { User } from "discord.js";
+import type { PartialUser, User } from "discord.js";
 import type { Sql } from "postgres";
 import type { CreateReport } from "./createReport.js";
 import { type RawReport, transformReport } from "./transformReport.js";
@@ -9,7 +9,7 @@ export type PatchReport = Pick<
 	"attachmentUrl" | "contextMessagesIds" | "guildId" | "message" | "reason" | "refId" | "reportId" | "status"
 >;
 
-export async function updateReport(report: PatchReport, moderator?: User) {
+export async function updateReport(report: PatchReport, moderator?: PartialUser | User) {
 	const sql = container.resolve<Sql<any>>(kSQL);
 
 	const updates: Partial<Record<keyof RawReport, unknown>> = {

@@ -2,7 +2,6 @@ import { Command, logger, kRedis, createButton, truncateEmbed, createMessageActi
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { ButtonStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";

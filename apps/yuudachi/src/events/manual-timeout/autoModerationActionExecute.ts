@@ -1,10 +1,9 @@
 import { on } from "node:events";
 import { logger, kRedis } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import type { AutoModerationActionExecution } from "discord.js";
-import { AutoModerationRuleTriggerType, AutoModerationActionType, Client, Events } from "discord.js";
+import type { AutoModerationActionExecution, Client } from "discord.js";
+import { AutoModerationRuleTriggerType, AutoModerationActionType, Events } from "discord.js";
 import i18next from "i18next";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { inject, injectable } from "tsyringe";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
@@ -55,6 +54,7 @@ export default class implements Event {
 				);
 
 				let reasonType = "default";
+				// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 				switch (autoModAction.ruleTriggerType) {
 					case AutoModerationRuleTriggerType.Keyword:
 						reasonType = "keyword";
@@ -62,6 +62,7 @@ export default class implements Event {
 					case AutoModerationRuleTriggerType.KeywordPreset:
 						reasonType = "keyword_preset";
 						break;
+					case AutoModerationRuleTriggerType.MentionSpam:
 					case AutoModerationRuleTriggerType.Spam:
 						reasonType = "spam";
 						break;

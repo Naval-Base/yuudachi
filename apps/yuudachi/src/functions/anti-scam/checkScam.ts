@@ -1,5 +1,4 @@
 import { createHash } from "node:crypto";
-import { URL } from "node:url";
 import { logger, kRedis, container } from "@yuudachi/framework";
 import type { Redis } from "ioredis";
 import { resolveRedirect } from "../../util/resolveRedirect.js";
@@ -45,7 +44,7 @@ async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null
 				lists: listHits,
 				host: url.host,
 				full: url.href,
-		  }
+			}
 		: null;
 }
 

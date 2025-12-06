@@ -1,6 +1,6 @@
 export * from "./ArgumentsOf.js";
-export * from "./Command.js";
-export * from "./Component.js";
-export * from "./Event.js";
+export type * from "./Command.js";
+export type * from "./Component.js";
+export type * from "./Event.js";
 export * from "./Interaction.js";
-export * from "./Utility.js";
+export type * from "./Utility.js";

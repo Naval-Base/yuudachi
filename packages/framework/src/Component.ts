@@ -14,8 +14,7 @@ export abstract class Component<
 	C extends ComponentPayload = ComponentPayload,
 	R extends Runtime = Runtime.Discordjs,
 	T extends CacheType = "cached",
-> implements Components<C, R, T>
-{
+> implements Components<C, R, T> {
 	public constructor(public readonly customId: C["customId"]) {}
 
 	public button(

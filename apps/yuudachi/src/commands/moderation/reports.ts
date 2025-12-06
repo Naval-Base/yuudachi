@@ -19,9 +19,9 @@ export default class extends Command<typeof ReportUtilsCommand> {
 		args: ArgsParam<typeof ReportUtilsCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		await interaction.deferReply({ ephemeral: args.lookup?.hide ?? true });
 
+		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 		switch (Object.keys(args)[0]) {
 			case "lookup":
 				await lookup(interaction, args.lookup, locale);

@@ -1,4 +1,3 @@
-import process from "node:process";
 import { kSQL, Command, createButton, createMessageActionRow, container } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { type Snowflake, ButtonStyle, ComponentType } from "discord.js";

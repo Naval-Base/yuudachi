@@ -1,8 +1,8 @@
 import { on } from "node:events";
 import { logger } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import type { AutoModerationActionExecution } from "discord.js";
-import { AutoModerationActionType, Client, Events } from "discord.js";
+import type { AutoModerationActionExecution, Client } from "discord.js";
+import { AutoModerationActionType, Events } from "discord.js";
 import { injectable } from "tsyringe";
 import { handleAntiSpam } from "../../functions/anti-spam/handler.js";
 

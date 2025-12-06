@@ -8,6 +8,7 @@ import type { RawCase } from "./transformCase.js";
 dayjs.extend(relativeTime);
 
 export async function findCases(phrase: string, guildId: Snowflake) {
+	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 	const sql = container.resolve<Sql<{}>>(kSQL);
 
 	if (!phrase.length) {

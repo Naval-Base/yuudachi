@@ -1,0 +1,26 @@
+packages:
+  - apps/*
+  - packages/*
+
+autoInstallPeers: false
+
+onlyBuiltDependencies:
+  - "@swc/core"
+  - bufferutil
+  - esbuild
+  - msgpackr-extract
+  - re2
+  - sharp
+  - unrs-resolver
+  - utf-8-validate
+
+peerDependencyRules:
+  allowAny:
+    - "*"
+  ignoreMissing:
+    - "*"
+
+publicHoistPattern:
+  - "*eslint*"
+  - "*prettier*"
+  - "*jju*"

@@ -1,8 +1,7 @@
-import process from "node:process";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Table } from "~/components/Table";
-import { columns } from "~/components/Table/AppealsColumns";
+import { Table } from "@/components/Table";
+import { columns } from "@/components/Table/AppealsColumns";
 
 export default async function Page() {
 	const cookieStore = cookies();
@@ -49,8 +48,8 @@ export default async function Page() {
 
 	return (
 		<div className="flex flex-col gap-8">
-			<h1 className="mb-4 pt-12 text-center text-4xl font-extrabold leading-none tracking-tight md:mb-8 md:text-5xl">
-				Latest <span className="underline-offset-3 decoration-blurple underline decoration-8">appeals</span>
+			<h1 className="mb-4 pt-12 text-center text-4xl leading-none font-extrabold tracking-tight md:mb-8 md:text-5xl">
+				Latest <span className="decoration-blurple underline decoration-8 underline-offset-3">appeals</span>
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">
 				<div className="flex w-full flex-col gap-4">

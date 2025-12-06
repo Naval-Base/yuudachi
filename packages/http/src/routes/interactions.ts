@@ -1,4 +1,3 @@
-/* eslint-disable promise/prefer-await-to-callbacks */
 import type { APIInteraction, APIInteractionResponse, APIInteractionResponsePong } from "discord-api-types/v10";
 import { InteractionResponseType, InteractionType } from "discord-api-types/v10";
 import type { FastifyInstance, FastifyRequest } from "fastify";
@@ -17,7 +16,7 @@ export default async function routes(fastify: FastifyInstance) {
 			reply,
 		): Promise<APIInteractionResponse> => {
 			if (!(await verifyRequest(request))) {
-				// eslint-disable-next-line @typescript-eslint/no-throw-literal
+				// eslint-disable-next-line @typescript-eslint/only-throw-error
 				throw { statusCode: 401, message: "Invalid signature." };
 			}
 

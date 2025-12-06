@@ -90,7 +90,7 @@ export async function user(
 					? i18next.t("command.mod.report.user.attachment_upsell.mention", {
 							report_command: chatInputApplicationCommandMention("report user", reportCommand.id),
 							lng: locale,
-					  })
+						})
 					: i18next.t("command.mod.report.user.attachment_upsell.option", { lng: locale }),
 				lng: locale,
 			}),

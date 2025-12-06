@@ -9,7 +9,7 @@ export const columns = [
 	columnHelper.accessor("target_id", {
 		header: "Target id",
 		cell: (info) => (
-			<Link href={`/moderation/cases/${info.getValue()}`} className="text-blurple">
+			<Link className="text-blurple" href={`/moderation/cases/${info.getValue()}`}>
 				{info.getValue()}
 			</Link>
 		),

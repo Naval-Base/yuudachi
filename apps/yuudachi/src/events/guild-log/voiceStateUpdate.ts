@@ -1,7 +1,7 @@
 import { on } from "node:events";
 import { logger, kWebhooks, truncateEmbed, addFields } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, Events, type VoiceState, type Webhook, type APIEmbedAuthor } from "discord.js";
+import { type Client, Events, type VoiceState, type Webhook, type APIEmbedAuthor } from "discord.js";
 import i18next from "i18next";
 import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
@@ -66,7 +66,6 @@ export default class implements Event {
 					);
 
 					description = i18next.t("log.guild_log.voice_state_update.joined", {
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});
@@ -91,7 +90,6 @@ export default class implements Event {
 					);
 
 					description = i18next.t("log.guild_log.voice_state_update.left", {
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
 						lng: locale,
 					});
@@ -117,9 +115,8 @@ export default class implements Event {
 					);
 
 					description = i18next.t("log.guild_log.voice_state_update.moved", {
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						from_channel: `${oldState.channel.toString()} - ${oldState.channel.name} (${oldState.channel.id})`,
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
+
 						to_channel: `${newState.channel.toString()} - ${newState.channel.name} (${newState.channel.id})`,
 						lng: locale,
 					});

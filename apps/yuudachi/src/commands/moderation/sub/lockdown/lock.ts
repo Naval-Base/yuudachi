@@ -32,7 +32,6 @@ export async function lock(
 	if (lockdown) {
 		throw new Error(
 			i18next.t("command.mod.lockdown.lock.errors.already_locked", {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 				lng: locale,
 			}),
@@ -61,7 +60,6 @@ export async function lock(
 
 	await interaction.editReply({
 		content: i18next.t("command.mod.lockdown.lock.pending", {
-			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 			lng: locale,
 		}),
@@ -88,7 +86,6 @@ export async function lock(
 	if (collectedInteraction?.customId === cancelKey) {
 		await collectedInteraction.update({
 			content: i18next.t("command.mod.lockdown.lock.cancel", {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 				lng: locale,
 			}),
@@ -114,16 +111,15 @@ export async function lock(
 						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
 						reason: args.reason,
 						lng: locale,
-				  })
+					})
 				: i18next.t("command.mod.lockdown.lock.message", {
 						duration: time(dayjs(duration.toISOString()).unix(), TimestampStyles.RelativeTime),
 						lng: locale,
-				  }),
+					}),
 		});
 
 		await collectedInteraction.editReply({
 			content: i18next.t("command.mod.lockdown.lock.success", {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				channel: `${args.channel.toString()} - ${args.channel.name} (${args.channel.id})`,
 				lng: locale,
 			}),

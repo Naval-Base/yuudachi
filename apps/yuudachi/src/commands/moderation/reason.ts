@@ -180,14 +180,14 @@ export default class extends Command<typeof ReasonCommand> {
 					amount: success.length,
 					count: upper - lower + 1,
 					lng: locale,
-			  })
+				})
 			: i18next.t("command.mod.reason.success", {
 					case: hyperlink(
 						`#${lower}`,
 						messageLink(modLogChannel.id, originalCaseLower.logMessageId!, interaction.guildId),
 					),
 					lng: locale,
-			  });
+				});
 
 		await interaction.editReply({
 			content: truncate(message, 1_000, ""),

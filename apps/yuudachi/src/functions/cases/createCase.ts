@@ -47,7 +47,7 @@ export async function createCase(
 
 	const reason = case_.modTag
 		? `Mod: ${case_.modTag}${case_.reason ? ` | ${case_.reason.replaceAll("`", "")}` : ""}`
-		: case_.reason ?? undefined;
+		: (case_.reason ?? undefined);
 
 	try {
 		if (!skipAction) {

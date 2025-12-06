@@ -79,34 +79,34 @@ type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) exten
 type TypeIdToType<T, O, C, P, R extends CacheType = "cached"> = T extends ApplicationCommandOptionType.Subcommand
 	? ArgumentsOfRaw<O, P, R>
 	: T extends ApplicationCommandOptionType.SubcommandGroup
-	  ? ArgumentsOfRaw<O, P, R>
-	  : T extends ApplicationCommandOptionType.String
-	    ? C extends readonly { value: string }[]
+		? ArgumentsOfRaw<O, P, R>
+		: T extends ApplicationCommandOptionType.String
+			? C extends readonly { value: string }[]
 				? C[number]["value"]
 				: string
-	    : T extends ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number
-	      ? C extends readonly { value: number }[]
+			: T extends ApplicationCommandOptionType.Integer | ApplicationCommandOptionType.Number
+				? C extends readonly { value: number }[]
 					? C[number]["value"]
 					: number
-	      : T extends ApplicationCommandOptionType.Boolean
-	        ? boolean
-	        : T extends ApplicationCommandOptionType.User
-	          ? P extends Runtime.Discordjs
+				: T extends ApplicationCommandOptionType.Boolean
+					? boolean
+					: T extends ApplicationCommandOptionType.User
+						? P extends Runtime.Discordjs
 							? {
 									member?: CacheTypeReducer<R, GuildMember, APIInteractionDataResolvedGuildMember> | undefined;
 									user: User;
-							  }
+								}
 							: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser }
-	          : T extends ApplicationCommandOptionType.Channel
-	            ? P extends Runtime.Discordjs
+						: T extends ApplicationCommandOptionType.Channel
+							? P extends Runtime.Discordjs
 								? CacheTypeReducer<R, GuildBasedChannel, APIInteractionDataResolvedChannel>
 								: APIPartialChannel & { permissions: Permissions }
-	            : T extends ApplicationCommandOptionType.Role
-	              ? P extends Runtime.Discordjs
+							: T extends ApplicationCommandOptionType.Role
+								? P extends Runtime.Discordjs
 									? CacheTypeReducer<R, Role, APIRole>
 									: APIRole
-	              : T extends ApplicationCommandOptionType.Mentionable
-	                ? P extends Runtime.Discordjs
+								: T extends ApplicationCommandOptionType.Mentionable
+									? P extends Runtime.Discordjs
 										?
 												| CacheTypeReducer<R, Role, APIRole>
 												| {
@@ -118,11 +118,11 @@ type TypeIdToType<T, O, C, P, R extends CacheType = "cached"> = T extends Applic
 												| APIRole
 												| { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser }
 												| undefined
-	                : T extends ApplicationCommandOptionType.Attachment
-	                  ? P extends Runtime.Discordjs
+									: T extends ApplicationCommandOptionType.Attachment
+										? P extends Runtime.Discordjs
 											? Attachment
 											: APIAttachment
-	                  : never;
+										: never;
 
 type OptionToObject<O, P, Z extends CacheType = "cached"> = O extends {
 	choices?: infer C | undefined;
@@ -135,8 +135,8 @@ type OptionToObject<O, P, Z extends CacheType = "cached"> = O extends {
 		? R extends true
 			? { [k in K]: TypeIdToType<T, O, C, P, Z> }
 			: T extends ApplicationCommandOptionType.Subcommand | ApplicationCommandOptionType.SubcommandGroup
-			  ? { [k in K]: TypeIdToType<T, O, C, P, Z> }
-			  : { [k in K]?: TypeIdToType<T, O, C, P, Z> | undefined }
+				? { [k in K]: TypeIdToType<T, O, C, P, Z> }
+				: { [k in K]?: TypeIdToType<T, O, C, P, Z> | undefined }
 		: never
 	: never;
 
@@ -153,29 +153,29 @@ export type ArgumentsOf<
 }
 	? UnionToIntersection<OptionToObject<C["options"][number], P, T>>
 	: C extends { type: ApplicationCommandType.Message }
-	  ? { message: P extends Runtime.Discordjs ? Message<true> : APIMessage }
-	  : C extends { type: ApplicationCommandType.User }
-	    ? P extends Runtime.Discordjs
+		? { message: P extends Runtime.Discordjs ? Message<true> : APIMessage }
+		: C extends { type: ApplicationCommandType.User }
+			? P extends Runtime.Discordjs
 				? {
 						user: {
 							member?: CacheTypeReducer<T, GuildMember, APIInteractionDataResolvedGuildMember> | undefined;
 							user: User;
 						};
-				  }
+					}
 				: { user: { member?: (APIGuildMember & { permissions: Permissions }) | undefined; user: APIUser } }
-	    : C extends { componentType: ComponentType.Button }
-	      ? never
-	      : C extends { componentType: ComponentType.ChannelSelect }
-	        ? P extends Runtime.Discordjs
+			: C extends { componentType: ComponentType.Button }
+				? never
+				: C extends { componentType: ComponentType.ChannelSelect }
+					? P extends Runtime.Discordjs
 						? {
 								channels: Collection<
 									Snowflake,
 									CacheTypeReducer<T, Channel, APIChannel, APIChannel | Channel, APIChannel | Channel>
 								>;
-						  }
+							}
 						: { channels: Map<Snowflake, APIPartialChannel & { permissions: Permissions }> }
-	        : C extends { componentType: ComponentType.MentionableSelect }
-	          ? P extends Runtime.Discordjs
+					: C extends { componentType: ComponentType.MentionableSelect }
+						? P extends Runtime.Discordjs
 							? {
 									members: Collection<
 										Snowflake,
@@ -189,22 +189,22 @@ export type ArgumentsOf<
 									>;
 									roles: Collection<Snowflake, CacheTypeReducer<T, Role, APIRole, APIRole | Role, APIRole | Role>>;
 									users: Collection<Snowflake, User>;
-							  }
+								}
 							: {
 									members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>;
 									roles: Map<Snowflake, APIRole>;
 									users: Map<Snowflake, APIUser>;
-							  }
-	          : C extends { componentType: ComponentType.RoleSelect }
-	            ? P extends Runtime.Discordjs
+								}
+						: C extends { componentType: ComponentType.RoleSelect }
+							? P extends Runtime.Discordjs
 								? { roles: Collection<Snowflake, CacheTypeReducer<T, Role, APIRole, APIRole | Role, APIRole | Role>> }
 								: { roles: Map<Snowflake, APIRole> }
-	            : C extends { componentType: ComponentType.StringSelect }
-	              ? { values: string[] }
-	              : C extends { componentType: ComponentType.TextInput }
-	                ? { value: string }
-	                : C extends { componentType: ComponentType.UserSelect }
-	                  ? P extends Runtime.Discordjs
+							: C extends { componentType: ComponentType.StringSelect }
+								? { values: string[] }
+								: C extends { componentType: ComponentType.TextInput }
+									? { value: string }
+									: C extends { componentType: ComponentType.UserSelect }
+										? P extends Runtime.Discordjs
 											? {
 													members: Collection<
 														Snowflake,
@@ -217,9 +217,9 @@ export type ArgumentsOf<
 														>
 													>;
 													users: Collection<Snowflake, User>;
-											  }
+												}
 											: {
 													members: Map<Snowflake, APIGuildMember & { permissions: Permissions }>;
 													users: Map<Snowflake, APIUser>;
-											  }
-	                  : never;
+												}
+										: never;

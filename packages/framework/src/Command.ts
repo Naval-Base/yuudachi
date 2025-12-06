@@ -16,8 +16,7 @@ export abstract class Command<
 	C extends CommandPayload = CommandPayload,
 	R extends Runtime = Runtime.Discordjs,
 	T extends CacheType = "cached",
-> implements Commands<C, R, T>
-{
+> implements Commands<C, R, T> {
 	public constructor(public readonly name?: C["name"][]) {}
 
 	public chatInput(

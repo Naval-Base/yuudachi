@@ -185,17 +185,15 @@ export async function generateCaseHistory(
 		colors.length - 1,
 	);
 
-	const records: HistoryRecord[] = cases.map((case_) => {
-		return {
-			created: case_.created_at,
-			identifierLabel: `#${case_.case_id}`,
-			identifierURL: case_.log_message_id
-				? messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id)
-				: undefined,
-			label: caseActionLabel(case_.action, locale).toUpperCase(),
-			description: case_.reason ?? undefined,
-		};
-	});
+	const records: HistoryRecord[] = cases.map((case_) => ({
+		created: case_.created_at,
+		identifierLabel: `#${case_.case_id}`,
+		identifierURL: case_.log_message_id
+			? messageLink(moduleLogChannelId, case_.log_message_id, case_.guild_id)
+			: undefined,
+		label: caseActionLabel(case_.action, locale).toUpperCase(),
+		description: case_.reason ?? undefined,
+	}));
 
 	return generateHistoryEmbed(
 		target.user,
@@ -395,9 +393,7 @@ export async function generateHistory(
 		}
 	}
 
-	if (!embed.color) {
-		embed.color = Color.DiscordEmbedBackground;
-	}
+	embed.color ??= Color.DiscordEmbedBackground;
 
 	return embed;
 }

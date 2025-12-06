@@ -3,13 +3,14 @@
 	"version": "0.0.0",
 	"description": "",
 	"scripts": {
-		"build": "yarn workspaces foreach -Apt run build",
-		"test": "yarn workspaces foreach -Apt run test",
-		"lint": "yarn workspaces foreach -Apt run lint",
-		"format": "yarn workspaces foreach -Apt run format",
-		"fmt": "yarn format",
-		"postinstall": "is-ci || husky install",
-		"update": "yarn upgrade-interactive"
+		"build": "pnpm --recursive build",
+		"test": "pnpm --recursive test",
+		"lint": "pnpm --recursive lint",
+		"format": "pnpm --recursive format",
+		"fmt": "pnpm format",
+		"prepare": "is-ci || husky",
+		"update": "pnpm --recursive update --interactive",
+		"update:latest": "pnpm --recursive update --interactive --latest"
 	},
 	"type": "module",
 	"keywords": [],
@@ -17,18 +18,22 @@
 	"license": "AGPL-3.0",
 	"private": true,
 	"devDependencies": {
-		"husky": "^8.0.3",
-		"is-ci": "^3.0.1",
-		"lint-staged": "^15.1.0",
-		"typescript": "^5.3.2",
-		"vercel": "^32.6.0"
+		"@types/lodash.merge": "^4.6.9",
+		"eslint": "^9.39.1",
+		"eslint-config-neon": "^0.2.9",
+		"eslint-formatter-pretty": "^7.0.0",
+		"eslint-import-resolver-typescript": "^4.4.4",
+		"eslint-plugin-react-compiler": "19.1.0-rc.2",
+		"husky": "^9.1.7",
+		"is-ci": "^4.1.0",
+		"lint-staged": "^16.2.7",
+		"lodash.merge": "^4.6.2",
+		"prettier": "^3.7.4",
+		"typescript": "^5.9.3",
+		"vercel": "^49.1.1"
 	},
 	"engines": {
-		"node": ">=16.0.0"
+		"node": ">=24.0.0"
 	},
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	],
-	"packageManager": "yarn@4.0.2"
+	"packageManager": "pnpm@10.20.0"
 }

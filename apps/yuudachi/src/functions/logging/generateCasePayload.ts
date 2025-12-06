@@ -1,4 +1,4 @@
-import type { GuildMember, Snowflake, User } from "discord.js";
+import type { GuildMember, PartialUser, Snowflake, User } from "discord.js";
 import type { CaseAction } from "../cases/createCase.js";
 
 type CasePayloadArgs = {
@@ -21,7 +21,7 @@ type GenerateCasePayloadOptions = {
 	messageId?: Snowflake | null | undefined;
 	multi?: boolean | null | undefined;
 	roleId?: Snowflake | null | undefined;
-	user?: User | null | undefined;
+	user?: PartialUser | User | null | undefined;
 };
 
 export function generateCasePayload({

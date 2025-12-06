@@ -1,13 +1,55 @@
 {
+	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+	"eslint.useESLintClass": true,
+	"eslint.useFlatConfig": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.fixAll": "explicit",
-		"source.organizeImports": "never"
+		"source.organizeImports": "never",
+		"source.fixAll.eslint": "always",
+		"source.fixAll": "always"
 	},
-	"eslint.workingDirectories": [{ "pattern": "./packages/*" }],
-	"unocss.root": "./packages/website",
-	"i18n-ally.localesPaths": "./packages/yuudachi/locales",
+	"editor.trimAutoWhitespace": false,
+	"files.associations": {
+		"tsconfig.json": "jsonc",
+		"tsconfig.eslint.json": "jsonc"
+	},
+	"files.insertFinalNewline": true,
+	"files.eol": "\n",
+	"search.exclude": {
+		"**/.yarn": true,
+		"**/.next": true,
+		"**/dist": true,
+		"**/coverage": true,
+		"**/test-results": true
+	},
+	"search.followSymlinks": false,
+	"search.useParentIgnoreFiles": true,
+	"files.watcherExclude": {
+		"**/.next/*/**": true,
+		"**/.yarn/*/**": true,
+		"**/coverage/*/**": true,
+		"**/dist/*/**": true,
+		"**/test-results/*/**": true
+	},
+	"unocss.disable": true,
+	"npm.packageManager": "pnpm",
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"tailwindCSS.experimental.classRegex": [
+		["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]?([^\"'`]+)[\"'`]?"],
+		["cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+		["class:\\s*?[\"'`]([^\"'`]*).*?,"]
+	],
+	"workbench.editor.customLabels.patterns": {
+		"**/app/**/page.tsx": "${dirname} (${filename}.${extname}) - Page",
+		"**/app/**/layout.tsx": "${dirname} (${filename}.${extname}) - Layout",
+		"**/app/**/template.tsx": "${dirname} (${filename}.${extname}) - Template",
+		"**/app/**/error.tsx": "${dirname} (${filename}.${extname}) - Error",
+		"**/app/**/not-found.tsx": "${dirname} (${filename}.${extname}) - Not Found",
+		"**/components/**/page.tsx": "${dirname} (${filename}.${extname}) - Component"
+	},
+	"i18n-ally.localesPaths": "./apps/yuudachi/locales",
 	"i18n-ally.enabledFrameworks": ["i18next"],
 	"i18n-ally.sourceLanguage": "en-US",
 	"i18n-ally.displayLanguage": "en-US",
@@ -18,6 +60,5 @@
 	"i18n-ally.theme.annotation": "#79b8ff",
 	"i18n-ally.theme.annotationBorder": "#c8e1ff",
 	"i18n-ally.theme.annotationMissing": "#79b8ff",
-	"i18n-ally.theme.annotationMissingBorder": "#f97583",
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"i18n-ally.theme.annotationMissingBorder": "#f97583"
 }

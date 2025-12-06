@@ -1,7 +1,7 @@
 import { on } from "node:events";
 import { logger, kWebhooks, addFields, truncateEmbed } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, Events, type Webhook } from "discord.js";
+import { type Client, Events, type Webhook } from "discord.js";
 import i18next from "i18next";
 import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
@@ -84,7 +84,7 @@ export default class implements Event {
 						? {
 								name: `${owner.tag} (${owner.id})`,
 								icon_url: owner.displayAvatarURL(),
-						  }
+							}
 						: undefined,
 					description: descriptionParts.join("\n"),
 					title: i18next.t("log.guild_log.thread_deleted.title"),

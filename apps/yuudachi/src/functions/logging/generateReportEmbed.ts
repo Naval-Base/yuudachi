@@ -39,7 +39,7 @@ export async function generateReportEmbed(
 							lng: locale,
 						}),
 						icon_url: user.client.user!.displayAvatarURL(),
-				  }
+					}
 				: undefined,
 	};
 

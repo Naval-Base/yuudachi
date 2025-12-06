@@ -1,6 +1,5 @@
 import { once } from "node:events";
 import { createServer } from "node:http";
-import { URL } from "node:url";
 import { logger } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import { Client, Events } from "discord.js";

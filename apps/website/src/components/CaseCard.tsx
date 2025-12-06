@@ -39,6 +39,7 @@ function caseActionLabel(key: CaseAction) {
 }
 
 function generateCaseColor(key: CaseAction) {
+	// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 	switch (key) {
 		case CaseAction.Role:
 		case CaseAction.Warn:
@@ -70,15 +71,15 @@ export function CaseCard({ case_ }: { readonly case_: any }) {
 					<div>
 						<span className="font-semibold">Action:</span> {caseActionLabel(case_.action)}
 					</div>
-					<div role="separator" className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" />
+					<div className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" role="separator" />
 					<div>
 						<span className="font-semibold">Moderator:</span> {case_.mod_tag}
 					</div>
-					<div role="separator" className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" />
+					<div className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" role="separator" />
 					<div>
 						<span className="font-semibold">Reason:</span> {case_.reason}
 					</div>
-					<div role="separator" className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" />
+					<div className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" role="separator" />
 					<div>
 						<span className="font-semibold">Date:</span> {new Intl.DateTimeFormat("en-GB").format(createdAt)} (
 						{format(Date.now() - createdAt.getTime(), true)} ago)

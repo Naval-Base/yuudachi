@@ -1,7 +1,8 @@
 import type { Command } from "@yuudachi/framework";
 import { transformApplicationInteraction, logger, kCommands } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { ApplicationCommandType, Client, Events } from "discord.js";
+import type { Client } from "discord.js";
+import { ApplicationCommandType, Events } from "discord.js";
 import { Counter } from "prom-client";
 import { inject, injectable } from "tsyringe";
 import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
@@ -69,6 +70,7 @@ export default class implements Event {
 
 					const effectiveLocale = forceLocale ? locale : interaction.locale;
 
+					// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 					switch (interaction.commandType) {
 						case ApplicationCommandType.ChatInput: {
 							const isAutocomplete = interaction.isAutocomplete();

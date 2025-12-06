@@ -1,14 +1,13 @@
 import { notFound } from "next/navigation";
-import type { SerializeOptions } from "next-mdx-remote/dist/types";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeHighlight from "rehype-highlight";
 import rehypeIgnore from "rehype-ignore";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-import rehypeGithubBlockquoteAdmonitions from "~/util/rehype-github-blockquote-admonitions";
-import rehypeHighlightANSI from "~/util/rehype-highlight-ansi";
-import remarkGithubBlockquoteAdmonitions from "~/util/remark-github-blockquote-admonitions";
+import rehypeGithubBlockquoteAdmonitions from "@/util/rehype-github-blockquote-admonitions";
+import rehypeHighlightANSI from "@/util/rehype-highlight-ansi";
+import remarkGithubBlockquoteAdmonitions from "@/util/remark-github-blockquote-admonitions";
 
 const mdxOptions = {
 	mdxOptions: {
@@ -24,7 +23,7 @@ const mdxOptions = {
 		],
 		format: "md",
 	},
-} satisfies SerializeOptions;
+} satisfies Parameters<typeof MDXRemote>[0]["options"];
 
 export default async function Page({ searchParams }: { readonly searchParams: { url: string } }) {
 	if (!searchParams.url) {

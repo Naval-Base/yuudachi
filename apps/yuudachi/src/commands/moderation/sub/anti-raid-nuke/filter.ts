@@ -167,7 +167,7 @@ export async function filter(
 			i18next.t("command.mod.anti_raid_nuke.filter.parameters.pattern", {
 				lng: locale,
 			}),
-			// eslint-disable-next-line @typescript-eslint/no-base-to-string
+
 			codeBlock(parsedPattern.toString()),
 		);
 	}

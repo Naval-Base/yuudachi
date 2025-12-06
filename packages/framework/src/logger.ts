@@ -1,4 +1,4 @@
-import process from "node:process";
 import { pino } from "pino";
 
-export const logger = pino({ name: process.env.LOGGER_NAME });
+// eslint-disable-next-line no-restricted-globals, n/prefer-global/process
+export const logger = pino({ name: process.env.LOGGER_NAME! });

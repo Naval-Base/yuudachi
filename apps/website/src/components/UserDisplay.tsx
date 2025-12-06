@@ -41,7 +41,7 @@ export function UserDisplay({
 				</div>
 
 				{user.avatar ? (
-					<div className="absolute left-[22px] top-[76px] rounded-full border-4">
+					<div className="absolute top-[76px] left-[22px] rounded-full border-4">
 						<picture>
 							<img
 								alt="Avatar"
@@ -53,7 +53,7 @@ export function UserDisplay({
 						</picture>
 					</div>
 				) : (
-					<div className="absolute left-[22px] top-[76px] rounded-full border-4">
+					<div className="absolute top-[76px] left-[22px] rounded-full border-4">
 						<picture>
 							<img
 								alt="Avatar"
@@ -64,7 +64,7 @@ export function UserDisplay({
 					</div>
 				)}
 			</div>
-			<div className="flex place-content-end truncate py-3 pl-28 pr-[22px]">
+			<div className="flex place-content-end truncate py-3 pr-[22px] pl-28">
 				<span className="truncate font-medium">{user.username}</span>
 			</div>
 		</div>

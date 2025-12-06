@@ -1,4 +1,3 @@
-import process from "node:process";
 import {
 	Command,
 	logger,
@@ -78,7 +77,7 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 					timestamp: lastRefresh
 						? `<t:${Math.floor(Number.parseInt(lastRefresh, 10) / 1_000)}:f> (<t:${Math.floor(
 								Number.parseInt(lastRefresh, 10) / 1_000,
-						  )}:R>)`
+							)}:R>)`
 						: i18next.t("command.utility.refresh_scamlist.refresh_never", { lng: locale }),
 					lng: locale,
 				}),

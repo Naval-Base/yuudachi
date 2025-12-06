@@ -26,6 +26,7 @@ export default class extends Command<typeof RestrictCommand> {
 			throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 		}
 
+		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 		switch (Object.keys(args)[0]) {
 			case "embed": {
 				await embed(interaction, reply, args.embed, locale);

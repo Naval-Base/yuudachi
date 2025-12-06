@@ -1,5 +1,5 @@
 import { kSQL, container } from "@yuudachi/framework";
-import type { Guild, Snowflake, User } from "discord.js";
+import type { Guild, PartialUser, Snowflake, User } from "discord.js";
 import type { Sql } from "postgres";
 import { generateCasePayload } from "../logging/generateCasePayload.js";
 import { CaseAction, createCase } from "./createCase.js";
@@ -16,7 +16,7 @@ type DeleteCaseOptions = {
 	reportReference?: number | undefined;
 	skipAction?: boolean | undefined;
 	target?: User | undefined;
-	user?: User | null | undefined;
+	user?: PartialUser | User | null | undefined;
 };
 
 export async function deleteCase({
@@ -109,8 +109,8 @@ export async function deleteCase({
 				case_action === CaseAction.Ban
 					? CaseAction.Unban
 					: case_action === CaseAction.Role
-					  ? CaseAction.Unrole
-					  : CaseAction.TimeoutEnd,
+						? CaseAction.Unrole
+						: CaseAction.TimeoutEnd,
 		}),
 		skipAction,
 	);

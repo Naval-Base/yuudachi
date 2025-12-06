@@ -2,7 +2,6 @@ import { Command, logger, kRedis, createModal, createModalActionRow, createTextC
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import { type GuildMember, type User, type Message, TextInputStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
 import { inject, injectable } from "tsyringe";
@@ -145,7 +144,7 @@ export default class extends Command<
 		await modalInteraction.deferReply({ ephemeral: true });
 
 		const reason = modalInteraction.components
-			.flatMap((row) => row.components)
+			.flatMap((row) => (row.type === ComponentType.ActionRow ? row.components : []))
 			.map((component) => (component.type === ComponentType.TextInput ? component.value || "" : ""));
 
 		await user(
@@ -220,7 +219,7 @@ export default class extends Command<
 		await modalInteraction.deferReply({ ephemeral: true });
 
 		const reason = modalInteraction.components
-			.flatMap((row) => row.components)
+			.flatMap((row) => (row.type === ComponentType.ActionRow ? row.components : []))
 			.map((component) => (component.type === ComponentType.TextInput ? component.value || "" : ""));
 
 		await message(

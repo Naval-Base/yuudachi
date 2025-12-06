@@ -1,4 +1,3 @@
-import { Buffer } from "node:buffer";
 import { ms } from "@naval-base/ms";
 import {
 	Command,
@@ -169,11 +168,14 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 				embeds: [],
 			});
 		} else if (collectedInteraction?.customId === clearKey) {
-			logger.info(`Pruning messages`, {
-				amount: messages.size,
-				timespan: ms(delta, true),
-				unique_authors: uniqueAuthors.size,
-			});
+			logger.info(
+				{
+					amount: messages.size,
+					timespan: ms(delta, true),
+					unique_authors: uniqueAuthors.size,
+				},
+				"Pruning messages",
+			);
 
 			await collectedInteraction.deferUpdate();
 			const prunedMessages = await pruneMessages(messages);
@@ -260,7 +262,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 				});
 			} catch (error_) {
 				const error = error_ as Error;
-				logger.error(error.message, error);
+				logger.error(error, error.message);
 			}
 		}
 	}

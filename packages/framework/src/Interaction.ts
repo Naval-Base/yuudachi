@@ -293,7 +293,7 @@ export function transformComponentInteraction<
 			break;
 		case InteractionType.ModalSubmit: {
 			const fields = interaction.components.reduce((acc, component) => {
-				for (const comp of component.components) {
+				for (const comp of component.type === ComponentType.ActionRow ? component.components : [component]) {
 					if (comp.type === ComponentType.TextInput) {
 						acc.set(comp.customId, comp.value);
 					}
@@ -369,7 +369,7 @@ export function transformComponentInteractionRaw<
 					? {
 							users: new Map(Object.entries(messageComponentInteraction.data.resolved.users ?? {})),
 							members: new Map(Object.entries(messageComponentInteraction.data.resolved.members ?? {})),
-					  }
+						}
 					: new Map(Object.entries(messageComponentInteraction.data.resolved.roles ?? {}));
 				break;
 			default:
@@ -383,7 +383,7 @@ export function transformComponentInteractionRaw<
 			break;
 		case InteractionType.ModalSubmit: {
 			const fields = interaction.data.components.reduce((acc, component) => {
-				for (const comp of component.components) {
+				for (const comp of component.type === ComponentType.ActionRow ? component.components : [component]) {
 					if (comp.type === ComponentType.TextInput) {
 						acc.set(comp.custom_id, comp.value);
 					}

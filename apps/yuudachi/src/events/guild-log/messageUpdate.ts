@@ -2,7 +2,7 @@ import { on } from "node:events";
 import { logger, kWebhooks, addFields, truncateEmbed } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import { diffLines, diffWords } from "diff";
-import { Client, Events, type Message, escapeMarkdown, type Webhook } from "discord.js";
+import { type Client, Events, type Message, escapeMarkdown, type Webhook } from "discord.js";
 import i18next from "i18next";
 import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
@@ -73,14 +73,14 @@ export default class implements Event {
 
 				// eslint-disable-next-line prefer-named-capture-group
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
-					// eslint-disable-next-line unicorn/no-unsafe-regex, prefer-named-capture-group
+					// eslint-disable-next-line prefer-named-capture-group
 					const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
 
 					if (!strippedOldMessage?.[2]) {
 						continue;
 					}
 
-					// eslint-disable-next-line unicorn/no-unsafe-regex, prefer-named-capture-group
+					// eslint-disable-next-line prefer-named-capture-group
 					const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
 
 					if (!strippedNewMessage?.[2]) {
@@ -117,7 +117,6 @@ export default class implements Event {
 				}
 
 				const info = `${i18next.t("log.guild_log.message_updated.channel", {
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string
 					channel: `${newMessage.channel.toString()} - ${newMessage.inGuild() ? newMessage.channel.name : ""}(${
 						newMessage.channel.id
 					})`,

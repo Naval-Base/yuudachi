@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { readFile } from "node:fs/promises";
-import process from "node:process";
-import { URL, fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { Backend } from "@skyra/i18next-backend";
 import {
 	type Command,
@@ -129,10 +128,13 @@ try {
 	if (wsURL && identity) {
 		new WebSocketConnection(process.env.SCAM_DOMAIN_WS!, scamDomainRequestHeaders.SCAM_DOMAIN_URL, redis);
 	} else {
-		logger.warn(`Missing env var 'SCAM_DOMAIN_WS or 'SCAM_DOMAIN_IDENTITY' to instantiate a WebSocketConnection`, {
-			wsURL,
-			identity,
-		});
+		logger.warn(
+			{
+				wsURL,
+				identity,
+			},
+			"Missing env var 'SCAM_DOMAIN_WS or 'SCAM_DOMAIN_IDENTITY' to instantiate a WebSocketConnection",
+		);
 	}
 } catch (error_) {
 	const error = error_ as Error;

@@ -1,7 +1,7 @@
 import { on } from "node:events";
 import { logger, kWebhooks, addFields, truncateEmbed } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { ChannelType, Client, Events, messageLink, MessageType, type Message, type Webhook } from "discord.js";
+import { type Client, ChannelType, Events, messageLink, MessageType, type Message, type Webhook } from "discord.js";
 import i18next from "i18next";
 import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
@@ -70,7 +70,6 @@ export default class implements Event {
 
 				const infoParts = [
 					i18next.t("log.guild_log.message_deleted.channel", {
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
 						channel: `${message.channel.toString()} - ${message.channel.name} (${message.channel.id})`,
 						lng: locale,
 					}),
@@ -138,14 +137,14 @@ export default class implements Event {
 									user_tag: message.mentions.repliedUser.tag,
 									user_id: message.mentions.repliedUser.id,
 									lng: locale,
-							  })
+								})
 							: i18next.t("log.guild_log.message_deleted.reply_to", {
 									message_id: messageId,
 									message_url: replyURL,
 									user_tag: message.mentions.repliedUser.tag,
 									user_id: message.mentions.repliedUser.id,
 									lng: locale,
-							  }),
+								}),
 					);
 				}
 

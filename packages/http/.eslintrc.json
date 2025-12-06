@@ -1,6 +1,0 @@
-{
-	"extends": ["../../.eslintrc.json", "neon/common", "neon/node", "neon/typescript", "neon/prettier"],
-	"rules": {
-		"import/extensions": 0
-	}
-}

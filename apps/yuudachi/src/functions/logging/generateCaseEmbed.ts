@@ -1,5 +1,5 @@
 import { addFields } from "@yuudachi/framework";
-import type { Snowflake, User } from "discord.js";
+import type { PartialUser, Snowflake, User } from "discord.js";
 import i18next from "i18next";
 import type { Case } from "../cases/createCase.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
@@ -9,7 +9,7 @@ import { generateCaseLog } from "./generateCaseLog.js";
 export async function generateCaseEmbed(
 	guildId: Snowflake,
 	logChannelId: Snowflake,
-	user: User | null | undefined,
+	user: PartialUser | User | null | undefined,
 	case_: Case,
 ) {
 	const locale = await getGuildSetting(guildId, SettingsKeys.Locale);

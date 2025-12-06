@@ -25,6 +25,7 @@ export type ReportStatusTagTuple = [string, string, string, string, string, stri
 export type ReportTypeTagTuple = [string, string];
 
 export async function getGuildSetting<T = string>(guildId: Snowflake, prop: SettingsKeys, table = "guild_settings") {
+	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 	const sql = container.resolve<Sql<{}>>(kSQL);
 
 	const [data] = await sql.unsafe<[{ value: ReportStatusTagTuple | ReportTypeTagTuple | boolean | string | null }?]>(

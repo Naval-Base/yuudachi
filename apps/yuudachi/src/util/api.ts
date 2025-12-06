@@ -1,4 +1,3 @@
-import process from "node:process";
 import helmet from "@fastify/helmet";
 import jwt from "@fastify/jwt";
 import sensible from "@fastify/sensible";

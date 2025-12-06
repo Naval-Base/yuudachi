@@ -1,4 +1,3 @@
-import { URL } from "node:url";
 import { container } from "@yuudachi/framework";
 import { Client } from "discord.js";
 

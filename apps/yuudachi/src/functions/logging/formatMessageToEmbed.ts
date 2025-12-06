@@ -13,7 +13,7 @@ export function formatMessageToEmbed(message: Message<true>, locale: string) {
 			? message.content
 			: i18next.t("common.errors.no_content", {
 					lng: locale,
-			  }),
+				}),
 		timestamp: message.createdAt.toISOString(),
 		footer: {
 			text: `#${message.channel.name}`,

@@ -1,11 +1,11 @@
 {
+	"$schema": "https://json.schemastore.org/tsconfig.json",
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"module": "Node16",
-		"moduleResolution": "Node16",
-		"resolveJsonModule": true,
-		"outDir": "dist",
-		"lib": ["ESNext"]
+		"exactOptionalPropertyTypes": false,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"outDir": "dist"
 	},
 	"include": ["src/**/*.ts"]
 }

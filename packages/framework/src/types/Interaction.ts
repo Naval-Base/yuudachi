@@ -183,8 +183,8 @@ export type ArgsParam<
 		? ComponentMethodParameters<C, M, R, Z>[1]
 		: never
 	: C extends CommandPayload
-	  ? CommandMethodParameters<C, M, R, Z>[1]
-	  : never;
+		? CommandMethodParameters<C, M, R, Z>[1]
+		: never;
 export type LocaleParam<
 	C extends CommandMethod | ComponentMethod = CommandMethod.ChatInput,
 	T extends InteractionType = InteractionType.ApplicationCommand,

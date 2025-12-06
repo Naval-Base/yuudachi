@@ -1,4 +1,3 @@
-import process from "node:process";
 import { logger, kRedis, container } from "@yuudachi/framework";
 import type { Redis } from "ioredis";
 import { request as fetch, type Dispatcher } from "undici";

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 
-import "~/styles/main.css";
+import "@/styles/main.css";
 
 export const viewport: Viewport = {
 	themeColor: [
