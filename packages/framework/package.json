@@ -5,7 +5,7 @@
 	"scripts": {
 		"build:clean": "del-cli dist",
 		"build:check": "tsc --emitDeclarationOnly",
-		"build:esm": "swc ./src --out-dir ./dist",
+		"build:esm": "swc ./src --out-dir ./dist --strip-leading-paths",
 		"build": "pnpm run build:clean && pnpm run build:check && pnpm run build:esm",
 		"lint": "prettier --check . && cross-env TIMING=1 eslint src --ext ts --format=pretty",
 		"format": "prettier --write . && cross-env TIMING=1 eslint src --ext ts --fix --format=pretty",
