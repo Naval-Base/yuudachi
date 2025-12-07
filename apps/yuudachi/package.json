@@ -24,7 +24,8 @@
 	"files": [
 		"dist",
 		"locales",
-		"migrations"
+		"migrations",
+		"linkshorteners.json"
 	],
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@gmail.com>",
