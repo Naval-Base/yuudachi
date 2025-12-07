@@ -17,7 +17,7 @@ RUN pnpm --filter yuudachi build
 
 FROM builder AS pruned
 
-RUN pnpm --filter yuudachi --prod deploy --legacy pruned
+RUN pnpm --filter yuudachi deploy --legacy pruned
 
 FROM node:24-alpine AS yuudachi
 
