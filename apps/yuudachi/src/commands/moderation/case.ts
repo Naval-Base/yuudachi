@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command, container, kSQL, truncateEmbed, createButton, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import { ButtonStyle, messageLink } from "discord.js";
@@ -13,6 +14,7 @@ import type { CaseLookupCommand } from "../../interactions/index.js";
 import { generateHistory } from "../../util/generateHistory.js";
 import { resolveMemberAndUser } from "../../util/resolveMemberAndUser.js";
 
+@injectable()
 export default class extends Command<typeof CaseLookupCommand> {
 	public override async autocomplete(
 		interaction: InteractionParam<CommandMethod.Autocomplete>,

@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
@@ -9,6 +10,7 @@ import { emoji } from "./sub/restrict/emoji.js";
 import { react } from "./sub/restrict/react.js";
 import { unrole } from "./sub/restrict/unrole.js";
 
+@injectable()
 export default class extends Command<typeof RestrictCommand> {
 	public override async chatInput(
 		interaction: InteractionParam,

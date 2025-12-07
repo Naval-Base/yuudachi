@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command, logger, createButton, truncateEmbed, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { ButtonStyle, ComponentType } from "discord.js";
@@ -12,6 +13,7 @@ import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuild
 import type { WarnCommand } from "../../interactions/index.js";
 import { generateHistory } from "../../util/generateHistory.js";
 
+@injectable()
 export default class extends Command<typeof WarnCommand> {
 	public override async chatInput(
 		interaction: InteractionParam,

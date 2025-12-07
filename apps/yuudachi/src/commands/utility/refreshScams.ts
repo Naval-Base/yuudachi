@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import {
 	Command,
 	logger,
@@ -16,6 +17,7 @@ import { Color } from "../../Constants.js";
 import { refreshScamDomains, ScamRedisKeys, scamURLEnvs } from "../../functions/anti-scam/refreshScamDomains.js";
 import type { RefreshScamlistCommand } from "../../interactions/index.js";
 
+@injectable()
 export default class extends Command<typeof RefreshScamlistCommand> {
 	public constructor() {
 		super(["refresh-scamlists"]);

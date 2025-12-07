@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import type { Message } from "discord.js";
@@ -7,6 +8,7 @@ import type { RepostCommand, RepostMessageContextCommand } from "../../interacti
 import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
 import { parseMessageLink, resolveMessage } from "../../util/resolveMessage.js";
 
+@injectable()
 export default class extends Command<typeof RepostCommand | typeof RepostMessageContextCommand> {
 	private async handle(
 		interaction: InteractionParam | InteractionParam<CommandMethod.MessageContext>,

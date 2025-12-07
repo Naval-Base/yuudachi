@@ -55,7 +55,7 @@ register.setDefaultLabels({
 
 const commandFiles = readdirp(fileURLToPath(new URL("commands", import.meta.url)), {
 	fileFilter: (file) => file.basename.endsWith(".js"),
-	directoryFilter: "!sub",
+	directoryFilter: (dir) => dir.basename !== "!sub",
 });
 
 const eventFiles = readdirp(fileURLToPath(new URL("events", import.meta.url)), {

@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command, addFields, truncateEmbed } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
@@ -5,6 +6,7 @@ import { Color } from "../../Constants.js";
 import { checkScam } from "../../functions/anti-scam/checkScam.js";
 import type { CheckScamCommand } from "../../interactions/index.js";
 
+@injectable()
 export default class extends Command<typeof CheckScamCommand> {
 	public constructor() {
 		super(["check-scam"]);

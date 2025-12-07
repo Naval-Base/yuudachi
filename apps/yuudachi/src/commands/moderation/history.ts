@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command, truncateEmbed } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import type { HistoryCommand, HistoryUserContextCommand } from "../../interactions/index.js";
@@ -7,6 +8,8 @@ type HistoryCommandArgs =
 	| ArgsParam<typeof HistoryCommand>["cases"]
 	| ArgsParam<typeof HistoryCommand>["reports"]
 	| ArgsParam<typeof HistoryUserContextCommand>;
+
+@injectable()
 export default class extends Command<typeof HistoryCommand | typeof HistoryUserContextCommand> {
 	public constructor() {
 		super(["history", "History"]);

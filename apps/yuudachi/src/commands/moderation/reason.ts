@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command, logger, createButton, truncate, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { ComponentType, ButtonStyle, hyperlink, messageLink } from "discord.js";
@@ -12,6 +13,7 @@ import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { ReasonCommand } from "../../interactions/index.js";
 
+@injectable()
 export default class extends Command<typeof ReasonCommand> {
 	public override async chatInput(
 		interaction: InteractionParam,

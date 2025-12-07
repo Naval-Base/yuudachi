@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
@@ -8,6 +9,7 @@ import type { ReferenceCommand } from "../../interactions/index.js";
 import { caseReference } from "./sub/reference/case.js";
 import { reportReference } from "./sub/reference/report.js";
 
+@injectable()
 export default class extends Command<typeof ReferenceCommand> {
 	public override async chatInput(
 		interaction: InteractionParam,

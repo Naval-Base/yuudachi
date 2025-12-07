@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import i18next from "i18next";
@@ -9,6 +10,7 @@ import { filter } from "./sub/anti-raid-nuke/filter.js";
 import { modal } from "./sub/anti-raid-nuke/modal.js";
 import { releaseNukeLock } from "./sub/anti-raid-nuke/utils.js";
 
+@injectable()
 export default class extends Command<typeof AntiRaidNukeCommand> {
 	public override async chatInput(
 		interaction: InteractionParam,

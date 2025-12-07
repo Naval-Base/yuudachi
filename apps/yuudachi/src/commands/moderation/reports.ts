@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import { handleReportAutocomplete } from "../../functions/autocomplete/reports.js";
@@ -5,6 +6,7 @@ import type { ReportUtilsCommand } from "../../interactions/index.js";
 import { lookup } from "./sub/reports/lookup.js";
 import { status } from "./sub/reports/status.js";
 
+@injectable()
 export default class extends Command<typeof ReportUtilsCommand> {
 	public override async autocomplete(
 		interaction: InteractionParam<CommandMethod.Autocomplete>,

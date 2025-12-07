@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { kSQL, Command, createButton, createMessageActionRow, container } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import { type Snowflake, ButtonStyle, ComponentType } from "discord.js";
@@ -6,6 +7,7 @@ import { nanoid } from "nanoid";
 import type { Sql } from "postgres";
 import type { SponsorCommand, SponsorUserContextCommand } from "../../interactions/index.js";
 
+@injectable()
 export default class extends Command<typeof SponsorCommand | typeof SponsorUserContextCommand> {
 	public constructor() {
 		super(["sponsor", "Assign sponsor"]);

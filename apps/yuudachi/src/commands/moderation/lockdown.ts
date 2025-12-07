@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { type TextChannel, ChannelType, PermissionFlagsBits } from "discord.js";
@@ -7,6 +8,7 @@ import type { LockdownCommand } from "../../interactions/index.js";
 import { lift } from "./sub/lockdown/lift.js";
 import { lock } from "./sub/lockdown/lock.js";
 
+@injectable()
 export default class extends Command<typeof LockdownCommand> {
 	public override async chatInput(
 		interaction: InteractionParam,

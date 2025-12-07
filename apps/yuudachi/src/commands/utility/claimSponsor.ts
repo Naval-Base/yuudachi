@@ -1,3 +1,4 @@
+import { injectable } from "@needle-di/core";
 import { kSQL, Command, createButton, createMessageActionRow, container } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { type Snowflake, ButtonStyle, ComponentType } from "discord.js";
@@ -7,6 +8,7 @@ import type { Sql } from "postgres";
 import { request as fetch } from "undici";
 import type { ClaimSponsorCommand } from "../../interactions/index.js";
 
+@injectable()
 export default class extends Command<typeof ClaimSponsorCommand> {
 	public constructor() {
 		super(["claim-sponsor"]);
