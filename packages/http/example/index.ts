@@ -1,7 +1,6 @@
 /* eslint-disable n/prefer-global/process */
 /* eslint-disable no-restricted-globals */
 
-import "reflect-metadata";
 import { setTimeout } from "node:timers";
 import { createREST, createAPI } from "@yuudachi/framework";
 import HttpHandler from "@yuudachi/http";

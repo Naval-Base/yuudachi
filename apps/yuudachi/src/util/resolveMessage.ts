@@ -23,7 +23,7 @@ export async function resolveMessage(
 	messageId: Snowflake,
 	locale: string,
 ) {
-	const client = container.resolve<Client<true>>(Client);
+	const client = container.get<Client<true>>(Client);
 
 	const guild = client.guilds.resolve(guildId);
 

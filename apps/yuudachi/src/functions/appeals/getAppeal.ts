@@ -3,7 +3,7 @@ import type { Sql } from "postgres";
 import { type RawAppeal, transformAppeal } from "./transformAppeal.js";
 
 export async function getAppeal(guildId: string, reportId: number) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [rawAppeal] = await sql<[RawAppeal?]>`
 		select *

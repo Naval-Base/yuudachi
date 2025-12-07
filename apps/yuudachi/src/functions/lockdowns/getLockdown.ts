@@ -4,7 +4,7 @@ import type { Sql } from "postgres";
 import { type RawLockdown, transformLockdown } from "./transformLockdown.js";
 
 export async function getLockdown(guildId: Snowflake, channelId: Snowflake) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [lockdown] = await sql<[RawLockdown?]>`
 		select *

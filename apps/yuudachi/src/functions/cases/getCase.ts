@@ -4,7 +4,7 @@ import type { Sql } from "postgres";
 import { type RawCase, transformCase } from "./transformCase.js";
 
 export async function getCase(guildId: Snowflake, caseId: number) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [case_] = await sql<[RawCase?]>`
 		select *

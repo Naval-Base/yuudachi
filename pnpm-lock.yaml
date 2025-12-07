@@ -289,6 +289,9 @@ importers:
       '@naval-base/ms':
         specifier: ^3.1.0
         version: 3.1.0
+      '@needle-di/core':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@skyra/i18next-backend':
         specifier: ^2.0.6
         version: 2.0.6
@@ -355,12 +358,6 @@ importers:
       redis:
         specifier: ^5.10.0
         version: 5.10.0
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
-      tsyringe:
-        specifier: 4.8.0
-        version: 4.8.0
       undici:
         specifier: ^7.16.0
         version: 7.16.0
@@ -428,6 +425,9 @@ importers:
       '@discordjs/rest':
         specifier: ^2.6.0
         version: 2.6.0
+      '@needle-di/core':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@swc/helpers':
         specifier: ^0.5.17
         version: 0.5.17
@@ -443,12 +443,6 @@ importers:
       readdirp:
         specifier: ^5.0.0
         version: 5.0.0
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
-      tsyringe:
-        specifier: ^4.10.0
-        version: 4.10.0
       type-fest:
         specifier: ^5.3.0
         version: 5.3.0
@@ -547,9 +541,6 @@ importers:
       prettier:
         specifier: ^3.7.4
         version: 3.7.4
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -1928,6 +1919,9 @@ packages:
 
   '@naval-base/ms@3.1.0':
     resolution: {integrity: sha512-3xSG3J2f9xSEgni7liDFBNnlhOf6/sLedCMaEtWv3iaJkeaWvyfdWBYhd2bTko3BLMcQfY4MgICoUGRla1bXiQ==}
+
+  '@needle-di/core@1.1.0':
+    resolution: {integrity: sha512-2naqWoNdHjmO5sOo8i3B8aqTPOPP3RUSjPofhxPBbmqBUTwQEZWEcUJF8Ib4YU7IbcKqDZnrtGLw2OcnhZi2/A==}
 
   '@next/bundle-analyzer@14.2.33':
     resolution: {integrity: sha512-pKrmt1oQXOICfbQKytSbWwxh3Txqd+NG5nLb24ginP4neYy9GW6wZ3STEAcCLVhXPIBAMs9IEefuMtPJF4z9FA==}
@@ -6426,9 +6420,6 @@ packages:
     resolution: {integrity: sha512-J8rn6v4DBb2nnFqkqwy6/NnTYMcgLA+sLr0iIO41qpv0n+ngb7ksag2tMRl0inb1bbO/esUwzW1vbJi7K0sI0g==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
-  reflect-metadata@0.2.2:
-    resolution: {integrity: sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==}
-
   reflect.getprototypeof@1.0.10:
     resolution: {integrity: sha512-00o4I+DVrefhv+nX0ulyi3biSHCPDe+yLv5o/p6d/UVlirijB8E16FtfwSAi4g3tcqrQ4lRAqQSoFEZJehYEcw==}
     engines: {node: '>= 0.4'}
@@ -7124,14 +7115,6 @@ packages:
     resolution: {integrity: sha512-5C1sg4USs1lfG0GFb2RLXsdpXqBSEhAaA/0kPL01wxzpMqLILNxIxIOKiILz+cdg/pLnOUxFYOR5yhHU666wbw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
-
-  tsyringe@4.10.0:
-    resolution: {integrity: sha512-axr3IdNuVIxnaK5XGEUFTu3YmAQ6lllgrvqfEoR16g/HGnYY/6We4oWENtAnzK6/LpJ2ur9PAb80RBt7/U4ugw==}
-    engines: {node: '>= 6.0.0'}
-
-  tsyringe@4.8.0:
-    resolution: {integrity: sha512-YB1FG+axdxADa3ncEtRnQCFq/M0lALGLxSZeVNbTU8NqhOVc51nnv2CISTcvc1kyv6EGPtXVr0v6lWeDxiijOA==}
-    engines: {node: '>= 6.0.0'}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -8813,6 +8796,8 @@ snapshots:
     optional: true
 
   '@naval-base/ms@3.1.0': {}
+
+  '@needle-di/core@1.1.0': {}
 
   '@next/bundle-analyzer@14.2.33(bufferutil@4.0.9)':
     dependencies:
@@ -14400,8 +14385,6 @@ snapshots:
     dependencies:
       '@eslint-community/regexpp': 4.12.2
 
-  reflect-metadata@0.2.2: {}
-
   reflect.getprototypeof@1.0.10:
     dependencies:
       call-bind: 1.0.8
@@ -15246,14 +15229,6 @@ snapshots:
       get-tsconfig: 4.13.0
     optionalDependencies:
       fsevents: 2.3.3
-
-  tsyringe@4.10.0:
-    dependencies:
-      tslib: 1.14.1
-
-  tsyringe@4.8.0:
-    dependencies:
-      tslib: 1.14.1
 
   type-check@0.4.0:
     dependencies:

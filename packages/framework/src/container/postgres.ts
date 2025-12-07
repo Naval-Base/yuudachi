@@ -1,4 +1,4 @@
-import { container } from "tsyringe";
+import { container } from "./container.js";
 import { kSQL } from "./tokens.js";
 
 export async function createPostgres() {
@@ -14,5 +14,5 @@ export async function createPostgres() {
 			},
 		},
 	});
-	container.register(kSQL, { useValue: sql });
+	container.bind({ provide: kSQL, useValue: sql });
 }

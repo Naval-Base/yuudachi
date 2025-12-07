@@ -10,4 +10,4 @@ export * from "./constants.js";
 export * from "./Interaction.js";
 export * from "./logger.js";
 
-export { container } from "tsyringe";
+export { container } from "./container/container.js";

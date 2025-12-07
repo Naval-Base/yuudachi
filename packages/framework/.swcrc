@@ -1,4 +1,5 @@
 {
+	"$schema": "https://swc.rs/schema.json",
 	"exclude": [".*/types/.*\\.ts$"],
 	"jsc": {
 		"parser": {
@@ -7,8 +8,6 @@
 			"decorators": true
 		},
 		"transform": {
-			"legacyDecorator": true,
-			"decoratorMetadata": true,
 			"treatConstEnumAsEnum": true,
 			"useDefineForClassFields": true
 		},

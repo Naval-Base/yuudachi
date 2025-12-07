@@ -1,10 +1,10 @@
+import { inject, injectable } from "@needle-di/core";
 import { Command, logger, kRedis, createButton, truncateEmbed, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { ButtonStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
-import { inject, injectable } from "tsyringe";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
@@ -16,7 +16,7 @@ import { generateHistory } from "../../util/generateHistory.js";
 
 @injectable()
 export default class extends Command<typeof BanCommand> {
-	public constructor(@inject(kRedis) public readonly redis: Redis) {
+	public constructor(public readonly redis: Redis = inject(kRedis)) {
 		super();
 	}
 

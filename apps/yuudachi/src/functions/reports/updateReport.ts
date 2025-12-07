@@ -10,7 +10,7 @@ export type PatchReport = Pick<
 >;
 
 export async function updateReport(report: PatchReport, moderator?: PartialUser | User) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const updates: Partial<Record<keyof RawReport, unknown>> = {
 		status: report.status,

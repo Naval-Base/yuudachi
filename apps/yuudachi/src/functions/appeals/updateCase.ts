@@ -7,7 +7,7 @@ import { type RawAppeal, transformAppeal } from "./transformAppeal.js";
 export type PatchAppeal = Pick<Partial<CreateAppeal>, "appealId" | "guildId" | "reason" | "refId" | "status">;
 
 export async function updateAppeal(appeal: PatchAppeal, moderator?: User) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const updates: Partial<Record<keyof RawAppeal, unknown>> = {
 		status: appeal.status,

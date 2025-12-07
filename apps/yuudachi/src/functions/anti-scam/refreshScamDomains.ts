@@ -36,7 +36,7 @@ export const scamDomainRequestHeaders = {
 export async function refreshScamDomains(redis?: Redis | undefined) {
 	let localRedis = redis;
 	if (!redis) {
-		localRedis = container.resolve<Redis>(kRedis);
+		localRedis = container.get<Redis>(kRedis);
 	}
 
 	const res: ScamDomainRefreshData[] = [];

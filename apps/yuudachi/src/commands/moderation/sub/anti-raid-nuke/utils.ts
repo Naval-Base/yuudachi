@@ -20,7 +20,7 @@ import { resolveTimestamp } from "../../../../util/timestamp.js";
  * @returns True, if the lock was acquired, false if already locked
  */
 export async function acquireNukeLock(guildId: Snowflake) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 	const key = `guild:${guildId}:anti_raid_nuke`;
 	if (await redis.exists(key)) {
 		return false;
@@ -37,7 +37,7 @@ export async function acquireNukeLock(guildId: Snowflake) {
  * @returns True, if the lock was released, false if there was no lock
  */
 export async function releaseNukeLock(guildId: Snowflake) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 	const key = `guild:${guildId}:anti_raid_nuke`;
 	if (await redis.exists(key)) {
 		await redis.del(key);

@@ -32,7 +32,7 @@ export enum ReportStatus {
 }
 
 export async function createReport(report: CreateReport): Promise<Report> {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [rawReport] = await sql<[RawReport]>`
 		insert into reports (

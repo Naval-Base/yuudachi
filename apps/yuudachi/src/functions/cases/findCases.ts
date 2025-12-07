@@ -9,7 +9,7 @@ dayjs.extend(relativeTime);
 
 export async function findCases(phrase: string, guildId: Snowflake) {
 	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-	const sql = container.resolve<Sql<{}>>(kSQL);
+	const sql = container.get<Sql<{}>>(kSQL);
 
 	if (!phrase.length) {
 		return sql<RawCase[]>`

@@ -5,7 +5,7 @@ import { SCAM_EXPIRE_SECONDS } from "../../Constants.js";
 import { checkScam } from "./checkScam.js";
 
 export async function totalScams(content: string, guildId: Snowflake, userId: Snowflake) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 
 	const scamKey = `guild:${guildId}:user:${userId}:scams`;
 	const hitDomains = await checkScam(content);

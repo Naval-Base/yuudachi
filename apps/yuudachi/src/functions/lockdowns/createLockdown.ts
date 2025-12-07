@@ -12,7 +12,7 @@ export type CreateLockdown = Omit<Lockdown, "expiration" | "overwrites"> & {
 };
 
 export async function createLockdown(lockdown: CreateLockdown & { channel: GuildChannel }) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const overwrites = [...lockdown.channel.permissionOverwrites.cache.values()];
 

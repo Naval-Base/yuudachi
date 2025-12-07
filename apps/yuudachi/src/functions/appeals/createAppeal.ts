@@ -19,7 +19,7 @@ export enum AppealStatus {
 }
 
 export async function createAppeal(appeal: CreateAppeal): Promise<Appeal> {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [rawAppeal] = await sql<[RawAppeal]>`
 		insert into appeals (

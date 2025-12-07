@@ -9,7 +9,7 @@ export type PatchCase = Pick<
 >;
 
 export async function updateCase(case_: PatchCase) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const updates: Partial<Record<keyof RawCase, unknown>> = {
 		action_expiration: case_.actionExpiration,

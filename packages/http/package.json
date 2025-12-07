@@ -55,7 +55,6 @@
 		"eslint-config-neon": "^0.2.9",
 		"eslint-formatter-pretty": "^7.0.0",
 		"prettier": "^3.7.4",
-		"reflect-metadata": "^0.2.2",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	},

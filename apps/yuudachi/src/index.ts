@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { Backend } from "@skyra/i18next-backend";
@@ -64,8 +63,8 @@ const eventFiles = readdirp(fileURLToPath(new URL("events", import.meta.url)), {
 });
 
 try {
-	const redis = container.resolve<Redis>(kRedis);
-	const commands = container.resolve<Map<string, Command>>(kCommands);
+	const redis = container.get<Redis>(kRedis);
+	const commands = container.get<Map<string, Command>>(kCommands);
 
 	const shorteners = JSON.parse(
 		(await readFile(fileURLToPath(new URL("../linkshorteners.json", import.meta.url).href))).toString(),
@@ -92,7 +91,7 @@ try {
 		}
 
 		const dynamic = dynamicImport<new () => Command>(async () => import(pathToFileURL(dir.fullPath).href));
-		const command = container.resolve<Command>((await dynamic()).default);
+		const command = container.get<Command>((await dynamic()).default);
 		logger.info(
 			{ command: { name: command.name?.join(", ") ?? cmdInfo.name } },
 			`Registering command: ${command.name?.join(", ") ?? cmdInfo.name}`,
@@ -109,7 +108,7 @@ try {
 
 	for await (const dir of eventFiles) {
 		const dynamic = dynamicImport<new () => Event>(async () => import(pathToFileURL(dir.fullPath).href));
-		const event_ = container.resolve<Event>((await dynamic()).default);
+		const event_ = container.get<Event>((await dynamic()).default);
 		logger.info({ event: { name: event_.name, event: event_.event } }, `Registering event: ${event_.name}`);
 
 		if (event_.disabled) {

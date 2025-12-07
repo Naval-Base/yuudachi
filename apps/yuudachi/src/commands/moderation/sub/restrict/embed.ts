@@ -35,7 +35,7 @@ export async function embed(
 		);
 	}
 
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [roles] = await sql<[{ embed_role_id: Snowflake | null }?]>`
 		select embed_role_id

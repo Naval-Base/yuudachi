@@ -1,10 +1,9 @@
+import { inject, injectable } from "@needle-di/core";
 import type { Command } from "@yuudachi/framework";
 import { transformApplicationInteraction, logger, kCommands } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import type { Client } from "discord.js";
-import { ApplicationCommandType, Events } from "discord.js";
+import { Client, ApplicationCommandType, Events } from "discord.js";
 import { Counter } from "prom-client";
-import { inject, injectable } from "tsyringe";
 import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
 import { handleReasonAutocomplete } from "../functions/autocomplete/reasons.js";
 import { handleReportAutocomplete } from "../functions/autocomplete/reports.js";
@@ -36,8 +35,8 @@ export default class implements Event {
 	public event = Events.InteractionCreate as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kCommands) public readonly commands: Map<string, Command>,
+		public readonly client: Client<true> = inject(Client),
+		public readonly commands: Map<string, Command> = inject(kCommands),
 	) {}
 
 	public execute(): void {

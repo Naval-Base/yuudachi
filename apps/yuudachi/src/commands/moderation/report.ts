@@ -1,10 +1,10 @@
+import { inject, injectable } from "@needle-di/core";
 import { Command, logger, kRedis, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
 import { type GuildMember, type User, type Message, TextInputStyle, ComponentType } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
-import { inject, injectable } from "tsyringe";
 import { REPORT_REASON_MAX_LENGTH, REPORT_REASON_MIN_LENGTH } from "../../Constants.js";
 import type { Report } from "../../functions/reports/createReport.js";
 import { getPendingReportByTarget } from "../../functions/reports/getReport.js";
@@ -19,7 +19,7 @@ import { user } from "./sub/report/user.js";
 export default class extends Command<
 	typeof ReportCommand | typeof ReportMessageContextCommand | typeof ReportUserContextCommand
 > {
-	public constructor(@inject(kRedis) public readonly redis: Redis) {
+	public constructor(public readonly redis: Redis = inject(kRedis)) {
 		super(["report", "Report message", "Report user"]);
 	}
 

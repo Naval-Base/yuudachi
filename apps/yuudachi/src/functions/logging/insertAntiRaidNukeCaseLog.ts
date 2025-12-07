@@ -14,7 +14,7 @@ export async function insertAntiRaidNukeCaseLog(
 	reason: string,
 	messageUrl: string,
 ) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	const modLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 

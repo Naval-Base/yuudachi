@@ -8,7 +8,7 @@ import type { RawAppeal } from "./transformAppeal.js";
 dayjs.extend(relativeTime);
 
 export async function findAppeals(phrase: string, guildId: Snowflake) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	if (!phrase.length) {
 		return sql<RawAppeal[]>`

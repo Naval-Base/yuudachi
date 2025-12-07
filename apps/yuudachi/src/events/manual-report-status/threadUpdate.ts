@@ -1,11 +1,11 @@
 import { on } from "node:events";
 import { setTimeout as pSetTimeout } from "node:timers/promises";
+import { inject, injectable } from "@needle-di/core";
 import { logger, kSQL, arrayEquals } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import type { ThreadChannel, Client } from "discord.js";
+import { type ThreadChannel, Client } from "discord.js";
 import { AuditLogEvent, Events } from "discord.js";
 import type { Sql } from "postgres";
-import { inject, injectable } from "tsyringe";
 import { AUDIT_LOG_WAIT_SECONDS } from "../../Constants.js";
 import { upsertReportLog } from "../../functions/logging/upsertReportLog.js";
 import { type RawReport, transformReport } from "../../functions/reports/transformReport.js";
@@ -19,8 +19,8 @@ export default class implements Event {
 	public event = Events.ThreadUpdate as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kSQL) public readonly sql: Sql<any>,
+		public readonly client: Client<true> = inject(Client),
+		public readonly sql: Sql<any> = inject(kSQL),
 	) {}
 
 	public async execute(): Promise<void> {

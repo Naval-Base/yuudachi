@@ -49,7 +49,7 @@ async function checkDomain(redis: Redis, url: URL): Promise<ScamDomainHit | null
 }
 
 export async function checkScam(content: string) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 
 	const linkRegex =
 		/https?:\/\/(?:www\.|(?!www))[\da-z][\da-z-]+[\da-z]\.\S{2,}|https?:\/\/(?:www\.|(?!www))[\da-z]+\.\S{2,}/gi;

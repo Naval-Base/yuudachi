@@ -1,11 +1,11 @@
 import { on } from "node:events";
+import { inject, injectable } from "@needle-di/core";
 import { logger, kRedis } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import type { AutoModerationActionExecution, Client } from "discord.js";
+import { type AutoModerationActionExecution, Client } from "discord.js";
 import { AutoModerationRuleTriggerType, AutoModerationActionType, Events } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import { inject, injectable } from "tsyringe";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
 import { generateCasePayload } from "../../functions/logging/generateCasePayload.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
@@ -18,8 +18,8 @@ export default class implements Event {
 	public event = Events.AutoModerationActionExecution as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kRedis) public readonly redis: Redis,
+		public readonly client: Client<true> = inject(Client),
+		public readonly redis: Redis = inject(kRedis),
 	) {}
 
 	public async execute(): Promise<void> {

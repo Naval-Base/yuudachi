@@ -1,10 +1,10 @@
 import { on } from "node:events";
+import { inject, injectable } from "@needle-di/core";
 import { logger, kWebhooks, addFields, truncateEmbed } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import { diffLines, diffWords } from "diff";
-import { type Client, Events, type Message, escapeMarkdown, type Webhook } from "discord.js";
+import { Client, Events, type Message, escapeMarkdown, type Webhook } from "discord.js";
 import i18next from "i18next";
-import { inject, injectable } from "tsyringe";
 import { Color } from "../../Constants.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 
@@ -15,8 +15,8 @@ export default class implements Event {
 	public event = Events.MessageUpdate as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>,
+		public readonly client: Client<true> = inject(Client),
+		public readonly webhooks: Map<string, Webhook> = inject(kWebhooks),
 	) {}
 
 	public async execute(): Promise<void> {

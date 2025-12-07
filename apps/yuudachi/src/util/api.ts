@@ -27,8 +27,8 @@ export const api = fastify({ trustProxy: true })
 
 			app.get("/users/:id", async (request) => {
 				const { id } = request.params as any;
-				const client = container.resolve(Client);
-				const sql = container.resolve<Sql<any>>(kSQL);
+				const client = container.get(Client);
+				const sql = container.get<Sql<any>>(kSQL);
 
 				let banned = false;
 
@@ -59,7 +59,7 @@ export const api = fastify({ trustProxy: true })
 			});
 
 			app.get("/cases", async (_) => {
-				const sql = container.resolve<Sql<any>>(kSQL);
+				const sql = container.get<Sql<any>>(kSQL);
 
 				const cases = await sql<RawCase[]>`
 					select target_id, target_tag, count(*) cases_count
@@ -83,8 +83,8 @@ export const api = fastify({ trustProxy: true })
 
 			app.get("/cases/:id", async (request) => {
 				const { id } = request.params as any;
-				const client = container.resolve(Client);
-				const sql = container.resolve<Sql<any>>(kSQL);
+				const client = container.get(Client);
+				const sql = container.get<Sql<any>>(kSQL);
 
 				const user = await client.users.fetch(id, { force: true });
 				const cases = await sql<RawCase[]>`
@@ -108,7 +108,7 @@ export const api = fastify({ trustProxy: true })
 			});
 
 			app.get("/appeals", async (_) => {
-				const sql = container.resolve<Sql<any>>(kSQL);
+				const sql = container.get<Sql<any>>(kSQL);
 
 				const appeals = await sql<RawCase[]>`
 					select *, (select count(*) from appeals) as appeals_count

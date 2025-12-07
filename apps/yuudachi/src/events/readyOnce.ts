@@ -1,10 +1,10 @@
 import { once } from "node:events";
 import { createServer } from "node:http";
-import { logger } from "@yuudachi/framework";
+import { inject, injectable } from "@needle-di/core";
+import { container, logger } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
 import { Client, Events } from "discord.js";
 import { Gauge, collectDefaultMetrics, register } from "prom-client";
-import { container, injectable } from "tsyringe";
 
 collectDefaultMetrics({ register, prefix: "yuudachi_bot_v3_" });
 
@@ -12,7 +12,7 @@ new Gauge({
 	name: "yuudachi_bot_v3_guilds_total",
 	help: "Total guilds",
 	collect() {
-		const client = container.resolve<Client<true>>(Client);
+		const client = container.get<Client<true>>(Client);
 
 		this.set(client.guilds.cache.size);
 	},
@@ -23,7 +23,7 @@ new Gauge({
 	help: "Total users",
 	labelNames: ["guildId"],
 	collect() {
-		const client = container.resolve<Client<true>>(Client);
+		const client = container.get<Client<true>>(Client);
 
 		for (const [, guild] of client.guilds.cache) {
 			this.set({ guildId: guild.id }, guild.memberCount);
@@ -37,7 +37,7 @@ export default class implements Event {
 
 	public event = Events.ClientReady as const;
 
-	public constructor(public readonly client: Client<true>) {}
+	public constructor(public readonly client: Client<true> = inject(Client)) {}
 
 	public async execute(): Promise<void> {
 		await once(this.client, this.event);

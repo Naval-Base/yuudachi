@@ -153,7 +153,7 @@ export async function generateCaseHistory(
 	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
 ) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 	const moduleLogChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ModLogChannelId);
 
 	const cases = await sql<[RawCase]>`
@@ -227,7 +227,7 @@ export async function generateReportHistory(
 	target: { member?: GuildMember | undefined; user: User },
 	locale: string,
 ) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const rawReports = await sql<[RawReport]>`
 		select *

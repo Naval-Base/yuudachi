@@ -43,7 +43,7 @@ export async function createCase(
 	case_: CreateCase & { target?: GuildMember | null | undefined },
 	skipAction = false,
 ) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const reason = case_.modTag
 		? `Mod: ${case_.modTag}${case_.reason ? ` | ${case_.reason.replaceAll("`", "")}` : ""}`

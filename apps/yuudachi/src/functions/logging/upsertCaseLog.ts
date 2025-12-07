@@ -8,7 +8,7 @@ import { generateCaseEmbed } from "./generateCaseEmbed.js";
 
 export async function upsertCaseLog(guild: Guild, user: PartialUser | User | null | undefined, case_: Case) {
 	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-	const sql = container.resolve<Sql<{}>>(kSQL);
+	const sql = container.get<Sql<{}>>(kSQL);
 	const modLogChannel = checkLogChannel(guild, await getGuildSetting(guild.id, SettingsKeys.ModLogChannelId));
 
 	const embed = await generateCaseEmbed(guild.id, modLogChannel!.id, user, case_);

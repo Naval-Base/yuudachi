@@ -57,7 +57,7 @@ export async function generateAntiRaidNukeReport(
 	cases: Case[],
 	args: FormatterArgs,
 ) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 	const locale = await getGuildSetting(guild.id, SettingsKeys.Locale);
 	const isPreliminary = Boolean(args.preliminary || args.hide);
 

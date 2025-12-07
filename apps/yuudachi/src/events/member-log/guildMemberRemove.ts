@@ -1,8 +1,8 @@
 import { on } from "node:events";
+import { inject, injectable } from "@needle-di/core";
 import { logger, kWebhooks } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { type Client, Events, type GuildMember, type Webhook } from "discord.js";
-import { inject, injectable } from "tsyringe";
+import { Client, Events, type GuildMember, type Webhook } from "discord.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import { generateMemberLog } from "../../util/generateMemberLog.js";
 
@@ -13,8 +13,8 @@ export default class implements Event {
 	public event = Events.GuildMemberRemove as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>,
+		public readonly client: Client<true> = inject(Client),
+		public readonly webhooks: Map<string, Webhook> = inject(kWebhooks),
 	) {}
 
 	public async execute(): Promise<void> {

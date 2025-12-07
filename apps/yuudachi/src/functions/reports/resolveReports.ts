@@ -1,14 +1,13 @@
-import { kSQL, logger } from "@yuudachi/framework";
+import { container, kSQL, logger } from "@yuudachi/framework";
 import type { Guild, User } from "discord.js";
 import type { Sql } from "postgres";
-import { container } from "tsyringe";
 import { upsertReportLog } from "../logging/upsertReportLog.js";
 import { ReportStatus } from "./createReport.js";
 import type { RawReport } from "./transformReport.js";
 import { updateReport } from "./updateReport.js";
 
 export async function resolvePendingReports(guild: Guild, targetId: string, caseId: number, moderator: User) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const pendingReports = await sql<RawReport[]>`
 		select *

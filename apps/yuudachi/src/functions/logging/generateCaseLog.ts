@@ -7,8 +7,8 @@ import { type Case, CaseAction } from "../cases/createCase.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 
 export async function generateCaseLog(case_: Case, logChannelId: Snowflake, locale: string) {
-	const client = container.resolve<Client<true>>(Client);
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const client = container.get<Client<true>>(Client);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	let action = caseActionLabel(case_.action, locale, true);
 

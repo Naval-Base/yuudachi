@@ -8,7 +8,7 @@ import type { RawReport } from "./transformReport.js";
 dayjs.extend(relativeTime);
 
 export async function findReports(phrase: string, guildId: Snowflake) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	if (!phrase.length) {
 		return sql<RawReport[]>`

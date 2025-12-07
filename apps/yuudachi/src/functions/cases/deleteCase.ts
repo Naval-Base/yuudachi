@@ -31,7 +31,7 @@ export async function deleteCase({
 	reportReference = undefined,
 	appealReference = undefined,
 }: DeleteCaseOptions) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	let case_: RawCase | undefined;
 	let localReason = reason;

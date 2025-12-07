@@ -35,7 +35,7 @@ export async function emoji(
 		);
 	}
 
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [roles] = await sql<[{ emoji_role_id: Snowflake | null }?]>`
 		select emoji_role_id

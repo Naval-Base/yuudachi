@@ -13,7 +13,7 @@ export async function blastOff(
 	rejections: TargetRejection[],
 	locale: string,
 ) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 
 	await redis.setex(`guild:${interaction.guildId}:anti_raid_nuke`, 15, "true");
 	let idx = 0;

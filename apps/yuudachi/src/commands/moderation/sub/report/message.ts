@@ -29,7 +29,7 @@ export async function message(
 	locale: string,
 	pendingReport?: Report | null,
 ) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 	const userKey = `guild:${interaction.guildId}:report:user:${args.message.author.id}`;
 	const trimmedReason = args.reason.trim();
 

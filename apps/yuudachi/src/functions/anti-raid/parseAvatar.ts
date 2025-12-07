@@ -18,7 +18,7 @@ export async function parseAvatar(input?: string | null | undefined) {
 
 	if (idReg.test(input)) {
 		try {
-			const client = container.resolve<Client<true>>(Client);
+			const client = container.get<Client<true>>(Client);
 			const user = await client.users.fetch(input);
 
 			return user.avatar ?? "none";

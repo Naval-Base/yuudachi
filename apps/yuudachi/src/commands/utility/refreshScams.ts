@@ -26,7 +26,7 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 		_: ArgsParam<typeof RefreshScamlistCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const redis = container.resolve<Redis>(kRedis);
+		const redis = container.get<Redis>(kRedis);
 
 		const reply = await interaction.deferReply({ ephemeral: true });
 

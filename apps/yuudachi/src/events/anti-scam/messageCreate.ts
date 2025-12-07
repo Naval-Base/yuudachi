@@ -1,10 +1,10 @@
 import { on } from "node:events";
+import { inject, injectable } from "@needle-di/core";
 import { logger, kRedis } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { type Client, Events, type Message } from "discord.js";
+import { Client, Events, type Message } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import { inject, injectable } from "tsyringe";
 import { SCAM_THRESHOLD } from "../../Constants.js";
 import { totalScams } from "../../functions/anti-scam/totalScams.js";
 import { type Case, CaseAction, createCase } from "../../functions/cases/createCase.js";
@@ -19,8 +19,8 @@ export default class implements Event {
 	public event = Events.MessageCreate as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kRedis) public readonly redis: Redis,
+		public readonly client: Client<true> = inject(Client),
+		public readonly redis: Redis = inject(kRedis),
 	) {}
 
 	public async execute(): Promise<void> {

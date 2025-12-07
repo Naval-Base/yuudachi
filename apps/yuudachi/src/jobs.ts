@@ -9,10 +9,10 @@ import { deleteLockdown } from "./functions/lockdowns/deleteLockdown.js";
 import { upsertCaseLog } from "./functions/logging/upsertCaseLog.js";
 
 export async function registerJobs() {
-	const client = container.resolve<Client<true>>(Client);
+	const client = container.get<Client<true>>(Client);
 	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-	const sql = container.resolve<Sql<{}>>(kSQL);
-	const redis = container.resolve<Redis>(kRedis);
+	const sql = container.get<Sql<{}>>(kSQL);
+	const redis = container.get<Redis>(kRedis);
 
 	const queue = new Queue("jobs", { connection: redis });
 

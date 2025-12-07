@@ -1,9 +1,9 @@
 import { on } from "node:events";
+import { inject, injectable } from "@needle-di/core";
 import { logger, kSQL } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { type Client, Events, type GuildMember } from "discord.js";
+import { Client, Events, type GuildMember } from "discord.js";
 import type { Sql } from "postgres";
-import { inject, injectable } from "tsyringe";
 import { CaseAction } from "../../functions/cases/createCase.js";
 import type { RawCase } from "../../functions/cases/transformCase.js";
 
@@ -14,8 +14,8 @@ export default class implements Event {
 	public event = Events.GuildMemberAdd as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kSQL) public readonly sql: Sql<any>,
+		public readonly client: Client<true> = inject(Client),
+		public readonly sql: Sql<any> = inject(kSQL),
 	) {}
 
 	public async execute(): Promise<void> {

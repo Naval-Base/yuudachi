@@ -19,7 +19,7 @@ export async function lookup(
 	args: ArgsParam<typeof ReportUtilsCommand>["lookup"],
 	locale: LocaleParam,
 ): Promise<void> {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 	const [cmd, id] = args.phrase.split(OP_DELIMITER);
 
 	if (cmd === "history" && id) {

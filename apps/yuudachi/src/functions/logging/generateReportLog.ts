@@ -19,7 +19,7 @@ import type { Report } from "../reports/createReport.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
 
 export async function generateReportLog(report: Report, locale: string, message?: Message | null): Promise<string> {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const parts = [
 		i18next.t("log.report_log.target", {

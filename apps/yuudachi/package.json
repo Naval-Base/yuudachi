@@ -32,6 +32,7 @@
 		"@fastify/jwt": "^10.0.0",
 		"@fastify/sensible": "^6.0.4",
 		"@naval-base/ms": "^3.1.0",
+		"@needle-di/core": "^1.1.0",
 		"@skyra/i18next-backend": "^2.0.6",
 		"@swc/helpers": "^0.5.17",
 		"@yuudachi/framework": "workspace:^",
@@ -54,8 +55,6 @@
 		"re2": "^1.22.3",
 		"readdirp": "^5.0.0",
 		"redis": "^5.10.0",
-		"reflect-metadata": "^0.2.2",
-		"tsyringe": "4.8.0",
 		"undici": "^7.16.0",
 		"utf-8-validate": "^6.0.5",
 		"ws": "^8.18.3"

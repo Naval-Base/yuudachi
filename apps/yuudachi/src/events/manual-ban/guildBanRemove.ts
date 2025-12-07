@@ -1,10 +1,10 @@
 import { on } from "node:events";
 import { setTimeout as pSetTimeout } from "node:timers/promises";
+import { inject, injectable } from "@needle-di/core";
 import { logger, kRedis } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { type Client, Events, type GuildBan, AuditLogEvent } from "discord.js";
+import { Client, Events, type GuildBan, AuditLogEvent } from "discord.js";
 import type { Redis } from "ioredis";
-import { inject, injectable } from "tsyringe";
 import { AUDIT_LOG_WAIT_SECONDS } from "../../Constants.js";
 import { deleteCase } from "../../functions/cases/deleteCase.js";
 import { upsertCaseLog } from "../../functions/logging/upsertCaseLog.js";
@@ -18,8 +18,8 @@ export default class implements Event {
 	public event = Events.GuildBanRemove as const;
 
 	public constructor(
-		public readonly client: Client<true>,
-		@inject(kRedis) public readonly redis: Redis,
+		public readonly client: Client<true> = inject(Client),
+		public readonly redis: Redis = inject(kRedis),
 	) {}
 
 	public async execute(): Promise<void> {

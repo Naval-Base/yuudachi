@@ -1,10 +1,10 @@
 import { ms } from "@naval-base/ms";
+import { inject, injectable } from "@needle-di/core";
 import { Command, kRedis } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
 import { hyperlink, messageLink } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import { inject, injectable } from "tsyringe";
 import { CaseAction } from "../../functions/cases/createCase.js";
 import { getCase } from "../../functions/cases/getCase.js";
 import { updateCase } from "../../functions/cases/updateCase.js";
@@ -15,7 +15,7 @@ import type { DurationCommand } from "../../interactions/index.js";
 
 @injectable()
 export default class extends Command<typeof DurationCommand> {
-	public constructor(@inject(kRedis) public readonly redis: Redis) {
+	public constructor(public readonly redis: Redis = inject(kRedis)) {
 		super();
 	}
 

@@ -1,4 +1,5 @@
 import { ms } from "@naval-base/ms";
+import { inject, injectable } from "@needle-di/core";
 import {
 	Command,
 	logger,
@@ -21,7 +22,6 @@ import {
 } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
-import { inject, injectable } from "tsyringe";
 import { Color, DATE_FORMAT_LOGFILE } from "../../Constants.js";
 import { formatMessageToEmbed } from "../../functions/logging/formatMessageToEmbed.js";
 import { formatMessagesToAttachment } from "../../functions/logging/formatMessagesToAttachment.js";
@@ -58,7 +58,7 @@ async function resolveSnowflakeOrLink(
 
 @injectable()
 export default class extends Command<typeof ClearCommand | typeof ClearContextCommand> {
-	public constructor(@inject(kWebhooks) public readonly webhooks: Map<string, Webhook>) {
+	public constructor(public readonly webhooks: Map<string, Webhook> = inject(kWebhooks)) {
 		super(["clear", "Clear messages to"]);
 	}
 

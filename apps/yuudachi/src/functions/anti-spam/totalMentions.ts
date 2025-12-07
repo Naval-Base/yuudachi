@@ -6,7 +6,7 @@ import { MENTION_EXPIRE_SECONDS } from "../../Constants.js";
 import { removeCodeBlocks } from "../../util/codeBlock.js";
 
 export async function totalMentions(guildId: Snowflake, userId: Snowflake, content: string) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 	const parsed = new Set<Snowflake>();
 
 	const filtered = removeCodeBlocks(content);

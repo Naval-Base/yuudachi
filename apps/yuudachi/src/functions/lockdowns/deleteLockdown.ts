@@ -4,8 +4,8 @@ import type { PermissionOverwrites, GuildChannel, Snowflake } from "discord.js";
 import type { Sql } from "postgres";
 
 export async function deleteLockdown(channelId: Snowflake) {
-	const client = container.resolve<Client<true>>(Client);
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const client = container.get<Client<true>>(Client);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	try {
 		const channel = client.channels.resolve(channelId) as GuildChannel;

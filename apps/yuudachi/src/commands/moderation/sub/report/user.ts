@@ -33,7 +33,7 @@ export async function user(
 	locale: string,
 	pendingReport?: Report | null,
 ) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 	const key = `guild:${interaction.guildId}:report:user:${args.user.user.id}`;
 
 	const {

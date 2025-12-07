@@ -9,7 +9,7 @@ export function createContentHash(content: string) {
 }
 
 export async function totalContents(guildId: Snowflake, userId: Snowflake, content: string) {
-	const redis = container.resolve<Redis>(kRedis);
+	const redis = container.get<Redis>(kRedis);
 
 	const contentHash = createContentHash(content);
 

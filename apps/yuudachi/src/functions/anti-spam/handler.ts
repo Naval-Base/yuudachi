@@ -16,8 +16,8 @@ export async function handleAntiSpam(
 	content: string,
 	event: { event: string; name: string },
 ): Promise<void> {
-	const client = container.resolve<Client<true>>(Client);
-	const redis = container.resolve<Redis>(kRedis);
+	const client = container.get<Client<true>>(Client);
+	const redis = container.get<Redis>(kRedis);
 
 	const guild = client.guilds.resolve(guildId);
 

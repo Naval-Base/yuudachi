@@ -27,7 +27,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 		args: ArgsParam<typeof CaseLookupCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const sql = container.resolve<Sql<any>>(kSQL);
+		const sql = container.get<Sql<any>>(kSQL);
 		await interaction.deferReply({ ephemeral: args.hide ?? true });
 
 		const [cmd, id] = args.phrase.split(OP_DELIMITER);

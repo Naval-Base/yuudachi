@@ -1,4 +1,4 @@
-import { container } from "tsyringe";
+import { container } from "./container.js";
 import { kRedis } from "./tokens.js";
 
 export async function createRedis() {
@@ -7,5 +7,5 @@ export async function createRedis() {
 	// @ts-expect-error: This is callable
 	// eslint-disable-next-line no-restricted-globals, n/prefer-global/process
 	const redis = new Redis.default(process.env.REDISHOST!, { maxRetriesPerRequest: null });
-	container.register(kRedis, { useValue: redis });
+	container.bind({ provide: kRedis, useValue: redis });
 }

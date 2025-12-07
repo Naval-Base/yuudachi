@@ -18,7 +18,7 @@ export default class extends Command<typeof SponsorCommand | typeof SponsorUserC
 	): Promise<void> {
 		const reply = await interaction.deferReply({ ephemeral: true });
 
-		const sql = container.resolve<Sql<any>>(kSQL);
+		const sql = container.get<Sql<any>>(kSQL);
 
 		const [roles] = await sql<[{ sponsor_role_id: Snowflake | null }?]>`
 			select sponsor_role_id

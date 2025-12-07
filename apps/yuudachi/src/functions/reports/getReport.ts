@@ -5,7 +5,7 @@ import { ReportStatus } from "./createReport.js";
 import { type RawReport, transformReport } from "./transformReport.js";
 
 export async function getReport(guildId: string, reportId: number) {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [rawReport] = await sql<[RawReport?]>`
 		select *
@@ -22,7 +22,7 @@ export async function getReport(guildId: string, reportId: number) {
 }
 
 export async function getPendingReportByTarget(guildId: string, targetId: string): Promise<Report | null> {
-	const sql = container.resolve<Sql<any>>(kSQL);
+	const sql = container.get<Sql<any>>(kSQL);
 
 	const [rawReport] = await sql<[RawReport]>`
 		select * 
