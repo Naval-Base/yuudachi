@@ -11,11 +11,11 @@
 		"lint": "prettier --check . && cross-env TIMING=1 eslint src --ext ts --format=pretty",
 		"format": "prettier --write . && cross-env TIMING=1 eslint src --ext ts --fix --format=pretty",
 		"fmt": "pnpm run format",
-		"start": "env-cmd node --enable-source-maps dist/index.js",
+		"start": "env-cmd --silent node --enable-source-maps dist/index.js",
 		"start:dev": "npm run build && npm run dev",
-		"dev": "env-cmd node --enable-source-maps dist/index.js",
-		"deploy:commands": "env-cmd node --enable-source-maps dist/deploy.js",
-		"migrate": "env-cmd ley"
+		"dev": "env-cmd --silent node --enable-source-maps dist/index.js",
+		"deploy:commands": "env-cmd --silent node --enable-source-maps dist/deploy.js",
+		"migrate": "env-cmd --silent ley"
 	},
 	"type": "module",
 	"directories": {
