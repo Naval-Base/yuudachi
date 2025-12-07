@@ -31,4 +31,4 @@ USER yuudachi
 
 COPY --from=pruned /usr/yuudachi/pruned .
 
-CMD pnpm --filter yuudachi migrate && pnpm --filter yuudachi start
+CMD pnpm --filter yuudachi migrate up && pnpm --filter yuudachi start
