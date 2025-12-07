@@ -23,6 +23,10 @@ FROM node:24-alpine AS yuudachi
 
 WORKDIR /usr/yuudachi
 
+RUN npm --global install corepack@latest
+RUN corepack enable
+RUN corepack install
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 yuudachi
 USER yuudachi
