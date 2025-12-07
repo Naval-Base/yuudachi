@@ -21,6 +21,11 @@
 	"directories": {
 		"lib": "src"
 	},
+	"files": [
+		"dist",
+		"locales",
+		"migrations"
+	],
 	"keywords": [],
 	"author": "iCrawl <icrawltogo@gmail.com>",
 	"license": "AGPL-3.0",
