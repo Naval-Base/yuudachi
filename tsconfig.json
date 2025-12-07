@@ -41,6 +41,7 @@
 		"isolatedModules": true,
 
 		// Language and Environment
+		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"lib": ["ESNext", "esnext.disposable"],
 		"target": "ESNext",

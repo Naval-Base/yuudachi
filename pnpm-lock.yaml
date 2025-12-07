@@ -359,8 +359,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2
       tsyringe:
-        specifier: ^4.10.0
-        version: 4.10.0
+        specifier: 4.8.0
+        version: 4.8.0
       undici:
         specifier: ^7.16.0
         version: 7.16.0
@@ -7127,6 +7127,10 @@ packages:
 
   tsyringe@4.10.0:
     resolution: {integrity: sha512-axr3IdNuVIxnaK5XGEUFTu3YmAQ6lllgrvqfEoR16g/HGnYY/6We4oWENtAnzK6/LpJ2ur9PAb80RBt7/U4ugw==}
+    engines: {node: '>= 6.0.0'}
+
+  tsyringe@4.8.0:
+    resolution: {integrity: sha512-YB1FG+axdxADa3ncEtRnQCFq/M0lALGLxSZeVNbTU8NqhOVc51nnv2CISTcvc1kyv6EGPtXVr0v6lWeDxiijOA==}
     engines: {node: '>= 6.0.0'}
 
   type-check@0.4.0:
@@ -15244,6 +15248,10 @@ snapshots:
       fsevents: 2.3.3
 
   tsyringe@4.10.0:
+    dependencies:
+      tslib: 1.14.1
+
+  tsyringe@4.8.0:
     dependencies:
       tslib: 1.14.1
 

@@ -55,7 +55,7 @@
 		"readdirp": "^5.0.0",
 		"redis": "^5.10.0",
 		"reflect-metadata": "^0.2.2",
-		"tsyringe": "^4.10.0",
+		"tsyringe": "4.8.0",
 		"undici": "^7.16.0",
 		"utf-8-validate": "^6.0.5",
 		"ws": "^8.18.3"
