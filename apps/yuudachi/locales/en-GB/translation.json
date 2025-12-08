@@ -1,7 +1,7 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_log_channel": "",
+			"no_mod_log_channel": "No mod log channel has been initialised yet.",
 			"no_anti_raid_archive_channel": "",
 			"no_report_channel": "",
 			"no_content": ""
@@ -33,7 +33,7 @@
 		"config": {
 			"common": {
 				"errors": {
-					"no_settings": ""
+					"no_settings": "No guild settings have been initialised yet."
 				}
 			}
 		},
@@ -86,7 +86,7 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "",
+				"cancel": "Cancelled warn on {{- user}}",
 				"success": ""
 			},
 			"timeout": {
@@ -98,7 +98,7 @@
 					"execute": ""
 				},
 				"pending": "",
-				"cancel": "",
+				"cancel": "Cancelled timeout for {{- user}}",
 				"success": ""
 			},
 			"kick": {
@@ -109,7 +109,7 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "",
+				"cancel": "Cancelled kick on {{- user}}",
 				"success": ""
 			},
 			"softban": {
@@ -124,7 +124,7 @@
 				"reasons": {
 					"clear_messages": ""
 				},
-				"cancel": "",
+				"cancel": "Cancelled softban on {{- user}}",
 				"success": {
 					"regular": "",
 					"clear_messages": ""
@@ -139,7 +139,7 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "",
+				"cancel": "Cancelled ban on {{- user}}",
 				"success": ""
 			},
 			"unban": {
@@ -151,7 +151,7 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "",
+				"cancel": "Cancelled unban on {{- user}}",
 				"success": ""
 			},
 			"anti_raid_nuke": {
@@ -238,7 +238,7 @@
 					},
 					"message": "",
 					"message_reason": "",
-					"cancel": "",
+					"cancel": "Cancelled locking of {{- channel}}",
 					"success": ""
 				},
 				"lift": {
@@ -251,7 +251,7 @@
 					"buttons": {
 						"execute": ""
 					},
-					"cancel": "",
+					"cancel": "Cancelled lifting lock of {{- channel}}",
 					"success": ""
 				}
 			},
@@ -387,7 +387,7 @@
 					"execute": ""
 				},
 				"reason": "",
-				"cancel": "",
+				"cancel": "Cancelled applying sponsor role to {{- user}}",
 				"success": ""
 			},
 			"claim_sponsor": {
