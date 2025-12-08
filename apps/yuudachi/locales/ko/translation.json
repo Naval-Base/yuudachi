@@ -1,0 +1,747 @@
+{
+	"common": {
+		"errors": {
+			"no_mod_log_channel": "",
+			"no_anti_raid_archive_channel": "",
+			"no_report_channel": "",
+			"no_content": ""
+		},
+		"moderator": "",
+		"and_more": ""
+	},
+	"command": {
+		"common": {
+			"errors": {
+				"generic": "",
+				"no_enabled_module": "",
+				"duration_format": "",
+				"use_autocomplete": "",
+				"target_not_found": "",
+				"timed_out": "",
+				"no_message": "",
+				"not_message_link": "",
+				"no_message_resolvable": "",
+				"no_guild": "",
+				"no_channel": "",
+				"ignored_channel": ""
+			},
+			"buttons": {
+				"cancel": "",
+				"message_reference": ""
+			}
+		},
+		"config": {
+			"common": {
+				"errors": {
+					"no_settings": ""
+				}
+			}
+		},
+		"mod": {
+			"common": {
+				"errors": {
+					"max_length_reason": "",
+					"not_a_text_channel": "",
+					"no_case": "",
+					"no_report": "",
+					"no_case_range": "",
+					"case_lower_one": "",
+					"no_reference_case": "",
+					"already_processed": "",
+					"no_reference_report": ""
+				},
+				"reasons": [
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					""
+				]
+			},
+			"case": {
+				"autocomplete": {
+					"no_reason": "",
+					"show_history": ""
+				},
+				"buttons": {
+					"goto": ""
+				}
+			},
+			"reports": {
+				"autocomplete": {
+					"no_reason": "",
+					"show_history_target": "",
+					"show_history_author": ""
+				}
+			},
+			"warn": {
+				"pending": "",
+				"buttons": {
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"timeout": {
+				"errors": {
+					"missing_permissions": "",
+					"already_timed_out": ""
+				},
+				"buttons": {
+					"execute": ""
+				},
+				"pending": "",
+				"cancel": "",
+				"success": ""
+			},
+			"kick": {
+				"errors": {
+					"missing_permissions": ""
+				},
+				"pending": "",
+				"buttons": {
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"softban": {
+				"errors": {
+					"missing_permissions": ""
+				},
+				"pending": "",
+				"not_member": "",
+				"buttons": {
+					"execute": ""
+				},
+				"reasons": {
+					"clear_messages": ""
+				},
+				"cancel": "",
+				"success": {
+					"regular": "",
+					"clear_messages": ""
+				}
+			},
+			"ban": {
+				"errors": {
+					"missing_permissions": "",
+					"already_banned": ""
+				},
+				"pending": "",
+				"buttons": {
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"unban": {
+				"errors": {
+					"missing_permissions": "",
+					"no_ban": ""
+				},
+				"pending": "",
+				"buttons": {
+					"execute": ""
+				},
+				"cancel": "",
+				"success": ""
+			},
+			"anti_raid_nuke": {
+				"common": {
+					"errors": {
+						"result": {
+							"reject_perms": "",
+							"reject_unbanable": "",
+							"reject_bot": "",
+							"reject_self": "",
+							"reject_protected": "",
+							"reject_user": ""
+						},
+						"no_hits": "",
+						"no_ids": "",
+						"no_filter": "",
+						"no_concurrent_use": ""
+					},
+					"parameters": {
+						"heading": "",
+						"launch_time": "",
+						"days_zero": "",
+						"days_one": "",
+						"days_other": "",
+						"parsed_ids": "",
+						"hide": ""
+					},
+					"reason": "",
+					"pending_one": "",
+					"pending_other": "",
+					"buttons": {
+						"execute": "",
+						"formatted": ""
+					},
+					"cancel": "",
+					"success_one": "",
+					"success_other": ""
+				},
+				"filter": {
+					"errors": {
+						"invalid_avatar": "",
+						"pattern_format": ""
+					},
+					"parameters": {
+						"join": {
+							"before": "",
+							"after": ""
+						},
+						"created": {
+							"before": "",
+							"after": ""
+						},
+						"pattern": "",
+						"avatar": "",
+						"zalgo": "",
+						"filter_confusables": "",
+						"clean_confusables": ""
+					}
+				},
+				"file": {
+					"parameters": {
+						"file": "",
+						"link_label": ""
+					}
+				},
+				"modal": {
+					"title": "",
+					"components": {
+						"label": "",
+						"placeholder": ""
+					}
+				}
+			},
+			"lockdown": {
+				"lock": {
+					"errors": {
+						"missing_permissions": "",
+						"already_locked": "",
+						"bot_requires_admin": ""
+					},
+					"pending": "",
+					"buttons": {
+						"execute": ""
+					},
+					"message": "",
+					"message_reason": "",
+					"cancel": "",
+					"success": ""
+				},
+				"lift": {
+					"errors": {
+						"missing_permissions": "",
+						"not_locked": "",
+						"failure": ""
+					},
+					"pending": "",
+					"buttons": {
+						"execute": ""
+					},
+					"cancel": "",
+					"success": ""
+				}
+			},
+			"reason": {
+				"success": "",
+				"success_multiple": "",
+				"pending_multiple": "",
+				"buttons": {
+					"execute": ""
+				},
+				"cancel": ""
+			},
+			"reference": {
+				"case": "",
+				"report": ""
+			},
+			"duration": {
+				"errors": {
+					"timeout": ""
+				},
+				"success": ""
+			},
+			"clear": {
+				"errors": {
+					"no_results": "",
+					"other_channel": ""
+				},
+				"pending_one": "",
+				"pending_other": "",
+				"message_too_old": "",
+				"success_one": "",
+				"success_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"buttons": {
+					"execute_one": "",
+					"execute_other": ""
+				},
+				"cancel": ""
+			},
+			"status": {
+				"success": ""
+			},
+			"report": {
+				"common": {
+					"errors": {
+						"recently_reported": {
+							"message": "",
+							"user": ""
+						},
+						"no_self": "",
+						"invalid_attachment": "",
+						"timed_out": "",
+						"bot": "",
+						"no_attachment_forward": ""
+					},
+					"warnings": "",
+					"trust_and_safety_sub": "",
+					"buttons": {
+						"forward": "",
+						"forward_attachment": "",
+						"execute": "",
+						"cancel": "",
+						"discord_report": ""
+					},
+					"modal": {
+						"label": "",
+						"placeholder": ""
+					},
+					"post": {
+						"name": "",
+						"reason": ""
+					}
+				},
+				"message": {
+					"modal": {
+						"title": ""
+					},
+					"pending": "",
+					"pending_sub": "",
+					"pending_forward": "",
+					"cancel": "",
+					"success": "",
+					"success_forward": ""
+				},
+				"user": {
+					"modal": {
+						"title": ""
+					},
+					"attachment_upsell": {
+						"base": "",
+						"mention": "",
+						"option": ""
+					},
+					"pending": "",
+					"pending_forward": "",
+					"cancel": "",
+					"success": "",
+					"success_forward": ""
+				}
+			}
+		},
+		"utility": {
+			"ping": {
+				"success": ""
+			},
+			"check_scam": {
+				"found_one": "",
+				"found_other": ""
+			},
+			"refresh_scamlist": {
+				"missing_env": "",
+				"refresh_never": "",
+				"amount": "",
+				"before": "",
+				"after": "",
+				"last_change": "",
+				"buttons": {
+					"execute": ""
+				},
+				"cancel": "",
+				"success": "",
+				"pending": "",
+				"error": ""
+			},
+			"sponsor": {
+				"errors": {
+					"no_role": "",
+					"already_sponsor": ""
+				},
+				"pending": "",
+				"buttons": {
+					"execute": ""
+				},
+				"reason": "",
+				"cancel": "",
+				"success": ""
+			},
+			"claim_sponsor": {
+				"errors": {
+					"no_role": "",
+					"already_sponsor": "",
+					"no_oc_user": "",
+					"no_oc_sponsor": "",
+					"no_oc_tag": "",
+					"oc_id_mismatch": ""
+				},
+				"pending": "",
+				"buttons": {
+					"execute": ""
+				},
+				"reason": "",
+				"cancel": "",
+				"success": ""
+			}
+		}
+	},
+	"log": {
+		"history": {
+			"common": {
+				"errors": {
+					"no_history": ""
+				},
+				"user_details": {
+					"title": "",
+					"description": ""
+				},
+				"member_details": {
+					"title": "",
+					"description": {
+						"nickname": "",
+						"roles_one": "",
+						"roles_other": "",
+						"joined": ""
+					}
+				}
+			},
+			"cases": {
+				"title": "",
+				"summary": {
+					"warning_one": "",
+					"warning_other": "",
+					"restriction_one": "",
+					"restriction_other": "",
+					"timeout_one": "",
+					"timeout_other": "",
+					"kick_one": "",
+					"kick_other": "",
+					"softban_one": "",
+					"softban_other": "",
+					"ban_one": "",
+					"ban_other": "",
+					"unban_one": "",
+					"unban_other": ""
+				},
+				"action_label": {
+					"restriction": "",
+					"restriction_case": "",
+					"unrestriction": "",
+					"unrestriction_case": "",
+					"warn": "",
+					"kick": "",
+					"softban": "",
+					"ban": "",
+					"unban": "",
+					"timeout": "",
+					"timeout_end": "",
+					"unknown": ""
+				}
+			},
+			"reports": {
+				"title": "",
+				"user_role": {
+					"author": "",
+					"target": ""
+				},
+				"summary": {
+					"target": "",
+					"author_one": "",
+					"author_other": "",
+					"spam_one": "",
+					"spam_other": ""
+				},
+				"status_label": {
+					"pending": "",
+					"approved": "",
+					"rejected": "",
+					"spam": "",
+					"unknown": ""
+				}
+			}
+		},
+		"mod_log": {
+			"case_log": {
+				"description": "",
+				"expiration": "",
+				"context": "",
+				"context_sub": "",
+				"reason": "",
+				"reason_fallback": "",
+				"case_reference": "",
+				"report_reference": "",
+				"footer": ""
+			},
+			"anti_raid_nuke": {
+				"description": "",
+				"report": "",
+				"report_sub": "",
+				"footer": ""
+			},
+			"scam": {
+				"reason": ""
+			},
+			"spam": {
+				"reason": "",
+				"reason_mentions": ""
+			},
+			"auto_mod": {
+				"keyword": "",
+				"keyword_preset": "",
+				"harmful_link": "",
+				"spam": "",
+				"default": ""
+			}
+		},
+		"member_log": {
+			"description": "",
+			"joined_at": "",
+			"left_at": "",
+			"footer": {
+				"joined": "",
+				"left": ""
+			}
+		},
+		"guild_log": {
+			"message_updated": {
+				"title": "",
+				"channel": "",
+				"jump_to": ""
+			},
+			"message_deleted": {
+				"title": "",
+				"channel": "",
+				"embeds": "",
+				"attachments": "",
+				"stickers": "",
+				"jump_to": "",
+				"reply_to": "",
+				"reply_to_mentions": ""
+			},
+			"message_bulk_deleted": {
+				"title": "",
+				"multiple_authors": "",
+				"description": "",
+				"attachment": "",
+				"sticker": "",
+				"reply_to": "",
+				"reply_to_mentions": ""
+			},
+			"voice_state_update": {
+				"title": "",
+				"joined": "",
+				"moved": "",
+				"left": ""
+			},
+			"thread_created": {
+				"title": "",
+				"channel": "",
+				"starter": "",
+				"jump_to": ""
+			},
+			"thread_deleted": {
+				"title": "",
+				"channel": "",
+				"starter": "",
+				"jump_to": ""
+			},
+			"messages_cleared": {
+				"title": "",
+				"messages_one": "",
+				"messages_other": "",
+				"authors_one": "",
+				"authors_other": "",
+				"time": ""
+			}
+		},
+		"anti_raid_nuke": {
+			"pending": "",
+			"title": "",
+			"description": ""
+		},
+		"report_log": {
+			"reason": "",
+			"target": "",
+			"message": "",
+			"message_sub": "",
+			"message_fallback": "",
+			"case_reference": "",
+			"status": "",
+			"moderator": "",
+			"updated_at": "",
+			"footer": "",
+			"forward": {
+				"message": "",
+				"user": "",
+				"errors": {
+					"generic": "",
+					"no_thread": ""
+				}
+			},
+			"report_status": {
+				"0": "",
+				"1": "",
+				"2": "",
+				"3": ""
+			}
+		}
+	},
+	"formatters": {
+		"formatting": {
+			"guild_member": ""
+		},
+		"anti_raid_nuke": {
+			"case_placeholder": "",
+			"title": "",
+			"title_preliminary": "",
+			"summary": {
+				"title": "",
+				"mode": "",
+				"launch_time": "",
+				"time_taken": "",
+				"moderator": "",
+				"reason": "",
+				"preliminary": "",
+				"preliminary_hidden": ""
+			},
+			"results": {
+				"title": "",
+				"total": "",
+				"preliminary": {
+					"banned_one": "",
+					"banned_other": "",
+					"failed_one": "",
+					"failed_other": ""
+				},
+				"blast": {
+					"banned_one": "",
+					"banned_other": "",
+					"failed_one": "",
+					"failed_other": ""
+				},
+				"ratio": ""
+			},
+			"parameters": {
+				"title": "",
+				"avatar": "",
+				"pattern": {
+					"title": "",
+					"confusables": "",
+					"insensitive": "",
+					"full_match": ""
+				},
+				"confusables": {
+					"title": "",
+					"0": "",
+					"1": "",
+					"2": "",
+					"3": ""
+				},
+				"created": {
+					"title": "",
+					"after": "",
+					"before": ""
+				},
+				"joined": {
+					"title": "",
+					"after": "",
+					"before": ""
+				},
+				"file": {
+					"title": "",
+					"placeholder": ""
+				},
+				"days_zero": "",
+				"days_one": "",
+				"days_other": "",
+				"zalgo": "",
+				"none": ""
+			},
+			"cases": {
+				"title": "",
+				"single": "",
+				"range": "",
+				"none": "",
+				"log_message": "",
+				"log_message_sub": "",
+				"log_message_none": ""
+			},
+			"preliminary": {
+				"successes": {
+					"title": "",
+					"none": ""
+				},
+				"fails": {
+					"title": "",
+					"none": ""
+				}
+			},
+			"blast": {
+				"successes": {
+					"title": "",
+					"none": ""
+				},
+				"fails": {
+					"title": "",
+					"none": ""
+				}
+			},
+			"table": {
+				"success_titles": [
+					"",
+					"",
+					""
+				],
+				"fail_titles": [
+					"",
+					"",
+					""
+				]
+			}
+		},
+		"report_log": {
+			"author": "",
+			"reason": "",
+			"target": "",
+			"message": "",
+			"message_sub": "",
+			"case_reference": "",
+			"status": "",
+			"footer": "",
+			"report_type": {
+				"0": "",
+				"1": ""
+			},
+			"report_status": {
+				"0": "",
+				"1": "",
+				"2": "",
+				"3": ""
+			}
+		}
+	}
+}
