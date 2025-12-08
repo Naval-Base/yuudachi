@@ -225,58 +225,6 @@
 					}
 				}
 			},
-			"restrict": {
-				"embed": {
-					"errors": {
-						"no_role": "No role for embed restrictions has been configured.",
-						"missing_permissions": "Missing permissions to embed restrict {{- user}}",
-						"already_restricted": "{{- user}} is already embed restricted."
-					},
-					"pending": "Do you really want to embed restrict {{- user}}?",
-					"buttons": {
-						"execute": "Restrict"
-					},
-					"cancel": "Canceled embed restriction on {{- user}}",
-					"success": "Successfully embed restricted {{- user}}"
-				},
-				"react": {
-					"errors": {
-						"no_role": "No role for reaction restrictions has been configured.",
-						"missing_permissions": "Missing permissions to react restrict {{- user}}",
-						"already_restricted": "{{- user}} is already reaction restricted."
-					},
-					"pending": "Do you really want to react restrict {{- user}}?",
-					"buttons": {
-						"execute": "Restrict"
-					},
-					"cancel": "Canceled react restriction on {{- user}}",
-					"success": "Successfully react restricted {{- user}}"
-				},
-				"emoji": {
-					"errors": {
-						"no_role": "No role for emoji restrictions has been configured.",
-						"missing_permissions": "Missing permissions to emoji restrict {{- user}}",
-						"already_restricted": "{{- user}} is already emoji restricted."
-					},
-					"pending": "Do you really want to emoji restrict {{- user}}?",
-					"buttons": {
-						"execute": "Restrict"
-					},
-					"cancel": "Canceled emoji restriction on {{- user}}",
-					"success": "Successfully emoji restricted {{- user}}"
-				},
-				"unrole": {
-					"errors": {
-						"missing_permissions": "Missing permissions to unrole `#{{case}}`"
-					},
-					"pending": "Do you really want to unrole {{- user}} from `{{- role}}` with case {{- case}}?",
-					"buttons": {
-						"execute": "Unrole"
-					},
-					"cancel": "Canceled unrole on {{- user}} from `{{- role}}` on case {{- case}}",
-					"success": "Successfully unroled {{- user}} from `{{- role}}` with case {{- case}}"
-				}
-			},
 			"lockdown": {
 				"lock": {
 					"errors": {
