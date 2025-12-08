@@ -1,4 +1,8 @@
-import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import {
+	ApplicationCommandOptionType,
+	InteractionContextType,
+	type RESTPostAPIApplicationCommandsJSONBody,
+} from "discord-api-types/v10";
 
 export const PingCommand = {
 	name: "ping",
@@ -20,4 +24,5 @@ export const PingCommand = {
 		},
 	],
 	default_member_permissions: "0",
-} as const;
+	contexts: [InteractionContextType.Guild],
+} as const satisfies RESTPostAPIApplicationCommandsJSONBody;

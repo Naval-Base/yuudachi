@@ -1,4 +1,8 @@
-import { ApplicationCommandType } from "discord-api-types/v10";
+import {
+	ApplicationCommandType,
+	InteractionContextType,
+	type RESTPostAPIApplicationCommandsJSONBody,
+} from "discord-api-types/v10";
 
 export const SponsorUserContextCommand = {
 	name: "Assign sponsor",
@@ -7,4 +11,5 @@ export const SponsorUserContextCommand = {
 	},
 	type: ApplicationCommandType.User,
 	default_member_permissions: "0",
-} as const;
+	contexts: [InteractionContextType.Guild],
+} as const satisfies RESTPostAPIApplicationCommandsJSONBody;

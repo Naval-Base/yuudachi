@@ -1,6 +1,11 @@
-import { ApplicationCommandType } from "discord.js";
+import {
+	ApplicationCommandType,
+	InteractionContextType,
+	type RESTPostAPIApplicationCommandsJSONBody,
+} from "discord-api-types/v10";
 
 export const ReportUserContextCommand = {
 	name: "Report user",
 	type: ApplicationCommandType.User,
-} as const;
+	contexts: [InteractionContextType.Guild],
+} as const satisfies RESTPostAPIApplicationCommandsJSONBody;

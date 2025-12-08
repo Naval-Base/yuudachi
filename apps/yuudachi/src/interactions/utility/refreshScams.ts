@@ -1,3 +1,5 @@
+import { InteractionContextType, type RESTPostAPIApplicationCommandsJSONBody } from "discord-api-types/v10";
+
 export const RefreshScamlistCommand = {
 	name: "refresh-scamlists",
 	description: "Refresh scamlists",
@@ -6,4 +8,5 @@ export const RefreshScamlistCommand = {
 	},
 	options: [],
 	default_member_permissions: "0",
-} as const;
+	contexts: [InteractionContextType.Guild],
+} as const satisfies RESTPostAPIApplicationCommandsJSONBody;

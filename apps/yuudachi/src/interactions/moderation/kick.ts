@@ -1,4 +1,8 @@
-import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import {
+	ApplicationCommandOptionType,
+	InteractionContextType,
+	type RESTPostAPIApplicationCommandsJSONBody,
+} from "discord-api-types/v10";
 import { CASE_REASON_MAX_LENGTH, CASE_REASON_MIN_LENGTH } from "../../Constants.js";
 
 export const KickCommand = {
@@ -33,4 +37,5 @@ export const KickCommand = {
 		},
 	],
 	default_member_permissions: "0",
-} as const;
+	contexts: [InteractionContextType.Guild],
+} as const satisfies RESTPostAPIApplicationCommandsJSONBody;

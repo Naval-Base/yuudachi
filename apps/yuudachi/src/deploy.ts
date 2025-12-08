@@ -39,7 +39,7 @@ const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 try {
 	console.log("Start refreshing interaction (/) commands.");
 
-	await rest.put(Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, process.env.DISCORD_GUILD_ID!), {
+	await rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!), {
 		body: [
 			// Moderation
 			AntiRaidNukeCommand,
@@ -74,6 +74,18 @@ try {
 			ReportUserContextCommand,
 		],
 	});
+
+	await rest.put(Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, process.env.DISCORD_GUILD_ID!), {
+		body: [
+			// Utility
+			SponsorCommand,
+			ClaimSponsorCommand,
+
+			// Context Menu
+			SponsorUserContextCommand,
+		],
+	});
+
 	console.log("Successfully reloaded interaction (/) commands.");
 } catch (error) {
 	console.error(error);

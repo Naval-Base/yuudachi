@@ -1,4 +1,8 @@
-import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import {
+	ApplicationCommandOptionType,
+	InteractionContextType,
+	type RESTPostAPIApplicationCommandsJSONBody,
+} from "discord-api-types/v10";
 
 export const ReferenceCommand = {
 	name: "reference",
@@ -48,4 +52,5 @@ export const ReferenceCommand = {
 		},
 	],
 	default_member_permissions: "0",
-} as const;
+	contexts: [InteractionContextType.Guild],
+} as const satisfies RESTPostAPIApplicationCommandsJSONBody;
