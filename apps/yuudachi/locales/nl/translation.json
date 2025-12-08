@@ -225,58 +225,6 @@
 					}
 				}
 			},
-			"restrict": {
-				"embed": {
-					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": ""
-					},
-					"cancel": "",
-					"success": ""
-				},
-				"react": {
-					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": ""
-					},
-					"cancel": "",
-					"success": ""
-				},
-				"emoji": {
-					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": ""
-					},
-					"cancel": "",
-					"success": ""
-				},
-				"unrole": {
-					"errors": {
-						"missing_permissions": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": ""
-					},
-					"cancel": "",
-					"success": ""
-				}
-			},
 			"lockdown": {
 				"lock": {
 					"errors": {
