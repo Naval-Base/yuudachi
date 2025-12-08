@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import { verify } from "discord-verify/node";
 import type { FastifyRequest } from "fastify";
 
@@ -15,5 +14,5 @@ export async function verifyRequest(
 	const rawBody = JSON.stringify(req.body);
 
 	// eslint-disable-next-line no-restricted-globals, n/prefer-global/process
-	return verify(rawBody, signature, timestamp, process.env.DISCORD_PUBLIC_KEY!, crypto.webcrypto.subtle);
+	return verify(rawBody, signature, timestamp, process.env.DISCORD_PUBLIC_KEY!, crypto.subtle);
 }
