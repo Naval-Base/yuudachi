@@ -225,58 +225,6 @@
 					}
 				}
 			},
-			"restrict": {
-				"embed": {
-					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": "制限する"
-					},
-					"cancel": "",
-					"success": ""
-				},
-				"react": {
-					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": "制限する"
-					},
-					"cancel": "",
-					"success": ""
-				},
-				"emoji": {
-					"errors": {
-						"no_role": "",
-						"missing_permissions": "",
-						"already_restricted": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": "制限する"
-					},
-					"cancel": "",
-					"success": ""
-				},
-				"unrole": {
-					"errors": {
-						"missing_permissions": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": "ロールを外す"
-					},
-					"cancel": "",
-					"success": ""
-				}
-			},
 			"lockdown": {
 				"lock": {
 					"errors": {
@@ -408,7 +356,7 @@
 		},
 		"utility": {
 			"ping": {
-				"success": "ok"
+				"success": ""
 			},
 			"check_scam": {
 				"found_one": "詐欺ドメイン発見しました ({{count}}つ)",

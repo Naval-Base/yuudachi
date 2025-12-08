@@ -119,7 +119,7 @@
 				"pending": "¿Realmente quieres softbanear a {{- user}}?",
 				"not_member": "{{- user}} no está en este servidor. ¿Aún deseas proceder con el softban para borrar sus mensajes?",
 				"buttons": {
-					"execute": "Softban"
+					"execute": ""
 				},
 				"reasons": {
 					"clear_messages": "Mod: {{- user}} | Softbaneo para eliminar mensajes"
@@ -223,58 +223,6 @@
 						"label": "",
 						"placeholder": ""
 					}
-				}
-			},
-			"restrict": {
-				"embed": {
-					"errors": {
-						"no_role": "No se ha configurado ningún rol para las restricciones de incrustado.",
-						"missing_permissions": "Me faltan permisos para restringir los incrustados de {{- user}}",
-						"already_restricted": "{{- user}} ya tiene una restricción de incrustados."
-					},
-					"pending": "¿Realmente quieres aplicar una restricción de incrustados a {{- user}}?",
-					"buttons": {
-						"execute": "Restringir"
-					},
-					"cancel": "Se canceló la restricción de incrustados para {{- user}}",
-					"success": "Se aplicó con éxito una restricción de incrustados a {{- user}}"
-				},
-				"react": {
-					"errors": {
-						"no_role": "No se ha configurado ningún rol para las restricciones de reacciones.",
-						"missing_permissions": "Me faltan permisos para restringir las reacciones de {{- user}}",
-						"already_restricted": "{{- user}} ya tiene una restricción de reacciones."
-					},
-					"pending": "¿Realmente quieres aplicar una restricción de reacciones a {{- user}}?",
-					"buttons": {
-						"execute": "Restringir"
-					},
-					"cancel": "Se canceló la restricción de reacciones para {{- user}}",
-					"success": "Se aplicó con éxito una restricción de reacciones a {{- user}}"
-				},
-				"emoji": {
-					"errors": {
-						"no_role": "No se ha configurado ningún rol para las restricciones de emojis.",
-						"missing_permissions": "Me faltan permisos para restringir los emojis de {{- user}}",
-						"already_restricted": "{{- user}} ya tiene una restricción de emojis."
-					},
-					"pending": "¿Realmente quieres aplicar una restricción de emojis a {{- user}}?",
-					"buttons": {
-						"execute": "Restringir"
-					},
-					"cancel": "Se canceló la restricción de emojis para {{- user}}",
-					"success": "Se aplicó con éxito una restricción de emojis a {{- user}}"
-				},
-				"unrole": {
-					"errors": {
-						"missing_permissions": ""
-					},
-					"pending": "",
-					"buttons": {
-						"execute": "Revoco de rol"
-					},
-					"cancel": "",
-					"success": ""
 				}
 			},
 			"lockdown": {
