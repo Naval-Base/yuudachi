@@ -1,23 +1,23 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_log_channel": "Es wurde noch kein Mod-Log-Kanal initialisiert.",
+			"no_mod_log_channel": "",
 			"no_anti_raid_archive_channel": "",
 			"no_report_channel": "",
 			"no_content": ""
 		},
-		"moderator": "Moderator",
+		"moderator": "",
 		"and_more": ""
 	},
 	"command": {
 		"common": {
 			"errors": {
-				"generic": "Etwas ist schief gelaufen.",
-				"no_enabled_module": "Das `{{module}}` ist in dieser Gilde nicht aktiviert.",
-				"duration_format": "Falsches Dauerformat.",
-				"use_autocomplete": "Die angegebene Option konnte nicht aufgelöst werden. Stellen Sie sicher, dass Sie eine Option zur automatischen Vervollständigung auswählen.",
-				"target_not_found": "Das angegebene Mitglied ist nicht in dieser Gilde.",
-				"timed_out": "Der Aktionstimer ist abgelaufen.",
+				"generic": "",
+				"no_enabled_module": "",
+				"duration_format": "",
+				"use_autocomplete": "",
+				"target_not_found": "",
+				"timed_out": "",
 				"no_message": "",
 				"not_message_link": "",
 				"no_message_resolvable": "",
@@ -26,14 +26,14 @@
 				"ignored_channel": ""
 			},
 			"buttons": {
-				"cancel": "Abbrechen",
+				"cancel": "",
 				"message_reference": ""
 			}
 		},
 		"config": {
 			"common": {
 				"errors": {
-					"no_settings": "Es wurden noch keine Gildeneinstellungen initialisiert."
+					"no_settings": ""
 				}
 			}
 		},
@@ -41,12 +41,12 @@
 			"common": {
 				"errors": {
 					"max_length_reason": "",
-					"not_a_text_channel": "{{- channel}} ist kein Textkanal.",
-					"no_case": "Kann den Fall `#{{case}}` nicht finden",
+					"not_a_text_channel": "",
+					"no_case": "",
 					"no_report": "",
 					"no_case_range": "",
-					"case_lower_one": "Case ids müssen über `0` liegen",
-					"no_reference_case": "Kann den Referenzfall `#{{case}}` nicht finden",
+					"case_lower_one": "",
+					"no_reference_case": "",
 					"already_processed": "",
 					"no_reference_report": ""
 				},
@@ -67,8 +67,8 @@
 			},
 			"case": {
 				"autocomplete": {
-					"no_reason": "Kein Grund",
-					"show_history": "Historie für Benutzer {{- user}} anzeigen"
+					"no_reason": "",
+					"show_history": ""
 				},
 				"buttons": {
 					"goto": ""
@@ -82,77 +82,77 @@
 				}
 			},
 			"warn": {
-				"pending": "Wollen Sie wirklich {{- user}} warnen?",
+				"pending": "",
 				"buttons": {
-					"execute": "Warn"
+					"execute": ""
 				},
-				"cancel": "Abgebrochene Warnung für {{- user}}",
-				"success": "Erfolgreich gewarnt {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"timeout": {
 				"errors": {
-					"missing_permissions": "Fehlende Berechtigungen für Timeout {{- user}}",
-					"already_timed_out": "{{- user}} befindet sich bereits im Timeout"
+					"missing_permissions": "",
+					"already_timed_out": ""
 				},
 				"buttons": {
-					"execute": "Timeout"
+					"execute": ""
 				},
-				"pending": "Wollen Sie wirklich eine Zeitüberschreitung {{- user}}?",
-				"cancel": "Abgebrochene Zeitüberschreitung für {{- user}}",
-				"success": "Erfolgreiche Zeitüberschreitung für {{- user}}"
+				"pending": "",
+				"cancel": "",
+				"success": ""
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "Fehlende Berechtigungen um {{- user}} zu kicken"
+					"missing_permissions": ""
 				},
-				"pending": "Willst du wirklich {{- user}} kicken?",
+				"pending": "",
 				"buttons": {
-					"execute": "Kick"
+					"execute": ""
 				},
-				"cancel": "Abgebrochener Kick für {{- user}}",
-				"success": "Erfolgreich gekickt {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": "Fehlende Berechtigungen für softban {{- user}}"
+					"missing_permissions": ""
 				},
-				"pending": "Willst du {{- user}} wirklich softbanen?",
-				"not_member": "Benutzer {{- user}} ist nicht in dieser Gilde. Willst du ihn trotzdem softbanen, um Nachrichten zu entfernen?",
+				"pending": "",
+				"not_member": "",
 				"buttons": {
-					"execute": "Softban"
+					"execute": ""
 				},
 				"reasons": {
-					"clear_messages": "Mod: {{- user}} | Softban zum Löschen von Nachrichten"
+					"clear_messages": ""
 				},
-				"cancel": "Softban für {{- user}} abgebrochen",
+				"cancel": "",
 				"success": {
-					"regular": "Erfolgreicher Softbann für {{- user}}",
-					"clear_messages": "Erfolgreich gelöschte Nachrichten von {{- user}}"
+					"regular": "",
+					"clear_messages": ""
 				}
 			},
 			"ban": {
 				"errors": {
-					"missing_permissions": "Fehlende Berechtigungen zum Verbieten von {{- user}}",
-					"already_banned": "{{- user}} ist bereits verbannt."
+					"missing_permissions": "",
+					"already_banned": ""
 				},
-				"pending": "Wollen Sie {{- user}} wirklich verbieten?",
+				"pending": "",
 				"buttons": {
-					"execute": "Verbieten"
+					"execute": ""
 				},
-				"cancel": "Aufgehobene Sperre für {{- user}}",
-				"success": "Erfolgreich gebannt {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"unban": {
 				"errors": {
-					"missing_permissions": "Fehlende Berechtigungen zum Aufheben der Sperre für {{- user}}",
-					"no_ban": "{{- user}} ist nicht gebannt."
+					"missing_permissions": "",
+					"no_ban": ""
 				},
-				"pending": "Willst du wirklich {{- user}} entsperren?",
+				"pending": "",
 				"buttons": {
-					"execute": "Unban"
+					"execute": ""
 				},
-				"cancel": "Aufhebung der Sperre für {{- user}}",
-				"success": "Erfolgreich entsperrt {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"anti_raid_nuke": {
 				"common": {
@@ -165,13 +165,13 @@
 							"reject_protected": "",
 							"reject_user": ""
 						},
-						"no_hits": "Die Anti-Raid-Nuke wird niemanden treffen, Sie sollten die Parameter neu einstellen und es erneut versuchen.",
+						"no_hits": "",
 						"no_ids": "",
 						"no_filter": "",
 						"no_concurrent_use": ""
 					},
 					"parameters": {
-						"heading": "Parameter:",
+						"heading": "",
 						"launch_time": "",
 						"days_zero": "",
 						"days_one": "",
@@ -225,94 +225,42 @@
 					}
 				}
 			},
-			"restrict": {
-				"embed": {
+			"lockdown": {
+				"lock": {
 					"errors": {
-						"no_role": "Es wurde keine Rolle für Einbettungseinschränkungen konfiguriert",
-						"missing_permissions": "Fehlende Berechtigungen zur Einbettungseinschränkung {{- user}}",
-						"already_restricted": "{{- user}} ist bereits eingebettet eingeschränkt."
-					},
-					"pending": "Möchten Sie wirklich einschränken {{- user}} einbetten?",
-					"buttons": {
-						"execute": "Einschränken"
-					},
-					"cancel": "Aufgehobene Einbettungsbeschränkung für {{- user}}",
-					"success": "Erfolgreich eingebettet eingeschränkt {{- user}}"
-				},
-				"react": {
-					"errors": {
-						"no_role": "Es wurde keine Rolle für Reaktionseinschränkungen konfiguriert.",
-						"missing_permissions": "Fehlende Berechtigungen für Reaktionseinschränkungen {{- user}}",
-						"already_restricted": "{{- user}} ist bereits reaktionsbeschränkt."
-					},
-					"pending": "Wollen Sie {{- user}} wirklich einschränken?",
-					"buttons": {
-						"execute": "Einschränken"
-					},
-					"cancel": "Aufgehobene Reaktionsbeschränkung für {{- user}}",
-					"success": "Erfolgreiche Reaktionsbeschränkung für {{- user}}"
-				},
-				"emoji": {
-					"errors": {
-						"no_role": "Es wurde keine Rolle für Emoji-Einschränkungen konfiguriert.",
-						"missing_permissions": "Fehlende Berechtigungen zur Emoji-Einschränkung {{- user}}",
-						"already_restricted": "{{- user}} ist bereits emoji eingeschränkt."
-					},
-					"pending": "Wollen Sie {{- user}} wirklich auf Emoji beschränken?",
-					"buttons": {
-						"execute": "Einschränken"
-					},
-					"cancel": "Aufgehobene Emoji-Beschränkung für {{- user}}",
-					"success": "Emoji erfolgreich eingeschränkt {{- user}}"
-				},
-				"unrole": {
-					"errors": {
-						"missing_permissions": ""
+						"missing_permissions": "",
+						"already_locked": "",
+						"bot_requires_admin": ""
 					},
 					"pending": "",
 					"buttons": {
-						"execute": "Unrole"
+						"execute": ""
+					},
+					"message": "",
+					"message_reason": "",
+					"cancel": "",
+					"success": ""
+				},
+				"lift": {
+					"errors": {
+						"missing_permissions": "",
+						"not_locked": "",
+						"failure": ""
+					},
+					"pending": "",
+					"buttons": {
+						"execute": ""
 					},
 					"cancel": "",
 					"success": ""
 				}
 			},
-			"lockdown": {
-				"lock": {
-					"errors": {
-						"missing_permissions": "Fehlende Berechtigungen zum Sperren von {{- channel}}",
-						"already_locked": "{{- channel}} ist bereits gesperrt.",
-						"bot_requires_admin": "Der Bot benötigt die `ADMINISTRATOR`-Berechtigung, um Channels zu sperren, da Discord es nicht erlaubt, alle Überschreibungen ohne diese Berechtigung einzustellen, was zu Problemen beim Sperren oder Entsperren führen kann."
-					},
-					"pending": "Willst du wirklich {{- channel}} sperren?",
-					"buttons": {
-						"execute": "Sperren"
-					},
-					"message": "🔒 Dieser Kanal wurde gesperrt, er wird wieder entsperrt {{- duration}}",
-					"message_reason": "",
-					"cancel": "Sperrung von {{- channel}} aufgehoben",
-					"success": "Erfolgreich gesperrt {{- channel}}"
-				},
-				"lift": {
-					"errors": {
-						"missing_permissions": "Fehlende Berechtigungen zum Aufheben der Sperre für {{- channel}}",
-						"not_locked": "{{- channel}} ist nicht gesperrt.",
-						"failure": ""
-					},
-					"pending": "Wollen Sie wirklich die Sperre für {{- channel}} aufheben?",
-					"buttons": {
-						"execute": "Unlock"
-					},
-					"cancel": "Aufgehobene Sperre von {{- channel}} aufgehoben",
-					"success": "Sperre für {{- channel}} erfolgreich aufgehoben"
-				}
-			},
 			"reason": {
-				"success": "Erfolgreich Grund für Fall {{- case}} gesetzt",
+				"success": "",
 				"success_multiple": "",
 				"pending_multiple": "",
 				"buttons": {
-					"execute": "Grund setzen"
+					"execute": ""
 				},
 				"cancel": ""
 			},
@@ -324,7 +272,7 @@
 				"errors": {
 					"timeout": ""
 				},
-				"success": "Erfolgreich Dauer für Fall {{- case}} gesetzt"
+				"success": ""
 			},
 			"clear": {
 				"errors": {
@@ -408,21 +356,21 @@
 		},
 		"utility": {
 			"ping": {
-				"success": "Verstanden"
+				"success": ""
 			},
 			"check_scam": {
-				"found_one": "Erkannte Betrugsdomäne ({{count}})",
-				"found_other": "Erkannte Betrugsdomänen ({{count}})"
+				"found_one": "",
+				"found_other": ""
 			},
 			"refresh_scamlist": {
-				"missing_env": "Fehlende Umgebungsvariablen {{missing, list}} zum Abrufen von Scam-Domains.",
-				"refresh_never": "`never`",
+				"missing_env": "",
+				"refresh_never": "",
 				"amount": "",
 				"before": "",
 				"after": "",
-				"last_change": "• Letzte Änderung: {{- timestamp}}",
+				"last_change": "",
 				"buttons": {
-					"execute": "Aktualisieren"
+					"execute": ""
 				},
 				"cancel": "",
 				"success": "",
@@ -431,16 +379,16 @@
 			},
 			"sponsor": {
 				"errors": {
-					"no_role": "Es wurde keine Rolle für Sponsoren konfiguriert.",
-					"already_sponsor": "{{- user}} ist bereits ein Sponsor."
+					"no_role": "",
+					"already_sponsor": ""
 				},
-				"pending": "Möchten Sie die Sponsorenrolle wirklich auf {{- user}} anwenden?",
+				"pending": "",
 				"buttons": {
-					"execute": "Anwenden"
+					"execute": ""
 				},
 				"reason": "",
-				"cancel": "Anwendung der Sponsorrolle auf {{- user}} abgebrochen",
-				"success": "Sponsorrolle erfolgreich auf {{- user}} angewendet"
+				"cancel": "",
+				"success": ""
 			},
 			"claim_sponsor": {
 				"errors": {
@@ -539,10 +487,10 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "\n**Expiration**: {{- time}}",
-				"context": "**Context:** {{- link}}",
-				"context_sub": "Beam me up, Yuu",
-				"reason": "\n**Reason:** {{- reason}}",
+				"expiration": "",
+				"context": "",
+				"context_sub": "",
+				"reason": "",
 				"reason_fallback": "",
 				"case_reference": "",
 				"report_reference": "",
@@ -552,14 +500,14 @@
 				"description": "",
 				"report": "",
 				"report_sub": "",
-				"footer": "Cases {{from}}-{{to}}"
+				"footer": ""
 			},
 			"scam": {
-				"reason": "Scam detection"
+				"reason": ""
 			},
 			"spam": {
-				"reason": "Spam detection",
-				"reason_mentions": "Mention spam detection"
+				"reason": "",
+				"reason_mentions": ""
 			},
 			"auto_mod": {
 				"keyword": "",
@@ -572,54 +520,54 @@
 		"member_log": {
 			"description": "",
 			"joined_at": "",
-			"left_at": "\n• Left: {{- left_at}} ({{- left_at_since}})",
+			"left_at": "",
 			"footer": {
-				"joined": "User joined",
-				"left": "User left"
+				"joined": "",
+				"left": ""
 			}
 		},
 		"guild_log": {
 			"message_updated": {
-				"title": "Message updated",
-				"channel": "• Channel: {{- channel}}",
-				"jump_to": "• [Jump to]({{- link}})"
+				"title": "",
+				"channel": "",
+				"jump_to": ""
 			},
 			"message_deleted": {
-				"title": "Message deleted",
-				"channel": "• Channel: {{- channel}}",
-				"embeds": "• Embeds: {{- embeds}}",
-				"attachments": "• Attachments: {{- attachments}}",
-				"stickers": "• Stickers: {{- stickers}}",
-				"jump_to": "• [Jump to]({{- link}})",
+				"title": "",
+				"channel": "",
+				"embeds": "",
+				"attachments": "",
+				"stickers": "",
+				"jump_to": "",
 				"reply_to": "",
 				"reply_to_mentions": ""
 			},
 			"message_bulk_deleted": {
-				"title": "Message deleted bulk",
+				"title": "",
 				"multiple_authors": "",
-				"description": "• Channel: {{- channel}}\n• Logs: See attachment file for full logs (possibly above this embed)",
-				"attachment": "↳ Attachment: {{- url}}",
-				"sticker": "↳ Sticker: {{- name}}",
+				"description": "",
+				"attachment": "",
+				"sticker": "",
 				"reply_to": "",
 				"reply_to_mentions": ""
 			},
 			"voice_state_update": {
-				"title": "Voice state update",
-				"joined": "Joined {{- channel}}",
+				"title": "",
+				"joined": "",
 				"moved": "",
-				"left": "Left {{- channel}}"
+				"left": ""
 			},
 			"thread_created": {
-				"title": "Thread created",
+				"title": "",
 				"channel": "",
 				"starter": "",
-				"jump_to": "• [Jump to starter message]({{- link}})"
+				"jump_to": ""
 			},
 			"thread_deleted": {
-				"title": "Thread deleted",
+				"title": "",
 				"channel": "",
 				"starter": "",
-				"jump_to": "• [Jump to starter message]({{- link}})"
+				"jump_to": ""
 			},
 			"messages_cleared": {
 				"title": "",
