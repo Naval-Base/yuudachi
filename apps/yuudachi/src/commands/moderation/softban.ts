@@ -36,6 +36,21 @@ export default class extends Command<typeof SoftbanCommand> {
 			throw new Error(i18next.t("common.errors.no_mod_log_channel", { lng: locale }));
 		}
 
+		let alreadyBanned = false;
+		try {
+			await interaction.guild.bans.fetch(args.user.user.id);
+			alreadyBanned = true;
+		} catch {}
+
+		if (alreadyBanned) {
+			throw new Error(
+				i18next.t("command.mod.softban.errors.already_banned", {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
+				}),
+			);
+		}
+
 		if (args.user.member && !args.user.member.bannable) {
 			throw new Error(
 				i18next.t("command.mod.softban.errors.missing_permissions", {
@@ -70,14 +85,14 @@ export default class extends Command<typeof SoftbanCommand> {
 			style: ButtonStyle.Secondary,
 		});
 
-		const embeds = isStillMember ? [truncateEmbed(await generateHistory(interaction, args.user, locale))] : [];
+		const embed = truncateEmbed(await generateHistory(interaction, args.user, locale));
 
 		await interaction.editReply({
 			content: i18next.t(isStillMember ? "command.mod.softban.pending" : "command.mod.softban.not_member", {
 				user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 				lng: locale,
 			}),
-			embeds,
+			embeds: [embed],
 			components: [createMessageActionRow([cancelButton, softbanButton])],
 		});
 

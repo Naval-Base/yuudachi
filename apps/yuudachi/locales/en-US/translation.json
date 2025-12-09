@@ -114,7 +114,8 @@
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": "Missing permissions to softban {{- user}}"
+					"missing_permissions": "Missing permissions to softban {{- user}}",
+					"already_banned": "{{- user}} is already banned."
 				},
 				"pending": "Do you really want to softban {{- user}}?",
 				"not_member": "User {{- user}} is not on this guild. Do you still wish to softban them to remove messages?",
