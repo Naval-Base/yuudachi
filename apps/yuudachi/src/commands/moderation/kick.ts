@@ -13,6 +13,7 @@ import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { KickCommand } from "../../interactions/index.js";
 import { generateHistory } from "../../util/generateHistory.js";
+import { tryAcquireMemberLock, extendMemberLock } from "../../util/memberLock.js";
 
 @injectable()
 export default class extends Command<typeof KickCommand> {
@@ -57,6 +58,16 @@ export default class extends Command<typeof KickCommand> {
 			throw new Error(
 				i18next.t("command.mod.common.errors.max_length_reason", {
 					reason_max_length: CASE_REASON_MAX_LENGTH,
+					lng: locale,
+				}),
+			);
+		}
+
+		const lockAcquired = await tryAcquireMemberLock(interaction.guildId, args.user.user.id);
+		if (!lockAcquired) {
+			throw new Error(
+				i18next.t("command.mod.common.errors.already_processing", {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 					lng: locale,
 				}),
 			);
@@ -117,6 +128,19 @@ export default class extends Command<typeof KickCommand> {
 			});
 		} else if (collectedInteraction?.customId === kickKey) {
 			await collectedInteraction.deferUpdate();
+
+			await extendMemberLock(interaction.guildId, args.user.user.id);
+
+			const memberStillPresent = collectedInteraction.guild.members.resolve(args.user.user.id);
+			if (!memberStillPresent) {
+				await collectedInteraction.editReply({
+					content: i18next.t("command.common.errors.target_not_found", {
+						lng: locale,
+					}),
+					components: [],
+				});
+				return;
+			}
 
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:kick`, 15, "");
 			const case_ = await createCase(

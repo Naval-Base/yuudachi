@@ -14,6 +14,7 @@ import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { TimeoutCommand } from "../../interactions/moderation/timeout.js";
 import { generateHistory } from "../../util/generateHistory.js";
+import { tryAcquireMemberLock, extendMemberLock } from "../../util/memberLock.js";
 
 @injectable()
 export default class extends Command<typeof TimeoutCommand> {
@@ -76,6 +77,16 @@ export default class extends Command<typeof TimeoutCommand> {
 			);
 		}
 
+		const lockAcquired = await tryAcquireMemberLock(interaction.guildId, args.user.user.id);
+		if (!lockAcquired) {
+			throw new Error(
+				i18next.t("command.mod.common.errors.already_processing", {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+					lng: locale,
+				}),
+			);
+		}
+
 		const timeoutKey = nanoid();
 		const cancelKey = nanoid();
 
@@ -131,6 +142,31 @@ export default class extends Command<typeof TimeoutCommand> {
 			});
 		} else if (collectedInteraction?.customId === timeoutKey) {
 			await collectedInteraction.deferUpdate();
+
+			await extendMemberLock(interaction.guildId, args.user.user.id);
+
+			const memberNow = collectedInteraction.guild.members.resolve(args.user.user.id);
+			if (!memberNow) {
+				await collectedInteraction.editReply({
+					content: i18next.t("command.common.errors.target_not_found", {
+						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+						lng: locale,
+					}),
+					components: [],
+				});
+				return;
+			}
+
+			if (Date.now() < (memberNow.communicationDisabledUntilTimestamp ?? 0)) {
+				await collectedInteraction.editReply({
+					content: i18next.t("command.mod.timeout.errors.already_timed_out", {
+						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+						lng: locale,
+					}),
+					components: [],
+				});
+				return;
+			}
 
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:timeout`, 15, "");
 			const case_ = await createCase(

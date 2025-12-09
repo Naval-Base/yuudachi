@@ -13,6 +13,7 @@ import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../../functions/settings/getGuildSetting.js";
 import type { SoftbanCommand } from "../../interactions/index.js";
 import { generateHistory } from "../../util/generateHistory.js";
+import { tryAcquireMemberLock, extendMemberLock } from "../../util/memberLock.js";
 
 @injectable()
 export default class extends Command<typeof SoftbanCommand> {
@@ -64,6 +65,16 @@ export default class extends Command<typeof SoftbanCommand> {
 			throw new Error(
 				i18next.t("command.mod.common.errors.max_length_reason", {
 					reason_max_length: CASE_REASON_MAX_LENGTH,
+					lng: locale,
+				}),
+			);
+		}
+
+		const lockAcquired = await tryAcquireMemberLock(interaction.guildId, args.user.user.id);
+		if (!lockAcquired) {
+			throw new Error(
+				i18next.t("command.mod.common.errors.already_processing", {
+					user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
 					lng: locale,
 				}),
 			);
@@ -126,6 +137,25 @@ export default class extends Command<typeof SoftbanCommand> {
 			});
 		} else if (collectedInteraction?.customId === softbanKey) {
 			await collectedInteraction.deferUpdate();
+
+			await extendMemberLock(interaction.guildId, args.user.user.id);
+
+			let alreadyBannedNow = false;
+			try {
+				await collectedInteraction.guild.bans.fetch(args.user.user.id);
+				alreadyBannedNow = true;
+			} catch {}
+
+			if (alreadyBannedNow) {
+				await collectedInteraction.editReply({
+					content: i18next.t("command.mod.softban.errors.already_banned", {
+						user: `${args.user.user.toString()} - ${args.user.user.tag} (${args.user.user.id})`,
+						lng: locale,
+					}),
+					components: [],
+				});
+				return;
+			}
 
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:ban`, 15, "");
 			await this.redis.setex(`guild:${collectedInteraction.guildId}:user:${args.user.user.id}:unban`, 15, "");
