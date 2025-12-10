@@ -1,6 +1,6 @@
 import { createMessageActionRow } from "@yuudachi/framework";
 import type { APIEmbed, Attachment, AttachmentPayload, Guild, User } from "discord.js";
-import { inlineCode, userMention, Message } from "discord.js";
+import { codeBlock, Message } from "discord.js";
 import i18next from "i18next";
 import { Color } from "../../Constants.js";
 import { createMessageLinkButton } from "../../util/createMessageLinkButton.js";
@@ -35,8 +35,26 @@ export async function forwardReport(
 		throw new Error(i18next.t("log.report_log.forward.errors.no_thread", { lng: locale }));
 	}
 
-	const embeds: APIEmbed[] = [];
 	const isMessage = payload instanceof Message;
+	const embeds: APIEmbed[] = [
+		{
+			author: {
+				name: `${author.tag} (${author.id})`,
+				icon_url: author.displayAvatarURL(),
+			},
+			description: i18next.t("log.report_log.reason", {
+				reason: codeBlock(reason),
+				lng: locale,
+			}),
+			footer: {
+				text: i18next.t(`log.report_log.forward.${isMessage ? "message" : "user"}`, {
+					lng: locale,
+				}),
+			},
+			timestamp: new Date().toISOString(),
+			color: Color.DiscordPrimary,
+		},
+	];
 
 	if (isMessage) {
 		await updateReport({
@@ -56,11 +74,6 @@ export async function forwardReport(
 	}
 
 	await thread.send({
-		content: i18next.t(`log.report_log.forward.${isMessage ? "message" : "user"}`, {
-			author: `${userMention(author.id)} - \`${author.tag}\` (${author.id})`,
-			reason: inlineCode(reason),
-			lng: locale,
-		}),
 		embeds,
 		components: isMessage ? [createMessageActionRow([createMessageLinkButton(payload as Message<true>, locale)])] : [],
 		allowedMentions: {

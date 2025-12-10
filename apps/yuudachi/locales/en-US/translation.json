@@ -597,8 +597,8 @@
 			"updated_at": "**Updated at:** {{- updated_at}}",
 			"footer": "Hint: To resolve a report: Change the status forum label, reference it in a case, set the reference for an existing case with /reference, or set the status via /reports status",
 			"forward": {
-				"message": "**Message report forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
-				"user": "**Attachment forwarded**\n • Author: {{- author}}\n • Reason: {{- reason}}",
+				"message": "Message report forwarded",
+				"user": "Attachment forwarded",
 				"errors": {
 					"generic": "There was an error forwarding the report.",
 					"no_thread": "There was an error forwarding the report the associated thread could not be found."
