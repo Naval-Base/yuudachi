@@ -1,3 +1,4 @@
+import { kSQL } from "@yuudachi/framework";
 import type { ButtonInteraction, User } from "discord.js";
 import i18next from "i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -9,7 +10,7 @@ import {
 	generateReportHistory,
 	HistoryType,
 } from "../src/util/generateHistory.js";
-import { createSqlMock, kSQL, mockContainerGet, mockLogger } from "./mocks.js";
+import { createSqlMock, mockContainerGet, mockLogger } from "./mocks.js";
 
 const getGuildSetting = vi.fn();
 vi.mock("../functions/settings/getGuildSetting.js", () => ({

@@ -3,9 +3,6 @@ import i18next from "i18next";
 import { afterEach, vi } from "vitest";
 import enUS from "../locales/en-US/translation.json" assert { type: "json" };
 import {
-	kRedis,
-	kSQL,
-	kWebhooks,
 	mockAddFields,
 	mockContainerBind,
 	mockContainerGet,
@@ -42,9 +39,6 @@ vi.mock("@yuudachi/framework", async (importOriginal) => {
 		truncate: mockTruncate,
 		truncateEmbed: mockTruncateEmbed,
 		container: { get: mockContainerGet, bind: mockContainerBind },
-		kSQL,
-		kWebhooks,
-		kRedis,
 		EMBED_DESCRIPTION_LIMIT: mod.EMBED_DESCRIPTION_LIMIT,
 		logger: mockLogger,
 		ellipsis: mockEllipsis,

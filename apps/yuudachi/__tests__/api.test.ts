@@ -1,8 +1,9 @@
+import { kSQL } from "@yuudachi/framework";
 import { Client } from "discord.js";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { CaseAction } from "../src/functions/cases/createCase.js";
 import type * as ApiModule from "../src/util/api.js";
-import { createSqlMock, kSQL, mockContainerGet } from "./mocks.js";
+import { createSqlMock, mockContainerGet } from "./mocks.js";
 
 const insertedAppeal = {
 	appeal_id: 2,

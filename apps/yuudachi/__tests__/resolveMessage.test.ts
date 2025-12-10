@@ -1,8 +1,9 @@
+import { kSQL } from "@yuudachi/framework";
 import { Client, type Guild, type Snowflake, type TextBasedChannel } from "discord.js";
 import i18next from "i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { parseMessageLink, resolveMessage } from "../src/util/resolveMessage.js";
-import { createSqlMock, kSQL, mockContainerGet } from "./mocks.js";
+import { createSqlMock, mockContainerGet } from "./mocks.js";
 
 const getGuildSetting = vi.fn();
 vi.mock("../src/util/functions/settings/getGuildSetting.js", () => ({

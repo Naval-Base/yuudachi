@@ -27,7 +27,3 @@ export function createSqlMock<T = unknown>(
 	sqlMock.unsafe = vi.fn(async () => [{ value: unsafeResult }]);
 	return sqlMock;
 }
-
-export const kSQL = Symbol("kSQL");
-export const kWebhooks = Symbol("kWebhooks");
-export const kRedis = Symbol("kRedis");
