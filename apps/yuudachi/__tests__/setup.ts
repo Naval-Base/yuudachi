@@ -43,5 +43,7 @@ afterEach(() => {
 	mockContainerGet.mockClear();
 	mockContainerBind.mockClear();
 	mockLogger.warn.mockClear();
+	mockLogger.info.mockClear();
+	mockLogger.error.mockClear();
 	translateMock.mockClear();
 });

@@ -10,7 +10,11 @@ export const mockTruncate = vi.fn((value: string, max: number, suffix = "...") =
 export const mockTruncateEmbed = vi.fn(<T>(embed: T) => embed);
 export const mockContainerGet = vi.fn<(token: unknown) => unknown>();
 export const mockContainerBind = vi.fn<(binding: { provide: unknown; useValue: unknown }) => void>();
-export const mockLogger = { warn: vi.fn<(message: string) => void>() };
+export const mockLogger = {
+	warn: vi.fn<(message: unknown, extra?: string) => void>(),
+	info: vi.fn<(message: unknown) => void>(),
+	error: vi.fn<(error: unknown, message?: string) => void>(),
+};
 export const mockEllipsis = (value: string, max: number) => (value.length > max ? value.slice(0, max) : value);
 
 export type SqlMock<T> = ReturnType<typeof vi.fn<(strings?: TemplateStringsArray) => Promise<T[]> | T[]>> & {
