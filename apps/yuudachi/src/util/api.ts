@@ -128,7 +128,7 @@ export const api = fastify({ trustProxy: true })
 			});
 
 			app.post("/appeals", async (request) => {
-				const { guildId, targetId, targetTag, reason } = request.params as any;
+				const { guildId, targetId, targetTag, reason } = request.body as any;
 				const trimmedReason = reason.trim();
 
 				const appeal = await createAppeal({

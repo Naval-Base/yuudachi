@@ -46,7 +46,7 @@
 	"devDependencies": {
 		"@swc/cli": "^0.7.9",
 		"@swc/core": "^1.15.3",
-		"@types/node": "^24.10.1",
+		"@types/node": "^24.10.2",
 		"@yuudachi/framework": "workspace:^",
 		"cross-env": "^10.1.0",
 		"del-cli": "^7.0.0",

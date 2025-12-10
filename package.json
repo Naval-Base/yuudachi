@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"build": "pnpm --recursive build",
-		"test": "pnpm --recursive test",
+		"test": "vitest run",
 		"lint": "pnpm --recursive lint",
 		"format": "pnpm --recursive format",
 		"fmt": "pnpm format",
@@ -19,6 +19,8 @@
 	"private": true,
 	"devDependencies": {
 		"@types/lodash.merge": "^4.6.9",
+		"@vitest/coverage-istanbul": "^4.0.15",
+		"@vitest/coverage-v8": "^4.0.15",
 		"eslint": "^9.39.1",
 		"eslint-config-neon": "^0.2.9",
 		"eslint-formatter-pretty": "^7.0.0",
@@ -30,7 +32,8 @@
 		"lodash.merge": "^4.6.2",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3",
-		"vercel": "^49.1.1"
+		"vercel": "^49.1.2",
+		"vitest": "^4.0.15"
 	},
 	"engines": {
 		"node": ">=24.0.0"

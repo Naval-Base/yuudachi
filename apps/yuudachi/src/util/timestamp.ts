@@ -6,16 +6,18 @@ export function resolveTimestamp(dateString?: string | null | undefined) {
 		return null;
 	}
 
-	if (Date.parse(dateString)) {
-		return Date.parse(dateString);
-	}
-
 	if (/^\d{17,20}$/.test(dateString)) {
 		return SnowflakeUtil.timestampFrom(dateString);
 	}
 
 	if (/^\d*$/.test(dateString)) {
 		return Number(dateString);
+	}
+
+	const parsedDate = Date.parse(dateString);
+
+	if (!Number.isNaN(parsedDate)) {
+		return parsedDate;
 	}
 
 	const msParse = ms(dateString);

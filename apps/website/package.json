@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"test": "vitest run",
 		"build": "pnpm run build:css && pnpm run build:next",
 		"build:check": "tsc --noEmit",
 		"build:next": "next build",
@@ -36,13 +35,13 @@
 	"devDependencies": {
 		"@next/bundle-analyzer": "^14.0.3",
 		"@testing-library/react": "^16.3.0",
-		"@types/node": "^24.10.1",
+		"@types/node": "^24.10.2",
 		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
 		"@unocss/cli": "^0.57.7",
 		"@unocss/reset": "^0.57.7",
 		"@vercel/node": "^5.5.15",
-		"@vitejs/plugin-react": "^5.1.1",
+		"@vitejs/plugin-react": "^5.1.2",
 		"@vitest/coverage-v8": "^4.0.15",
 		"concurrently": "^9.2.1",
 		"cross-env": "^10.1.0",
