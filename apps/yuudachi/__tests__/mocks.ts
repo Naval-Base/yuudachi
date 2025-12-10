@@ -1,9 +1,7 @@
 import { vi } from "vitest";
 
-export const translateMock = vi.fn((key: string, opts?: { lng?: string }) => `${key}:${opts?.lng ?? ""}`);
-
 export const mockCreateButton = vi.fn<(input: unknown) => unknown>();
-export const mockAddFields = vi.fn((...parts: Record<string, unknown>[]) => Object.assign({}, ...parts));
+export const mockAddFields = vi.fn((...parts: unknown[]) => Object.assign({}, ...parts));
 export const mockTruncate = vi.fn((value: string, max: number, suffix = "...") =>
 	value.length > max ? `${value.slice(0, max)}${suffix}` : value,
 );

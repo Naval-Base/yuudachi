@@ -1,4 +1,5 @@
 import { Collection, inlineCode, type AutocompleteInteraction, type GuildMember } from "discord.js";
+import i18next from "i18next";
 import { describe, expect, it, vi } from "vitest";
 import { canBan } from "../src/functions/anti-raid/canBan.js";
 import { formatMemberTimestamps } from "../src/functions/anti-raid/formatMemberTimestamps.js";
@@ -8,7 +9,7 @@ import { resolveDateLocale } from "../src/functions/anti-raid/resolveDateLocale.
 import { handleCaseAutocomplete } from "../src/functions/autocomplete/cases.js";
 import { handleReasonAutocomplete } from "../src/functions/autocomplete/reasons.js";
 import { handleReportAutocomplete } from "../src/functions/autocomplete/reports.js";
-import { mockContainerGet, translateMock } from "./mocks.js";
+import { mockContainerGet } from "./mocks.js";
 
 const request = vi.hoisted(() => vi.fn());
 
@@ -42,6 +43,8 @@ vi.mock("../src/functions/reports/findReports.js", () => ({
 		},
 	]),
 }));
+
+const locale = "en-US";
 
 const createAutocomplete = (focused: string): AutocompleteInteraction<"cached"> =>
 	({
@@ -127,23 +130,23 @@ describe("formatMemberTimestamps", () => {
 describe("canBan", () => {
 	it("rejects bots, self, protected and privileged users", () => {
 		const base = { roles: { cache: { hasAny: vi.fn(() => false) } }, permissions: { any: vi.fn(() => false) } };
-		expect(canBan({ ...base, id: "1", user: { bot: false }, bannable: true } as any, "1", [], "en")).toContain(
-			"reject_self",
+		expect(canBan({ ...base, id: "1", user: { bot: false }, bannable: true } as any, "1", [], locale)).toBe(
+			i18next.t("command.mod.anti_raid_nuke.common.errors.result.reject_self", { lng: locale }),
 		);
-		expect(canBan({ ...base, id: "2", user: { bot: true }, bannable: true } as any, "1", [], "en")).toContain(
-			"reject_bot",
+		expect(canBan({ ...base, id: "2", user: { bot: true }, bannable: true } as any, "1", [], locale)).toBe(
+			i18next.t("command.mod.anti_raid_nuke.common.errors.result.reject_bot", { lng: locale }),
 		);
-		expect(canBan({ ...base, id: "3", user: { bot: false }, bannable: false } as any, "1", [], "en")).toContain(
-			"reject_unbanable",
+		expect(canBan({ ...base, id: "3", user: { bot: false }, bannable: false } as any, "1", [], locale)).toBe(
+			i18next.t("command.mod.anti_raid_nuke.common.errors.result.reject_unbanable", { lng: locale }),
 		);
 		expect(
 			canBan(
 				{ ...base, id: "4", user: { bot: false }, bannable: true, roles: { cache: { hasAny: () => true } } } as any,
 				"1",
 				["x"],
-				"en",
+				locale,
 			),
-		).toContain("reject_protected");
+		).toBe(i18next.t("command.mod.anti_raid_nuke.common.errors.result.reject_protected", { lng: locale }));
 		expect(
 			canBan(
 				{
@@ -155,23 +158,25 @@ describe("canBan", () => {
 				} as any,
 				"1",
 				[],
-				"en",
+				locale,
 			),
-		).toContain("reject_perms");
-		expect(canBan({ ...base, id: "6", user: { bot: false }, bannable: true } as any, "1", [], "en")).toBeNull();
+		).toBe(i18next.t("command.mod.anti_raid_nuke.common.errors.result.reject_perms", { lng: locale }));
+		expect(canBan({ ...base, id: "6", user: { bot: false }, bannable: true } as any, "1", [], locale)).toBeNull();
 	});
 });
 
 describe("autocomplete handlers", () => {
 	it("handles reason autocomplete results", async () => {
 		const interaction = {
-			options: { getFocused: () => "reas" },
+			options: { getFocused: () => "trol" },
 			respond: vi.fn(),
 		} as unknown as AutocompleteInteraction;
-		translateMock.mockReturnValueOnce(["one", "two", "three"] as unknown as string);
 
-		await handleReasonAutocomplete(interaction, "en");
+		await handleReasonAutocomplete(interaction, locale);
 		expect(interaction.respond).toHaveBeenCalled();
+		const [payload] = (interaction.respond as ReturnType<typeof vi.fn>).mock.calls[0] ?? [];
+		expect(Array.isArray(payload)).toBe(true);
+		expect(payload.some((entry: { name: string }) => entry.name.includes("Troll"))).toBe(true);
 	});
 
 	it("responds with case choices and history option", async () => {

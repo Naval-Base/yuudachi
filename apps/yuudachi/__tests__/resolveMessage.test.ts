@@ -1,4 +1,5 @@
 import { Client, type Guild, type Snowflake, type TextBasedChannel } from "discord.js";
+import i18next from "i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { parseMessageLink, resolveMessage } from "../src/util/resolveMessage.js";
 import { createSqlMock, kSQL, mockContainerGet } from "./mocks.js";
@@ -12,7 +13,8 @@ vi.mock("../src/util/functions/settings/getGuildSetting.js", () => ({
 const guildId = "1";
 const channelId = "2";
 const messageId = "3";
-const locale = "en";
+
+const locale = "en-US";
 
 let client: Partial<Client<true>> & { guilds: { resolve: ReturnType<typeof vi.fn> } };
 let sqlMock: ReturnType<typeof createSqlMock>;
@@ -41,7 +43,7 @@ describe("resolveMessage", () => {
 		client.guilds.resolve.mockReturnValue(null);
 
 		await expect(resolveMessage("0", guildId, channelId, messageId, locale)).rejects.toThrow(
-			"command.common.errors.no_guild",
+			i18next.t("command.common.errors.no_guild", { guild_id: guildId, lng: locale }),
 		);
 	});
 
@@ -56,7 +58,7 @@ describe("resolveMessage", () => {
 		client.guilds.resolve.mockReturnValue(guild);
 
 		await expect(resolveMessage("0", guildId, channelId, messageId, locale)).rejects.toThrow(
-			"command.common.errors.no_channel",
+			i18next.t("command.common.errors.no_channel", { channel_id: channelId, guild: "guild", lng: locale }),
 		);
 	});
 
@@ -76,7 +78,7 @@ describe("resolveMessage", () => {
 		client.guilds.resolve.mockReturnValue(guild);
 
 		await expect(resolveMessage("0", guildId, channelId, messageId, locale)).rejects.toThrow(
-			"command.common.errors.ignored_channel",
+			i18next.t("command.common.errors.ignored_channel", { lng: locale }),
 		);
 	});
 
@@ -120,7 +122,7 @@ describe("resolveMessage", () => {
 		client.guilds.resolve.mockReturnValue(guild);
 
 		await expect(resolveMessage("0", guildId, channelId, messageId, locale)).rejects.toThrow(
-			"command.common.errors.no_message",
+			i18next.t("command.common.errors.no_message", { message_id: messageId, channel: "#general", lng: locale }),
 		);
 	});
 });

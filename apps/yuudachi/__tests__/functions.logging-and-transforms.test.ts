@@ -1,17 +1,20 @@
 import type * as FrameworkModule from "@yuudachi/framework";
 import type { APIEmbed } from "discord.js";
+import i18next from "i18next";
 import { describe, expect, it, vi } from "vitest";
+import { Color } from "../src/Constants.js";
 import { transformAppeal } from "../src/functions/appeals/transformAppeal.js";
 import { transformCase } from "../src/functions/cases/transformCase.js";
+import { formatMessageToEmbed } from "../src/functions/logging/formatMessageToEmbed.js";
 import { generateCaseEmbed } from "../src/functions/logging/generateCaseEmbed.js";
 import { generateCasePayload } from "../src/functions/logging/generateCasePayload.js";
 import { generateReportEmbed } from "../src/functions/logging/generateReportEmbed.js";
 import { transformReport } from "../src/functions/reports/transformReport.js";
 
 vi.mock("@yuudachi/framework", async (importOriginal) => {
-	const actual = await importOriginal<typeof FrameworkModule>();
+	const mod = await importOriginal<typeof FrameworkModule>();
 	return {
-		...actual,
+		...mod,
 		addFields: vi.fn((embed: APIEmbed) => embed),
 	};
 });
@@ -32,6 +35,8 @@ vi.mock("../src/functions/settings/getGuildSetting.js", () => ({
 vi.mock("../src/functions/logging/generateReportLog.js", () => ({
 	generateReportLog: vi.fn(async () => "report log"),
 }));
+
+const locale = "en-US";
 
 describe("transformers", () => {
 	it("transforms case, appeal and report rows", () => {
@@ -192,5 +197,54 @@ describe("generateReportEmbed", () => {
 		expect(embed.color).toBeDefined();
 		expect(embed.image?.url).toBe("https://image");
 		expect(embed.description).toBe("report log");
+	});
+});
+
+describe("formatMessageToEmbed", () => {
+	it("builds embed from message content without attachment image", () => {
+		const message = {
+			author: {
+				tag: "User#0001",
+				id: "1",
+				displayAvatarURL: () => "avatar.png",
+			},
+			content: "hello world",
+			createdAt: new Date("2024-01-01T00:00:00.000Z"),
+			channel: { name: "general" },
+			attachments: { first: () => null },
+		} as any;
+
+		const embed = formatMessageToEmbed(message, "en");
+
+		expect(embed.description).toBe("hello world");
+		expect(embed.author?.name).toBe("User#0001 (1)");
+		expect(embed.footer?.text).toBe("#general");
+		expect(embed.color).toBe(Color.DiscordEmbedBackground);
+		expect(embed.image).toBeUndefined();
+	});
+
+	it("uses fallback translation and attaches image when present", () => {
+		const message = {
+			author: {
+				tag: "User#0001",
+				id: "1",
+				displayAvatarURL: () => "avatar.png",
+			},
+			content: "",
+			createdAt: new Date("2024-01-01T00:00:00.000Z"),
+			channel: { name: "general" },
+			attachments: {
+				first: () => ({
+					url: "https://example.com/image.png",
+					contentType: "image/png",
+					name: "image.png",
+				}),
+			},
+		} as any;
+
+		const embed = formatMessageToEmbed(message, locale);
+
+		expect(embed.description).toBe(i18next.t("common.errors.no_content", { lng: locale }));
+		expect(embed.image?.url).toBe("https://example.com/image.png");
 	});
 });
