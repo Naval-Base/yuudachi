@@ -6,6 +6,7 @@ import { verifyRequest } from "../util/verifyRequest.js";
 export default async function routes(fastify: FastifyInstance) {
 	fastify.post(
 		fastify.httpHandlerOptions.interactionsRoute ?? "/interactions",
+		{ config: { rawBody: true } },
 		async (
 			request: FastifyRequest<{
 				Headers: {

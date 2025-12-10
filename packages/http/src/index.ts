@@ -1,6 +1,7 @@
 import helmet from "@fastify/helmet";
 import sensible from "@fastify/sensible";
 import { fastify, type FastifyInstance } from "fastify";
+import fastifyRawBody from "fastify-raw-body";
 import InteractionsRoute from "./routes/interactions.js";
 import type { HttpHandlerOptions } from "./types/index.js";
 
@@ -18,6 +19,10 @@ export default class HttpHandler {
 	public async listen(port: number) {
 		await this.#_fastify.register(helmet);
 		await this.#_fastify.register(sensible);
+		await this.#_fastify.register(fastifyRawBody, {
+			global: false,
+			runFirst: true,
+		});
 
 		this.#_fastify.decorate("httpHandlerOptions", this.options);
 		this.#_fastify.decorate("discord", { api: this.options.api });
