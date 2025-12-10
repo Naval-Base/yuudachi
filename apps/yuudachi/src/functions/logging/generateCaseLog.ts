@@ -1,3 +1,4 @@
+import { ms } from "@naval-base/ms";
 import { logger, kSQL, container } from "@yuudachi/framework";
 import { Client, type Snowflake, hyperlink, time, TimestampStyles, messageLink, channelLink } from "discord.js";
 import i18next from "i18next";
@@ -36,8 +37,11 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 	});
 
 	if (case_.actionExpiration) {
-		msg += i18next.t("log.mod_log.case_log.expiration", {
-			time: time(new Date(case_.actionExpiration), TimestampStyles.RelativeTime),
+		const expirationDate = new Date(case_.actionExpiration);
+
+		msg += i18next.t("log.mod_log.case_log.duration", {
+			time: ms(expirationDate.getTime() - Date.now()),
+			timestamp: time(expirationDate, TimestampStyles.RelativeTime),
 			lng: locale,
 		});
 	}
