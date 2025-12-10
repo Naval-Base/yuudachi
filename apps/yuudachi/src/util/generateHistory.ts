@@ -89,6 +89,7 @@ function generateHistoryEmbed(
 			descriptionParts.push(recordString);
 		} else {
 			descriptionParts.push(truncatePhrase);
+			break;
 		}
 	}
 

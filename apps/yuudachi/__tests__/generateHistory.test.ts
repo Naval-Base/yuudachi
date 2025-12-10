@@ -105,6 +105,35 @@ describe("generateCaseHistory", () => {
 		expect(embed.description).toContain(i18next.t("log.history.common.errors.no_history", { lng: locale }));
 		expect(embed.color).toBeDefined();
 	});
+
+	it("only appends truncation text once when exceeding embed length", async () => {
+		const manyCases = Array.from({ length: 100 }, (_, index) => ({
+			created_at: new Date(2_024, 0, index + 1).toISOString(),
+			action: CaseAction.Warn,
+			case_id: index + 1,
+			log_message_id: "log",
+			guild_id: interaction.guildId,
+			reason: "reason ".repeat(20),
+			target_id: user.id,
+		}));
+
+		sqlMock.mockImplementationOnce(async (strings?: TemplateStringsArray) => {
+			const query = strings?.[0] ?? "";
+
+			if (query.includes("from cases")) {
+				return manyCases;
+			}
+
+			return [];
+		});
+
+		const embed = await generateCaseHistory(interaction as unknown as ButtonInteraction<"cached">, { user }, locale);
+		const truncatePhrase = i18next.t("common.and_more", { lng: locale });
+		const occurrences = (embed.description?.split(truncatePhrase).length ?? 1) - 1;
+
+		expect(occurrences).toBe(1);
+		expect(embed.description?.endsWith(truncatePhrase)).toBe(true);
+	});
 });
 
 describe("generateReportHistory", () => {
@@ -122,6 +151,36 @@ describe("generateReportHistory", () => {
 		const embed = await generateReportHistory(interaction as unknown as ButtonInteraction<"cached">, { user }, locale);
 
 		expect(embed.description).toContain(i18next.t("log.history.common.errors.no_history", { lng: locale }));
+	});
+
+	it("only appends truncation text once when exceeding embed length", async () => {
+		const manyReports = Array.from({ length: 100 }, (_, index) => ({
+			created_at: new Date(2_024, 0, index + 1).toISOString(),
+			report_id: index + 1,
+			log_post_id: "channel",
+			guild_id: interaction.guildId,
+			status: ReportStatus.Approved,
+			author_id: user.id,
+			target_id: user.id,
+			reason: "reason ".repeat(20),
+		}));
+
+		sqlMock.mockImplementationOnce(async (strings?: TemplateStringsArray) => {
+			const query = strings?.[0] ?? "";
+
+			if (query.includes("from reports")) {
+				return manyReports;
+			}
+
+			return [];
+		});
+
+		const embed = await generateReportHistory(interaction as unknown as ButtonInteraction<"cached">, { user }, locale);
+		const truncatePhrase = i18next.t("common.and_more", { lng: locale });
+		const occurrences = (embed.description?.split(truncatePhrase).length ?? 1) - 1;
+
+		expect(occurrences).toBe(1);
+		expect(embed.description?.endsWith(truncatePhrase)).toBe(true);
 	});
 });
 
