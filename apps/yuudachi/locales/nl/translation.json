@@ -40,6 +40,7 @@
 		"mod": {
 			"common": {
 				"errors": {
+					"already_processing": "",
 					"max_length_reason": "",
 					"not_a_text_channel": "",
 					"no_case": "",
@@ -114,7 +115,8 @@
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": ""
+					"missing_permissions": "",
+					"already_banned": ""
 				},
 				"pending": "",
 				"not_member": "",
@@ -487,7 +489,7 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "",
+				"duration": "",
 				"context": "",
 				"context_sub": "",
 				"reason": "",
