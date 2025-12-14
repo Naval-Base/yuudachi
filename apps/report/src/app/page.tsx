@@ -19,18 +19,20 @@ const mdxOptions = {
 			rehypeSlug,
 			rehypeGithubBlockquoteAdmonitions,
 			rehypeHighlightANSI,
-			[rehypeHighlight as any, { ignoreMissing: true, detect: true }],
+			[rehypeHighlight, { ignoreMissing: true, detect: true }],
 		],
 		format: "md",
 	},
 } satisfies Parameters<typeof MDXRemote>[0]["options"];
 
-export default async function Page({ searchParams }: { readonly searchParams: { url: string } }) {
-	if (!searchParams.url) {
+export default async function Page({ searchParams }: { readonly searchParams: Promise<{ url: string }> }) {
+	const { url } = await searchParams;
+
+	if (!url) {
 		notFound();
 	}
 
-	const res = await fetch(searchParams.url);
+	const res = await fetch(url);
 	const text = await res.text();
 
 	return (

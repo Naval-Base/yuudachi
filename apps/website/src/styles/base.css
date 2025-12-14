@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+@import "tw-animate-css";
+@plugin "tailwindcss-react-aria-components";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+	--font-inter:
+		"Inter Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji";
+	--font-mono:
+		"JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+		monospace;
+
+	--color-base-neutral-0: #ffffff;
+	--color-base-neutral-40: #fcfcfc;
+	--color-base-neutral-60: #fafafa;
+	--color-base-neutral-80: #f0f0f0;
+	--color-base-neutral-100: #e6e6e6;
+	--color-base-neutral-200: #cccccc;
+	--color-base-neutral-300: #b3b3b3;
+	--color-base-neutral-400: #999999;
+	--color-base-neutral-500: #808080;
+	--color-base-neutral-600: #666666;
+	--color-base-neutral-700: #4c4c4c;
+	--color-base-neutral-800: #333333;
+	--color-base-neutral-900: #191919;
+
+	--color-base-tangerine-100: #fdefd2;
+	--color-base-tangerine-200: #fce0a5;
+	--color-base-tangerine-300: #fad078;
+	--color-base-tangerine-400: #f9c14b;
+	--color-base-tangerine-500: #f7b11e;
+	--color-base-tangerine-600: #c68e18;
+	--color-base-tangerine-700: #946a12;
+	--color-base-tangerine-800: #63470c;
+	--color-base-tangerine-900: #312306;
+
+	--color-base-sunset-100: #ffe1df;
+	--color-base-sunset-200: #ffc3bf;
+	--color-base-sunset-300: #ffa69e;
+	--color-base-sunset-400: #ff887e;
+	--color-base-sunset-500: #ff6a5e;
+	--color-base-sunset-600: #cc554b;
+	--color-base-sunset-700: #994038;
+	--color-base-sunset-800: #662a26;
+	--color-base-sunset-900: #331513;
+
+	--text-base-heading-xl: 2.813rem;
+	--text-base-heading-xl--line-height: 3.25rem;
+	--text-base-heading-xl--letter-spacing: 0;
+	--text-base-heading-xl--font-weight: 400;
+	--text-base-heading-lg: 2.25rem;
+	--text-base-heading-lg--line-height: 2.75rem;
+	--text-base-heading-lg--letter-spacing: 0;
+	--text-base-heading-lg--font-weight: 400;
+	--text-base-heading-md: 2rem;
+	--text-base-heading-md--line-height: 2.5rem;
+	--text-base-heading-md--letter-spacing: 0;
+	--text-base-heading-md--font-weight: 400;
+	--text-base-heading-sm: 1.75rem;
+	--text-base-heading-sm--line-height: 2.25rem;
+	--text-base-heading-sm--letter-spacing: 0;
+	--text-base-heading-sm--font-weight: 400;
+	--text-base-heading-xs: 1.5rem;
+	--text-base-heading-xs--line-height: 2rem;
+	--text-base-heading-xs--letter-spacing: 0;
+	--text-base-heading-xs--font-weight: 400;
+	--text-base-label-xl: 1.125rem;
+	--text-base-label-xl--line-height: 1.75rem;
+	--text-base-label-xl--letter-spacing: 0.5px;
+	--text-base-label-xl--font-weight: 500;
+	--text-base-label-lg: 1rem;
+	--text-base-label-lg--line-height: 1.5rem;
+	--text-base-label-lg--letter-spacing: 0.5px;
+	--text-base-label-lg--font-weight: 500;
+	--text-base-label-md: 0.875rem;
+	--text-base-label-md--line-height: 1.25rem;
+	--text-base-label-md--letter-spacing: 0.1px;
+	--text-base-label-md--font-weight: 500;
+	--text-base-label-sm: 0.75rem;
+	--text-base-label-sm--line-height: 1rem;
+	--text-base-label-sm--letter-spacing: 0.5px;
+	--text-base-label-sm--font-weight: 500;
+	--text-base-label-xs: 0.688rem;
+	--text-base-label-xs--line-height: 1rem;
+	--text-base-label-xs--letter-spacing: 0.5px;
+	--text-base-label-xs--font-weight: 500;
+	--text-base-xl: 1.125rem;
+	--text-base-xl--line-height: 1.75rem;
+	--text-base-xl--letter-spacing: 0.5px;
+	--text-base-xl--font-weight: 400;
+	--text-base-lg: 1rem;
+	--text-base-lg--line-height: 1.5rem;
+	--text-base-lg--letter-spacing: 0.5px;
+	--text-base-lg--font-weight: 400;
+	--text-base-md: 0.875rem;
+	--text-base-md--line-height: 1.25rem;
+	--text-base-md--letter-spacing: 0.25px;
+	--text-base-md--font-weight: 400;
+	--text-base-sm: 0.75rem;
+	--text-base-sm--line-height: 1rem;
+	--text-base-sm--letter-spacing: 0.4px;
+	--text-base-sm--font-weight: 400;
+	--text-base-xs: 0.688rem;
+	--text-base-xs--line-height: 1rem;
+	--text-base-xs--letter-spacing: 0.5px;
+	--text-base-xs--font-weight: 400;
+
+	--shadow-base-sm: 0 1px 4px 0 #19191929;
+	--shadow-base-md: 0 3px 3px 0 #19191929;
+	--shadow-base-lg: 0 3px 6px 0 #1919193d;
+	--shadow-base-xl: 0 6px 6px 0 #1919193d;
+	--shadow-base-2xl: 0 8px 8px 0 #19191952;
+}
+
+@layer base {
+	* {
+		font-family: var(--font-inter);
+		font-feature-settings: "cv11", "ss01";
+		font-variation-settings: "opsz" 850;
+		text-rendering: optimizeLegibility;
+
+		scrollbar-width: thin;
+	}
+}
+
+@utility scrollbar-hidden {
+	scrollbar-width: none;
+}
+
+pre.shiki {
+	@apply rounded-b-md p-4;
+	& > code span {
+		@apply font-mono text-xs;
+	}
+}

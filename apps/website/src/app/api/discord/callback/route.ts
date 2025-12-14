@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
-	const cookieStore = cookies();
+	const cookieStore = await cookies();
 
 	const params = new URLSearchParams();
 	params.append("client_id", process.env.DISCORD_CLIENT_ID!);

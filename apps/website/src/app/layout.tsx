@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
+import { jetBrainsMono, roboto } from "@/styles/fonts";
 
-import "@unocss/reset/tailwind.css";
-import "../styles/unocss.css";
-import "../styles/main.css";
+import "overlayscrollbars/overlayscrollbars.css";
+import "@/styles/base.css";
 
 export const viewport: Viewport = {
 	themeColor: [
@@ -15,40 +15,22 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-	title: "Yuudachi",
-	icons: {
-		other: [
-			{
-				url: "/favicon-32x32.png",
-				sizes: "32x32",
-				type: "image/png",
-			},
-			{
-				url: "/favicon-16x16.png",
-				sizes: "16x16",
-				type: "image/png",
-			},
-		],
-		apple: [
-			"/apple-touch-icon.png",
-			{
-				url: "/safari-pinned-tab.svg",
-				rel: "mask-icon",
-			},
-		],
+	title: {
+		default: "Yuudachi",
+		template: "%s | Yuudachi",
 	},
-
-	manifest: "/site.webmanifest",
-
-	appleWebApp: {
-		title: "Yuudachi",
-	},
+	description: "",
 
 	applicationName: "Yuudachi",
 
 	openGraph: {
+		title: "Yuudachi",
+		description: "",
 		siteName: "Yuudachi",
 		type: "website",
+	},
+
+	appleWebApp: {
 		title: "Yuudachi",
 	},
 
@@ -56,16 +38,12 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 		creator: "@iCrawlToGo",
 	},
-
-	other: {
-		"msapplication-TileColor": "#181818",
-	},
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
 	return (
-		<html lang="en" suppressHydrationWarning>
-			<body className="bg-light-600 dark:bg-dark-600 dark:text-light-600">
+		<html className={`${roboto.variable} ${jetBrainsMono.variable} antialiased`} lang="en" suppressHydrationWarning>
+			<body className="bg-base-neutral-0 text-base-md text-base-neutral-900 dark:bg-base-neutral-900 dark:text-base-neutral-40 overscroll-y-none">
 				<Providers>{children}</Providers>
 			</body>
 		</html>

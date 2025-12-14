@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 
-import "@/styles/main.css";
+import "overlayscrollbars/overlayscrollbars.css";
+import "@/styles/base.css";
 
 export const viewport: Viewport = {
 	themeColor: [
@@ -12,50 +13,28 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-	title: "Yuudachi Report",
-	icons: {
-		other: [
-			{
-				url: "/favicon-32x32.png",
-				sizes: "32x32",
-				type: "image/png",
-			},
-			{
-				url: "/favicon-16x16.png",
-				sizes: "16x16",
-				type: "image/png",
-			},
-		],
-		apple: [
-			"/apple-touch-icon.png",
-			{
-				url: "/safari-pinned-tab.svg",
-				rel: "mask-icon",
-			},
-		],
+	title: {
+		default: "Yuudachi Report",
+		template: "%s | Yuudachi Report",
 	},
-
-	manifest: "/site.webmanifest",
-
-	appleWebApp: {
-		title: "Yuudachi Report",
-	},
+	description: "",
 
 	applicationName: "Yuudachi Report",
 
 	openGraph: {
+		title: "Yuudachi Report",
+		description: "",
 		siteName: "Yuudachi Report",
 		type: "website",
+	},
+
+	appleWebApp: {
 		title: "Yuudachi Report",
 	},
 
 	twitter: {
 		card: "summary_large_image",
 		creator: "@iCrawlToGo",
-	},
-
-	other: {
-		"msapplication-TileColor": "#0d1117",
 	},
 };
 

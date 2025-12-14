@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { CaseCard } from "@/components/CaseCard";
 import { UserDisplay } from "@/components/UserDisplay";
 
-export default async function Page({ params }: { readonly params: { id: string } }) {
-	const cookieStore = cookies();
+export default async function Page({ params }: { readonly params: Promise<{ id: string }> }) {
+	const { id } = await params;
+	const cookieStore = await cookies();
 
 	const token = cookieStore.get("discord_token");
 	if (!token) {
@@ -38,7 +39,7 @@ export default async function Page({ params }: { readonly params: { id: string }
 		return <div className="mx-auto max-w-5xl gap-2 p-8">Nah, surely not.</div>;
 	}
 
-	const caseData = await fetch(`https://bot.yuudachi.dev/api/appeals/${params.id}`, {
+	const caseData = await fetch(`https://bot.yuudachi.dev/api/appeals/${id}`, {
 		headers: {
 			Authorization: `Bearer ${process.env.JWT_TOKEN}`,
 		},
@@ -56,7 +57,7 @@ export default async function Page({ params }: { readonly params: { id: string }
 				Review <span className="decoration-blurple underline decoration-8 underline-offset-3">cases</span>
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">
-				<div className="dark:from-dark-600 from-light-600 sticky top-0 flex w-full flex-col place-content-start gap-4 bg-gradient-to-b from-85% md:w-auto dark:from-85%">
+				<div className="dark:from-dark-600 from-light-600 sticky top-0 flex w-full flex-col place-content-start gap-4 bg-linear-to-b from-85% md:w-auto dark:from-85%">
 					<UserDisplay className="sticky top-0 py-4" user={user} />
 				</div>
 

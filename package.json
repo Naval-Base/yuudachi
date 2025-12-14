@@ -21,7 +21,7 @@
 		"@types/lodash.merge": "^4.6.9",
 		"@vitest/coverage-istanbul": "^4.0.15",
 		"@vitest/coverage-v8": "^4.0.15",
-		"eslint": "^9.39.1",
+		"eslint": "^9.39.2",
 		"eslint-config-neon": "^0.2.9",
 		"eslint-formatter-pretty": "^7.0.0",
 		"eslint-import-resolver-typescript": "^4.4.4",
@@ -32,7 +32,7 @@
 		"lodash.merge": "^4.6.2",
 		"prettier": "^3.7.4",
 		"typescript": "^5.9.3",
-		"vercel": "^49.1.2",
+		"vercel": "^50.0.1",
 		"vitest": "^4.0.15"
 	},
 	"engines": {

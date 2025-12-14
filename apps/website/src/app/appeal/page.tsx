@@ -4,7 +4,7 @@ import { CaseCard } from "@/components/CaseCard";
 import { UserDisplay } from "@/components/UserDisplay";
 
 export default async function Page() {
-	const cookieStore = cookies();
+	const cookieStore = await cookies();
 
 	const token = cookieStore.get("discord_token");
 	if (!token) {
@@ -53,7 +53,7 @@ export default async function Page() {
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">
 				<div className="flex flex-col gap-8">
-					<div className="dark:from-dark-600 from-light-600 top-0 flex w-full flex-col place-content-start gap-4 bg-gradient-to-b from-82% md:w-auto dark:from-82%">
+					<div className="dark:from-dark-600 from-light-600 top-0 flex w-full flex-col place-content-start gap-4 bg-linear-to-b from-82% md:w-auto dark:from-82%">
 						<UserDisplay user={user} />
 					</div>
 

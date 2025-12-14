@@ -4,6 +4,9 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 export function Table({ columns, data }: { readonly columns: ColumnDef<any, any>[]; readonly data: any }) {
+	// eslint-disable-next-line react-compiler/react-compiler
+	"use no memo";
+
 	const table = useReactTable({
 		data,
 		columns,

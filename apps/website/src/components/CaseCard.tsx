@@ -71,15 +71,15 @@ export function CaseCard({ case_ }: { readonly case_: any }) {
 					<div>
 						<span className="font-semibold">Action:</span> {caseActionLabel(case_.action)}
 					</div>
-					<div className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" role="separator" />
+					<div className="from-light-900 dark:from-dark-100 my-2 h-px bg-linear-to-r" role="separator" />
 					<div>
 						<span className="font-semibold">Moderator:</span> {case_.mod_tag}
 					</div>
-					<div className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" role="separator" />
+					<div className="from-light-900 dark:from-dark-100 my-2 h-px bg-linear-to-r" role="separator" />
 					<div>
 						<span className="font-semibold">Reason:</span> {case_.reason}
 					</div>
-					<div className="from-light-900 dark:from-dark-100 my-2 h-[1px] bg-gradient-to-r" role="separator" />
+					<div className="from-light-900 dark:from-dark-100 my-2 h-px bg-linear-to-r" role="separator" />
 					<div>
 						<span className="font-semibold">Date:</span> {new Intl.DateTimeFormat("en-GB").format(createdAt)} (
 						{format(Date.now() - createdAt.getTime(), true)} ago)

@@ -4,7 +4,7 @@ import { Table } from "@/components/Table";
 import { columns } from "@/components/Table/CasesColumns";
 
 export default async function Page() {
-	const cookieStore = cookies();
+	const cookieStore = await cookies();
 
 	const token = cookieStore.get("discord_token");
 	if (!token) {
