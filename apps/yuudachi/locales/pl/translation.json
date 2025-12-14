@@ -1,7 +1,7 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_log_channel": "Kanał dla logów nie został jeszcze zainicjowany.",
+			"no_mod_log_channel": "",
 			"no_anti_raid_archive_channel": "",
 			"no_report_channel": "",
 			"no_content": ""
@@ -12,11 +12,11 @@
 	"command": {
 		"common": {
 			"errors": {
-				"generic": "Coś poszło nie tak.",
+				"generic": "",
 				"no_enabled_module": "",
-				"duration_format": "Nieprawidłowy format czasu trwania.",
-				"use_autocomplete": "Nie udało się przetworzyć podanej opcji. Upewnij się, że wybierasz opcję z uzupełnianiem.",
-				"target_not_found": "Podany użytkownik nie znajduje się na tym serwerze.",
+				"duration_format": "",
+				"use_autocomplete": "",
+				"target_not_found": "",
 				"timed_out": "",
 				"no_message": "",
 				"not_message_link": "",
@@ -33,15 +33,16 @@
 		"config": {
 			"common": {
 				"errors": {
-					"no_settings": "Ustawienia serwera nie zostały jeszcze zainicjowane."
+					"no_settings": ""
 				}
 			}
 		},
 		"mod": {
 			"common": {
 				"errors": {
+					"already_processing": "",
 					"max_length_reason": "",
-					"not_a_text_channel": "{{- channel}} nie jest kanałem tekstowym.",
+					"not_a_text_channel": "",
 					"no_case": "",
 					"no_report": "",
 					"no_case_range": "",
@@ -68,7 +69,7 @@
 			"case": {
 				"autocomplete": {
 					"no_reason": "",
-					"show_history": "Pokaż historię dla użytkownika {{- user}}"
+					"show_history": ""
 				},
 				"buttons": {
 					"goto": ""
@@ -82,77 +83,78 @@
 				}
 			},
 			"warn": {
-				"pending": "Czy na pewno chcesz ostrzec {{- user}}?",
+				"pending": "",
 				"buttons": {
-					"execute": "Ostrzeż"
+					"execute": ""
 				},
-				"cancel": "Anulowano ostrzeganie {{- user}}",
-				"success": "Pomyślnie ostrzeżono {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"timeout": {
 				"errors": {
-					"missing_permissions": "Brakuje uprawnień, aby wyciszyć {{- user}}",
-					"already_timed_out": "{{- user}} jest już wyciszony"
+					"missing_permissions": "",
+					"already_timed_out": ""
 				},
 				"buttons": {
-					"execute": "Wycisz"
+					"execute": ""
 				},
-				"pending": "Czy na pewno chcesz wyciszyć {{- user}}?",
-				"cancel": "Anulowano wyciszenie {{- user}}",
-				"success": "Pomyślnie wyciszono {{- user}}"
+				"pending": "",
+				"cancel": "",
+				"success": ""
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "Brakuje uprawnień aby wykopać {{- user}}"
+					"missing_permissions": ""
 				},
-				"pending": "Czy na pewno chcesz wykopać {{- user}}?",
+				"pending": "",
 				"buttons": {
-					"execute": "Wykop"
+					"execute": ""
 				},
-				"cancel": "Anulowano wykopanie {{- user}}",
-				"success": "Pomyślnie wykopano {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": "Brakuje uprawnień aby wykonać softban na {{- user}}"
+					"missing_permissions": "",
+					"already_banned": ""
 				},
-				"pending": "Czy na pewno chcesz wykonać softban na {{- user}}?",
-				"not_member": "Użytkownik {{- user}} nie znajduje się na tym serwerze. Czy nadal chcesz kontynuować z wykonaniem softbanu aby usunąć jego wiadomości?",
+				"pending": "",
+				"not_member": "",
 				"buttons": {
-					"execute": "Wykonaj"
+					"execute": ""
 				},
 				"reasons": {
-					"clear_messages": "Mod: {{- user}} | Softban w celu usunięcia wiadomości"
+					"clear_messages": ""
 				},
-				"cancel": "Anulowano wykonywanie softbanu na {{- user}}",
+				"cancel": "",
 				"success": {
-					"regular": "Pomyślnie wykonano softban na {{- user}}",
-					"clear_messages": "Pomyślnie usunięto wiadomości od {{- user}}"
+					"regular": "",
+					"clear_messages": ""
 				}
 			},
 			"ban": {
 				"errors": {
-					"missing_permissions": "Brakuje uprawnień, aby zbanować {{- user}}",
-					"already_banned": "{{- user}} jest już zbanowany."
+					"missing_permissions": "",
+					"already_banned": ""
 				},
-				"pending": "Czy na pewno chcesz zbanować {{- user}}?",
+				"pending": "",
 				"buttons": {
-					"execute": "Zbanuj"
+					"execute": ""
 				},
-				"cancel": "Anulowano banowanie {{- user}}",
-				"success": "Pomyślnie zbanowano {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"unban": {
 				"errors": {
-					"missing_permissions": "Brakuje uprawnień, aby odbanować {{- user}}",
-					"no_ban": "{{- user}} nie jest zbanowany."
+					"missing_permissions": "",
+					"no_ban": ""
 				},
-				"pending": "Czy na pewno chcesz odbanować {{- user}}?",
+				"pending": "",
 				"buttons": {
-					"execute": "Odbanuj"
+					"execute": ""
 				},
-				"cancel": "Anulowano odbanowanie {{- user}}",
-				"success": "Pomyślnie odbanowano {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"anti_raid_nuke": {
 				"common": {
@@ -228,39 +230,39 @@
 			"lockdown": {
 				"lock": {
 					"errors": {
-						"missing_permissions": "Brakuje uprawnień aby zablokować {{- channel}}",
-						"already_locked": "{{- channel}} jest już zablokowany.",
-						"bot_requires_admin": "Bot wymaga uprawnienia `ADMINISTRATOR` w celu blokowania kanałów, ponieważ bez niego Discord nie pozwala zmieniać wszystkich uprawnień kanału, co może powodować problemy w trakcie blokowania lub odblokowywania."
+						"missing_permissions": "",
+						"already_locked": "",
+						"bot_requires_admin": ""
 					},
-					"pending": "Czy na pewno chcesz zablokować {{- channel}}?",
+					"pending": "",
 					"buttons": {
-						"execute": "Zablokuj"
+						"execute": ""
 					},
-					"message": "🔒 Ten kanał został zablokowany, zostanie odblokowany {{- duration}}",
+					"message": "",
 					"message_reason": "",
-					"cancel": "Anulowano blokowanie {{- channel}}",
-					"success": "Pomyślnie zablokowano {{- channel}}"
+					"cancel": "",
+					"success": ""
 				},
 				"lift": {
 					"errors": {
-						"missing_permissions": "Brakuje uprawnień aby znieść blokadę dla {{- channel}}",
-						"not_locked": "{{- channel}} nie jest zablokowany.",
+						"missing_permissions": "",
+						"not_locked": "",
 						"failure": ""
 					},
-					"pending": "Czy na pewno chcesz znieść blokadę dla {{- channel}}?",
+					"pending": "",
 					"buttons": {
-						"execute": "Odblokuj"
+						"execute": ""
 					},
-					"cancel": "Anulowano znoszenie blokady dla {{- channel}}",
-					"success": "Pomyślnie zniesiono blokadę dla {{- channel}}"
+					"cancel": "",
+					"success": ""
 				}
 			},
 			"reason": {
-				"success": "Pomyślnie ustawiono powód dla incydentu {{- case}}",
+				"success": "",
 				"success_multiple": "",
 				"pending_multiple": "",
 				"buttons": {
-					"execute": "Ustaw"
+					"execute": ""
 				},
 				"cancel": ""
 			},
@@ -272,7 +274,7 @@
 				"errors": {
 					"timeout": ""
 				},
-				"success": "Pomyślnie ustawiono czas trwania dla incydentu {{- case}}"
+				"success": ""
 			},
 			"clear": {
 				"errors": {
@@ -356,21 +358,21 @@
 		},
 		"utility": {
 			"ping": {
-				"success": "Wszystko w porządku"
+				"success": ""
 			},
 			"check_scam": {
-				"found_one": "Wykryto domenę ze scamem ({{count}})",
-				"found_other": "Wykryto domeny ze scamem ({{count}})"
+				"found_one": "",
+				"found_other": ""
 			},
 			"refresh_scamlist": {
-				"missing_env": "Brakuje zmiennych środowiskowych {{missing, list}} z listami domen ze scamem do sprawdzenia.",
+				"missing_env": "",
 				"refresh_never": "",
 				"amount": "",
 				"before": "",
 				"after": "",
-				"last_change": "• Ostatnia zmiana: {{- timestamp}}",
+				"last_change": "",
 				"buttons": {
-					"execute": "Odśwież"
+					"execute": ""
 				},
 				"cancel": "",
 				"success": "",
@@ -379,16 +381,16 @@
 			},
 			"sponsor": {
 				"errors": {
-					"no_role": "Nie skonfigurowano żadnej roli dla sponsorów.",
-					"already_sponsor": "{{- user}} jest już sponsorem."
+					"no_role": "",
+					"already_sponsor": ""
 				},
-				"pending": "Czy na pewno chcesz przyznać rolę sponsora dla {{- user}}?",
+				"pending": "",
 				"buttons": {
-					"execute": "Zastosuj"
+					"execute": ""
 				},
 				"reason": "",
-				"cancel": "Anulowano przyznawanie roli sponsora dla {{- user}}",
-				"success": "Pomyślnie przyznano rolę sponsora dla {{- user}}"
+				"cancel": "",
+				"success": ""
 			},
 			"claim_sponsor": {
 				"errors": {
@@ -487,7 +489,7 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "",
+				"duration": "",
 				"context": "",
 				"context_sub": "",
 				"reason": "",
