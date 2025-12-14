@@ -40,6 +40,7 @@
 		"mod": {
 			"common": {
 				"errors": {
+					"already_processing": "",
 					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} ist kein Textkanal.",
 					"no_case": "Kann den Fall `#{{case}}` nicht finden",
@@ -114,7 +115,8 @@
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": "Fehlende Berechtigungen für softban {{- user}}"
+					"missing_permissions": "Fehlende Berechtigungen für softban {{- user}}",
+					"already_banned": ""
 				},
 				"pending": "Willst du {{- user}} wirklich softbanen?",
 				"not_member": "Benutzer {{- user}} ist nicht in dieser Gilde. Willst du ihn trotzdem softbanen, um Nachrichten zu entfernen?",
@@ -487,7 +489,7 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "",
+				"duration": "",
 				"context": "",
 				"context_sub": "",
 				"reason": "",

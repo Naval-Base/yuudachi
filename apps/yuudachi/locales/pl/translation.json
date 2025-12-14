@@ -40,6 +40,7 @@
 		"mod": {
 			"common": {
 				"errors": {
+					"already_processing": "",
 					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} nie jest kanałem tekstowym.",
 					"no_case": "",
@@ -114,7 +115,8 @@
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": "Brakuje uprawnień aby wykonać softban na {{- user}}"
+					"missing_permissions": "Brakuje uprawnień aby wykonać softban na {{- user}}",
+					"already_banned": ""
 				},
 				"pending": "Czy na pewno chcesz wykonać softban na {{- user}}?",
 				"not_member": "Użytkownik {{- user}} nie znajduje się na tym serwerze. Czy nadal chcesz kontynuować z wykonaniem softbanu aby usunąć jego wiadomości?",
@@ -487,7 +489,7 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "",
+				"duration": "",
 				"context": "",
 				"context_sub": "",
 				"reason": "",

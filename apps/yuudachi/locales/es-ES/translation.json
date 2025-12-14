@@ -40,6 +40,7 @@
 		"mod": {
 			"common": {
 				"errors": {
+					"already_processing": "",
 					"max_length_reason": "",
 					"not_a_text_channel": "{{- channel}} no es un canal de texto.",
 					"no_case": "",
@@ -114,7 +115,8 @@
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": "Me faltan permisos para softbanear a {{- user}}"
+					"missing_permissions": "Me faltan permisos para softbanear a {{- user}}",
+					"already_banned": ""
 				},
 				"pending": "¿Realmente quieres softbanear a {{- user}}?",
 				"not_member": "{{- user}} no está en este servidor. ¿Aún deseas proceder con el softban para borrar sus mensajes?",
@@ -487,7 +489,7 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "\n**Fecha de expiración**: {{- time}}",
+				"duration": "",
 				"context": "**Contexto:** {{- link}}",
 				"context_sub": "Transpórtame, Yuu",
 				"reason": "\n**Motivo:** {{- reason}}",

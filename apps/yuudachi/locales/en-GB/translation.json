@@ -1,7 +1,7 @@
 {
 	"common": {
 		"errors": {
-			"no_mod_log_channel": "No mod log channel has been initialised yet.",
+			"no_mod_log_channel": "",
 			"no_anti_raid_archive_channel": "",
 			"no_report_channel": "",
 			"no_content": ""
@@ -33,13 +33,14 @@
 		"config": {
 			"common": {
 				"errors": {
-					"no_settings": "No guild settings have been initialised yet."
+					"no_settings": ""
 				}
 			}
 		},
 		"mod": {
 			"common": {
 				"errors": {
+					"already_processing": "",
 					"max_length_reason": "",
 					"not_a_text_channel": "",
 					"no_case": "",
@@ -86,7 +87,7 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "Cancelled warn on {{- user}}",
+				"cancel": "",
 				"success": ""
 			},
 			"timeout": {
@@ -98,7 +99,7 @@
 					"execute": ""
 				},
 				"pending": "",
-				"cancel": "Cancelled timeout for {{- user}}",
+				"cancel": "",
 				"success": ""
 			},
 			"kick": {
@@ -109,12 +110,13 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "Cancelled kick on {{- user}}",
+				"cancel": "",
 				"success": ""
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": ""
+					"missing_permissions": "",
+					"already_banned": ""
 				},
 				"pending": "",
 				"not_member": "",
@@ -124,7 +126,7 @@
 				"reasons": {
 					"clear_messages": ""
 				},
-				"cancel": "Cancelled softban on {{- user}}",
+				"cancel": "",
 				"success": {
 					"regular": "",
 					"clear_messages": ""
@@ -139,7 +141,7 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "Cancelled ban on {{- user}}",
+				"cancel": "",
 				"success": ""
 			},
 			"unban": {
@@ -151,7 +153,7 @@
 				"buttons": {
 					"execute": ""
 				},
-				"cancel": "Cancelled unban on {{- user}}",
+				"cancel": "",
 				"success": ""
 			},
 			"anti_raid_nuke": {
@@ -238,7 +240,7 @@
 					},
 					"message": "",
 					"message_reason": "",
-					"cancel": "Cancelled locking of {{- channel}}",
+					"cancel": "",
 					"success": ""
 				},
 				"lift": {
@@ -251,7 +253,7 @@
 					"buttons": {
 						"execute": ""
 					},
-					"cancel": "Cancelled lifting lock of {{- channel}}",
+					"cancel": "",
 					"success": ""
 				}
 			},
@@ -387,7 +389,7 @@
 					"execute": ""
 				},
 				"reason": "",
-				"cancel": "Cancelled applying sponsor role to {{- user}}",
+				"cancel": "",
 				"success": ""
 			},
 			"claim_sponsor": {
@@ -487,7 +489,7 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "",
+				"duration": "",
 				"context": "",
 				"context_sub": "",
 				"reason": "",
