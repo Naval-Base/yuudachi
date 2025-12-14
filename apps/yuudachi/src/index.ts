@@ -119,7 +119,7 @@ try {
 	}
 
 	await client.login();
-	await api.listen({ port: Number(process.env.API_PORT) });
+	await api.listen({ port: Number(process.env.API_PORT), host: "0.0.0.0" });
 
 	const wsURL = process.env.SCAM_DOMAIN_WS;
 	const identity = process.env.SCAM_DOMAIN_IDENTITY;
