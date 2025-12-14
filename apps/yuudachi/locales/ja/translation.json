@@ -12,11 +12,11 @@
 	"command": {
 		"common": {
 			"errors": {
-				"generic": "問題が発生しました。",
+				"generic": "",
 				"no_enabled_module": "",
-				"duration_format": "存続期間の形式は間違っています。",
+				"duration_format": "",
 				"use_autocomplete": "",
-				"target_not_found": "対象ユーザーはこのサーバーにいません。",
+				"target_not_found": "",
 				"timed_out": "",
 				"no_message": "",
 				"not_message_link": "",
@@ -33,15 +33,16 @@
 		"config": {
 			"common": {
 				"errors": {
-					"no_settings": "サーバーの設定はまだ非初期化です。"
+					"no_settings": ""
 				}
 			}
 		},
 		"mod": {
 			"common": {
 				"errors": {
+					"already_processing": "",
 					"max_length_reason": "",
-					"not_a_text_channel": "{{- channel}}はテキストチャンネルではありません。",
+					"not_a_text_channel": "",
 					"no_case": "",
 					"no_report": "",
 					"no_case_range": "",
@@ -68,7 +69,7 @@
 			"case": {
 				"autocomplete": {
 					"no_reason": "",
-					"show_history": "{{- user}}の歴史を見る"
+					"show_history": ""
 				},
 				"buttons": {
 					"goto": ""
@@ -84,10 +85,10 @@
 			"warn": {
 				"pending": "",
 				"buttons": {
-					"execute": "警告する"
+					"execute": ""
 				},
-				"cancel": "{{- user}}を警告することをキャンセルしました",
-				"success": "{{- user}}を警告することは成功しました"
+				"cancel": "",
+				"success": ""
 			},
 			"timeout": {
 				"errors": {
@@ -103,18 +104,19 @@
 			},
 			"kick": {
 				"errors": {
-					"missing_permissions": "{{- user}}を追放するの権利がありません"
+					"missing_permissions": ""
 				},
-				"pending": "本当に{{- user}}を追放しますか？",
+				"pending": "",
 				"buttons": {
-					"execute": "追放する"
+					"execute": ""
 				},
-				"cancel": "{{- user}}を追放することをキャンセルしました",
-				"success": "{{- user}}を追放することは成功しました"
+				"cancel": "",
+				"success": ""
 			},
 			"softban": {
 				"errors": {
-					"missing_permissions": ""
+					"missing_permissions": "",
+					"already_banned": ""
 				},
 				"pending": "",
 				"not_member": "",
@@ -127,32 +129,32 @@
 				"cancel": "",
 				"success": {
 					"regular": "",
-					"clear_messages": "{{- user}}と言うユーザーのメッセージを消しました"
+					"clear_messages": ""
 				}
 			},
 			"ban": {
 				"errors": {
-					"missing_permissions": "{{- user}}をBANするの権利がありません",
-					"already_banned": "{{- user}}はすでにBANされました。"
+					"missing_permissions": "",
+					"already_banned": ""
 				},
-				"pending": "本当に{{- user}}をBANしますか？",
+				"pending": "",
 				"buttons": {
-					"execute": "BAN"
+					"execute": ""
 				},
-				"cancel": "{{- user}}をBANすることをキャンセルしました",
-				"success": "{{- user}}をBANすることは成功しました"
+				"cancel": "",
+				"success": ""
 			},
 			"unban": {
 				"errors": {
-					"missing_permissions": "{{- user}}のBANを解除するの権利がありません",
-					"no_ban": "{{- user}}はBANされていません。"
+					"missing_permissions": "",
+					"no_ban": ""
 				},
-				"pending": "本当に{{- user}}のBANを解除しますか？",
+				"pending": "",
 				"buttons": {
-					"execute": "BAN解除"
+					"execute": ""
 				},
-				"cancel": "{{- user}}のBANを解除することをキャンセルしました",
-				"success": "{{- user}}のBANを解除することは成功しました"
+				"cancel": "",
+				"success": ""
 			},
 			"anti_raid_nuke": {
 				"common": {
@@ -260,7 +262,7 @@
 				"success_multiple": "",
 				"pending_multiple": "",
 				"buttons": {
-					"execute": "理由を設定する"
+					"execute": ""
 				},
 				"cancel": ""
 			},
@@ -359,18 +361,18 @@
 				"success": ""
 			},
 			"check_scam": {
-				"found_one": "詐欺ドメイン発見しました ({{count}}つ)",
-				"found_other": "詐欺ドメイン発見しました ({{count}}つ)"
+				"found_one": "",
+				"found_other": ""
 			},
 			"refresh_scamlist": {
-				"missing_env": "詐欺ドメインを取り出す環境変数の{{missing, list}}は未設定です。",
-				"refresh_never": "`なし`",
+				"missing_env": "",
+				"refresh_never": "",
 				"amount": "",
 				"before": "",
 				"after": "",
-				"last_change": "• 最終更新日時: {{- timestamp}}",
+				"last_change": "",
 				"buttons": {
-					"execute": "更新"
+					"execute": ""
 				},
 				"cancel": "",
 				"success": "",
@@ -379,16 +381,16 @@
 			},
 			"sponsor": {
 				"errors": {
-					"no_role": "支援者ロールは未設定です。",
-					"already_sponsor": "{{- user}}はすでに支援者であります。"
+					"no_role": "",
+					"already_sponsor": ""
 				},
-				"pending": "本当に{{- user}}に支援者ロールを与えますか？",
+				"pending": "",
 				"buttons": {
-					"execute": "保存"
+					"execute": ""
 				},
 				"reason": "",
-				"cancel": "{{- user}}に支援者ロールを与えることをキャンセルしました。",
-				"success": "{{- user}}に支援者ロールを与えることは成功しました"
+				"cancel": "",
+				"success": ""
 			},
 			"claim_sponsor": {
 				"errors": {
@@ -487,10 +489,10 @@
 		"mod_log": {
 			"case_log": {
 				"description": "",
-				"expiration": "",
+				"duration": "",
 				"context": "",
 				"context_sub": "",
-				"reason": "\n**理由:** {{- reason}}",
+				"reason": "",
 				"reason_fallback": "",
 				"case_reference": "",
 				"report_reference": "",
@@ -503,11 +505,11 @@
 				"footer": ""
 			},
 			"scam": {
-				"reason": "詐欺検出"
+				"reason": ""
 			},
 			"spam": {
-				"reason": "スパム検出",
-				"reason_mentions": "メンションスパム検出"
+				"reason": "",
+				"reason_mentions": ""
 			},
 			"auto_mod": {
 				"keyword": "",
@@ -520,25 +522,25 @@
 		"member_log": {
 			"description": "",
 			"joined_at": "",
-			"left_at": "• サーバからの退場: {{- left_at}} ({{- left_at_since}})",
+			"left_at": "",
 			"footer": {
-				"joined": "ユーザー入場",
-				"left": "ユーザー退場"
+				"joined": "",
+				"left": ""
 			}
 		},
 		"guild_log": {
 			"message_updated": {
-				"title": "メッセージは編集しました",
-				"channel": "• チャンネル: {{- channel}}",
-				"jump_to": "• [メッセージへ移動する]({{- link}})"
+				"title": "",
+				"channel": "",
+				"jump_to": ""
 			},
 			"message_deleted": {
-				"title": "メッセージ消し",
-				"channel": "• チャンネル: {{- channel}}",
+				"title": "",
+				"channel": "",
 				"embeds": "",
 				"attachments": "",
 				"stickers": "",
-				"jump_to": "• [メッセージへ移動する]({{- link}})",
+				"jump_to": "",
 				"reply_to": "",
 				"reply_to_mentions": ""
 			},
@@ -552,22 +554,22 @@
 				"reply_to_mentions": ""
 			},
 			"voice_state_update": {
-				"title": "ボイスステータス更新",
-				"joined": "{{- channel}}へ入場しました",
+				"title": "",
+				"joined": "",
 				"moved": "",
-				"left": "{{- channel}}から退場しました"
+				"left": ""
 			},
 			"thread_created": {
-				"title": "スレッド作成",
+				"title": "",
 				"channel": "",
 				"starter": "",
-				"jump_to": "• [元メッセージへ移動する]({{- link}})"
+				"jump_to": ""
 			},
 			"thread_deleted": {
-				"title": "スレッド消し",
+				"title": "",
 				"channel": "",
 				"starter": "",
-				"jump_to": "• [元メッセージへ移動する]({{- link}})"
+				"jump_to": ""
 			},
 			"messages_cleared": {
 				"title": "",
