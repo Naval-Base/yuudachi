@@ -1,9 +1,9 @@
-project_id: '449484'
-pull_request_title: 'feat(i18n): new translation updates'
-commit_message: 'chore(i18n): new translations for %original_file_name% (%language%) [skip ci]'
-append_commit_message: 
+project_id: "449484"
+pull_request_title: "feat(i18n): new translation updates"
+commit_message: "chore(i18n): new translations for %original_file_name% (%language%) [skip ci]"
+append_commit_message: false
 base_path: .
-preserve_hierarchy: 1
+preserve_hierarchy: true
 files:
   - source: /apps/yuudachi/locales/en-US/translation.json
     translation: /apps/yuudachi/locales/%locale%/%original_file_name%
