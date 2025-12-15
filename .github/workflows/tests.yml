@@ -32,7 +32,9 @@ jobs:
         if: ${{ github.event_name != 'push' }}
         run: pnpm run lint --format=compact
 
+      - name: Tests
+        run: pnpm run test
+
       - name: Docker
         run: |
           docker compose -f docker-compose.yml -f docker-compose.local.yml build
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml build
