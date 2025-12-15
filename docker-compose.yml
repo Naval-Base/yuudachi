@@ -1,24 +1,20 @@
-version: "3.7"
-
 services:
   postgres:
     build: ./docker/postgresql
     labels:
       com.naval-base.description: "PostgreSQL"
     environment:
-      POSTGRES_USER: ""
       POSTGRES_PASSWORD: ""
-      POSTGRES_DB: ""
     expose:
       - "5432"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yuudachi"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
 
   redis:
-    image: redis/redis-stack-server:latest
+    image: redis:8-alpine
     labels:
       com.naval-base.description: "Redis"
     environment:
@@ -31,20 +27,20 @@ services:
       interval: 10s
       timeout: 5s
 
-  prometheus:
-    build: ./docker/prometheus
-    labels:
-      com.naval-base.description: "Prometheus"
-    expose:
-      - "9090"
-    restart: unless-stopped
-    network_mode: "host"
+  #prometheus:
+  #  build: ./docker/prometheus
+  #  labels:
+  #    com.naval-base.description: "Prometheus"
+  #  expose:
+  #    - "9090"
+  #  restart: unless-stopped
+  #  network_mode: "host"
 
-  grafana:
-    image: grafana/grafana-oss:10.0.8
-    labels:
-      com.naval-base.description: "Grafana"
-    expose:
-      - "3000"
-    restart: unless-stopped
-    network_mode: "host"
+  #grafana:
+  #  image: grafana/grafana-oss:10.0.8
+  #  labels:
+  #    com.naval-base.description: "Grafana"
+  #  expose:
+  #    - "3000"
+  #  restart: unless-stopped
+  #  network_mode: "host"
