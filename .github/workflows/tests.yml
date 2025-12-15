@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -29,7 +29,6 @@ jobs:
         run: pnpm run build
 
       - name: ESLint
-        if: ${{ github.event_name != 'push' }}
         run: pnpm run lint --format=compact
 
       - name: Tests
