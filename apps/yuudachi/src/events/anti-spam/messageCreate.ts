@@ -16,7 +16,7 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [message] of on(this.client, this.event) as AsyncIterableIterator<[Message]>) {
 			try {
-				if (message.author.bot || !message.content.length || !message.inGuild()) {
+				if (message.author.bot || !message.inGuild()) {
 					continue;
 				}
 
@@ -24,10 +24,23 @@ export default class implements Event {
 					continue;
 				}
 
-				await handleAntiSpam(message.guildId, message.member.id, message.content, {
-					name: this.name,
-					event: this.event,
-				});
+				const hasContent = message.content.length > 0;
+				const hasAttachments = message.attachments.size > 0;
+
+				if (!hasContent && !hasAttachments) {
+					continue;
+				}
+
+				await handleAntiSpam(
+					message.guildId,
+					message.member.id,
+					message.content ?? "",
+					{
+						name: this.name,
+						event: this.event,
+					},
+					[...message.attachments.values()],
+				);
 			} catch (error_) {
 				const error = error_ as Error;
 				logger.error(error, error.message);

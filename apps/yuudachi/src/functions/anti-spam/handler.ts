@@ -1,12 +1,18 @@
 import { logger, kRedis, container } from "@yuudachi/framework";
-import { Client, type Snowflake } from "discord.js";
+import { Client, type Attachment, type Snowflake } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
-import { MENTION_THRESHOLD, SPAM_THRESHOLD } from "../../Constants.js";
+import {
+	ATTACHMENT_DUPLICATE_THRESHOLD,
+	ATTACHMENT_SPAM_THRESHOLD,
+	MENTION_THRESHOLD,
+	SPAM_THRESHOLD,
+} from "../../Constants.js";
 import { type Case, CaseAction, createCase } from "../cases/createCase.js";
 import { upsertCaseLog } from "../logging/upsertCaseLog.js";
 import { checkLogChannel } from "../settings/checkLogChannel.js";
 import { getGuildSetting, SettingsKeys } from "../settings/getGuildSetting.js";
+import { isMediaAttachment, totalAttachmentDuplicates, totalAttachmentUploads } from "./totalAttachments.js";
 import { createContentHash, totalContents } from "./totalContents.js";
 import { totalMentions } from "./totalMentions.js";
 
@@ -15,6 +21,7 @@ export async function handleAntiSpam(
 	userId: Snowflake,
 	content: string,
 	event: { event: string; name: string },
+	attachments?: readonly Attachment[] | null,
 ): Promise<void> {
 	const client = container.get<Client<true>>(Client);
 	const redis = container.get<Redis>(kRedis);
@@ -43,13 +50,26 @@ export async function handleAntiSpam(
 		return;
 	}
 
-	const totalMentionCount = await totalMentions(guildId, userId, content);
-	const totalContentCount = await totalContents(guildId, userId, content);
+	const normalizedContent = content.trim();
+	const totalMentionCount = normalizedContent.length ? await totalMentions(guildId, userId, normalizedContent) : 0;
+	const totalContentCount = normalizedContent.length ? await totalContents(guildId, userId, normalizedContent) : 0;
+
+	const mediaAttachments = (attachments ?? []).filter(isMediaAttachment);
+	const totalAttachmentCount = mediaAttachments.length
+		? await totalAttachmentUploads(guildId, userId, mediaAttachments.length)
+		: 0;
+	const duplicateResult =
+		mediaAttachments.length && totalAttachmentCount < ATTACHMENT_SPAM_THRESHOLD
+			? await totalAttachmentDuplicates(guildId, userId, mediaAttachments)
+			: { maxDuplicateCount: 0, attachmentHashes: [] as string[] };
 
 	const mentionExceeded = totalMentionCount >= MENTION_THRESHOLD;
 	const contentExceeded = totalContentCount >= SPAM_THRESHOLD;
+	const attachmentsExceeded =
+		totalAttachmentCount >= ATTACHMENT_SPAM_THRESHOLD ||
+		duplicateResult.maxDuplicateCount >= ATTACHMENT_DUPLICATE_THRESHOLD;
 
-	if (mentionExceeded || contentExceeded) {
+	if (mentionExceeded || contentExceeded || attachmentsExceeded) {
 		const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
 
 		await redis.setex(`guild:${guildId}:user:${userId}:ban`, 15, "");
@@ -79,6 +99,35 @@ export async function handleAntiSpam(
 			});
 
 			await redis.del(`guild:${guildId}:user:${userId}:mentions`);
+		} else if (attachmentsExceeded) {
+			logger.info(
+				{
+					event,
+					guildId,
+					userId: client.user.id,
+					memberId: userId,
+					totalAttachmentCount,
+					maxDuplicateCount: duplicateResult.maxDuplicateCount,
+				},
+				`Member ${userId} softbanned (attachment spam)`,
+			);
+
+			await redis.setex(`guild:${guildId}:user:${userId}:unban`, 15, "");
+
+			case_ = await createCase(guild, {
+				targetId: userId,
+				guildId,
+				action: CaseAction.Softban,
+				targetTag: member.user.tag,
+				reason: i18next.t("log.mod_log.spam.reason_attachments", { lng: locale }),
+				deleteMessageDays: 1,
+			});
+
+			const deleteKeys = [
+				`guild:${guildId}:user:${userId}:attachments`,
+				...duplicateResult.attachmentHashes.map((hash) => `guild:${guildId}:user:${userId}:attachmenthash:${hash}`),
+			];
+			await redis.del(...deleteKeys);
 		} else if (contentExceeded) {
 			logger.info(
 				{
@@ -101,7 +150,7 @@ export async function handleAntiSpam(
 				deleteMessageDays: 1,
 			});
 
-			const contentHash = createContentHash(content);
+			const contentHash = createContentHash(normalizedContent);
 
 			await redis.del(`guild:${guildId}:user:${userId}:contenthash:${contentHash}`);
 		}
