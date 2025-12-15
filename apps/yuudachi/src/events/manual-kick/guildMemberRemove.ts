@@ -28,11 +28,6 @@ export default class implements Event {
 	public async execute(): Promise<void> {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
-				logger.info(
-					{ event: { name: this.name, event: this.event }, guildId: guildMember.guild.id, memberId: guildMember.id },
-					`Member ${guildMember.id} kicked`,
-				);
-
 				const modLogChannel = checkLogChannel(
 					guildMember.guild,
 					await getGuildSetting(guildMember.guild.id, SettingsKeys.ModLogChannelId),
@@ -45,12 +40,44 @@ export default class implements Event {
 				const deleted = await this.redis.del(`guild:${guildMember.guild.id}:user:${guildMember.user.id}:kick`);
 
 				if (deleted) {
+					logger.info(
+						{
+							event: { name: this.name, event: this.event },
+							guildId: guildMember.guild.id,
+							memberId: guildMember.user.id,
+							manual: false,
+						},
+						`Member ${guildMember.user.id} kicked`,
+					);
+
 					continue;
 				}
 
 				await pSetTimeout(AUDIT_LOG_WAIT_SECONDS * 1_000);
 				const auditLogs = await guildMember.guild.fetchAuditLogs({ limit: 10, type: AuditLogEvent.MemberKick });
 				const logs = auditLogs.entries.find((log) => log.target!.id === guildMember.user.id);
+
+				logger.info(
+					{
+						event: { name: this.name, event: this.event },
+						guildId: guildMember.guild.id,
+						userId: logs?.executor?.id,
+						memberId: guildMember.user.id,
+						manual: true,
+					},
+					`Member ${guildMember.user.id} kicked`,
+				);
+				logger.info(
+					{
+						event: { name: this.name, event: this.event },
+						guildId: guildMember.guild.id,
+						userId: logs?.executor?.id,
+						memberId: guildMember.user.id,
+						manual: true,
+						logs,
+					},
+					`Fetched logs for kick ${guildMember.user.id}`,
+				);
 
 				if (logs) {
 					const case_ = await createCase(

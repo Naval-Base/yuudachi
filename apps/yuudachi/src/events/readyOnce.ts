@@ -43,15 +43,22 @@ export default class implements Event {
 		await once(this.client, this.event);
 
 		logger.info(
-			{ event: { name: this.name, event: this.event } },
-			"Settings up /metrics endpoint for prometheus scraping",
+			{
+				event: { name: this.name, event: this.event },
+			},
+			"Setting up /metrics endpoint for prometheus scraping",
 		);
 
 		const server = createServer(async (req, res) => {
 			const route = new URL(req.url!, "http://noop").pathname;
 
 			if (route === "/metrics") {
-				logger.info({ event: { name: this.name, event: this.event } }, "Scraping /metrics request");
+				logger.info(
+					{
+						event: { name: this.name, event: this.event },
+					},
+					"Scraping /metrics request",
+				);
 
 				res.setHeader("content-type", register.contentType);
 				res.end(await register.metrics());

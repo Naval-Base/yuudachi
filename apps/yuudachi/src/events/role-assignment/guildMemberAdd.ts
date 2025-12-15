@@ -22,7 +22,11 @@ export default class implements Event {
 		for await (const [guildMember] of on(this.client, this.event) as AsyncIterableIterator<[GuildMember]>) {
 			try {
 				logger.info(
-					{ event: { name: this.name, event: this.event }, guildId: guildMember.guild.id, memberId: guildMember.id },
+					{
+						event: { name: this.name, event: this.event },
+						guildId: guildMember.guild.id,
+						memberId: guildMember.id,
+					},
 					"Checking for non-processed cases",
 				);
 
