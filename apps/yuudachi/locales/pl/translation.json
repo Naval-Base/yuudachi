@@ -509,7 +509,8 @@
 			},
 			"spam": {
 				"reason": "",
-				"reason_mentions": ""
+				"reason_mentions": "",
+				"reason_attachments": ""
 			},
 			"auto_mod": {
 				"keyword": "",
