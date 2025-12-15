@@ -510,7 +510,8 @@
 			"spam": {
 				"reason": "スパム検出",
 				"reason_mentions": "メンションスパム検出",
-				"reason_attachments": ""
+				"reason_attachments": "",
+				"reason_interactions": ""
 			},
 			"auto_mod": {
 				"keyword": "",
