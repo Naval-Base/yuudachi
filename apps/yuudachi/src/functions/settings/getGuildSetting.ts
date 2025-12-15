@@ -5,8 +5,6 @@ import type { Sql } from "postgres";
 export enum SettingsKeys {
 	AntiRaidNukeArchiveChannelId = "anti_raid_nuke_archive_channel_id",
 	AutomodIgnoreRoles = "automod_ignore_roles",
-	EmbedRoleId = "embed_role_id",
-	EmojiRoleId = "emoji_role_id",
 	ForceLocale = "force_locale",
 	GuildLogWebhookId = "guild_log_webhook_id",
 	Locale = "locale",
@@ -14,7 +12,6 @@ export enum SettingsKeys {
 	MemberLogWebhookId = "member_log_webhook_id",
 	ModLogChannelId = "mod_log_channel_id",
 	ModRoleId = "mod_role_id",
-	ReactionRoleId = "reaction_role_id",
 	ReportChannelId = "report_channel_id",
 	ReportStatusTags = "report_status_tags",
 	ReportTypeTags = "report_type_tags",
