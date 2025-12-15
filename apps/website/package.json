@@ -13,8 +13,8 @@
 		"build:next": "pnpm exec next build",
 		"preview": "pnpm exec next start",
 		"dev": "pnpm exec next dev",
-		"lint": "pnpm exec prettier --check . && cross-env TIMING=1 pnpm exec eslint --format=pretty src && pnpm run build:check",
-		"format": "pnpm exec prettier --write . && cross-env TIMING=1 pnpm exec eslint --fix --format=pretty src && pnpm run build:check",
+		"lint": "pnpm run build:check && pnpm exec prettier --check . && cross-env TIMING=1 pnpm exec eslint --format=pretty src",
+		"format": "pnpm run build:check && pnpm exec prettier --write . && cross-env TIMING=1 pnpm exec eslint --fix --format=pretty src",
 		"fmt": "pnpm run format"
 	},
 	"type": "module",

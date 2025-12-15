@@ -6,12 +6,12 @@
 		"build:clean": "del-cli dist",
 		"build:check": "tsc --emitDeclarationOnly",
 		"build:esm": "swc ./src --out-dir ./dist --strip-leading-paths",
-		"build": "pnpm run build:clean && pnpm run build:check && pnpm run build:esm",
+		"build": "pnpm run build:clean && pnpm run build:esm",
 		"example": "pnpm --filter @yuudachi/framework build && pnpm run build && env-cmd tsx ./example/index.ts",
-		"lint": "prettier --check . && cross-env TIMING=1 eslint src --ext ts --format=pretty",
-		"format": "prettier --write . && cross-env TIMING=1 eslint src --ext ts --fix --format=pretty",
+		"lint": "pnpm run build:check && prettier --check . && cross-env TIMING=1 eslint src --ext ts --format=pretty",
+		"format": "pnpm run build:check && prettier --write . && cross-env TIMING=1 eslint src --ext ts --fix --format=pretty",
 		"fmt": "pnpm run format",
-		"prepack": "pnpm run build && pnpm run lint"
+		"prepack": "pnpm run lint && pnpm run build"
 	},
 	"type": "module",
 	"module": "./dist/index.js",

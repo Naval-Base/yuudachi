@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
-import { Providers } from "./providers";
 import { jetBrainsMono, roboto } from "@/styles/fonts";
+import { Providers } from "./providers";
 
 import "overlayscrollbars/overlayscrollbars.css";
 import "@/styles/base.css";
