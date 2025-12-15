@@ -509,7 +509,8 @@
 			},
 			"spam": {
 				"reason": "Detección de spam",
-				"reason_mentions": "Detección de exceso de menciones"
+				"reason_mentions": "Detección de exceso de menciones",
+				"reason_attachments": ""
 			},
 			"auto_mod": {
 				"keyword": "",
