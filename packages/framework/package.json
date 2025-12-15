@@ -6,7 +6,7 @@
 		"build:clean": "del-cli dist",
 		"build:check": "tsc --emitDeclarationOnly",
 		"build:esm": "swc ./src --out-dir ./dist --strip-leading-paths",
-		"build": "pnpm run build:clean && pnpm run build:esm",
+		"build": "pnpm run build:clean && pnpm run build:check && pnpm run build:esm",
 		"lint": "pnpm run build:check && prettier --check . && cross-env TIMING=1 eslint src --ext ts --format=pretty",
 		"format": "pnpm run build:check && prettier --write . && cross-env TIMING=1 eslint src --ext ts --fix --format=pretty",
 		"fmt": "pnpm run format",

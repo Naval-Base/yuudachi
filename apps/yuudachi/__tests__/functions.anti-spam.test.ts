@@ -1,7 +1,12 @@
 import { createHash } from "node:crypto";
 import type { Snowflake } from "discord.js";
 import { describe, expect, it, vi } from "vitest";
-import { ATTACHMENT_EXPIRE_SECONDS, MENTION_EXPIRE_SECONDS, SPAM_EXPIRE_SECONDS } from "../src/Constants.js";
+import {
+	ATTACHMENT_EXPIRE_SECONDS,
+	INTERACTION_SPAM_EXPIRE_SECONDS,
+	MENTION_EXPIRE_SECONDS,
+	SPAM_EXPIRE_SECONDS,
+} from "../src/Constants.js";
 import {
 	createAttachmentHash,
 	isMediaAttachment,
@@ -10,6 +15,7 @@ import {
 	totalAttachmentUploads,
 } from "../src/functions/anti-spam/totalAttachments.js";
 import { createContentHash, normalizeContentForHash, totalContents } from "../src/functions/anti-spam/totalContents.js";
+import { totalInteractionMessages } from "../src/functions/anti-spam/totalInteractions.js";
 import { totalMentions } from "../src/functions/anti-spam/totalMentions.js";
 import { mockContainerGet } from "./mocks.js";
 
@@ -135,6 +141,23 @@ describe("totalAttachmentUploads", () => {
 		await expect(totalAttachmentUploads(guildId, userId, 3)).resolves.toBe(3);
 		expect(redis.incrby).toHaveBeenCalledWith(redisKey, 3);
 		expect(redis.expire).toHaveBeenCalledWith(redisKey, ATTACHMENT_EXPIRE_SECONDS);
+	});
+});
+
+describe("totalInteractionMessages", () => {
+	it("increments interaction message count and sets expiry", async () => {
+		const redis = {
+			incr: vi.fn(async () => 1),
+			expire: vi.fn(async () => 1),
+		} satisfies RedisStub;
+		const guildId = "1" as Snowflake;
+		const userId = "2" as Snowflake;
+		const redisKey = `guild:${guildId}:user:${userId}:interactions`;
+		mockContainerGet.mockReturnValue(redis);
+
+		await expect(totalInteractionMessages(guildId, userId)).resolves.toBe(1);
+		expect(redis.incr).toHaveBeenCalledWith(redisKey);
+		expect(redis.expire).toHaveBeenCalledWith(redisKey, INTERACTION_SPAM_EXPIRE_SECONDS);
 	});
 });
 
