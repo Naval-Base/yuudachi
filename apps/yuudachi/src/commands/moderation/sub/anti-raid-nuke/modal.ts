@@ -1,6 +1,6 @@
 import { logger, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
 import type { InteractionParam, ArgsParam, LocaleParam } from "@yuudachi/framework/types";
-import { ComponentType } from "discord.js";
+import { ComponentType, MessageFlags } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
 import type { AntiRaidNukeCommand } from "../../../../interactions/index.js";
@@ -44,7 +44,7 @@ export async function modal(
 			try {
 				await interaction.followUp({
 					content: i18next.t("command.common.errors.timed_out", { lng: locale }),
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 					components: [],
 				});
 			} catch (error_) {
@@ -59,7 +59,7 @@ export async function modal(
 		return;
 	}
 
-	await modalInteraction.deferReply({ ephemeral: args.hide ?? false });
+	await modalInteraction.deferReply({ flags: args.hide ? MessageFlags.Ephemeral : undefined });
 	const fullContent = modalInteraction.components
 		.flatMap((row) => (row.type === ComponentType.ActionRow ? row.components : []))
 		.map((component) => (component.type === ComponentType.TextInput ? component.value || "" : ""));

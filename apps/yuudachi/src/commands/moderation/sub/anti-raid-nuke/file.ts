@@ -1,5 +1,5 @@
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
-import { hyperlink } from "discord.js";
+import { hyperlink, MessageFlags } from "discord.js";
 import i18next from "i18next";
 import { parseFile } from "../../../../functions/anti-raid/parseFile.js";
 import type { AntiRaidNukeCommand } from "../../../../interactions/index.js";
@@ -13,7 +13,7 @@ export async function file(
 ): Promise<void> {
 	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
 
-	await interaction.deferReply({ ephemeral: args.hide ?? false });
+	await interaction.deferReply({ flags: args.hide ? MessageFlags.Ephemeral : undefined });
 	const ids = await parseFile(args.file);
 	const { validIdCount, totalIdCount, validMembers } = await validateMemberIds(interaction, ids, locale);
 

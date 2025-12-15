@@ -1,7 +1,7 @@
 import { inject, injectable } from "@needle-di/core";
 import { Command, logger, kRedis, createButton, truncateEmbed, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
-import { ComponentType, ButtonStyle } from "discord.js";
+import { ComponentType, ButtonStyle, MessageFlags } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
@@ -26,7 +26,7 @@ export default class extends Command<typeof KickCommand> {
 		args: ArgsParam<typeof KickCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true });
+		const reply = await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const modLogChannel = checkLogChannel(
 			interaction.guild,

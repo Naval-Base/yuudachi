@@ -1,6 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
+import { MessageFlags } from "discord.js";
 import i18next from "i18next";
 import { getCase } from "../../functions/cases/getCase.js";
 import { checkLogChannel } from "../../functions/settings/checkLogChannel.js";
@@ -16,7 +17,7 @@ export default class extends Command<typeof ReferenceCommand> {
 		args: ArgsParam<typeof ReferenceCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const caseId = args.case?.case ?? args.report.case;
 

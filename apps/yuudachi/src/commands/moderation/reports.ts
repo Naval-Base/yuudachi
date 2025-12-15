@@ -1,6 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
+import { MessageFlags } from "discord.js";
 import { handleReportAutocomplete } from "../../functions/autocomplete/reports.js";
 import type { ReportUtilsCommand } from "../../interactions/index.js";
 import { lookup } from "./sub/reports/lookup.js";
@@ -21,7 +22,7 @@ export default class extends Command<typeof ReportUtilsCommand> {
 		args: ArgsParam<typeof ReportUtilsCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: args.lookup?.hide ?? true });
+		await interaction.deferReply({ flags: args.lookup?.hide ? MessageFlags.Ephemeral : undefined });
 
 		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 		switch (Object.keys(args)[0]) {

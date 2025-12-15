@@ -2,7 +2,7 @@ import { ms } from "@naval-base/ms";
 import { inject, injectable } from "@needle-di/core";
 import { Command, kRedis } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
-import { hyperlink, messageLink } from "discord.js";
+import { hyperlink, MessageFlags, messageLink } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { CaseAction } from "../../functions/cases/createCase.js";
@@ -24,7 +24,7 @@ export default class extends Command<typeof DurationCommand> {
 		args: ArgsParam<typeof DurationCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const modLogChannel = checkLogChannel(
 			interaction.guild,

@@ -2,7 +2,7 @@ import { ms } from "@naval-base/ms";
 import { inject, injectable } from "@needle-di/core";
 import { Command, logger, kRedis, createButton, truncateEmbed, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
-import { ButtonStyle, ComponentType, PermissionFlagsBits } from "discord.js";
+import { ButtonStyle, ComponentType, MessageFlags, PermissionFlagsBits } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
@@ -27,7 +27,7 @@ export default class extends Command<typeof TimeoutCommand> {
 		args: ArgsParam<typeof TimeoutCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true });
+		const reply = await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const modLogChannel = checkLogChannel(
 			interaction.guild,

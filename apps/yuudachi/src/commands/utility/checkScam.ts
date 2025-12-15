@@ -1,6 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { Command, addFields, truncateEmbed } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
+import { MessageFlags } from "discord.js";
 import i18next from "i18next";
 import { Color } from "../../Constants.js";
 import { checkScam } from "../../functions/anti-scam/checkScam.js";
@@ -17,7 +18,7 @@ export default class extends Command<typeof CheckScamCommand> {
 		args: ArgsParam<typeof CheckScamCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: args.hide ?? true });
+		await interaction.deferReply({ flags: args.hide ? MessageFlags.Ephemeral : undefined });
 
 		const domains = await checkScam(args.content);
 

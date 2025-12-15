@@ -2,7 +2,7 @@ import { inject, injectable } from "@needle-di/core";
 import type { Command } from "@yuudachi/framework";
 import { transformApplicationInteraction, logger, kCommands } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { Client, ApplicationCommandType, Events } from "discord.js";
+import { Client, ApplicationCommandType, Events, MessageFlags } from "discord.js";
 import { Counter } from "prom-client";
 import { handleCaseAutocomplete } from "../functions/autocomplete/cases.js";
 import { handleReasonAutocomplete } from "../functions/autocomplete/reasons.js";
@@ -175,7 +175,7 @@ export default class implements Event {
 								{ command: { name: interaction.commandName, type: interaction.type }, userId: interaction.user.id },
 								"Command interaction has not been deferred before throwing",
 							);
-							await interaction.deferReply({ ephemeral: true });
+							await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 						}
 
 						await interaction.editReply({ content: error.message, components: [] });

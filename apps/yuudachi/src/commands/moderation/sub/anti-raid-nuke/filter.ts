@@ -1,6 +1,6 @@
 import type { InteractionParam, ArgsParam, LocaleParam } from "@yuudachi/framework/types";
 import dayjs from "dayjs";
-import { codeBlock, time, TimestampStyles } from "discord.js";
+import { codeBlock, MessageFlags, time, TimestampStyles } from "discord.js";
 import i18next from "i18next";
 import {
 	ageFilter,
@@ -62,7 +62,7 @@ export async function filter(
 ): Promise<void> {
 	await acquireLockIfPublic(interaction.guildId, locale, args.hide);
 
-	await interaction.deferReply({ ephemeral: args.hide ?? false });
+	await interaction.deferReply({ flags: args.hide ? MessageFlags.Ephemeral : undefined });
 
 	const { parsedCreatedAfter, parsedCreatedBefore, parsedJoinAfter, parsedJoinBefore } = parseDates(
 		{

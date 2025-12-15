@@ -19,6 +19,7 @@ import {
 	type Webhook,
 	type Message,
 	type APIButtonComponent,
+	MessageFlags,
 } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
@@ -68,7 +69,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 		firstMessage: Message,
 		lastMessage?: Message | undefined,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true, fetchReply: true });
+		const reply = await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		if (lastMessage && firstMessage.channelId !== lastMessage.channelId) {
 			throw new Error(

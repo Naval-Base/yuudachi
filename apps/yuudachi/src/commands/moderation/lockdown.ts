@@ -1,7 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { Command } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
-import { type TextChannel, ChannelType, PermissionFlagsBits } from "discord.js";
+import { type TextChannel, ChannelType, MessageFlags, PermissionFlagsBits } from "discord.js";
 import i18next from "i18next";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
 import type { LockdownCommand } from "../../interactions/index.js";
@@ -15,7 +15,7 @@ export default class extends Command<typeof LockdownCommand> {
 		args: ArgsParam<typeof LockdownCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true });
+		const reply = await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		if (!interaction.guild.members.me?.permissions.has(PermissionFlagsBits.Administrator)) {
 			throw new Error(

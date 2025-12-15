@@ -1,7 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { Command, container, kSQL, truncateEmbed, createButton, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import { ButtonStyle, messageLink } from "discord.js";
+import { ButtonStyle, MessageFlags, messageLink } from "discord.js";
 import i18next from "i18next";
 import type { Sql } from "postgres";
 import { OP_DELIMITER } from "../../Constants.js";
@@ -30,7 +30,7 @@ export default class extends Command<typeof CaseLookupCommand> {
 		locale: LocaleParam,
 	): Promise<void> {
 		const sql = container.get<Sql<any>>(kSQL);
-		await interaction.deferReply({ ephemeral: args.hide ?? true });
+		await interaction.deferReply({ flags: args.hide ? MessageFlags.Ephemeral : undefined });
 
 		const [cmd, id] = args.phrase.split(OP_DELIMITER);
 

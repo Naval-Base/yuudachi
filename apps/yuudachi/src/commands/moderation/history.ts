@@ -1,6 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { Command, truncateEmbed } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
+import { MessageFlags } from "discord.js";
 import type { HistoryCommand, HistoryUserContextCommand } from "../../interactions/index.js";
 import { generateHistory, HistoryType } from "../../util/generateHistory.js";
 
@@ -33,7 +34,9 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		args: ArgsParam<typeof HistoryCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: args.cases?.hide ?? args.reports?.hide ?? true });
+		await interaction.deferReply({
+			flags: args.cases?.hide || args.reports?.hide ? MessageFlags.Ephemeral : undefined,
+		});
 
 		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
 		switch (Object.keys(args)[0]) {
@@ -58,7 +61,7 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 		args: ArgsParam<typeof HistoryUserContextCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 		await this.handle(interaction, args, HistoryType.Case, locale);
 	}
 }

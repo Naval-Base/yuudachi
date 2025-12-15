@@ -1,7 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { kSQL, Command, createButton, createMessageActionRow, container } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import { type Snowflake, ButtonStyle, ComponentType } from "discord.js";
+import { type Snowflake, ButtonStyle, ComponentType, MessageFlags } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
 import type { Sql } from "postgres";
@@ -18,7 +18,7 @@ export default class extends Command<typeof SponsorCommand | typeof SponsorUserC
 		args: ArgsParam<typeof SponsorCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true });
+		const reply = await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const sql = container.get<Sql<any>>(kSQL);
 

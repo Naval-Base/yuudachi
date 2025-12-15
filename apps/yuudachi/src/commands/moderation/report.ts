@@ -1,7 +1,7 @@
 import { inject, injectable } from "@needle-di/core";
 import { Command, logger, kRedis, createModal, createModalActionRow, createTextComponent } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam, CommandMethod } from "@yuudachi/framework/types";
-import { type GuildMember, type User, type Message, TextInputStyle, ComponentType } from "discord.js";
+import { type GuildMember, type User, type Message, TextInputStyle, ComponentType, MessageFlags } from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { nanoid } from "nanoid";
@@ -28,7 +28,7 @@ export default class extends Command<
 		args: ArgsParam<typeof ReportCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const reportChannelId = await getGuildSetting(interaction.guildId, SettingsKeys.ReportChannelId);
 		const reportChannel = checkLogChannel(interaction.guild, reportChannelId);
@@ -126,7 +126,7 @@ export default class extends Command<
 				try {
 					await interaction.followUp({
 						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 						components: [],
 					});
 				} catch (error_) {
@@ -141,7 +141,7 @@ export default class extends Command<
 			return;
 		}
 
-		await modalInteraction.deferReply({ ephemeral: true });
+		await modalInteraction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const reason = modalInteraction.components
 			.flatMap((row) => (row.type === ComponentType.ActionRow ? row.components : []))
@@ -201,7 +201,7 @@ export default class extends Command<
 				try {
 					await interaction.followUp({
 						content: i18next.t("command.mod.report.common.errors.timed_out", { lng: locale }),
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 						components: [],
 					});
 				} catch (error_) {
@@ -216,7 +216,7 @@ export default class extends Command<
 			return;
 		}
 
-		await modalInteraction.deferReply({ ephemeral: true });
+		await modalInteraction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const reason = modalInteraction.components
 			.flatMap((row) => (row.type === ComponentType.ActionRow ? row.components : []))

@@ -1,7 +1,7 @@
 import { injectable } from "@needle-di/core";
 import { Command, logger, createButton, truncateEmbed, createMessageActionRow } from "@yuudachi/framework";
 import type { ArgsParam, InteractionParam, LocaleParam } from "@yuudachi/framework/types";
-import { ButtonStyle, ComponentType } from "discord.js";
+import { ButtonStyle, ComponentType, MessageFlags } from "discord.js";
 import i18next from "i18next";
 import { nanoid } from "nanoid";
 import { CASE_REASON_MAX_LENGTH } from "../../Constants.js";
@@ -20,7 +20,7 @@ export default class extends Command<typeof WarnCommand> {
 		args: ArgsParam<typeof WarnCommand>,
 		locale: LocaleParam,
 	): Promise<void> {
-		const reply = await interaction.deferReply({ ephemeral: true });
+		const reply = await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 		const modLogChannel = checkLogChannel(
 			interaction.guild,
