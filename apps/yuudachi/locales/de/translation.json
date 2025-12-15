@@ -510,7 +510,8 @@
 			"spam": {
 				"reason": "",
 				"reason_mentions": "",
-				"reason_attachments": ""
+				"reason_attachments": "",
+				"reason_interactions": ""
 			},
 			"auto_mod": {
 				"keyword": "",

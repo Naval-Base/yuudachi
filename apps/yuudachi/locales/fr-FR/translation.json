@@ -510,7 +510,8 @@
 			"spam": {
 				"reason": "Détection du spam",
 				"reason_mentions": "Mentionner la détection du spam",
-				"reason_attachments": ""
+				"reason_attachments": "",
+				"reason_interactions": ""
 			},
 			"auto_mod": {
 				"keyword": "Le message contenait un mot-clé défini dans la règle AutoMod",
