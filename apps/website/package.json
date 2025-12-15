@@ -61,6 +61,7 @@
 		"cross-env": "^10.1.0",
 		"eslint": "^9.39.2",
 		"eslint-config-neon": "^0.2.9",
+		"eslint-formatter-compact": "^9.0.1",
 		"eslint-formatter-pretty": "^7.0.0",
 		"eslint-plugin-react-compiler": "19.1.0-rc.2",
 		"happy-dom": "^20.0.11",

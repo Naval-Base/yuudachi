@@ -177,6 +177,9 @@ importers:
       eslint-config-neon:
         specifier: ^0.2.9
         version: 0.2.9(@typescript-eslint/types@8.48.1)(@typescript-eslint/utils@8.48.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      eslint-formatter-compact:
+        specifier: ^9.0.1
+        version: 9.0.1
       eslint-formatter-pretty:
         specifier: ^7.0.0
         version: 7.0.0
@@ -319,6 +322,9 @@ importers:
       eslint-config-neon:
         specifier: ^0.2.9
         version: 0.2.9(@typescript-eslint/types@8.48.1)(@typescript-eslint/utils@8.48.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      eslint-formatter-compact:
+        specifier: ^9.0.1
+        version: 9.0.1
       eslint-formatter-pretty:
         specifier: ^7.0.0
         version: 7.0.0
@@ -485,6 +491,9 @@ importers:
       eslint-config-neon:
         specifier: ^0.2.9
         version: 0.2.9(@typescript-eslint/types@8.48.1)(@typescript-eslint/utils@8.48.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      eslint-formatter-compact:
+        specifier: ^9.0.1
+        version: 9.0.1
       eslint-formatter-pretty:
         specifier: ^7.0.0
         version: 7.0.0
@@ -555,6 +564,9 @@ importers:
       eslint-config-neon:
         specifier: ^0.2.9
         version: 0.2.9(@typescript-eslint/types@8.48.1)(@typescript-eslint/utils@8.48.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      eslint-formatter-compact:
+        specifier: ^9.0.1
+        version: 9.0.1
       eslint-formatter-pretty:
         specifier: ^7.0.0
         version: 7.0.0
@@ -625,6 +637,9 @@ importers:
       eslint-config-neon:
         specifier: ^0.2.9
         version: 0.2.9(@typescript-eslint/types@8.48.1)(@typescript-eslint/utils@8.48.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      eslint-formatter-compact:
+        specifier: ^9.0.1
+        version: 9.0.1
       eslint-formatter-pretty:
         specifier: ^7.0.0
         version: 7.0.0
@@ -4836,6 +4851,10 @@ packages:
     peerDependencies:
       eslint: ^8.0.0
       typescript: '>=4.0.0'
+
+  eslint-formatter-compact@9.0.1:
+    resolution: {integrity: sha512-mBAti2tb403dQGMyilQTYHU80stem3N7jdtKW+tmn5gj3JNF7ki0rgCZtJFw4iMayTH862FTUIqCdp70ug0S0Q==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   eslint-formatter-pretty@7.0.0:
     resolution: {integrity: sha512-1CaE7Pnce8Csy+tlTEbFC2q5qgT5cJo2a0UkEOds+Y5+mI1nX3DApIhcBP8EPwV8TgTpLlzOfw8mcBJBAs3Y9Q==}
@@ -13019,6 +13038,8 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
+
+  eslint-formatter-compact@9.0.1: {}
 
   eslint-formatter-pretty@7.0.0:
     dependencies:

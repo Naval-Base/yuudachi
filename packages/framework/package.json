@@ -52,6 +52,7 @@
 		"del-cli": "^7.0.0",
 		"eslint": "^9.39.2",
 		"eslint-config-neon": "^0.2.9",
+		"eslint-formatter-compact": "^9.0.1",
 		"eslint-formatter-pretty": "^7.0.0",
 		"ioredis": "^5.8.2",
 		"postgres": "^3.4.7",
