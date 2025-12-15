@@ -510,7 +510,8 @@
 			"spam": {
 				"reason": "Detección de spam",
 				"reason_mentions": "Detección de exceso de menciones",
-				"reason_attachments": ""
+				"reason_attachments": "",
+				"reason_interactions": ""
 			},
 			"auto_mod": {
 				"keyword": "",
