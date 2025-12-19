@@ -65,7 +65,7 @@ type MenuContentProps<Type> = Pick<PopoverContentProps, "placement"> &
 
 export function MenuContent<Type extends object>({ popover, ...props }: MenuContentProps<Type>) {
 	return (
-		<PopoverContent {...popover} className={cx("min-w-(--trigger-width)", popover?.className)}>
+		<PopoverContent {...popover} className={cx("min-w-(--trigger-width) overflow-hidden", popover?.className)}>
 			<RACMenu
 				{...props}
 				className={cx(

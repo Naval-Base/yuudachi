@@ -42,8 +42,8 @@
 		"@skyra/i18next-backend": "^2.0.6",
 		"@swc/helpers": "^0.5.17",
 		"@yuudachi/framework": "workspace:^",
-		"bufferutil": "^4.0.9",
-		"bullmq": "^5.66.0",
+		"bufferutil": "^4.1.0",
+		"bullmq": "^5.66.1",
 		"common-tags": "^1.8.2",
 		"dayjs": "^1.11.19",
 		"diff": "^8.0.2",
@@ -62,15 +62,15 @@
 		"readdirp": "^5.0.0",
 		"redis": "^5.10.0",
 		"undici": "^7.16.0",
-		"utf-8-validate": "^6.0.5",
+		"utf-8-validate": "^6.0.6",
 		"ws": "^8.18.3"
 	},
 	"devDependencies": {
 		"@swc/cli": "^0.7.9",
-		"@swc/core": "^1.15.5",
+		"@swc/core": "^1.15.7",
 		"@types/common-tags": "^1.8.4",
 		"@types/diff": "^8.0.0",
-		"@types/node": "^25.0.2",
+		"@types/node": "^25.0.3",
 		"@types/ws": "^8.17.1",
 		"cpy-cli": "^6.0.0",
 		"cross-env": "^10.1.0",
@@ -83,7 +83,7 @@
 		"prettier": "^3.7.4",
 		"type-fest": "^5.3.1",
 		"typescript": "^5.9.3",
-		"vitest": "^4.0.15"
+		"vitest": "^4.0.16"
 	},
 	"engines": {
 		"node": ">=24.0.0"

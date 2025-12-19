@@ -7,6 +7,6 @@ export async function GET(req: NextRequest) {
 	cookieStore.delete("discord_token");
 
 	return NextResponse.redirect(
-		new URL("/", process.env.NODE_ENV === "development" ? `https://${req.headers.get("host")}` : req.url),
+		new URL("/", process.env.NODE_ENV === "development" ? `http://${req.headers.get("host")}` : req.url),
 	);
 }

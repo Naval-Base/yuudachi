@@ -25,6 +25,28 @@ export const api = fastify({ trustProxy: true })
 		(app, _, done) => {
 			app.get("/", () => "Welcome to the yuudachi api.");
 
+			app.get("/guilds", async () => {
+				const sql = container.get<Sql<any>>(kSQL);
+
+				return sql<any>`
+					select guild_id
+					from guild_settings
+				`;
+			});
+
+			app.get("/guilds/:id/settings", async (request) => {
+				const { id } = request.params as any;
+				const sql = container.get<Sql<any>>(kSQL);
+
+				const [guild] = await sql<[any]>`
+					select *
+					from guild_settings
+					where guild_id = ${id}
+				`;
+
+				return guild;
+			});
+
 			app.get("/users/:id", async (request) => {
 				const { id } = request.params as any;
 				const client = container.get(Client);

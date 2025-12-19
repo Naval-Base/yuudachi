@@ -35,7 +35,7 @@ export function PopoverFooter(props: DialogFooterProps) {
 }
 
 const contentStyles = cva({
-	base: "group/popover border-base-neutral-200 dark:border-base-neutral-600 shadow-base-sm bg-base-neutral-0 dark:bg-base-neutral-800 text-base-md max-w-xs min-w-(--trigger-width) origin-(--trigger-anchor-point) rounded-sm border transition-transform [scrollbar-width:thin] forced-colors:bg-[Canvas]",
+	base: "group/popover border-base-neutral-200 dark:border-base-neutral-600 shadow-base-sm bg-base-neutral-0 dark:bg-base-neutral-800 text-base-md max-w-xs min-w-(--trigger-width) origin-(--trigger-anchor-point) rounded-sm border transition-transform [scrollbar-width:thin] forced-colors:bg-[Canvas] overflow-y-auto",
 	variants: {
 		isEntering: {
 			true: "fade-in animate-in placement-left:slide-in-from-right-1 placement-right:slide-in-from-left-1 placement-top:slide-in-from-bottom-1 placement-bottom:slide-in-from-top-1 duration-150 ease-out",
