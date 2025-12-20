@@ -48,7 +48,7 @@ export default async function Page() {
 
 	return (
 		<div className="flex flex-col gap-8">
-			<h1 className="mb-4 pt-12 text-center text-4xl leading-none font-extrabold tracking-tight md:mb-8 md:text-5xl">
+			<h1 className="p-6 text-center text-4xl leading-none font-extrabold tracking-tight md:text-5xl">
 				Your <span className="decoration-blurple underline decoration-8 underline-offset-3">guilds</span>
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">

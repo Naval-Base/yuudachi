@@ -16,8 +16,10 @@ export const columns = [
 				<picture>
 					<img
 						alt="Icon"
-						className="h-[120px] max-h-[120px] rounded-lg object-cover shadow-md"
+						className="rounded-lg object-cover drop-shadow-md"
+						height={48}
 						src={`https://cdn.discordapp.com/icons/${info.row.original.id}/${icon}${isIconAnimated ? ".gif" : ".png"}?size=480`}
+						width={48}
 					/>
 				</picture>
 			) : null;

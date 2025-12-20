@@ -1,10 +1,11 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Fragment } from "react";
 import { CaseCard } from "@/components/CaseCard";
 import { UserDisplay } from "@/components/UserDisplay";
 
-export default async function Page({ params }: { readonly params: Promise<{ id: string }> }) {
-	const { id } = await params;
+export default async function Page({ params }: { readonly params: Promise<{ caseId: string }> }) {
+	const { caseId } = await params;
 	const cookieStore = await cookies();
 
 	const token = cookieStore.get("discord_token");
@@ -39,13 +40,13 @@ export default async function Page({ params }: { readonly params: Promise<{ id: 
 		return <div className="mx-auto max-w-5xl gap-2 p-8">Nah, surely not.</div>;
 	}
 
-	const caseData = await fetch(`https://bot.yuudachi.dev/api/appeals/${id}`, {
+	const caseData = await fetch(`https://bot.yuudachi.dev/api/cases/${caseId}`, {
 		headers: {
 			Authorization: `Bearer ${process.env.JWT_TOKEN}`,
 		},
 	});
 
-	const { user, appeal } = await caseData.json();
+	const { user, cases } = await caseData.json();
 
 	if (!user) {
 		return <div className="mx-auto max-w-5xl gap-2 p-8 font-medium">No user found.</div>;
@@ -53,7 +54,7 @@ export default async function Page({ params }: { readonly params: Promise<{ id: 
 
 	return (
 		<div className="flex flex-col gap-8">
-			<h1 className="mb-4 pt-12 text-center text-4xl leading-none font-extrabold tracking-tight md:mb-8 md:text-5xl">
+			<h1 className="p-6 text-center text-4xl leading-none font-extrabold tracking-tight md:text-5xl">
 				Review <span className="decoration-blurple underline decoration-8 underline-offset-3">cases</span>
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">
@@ -63,8 +64,16 @@ export default async function Page({ params }: { readonly params: Promise<{ id: 
 
 				<div className="flex w-full flex-col gap-4">
 					<div className="flex flex-col gap-4">
-						<h2 className="text-lg font-semibold">Appeal #{appeal.appeal_id}</h2>
-						<CaseCard case_={appeal} />
+						{cases.length ? (
+							cases.map((case_: any) => (
+								<Fragment key={case_.case_id}>
+									<h2 className="text-lg font-semibold">Case #{case_.case_id}</h2>
+									<CaseCard case_={case_} />
+								</Fragment>
+							))
+						) : (
+							<h2 className="pt-4 text-center text-lg font-semibold">No cases</h2>
+						)}
 					</div>
 				</div>
 			</div>

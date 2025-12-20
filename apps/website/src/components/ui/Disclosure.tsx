@@ -56,7 +56,7 @@ export function Disclosure(props: RACDisclosureProps) {
 const disclosureTriggerStyles = compose(
 	focusRing,
 	cva({
-		base: 'relative isolate flex w-full cursor-default place-content-between place-items-center text-left **:data-[slot=icon]:shrink-0 [&_[data-slot="icon"]:not([class*="size-"])]:size-5 sm:[&_[data-slot="icon"]:not([class*="size-"])]:size-4',
+		base: 'relative isolate flex w-full cursor-default place-content-between place-items-center text-left **:data-[slot=icon]:shrink-0 [&_[data-slot="icon"]:not([class*="size-"])]:size-5',
 		variants: {
 			isOpen: {
 				true: null,

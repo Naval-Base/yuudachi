@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
-export default async function Page({ params }: { readonly params: Promise<{ id: string }> }) {
-	const { id } = await params;
+export default async function Page({ params }: { readonly params: Promise<{ guildId: string }> }) {
+	const { guildId } = await params;
 	const cookieStore = await cookies();
 
 	const token = cookieStore.get("discord_token");
@@ -32,13 +32,13 @@ export default async function Page({ params }: { readonly params: Promise<{ id: 
 	}
 
 	const guilds = await guildsData.json();
-	const guild = guilds.find((guild: any) => guild.id === id);
+	const guild = guilds.find((guild: any) => guild.id === guildId);
 
 	if (!guild) {
 		return notFound();
 	}
 
-	const memberData = await fetch(`https://discord.com/api/v10/users/@me/guilds/${id}/member`, {
+	const memberData = await fetch(`https://discord.com/api/v10/users/@me/guilds/${guildId}/member`, {
 		headers: {
 			Authorization: `Bearer ${token.value}`,
 		},
@@ -51,7 +51,7 @@ export default async function Page({ params }: { readonly params: Promise<{ id: 
 
 	const member = await memberData.json();
 
-	const guildSettingsData = await fetch(`${process.env.BOT_API_URL}/api/guilds/${id}/settings`, {
+	const guildSettingsData = await fetch(`${process.env.BOT_API_URL}/api/guilds/${guildId}/settings`, {
 		headers: {
 			Authorization: `Bearer ${process.env.JWT_TOKEN}`,
 		},
@@ -65,7 +65,7 @@ export default async function Page({ params }: { readonly params: Promise<{ id: 
 
 	return (
 		<div className="flex flex-col gap-8">
-			<h1 className="mb-4 pt-12 text-center text-4xl leading-none font-extrabold tracking-tight md:mb-8 md:text-5xl">
+			<h1 className="p-6 text-center text-4xl leading-none font-extrabold tracking-tight md:text-5xl">
 				<span className="decoration-blurple underline decoration-8 underline-offset-3">{guild.name}</span>
 			</h1>
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-8 md:max-w-4xl md:flex-row md:gap-8">

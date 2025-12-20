@@ -33,7 +33,7 @@ export function CalendarHeader(props: ComponentProps<"header"> & { readonly isRa
 			)} */}
 			{/* <Heading
 				className={cx(
-					'text-muted-fg mr-2 flex-1 text-left font-medium sm:text-sm',
+					'text-muted-fg mr-2 flex-1 text-left font-medium',
 					!props.isRange && 'sr-only',
 					props.className,
 				)}
