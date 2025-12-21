@@ -9,17 +9,17 @@ import {
 	SidebarInset,
 	SidebarItem,
 	SidebarLabel,
-	SidebarNav,
+	// SidebarNav,
 	SidebarProvider,
 	SidebarSection,
 	SidebarSectionGroup,
-	SidebarTrigger,
+	// SidebarTrigger,
 } from "@/components/ui/Sidebar";
 
 export default async function Layout({ children }: PropsWithChildren) {
 	return (
 		<SidebarProvider className="[--sidebar-width-dock:3.25rem] [--sidebar-width:17rem]" defaultOpen>
-			<Sidebar intent="inset">
+			<Sidebar className="rounded-none" intent="inset">
 				<SidebarHeader>
 					<Link className="flex place-items-center gap-3" href="/moderation" variant="unset">
 						<Image alt="Yuudachi" className="drop-shadow-md" height={32} src="/yuudachi_logo.svg" width={32} />

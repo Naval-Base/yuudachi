@@ -1,18 +1,14 @@
 "use client";
 
 import { createColumnHelper } from "@tanstack/react-table";
-import Link from "next/link";
+import { Link } from "@/components/ui/Link";
 
 const columnHelper = createColumnHelper<any>();
 
 export const columns = [
 	columnHelper.accessor("target_id", {
 		header: "Target id",
-		cell: (info) => (
-			<Link className="text-blurple" href={`/moderation/cases/${info.getValue()}`}>
-				{info.getValue()}
-			</Link>
-		),
+		cell: (info) => <Link href={`/moderation/cases/${info.getValue()}`}>{info.getValue()}</Link>,
 	}),
 	columnHelper.accessor("target_tag", {
 		header: "Username",

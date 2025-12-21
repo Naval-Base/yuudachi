@@ -459,7 +459,7 @@ export function SidebarSection({ className, ...props }: SidebarSectionProps) {
 			data-slot="sidebar-section"
 		>
 			{state !== "collapsed" && "label" in props && (
-				<RACHeader className="text-base-label-sm flex shrink-0 place-items-center rounded-md px-2.5 py-1 transition-[margin,opacity] duration-200 ease-linear outline-none group-data-[collapsible=dock]:-mt-8 group-data-[collapsible=dock]:opacity-0 focus-visible:ring-2 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0">
+				<RACHeader className="text-base-label-sm flex shrink-0 place-items-center rounded px-2.5 py-1 transition-[margin,opacity] duration-200 ease-linear outline-none group-data-[collapsible=dock]:-mt-8 group-data-[collapsible=dock]:opacity-0 focus-visible:ring-2 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0">
 					{props.label}
 				</RACHeader>
 			)}
@@ -581,7 +581,7 @@ export function SidebarInset(props: ComponentProps<"main">) {
 			{...props}
 			className={cx(
 				"relative flex min-h-dvh w-full flex-1 flex-col peer-data-[intent=inset]:border peer-data-[intent=inset]:border-transparent lg:min-w-0",
-				"bg-base-neutral-0 dark:peer-data-[intent=inset]:bg-base-neutral-900 peer-data-[intent=inset]:overflow-hidden",
+				"bg-base-neutral-0 dark:bg-base-neutral-900 dark:peer-data-[intent=inset]:bg-base-neutral-900 peer-data-[intent=inset]:overflow-hidden",
 				"md:peer-data-[intent=inset]:shadow-base-md peer-data-[intent=inset]:min-h-[calc(100dvh-(--spacing(4)))] md:peer-data-[intent=inset]:m-2 md:peer-data-[intent=inset]:rounded-xl md:peer-data-[intent=inset]:peer-data-[side=left]:ml-0 md:peer-data-[intent=inset]:peer-data-[side=right]:mr-0 md:peer-data-[state=collapsed]:peer-data-[intent=inset]:peer-data-[side=left]:ml-2 md:peer-data-[state=collapsed]:peer-data-[intent=inset]:peer-data-[side=right]:mr-2",
 				props.className,
 			)}
