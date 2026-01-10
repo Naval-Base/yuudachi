@@ -80,23 +80,23 @@ export async function refreshScamDomains(redis?: Redis) {
 					.set(`${key}:refresh`, Date.now())
 					.exec();
 
-				const lastRefreshTimestamp = Number.parseInt(lastRefresh, 10);
+				const lastRefreshTimestamp = Number.parseInt(lastRefresh as string, 10);
 
 				logger.info({
 					msg: "refreshed scam domains",
 					envVar: urlEnvironment,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,
-					before,
-					after,
+					before: before as number,
+					after: after as number,
 				});
 
 				res.push({
 					envVar: urlEnvironment,
 					redisKey: key,
 					lastRefresh: lastRefreshTimestamp,
-					before,
-					after,
+					before: before as number,
+					after: after as number,
 				});
 				break;
 			}
