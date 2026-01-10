@@ -17,7 +17,7 @@ export default async function routes(fastify: FastifyInstance) {
 			reply,
 		): Promise<APIInteractionResponse> => {
 			if (!(await verifyRequest(request))) {
-				// eslint-disable-next-line @typescript-eslint/only-throw-error
+				// oxlint-disable-next-line only-throw-error
 				throw { statusCode: 401, message: "Invalid signature." };
 			}
 

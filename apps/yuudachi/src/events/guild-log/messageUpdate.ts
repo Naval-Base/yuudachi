@@ -71,16 +71,13 @@ export default class implements Event {
 
 				let description = "";
 
-				// eslint-disable-next-line prefer-named-capture-group
 				if (/```(.*?)```/s.test(oldMessage.content) && /```(.*?)```/s.test(newMessage.content)) {
-					// eslint-disable-next-line prefer-named-capture-group
 					const strippedOldMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(oldMessage.content);
 
 					if (!strippedOldMessage?.[2]) {
 						continue;
 					}
 
-					// eslint-disable-next-line prefer-named-capture-group
 					const strippedNewMessage = /```(?:(\S+)\n)?\s*([^]+?)\s*```/.exec(newMessage.content);
 
 					if (!strippedNewMessage?.[2]) {
@@ -145,9 +142,9 @@ export default class implements Event {
 					username: this.client.user.username,
 					avatarURL: this.client.user.displayAvatarURL(),
 				});
-			} catch (error_) {
-				const error = error_ as Error;
-				logger.error(error, error.message);
+			} catch (error) {
+				const error_ = error as Error;
+				logger.error(error_, error_.message);
 			}
 		}
 	}

@@ -94,7 +94,7 @@ export function SidebarProvider({
 				setInternalOpenState(openState);
 			}
 
-			// eslint-disable-next-line react-compiler/react-compiler
+			// oxlint-disable-next-line no-document-cookie, react-compiler/react-compiler
 			document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
 		},
 		[setOpenProp, open, isMobile, setOpenMobile],
@@ -166,9 +166,9 @@ const sidebarGapStyles = cva({
 const sidebarStyles = cva({
 	base: [
 		"fixed inset-y-0 z-10 hidden h-dvh w-(--sidebar-width) transition-[left,right,width] duration-100 ease-linear md:flex",
-		"in-data-[intent=inset]:bg-base-neutral-100 bg-base-neutral-0 dark:bg-base-neutral-800 min-h-dvh",
+		"min-h-dvh bg-base-neutral-0 in-data-[intent=inset]:bg-base-neutral-100 dark:bg-base-neutral-800",
 		"**:data-[slot=disclosure]:border-0 **:data-[slot=disclosure]:px-2.5",
-		"group-data-[intent=default]:shadow-base-md not-has-data-[slot=sidebar-footer]:pb-2",
+		"not-has-data-[slot=sidebar-footer]:pb-2 group-data-[intent=default]:shadow-base-md",
 		"[@-moz-document_url-prefix()]:h-full [@-moz-document_url-prefix()]:min-h-full",
 	],
 	variants: {
@@ -259,7 +259,7 @@ export function Sidebar({
 					{...props}
 					aria-label="Sidebar"
 					className={cx(
-						"entering:blur-in exiting:blur-out w-(--sidebar-width) [--sidebar-width:18rem] has-data-[slot=calendar]:[--sidebar-width:23rem]",
+						"w-(--sidebar-width) [--sidebar-width:18rem] has-data-[slot=calendar]:[--sidebar-width:23rem] entering:blur-in exiting:blur-out",
 						props.className,
 					)}
 					closeButton={closeButton}
@@ -300,7 +300,7 @@ export function Sidebar({
 					className={cx(
 						"flex h-full w-full flex-col",
 						"group-data-[intent=inset]:bg-base-neutral-100 dark:group-data-[intent=inset]:bg-base-neutral-800",
-						"group-data-[intent=float]:bg-sidebar group-data-[intent=float]:shadow-base-md group-data-[intent=float]:rounded-lg group-data-[intent=float]:border group-data-[intent=float]:border-(--sidebar-border)",
+						"group-data-[intent=float]:bg-sidebar group-data-[intent=float]:rounded-lg group-data-[intent=float]:border group-data-[intent=float]:border-(--sidebar-border) group-data-[intent=float]:shadow-base-md",
 					)}
 					data-sidebar="default"
 					data-slot="sidebar-inner"
@@ -333,14 +333,14 @@ export function SidebarInsetAnchor({
 }
 
 const sidebarHeaderStyles = cva({
-	base: "dark:bg-base-neutral-800 in-data-[intent=inset]:bg-base-neutral-100 dark:in-data-[intent=inset]:dark:bg-base-neutral-800 bg-base-neutral-0 flex flex-col in-data-[intent=inset]:p-4",
+	base: "flex flex-col bg-base-neutral-0 in-data-[intent=inset]:bg-base-neutral-100 in-data-[intent=inset]:p-4 dark:bg-base-neutral-800 dark:in-data-[intent=inset]:dark:bg-base-neutral-800",
 	variants: {
 		collapsed: {
-			true: "px-2.5 pt-8 pb-4 gap-2 place-items-center",
+			true: "place-items-center gap-2 px-2.5 pt-8 pb-4",
 			false: "px-6 pt-8 pb-4",
 		},
 		hasBorder: {
-			true: "border-base-neutral-100 dark:border-base-neutral-700 border-b",
+			true: "border-b border-base-neutral-100 dark:border-base-neutral-700",
 			false: null,
 		},
 	},
@@ -369,7 +369,7 @@ const sidebarFooterStyles = cva({
 		"in-data-[intent=fleet]:**:data-[slot=menu-trigger]:rounded-none",
 		"**:data-[slot=menu-trigger]:relative **:data-[slot=menu-trigger]:overflow-hidden",
 		"**:data-[slot=menu-trigger]:rounded-lg",
-		"sm:**:data-[slot=menu-trigger]:text-base-md **:data-[slot=menu-trigger]:flex **:data-[slot=menu-trigger]:cursor-default **:data-[slot=menu-trigger]:items-center **:data-[slot=menu-trigger]:p-2 **:data-[slot=menu-trigger]:outline-hidden",
+		"**:data-[slot=menu-trigger]:flex **:data-[slot=menu-trigger]:cursor-default **:data-[slot=menu-trigger]:items-center **:data-[slot=menu-trigger]:p-2 **:data-[slot=menu-trigger]:outline-hidden sm:**:data-[slot=menu-trigger]:text-base-md",
 		"**:data-[slot=menu-trigger]:hover:text-fg **:data-[slot=menu-trigger]:hover:bg-(--sidebar-accent)",
 	],
 	variants: {
@@ -381,11 +381,11 @@ const sidebarFooterStyles = cva({
 			],
 			false: [
 				"**:data-[slot=avatar]:size-8 **:data-[slot=avatar]:*:size-8 **:data-[slot=menu-trigger]:**:data-[slot=avatar]:mr-2",
-				"**:data-[slot=menu-trigger]:pressed:**:data-[slot=chevron]:rotate-180 **:data-[slot=menu-trigger]:w-full **:data-[slot=menu-trigger]:**:data-[slot=chevron]:ml-auto **:data-[slot=menu-trigger]:**:data-[slot=chevron]:transition-transform",
+				"**:data-[slot=menu-trigger]:w-full **:data-[slot=menu-trigger]:**:data-[slot=chevron]:ml-auto **:data-[slot=menu-trigger]:**:data-[slot=chevron]:transition-transform **:data-[slot=menu-trigger]:pressed:**:data-[slot=chevron]:rotate-180",
 			],
 		},
 		hasBorder: {
-			true: "border-base-neutral-100 dark:border-base-neutral-700 border-t",
+			true: "border-t border-base-neutral-100 dark:border-base-neutral-700",
 			false: null,
 		},
 	},
@@ -415,7 +415,7 @@ export function SidebarContent(props: ComponentProps<"div">) {
 		<div
 			{...props}
 			className={cx(
-				"dark:bg-base-neutral-800 in-data-[intent=inset]:bg-base-neutral-100 bg-base-neutral-0 flex min-h-0 flex-1 scroll-mb-96 flex-col overflow-auto *:data-sidebar-section:border-l-0",
+				"flex min-h-0 flex-1 scroll-mb-96 flex-col overflow-auto bg-base-neutral-0 in-data-[intent=inset]:bg-base-neutral-100 *:data-sidebar-section:border-l-0 dark:bg-base-neutral-800",
 				state === "collapsed" ? "place-items-center" : "mask-b-from-95% p-4",
 				props.className,
 			)}
@@ -459,7 +459,7 @@ export function SidebarSection({ className, ...props }: SidebarSectionProps) {
 			data-slot="sidebar-section"
 		>
 			{state !== "collapsed" && "label" in props && (
-				<RACHeader className="text-base-label-sm flex shrink-0 place-items-center rounded px-2.5 py-1 transition-[margin,opacity] duration-200 ease-linear outline-none group-data-[collapsible=dock]:-mt-8 group-data-[collapsible=dock]:opacity-0 focus-visible:ring-2 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0">
+				<RACHeader className="flex shrink-0 place-items-center rounded px-2.5 py-1 text-base-label-sm transition-[margin,opacity] duration-200 ease-linear outline-none group-data-[collapsible=dock]:-mt-8 group-data-[collapsible=dock]:opacity-0 focus-visible:ring-2 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0">
 					{props.label}
 				</RACHeader>
 			)}
@@ -473,7 +473,7 @@ export function SidebarSection({ className, ...props }: SidebarSectionProps) {
 const sidebarItemStyles = cva({
 	base: [
 		"group/sidebar-item relative col-span-full w-full min-w-0 cursor-pointer overflow-hidden rounded-lg px-[calc(var(--spacing)*2.3)] py-[calc(var(--spacing)*1.3)] text-left focus-visible:outline-hidden",
-		"**:data-[slot=menu-trigger]:pressed:opacity-100 pressed:**:data-[slot=menu-trigger]:opacity-100 **:data-[slot=menu-trigger]:absolute **:data-[slot=menu-trigger]:right-0 **:data-[slot=menu-trigger]:-mr-1 **:data-[slot=menu-trigger]:flex **:data-[slot=menu-trigger]:h-full **:data-[slot=menu-trigger]:w-[calc(var(--sidebar-width)-90%)] **:data-[slot=menu-trigger]:items-center **:data-[slot=menu-trigger]:justify-end **:data-[slot=menu-trigger]:pr-2.5 **:data-[slot=menu-trigger]:opacity-0 hover:**:data-[slot=menu-trigger]:opacity-100 **:data-[slot=menu-trigger]:focus-visible:opacity-100 **:data-[slot=menu-trigger]:has-data-focus:opacity-100",
+		"**:data-[slot=menu-trigger]:absolute **:data-[slot=menu-trigger]:right-0 **:data-[slot=menu-trigger]:-mr-1 **:data-[slot=menu-trigger]:flex **:data-[slot=menu-trigger]:h-full **:data-[slot=menu-trigger]:w-[calc(var(--sidebar-width)-90%)] **:data-[slot=menu-trigger]:items-center **:data-[slot=menu-trigger]:justify-end **:data-[slot=menu-trigger]:pr-2.5 **:data-[slot=menu-trigger]:opacity-0 hover:**:data-[slot=menu-trigger]:opacity-100 **:data-[slot=menu-trigger]:focus-visible:opacity-100 **:data-[slot=menu-trigger]:has-data-focus:opacity-100 **:data-[slot=menu-trigger]:pressed:opacity-100 pressed:**:data-[slot=menu-trigger]:opacity-100",
 		"**:data-[slot=avatar]:size-4 **:data-[slot=avatar]:shrink-0 **:data-[slot=avatar]:*:size-4 **:data-[slot=icon]:size-4 **:data-[slot=icon]:shrink-0",
 		"in-data-[intent=fleet]:rounded-none",
 	],
@@ -581,8 +581,8 @@ export function SidebarInset(props: ComponentProps<"main">) {
 			{...props}
 			className={cx(
 				"relative flex min-h-dvh w-full flex-1 flex-col peer-data-[intent=inset]:border peer-data-[intent=inset]:border-transparent lg:min-w-0",
-				"bg-base-neutral-0 dark:bg-base-neutral-900 dark:peer-data-[intent=inset]:bg-base-neutral-900 peer-data-[intent=inset]:overflow-hidden",
-				"md:peer-data-[intent=inset]:shadow-base-md peer-data-[intent=inset]:min-h-[calc(100dvh-(--spacing(4)))] md:peer-data-[intent=inset]:m-2 md:peer-data-[intent=inset]:rounded-xl md:peer-data-[intent=inset]:peer-data-[side=left]:ml-0 md:peer-data-[intent=inset]:peer-data-[side=right]:mr-0 md:peer-data-[state=collapsed]:peer-data-[intent=inset]:peer-data-[side=left]:ml-2 md:peer-data-[state=collapsed]:peer-data-[intent=inset]:peer-data-[side=right]:mr-2",
+				"bg-base-neutral-0 peer-data-[intent=inset]:overflow-hidden dark:bg-base-neutral-900 dark:peer-data-[intent=inset]:bg-base-neutral-900",
+				"peer-data-[intent=inset]:min-h-[calc(100dvh-(--spacing(4)))] md:peer-data-[intent=inset]:m-2 md:peer-data-[intent=inset]:rounded-xl md:peer-data-[intent=inset]:shadow-base-md md:peer-data-[intent=inset]:peer-data-[side=left]:ml-0 md:peer-data-[intent=inset]:peer-data-[side=right]:mr-0 md:peer-data-[state=collapsed]:peer-data-[intent=inset]:peer-data-[side=left]:ml-2 md:peer-data-[state=collapsed]:peer-data-[intent=inset]:peer-data-[side=right]:mr-2",
 				props.className,
 			)}
 			data-slot="sidebar-inset"
@@ -728,7 +728,7 @@ export function SidebarCloseIndicator({ isDismissable = true, ...props }: CloseB
 			{...props}
 			aria-label="Close"
 			className={cx(
-				"close text-base-neutral-500 hover:text-base-neutral-700 focus-visible:text-base-neutral-700 pressed:text-base-neutral-900 dark:text-base-neutral-400 dark:hover:text-base-neutral-200 dark:focus-visible:text-base-neutral-200 dark:pressed:text-base-neutral-500 disabled:text-base-neutral-300 dark:disabled:text-base-neutral-300 z-50 rounded-full",
+				"close z-50 rounded-full text-base-neutral-500 hover:text-base-neutral-700 focus-visible:text-base-neutral-700 disabled:text-base-neutral-300 dark:text-base-neutral-400 dark:hover:text-base-neutral-200 dark:focus-visible:text-base-neutral-200 dark:disabled:text-base-neutral-300 pressed:text-base-neutral-900 dark:pressed:text-base-neutral-500",
 				props.className,
 			)}
 			onPress={isDismissable ? chain(() => setOpen((open) => !open), props.onPress) : props.onPress!}
@@ -814,9 +814,9 @@ export function SidebarMenuTrigger({ alwaysVisible = false, ...props }: SidebarM
 			className={composeRenderProps(props.className, (className) =>
 				cx(
 					!alwaysVisible &&
-						"pressed:opacity-100 group/sidebar-item:pressed:opacity-100 opacity-0 group-hover/sidebar-item:opacity-100 group-focus-visible/sidebar-item:opacity-100",
+						"group/sidebar-item:pressed:opacity-100 opacity-0 group-hover/sidebar-item:opacity-100 group-focus-visible/sidebar-item:opacity-100 pressed:opacity-100",
 					"absolute right-0 flex h-full w-[calc(var(--sidebar-width)-90%)] place-content-end place-items-center pr-2.5 outline-hidden",
-					'**:data-[slot=icon]:shrink-0 [&_[data-slot="icon"]:not([class*="size-"])]:size-5',
+					"**:data-[slot=icon]:shrink-0 [&_[data-slot='icon']:not([class*='size-'])]:size-5",
 					className,
 				),
 			)}

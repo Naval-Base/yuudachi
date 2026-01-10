@@ -4,13 +4,12 @@ import RE2 from "re2";
  * @param input - `/(hype)\s+(events?|messages?|apply|team|system)/i`
  * @returns `(hype)\s+(events?|messages?|apply|team|system)`
  */
-export function parseRegex(input?: string | null | undefined, insensitive = true, fullMatch = false) {
+export function parseRegex(input?: string | null, insensitive = true, fullMatch = false) {
 	if (!input) {
 		return null;
 	}
 
 	try {
-		// eslint-disable-next-line prefer-named-capture-group
 		const regex = /^\/(.+)\/[gimsuy]?$/;
 		const options = insensitive ? "i" : "";
 

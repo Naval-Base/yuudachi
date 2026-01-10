@@ -16,20 +16,20 @@ export const switchStyles = compose(
 		variants: {
 			variant: {
 				default: [
-					"bg-base-neutral-500 dark:bg-base-neutral-300 text-base-neutral-800 dark:text-base-neutral-100",
+					"bg-base-neutral-500 text-base-neutral-800 dark:bg-base-neutral-300 dark:text-base-neutral-100",
 					"group-hover:bg-base-neutral-400",
 					"group-focus-visible:bg-base-neutral-400",
-					"group-disabled:bg-base-neutral-200 dark:group-disabled:bg-base-neutral-700 group-disabled:cursor-default",
+					"group-disabled:cursor-default group-disabled:bg-base-neutral-200 dark:group-disabled:bg-base-neutral-700",
 					"group-selected:bg-base-neutral-800 group-selected:dark:bg-base-neutral-100",
 					"group-selected:group-hover:bg-base-neutral-600 group-selected:dark:group-hover:bg-base-neutral-300",
 					"group-selected:group-focus-visible:bg-base-neutral-600 group-selected:dark:group-focus-visible:bg-base-neutral-300",
 					"group-selected:group-pressed:bg-base-neutral-200 group-selected:dark:group-pressed:bg-base-neutral-700",
 				],
 				tangerine: [
-					"bg-base-neutral-500 dark:bg-base-neutral-300 text-base-neutral-800 dark:text-base-neutral-100",
+					"bg-base-neutral-500 text-base-neutral-800 dark:bg-base-neutral-300 dark:text-base-neutral-100",
 					"group-hover:bg-base-neutral-400",
 					"group-focus-visible:bg-base-neutral-400",
-					"group-disabled:bg-base-neutral-200 dark:group-disabled:bg-base-neutral-700 group-disabled:cursor-default",
+					"group-disabled:cursor-default group-disabled:bg-base-neutral-200 dark:group-disabled:bg-base-neutral-700",
 					"group-selected:bg-base-tangerine-600 group-selected:dark:bg-base-tangerine-400",
 					"group-selected:group-hover:bg-base-tangerine-400 group-selected:dark:group-hover:bg-base-tangerine-600",
 					"group-selected:group-focus-visible:bg-base-tangerine-400 group-selected:dark:group-focus-visible:bg-base-tangerine-600",
@@ -94,8 +94,8 @@ export function Switch(props: SwitchProps) {
 							<span
 								aria-hidden
 								className={cx(
-									"group-pressed:w-6 group-selected:ml-4 bg-base-neutral-0 dark:bg-base-neutral-800 group-selected:group-pressed:ml-2 pointer-events-none relative flex size-5 origin-right place-content-center place-items-center rounded-3xl transition-all duration-200 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0 forced-colors:disabled:outline-[GrayText]",
-									props.size === "sm" && "group-pressed:w-5 group-selected:group-pressed:ml-3 size-4",
+									"pointer-events-none relative flex size-5 origin-right place-content-center place-items-center rounded-3xl bg-base-neutral-0 transition-all duration-200 group-pressed:w-6 group-selected:ml-4 group-selected:group-pressed:ml-2 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0 dark:bg-base-neutral-800 forced-colors:disabled:outline-[GrayText]",
+									props.size === "sm" && "size-4 group-pressed:w-5 group-selected:group-pressed:ml-3",
 								)}
 							>
 								{values.isSelected && props.size !== "sm" ? (

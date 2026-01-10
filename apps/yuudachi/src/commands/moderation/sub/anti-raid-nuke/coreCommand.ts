@@ -84,6 +84,7 @@ async function launchNuke(
 		created_before: parseDate(args.created_before),
 		join_after: parseDate(args.join_after),
 		join_before: parseDate(args.join_before),
+		// oxlint-disable-next-line no-base-to-string
 		pattern: args.pattern ? parseRegex(args.pattern, insensitive, args.full_match)?.toString() : undefined,
 		logMessageUrl: caseMessage?.url,
 	};
@@ -159,6 +160,7 @@ export async function handleAntiRaidNuke(
 		created_before: parseDate(args.created_before),
 		join_after: parseDate(args.join_after),
 		join_before: parseDate(args.join_before),
+		// oxlint-disable-next-line no-base-to-string
 		pattern: args.pattern ? parseRegex(args.pattern, insensitive, args.full_match)?.toString() : undefined,
 		logMessageUrl: undefined,
 		preliminary: true,

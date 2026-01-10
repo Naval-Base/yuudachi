@@ -23,9 +23,9 @@ export async function generateCaseLog(case_: Case, logChannelId: Snowflake, loca
 			} else {
 				action += ` \`Unknown\` (${case_.roleId})`;
 			}
-		} catch (error_) {
-			const error = error_ as Error;
-			logger.error(error, error.message);
+		} catch (error) {
+			const error_ = error as Error;
+			logger.error(error_, error_.message);
 		}
 	}
 

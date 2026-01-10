@@ -1,12 +1,17 @@
 {
+	"typescript.experimental.useTsgo": false,
+	"eslint.enable": false,
 	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
 	"eslint.useESLintClass": true,
 	"eslint.useFlatConfig": true,
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"oxc.requireConfig": true,
+	"oxc.typeAware": true,
+	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "never",
 		"source.fixAll.eslint": "always",
+		"source.fixAll.oxc": "always",
 		"source.fixAll": "always"
 	},
 	"editor.trimAutoWhitespace": false,

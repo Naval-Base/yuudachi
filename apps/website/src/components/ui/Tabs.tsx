@@ -43,7 +43,7 @@ export function Tabs(props: RACTabsProps) {
 }
 
 const tabListStyles = cva({
-	base: "border-base-neutral-100 dark:border-base-neutral-700 relative flex forced-color-adjust-none",
+	base: "relative flex border-base-neutral-100 forced-color-adjust-none dark:border-base-neutral-700",
 	variants: {
 		orientation: {
 			horizontal:
@@ -84,7 +84,7 @@ const tabStyles = compose(
 		],
 		variants: {
 			isDisabled: {
-				true: "forced-colors:selected:bg-[GrayText] forced-colors:selected:text-[HighlightText] forced-colors:text-[GrayText]",
+				true: "forced-colors:text-[GrayText] forced-colors:selected:bg-[GrayText] forced-colors:selected:text-[HighlightText]",
 				false: null,
 			},
 		},
@@ -111,7 +111,7 @@ export function Tab({ hasIndicator = true, ...props }: TabProps) {
 					{hasIndicator && (
 						<RACSelectionIndicator
 							className={cx(
-								"bg-base-neutral-800 dark:bg-base-neutral-60 absolute rounded transition-[translate,width,height] duration-200",
+								"absolute rounded bg-base-neutral-800 transition-[translate,width,height] duration-200 dark:bg-base-neutral-60",
 								"group-orientation-horizontal/tabs:inset-x-0 group-orientation-horizontal/tabs:-bottom-[15px] group-orientation-horizontal/tabs:h-0.5",
 							)}
 							data-slot="selected-indicator"

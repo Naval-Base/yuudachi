@@ -24,7 +24,7 @@ export default class extends Command<typeof ReportUtilsCommand> {
 	): Promise<void> {
 		await interaction.deferReply({ flags: args.lookup?.hide ? MessageFlags.Ephemeral : undefined });
 
-		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+		// oxlint-disable-next-line switch-exhaustiveness-check
 		switch (Object.keys(args)[0]) {
 			case "lookup":
 				await lookup(interaction, args.lookup, locale);

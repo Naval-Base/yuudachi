@@ -20,7 +20,7 @@ export async function resolveGuildCommand(guild: Guild, commandName: string) {
  * @param commandName - The application command name to format
  * @param commandId - The application command ID to format
  */
-export function chatInputApplicationCommandMention<N extends string, G extends Snowflake | string>(
+export function chatInputApplicationCommandMention<N extends string, G extends Snowflake>(
 	commandName: N,
 	commandId: G,
 ): `</${N}:${G}>` {

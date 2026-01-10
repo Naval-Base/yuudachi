@@ -69,7 +69,7 @@ export default class implements Event {
 
 					const effectiveLocale = forceLocale ? locale : interaction.locale;
 
-					// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+					// oxlint-disable-next-line switch-exhaustiveness-check
 					switch (interaction.commandType) {
 						case ApplicationCommandType.ChatInput: {
 							const isAutocomplete = interaction.isAutocomplete();
@@ -155,9 +155,9 @@ export default class implements Event {
 						type: interaction.type,
 						commandName: interaction.commandName,
 					});
-				} catch (error_) {
-					const error = error_ as Error;
-					logger.error(error, error.message);
+				} catch (error) {
+					const error_ = error as Error;
+					logger.error(error_, error_.message);
 
 					commandFailureCounter.inc({
 						commandType: interaction.commandType,
@@ -178,9 +178,9 @@ export default class implements Event {
 							await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 						}
 
-						await interaction.editReply({ content: error.message, components: [] });
-					} catch (error__) {
-						const subError = error__ as Error;
+						await interaction.editReply({ content: error_.message, components: [] });
+					} catch (error) {
+						const subError = error as Error;
 						logger.error(subError, subError.message);
 					}
 				}

@@ -11,16 +11,16 @@ const tooltipStyles = cva({
 	variants: {
 		variant: {
 			default:
-				"bg-base-neutral-700 text-base-sm text-base-neutral-40 dark:bg-base-neutral-200 dark:text-base-neutral-900 rounded-sm px-2 py-1",
+				"rounded-sm bg-base-neutral-700 px-2 py-1 text-base-sm text-base-neutral-40 dark:bg-base-neutral-200 dark:text-base-neutral-900",
 			plain:
-				"bg-base-neutral-900 text-base-sm dark:[&_.arx]:fill-base-neutral-80 [&_.arx]:fill-base-neutral-900 text-base-neutral-40 shadow-base-sm dark:bg-base-neutral-80 dark:text-base-neutral-900 rounded-sm px-4 py-[10px]",
-			rich: "bg-base-neutral-100 text-base-md text-base-neutral-900 shadow-base-sm dark:border-base-neutral-700 dark:bg-base-neutral-700 dark:text-base-neutral-40 max-w-[248px] rounded-lg p-4",
+				"rounded-sm bg-base-neutral-900 px-4 py-[10px] text-base-sm text-base-neutral-40 shadow-base-sm dark:bg-base-neutral-80 dark:text-base-neutral-900 [&_.arx]:fill-base-neutral-900 dark:[&_.arx]:fill-base-neutral-80",
+			rich: "max-w-[248px] rounded-lg bg-base-neutral-100 p-4 text-base-md text-base-neutral-900 shadow-base-sm dark:border-base-neutral-700 dark:bg-base-neutral-700 dark:text-base-neutral-40",
 		},
 		isEntering: {
-			true: "fade-in animate-in placement-left:slide-in-from-right-1 placement-right:slide-in-from-left-1 placement-top:slide-in-from-bottom-1 placement-bottom:slide-in-from-top-1",
+			true: "animate-in fade-in placement-left:slide-in-from-right-1 placement-right:slide-in-from-left-1 placement-top:slide-in-from-bottom-1 placement-bottom:slide-in-from-top-1",
 		},
 		isExiting: {
-			true: "fade-in direction-reverse animate-in placement-left:slide-out-to-right-1 placement-right:slide-out-to-left-1 placement-top:slide-out-to-bottom-1 placement-bottom:slide-out-to-top-1",
+			true: "animate-in direction-reverse fade-in placement-left:slide-out-to-right-1 placement-right:slide-out-to-left-1 placement-top:slide-out-to-bottom-1 placement-bottom:slide-out-to-top-1",
 		},
 	},
 	defaultVariants: {
@@ -50,7 +50,7 @@ export function TooltipContent({ offset = 12, showArrow = true, ...props }: Tool
 			{showArrow && (
 				<RACOverlayArrow className="group">
 					<svg
-						className="arx group-placement-left:-rotate-90 group-placement-bottom:rotate-180 group-placement-right:rotate-90 block forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
+						className="arx block group-placement-left:-rotate-90 group-placement-right:rotate-90 group-placement-bottom:rotate-180 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
 						height={4}
 						viewBox="0 0 8 4"
 						width={8}

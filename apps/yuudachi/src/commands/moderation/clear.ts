@@ -67,7 +67,7 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 		interaction: InteractionParam | InteractionParam<CommandMethod.MessageContext>,
 		locale: LocaleParam,
 		firstMessage: Message,
-		lastMessage?: Message | undefined,
+		lastMessage?: Message,
 	): Promise<void> {
 		const reply = await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
@@ -152,9 +152,9 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 						components: [],
 						embeds: [],
 					});
-				} catch (error_) {
-					const error = error_ as Error;
-					logger.error(error, error.message);
+				} catch (error) {
+					const error_ = error as Error;
+					logger.error(error_, error_.message);
 				}
 
 				return undefined;
@@ -261,9 +261,9 @@ export default class extends Command<typeof ClearCommand | typeof ClearContextCo
 					username: interaction.client.user!.username,
 					avatarURL: interaction.client.user!.displayAvatarURL(),
 				});
-			} catch (error_) {
-				const error = error_ as Error;
-				logger.error(error, error.message);
+			} catch (error) {
+				const error_ = error as Error;
+				logger.error(error_, error_.message);
 			}
 		}
 	}

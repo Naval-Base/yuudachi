@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
-
 import "overlayscrollbars/overlayscrollbars.css";
 import "@/styles/base.css";
 
@@ -78,7 +77,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 					rel="stylesheet"
 				/>
 				<script
-					// eslint-disable-next-line react/no-danger
+					// oxlint-disable-next-line no-danger
 					dangerouslySetInnerHTML={{
 						__html: `(() => {
 							const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;

@@ -8,7 +8,6 @@ export async function verifyRequest(
 			"x-signature-timestamp": string;
 		};
 	}> & {
-		// eslint-disable-next-line n/prefer-global/buffer
 		rawBody?: Buffer | string;
 	},
 ) {
@@ -20,6 +19,5 @@ export async function verifyRequest(
 		return false;
 	}
 
-	// eslint-disable-next-line no-restricted-globals, n/prefer-global/process
 	return verify(rawBody, signature, timestamp, process.env.DISCORD_PUBLIC_KEY!, crypto.subtle);
 }

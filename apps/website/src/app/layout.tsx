@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { jetBrainsMono, roboto } from "@/styles/fonts";
 import { Providers } from "./providers";
-
 import "overlayscrollbars/overlayscrollbars.css";
 import "@/styles/base.css";
 
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html className={`${roboto.variable} ${jetBrainsMono.variable} antialiased`} lang="en" suppressHydrationWarning>
-			<body className="bg-base-neutral-0 text-base-md text-base-neutral-900 dark:bg-base-neutral-900 dark:text-base-neutral-40 overscroll-y-none">
+			<body className="overscroll-y-none bg-base-neutral-0 text-base-md text-base-neutral-900 dark:bg-base-neutral-900 dark:text-base-neutral-40">
 				<Providers>{children}</Providers>
 			</body>
 		</html>

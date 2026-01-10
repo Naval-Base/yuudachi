@@ -59,7 +59,7 @@ export function GridListItem({ hasCheckbox = true, ...props }: GridListItemProps
 			{(values) => (
 				<>
 					{values.allowsDragging && (
-						<Button className="dragging:cursor-grabbing cursor-grab" size="icon-xs" slot="drag" variant="unset">
+						<Button className="cursor-grab dragging:cursor-grabbing" size="icon-xs" slot="drag" variant="unset">
 							<MenuIcon aria-hidden data-slot="icon" size={18} strokeWidth={1.5} />
 						</Button>
 					)}

@@ -15,13 +15,13 @@ import { cva } from "@/styles/cva";
 import { composeTailwindRenderProps } from "@/styles/util";
 
 export const segmentStyles = cva({
-	base: "type-literal:px-0 sm:text-base-md text-base-neutral-900 dark:text-base-neutral-40 text-base-lg inline shrink-0 tracking-wider uppercase tabular-nums caret-transparent outline-hidden forced-color-adjust-none focus:outline-hidden forced-colors:text-[ButtonText]",
+	base: "inline shrink-0 text-base-lg tracking-wider text-base-neutral-900 uppercase tabular-nums caret-transparent outline-hidden forced-color-adjust-none focus:outline-hidden sm:text-base-md dark:text-base-neutral-40 forced-colors:text-[ButtonText] type-literal:px-0",
 	variants: {
 		isPlaceholder: {
 			true: "text-base-neutral-400 dark:text-base-neutral-500",
 		},
 		isFocused: {
-			true: "text-base-neutral-900 dark:text-base-neutral-40 bg-base-tangerine-300 rounded forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+			true: "rounded bg-base-tangerine-300 text-base-neutral-900 dark:text-base-neutral-40 forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
 			false: null,
 		},
 	},

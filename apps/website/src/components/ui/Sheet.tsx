@@ -30,7 +30,7 @@ const generateCompoundVariants = (sides: Sides[]) =>
 	}));
 
 const sheetContentStyles = cva({
-	base: "shadow-base-xl bg-base-neutral-0 dark:bg-base-neutral-800 fixed z-50 grid transform-gpu gap-4 rounded-lg text-left align-middle transition ease-in-out will-change-transform",
+	base: "fixed z-50 grid transform-gpu gap-4 rounded-lg bg-base-neutral-0 text-left align-middle shadow-base-xl transition ease-in-out will-change-transform dark:bg-base-neutral-800",
 	variants: {
 		isEntering: {
 			true: "animate-in duration-300",
@@ -39,11 +39,11 @@ const sheetContentStyles = cva({
 			true: "animate-out duration-200",
 		},
 		side: {
-			top: "entering:slide-in-from-top exiting:slide-out-to-top inset-x-0 top-0 border-b",
-			bottom: "entering:slide-in-from-bottom exiting:slide-out-to-bottom inset-x-0 bottom-0 border-t",
-			left: "entering:slide-in-from-left exiting:slide-out-to-left inset-y-0 left-0 h-auto w-full max-w-xs overflow-y-auto border-r",
+			top: "inset-x-0 top-0 border-b entering:slide-in-from-top exiting:slide-out-to-top",
+			bottom: "inset-x-0 bottom-0 border-t entering:slide-in-from-bottom exiting:slide-out-to-bottom",
+			left: "inset-y-0 left-0 h-auto w-full max-w-xs overflow-y-auto border-r entering:slide-in-from-left exiting:slide-out-to-left",
 			right:
-				"entering:slide-in-from-right exiting:slide-out-to-right border-base-neutral-200 dark:border-base-neutral-600 inset-y-0 right-0 h-auto w-full max-w-xs overflow-y-auto border-l",
+				"inset-y-0 right-0 h-auto w-full max-w-xs overflow-y-auto border-l border-base-neutral-200 dark:border-base-neutral-600 entering:slide-in-from-right exiting:slide-out-to-right",
 		},
 		isFloat: {
 			true: null,
@@ -60,16 +60,16 @@ export function Sheet(props: SheetProps) {
 }
 
 const sheetOverlayStyles = cva({
-	base: "bg-base-neutral-900/72 fixed top-0 left-0 isolate z-50 flex h-(--visual-viewport-height) w-dvw place-content-end place-items-end p-4",
+	base: "fixed top-0 left-0 isolate z-50 flex h-(--visual-viewport-height) w-dvw place-content-end place-items-end bg-base-neutral-900/72 p-4",
 	variants: {
 		isBlurred: {
 			true: "supports-backdrop-filter:backdrop-blur",
 		},
 		isEntering: {
-			true: "fade-in animate-in duration-300 ease-out",
+			true: "animate-in duration-300 ease-out fade-in",
 		},
 		isExiting: {
-			true: "fade-out animate-out duration-200 ease-in",
+			true: "animate-out duration-200 ease-in fade-out",
 		},
 	},
 });

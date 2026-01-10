@@ -10,11 +10,11 @@ import { upsertCaseLog } from "./functions/logging/upsertCaseLog.js";
 
 export async function registerJobs() {
 	const client = container.get<Client<true>>(Client);
-	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+	// oxlint-disable-next-line no-empty-object-type
 	const sql = container.get<Sql<{}>>(kSQL);
 	const redis = container.get<Redis>(kRedis);
 
-	const queue = new Queue("jobs", { connection: redis });
+	const queue = new Queue("jobs", { connection: redis.options });
 
 	try {
 		logger.info(
@@ -81,9 +81,9 @@ export async function registerJobs() {
 								try {
 									const newCase = await deleteCase({ guild, user: client.user, caseId: case_.case_id });
 									await upsertCaseLog(guild, client.user, newCase);
-								} catch (error_) {
-									const error = error_ as Error;
-									logger.error(error, error.message);
+								} catch (error) {
+									const error_ = error as Error;
+									logger.error(error_, error_.message);
 								}
 							}
 						}
@@ -101,9 +101,9 @@ export async function registerJobs() {
 							if (Date.parse(lockdown.expiration) <= Date.now()) {
 								try {
 									await deleteLockdown(lockdown.channel_id);
-								} catch (error_) {
-									const error = error_ as Error;
-									logger.error(error, error.message);
+								} catch (error) {
+									const error_ = error as Error;
+									logger.error(error_, error_.message);
 								}
 							}
 						}
@@ -114,9 +114,9 @@ export async function registerJobs() {
 					case "scamDomainUpdateTimers": {
 						try {
 							await refreshScamDomains();
-						} catch (error_) {
-							const error = error_ as Error;
-							logger.error(error, error.message);
+						} catch (error) {
+							const error_ = error as Error;
+							logger.error(error_, error_.message);
 						}
 
 						break;
@@ -126,10 +126,10 @@ export async function registerJobs() {
 						break;
 				}
 			},
-			{ connection: redis },
+			{ connection: redis.options },
 		);
-	} catch (error_) {
-		const error = error_ as Error;
-		logger.error(error, error.message);
+	} catch (error) {
+		const error_ = error as Error;
+		logger.error(error_, error_.message);
 	}
 }

@@ -125,10 +125,10 @@ type TypeIdToType<T, O, C, P, R extends CacheType = "cached"> = T extends Applic
 										: never;
 
 type OptionToObject<O, P, Z extends CacheType = "cached"> = O extends {
-	choices?: infer C | undefined;
+	choices?: (infer C) | undefined;
 	name: infer K;
-	options?: infer O | undefined;
-	required?: infer R | undefined;
+	options?: (infer O) | undefined;
+	required?: (infer R) | undefined;
 	type: infer T;
 }
 	? K extends string

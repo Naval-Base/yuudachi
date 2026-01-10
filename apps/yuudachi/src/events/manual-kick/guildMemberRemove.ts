@@ -92,9 +92,9 @@ export default class implements Event {
 					);
 					await upsertCaseLog(guildMember.guild, logs.executor, case_);
 				}
-			} catch (error_) {
-				const error = error_ as Error;
-				logger.error(error, error.message);
+			} catch (error) {
+				const error_ = error as Error;
+				logger.error(error_, error_.message);
 			}
 		}
 	}

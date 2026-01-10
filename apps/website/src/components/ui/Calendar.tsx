@@ -56,7 +56,7 @@ export function CalendarHeader(props: ComponentProps<"header"> & { readonly isRa
 export function CalendarGridHeader() {
 	return (
 		<RACCalendarGridHeader>
-			{(day) => <RACCalendarHeaderCell className="text-base-label-md size-10 p-1">{day}</RACCalendarHeaderCell>}
+			{(day) => <RACCalendarHeaderCell className="size-10 p-1 text-base-label-md">{day}</RACCalendarHeaderCell>}
 		</RACCalendarGridHeader>
 	);
 }
@@ -79,22 +79,22 @@ export function Calendar<Type extends RACDateValue>(props: CalendarProps<Type>) 
 							className={composeRenderProps(props.className as string, (className, { isSelected, isDisabled }) =>
 								cx(
 									[
-										"bg-base-neutral-0 dark:bg-base-neutral-800 relative m-1 flex size-8 cursor-default place-content-center place-items-center rounded-full tabular-nums forced-colors:text-[ButtonText]",
+										"relative m-1 flex size-8 cursor-default place-content-center place-items-center rounded-full bg-base-neutral-0 tabular-nums dark:bg-base-neutral-800 forced-colors:text-[ButtonText]",
 										"hover:bg-base-neutral-100 dark:hover:bg-base-neutral-700",
-										"focus-visible:bg-base-neutral-100 focus-visible:outline-base-tangerine-400 dark:focus-visible:outline-base-tangerine-600 dark:focus-visible:bg-base-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2",
+										"focus-visible:bg-base-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-tangerine-400 dark:focus-visible:bg-base-neutral-700 dark:focus-visible:outline-base-tangerine-600",
 										"pressed:bg-base-neutral-200 dark:pressed:bg-base-neutral-600",
 									],
 									isSelected && [
-										"bg-base-tangerine-300 dark:bg-base-tangerine-700 text-base-label-md forced-colors:bg-[Highlight] forced-colors:text-[Highlight] forced-colors:data-invalid:bg-[Mark]",
+										"bg-base-tangerine-300 text-base-label-md dark:bg-base-tangerine-700 forced-colors:bg-[Highlight] forced-colors:text-[Highlight] forced-colors:data-invalid:bg-[Mark]",
 										"hover:bg-base-tangerine-500 dark:hover:bg-base-tangerine-500 dark:hover:text-base-neutral-900",
 										"focus-visible:bg-base-tangerine-500 dark:focus-visible:bg-base-tangerine-500 dark:focus-visible:text-base-neutral-900",
 										"pressed:bg-base-tangerine-600 pressed:text-base-neutral-40 dark:pressed:bg-base-tangerine-400 dark:pressed:text-base-neutral-900",
 										"disabled:bg-base-neutral-200 dark:disabled:bg-base-neutral-700",
 									],
 									isDisabled &&
-										"text-base-neutral-900 dark:text-base-neutral-40 opacity-38 forced-colors:text-[GrayText]",
+										"text-base-neutral-900 opacity-38 dark:text-base-neutral-40 forced-colors:text-[GrayText]",
 									date.compare(now) === 0 && [
-										"border-base-tangerine-500 border",
+										"border border-base-tangerine-500",
 										"disabled:border-base-neutral-900 dark:disabled:border-base-neutral-40",
 									],
 									className,

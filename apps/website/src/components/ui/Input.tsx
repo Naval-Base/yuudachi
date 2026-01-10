@@ -43,8 +43,8 @@ export const inputStyles = compose(
 	cva({
 		base: [
 			"relative block h-10 w-full appearance-none rounded-sm border px-3 py-2.5 transition duration-200 ease-out forced-colors:outline-[Highlight]",
-			"text-base-neutral-900 placeholder:text-base-neutral-400 dark:placeholder:text-base-neutral-500 dark:text-base-neutral-40 text-base-lg sm:text-base-md",
-			"bg-base-neutral-0 border-base-neutral-300 dark:bg-base-neutral-800 dark:border-base-neutral-500",
+			"text-base-lg text-base-neutral-900 placeholder:text-base-neutral-400 sm:text-base-md dark:text-base-neutral-40 dark:placeholder:text-base-neutral-500",
+			"border-base-neutral-300 bg-base-neutral-0 dark:border-base-neutral-500 dark:bg-base-neutral-800",
 			"hover:border-base-neutral-200 dark:hover:border-base-neutral-600",
 			"focus:border-base-neutral-200 dark:focus:border-base-neutral-600",
 			"disabled:opacity-38 in-disabled:opacity-38 forced-colors:disabled:border forced-colors:disabled:border-[GrayText] forced-colors:in-disabled:border forced-colors:in-disabled:border-[GrayText]",

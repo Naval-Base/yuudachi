@@ -68,15 +68,15 @@ const selectTriggerStyles = compose(
 	cva({
 		base: [
 			"group/select-trigger relative flex h-10 w-full min-w-0 place-items-center overflow-hidden rounded-sm border px-3 py-2.5 text-start transition duration-200 ease-out forced-colors:outline-[Highlight]",
-			"bg-base-neutral-0 border-base-neutral-300 dark:bg-base-neutral-800 dark:border-base-neutral-500",
+			"border-base-neutral-300 bg-base-neutral-0 dark:border-base-neutral-500 dark:bg-base-neutral-800",
 			"hover:border-base-neutral-200 dark:hover:border-base-neutral-600",
 			"focus-visible:border-base-neutral-200 dark:focus-visible:border-base-neutral-600",
-			"group-open:border-base-neutral-200 dark:group-open:border-base-neutral-600 group-open:outline-2",
-			"group-disabled:bg-base-neutral-100 group-disabled:border-base-neutral-100 dark:group-disabled:border-base-neutral-400 dark:group-disabled:bg-base-neutral-400 group-disabled:opacity-38 group-disabled:forced-colors:border group-disabled:forced-colors:border-[GrayText]",
+			"group-open:border-base-neutral-200 group-open:outline-2 dark:group-open:border-base-neutral-600",
+			"group-disabled:border-base-neutral-100 group-disabled:bg-base-neutral-100 group-disabled:opacity-38 dark:group-disabled:border-base-neutral-400 dark:group-disabled:bg-base-neutral-400 group-disabled:forced-colors:border group-disabled:forced-colors:border-[GrayText]",
 			"group-invalid:border-base-sunset-500 forced-colors:group-invalid:border-[Mark]",
 			"group-invalid:hover:border-base-sunset-200 dark:group-invalid:hover:border-base-sunset-700",
 			"group-invalid:focus-visible:border-base-sunset-200 dark:group-invalid:focus-visible:border-base-sunset-700",
-			"*:data-[slot=icon]:text-base-neutral-800 dark:*:data-[slot=icon]:text-base-neutral-100 *:data-[slot=icon]:size-6 **:data-[slot=icon]:size-6 **:data-[slot=icon]:shrink-0",
+			"*:data-[slot=icon]:size-6 *:data-[slot=icon]:text-base-neutral-800 **:data-[slot=icon]:size-6 **:data-[slot=icon]:shrink-0 dark:*:data-[slot=icon]:text-base-neutral-100",
 		],
 	}),
 );
@@ -105,7 +105,7 @@ export function SelectTrigger(props: SelectTriggerProps) {
 						{!props.children && (
 							<>
 								<RACSelectValue
-									className="text-base-neutral-900 group-disabled:data-placeholder:text-base-neutral-900 dark:group-disabled:data-placeholder:text-base-neutral-40 dark:data-placeholder:text-base-neutral-500 dark:text-base-neutral-40 data-placeholder:text-base-neutral-400 text-base-lg sm:text-base-md truncate **:[[slot=description]]:hidden **:[[slot=label]]:inline"
+									className="truncate text-base-lg text-base-neutral-900 data-placeholder:text-base-neutral-400 group-disabled:data-placeholder:text-base-neutral-900 sm:text-base-md dark:text-base-neutral-40 dark:data-placeholder:text-base-neutral-500 dark:group-disabled:data-placeholder:text-base-neutral-40 **:[[slot=description]]:hidden **:[[slot=label]]:inline"
 									data-slot="select-value"
 								/>
 								<ChevronDownIcon

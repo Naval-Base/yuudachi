@@ -1,3 +1,5 @@
+// oxlint-disable numeric-separators-style
+
 export const enum Color {
 	DiscordEmbedBackground = 0x2f3136,
 	DiscordSuccess = 0x57f287,

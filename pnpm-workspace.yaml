@@ -23,4 +23,6 @@ peerDependencyRules:
 publicHoistPattern:
   - "*eslint*"
   - "*prettier*"
+  - "*oxlint*"
+  - "*oxfmt*"
   - "*jju*"

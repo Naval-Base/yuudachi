@@ -23,9 +23,9 @@ export function colorBasedOnDeterminant<T>(
 	predicates: PredicateEntry<T>[],
 ): string {
 	const res = stringExtractor(determinant);
-	for (const { color, predicate } of predicates) {
-		if (predicate(determinant)) {
-			return color(res);
+	for (const entry of predicates) {
+		if (entry.predicate(determinant)) {
+			return entry.color(res);
 		}
 	}
 

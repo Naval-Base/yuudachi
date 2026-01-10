@@ -50,7 +50,7 @@ export function Table(props: TableProps) {
 						<RACTable
 							{...props}
 							className={cx(
-								"**:drop-target:border-primary text-base-md **:drop-target:border table w-full min-w-full caption-bottom border-spacing-0 outline-hidden",
+								"**:drop-target:border-primary table w-full min-w-full caption-bottom border-spacing-0 text-base-md outline-hidden **:drop-target:border",
 								props.className,
 							)}
 						>
@@ -61,7 +61,7 @@ export function Table(props: TableProps) {
 					<RACTable
 						{...props}
 						className={cx(
-							"**:drop-target:border-primary text-base-md **:drop-target:border table w-full min-w-full caption-bottom border-spacing-0 outline-hidden",
+							"**:drop-target:border-primary table w-full min-w-full caption-bottom border-spacing-0 text-base-md outline-hidden **:drop-target:border",
 							props.className,
 						)}
 					>
@@ -82,7 +82,7 @@ function ColumnResizer(props: RACColumnResizerProps) {
 				"&[data-resizable-direction=left]:cursor-e-resize &[data-resizable-direction=right]:cursor-w-resize [&[data-resizing]>div]:bg-primary resizable-both:cursor-ew-resize absolute top-0 right-0 bottom-0 grid w-px touch-none place-content-center px-1",
 			)}
 		>
-			<div className="border-base-neutral-100 dark:border-base-neutral-700 h-full w-px py-3" />
+			<div className="h-full w-px border-base-neutral-100 py-3 dark:border-base-neutral-700" />
 		</RACColumnResizer>
 	);
 }
@@ -125,7 +125,7 @@ export function TableCell(props: TableCellProps) {
 }
 
 const columnStyles = cva({
-	base: "allows-sorting:cursor-pointer dragging:cursor-grabbing relative h-16 px-4 py-3 text-left whitespace-nowrap [&:has([slot=selection])]:pr-0",
+	base: "relative h-16 px-4 py-3 text-left whitespace-nowrap allows-sorting:cursor-pointer dragging:cursor-grabbing [&:has([slot=selection])]:pr-0",
 	variants: {
 		isResizable: {
 			true: "truncate overflow-hidden",
@@ -205,8 +205,8 @@ export function TableRow<Type extends object>(props: TableRowProps<Type>) {
 				props.className,
 				cx(
 					[
-						"tr group outline-base-tangerine-400 dark:outline-base-tangerine-600 relative cursor-default border-b -outline-offset-2 focus-visible:outline-2 forced-colors:outline-[Highlight]",
-						"bg-base-neutral-0 border-base-neutral-100 dark:bg-base-neutral-800 dark:border-base-neutral-700",
+						"tr group relative cursor-default border-b -outline-offset-2 outline-base-tangerine-400 focus-visible:outline-2 dark:outline-base-tangerine-600 forced-colors:outline-[Highlight]",
+						"border-base-neutral-100 bg-base-neutral-0 dark:border-base-neutral-700 dark:bg-base-neutral-800",
 						"selected:bg-base-tangerine-100/36 dark:selected:bg-base-tangerine-900/38",
 					],
 					"href" in props
@@ -225,7 +225,7 @@ export function TableRow<Type extends object>(props: TableRowProps<Type>) {
 			id={props.id!}
 		>
 			{allowsDragging && (
-				<RACCell className="group dragging:cursor-grabbing cursor-grab pr-0">
+				<RACCell className="group cursor-grab pr-0 dragging:cursor-grabbing">
 					<Button slot="drag">
 						<MenuIcon />
 					</Button>

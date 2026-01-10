@@ -4,7 +4,7 @@ import { Separator as RACSeparator, type SeparatorProps as RACSeparatorProps } f
 import { cva } from "@/styles/cva";
 
 const separatorStyles = cva({
-	base: "bg-base-neutral-100 text-base-neutral-100 dark:bg-base-neutral-700 dark:text-base-neutral-700 shrink-0 forced-colors:bg-[ButtonBorder]",
+	base: "shrink-0 bg-base-neutral-100 text-base-neutral-100 dark:bg-base-neutral-700 dark:text-base-neutral-700 forced-colors:bg-[ButtonBorder]",
 	variants: {
 		orientation: {
 			horizontal: "mx-3 my-2 h-px",

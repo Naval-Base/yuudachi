@@ -5,7 +5,7 @@ export const buttonStyles = compose(
 	focusRing,
 	cva({
 		base: [
-			"text-base-label-md relative isolate inline-flex place-content-center place-items-center gap-2 border border-transparent",
+			"relative isolate inline-flex place-content-center place-items-center gap-2 border border-transparent text-base-label-md",
 			"*:data-[slot=icon]:size-4.5 *:data-[slot=icon]:shrink-0 print:hidden",
 		],
 		variants: {
@@ -13,15 +13,15 @@ export const buttonStyles = compose(
 				unset: null,
 				outline: [
 					"h-10 rounded-sm px-4 py-2.5",
-					"border-base-neutral-300 text-base-neutral-800 bg-base-neutral-0 dark:bg-base-neutral-800 dark:border-base-neutral-500 dark:text-base-neutral-100",
-					"hover:bg-base-neutral-700 hover:text-base-neutral-40 dark:hover:bg-base-neutral-100 dark:hover:text-base-neutral-900 hover:border-transparent",
-					"focus-visible:bg-base-neutral-700 focus-visible:text-base-neutral-40 dark:focus-visible:bg-base-neutral-100 dark:focus-visible:text-base-neutral-900 focus-visible:border-transparent",
-					"pressed:bg-base-neutral-800 pressed:text-base-neutral-40 pressed:border-transparent dark:pressed:bg-base-neutral-60 dark:pressed:text-base-neutral-900",
-					"disabled:bg-base-neutral-40 disabled:text-base-neutral-900 disabled:border-base-neutral-300 dark:disabled:bg-base-neutral-800 dark:disabled:text-base-neutral-40",
+					"border-base-neutral-300 bg-base-neutral-0 text-base-neutral-800 dark:border-base-neutral-500 dark:bg-base-neutral-800 dark:text-base-neutral-100",
+					"hover:border-transparent hover:bg-base-neutral-700 hover:text-base-neutral-40 dark:hover:bg-base-neutral-100 dark:hover:text-base-neutral-900",
+					"focus-visible:border-transparent focus-visible:bg-base-neutral-700 focus-visible:text-base-neutral-40 dark:focus-visible:bg-base-neutral-100 dark:focus-visible:text-base-neutral-900",
+					"pressed:border-transparent pressed:bg-base-neutral-800 pressed:text-base-neutral-40 dark:pressed:bg-base-neutral-60 dark:pressed:text-base-neutral-900",
+					"disabled:border-base-neutral-300 disabled:bg-base-neutral-40 disabled:text-base-neutral-900 dark:disabled:bg-base-neutral-800 dark:disabled:text-base-neutral-40",
 				],
 				discreet: [
 					"h-10 rounded-sm px-4 py-2.5",
-					"text-base-neutral-800 dark:text-base-neutral-100 bg-transparent",
+					"bg-transparent text-base-neutral-800 dark:text-base-neutral-100",
 					"hover:bg-base-neutral-100 dark:hover:bg-base-neutral-700",
 					"focus-visible:bg-base-neutral-100 dark:focus-visible:bg-base-neutral-700",
 					"pressed:bg-base-neutral-200 dark:pressed:bg-base-neutral-600",
@@ -45,15 +45,15 @@ export const buttonStyles = compose(
 				],
 				"secondary-outline": [
 					"h-10 rounded-sm px-4 py-2.5",
-					"border-base-tangerine-300 text-base-neutral-800 bg-base-neutral-0 dark:bg-base-neutral-800 dark:border-base-tangerine-600 dark:text-base-neutral-40",
-					"hover:bg-base-tangerine-500 hover:text-base-neutral-900 hover:border-transparent",
-					"focus-visible:bg-base-tangerine-500 focus-visible:text-base-neutral-900 focus-visible:border-transparent",
-					"pressed:bg-base-tangerine-600 pressed:text-base-neutral-40 pressed:border-transparent dark:pressed:bg-base-tangerine-400 dark:pressed:text-base-neutral-900",
-					"disabled:bg-base-neutral-0 disabled:text-base-neutral-900 disabled:border-base-neutral-200 dark:text-base-neutral-40 dark:disabled:bg-base-neutral-800 dark:disabled:border-base-neutral-700",
+					"border-base-tangerine-300 bg-base-neutral-0 text-base-neutral-800 dark:border-base-tangerine-600 dark:bg-base-neutral-800 dark:text-base-neutral-40",
+					"hover:border-transparent hover:bg-base-tangerine-500 hover:text-base-neutral-900",
+					"focus-visible:border-transparent focus-visible:bg-base-tangerine-500 focus-visible:text-base-neutral-900",
+					"pressed:border-transparent pressed:bg-base-tangerine-600 pressed:text-base-neutral-40 dark:pressed:bg-base-tangerine-400 dark:pressed:text-base-neutral-900",
+					"disabled:border-base-neutral-200 disabled:bg-base-neutral-0 disabled:text-base-neutral-900 dark:text-base-neutral-40 dark:disabled:border-base-neutral-700 dark:disabled:bg-base-neutral-800",
 				],
 				"secondary-discreet": [
 					"h-10 rounded-sm px-4 py-2.5",
-					"text-base-tangerine-600 dark:text-base-tangerine-400 bg-transparent",
+					"bg-transparent text-base-tangerine-600 dark:text-base-tangerine-400",
 					"hover:bg-base-tangerine-100 hover:text-base-tangerine-700 dark:hover:bg-base-tangerine-800 dark:hover:text-base-tangerine-300",
 					"focus-visible:bg-base-tangerine-100 focus-visible:text-base-tangerine-700 dark:focus-visible:bg-base-tangerine-800 dark:focus-visible:text-base-tangerine-300",
 					"pressed:bg-base-tangerine-200 pressed:text-base-tangerine-800 dark:pressed:bg-base-tangerine-700 dark:pressed:text-base-tangerine-100",
@@ -77,10 +77,10 @@ export const buttonStyles = compose(
 				],
 				"crystal-tonal": [
 					"h-10 rounded-sm px-4 py-2.5",
-					"bg-base-crystal-300 text-base-neutral-900 dark:bg-base-crystal-700 dark:text-base-neutral-40",
+					"bg-base-crystal-300 dark:bg-base-crystal-700 text-base-neutral-900 dark:text-base-neutral-40",
 					"hover:bg-base-crystal-500 dark:hover:text-base-neutral-900",
 					"focus-visible:bg-base-crystal-500 dark:focus-visible:text-base-neutral-900",
-					"pressed:bg-base-crystal-600 pressed:text-base-neutral-40 dark:pressed:bg-base-crystal-400 dark:pressed:text-base-neutral-900",
+					"pressed:bg-base-crystal-600 dark:pressed:bg-base-crystal-400 pressed:text-base-neutral-40 dark:pressed:text-base-neutral-900",
 					"disabled:bg-base-neutral-200 disabled:text-base-neutral-900 dark:disabled:bg-base-neutral-700 dark:disabled:text-base-neutral-40",
 				],
 				tooltip: [

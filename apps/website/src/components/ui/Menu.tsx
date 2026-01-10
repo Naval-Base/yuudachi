@@ -69,7 +69,7 @@ export function MenuContent<Type extends object>({ popover, ...props }: MenuCont
 			<RACMenu
 				{...props}
 				className={cx(
-					'grid max-h-[inherit] grid-cols-[auto_1fr] gap-x-2 overflow-x-hidden overflow-y-auto overscroll-contain p-2 outline-hidden *:[[role="group"]+[role="group"]]:mt-2 *:[[role="group"]+[role="separator"]]:mt-1',
+					"grid max-h-[inherit] grid-cols-[auto_1fr] gap-x-2 overflow-x-hidden overflow-y-auto overscroll-contain p-2 outline-hidden *:[[role='group']+[role='group']]:mt-2 *:[[role='group']+[role='separator']]:mt-1",
 					props.className,
 				)}
 				data-slot="menu-content"
@@ -83,7 +83,7 @@ export function StandaloneMenuContent<Type extends object>(props: RACMenuProps<T
 		<RACMenu
 			{...props}
 			className={cx(
-				'grid max-h-[inherit] grid-cols-[auto_1fr] gap-x-2 overflow-x-hidden overflow-y-auto overscroll-contain p-2 outline-hidden *:[[role="group"]+[role="group"]]:mt-2 *:[[role="group"]+[role="separator"]]:mt-1',
+				"grid max-h-[inherit] grid-cols-[auto_1fr] gap-x-2 overflow-x-hidden overflow-y-auto overscroll-contain p-2 outline-hidden *:[[role='group']+[role='group']]:mt-2 *:[[role='group']+[role='separator']]:mt-1",
 				props.className,
 			)}
 		/>
@@ -130,12 +130,12 @@ export function MenuItem({ isDestructive = false, ...props }: MenuItemProps) {
 						<>
 							{values.selectionMode === "single" && (
 								<div
-									className="bg-base-tangerine-600 dark:bg-base-tangerine-400 flex size-[18px] place-content-center place-items-center place-self-end self-center rounded-full"
+									className="flex size-[18px] place-content-center place-items-center place-self-end self-center rounded-full bg-base-tangerine-600 dark:bg-base-tangerine-400"
 									data-slot="checked-icon"
 								>
 									<CheckIcon
 										aria-hidden
-										className="text-base-neutral-40 dark:text-base-neutral-900 size-3.5 shrink-0"
+										className="size-3.5 shrink-0 text-base-neutral-40 dark:text-base-neutral-900"
 									/>
 								</div>
 							)}
@@ -160,7 +160,7 @@ export function MenuHeader({ className, separator = false, ...props }: MenuHeade
 		<RACHeader
 			{...props}
 			className={cx(
-				"text-base-label-sm col-span-full px-2.5 py-2",
+				"col-span-full px-2.5 py-2 text-base-label-sm",
 				separator && "-mx-1 mb-1 border-b sm:px-3 sm:pb-2.5",
 				className,
 			)}
@@ -175,7 +175,7 @@ type MenuSectionProps<Type> = RACMenuSectionProps<Type> & {
 export function MenuSection<Type extends object>(props: MenuSectionProps<Type>) {
 	return (
 		<RACMenuSection {...props} className={cx("col-span-full grid grid-cols-[auto_1fr]", props.className)}>
-			{props.label && <RACHeader className="text-base-label-sm col-span-full px-2.5 py-1">{props.label}</RACHeader>}
+			{props.label && <RACHeader className="col-span-full px-2.5 py-1 text-base-label-sm">{props.label}</RACHeader>}
 			<RACCollection items={props.items!}>{props.children}</RACCollection>
 		</RACMenuSection>
 	);

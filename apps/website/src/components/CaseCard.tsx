@@ -39,7 +39,7 @@ function caseActionLabel(key: CaseAction) {
 }
 
 function generateCaseColor(key: CaseAction) {
-	// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+	// oxlint-disable-next-line switch-exhaustiveness-check
 	switch (key) {
 		case CaseAction.Role:
 		case CaseAction.Warn:

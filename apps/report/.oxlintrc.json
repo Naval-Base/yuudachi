@@ -1,0 +1,33 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"extends": [
+		"node_modules/eslint-config-neon/oxlint-configs/common.json",
+		"node_modules/eslint-config-neon/oxlint-configs/node.json",
+		"node_modules/eslint-config-neon/oxlint-configs/typescript.json",
+		"node_modules/eslint-config-neon/oxlint-configs/react.json",
+		"node_modules/eslint-config-neon/oxlint-configs/jsx-a11y.json",
+		"node_modules/eslint-config-neon/oxlint-configs/next.json",
+		"node_modules/eslint-config-neon/oxlint-configs/edge.json",
+		"node_modules/eslint-config-neon/oxlint-configs/prettier.json"
+	],
+	"ignorePatterns": [
+		"**/node_modules/",
+		".git/",
+		"**/dist/",
+		"**/template/",
+		"**/coverage/",
+		"**/.next/",
+		"**/shiki.bundle.ts"
+	],
+	"rules": {
+		"id-length": [
+			2,
+			{
+				"exceptions": ["_", "$", "a", "b", "d", "v", "x", "y"],
+				"min": 2
+			}
+		],
+		"no-restricted-globals": 0,
+		"typescript/unbound-method": 0
+	}
+}

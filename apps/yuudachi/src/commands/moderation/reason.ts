@@ -113,9 +113,9 @@ export default class extends Command<typeof ReasonCommand> {
 							content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 							components: [],
 						});
-					} catch (error_) {
-						const error = error_ as Error;
-						logger.error(error, error.message);
+					} catch (error) {
+						const error_ = error as Error;
+						logger.error(error_, error_.message);
 					}
 
 					return undefined;

@@ -7,6 +7,7 @@ import { generateHistory, HistoryType } from "../../util/generateHistory.js";
 
 type HistoryCommandArgs =
 	| ArgsParam<typeof HistoryCommand>["cases"]
+	// oxlint-disable-next-line no-duplicate-type-constituents
 	| ArgsParam<typeof HistoryCommand>["reports"]
 	| ArgsParam<typeof HistoryUserContextCommand>;
 
@@ -38,7 +39,7 @@ export default class extends Command<typeof HistoryCommand | typeof HistoryUserC
 			flags: args.cases?.hide || args.reports?.hide ? MessageFlags.Ephemeral : undefined,
 		});
 
-		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+		// oxlint-disable-next-line switch-exhaustiveness-check
 		switch (Object.keys(args)[0]) {
 			case "cases": {
 				await this.handle(interaction, args.cases, HistoryType.Case, locale);

@@ -33,7 +33,7 @@ export const scamDomainRequestHeaders = {
 	SCAM_DOMAIN_DISCORD_URL: {},
 } as const;
 
-export async function refreshScamDomains(redis?: Redis | undefined) {
+export async function refreshScamDomains(redis?: Redis) {
 	let localRedis = redis;
 	if (!redis) {
 		localRedis = container.get<Redis>(kRedis);

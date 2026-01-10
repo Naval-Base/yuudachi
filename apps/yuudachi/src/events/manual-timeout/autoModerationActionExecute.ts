@@ -2,8 +2,13 @@ import { on } from "node:events";
 import { inject, injectable } from "@needle-di/core";
 import { logger, kRedis } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { type AutoModerationActionExecution, Client } from "discord.js";
-import { AutoModerationRuleTriggerType, AutoModerationActionType, Events } from "discord.js";
+import {
+	type AutoModerationActionExecution,
+	AutoModerationRuleTriggerType,
+	AutoModerationActionType,
+	Events,
+	Client,
+} from "discord.js";
 import i18next from "i18next";
 import type { Redis } from "ioredis";
 import { CaseAction, createCase } from "../../functions/cases/createCase.js";
@@ -54,7 +59,7 @@ export default class implements Event {
 				);
 
 				let reasonType = "default";
-				// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+				// oxlint-disable-next-line switch-exhaustiveness-check
 				switch (autoModAction.ruleTriggerType) {
 					case AutoModerationRuleTriggerType.Keyword:
 						reasonType = "keyword";
@@ -87,9 +92,9 @@ export default class implements Event {
 				);
 
 				await upsertCaseLog(guild, this.client.user, case_);
-			} catch (error_) {
-				const error = error_ as Error;
-				logger.error(error, error.message);
+			} catch (error) {
+				const error_ = error as Error;
+				logger.error(error_, error_.message);
 			}
 		}
 	}

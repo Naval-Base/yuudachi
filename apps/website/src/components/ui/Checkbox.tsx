@@ -37,7 +37,7 @@ const boxStyles = compose(
 				unset: null,
 				default: [
 					"size-4 rounded-xs border-[1.5px] *:data-[slot=check-indicator]:size-3.5",
-					"bg-base-neutral-0 border-base-neutral-300 text-base-neutral-40 dark:bg-base-neutral-800 dark:border-base-neutral-300",
+					"border-base-neutral-300 bg-base-neutral-0 text-base-neutral-40 dark:border-base-neutral-300 dark:bg-base-neutral-800",
 					"group-hover:border-base-neutral-200 dark:group-hover:border-base-neutral-600",
 					"group-focus-visible:border-base-neutral-200 dark:group-focus-visible:border-base-neutral-600",
 					"group-pressed:border-base-neutral-100 dark:group-pressed:border-base-neutral-700",
@@ -49,10 +49,10 @@ const boxStyles = compose(
 			},
 			isSelected: {
 				true: [
-					"bg-base-neutral-700 dark:bg-base-neutral-100 dark:text-base-neutral-900 border-transparent dark:border-transparent",
-					"group-hover:bg-base-neutral-500 dark:group-hover:bg-base-neutral-300 group-hover:border-transparent dark:group-hover:border-transparent",
-					"group-focus-visible:bg-base-neutral-500 dark:group-focus-visible:bg-base-neutral-300 group-focus-visible:border-transparent dark:group-focus-visible:border-transparent",
-					"group-pressed:bg-base-neutral-400 group-pressed:text-base-neutral-800 dark:group-pressed:text-base-neutral-900 dark:group-pressed:bg-base-neutral-400 dark:group-pressed:border-transparent group-pressed:border-transparent",
+					"border-transparent bg-base-neutral-700 dark:border-transparent dark:bg-base-neutral-100 dark:text-base-neutral-900",
+					"group-hover:border-transparent group-hover:bg-base-neutral-500 dark:group-hover:border-transparent dark:group-hover:bg-base-neutral-300",
+					"group-focus-visible:border-transparent group-focus-visible:bg-base-neutral-500 dark:group-focus-visible:border-transparent dark:group-focus-visible:bg-base-neutral-300",
+					"group-pressed:border-transparent group-pressed:bg-base-neutral-400 group-pressed:text-base-neutral-800 dark:group-pressed:border-transparent dark:group-pressed:bg-base-neutral-400 dark:group-pressed:text-base-neutral-900",
 					"group-invalid:bg-base-sunset-500 group-invalid:text-base-neutral-900",
 					"group-invalid:group-hover:bg-base-sunset-200 dark:group-invalid:group-hover:bg-base-sunset-700 dark:group-invalid:group-hover:text-base-neutral-40",
 					"group-invalid:group-focus-visible:bg-base-sunset-200 dark:group-invalid:group-focus-visible:bg-base-sunset-700 dark:group-invalid:group-focus-visible:text-base-neutral-40",

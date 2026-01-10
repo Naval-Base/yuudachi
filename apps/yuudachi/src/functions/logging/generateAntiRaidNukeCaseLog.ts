@@ -7,7 +7,7 @@ export async function generateAntiRaidNukeCaseLog(
 	guildId: Snowflake,
 	cases: Case[],
 	reason: string,
-	messageUrl?: string | null | undefined,
+	messageUrl?: string | null,
 ) {
 	const locale = await getGuildSetting(guildId, SettingsKeys.Locale);
 

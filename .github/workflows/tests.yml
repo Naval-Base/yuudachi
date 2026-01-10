@@ -28,8 +28,8 @@ jobs:
       - name: Build dependencies
         run: pnpm run build
 
-      - name: ESLint
-        run: pnpm run lint --format=compact
+      - name: Oxlint
+        run: pnpm run lint
 
       - name: Tests
         run: pnpm run test

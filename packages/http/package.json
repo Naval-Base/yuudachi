@@ -2,68 +2,72 @@
 	"name": "@yuudachi/http",
 	"version": "0.1.5",
 	"description": "",
-	"scripts": {
-		"build:clean": "del-cli dist",
-		"build:check": "tsc --emitDeclarationOnly",
-		"build:esm": "swc ./src --out-dir ./dist --strip-leading-paths",
-		"build": "pnpm run build:clean && pnpm run build:check && pnpm run build:esm",
-		"example": "pnpm --filter @yuudachi/framework build && pnpm run build && env-cmd tsx ./example/index.ts",
-		"lint": "pnpm run build:check && prettier --check . && cross-env TIMING=1 eslint src --ext ts --format=pretty",
-		"format": "pnpm run build:check && prettier --write . && cross-env TIMING=1 eslint src --ext ts --fix --format=pretty",
-		"fmt": "pnpm run format",
-		"prepack": "pnpm run lint && pnpm run build"
-	},
-	"type": "module",
-	"module": "./dist/index.js",
-	"typings": "./dist/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./types": {
-			"types": "./dist/types/index.d.ts"
-		}
-	},
+	"keywords": [],
+	"license": "AGPL-3.0",
+	"author": "iCrawl <icrawltogo@gmail.com>",
 	"directories": {
 		"lib": "src"
 	},
 	"files": [
 		"dist"
 	],
-	"keywords": [],
-	"author": "iCrawl <icrawltogo@gmail.com>",
-	"license": "AGPL-3.0",
+	"type": "module",
+	"module": "./dist/index.js",
+	"typings": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./types": {
+			"types": "./dist/types/index.d.ts"
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build:clean": "del-cli dist",
+		"build:check": "tsgo --emitDeclarationOnly",
+		"build:esm": "swc ./src --out-dir ./dist --strip-leading-paths",
+		"build": "pnpm run build:clean && pnpm run build:check && pnpm run build:esm",
+		"example": "pnpm --filter @yuudachi/framework build && pnpm run build && env-cmd tsx ./example/index.ts",
+		"lint": "pnpm run build:check && oxfmt --check && oxlint --tsconfig=tsconfig.eslint.json --type-aware src",
+		"format": "pnpm run build:check && oxfmt && oxlint --tsconfig=tsconfig.eslint.json --type-aware src --fix --fix-suggestions",
+		"fmt": "pnpm run format",
+		"prepack": "pnpm run lint && pnpm run build"
+	},
 	"dependencies": {
 		"@discordjs/core": "^2.4.0",
 		"@fastify/helmet": "^13.0.2",
 		"@fastify/sensible": "^6.0.4",
-		"@swc/helpers": "^0.5.17",
-		"discord-api-types": "0.38.36",
+		"@swc/helpers": "^0.5.18",
+		"discord-api-types": "0.38.37",
 		"discord-verify": "^1.2.0",
 		"fastify": "^5.6.2",
 		"fastify-raw-body": "^5.0.0"
 	},
 	"devDependencies": {
 		"@swc/cli": "^0.7.9",
-		"@swc/core": "^1.15.7",
-		"@types/node": "^25.0.3",
+		"@swc/core": "^1.15.8",
+		"@types/node": "^25.0.5",
+		"@typescript/native-preview": "7.0.0-dev.20260109.1",
 		"@yuudachi/framework": "workspace:^",
 		"cross-env": "^10.1.0",
 		"del-cli": "^7.0.0",
 		"env-cmd": "^11.0.0",
 		"eslint": "^9.39.2",
-		"eslint-config-neon": "^0.2.9",
+		"eslint-config-neon": "^0.3.2",
 		"eslint-formatter-compact": "^9.0.1",
 		"eslint-formatter-pretty": "^7.0.0",
+		"oxfmt": "^0.23.0",
+		"oxlint": "^1.38.0",
+		"oxlint-tsgolint": "^0.11.0",
 		"prettier": "^3.7.4",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	},
 	"engines": {
 		"node": ">=24.0.0"
-	},
-	"publishConfig": {
-		"access": "public"
 	}
 }

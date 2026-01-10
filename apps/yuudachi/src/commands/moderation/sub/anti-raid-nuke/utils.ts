@@ -125,6 +125,6 @@ export async function validateMemberIds(
 	};
 }
 
-export function parseDate(date?: string | null | undefined) {
+export function parseDate(date?: string | null) {
 	return date ? dayjs(resolveTimestamp(date)).format(DATE_FORMAT_WITH_SECONDS) : undefined;
 }

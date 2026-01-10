@@ -109,9 +109,9 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 						content: i18next.t("command.common.errors.timed_out", { lng: locale }),
 						components: [],
 					});
-				} catch (error_) {
-					const error = error_ as Error;
-					logger.error(error, error.message);
+				} catch (error) {
+					const error_ = error as Error;
+					logger.error(error_, error_.message);
 				}
 
 				return undefined;
@@ -160,9 +160,9 @@ export default class extends Command<typeof RefreshScamlistCommand> {
 						inline: true,
 					});
 				}
-			} catch (error_) {
-				const error = error_ as Error;
-				logger.error(error, error.message);
+			} catch (error) {
+				const error_ = error as Error;
+				logger.error(error_, error_.message);
 				embed = addFields({
 					color: Color.DiscordDanger,
 					title: i18next.t("command.utility.refresh_scamlist.error", {

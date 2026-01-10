@@ -49,7 +49,6 @@ export default defineConfig({
 				h3: {
 					"margin-top": "0.75em",
 				},
-				// eslint-disable-next-line id-length
 				p: {
 					margin: ".5em 0",
 				},

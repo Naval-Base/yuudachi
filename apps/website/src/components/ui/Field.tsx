@@ -22,7 +22,7 @@ export function Label(props: RACLabelProps) {
 		<RACLabel
 			{...props}
 			className={cx(
-				"text-base-neutral-800 dark:text-base-neutral-100 group-invalid:text-base-sunset-500 group-disabled:text-base-neutral-900 dark:group-disabled:text-base-neutral-40 text-base-label-md w-fit select-none group-disabled:opacity-38 in-disabled:opacity-38",
+				"w-fit text-base-label-md text-base-neutral-800 select-none group-invalid:text-base-sunset-500 group-disabled:text-base-neutral-900 group-disabled:opacity-38 in-disabled:opacity-38 dark:text-base-neutral-100 dark:group-disabled:text-base-neutral-40",
 				props.className,
 			)}
 			data-slot="label"
@@ -34,7 +34,7 @@ export function Description(props: RACTextProps) {
 	return (
 		<RACText
 			{...props}
-			className={cx("text-base-neutral-600 dark:text-base-neutral-300 text-base-sm text-pretty", props.className)}
+			className={cx("text-base-sm text-pretty text-base-neutral-600 dark:text-base-neutral-300", props.className)}
 			slot="description"
 		/>
 	);

@@ -168,6 +168,7 @@ export async function filter(
 				lng: locale,
 			}),
 
+			// oxlint-disable-next-line no-base-to-string
 			codeBlock(parsedPattern.toString()),
 		);
 	}

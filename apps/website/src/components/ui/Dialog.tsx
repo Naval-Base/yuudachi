@@ -33,7 +33,7 @@ export function DialogHeader({ hasBorder = false, ...props }: DialogHeaderProps)
 			className={cx(
 				"relative flex flex-col gap-1 p-6 pb-4",
 				hasBorder &&
-					"border-base-neutral-100 dark:border-base-neutral-700 border-b [&[data-slot=dialog-header]:has(+[data-slot=dialog-footer])]:border-0",
+					"border-b border-base-neutral-100 dark:border-base-neutral-700 [&[data-slot=dialog-header]:has(+[data-slot=dialog-footer])]:border-0",
 				props.className,
 			)}
 			data-slot="dialog-header"
@@ -55,7 +55,7 @@ export function DialogTitle({ level = 2, ...props }: DialogTitleProps) {
 	return (
 		<RACHeading
 			{...props}
-			className={cx("text-base-label-md flex flex-1 place-items-center text-balance", props.className)}
+			className={cx("flex flex-1 place-items-center text-base-label-md text-balance", props.className)}
 			level={level}
 			slot="title"
 		/>
@@ -90,7 +90,7 @@ export function DialogFooter({ hasBorder = false, ...props }: DialogFooterProps)
 			{...props}
 			className={cx(
 				"isolate mt-auto flex flex-col-reverse place-content-between gap-3 p-6 sm:flex-row sm:place-content-end sm:place-items-center",
-				hasBorder && "border-base-neutral-100 dark:border-base-neutral-700 border-t",
+				hasBorder && "border-t border-base-neutral-100 dark:border-base-neutral-700",
 				props.className,
 			)}
 			data-slot="dialog-footer"
@@ -115,7 +115,7 @@ export function DialogCloseIndicator(props: CloseButtonIndicatorProps) {
 			{...props}
 			aria-label="Close"
 			className={cx(
-				"close text-base-neutral-500 hover:text-base-neutral-700 focus-visible:text-base-neutral-700 pressed:text-base-neutral-900 dark:text-base-neutral-400 dark:hover:text-base-neutral-200 dark:focus-visible:text-base-neutral-200 dark:pressed:text-base-neutral-500 disabled:text-base-neutral-300 dark:disabled:text-base-neutral-300 absolute top-3 right-4 z-50 grid place-content-center rounded-full",
+				"close absolute top-3 right-4 z-50 grid place-content-center rounded-full text-base-neutral-500 hover:text-base-neutral-700 focus-visible:text-base-neutral-700 disabled:text-base-neutral-300 dark:text-base-neutral-400 dark:hover:text-base-neutral-200 dark:focus-visible:text-base-neutral-200 dark:disabled:text-base-neutral-300 pressed:text-base-neutral-900 dark:pressed:text-base-neutral-500",
 				props.className,
 			)}
 			size="icon-xs"

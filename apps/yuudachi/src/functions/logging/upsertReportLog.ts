@@ -20,7 +20,7 @@ export async function upsertReportLog(
 	message?: Message,
 	messageContext?: Collection<string, Message>,
 ) {
-	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+	// oxlint-disable-next-line no-empty-object-type
 	const sql = container.get<Sql<{}>>(kSQL);
 	const reportForum = checkReportForum(guild, await getGuildSetting(guild.id, SettingsKeys.ReportChannelId));
 	const reportStatusTags = await getGuildSetting<ReportStatusTagTuple>(guild.id, SettingsKeys.ReportStatusTags);

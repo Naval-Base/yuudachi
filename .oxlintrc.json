@@ -1,0 +1,50 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"extends": [
+		"node_modules/eslint-config-neon/oxlint-configs/common.json",
+		"node_modules/eslint-config-neon/oxlint-configs/node.json",
+		"node_modules/eslint-config-neon/oxlint-configs/typescript.json",
+		"node_modules/eslint-config-neon/oxlint-configs/prettier.json"
+	],
+	"ignorePatterns": [
+		"**/node_modules/",
+		".git/",
+		"**/dist/",
+		"**/template/",
+		"**/coverage/",
+		"**/.next/",
+		"**/shiki.bundle.ts"
+	],
+	"rules": {
+		"id-length": [
+			2,
+			{
+				"exceptions": [
+					"_",
+					"$",
+					"a",
+					"b",
+					"v",
+					"x",
+					"y",
+					"k",
+					"C",
+					"G",
+					"I",
+					"K",
+					"M",
+					"N",
+					"O",
+					"P",
+					"R",
+					"T",
+					"U",
+					"Z"
+				],
+				"min": 2
+			}
+		],
+		"no-restricted-globals": 0,
+		"no-redundant-type-constituents": 0
+	}
+}

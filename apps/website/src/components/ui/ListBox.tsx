@@ -13,7 +13,7 @@ export function ListBox<Type extends object>(props: RACListBoxProps<Type>) {
 			{...props}
 			className={composeRenderProps(props.className, (className) =>
 				cx(
-					'border-base-neutral-200 dark:border-base-neutral-600 shadow-base-sm grid max-h-96 w-full min-w-56 grid-cols-[auto_1fr] gap-x-1 overflow-y-auto overscroll-contain rounded-sm border p-2 outline-hidden [scrollbar-width:thin] *:[[role="group"]+[role=group]]:mt-4 *:[[role="group"]+[role=separator]]:mt-1',
+					"grid max-h-96 w-full min-w-56 grid-cols-[auto_1fr] gap-x-1 overflow-y-auto overscroll-contain rounded-sm border border-base-neutral-200 p-2 shadow-base-sm outline-hidden [scrollbar-width:thin] dark:border-base-neutral-600 *:[[role='group']+[role='group']]:mt-4 *:[[role='group']+[role='separator']]:mt-1",
 
 					className,
 				),
@@ -66,7 +66,7 @@ export function ListBoxItem<Type extends object>(props: ListBoxItemProps<Type>) 
 						{isSelected && (
 							<div
 								className={cx(
-									"bg-base-tangerine-600 dark:bg-base-tangerine-400 col-start-2 row-start-1 flex size-[18px] shrink-0 place-content-center place-items-center place-self-end rounded-full",
+									"col-start-2 row-start-1 flex size-[18px] shrink-0 place-content-center place-items-center place-self-end rounded-full bg-base-tangerine-600 dark:bg-base-tangerine-400",
 									props.classNames?.selected,
 								)}
 								data-slot="check-indicator"

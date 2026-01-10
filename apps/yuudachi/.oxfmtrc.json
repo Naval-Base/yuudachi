@@ -1,0 +1,22 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"printWidth": 120,
+	"useTabs": true,
+	"quoteProps": "as-needed",
+	"trailingComma": "all",
+	"endOfLine": "lf",
+	"ignorePatterns": [
+		"tsup.config.bundled*",
+		"vitest.config.ts.timestamp*",
+		"pnpm-lock.yaml",
+		"dist",
+		"coverage",
+		"locales",
+		"!locales/en-US"
+	],
+	"experimentalSortImports": {
+		"groups": [["builtin"], ["external"], ["internal"], ["parent"], ["sibling"], ["index"]],
+		"ignoreCase": false,
+		"newlinesBetween": false
+	}
+}

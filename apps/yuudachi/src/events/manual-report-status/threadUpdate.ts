@@ -3,8 +3,7 @@ import { setTimeout as pSetTimeout } from "node:timers/promises";
 import { inject, injectable } from "@needle-di/core";
 import { logger, kSQL, arrayEquals } from "@yuudachi/framework";
 import type { Event } from "@yuudachi/framework/types";
-import { type ThreadChannel, Client } from "discord.js";
-import { AuditLogEvent, Events } from "discord.js";
+import { type ThreadChannel, AuditLogEvent, Events, Client } from "discord.js";
 import type { Sql } from "postgres";
 import { AUDIT_LOG_WAIT_SECONDS } from "../../Constants.js";
 import { upsertReportLog } from "../../functions/logging/upsertReportLog.js";
@@ -70,9 +69,9 @@ export default class implements Event {
 						}
 					}
 				}
-			} catch (error_) {
-				const error = error_ as Error;
-				logger.error(error, error.message);
+			} catch (error) {
+				const error_ = error as Error;
+				logger.error(error_, error_.message);
 			}
 		}
 	}

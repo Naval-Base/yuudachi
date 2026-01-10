@@ -35,13 +35,13 @@ export function PopoverFooter(props: DialogFooterProps) {
 }
 
 const contentStyles = cva({
-	base: "group/popover border-base-neutral-200 dark:border-base-neutral-600 shadow-base-sm bg-base-neutral-0 dark:bg-base-neutral-800 text-base-md max-w-xs min-w-(--trigger-width) origin-(--trigger-anchor-point) rounded-sm border transition-transform [scrollbar-width:thin] forced-colors:bg-[Canvas] overflow-y-auto",
+	base: "group/popover max-w-xs min-w-(--trigger-width) origin-(--trigger-anchor-point) overflow-y-auto rounded-sm border border-base-neutral-200 bg-base-neutral-0 text-base-md shadow-base-sm transition-transform [scrollbar-width:thin] dark:border-base-neutral-600 dark:bg-base-neutral-800 forced-colors:bg-[Canvas]",
 	variants: {
 		isEntering: {
-			true: "fade-in animate-in placement-left:slide-in-from-right-1 placement-right:slide-in-from-left-1 placement-top:slide-in-from-bottom-1 placement-bottom:slide-in-from-top-1 duration-150 ease-out",
+			true: "animate-in duration-150 ease-out fade-in placement-left:slide-in-from-right-1 placement-right:slide-in-from-left-1 placement-top:slide-in-from-bottom-1 placement-bottom:slide-in-from-top-1",
 		},
 		isExiting: {
-			true: "fade-out animate-out placement-left:slide-out-to-right-1 placement-right:slide-out-to-left-1 placement-top:slide-out-to-bottom-1 placement-bottom:slide-out-to-top-1 duration-100 ease-in",
+			true: "animate-out duration-100 ease-in fade-out placement-left:slide-out-to-right-1 placement-right:slide-out-to-left-1 placement-top:slide-out-to-bottom-1 placement-bottom:slide-out-to-top-1",
 		},
 	},
 });
@@ -69,7 +69,7 @@ export function PopoverContent({ showArrow = true, ...props }: PopoverContentPro
 					{showArrow && (
 						<RACOverlayArrow className="group">
 							<svg
-								className="fill-base-neutral-0 dark:fill-base-neutral-800 stroke-base-neutral-200 dark:stroke-base-neutral-600 group-placement-left:-rotate-90 fill-overlay stroke-border group-placement-bottom:rotate-180 group-placement-right:rotate-90 block forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
+								className="fill-overlay stroke-border block fill-base-neutral-0 stroke-base-neutral-200 group-placement-left:-rotate-90 group-placement-right:rotate-90 group-placement-bottom:rotate-180 dark:fill-base-neutral-800 dark:stroke-base-neutral-600 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
 								height={12}
 								viewBox="0 0 12 12"
 								width={12}

@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { notFound } from "next/navigation";
 import rehypeHighlight from "rehype-highlight";
 import rehypeIgnore from "rehype-ignore";
 import rehypeRaw from "rehype-raw";

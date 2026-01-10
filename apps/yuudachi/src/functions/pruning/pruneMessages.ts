@@ -5,7 +5,7 @@ type MessageOrder = {
 	oldest: Message;
 };
 
-export function orderMessages(first: Message, second?: Message | null | undefined): MessageOrder {
+export function orderMessages(first: Message, second?: Message | null): MessageOrder {
 	if (first.id === second?.id || !second) {
 		return {
 			newest: undefined,
@@ -22,7 +22,7 @@ export function orderMessages(first: Message, second?: Message | null | undefine
 	};
 }
 
-export async function fetchMessages(from: Message, to?: Message | null | undefined) {
+export async function fetchMessages(from: Message, to?: Message | null) {
 	const { newest, oldest } = orderMessages(from, to);
 	const res = new Collection<Snowflake, Message>();
 

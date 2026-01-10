@@ -1,7 +1,7 @@
 import { ms } from "@naval-base/ms";
 import { SnowflakeUtil } from "discord.js";
 
-export function resolveTimestamp(dateString?: string | null | undefined) {
+export function resolveTimestamp(dateString?: string | null) {
 	if (!dateString) {
 		return null;
 	}

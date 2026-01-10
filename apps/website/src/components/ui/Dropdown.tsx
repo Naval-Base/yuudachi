@@ -28,7 +28,7 @@ export function DropdownSection<Type extends object>(props: DropdownSectionProps
 	return (
 		<RACListBoxSection {...props} className={cx("col-span-full grid grid-cols-[auto_1fr]", props.className)}>
 			{props.title && (
-				<RACHeader className="text-base-label-sm text-base-neutral-600 dark:text-base-neutral-300 col-span-full px-3 py-2">
+				<RACHeader className="col-span-full px-3 py-2 text-base-label-sm text-base-neutral-600 dark:text-base-neutral-300">
 					{props.title}
 				</RACHeader>
 			)}
@@ -44,12 +44,12 @@ export function DropdownLabel(props: RACTextProps) {
 export const dropdownItemStyles = cva({
 	base: [
 		"col-span-full grid grid-cols-[auto_1fr_1.5rem_0.5rem_auto] not-has-[[slot=description]]:items-center has-[[slot=description]]:**:data-[slot=check-indicator]:mt-[1.5px] supports-[grid-template-columns:subgrid]:grid-cols-subgrid",
-		"group forced-color:text-[Highlight] text-base-md h-inherit relative cursor-default rounded-sm px-3 py-2.5 outline-0 forced-color-adjust-none select-none has-[[slot=description]]:h-[inherit] has-[[slot=description]]:place-content-center forced-colors:text-[LinkText]",
-		"text-base-neutral-900 dark:text-base-neutral-40 bg-base-neutral-0 dark:bg-base-neutral-800",
+		"group forced-color:text-[Highlight] h-inherit relative cursor-default rounded-sm px-3 py-2.5 text-base-md outline-0 forced-color-adjust-none select-none has-[[slot=description]]:h-[inherit] has-[[slot=description]]:place-content-center forced-colors:text-[LinkText]",
+		"bg-base-neutral-0 text-base-neutral-900 dark:bg-base-neutral-800 dark:text-base-neutral-40",
 		"hover:bg-base-neutral-80 dark:hover:bg-base-neutral-700/72",
 		"focus-visible:bg-base-neutral-80 dark:focus-visible:bg-base-neutral-700/72",
 		"pressed:bg-base-neutral-100 dark:pressed:bg-base-neutral-700/72",
-		"data-destructive:text-base-sunset-600 dark:data-destructive:text-base-sunset-400 data-destructive:hover:bg-base-sunset-100 dark:data-destructive:hover:bg-base-sunset-800 data-destructive:hover:text-base-sunset-700 dark:data-destructive:hover:text-base-sunset-300 data-destructive:focus-visible:bg-base-sunset-100 dark:data-destructive:focus-visible:bg-base-sunset-800 data-destructive:focus-visible:hover:text-base-sunset-700 dark:data-destructive:focus-visible:text-base-sunset-300 data-destructive:pressed:bg-base-sunset-200 dark:data-destructive:pressed:bg-base-sunset-700 data-destructive:pressed:text-base-sunset-800 dark:data-destructive:pressed:text-base-sunset-100",
+		"data-destructive:text-base-sunset-600 data-destructive:hover:bg-base-sunset-100 data-destructive:hover:text-base-sunset-700 data-destructive:focus-visible:bg-base-sunset-100 data-destructive:focus-visible:hover:text-base-sunset-700 dark:data-destructive:text-base-sunset-400 dark:data-destructive:hover:bg-base-sunset-800 dark:data-destructive:hover:text-base-sunset-300 dark:data-destructive:focus-visible:bg-base-sunset-800 dark:data-destructive:focus-visible:text-base-sunset-300 data-destructive:pressed:bg-base-sunset-200 data-destructive:pressed:text-base-sunset-800 dark:data-destructive:pressed:bg-base-sunset-700 dark:data-destructive:pressed:text-base-sunset-100",
 		"forced-colors:**:data-[slot=icon]:text-[CanvasText] forced-colors:group-data-focused:**:data-[slot=icon]:text-[Canvas]",
 	],
 	variants: {
@@ -89,7 +89,7 @@ export function DropdownItem(props: DropdownItemProps) {
 					{isSelected && (
 						<div
 							className={cx(
-								"bg-base-tangerine-600 dark:bg-base-tangerine-400 col-start-2 row-start-1 flex size-[18px] shrink-0 place-content-center place-items-center place-self-end rounded-full",
+								"col-start-2 row-start-1 flex size-[18px] shrink-0 place-content-center place-items-center place-self-end rounded-full bg-base-tangerine-600 dark:bg-base-tangerine-400",
 								props.classNames?.selected,
 							)}
 							data-slot="check-indicator"
@@ -108,7 +108,7 @@ export function DropdownDescription(props: RACTextProps) {
 		<RACText
 			{...props}
 			className={cx(
-				"text-base-sm text-base-neutral-600 dark:text-base-neutral-300 col-start-1 line-clamp-2",
+				"col-start-1 line-clamp-2 text-base-sm text-base-neutral-600 dark:text-base-neutral-300",
 				props.className,
 			)}
 			slot={props.slot ?? "description"}
@@ -121,7 +121,7 @@ export function DropdownSeparator(props: RACSeparatorProps) {
 		<RACSeparator
 			{...props}
 			className={cx(
-				"bg-base-neutral-100 dark:bg-base-neutral-700 col-span-full mx-3 my-2 h-px forced-colors:bg-[ButtonBorder]",
+				"col-span-full mx-3 my-2 h-px bg-base-neutral-100 dark:bg-base-neutral-700 forced-colors:bg-[ButtonBorder]",
 				props.className,
 			)}
 			orientation="horizontal"

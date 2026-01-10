@@ -74,7 +74,7 @@ export function SliderThumb(props: RACSliderThumbProps) {
 }
 
 const fillerStyles = cva({
-	base: "group-orientation-horizontal/top-0 bg-base-tangerine-600 group-orientation-vertical/track:bottom-0 group-orientation-horizontal/track:h-full group-orientation-vertical/track:w-full dark:bg-base-tangerine-500 pointer-events-none absolute rounded-full",
+	base: "group-orientation-horizontal/top-0 pointer-events-none absolute rounded-full bg-base-tangerine-600 group-orientation-horizontal/track:h-full group-orientation-vertical/track:bottom-0 group-orientation-vertical/track:w-full dark:bg-base-tangerine-500",
 });
 
 export function SliderFill(props: HTMLAttributes<HTMLDivElement>) {
@@ -104,7 +104,7 @@ export function SliderFill(props: HTMLAttributes<HTMLDivElement>) {
 }
 
 const trackStyles = cva({
-	base: "group/track group-orientation-horizontal:h-1.5 group-orientation-horizontal:w-full group-orientation-vertical:w-1.5 group-orientation-vertical:flex-1 relative grow cursor-pointer rounded-full bg-neutral-300 dark:bg-neutral-700",
+	base: "group/track relative grow cursor-pointer rounded-full bg-neutral-300 group-orientation-horizontal:h-1.5 group-orientation-horizontal:w-full group-orientation-vertical:w-1.5 group-orientation-vertical:flex-1 dark:bg-neutral-700",
 	variants: {
 		isDisabled: {
 			true: "cursor-default",

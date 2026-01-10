@@ -92,9 +92,9 @@ export async function createCase(
 					break;
 			}
 		}
-	} catch (error_) {
-		const error = error_ as Error;
-		logger.error(error, error.message);
+	} catch (error) {
+		const error_ = error as Error;
+		logger.error(error_, error_.message);
 	}
 
 	const [newCase] = await sql<[RawCase]>`
@@ -152,9 +152,9 @@ export async function createCase(
 					reportRefId: resolvedReports.at(-1)!.report_id,
 				});
 			}
-		} catch (error_) {
-			const error = error_ as Error;
-			logger.error(error, error.message);
+		} catch (error) {
+			const error_ = error as Error;
+			logger.error(error_, error_.message);
 		}
 	}
 

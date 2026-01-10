@@ -36,7 +36,7 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 		}
 
 		try {
-			// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+			// oxlint-disable-next-line switch-exhaustiveness-check
 			switch (Object.keys(args)[0]) {
 				case "file": {
 					await file(interaction, args.file, locale);
@@ -56,13 +56,13 @@ export default class extends Command<typeof AntiRaidNukeCommand> {
 				default:
 					break;
 			}
-		} catch (error_) {
-			const error = error_ as Error;
+		} catch (error) {
+			const error_ = error as Error;
 			const keepLockRejection = i18next.t("command.mod.anti_raid_nuke.common.errors.no_concurrent_use", {
 				lng: locale,
 			});
 
-			if (keepLockRejection !== error.message) {
+			if (keepLockRejection !== error_.message) {
 				await releaseNukeLock(interaction.guildId);
 			}
 

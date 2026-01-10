@@ -5,7 +5,6 @@ export async function createRedis() {
 	const Redis = await import("ioredis");
 
 	// @ts-expect-error: This is callable
-	// eslint-disable-next-line no-restricted-globals, n/prefer-global/process
 	const redis = new Redis.default(process.env.REDISHOST!, { maxRetriesPerRequest: null });
 	container.bind({ provide: kRedis, useValue: redis });
 }

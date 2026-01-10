@@ -43,14 +43,14 @@ export async function blastOff(
 					multi: true,
 				}),
 			)
-				// eslint-disable-next-line promise/prefer-await-to-then
+				// oxlint-disable-next-line prefer-await-to-then
 				.then((case_) => {
 					confirmedHits.push(member);
 					return case_;
 				})
-				// eslint-disable-next-line promise/prefer-await-to-then, promise/prefer-await-to-callbacks
+				// oxlint-disable-next-line prefer-await-to-then, prefer-await-to-callbacks
 				.catch((error: Error) => void rejections.push({ member, reason: error.message }))
-				// eslint-disable-next-line promise/prefer-await-to-then
+				// oxlint-disable-next-line prefer-await-to-then
 				.finally(() => void redis.expire(`guild:${interaction.guildId}:anti_raid_nuke`, 15)),
 		);
 	}

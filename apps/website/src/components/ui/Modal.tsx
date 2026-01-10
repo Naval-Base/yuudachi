@@ -20,25 +20,25 @@ export function Modal(props: RACDialogTriggerProps) {
 }
 
 const modalOverlayStyles = cva({
-	base: "bg-base-neutral-900/72 fixed inset-0 z-50 grid h-(--visual-viewport-height,100vh) grid-rows-[1fr_auto] place-items-center p-4 text-center sm:grid-rows-[1fr_auto_3fr]",
+	base: "fixed inset-0 z-50 grid h-(--visual-viewport-height,100vh) grid-rows-[1fr_auto] place-items-center bg-base-neutral-900/72 p-4 text-center sm:grid-rows-[1fr_auto_3fr]",
 	variants: {
 		isBlurred: {
 			true: "supports-backdrop-filter:backdrop-blur-xs supports-backdrop-filter:backdrop-filter",
 		},
 		isEntering: {
-			true: "fade-in animate-in duration-300 ease-out",
+			true: "animate-in duration-300 ease-out fade-in",
 		},
 		isExiting: {
-			true: "fade-out animate-out duration-200 ease-in",
+			true: "animate-out duration-200 ease-in fade-out",
 		},
 	},
 });
 
 const modalContentStyles = cva({
-	base: "bg-base-neutral-0 shadow-base-xl dark:bg-base-neutral-800 relative row-start-2 max-h-full w-full overflow-hidden rounded-lg text-left align-middle [--visual-viewport-vertical-padding:16px] sm:[--visual-viewport-vertical-padding:32px]",
+	base: "relative row-start-2 max-h-full w-full overflow-hidden rounded-lg bg-base-neutral-0 text-left align-middle shadow-base-xl [--visual-viewport-vertical-padding:16px] sm:[--visual-viewport-vertical-padding:32px] dark:bg-base-neutral-800",
 	variants: {
 		isEntering: {
-			true: "fade-in slide-in-from-bottom animate-in sm:zoom-in-95 sm:slide-in-from-bottom-0 duration-200 ease-out",
+			true: "animate-in duration-200 ease-out fade-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95",
 		},
 		size: {
 			"2xs": "sm:max-w-2xs",
